@@ -1,0 +1,6 @@
+{
+  "result": "passed",
+  "scope": "CELT normalized PVQ bands, spreading, collapse masks, unit norm and entropy state; not complete recursive bands or audio decoding",
+  "maximum_absolute_tolerance": 3E-06,
+  "stats": "Passed 13000 normalized pulse-vector/entropy comparisons, 15352 spreading comparisons, 8192 renormalization comparisons, 31 invalid-request guards; peak error 0."
+}

@@ -4,7 +4,7 @@ A Windows x86-64 audio player with handwritten assembly WAV, FLAC, MP3, and Ogg/
 
 The dark canvas, compact playback controls and automatic hiding are inspired by mpv. The custom pixel buffer and Win32 presentation follow Rhun's documented assembly UI model. No Rhun source, fonts, icons, or other assets were copied.
 
-**Opus playback is unfinished.** Tested assembly components cover packet framing, range decoding, CELT signed-pulse enumeration and energy reconstruction, and SILK shell/excitation reconstruction. They are not a complete audio decoder and are not linked into either player. Full CELT shape/allocation/transform reconstruction, SILK prediction/synthesis/resampling, hybrid transitions, and PCM integration still need implementation and audio-vector validation. An `.opus` file is rejected.
+**Opus playback is unfinished.** Tested assembly components cover packet framing, range decoding, CELT energy/static allocation, base PVQ shapes, spreading/collapse masks, Haar/Hadamard transforms and renormalization, and SILK shell/excitation reconstruction. They are not a complete audio decoder and are not linked into either player. CELT packet decisions, recursive band/stereo/folding reconstruction, inverse MDCT/overlap/postfilters, SILK prediction/synthesis/resampling, hybrid transitions, and PCM integration still need implementation and audio-vector validation. An `.opus` file is rejected. [Opus stage documentation](opus.md) records interfaces, bounds, results and remaining work.
 
 All runtime application and decoder code is MASM x64 assembly. No C/C++/Rust codec, codec DLL, CRT, FFmpeg process, or media-player engine is linked or invoked. Reference C source is used only for algorithms, permitted coefficient/probability data, and test oracles.
 
@@ -103,6 +103,8 @@ Real Vorbis comparisons exceed 138 dB SNR, with peak error below 0.00000012. Syn
 
 Opus component tests cover 1,216,672 packet framing cases, 524,288 range operations, 90,678 CELT signed-pulse comparisons, 131,072 Laplace symbols, 12,288 energy-stage comparisons, 69,632 SILK shell trees and 24,576 excitation comparisons. Entropy states and normative float energy operations match exactly. These results do not imply Opus audio support.
 
+The new CELT suites add 271,160 exact allocation/entropy comparisons and 52,479 pulse-cache comparisons, 13,000 normalized pulse-vector/entropy comparisons, 15,352 spreading comparisons, 8,192 renormalization comparisons, 3,280 Haar comparisons and 5,888 layout/inverse comparisons. Observed float error was zero in these tests; PVQ/spreading comparisons permit a 0.000003 absolute tolerance for platform libm differences. Guard tests check rejection before output/entropy writes. These are primitive-stage checks, not decoded Opus PCM comparisons.
+
 The UI preview uses the actual assembly renderer with synthetic playback state. **Desktop window interaction, open-dialog/drop behavior and monitor-DPI changes remain unverified** because the permitted desktop automation runtime was unavailable. Audio controls are tested separately by a native assembly harness.
 
 FFmpeg and Node.js are needed only for test fixture generation/comparison. Opus oracle tests also compile the bundled BSD reference into test executables; neither player calls them or links their objects.
@@ -120,6 +122,10 @@ node .\tests\fuzz-vorbis.js
 .\tests\verify-opus-cwrs.ps1
 .\tests\verify-opus-energy.ps1
 .\tests\verify-opus-silk-pulses.ps1
+.\tests\verify-opus-allocation.ps1
+.\tests\verify-opus-vq.ps1
+.\tests\verify-opus-band-transform.ps1
+.\tests\verify-opus-components.ps1
 .\tests\render-ui.ps1
 ```
 
@@ -127,7 +133,7 @@ The RFC reference archive is checked against its normative SHA-1 before extracti
 
 ## Remaining implementation
 
-Complete Opus CELT shape/bit allocation/transform reconstruction and SILK parameter/prediction/synthesis/resampling, then hybrid switching, pre-skip/gain/end trimming and official audio-vector validation. Further work includes indexed seeking, multichannel/chained streams, device changes, and same-machine CPU/RAM comparisons against existing players.
+Complete Opus CELT packet decisions and recursive shape/stereo/folding reconstruction, inverse MDCT/overlap/postfilters, and SILK parameter/prediction/synthesis/resampling, then hybrid switching, pre-skip/gain/end trimming and official audio-vector validation. Further work includes indexed seeking, multichannel/chained streams, device changes, and same-machine CPU/RAM comparisons against existing players.
 
 ## References
 

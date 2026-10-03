@@ -77,6 +77,8 @@ The UI image comes from the actual assembly renderer with synthetic state. Open-
 
 ## Roadmap and contribution
 
+Latest Opus work adds reference-checked CELT static allocation, normalized pulse-vector reconstruction/spreading, and time/frequency layout kernels, all in assembly. These stages are assembled and tested but not yet integrated into audio playback. See [the decoder-stage notes](docs/opus.md) and run `./tests/verify-opus-components.ps1` to reproduce their checks without FFmpeg or an audio device.
+
 [ROADMAP.md](ROADMAP.md) covers Opus, reliable audio playback, broader codecs and containers, video, subtitles, streaming, and eventual support for everything relevant that mpv supports. The [compatibility matrix](docs/compatibility.md) tracks the current gaps. Goals have acceptance gates, not promised release dates. Hardware decode should be used when it lowers system cost; handwritten assembly alone does not guarantee a faster codec.
 
 Keep runtime and codec code in assembly. Use original implementations or carefully attributed permissive references (MIT, MIT-0, BSD-2-Clause, BSD-3-Clause, or CC0). Preserve applicable notices. Test tools may use other languages. Please include the failing media characteristics, a redistributable fixture when possible, and a reference comparison when reporting decoder issues.
