@@ -126,6 +126,7 @@ node .\tests\fuzz-vorbis.js
 .\tests\verify-opus-vq.ps1
 .\tests\verify-opus-band-transform.ps1
 .\tests\verify-opus-controls.ps1
+.\tests\verify-opus-theta.ps1
 .\tests\verify-opus-components.ps1
 .\tests\render-ui.ps1
 ```

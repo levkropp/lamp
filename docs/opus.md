@@ -15,6 +15,7 @@ LAMP's Opus work is handwritten MASM x86-64 assembly, based on the BSD normative
 | CELT normalized PVQ bands/spreading | `opus_vq.asm` | 13,000 band/entropy, 15,352 spreading and 8,192 renormalization comparisons |
 | CELT Haar/Hadamard layout helpers | `opus_band_transform.asm` | 3,280 Haar and 5,888 layout/inverse comparisons |
 | CELT frame-prefix controls and dynamic allocation | `opus_controls.asm` | 48,909 frame-prefix/entropy comparisons (including 13 real frames), 48,896 standalone TF comparisons and 33 invalid-request guards |
+| CELT recursive/stereo split angles | `opus_theta.asm` | 157,936 split-angle/entropy comparisons, 16,384 cosine, 131,072 log-tangent, 262,144 integer-square-root checks and 26 invalid-request guards |
 
 The new suites also cover 83 invalid-request cases, output canaries, entropy non-consumption on rejected requests, unit-energy checks and inverse layout recovery. Allocation/cache/entropy and Haar/layout/renormalization comparisons are exact. The tested PVQ/spreading outputs also had zero observed error; their allowed absolute tolerance is 0.000003 for differences between platform math implementations. These numbers concern component outputs, not complete decoded audio.
 
@@ -64,7 +65,7 @@ Requirements: Windows x64, Visual Studio Build Tools with the C tools and Window
 
 ## Next dependencies
 
-1. Add recursive band splitting, stereo reconstruction and low-band folding to the tested frame prefix.
+1. Connect the tested split angles to recursive vector reconstruction, stereo reconstruction and low-band folding.
 2. Add anti-collapse, energy denormalization, inverse MDCT, overlap and postfilters.
 3. Complete SILK parameters, prediction, synthesis and resampling; handle hybrid transitions.
 4. Integrate Ogg Opus pre-skip/gain/end trimming with the playback engine.
@@ -79,5 +80,13 @@ Requirements: Windows x64, Visual Studio Build Tools with the C tools and Window
 Null buffers, invalid ranges/channels/LM, nonfinite energy history and structurally invalid entropy state are rejected before writes. Buffers remain caller-owned, correctly sized and nonoverlapping. Empty/short payloads use normative entropy padding at the component level; the eventual complete decoder must apply the packet-loss policy and final entropy-error checks.
 
 The oracle extracts the frame-prefix decisions and TF helper directly from the hash-verified RFC source, then compares all output scalars, energies, complete band arrays, canaries and the full entropy context. It covers empty/short/maximum-size payloads, zero/one/random bits, all LM/channel values, active band ranges, prior entropy consumption and the committed Ogg/Opus fixture. These are exact prefix comparisons, not complete decoded PCM.
+
+## Split-angle interface
+
+`op_celt_theta(request*)` decodes recursive mono or stereo split angles. It implements the normative angle-resolution budget, triangular/uniform/stereo-step probability models, intensity-stereo inversion, bit-exact cosine/log-tangent gains and allocation deltas, entropy cost and collapse-fill masks. It returns 1 on success and 0 for invalid requests, with validation before output or entropy writes. The recursive band caller applies the measured cost and time-split allocation adjustments; it then uses the gains to reconstruct both vectors.
+
+`src/opus_theta_layout.inc` defines the 88-byte request: entropy and remaining-budget pointers at 0/8; N, bit budget, band, LM, stereo, blocks, original blocks, intensity and input fill at 16–48; angle, integer mid/side gains, allocation delta, entropy cost, inversion, output fill and angle resolution at 52–80. Budgets use eighth-bits. Valid ranges are N 2–1024, band 0–20, LM -1–3, power-of-two block counts 1–16, intensity 0–21, and a budget from -16,384 to 81,600. The remaining-budget value is read, not changed. Gains are normalized by 32,768 at the band caller.
+
+The test extracts the angle decisions directly from the normative source, compares every output and the full entropy state, and covers all three probability models, zero/short/maximum payloads, primed entropy, intensity cutoffs and request guards. The integer helpers are checked separately, including every Q14 cosine input below 16,384 and integer-square-root boundaries throughout the uint32 range. These checks support recursive decoding work; they do not establish complete Opus PCM output.
 
 [Normative reference](https://www.rfc-editor.org/rfc/rfc6716.html) · [Roadmap](../ROADMAP.md) · [Required notices](../THIRD_PARTY_NOTICES)

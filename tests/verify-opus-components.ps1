@@ -4,7 +4,7 @@ $ErrorActionPreference='Stop'
 $reference=Get-LampOpusReference
 & node (Join-Path $PSScriptRoot 'generate-celt-tables.js') $reference --check
 if($LASTEXITCODE){throw 'CELT table provenance verification failed'}
-foreach($stage in @('range','packet','cwrs','energy','silk-pulses','allocation','vq','band-transform','controls')){
+foreach($stage in @('range','packet','cwrs','energy','silk-pulses','allocation','vq','band-transform','controls','theta')){
     & (Join-Path $PSScriptRoot "verify-opus-$stage.ps1")
 }
-Write-Output 'All nine Opus component suites passed. Full Opus audio decoding is not yet implemented.'
+Write-Output 'All ten Opus component suites passed. Full Opus audio decoding is not yet implemented.'
