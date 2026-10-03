@@ -4,7 +4,7 @@ A Windows x86-64 audio player with handwritten assembly WAV, FLAC, MP3, and Ogg/
 
 The dark canvas, compact playback controls and automatic hiding are inspired by mpv. The custom pixel buffer and Win32 presentation follow Rhun's documented assembly UI model. No Rhun source, fonts, icons, or other assets were copied.
 
-**Opus playback is unfinished.** Tested assembly components cover packet framing, range decoding, CELT energy/static allocation, base PVQ shapes, spreading/collapse masks, Haar/Hadamard transforms and renormalization, and SILK shell/excitation reconstruction. They are not a complete audio decoder and are not linked into either player. CELT packet decisions, recursive band/stereo/folding reconstruction, inverse MDCT/overlap/postfilters, SILK prediction/synthesis/resampling, hybrid transitions, and PCM integration still need implementation and audio-vector validation. An `.opus` file is rejected. [Opus stage documentation](opus.md) records interfaces, bounds, results and remaining work.
+**Opus playback is unfinished.** Tested assembly components cover packet framing, range decoding, connected CELT frame controls/energy/dynamic and static allocation, base PVQ shapes, spreading/collapse masks, Haar/Hadamard transforms and renormalization, and SILK shell/excitation reconstruction. They are not a complete audio decoder and are not linked into either player. Recursive band/stereo/folding reconstruction, inverse MDCT/overlap/postfilters, SILK prediction/synthesis/resampling, hybrid transitions, and PCM integration still need implementation and audio-vector validation. An `.opus` file is rejected. [Opus stage documentation](opus.md) records interfaces, bounds, results and remaining work.
 
 All runtime application and decoder code is MASM x64 assembly. No C/C++/Rust codec, codec DLL, CRT, FFmpeg process, or media-player engine is linked or invoked. Reference C source is used only for algorithms, permitted coefficient/probability data, and test oracles.
 
@@ -125,6 +125,7 @@ node .\tests\fuzz-vorbis.js
 .\tests\verify-opus-allocation.ps1
 .\tests\verify-opus-vq.ps1
 .\tests\verify-opus-band-transform.ps1
+.\tests\verify-opus-controls.ps1
 .\tests\verify-opus-components.ps1
 .\tests\render-ui.ps1
 ```
@@ -133,7 +134,7 @@ The RFC reference archive is checked against its normative SHA-1 before extracti
 
 ## Remaining implementation
 
-Complete Opus CELT packet decisions and recursive shape/stereo/folding reconstruction, inverse MDCT/overlap/postfilters, and SILK parameter/prediction/synthesis/resampling, then hybrid switching, pre-skip/gain/end trimming and official audio-vector validation. Further work includes indexed seeking, multichannel/chained streams, device changes, and same-machine CPU/RAM comparisons against existing players.
+Complete Opus CELT recursive shape/stereo/folding reconstruction, inverse MDCT/overlap/postfilters, and SILK parameter/prediction/synthesis/resampling, then hybrid switching, pre-skip/gain/end trimming and official audio-vector validation. Further work includes indexed seeking, multichannel/chained streams, device changes, and same-machine CPU/RAM comparisons against existing players.
 
 ## References
 

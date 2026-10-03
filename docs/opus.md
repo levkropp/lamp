@@ -14,6 +14,7 @@ LAMP's Opus work is handwritten MASM x86-64 assembly, based on the BSD normative
 | CELT static band allocation | `opus_allocation.asm` | 271,160 allocation/entropy and 52,479 pulse-cache comparisons |
 | CELT normalized PVQ bands/spreading | `opus_vq.asm` | 13,000 band/entropy, 15,352 spreading and 8,192 renormalization comparisons |
 | CELT Haar/Hadamard layout helpers | `opus_band_transform.asm` | 3,280 Haar and 5,888 layout/inverse comparisons |
+| CELT frame-prefix controls and dynamic allocation | `opus_controls.asm` | 48,909 frame-prefix/entropy comparisons (including 13 real frames), 48,896 standalone TF comparisons and 33 invalid-request guards |
 
 The new suites also cover 83 invalid-request cases, output canaries, entropy non-consumption on rejected requests, unit-energy checks and inverse layout recovery. Allocation/cache/entropy and Haar/layout/renormalization comparisons are exact. The tested PVQ/spreading outputs also had zero observed error; their allowed absolute tolerance is 0.000003 for differences between platform math implementations. These numbers concern component outputs, not complete decoded audio.
 
@@ -63,11 +64,20 @@ Requirements: Windows x64, Visual Studio Build Tools with the C tools and Window
 
 ## Next dependencies
 
-1. Decode CELT packet flags, transient/time-frequency decisions and dynamic allocation into the tested stages.
-2. Add recursive band splitting, stereo reconstruction and low-band folding.
-3. Add anti-collapse, energy denormalization, inverse MDCT, overlap and postfilters.
-4. Complete SILK parameters, prediction, synthesis and resampling; handle hybrid transitions.
-5. Integrate Ogg Opus pre-skip/gain/end trimming with the playback engine.
-6. Validate complete CELT/SILK/hybrid audio against official decoder vectors and reference PCM.
+1. Add recursive band splitting, stereo reconstruction and low-band folding to the tested frame prefix.
+2. Add anti-collapse, energy denormalization, inverse MDCT, overlap and postfilters.
+3. Complete SILK parameters, prediction, synthesis and resampling; handle hybrid transitions.
+4. Integrate Ogg Opus pre-skip/gain/end trimming with the playback engine.
+5. Validate complete CELT/SILK/hybrid audio against official decoder vectors and reference PCM.
+
+## Frame-prefix interface
+
+`op_celt_controls(request*)` consumes the actual CELT frame prefix, from silence/postfilter/transient/intra decisions through coarse energy, time/frequency decisions, spreading, dynamic boosts, static allocation and fine energy. It returns the coded-band count, or -1 for invalid input. The remaining entropy state is ready for normalized shape decoding. For mono frames it merges the two channels' energy history as the normative decoder does. It supports the standard 48 kHz mode, LM 0–3, mono/stereo and arbitrary valid band ranges, including hybrid high-band prefixes after earlier entropy consumption.
+
+`src/opus_controls_layout.inc` defines the 136-byte request. Eight pointers at offsets 0–56 select entropy state, 42 float energies and six 21-entry integer arrays (TF, offsets, caps, shape budgets, fine energy bits and priorities). Start/end/channels/LM occupy offsets 64–76. Outputs at 80–132 record silence/transient/intra, spreading, postfilter pitch/gain/tapset, trim, anti-collapse reservation, allocation balance/intensity/dual stereo/coded bands and the allocation budget. Reservations and budgets use eighth-bits; gain is float32. `op_celt_tf_decode` also exposes the TF stage using this request's entropy, TF, band range, LM and transient fields.
+
+Null buffers, invalid ranges/channels/LM, nonfinite energy history and structurally invalid entropy state are rejected before writes. Buffers remain caller-owned, correctly sized and nonoverlapping. Empty/short payloads use normative entropy padding at the component level; the eventual complete decoder must apply the packet-loss policy and final entropy-error checks.
+
+The oracle extracts the frame-prefix decisions and TF helper directly from the hash-verified RFC source, then compares all output scalars, energies, complete band arrays, canaries and the full entropy context. It covers empty/short/maximum-size payloads, zero/one/random bits, all LM/channel values, active band ranges, prior entropy consumption and the committed Ogg/Opus fixture. These are exact prefix comparisons, not complete decoded PCM.
 
 [Normative reference](https://www.rfc-editor.org/rfc/rfc6716.html) · [Roadmap](../ROADMAP.md) · [Required notices](../THIRD_PARTY_NOTICES)

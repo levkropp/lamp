@@ -57,9 +57,10 @@ https://www.rfc-editor.org/rfc/rfc6716.html
 Adapted range/CELT algorithms:
 Copyright (c) 2001-2012 IETF Trust, Xiph.Org Foundation, CSIRO,
 Jean-Marc Valin and Timothy B. Terriberry. All rights reserved.
-The CELT allocation/PVQ/Haar/Hadamard additions reference rate.c, vq.c,
-bands.c, modes.c, and static_modes_float.h in that same normative archive:
+The CELT allocation/PVQ/Haar/Hadamard and frame-control additions reference
+celt.c, rate.c, vq.c, bands.c, modes.c, and static_modes_float.h in that same normative archive:
 Copyright (c) 2007-2012 IETF Trust, CSIRO, Xiph.Org Foundation.
+The frame-control reference also credits Gregory Maxwell.
 The applicable redistribution conditions and disclaimer follow below.
 
 Adapted SILK pulse algorithms and probability data:

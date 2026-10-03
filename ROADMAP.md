@@ -29,7 +29,8 @@ The public repository includes build/test tooling, a Windows prerelease and a we
 - [x] CELT static bit allocation, pulse budgets, fine-energy split, band skipping and stereo allocation decisions.
 - [x] CELT base PVQ band reconstruction, normalization, spreading and collapse masks.
 - [x] CELT Haar time/frequency kernels, Hadamard layout transforms and vector renormalization.
-- [ ] CELT packet decisions/dynamic allocation, recursive band splits, stereo/folding, and complete band reconstruction.
+- [x] CELT frame flags/postfilter parameters, energy integration, TF decisions and dynamic allocation, checked against the normative frame prefix.
+- [ ] CELT recursive band splits, stereo/folding, and complete band reconstruction.
 - [ ] CELT inverse MDCT, denormalization, overlap, anti-collapse and postfilters.
 - [ ] SILK parameter decoding, NLSF/LPC/prediction, synthesis and resampling.
 - [ ] Hybrid modes, bandwidth/frame transitions, stereo, channel mapping, output gain, pre-skip and end trimming.

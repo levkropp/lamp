@@ -1,0 +1,5 @@
+{
+    "result":  "passed",
+    "scope":  "CELT frame flags, postfilter parameters, coarse/fine energy, TF decisions, dynamic/static allocation and entropy state; not shape synthesis or audio decoding",
+    "stats":  "Passed 48909 CELT frame-prefix/entropy comparisons, 48896 TF/entropy comparisons, 33 invalid-request guards, including 13 real CELT frames."
+}

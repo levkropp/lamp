@@ -19,7 +19,7 @@ try {
     & $rc /nologo /d LAMP_CLI "/fo$out\lamp-cli.res" lamp.rc
     if ($LASTEXITCODE) { throw 'CLI resource compilation failed.' }
 } finally { Pop-Location }
-foreach ($name in @('player', 'decoder', 'mp3', 'mp3_synthesis', 'ogg', 'vorbis', 'vorbis_transform', 'ui', 'opus_range', 'opus_packet', 'opus_cwrs', 'opus_energy', 'opus_silk_pulses', 'opus_allocation', 'opus_vq', 'opus_band_transform')) {
+foreach ($name in @('player', 'decoder', 'mp3', 'mp3_synthesis', 'ogg', 'vorbis', 'vorbis_transform', 'ui', 'opus_range', 'opus_packet', 'opus_cwrs', 'opus_energy', 'opus_silk_pulses', 'opus_allocation', 'opus_vq', 'opus_band_transform', 'opus_controls')) {
     & (Join-Path $tools 'ml64.exe') /nologo /c "/I$root\src" "/Fo$out\$name.obj" (Join-Path $root "src\$name.asm")
     if ($LASTEXITCODE) { throw "Assembly failed: $name" }
 }
