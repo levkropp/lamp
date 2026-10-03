@@ -1,0 +1,1254 @@
+; LAMP: original x86-64 assembly decoders. MIT license, see LICENSE.
+; ABI: decoder_open(RCX=path W) -> EAX=1 on success; decoder_read(RCX=stereo
+; float output, EDX=frame capacity) -> EAX=frames. 0=EOF or error.
+; The decoder is single-instance and only called by the producer thread.
+option casemap:none
+EXTERN CreateFileW:PROC, GetFileSizeEx:PROC, CreateFileMappingW:PROC
+EXTERN MapViewOfFile:PROC, UnmapViewOfFile:PROC, CloseHandle:PROC
+EXTERN mp3_open:PROC, mp3_read:PROC
+EXTERN vorbis_open:PROC, vorbis_read:PROC, vorbis_close:PROC, ogg_close:PROC
+PUBLIC decoder_open, decoder_read, decoder_close
+PUBLIC sample_rate, source_channels, source_bits, decode_error, total_frames, codec_kind
+
+.data
+sample_rate dd 0
+source_channels dd 0
+source_bits dd 0
+decode_error dd 0
+codec_kind dd 0                 ; 1 WAV, 2 native FLAC, 3 MP3 Layer III, 4 Vorbis
+total_frames dq 0
+file_handle dq -1
+map_handle dq 0
+map_base dq 0
+file_size dq 0
+input_cursor dq 0
+input_end dq 0
+wav_end dq 0
+wav_format dd 0
+wav_align dd 0
+bits_count dd 0
+bits_buf dq 0
+frame_start dq 0
+header_end dq 0
+frame_samples dd 0
+frame_used dd 0
+channel_mode dd 0
+block_code dd 0
+rate_code dd 0
+depth_code dd 0
+frame_bps dd 0
+minimum_block dd 0
+maximum_block dd 0
+sub_bps dd 0
+wasted_bits dd 0
+sub_type dd 0
+predict_order dd 0
+predict_shift dd 0
+rice_bits dd 0
+rice_k dd 0
+partition_count dd 0
+partition_samples dd 0
+crc_ready dd 0
+scale8 dd 3c000000h
+scale16 dd 38000000h
+scale24 dd 34000000h
+scale32 dd 30000000h
+float_scale real4 0.0
+rate_table dd 0,88200,176400,192000,8000,16000,22050,24000,32000,44100,48000,96000
+depth_table dd 0,8,12,0,16,20,24,32
+
+.data?
+left_samples dq 65536 dup (?)
+right_samples dq 65536 dup (?)
+lpc_coeff dq 32 dup (?)
+crc8_table db 256 dup (?)
+crc16_table dw 256 dup (?)
+
+.code
+decoder_open PROC
+    push rbp
+    mov rbp,rsp
+    sub rsp,80
+    mov dword ptr [decode_error],0
+    mov dword ptr [codec_kind],0
+    mov qword ptr [total_frames],0
+    mov dword ptr [frame_samples],0
+    mov dword ptr [frame_used],0
+    mov edx,80000000h
+    mov r8d,1
+    xor r9d,r9d
+    mov qword ptr [rsp+32],3
+    mov qword ptr [rsp+40],08000000h
+    mov qword ptr [rsp+48],0
+    call CreateFileW
+    mov [file_handle],rax
+    cmp rax,-1
+    je open_bad
+    mov rcx,rax
+    lea rdx,file_size
+    call GetFileSizeEx
+    test eax,eax
+    jz open_bad
+    cmp qword ptr [file_size],12
+    jb open_bad
+    mov rcx,[file_handle]
+    xor edx,edx
+    mov r8d,2
+    xor r9d,r9d
+    mov qword ptr [rsp+32],0
+    mov qword ptr [rsp+40],0
+    call CreateFileMappingW
+    mov [map_handle],rax
+    test rax,rax
+    jz open_bad
+    mov rcx,rax
+    mov edx,4
+    xor r8d,r8d
+    xor r9d,r9d
+    mov qword ptr [rsp+32],0
+    call MapViewOfFile
+    mov [map_base],rax
+    test rax,rax
+    jz open_bad
+    mov rdx,rax
+    add rdx,[file_size]
+    jc open_bad
+    mov [input_end],rdx
+    mov [input_cursor],rax
+    cmp dword ptr [rax],46464952h ; RIFF
+    je open_wav
+    cmp dword ptr [rax],43614c66h ; fLaC
+    je open_flac
+    cmp dword ptr [rax],5367674fh ; OggS
+    je open_ogg
+    mov rcx,[input_cursor]
+    mov rdx,[input_end]
+    call mp3_open
+    test eax,eax
+    jz open_bad
+    mov dword ptr [codec_kind],3
+    leave
+    ret
+open_ogg:
+    mov rcx,[input_cursor]
+    mov rdx,[input_end]
+    call vorbis_open
+    test eax,eax
+    jz open_bad
+    mov dword ptr [codec_kind],4
+    leave
+    ret
+open_bad:
+    mov dword ptr [decode_error],1
+    xor eax,eax
+    leave
+    ret
+open_wav:
+    cmp dword ptr [rax+8],45564157h
+    jne open_bad
+    mov edx,[rax+4]
+    add rdx,8
+    cmp rdx,[file_size]
+    ja open_bad
+    add rdx,rax
+    mov [input_end],rdx
+    add rax,12
+    mov r10,rax
+    xor r11d,r11d              ; fmt found
+wav_chunks:
+    lea rax,[r10+8]
+    cmp rax,[input_end]
+    ja open_bad
+    mov edx,[r10+4]
+    mov r8,rax
+    add r8,rdx
+    jc open_bad
+    cmp r8,[input_end]
+    ja open_bad
+    cmp dword ptr [r10],20746d66h
+    je wav_fmt
+    cmp dword ptr [r10],61746164h
+    je wav_data
+wav_next:
+    add r8,1
+    and r8,-2
+    mov r10,r8
+    jmp wav_chunks
+wav_fmt:
+    cmp edx,16
+    jb open_bad
+    movzx ecx,word ptr [rax]
+    cmp ecx,0fffeh
+    jne wav_basic_fmt
+    cmp edx,40
+    jb open_bad
+    cmp word ptr [rax+16],22
+    jb open_bad
+    ; Only PCM / float SubFormat GUIDs, canonical remaining 14 bytes.
+    cmp word ptr [rax+26],0
+    jne open_bad
+    cmp dword ptr [rax+28],00100000h
+    jne open_bad
+    mov r9,0719b3800aa000080h
+    cmp qword ptr [rax+32],r9
+    jne open_bad
+    movzx ecx,word ptr [rax+24]
+    movzx r9d,word ptr [rax+18]
+    cmp r9w,[rax+14]
+    jne open_bad             ; uncommon packed valid-bits layouts deferred
+wav_basic_fmt:
+    cmp ecx,1
+    je wav_valid_type
+    cmp ecx,3
+    jne open_bad
+wav_valid_type:
+    mov [wav_format],ecx
+    movzx ecx,word ptr [rax+2]
+    cmp ecx,1
+    jb open_bad
+    cmp ecx,2
+    ja open_bad
+    mov [source_channels],ecx
+    mov ecx,[rax+4]
+    cmp ecx,8000
+    jb open_bad
+    cmp ecx,192000
+    ja open_bad
+    mov [sample_rate],ecx
+    movzx ecx,word ptr [rax+14]
+    cmp dword ptr [wav_format],3
+    jne wav_pcm_bits
+    cmp ecx,32
+    jne open_bad
+    jmp wav_bits_ok
+wav_pcm_bits:
+    cmp ecx,8
+    je wav_bits_ok
+    cmp ecx,16
+    je wav_bits_ok
+    cmp ecx,24
+    je wav_bits_ok
+    cmp ecx,32
+    jne open_bad
+wav_bits_ok:
+    mov [source_bits],ecx
+    shr ecx,3
+    imul ecx,[source_channels]
+    cmp cx,[rax+12]
+    jne open_bad
+    mov [wav_align],ecx
+    imul ecx,[sample_rate]
+    cmp ecx,[rax+8]
+    jne open_bad
+    mov r11d,1
+    jmp wav_next
+wav_data:
+    test r11d,r11d
+    jz open_bad
+    mov [input_cursor],rax
+    mov [wav_end],r8
+    mov rax,rdx
+    xor edx,edx
+    mov ecx,[wav_align]
+    div rcx
+    test edx,edx
+    jnz open_bad
+    mov [total_frames],rax
+    mov dword ptr [codec_kind],1
+    mov eax,1
+    leave
+    ret
+
+open_flac:
+    add rax,4
+    mov r10,rax
+    xor r11d,r11d
+flac_metadata:
+    lea rax,[r10+4]
+    cmp rax,[input_end]
+    ja open_bad
+    mov edx,[r10]
+    bswap edx
+    mov r8d,edx
+    and edx,00ffffffh
+    lea r9,[rax+rdx]
+    cmp r9,[input_end]
+    ja open_bad
+    mov ecx,r8d
+    shr ecx,24
+    and ecx,7fh
+    cmp r11d,0
+    jne flac_have_streaminfo
+    test ecx,ecx
+    jnz open_bad
+    cmp edx,34
+    jne open_bad
+    movzx ecx,word ptr [rax]
+    rol cx,8
+    cmp ecx,16
+    jb open_bad
+    mov [minimum_block],ecx
+    movzx edx,word ptr [rax+2]
+    rol dx,8
+    cmp edx,ecx
+    jb open_bad
+    mov [maximum_block],edx
+    mov rdx,[rax+10]
+    bswap rdx
+    mov rcx,rdx
+    shr rcx,44
+    mov [sample_rate],ecx
+    cmp ecx,8000
+    jb open_bad
+    cmp ecx,192000
+    ja open_bad
+    mov rcx,rdx
+    shr rcx,41
+    and ecx,7
+    inc ecx
+    cmp ecx,2
+    ja open_bad
+    mov [source_channels],ecx
+    mov rcx,rdx
+    shr rcx,36
+    and ecx,31
+    inc ecx
+    cmp ecx,4
+    jb open_bad
+    cmp ecx,24
+    ja open_bad
+    mov [source_bits],ecx
+    mov rcx,0fffffffffh
+    and rdx,rcx
+    mov [total_frames],rdx
+    mov r11d,1
+    jmp flac_meta_next
+flac_have_streaminfo:
+    test ecx,ecx
+    jz open_bad
+    cmp ecx,127
+    je open_bad
+flac_meta_next:
+    mov r10,r9
+    test r8d,80000000h
+    jz flac_metadata
+    mov [input_cursor],r10
+    mov dword ptr [codec_kind],2
+    ; Compute exact reciprocal 2^(1-bits), no library calls.
+    mov eax,128
+    sub eax,[source_bits]
+    shl eax,23
+    mov [float_scale],eax
+    mov eax,1
+    leave
+    ret
+decoder_open ENDP
+
+decoder_close PROC
+    push rbp
+    mov rbp,rsp
+    sub rsp,32
+    call vorbis_close
+    call ogg_close
+    mov rcx,[map_base]
+    test rcx,rcx
+    jz close_mapping
+    call UnmapViewOfFile
+    mov qword ptr [map_base],0
+close_mapping:
+    mov rcx,[map_handle]
+    test rcx,rcx
+    jz close_file
+    call CloseHandle
+    mov qword ptr [map_handle],0
+close_file:
+    mov rcx,[file_handle]
+    cmp rcx,-1
+    je closed
+    call CloseHandle
+    mov qword ptr [file_handle],-1
+closed:
+    leave
+    ret
+decoder_close ENDP
+
+; Bounds-checked MSB-first reservoir. Width <=32, result unsigned in RAX.
+get_bits PROC
+    mov r9d,ecx
+    mov rdx,[bits_buf]
+    mov r8d,[bits_count]
+gb_fill:
+    cmp r8d,r9d
+    jae gb_extract
+    mov r10,[input_cursor]
+    cmp r10,[input_end]
+    jae gb_bad
+    shl rdx,8
+    movzx eax,byte ptr [r10]
+    or rdx,rax
+    inc r10
+    mov [input_cursor],r10
+    add r8d,8
+    jmp gb_fill
+gb_extract:
+    sub r8d,r9d
+    mov ecx,r8d
+    mov rax,rdx
+    shr rax,cl
+    mov ecx,r9d
+    mov r10,1
+    shl r10,cl
+    dec r10
+    and rax,r10
+    mov [bits_buf],rdx
+    mov [bits_count],r8d
+    ret
+gb_bad:
+    mov dword ptr [decode_error],2
+    xor eax,eax
+    ret
+get_bits ENDP
+
+get_signed PROC
+    push rbx
+    sub rsp,32
+    mov ebx,ecx
+    call get_bits
+    mov ecx,64
+    sub ecx,ebx
+    shl rax,cl
+    sar rax,cl
+    add rsp,32
+    pop rbx
+    ret
+get_signed ENDP
+
+; Count unary prefixes a byte at a time using BSR; no per-bit Rice calls.
+get_unary PROC
+    xor r11d,r11d
+unary_chunk:
+    mov ecx,[bits_count]
+    test ecx,ecx
+    jnz unary_scan
+    mov r10,[input_cursor]
+    cmp r10,[input_end]
+    jae unary_bad
+    movzx edx,byte ptr [r10]
+    inc r10
+    mov [input_cursor],r10
+    mov [bits_buf],rdx
+    mov ecx,8
+    mov [bits_count],ecx
+unary_scan:
+    mov rdx,[bits_buf]
+    mov r8,1
+    shl r8,cl
+    dec r8
+    and rdx,r8
+    bsr r8,rdx
+    jnz unary_found
+    add r11d,ecx
+    cmp r11d,01000000h
+    jae unary_bad
+    mov dword ptr [bits_count],0
+    jmp unary_chunk
+unary_found:
+    sub ecx,r8d
+    dec ecx
+    add r11d,ecx
+    mov [bits_count],r8d
+    mov eax,r11d
+    ret
+unary_bad:
+    mov dword ptr [decode_error],2
+    xor eax,eax
+    ret
+get_unary ENDP
+
+init_crc_tables PROC
+    xor r11d,r11d
+crc_init_byte:
+    mov eax,r11d
+    mov edx,r11d
+    shl edx,8
+    mov ecx,8
+crc_init_bit:
+    shl eax,1
+    test eax,100h
+    jz crc_init_16
+    xor eax,7
+crc_init_16:
+    shl edx,1
+    test edx,10000h
+    jz crc_init_next
+    xor edx,8005h
+crc_init_next:
+    dec ecx
+    jnz crc_init_bit
+    lea r8,crc8_table
+    mov [r8+r11],al
+    lea r8,crc16_table
+    mov [r8+r11*2],dx
+    inc r11d
+    cmp r11d,256
+    jb crc_init_byte
+    mov dword ptr [crc_ready],1
+    ret
+init_crc_tables ENDP
+
+; Reflected-free FLAC CRC: RCX=start, RDX=end, R8D=8 or 16.
+flac_crc PROC
+    xor eax,eax
+    cmp r8d,8
+    je crc8_fast
+    lea r10,crc16_table
+crc_byte:
+    cmp rcx,rdx
+    jae crc_done
+    mov r8d,eax
+    shr r8d,8
+    movzx r9d,byte ptr [rcx]
+    inc rcx
+    xor r8d,r9d
+    movzx r9d,word ptr [r10+r8*2]
+    shl eax,8
+    xor eax,r9d
+    and eax,0ffffh
+    jmp crc_byte
+crc8_fast:
+    lea r10,crc8_table
+crc8_byte:
+    cmp rcx,rdx
+    jae crc_done
+    movzx r9d,byte ptr [rcx]
+    inc rcx
+    xor eax,r9d
+    movzx eax,byte ptr [r10+rax]
+    jmp crc8_byte
+crc_done:
+    ret
+flac_crc ENDP
+
+decode_frame PROC
+    push rbp
+    mov rbp,rsp
+    push rbx
+    push rsi
+    push rdi
+    push r12
+    sub rsp,64
+    cmp dword ptr [crc_ready],0
+    jne crc_tables_ready
+    call init_crc_tables
+crc_tables_ready:
+    mov rax,[input_cursor]
+    cmp rax,[input_end]
+    jae frame_eof
+    mov [frame_start],rax
+    mov dword ptr [bits_count],0
+    mov qword ptr [bits_buf],0
+    mov ecx,14
+    call get_bits
+    cmp eax,3ffeh
+    jne frame_bad
+    mov ecx,1
+    call get_bits
+    test eax,eax
+    jnz frame_bad
+    mov ecx,1
+    call get_bits             ; fixed / variable blocking
+    mov ecx,4
+    call get_bits
+    mov [block_code],eax
+    mov ecx,4
+    call get_bits
+    mov [rate_code],eax
+    mov ecx,4
+    call get_bits
+    cmp eax,10
+    ja frame_bad
+    mov [channel_mode],eax
+    mov ecx,eax
+    cmp ecx,8
+    jae frame_stereo
+    inc ecx
+    jmp frame_ch_check
+frame_stereo:
+    mov ecx,2
+frame_ch_check:
+    cmp ecx,[source_channels]
+    jne frame_bad
+    mov ecx,3
+    call get_bits
+    mov [depth_code],eax
+    mov ecx,1
+    call get_bits
+    test eax,eax
+    jnz frame_bad
+    ; UTF-8 encoded frame / sample number; validate prefix and continuations.
+    mov ecx,8
+    call get_bits
+    cmp eax,80h
+    jb frame_number_done
+    cmp eax,0c0h
+    jb frame_bad
+    cmp eax,0ffh
+    je frame_bad
+    mov ebx,0
+    mov edx,eax
+number_prefix:
+    test edx,80h
+    jz number_counted
+    inc ebx
+    shl edx,1
+    jmp number_prefix
+number_counted:
+    dec ebx
+number_cont:
+    mov ecx,8
+    call get_bits
+    and eax,0c0h
+    cmp eax,80h
+    jne frame_bad
+    dec ebx
+    jnz number_cont
+frame_number_done:
+    mov eax,[block_code]
+    test eax,eax
+    jz frame_bad
+    cmp eax,1
+    je block192
+    cmp eax,5
+    jbe block576
+    cmp eax,6
+    je block8
+    cmp eax,7
+    je block16
+    mov ecx,eax
+    sub ecx,8
+    mov eax,256
+    shl eax,cl
+    jmp block_done
+block192:
+    mov eax,192
+    jmp block_done
+block576:
+    mov ecx,eax
+    sub ecx,2
+    mov eax,576
+    shl eax,cl
+    jmp block_done
+block8:
+    mov ecx,8
+    call get_bits
+    inc eax
+    jmp block_done
+block16:
+    mov ecx,16
+    call get_bits
+    inc eax
+block_done:
+    cmp eax,65535
+    ja frame_bad
+    cmp eax,[maximum_block]
+    ja frame_bad
+    mov [frame_samples],eax
+    mov dword ptr [frame_used],0
+    mov eax,[rate_code]
+    test eax,eax
+    jz rate_done
+    cmp eax,12
+    je rate8
+    cmp eax,14
+    je rate16x10
+    cmp eax,13
+    je rate16
+    cmp eax,15
+    je frame_bad
+    lea rdx,rate_table
+    mov eax,[rdx+rax*4]
+    jmp rate_check
+rate8:
+    mov ecx,8
+    call get_bits
+    imul eax,1000
+    jmp rate_check
+rate16x10:
+    mov ecx,16
+    call get_bits
+    imul eax,10
+    jmp rate_check
+rate16:
+    mov ecx,16
+    call get_bits
+rate_check:
+    cmp eax,[sample_rate]
+    jne frame_bad
+rate_done:
+    mov eax,[depth_code]
+    test eax,eax
+    jz inherited_depth
+    lea rdx,depth_table
+    mov eax,[rdx+rax*4]
+    cmp eax,[source_bits]
+    jne frame_bad
+    jmp depth_done
+inherited_depth:
+    mov eax,[source_bits]
+depth_done:
+    mov [frame_bps],eax
+    ; Header CRC byte is the next aligned byte.
+    mov rax,[input_cursor]
+    mov [header_end],rax
+    mov ecx,8
+    call get_bits
+    mov ebx,eax
+    mov rcx,[frame_start]
+    mov rdx,[header_end]
+    mov r8d,8
+    call flac_crc
+    cmp eax,ebx
+    jne frame_bad
+    lea rcx,left_samples
+    mov edx,[frame_bps]
+    cmp dword ptr [channel_mode],9
+    jne left_depth_done
+    inc edx
+left_depth_done:
+    call decode_subframe
+    test eax,eax
+    jz frame_bad
+    cmp dword ptr [source_channels],1
+    je subframes_done
+    lea rcx,right_samples
+    mov edx,[frame_bps]
+    cmp dword ptr [channel_mode],8
+    je right_extra
+    cmp dword ptr [channel_mode],10
+    jne right_depth_done
+right_extra:
+    inc edx
+right_depth_done:
+    call decode_subframe
+    test eax,eax
+    jz frame_bad
+subframes_done:
+    mov ecx,[bits_count]
+    test ecx,ecx
+    jz aligned_frame
+    call get_bits
+    test eax,eax
+    jnz frame_bad
+aligned_frame:
+    mov rcx,[frame_start]
+    mov rdx,[input_cursor]
+    mov r8d,16
+    call flac_crc
+    mov ebx,eax
+    mov ecx,16
+    call get_bits
+    cmp eax,ebx
+    jne frame_bad
+    cmp dword ptr [decode_error],0
+    jne frame_bad
+    mov rax,[input_cursor]
+    cmp rax,[input_end]
+    jae last_block_valid
+    mov eax,[frame_samples]
+    cmp eax,[minimum_block]
+    jb frame_bad
+last_block_valid:
+    ; Restore left/right channels, using 64-bit intermediates.
+    xor ebx,ebx
+    lea rsi,left_samples
+    lea rdi,right_samples
+decorrelate:
+    cmp ebx,[frame_samples]
+    jae frame_ok
+    mov rax,[rsi+rbx*8]
+    mov rdx,[rdi+rbx*8]
+    cmp dword ptr [channel_mode],8
+    je left_side
+    cmp dword ptr [channel_mode],9
+    je side_right
+    cmp dword ptr [channel_mode],10
+    jne decor_next
+    shl rax,1
+    mov rcx,rdx
+    and ecx,1
+    or rax,rcx
+    mov rcx,rax
+    add rax,rdx
+    sub rcx,rdx
+    sar rax,1
+    sar rcx,1
+    mov [rsi+rbx*8],rax
+    mov [rdi+rbx*8],rcx
+    jmp decor_next
+left_side:
+    sub rax,rdx
+    mov [rdi+rbx*8],rax
+    jmp decor_next
+side_right:
+    add rax,rdx
+    mov [rsi+rbx*8],rax
+decor_next:
+    mov ecx,64
+    sub ecx,[source_bits]
+    mov rax,[rsi+rbx*8]
+    mov rdx,rax
+    shl rdx,cl
+    sar rdx,cl
+    cmp rax,rdx
+    jne frame_bad
+    cmp dword ptr [source_channels],1
+    je decor_range_valid
+    mov rax,[rdi+rbx*8]
+    mov rdx,rax
+    shl rdx,cl
+    sar rdx,cl
+    cmp rax,rdx
+    jne frame_bad
+decor_range_valid:
+    inc ebx
+    jmp decorrelate
+frame_ok:
+    mov eax,1
+    jmp frame_return
+frame_bad:
+    mov dword ptr [decode_error],3
+frame_eof:
+    xor eax,eax
+frame_return:
+    add rsp,64
+    pop r12
+    pop rdi
+    pop rsi
+    pop rbx
+    pop rbp
+    ret
+decode_frame ENDP
+
+decode_subframe PROC
+    push rbp
+    mov rbp,rsp
+    push rbx
+    push rsi
+    push rdi
+    push r12
+    push r13
+    push r14
+    sub rsp,64
+    mov rsi,rcx
+    mov [sub_bps],edx
+    mov dword ptr [wasted_bits],0
+    mov ecx,1
+    call get_bits
+    test eax,eax
+    jnz sub_bad
+    mov ecx,6
+    call get_bits
+    mov [sub_type],eax
+    mov ecx,1
+    call get_bits
+    test eax,eax
+    jz sub_header_done
+    call get_unary
+    inc eax
+    mov [wasted_bits],eax
+    cmp eax,[sub_bps]
+    jae sub_bad
+    sub [sub_bps],eax
+sub_header_done:
+    mov eax,[sub_type]
+    test eax,eax
+    jz sub_constant
+    cmp eax,1
+    je sub_verbatim
+    cmp eax,8
+    jb sub_bad
+    cmp eax,12
+    jbe sub_fixed
+    cmp eax,32
+    jb sub_bad
+    sub eax,31
+    mov [predict_order],eax
+    jmp sub_warmup
+sub_fixed:
+    sub eax,8
+    mov [predict_order],eax
+sub_warmup:
+    mov eax,[predict_order]
+    cmp eax,[frame_samples]
+    ja sub_bad
+    xor ebx,ebx
+warmup_loop:
+    cmp ebx,[predict_order]
+    jae warmup_done
+    mov ecx,[sub_bps]
+    call get_signed
+    mov [rsi+rbx*8],rax
+    inc ebx
+    jmp warmup_loop
+warmup_done:
+    cmp dword ptr [sub_type],32
+    jb residual_start
+    mov ecx,4
+    call get_bits
+    cmp eax,15
+    je sub_bad
+    inc eax
+    mov r12d,eax
+    mov ecx,5
+    call get_signed
+    test eax,eax
+    js sub_bad
+    mov [predict_shift],eax
+    xor ebx,ebx
+coeff_loop:
+    cmp ebx,[predict_order]
+    jae residual_start
+    mov ecx,r12d
+    call get_signed
+    lea rdx,lpc_coeff
+    mov [rdx+rbx*8],rax
+    inc ebx
+    jmp coeff_loop
+residual_start:
+    mov ecx,2
+    call get_bits
+    cmp eax,1
+    ja sub_bad
+    add eax,4
+    mov [rice_bits],eax
+    mov ecx,4
+    call get_bits
+    mov ecx,eax
+    mov eax,1
+    shl eax,cl
+    mov [partition_count],eax
+    mov ecx,eax
+    mov eax,[frame_samples]
+    xor edx,edx
+    div ecx
+    test edx,edx
+    jnz sub_bad
+    mov [partition_samples],eax
+    cmp eax,[predict_order]
+    jb sub_bad
+    xor r12d,r12d
+    mov ebx,[predict_order]
+partition_loop:
+    mov r13d,[partition_samples]
+    test r12d,r12d
+    jnz partition_full
+    sub r13d,[predict_order]
+partition_full:
+    mov ecx,[rice_bits]
+    call get_bits
+    mov [rice_k],eax
+    mov ecx,[rice_bits]
+    mov edx,1
+    shl edx,cl
+    dec edx
+    cmp eax,edx
+    je residual_escape
+rice_samples:
+    test r13d,r13d
+    jz partition_done
+    call get_unary
+    mov r14,rax
+    cmp dword ptr [decode_error],0
+    jne sub_bad
+rice_remainder:
+    mov ecx,[rice_k]
+    call get_bits
+    mov ecx,[rice_k]
+    shl r14,cl
+    or rax,r14
+    mov edx,0ffffffffh
+    cmp rax,rdx
+    ja sub_bad
+    mov rdx,rax
+    and edx,1
+    neg rdx
+    shr rax,1
+    xor rax,rdx
+    mov [rsi+rbx*8],rax
+    inc ebx
+    dec r13d
+    jmp rice_samples
+residual_escape:
+    mov ecx,5
+    call get_bits
+    mov r14d,eax
+escape_samples:
+    test r13d,r13d
+    jz partition_done
+    xor eax,eax
+    test r14d,r14d
+    jz escape_zero
+    mov ecx,r14d
+    call get_signed
+escape_zero:
+    mov [rsi+rbx*8],rax
+    inc ebx
+    dec r13d
+    jmp escape_samples
+partition_done:
+    inc r12d
+    cmp r12d,[partition_count]
+    jb partition_loop
+    cmp ebx,[frame_samples]
+    jne sub_bad
+    ; Prediction. qword samples avoid overflow for 24-bit stereo side data.
+    mov ebx,[predict_order]
+prediction_loop:
+    cmp ebx,[frame_samples]
+    jae restore_wasted
+    cmp dword ptr [sub_type],32
+    jae lpc_predict
+    mov ecx,[predict_order]
+    xor eax,eax
+    test ecx,ecx
+    jz predicted
+    mov rax,[rsi+rbx*8-8]
+    cmp ecx,1
+    je predicted
+    shl rax,1
+    sub rax,[rsi+rbx*8-16]
+    cmp ecx,2
+    je predicted
+    mov rax,[rsi+rbx*8-8]
+    imul rax,3
+    mov rdx,[rsi+rbx*8-16]
+    imul rdx,3
+    sub rax,rdx
+    add rax,[rsi+rbx*8-24]
+    cmp ecx,3
+    je predicted
+    mov rax,[rsi+rbx*8-8]
+    shl rax,2
+    mov rdx,[rsi+rbx*8-16]
+    imul rdx,6
+    sub rax,rdx
+    mov rdx,[rsi+rbx*8-24]
+    shl rdx,2
+    add rax,rdx
+    sub rax,[rsi+rbx*8-32]
+    jmp predicted
+lpc_predict:
+    xor eax,eax
+    xor edi,edi
+    lea r12,lpc_coeff
+    lea r13,[rsi+rbx*8-8]
+lpc_sum:
+    cmp edi,[predict_order]
+    jae lpc_shift
+    mov rdx,[r13]
+    imul rdx,[r12+rdi*8]
+    add rax,rdx
+    sub r13,8
+    inc edi
+    jmp lpc_sum
+lpc_shift:
+    mov ecx,[predict_shift]
+    sar rax,cl
+predicted:
+    add [rsi+rbx*8],rax
+    inc ebx
+    jmp prediction_loop
+sub_constant:
+    mov ecx,[sub_bps]
+    call get_signed
+    xor ebx,ebx
+constant_loop:
+    cmp ebx,[frame_samples]
+    jae restore_wasted
+    mov [rsi+rbx*8],rax
+    inc ebx
+    jmp constant_loop
+sub_verbatim:
+    xor ebx,ebx
+verbatim_loop:
+    cmp ebx,[frame_samples]
+    jae restore_wasted
+    mov ecx,[sub_bps]
+    call get_signed
+    mov [rsi+rbx*8],rax
+    inc ebx
+    jmp verbatim_loop
+restore_wasted:
+    cmp dword ptr [decode_error],0
+    jne sub_bad
+    ; Validate reconstructed samples before exposing any decoded frame.
+    xor ebx,ebx
+range_loop:
+    cmp ebx,[frame_samples]
+    jae sub_ok
+    mov rax,[rsi+rbx*8]
+    mov ecx,64
+    sub ecx,[sub_bps]
+    mov rdx,rax
+    shl rdx,cl
+    sar rdx,cl
+    cmp rax,rdx
+    jne sub_bad
+    mov ecx,[wasted_bits]
+    shl rax,cl
+    mov [rsi+rbx*8],rax
+    inc ebx
+    jmp range_loop
+sub_ok:
+    mov eax,1
+    jmp sub_return
+sub_bad:
+    mov dword ptr [decode_error],4
+    xor eax,eax
+sub_return:
+    add rsp,64
+    pop r14
+    pop r13
+    pop r12
+    pop rdi
+    pop rsi
+    pop rbx
+    pop rbp
+    ret
+decode_subframe ENDP
+
+decoder_read PROC
+    push rbp
+    mov rbp,rsp
+    push rbx
+    push rsi
+    push rdi
+    push r12
+    sub rsp,48
+    mov rdi,rcx
+    mov r12d,edx
+    xor ebx,ebx
+    cmp dword ptr [decode_error],0
+    jne read_done
+    cmp dword ptr [codec_kind],4
+    jne read_try_mp3
+    mov rcx,rdi
+    mov edx,r12d
+    call vorbis_read
+    mov ebx,eax
+    jmp read_done
+read_try_mp3:
+    cmp dword ptr [codec_kind],3
+    jne read_existing
+    mov rcx,rdi
+    mov edx,r12d
+    call mp3_read
+    mov ebx,eax
+    jmp read_done
+read_existing:
+    cmp dword ptr [codec_kind],1
+    je read_wav
+read_flac:
+    cmp ebx,r12d
+    jae read_done
+    mov eax,[frame_used]
+    cmp eax,[frame_samples]
+    jb flac_emit
+    call decode_frame
+    test eax,eax
+    jz read_done
+flac_emit:
+    mov ecx,[frame_used]
+    lea rsi,left_samples
+    cvtsi2ss xmm0,qword ptr [rsi+rcx*8]
+    mulss xmm0,[float_scale]
+    movss dword ptr [rdi+rbx*8],xmm0
+    cmp dword ptr [source_channels],1
+    je flac_mono
+    lea rsi,right_samples
+    cvtsi2ss xmm0,qword ptr [rsi+rcx*8]
+    mulss xmm0,[float_scale]
+flac_mono:
+    movss dword ptr [rdi+rbx*8+4],xmm0
+    inc dword ptr [frame_used]
+    inc ebx
+    jmp read_flac
+read_wav:
+    mov rsi,[input_cursor]
+wav_emit:
+    cmp ebx,r12d
+    jae wav_read_done
+    cmp rsi,[wav_end]
+    jae wav_read_done
+    call wav_sample
+    movss dword ptr [rdi+rbx*8],xmm0
+    cmp dword ptr [source_channels],1
+    je wav_mono
+    call wav_sample
+wav_mono:
+    movss dword ptr [rdi+rbx*8+4],xmm0
+    inc ebx
+    jmp wav_emit
+wav_read_done:
+    mov [input_cursor],rsi
+read_done:
+    mov eax,ebx
+    add rsp,48
+    pop r12
+    pop rdi
+    pop rsi
+    pop rbx
+    pop rbp
+    ret
+decoder_read ENDP
+
+wav_sample PROC
+    cmp dword ptr [wav_format],3
+    je sample_float
+    mov eax,[source_bits]
+    cmp eax,8
+    je sample8
+    cmp eax,16
+    je sample16
+    cmp eax,24
+    je sample24
+    movsxd rax,dword ptr [rsi]
+    cvtsi2ss xmm0,rax
+    mulss xmm0,[scale32]
+    add rsi,4
+    ret
+sample8:
+    movzx eax,byte ptr [rsi]
+    sub eax,128
+    cvtsi2ss xmm0,eax
+    mulss xmm0,[scale8]
+    inc rsi
+    ret
+sample16:
+    movsx eax,word ptr [rsi]
+    cvtsi2ss xmm0,eax
+    mulss xmm0,[scale16]
+    add rsi,2
+    ret
+sample24:
+    movzx eax,word ptr [rsi]
+    movsx edx,byte ptr [rsi+2]
+    shl edx,16
+    or eax,edx
+    cvtsi2ss xmm0,eax
+    mulss xmm0,[scale24]
+    add rsi,3
+    ret
+sample_float:
+    mov eax,[rsi]
+    mov edx,eax
+    and edx,7f800000h
+    cmp edx,7f800000h
+    jne sample_float_ok
+    xor eax,eax             ; NaN / Infinity sanitized to silence
+sample_float_ok:
+    movd xmm0,eax
+    add rsi,4
+    ret
+wav_sample ENDP
+END

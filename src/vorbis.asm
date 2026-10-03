@@ -1,0 +1,410 @@
+; Original bounded Vorbis decoder in x86-64 assembly. MIT, see LICENSE.
+; Floor 1, residue 0/1/2, mapping 0, mono/stereo. Reference: Xiph Vorbis I.
+option casemap:none
+include vorbis_layout.inc
+EXTERN VirtualAlloc:PROC, VirtualFree:PROC
+EXTERN ogg_open:PROC, ogg_next:PROC, ogg_close:PROC
+EXTERN ogg_granule:QWORD, ogg_total_granule:QWORD, ogg_eos:DWORD
+EXTERN sample_rate:DWORD, source_channels:DWORD, source_bits:DWORD
+EXTERN total_frames:QWORD, decode_error:DWORD
+EXTERN vb_transform_init:PROC, vb_imdct:PROC, vb_windows:QWORD
+PUBLIC vorbis_open, vorbis_read, vorbis_close
+.data
+vb_arena dq 0
+vb_allocated dd 0
+vb_committed dd 0
+vb_ptr dq 0
+vb_end dq 0
+vb_acc dq 0
+vb_count dd 0
+vb_bad dd 0
+vb_short dd 0
+vb_long dd 0
+vb_books_count dd 0
+vb_floors_count dd 0
+vb_residues_count dd 0
+vb_maps_count dd 0
+vb_modes_count dd 0
+vb_mode_bits dd 0
+vb_first dd 1
+vb_previous dd 0
+vb_available dd 0
+vb_used dd 0
+vb_emitted dq 0
+vb_n dd 0
+vb_block dd 0
+vb_left dd 0
+vb_left_end dd 0
+vb_right dd 0
+vb_right_end dd 0
+vb_current_map dq 0
+vb_range_table dd 256,128,86,64
+vb_float_mant dd 0
+vb_float_exp dd 0
+vb_lengths_total dd 0
+vb_tree_used dd 0
+vb_quant_ptr dq 0
+vb_min real4 0.0
+vb_delta real4 0.0
+vb_rs_ptr dq 0
+vb_rs_channels dd 0
+vb_rs_groups dd 0
+vb_rs_active dd 2 dup (0)
+vb_rs_channel dd 2 dup (0)
+vb_rs_parts dd 0
+vb_rs_words dd 0
+vb_rs_begin dd 0
+vb_rs_type dd 0
+include vorbis_tables.inc
+.data?
+ALIGN 16
+vb_books db CB_SIZE*256 dup (?)
+vb_floors db FL_SIZE*64 dup (?)
+vb_residues db RS_SIZE*64 dup (?)
+vb_maps db MP_SIZE*64 dup (?)
+vb_modes dd 128 dup (?)
+vb_codes_available dd 33 dup (?)
+vb_spectrum real4 8192 dup (?)
+vb_time real4 16384 dup (?)
+vb_tail real4 8192 dup (?)
+vb_pcm real4 16384 dup (?)
+vb_y dd 512 dup (?)
+vb_active dd 512 dup (?)
+vb_floor_channel dq 2 dup (?)
+vb_zero dd 2 dup (?)
+vb_really_zero dd 2 dup (?)
+vb_classdata dd 32768 dup (?)
+.code
+; Bounded little-endian bit reader. Only EAX and flags are clobbered.
+vb_bits PROC
+    push rcx
+    push rdx
+    push r8
+    cmp ecx,32
+    ja vb_bits_bad
+    test ecx,ecx
+    jz vb_bits_zero
+    mov r8d,[vb_count]
+vb_bits_load:
+    cmp r8d,ecx
+    jae vb_bits_extract
+    mov rdx,[vb_ptr]
+    cmp rdx,[vb_end]
+    jae vb_bits_bad
+    movzx eax,byte ptr [rdx]
+    inc rdx
+    mov [vb_ptr],rdx
+    mov edx,ecx
+    mov ecx,r8d
+    shl rax,cl
+    or [vb_acc],rax
+    mov ecx,edx
+    add r8d,8
+    jmp vb_bits_load
+vb_bits_extract:
+    mov rax,[vb_acc]
+    mov edx,-1
+    cmp ecx,32
+    je vb_bits_mask
+    mov edx,1
+    shl edx,cl
+    dec edx
+vb_bits_mask:
+    and eax,edx
+    shr qword ptr [vb_acc],cl
+    sub r8d,ecx
+    mov [vb_count],r8d
+    jmp vb_bits_done
+vb_bits_bad:
+    mov dword ptr [vb_bad],1
+vb_bits_zero:
+    xor eax,eax
+vb_bits_done:
+    pop r8
+    pop rdx
+    pop rcx
+    ret
+vb_bits ENDP
+
+; EAX=nonnegative integer -> ECX=ilog(integer).
+vb_ilog PROC
+    xor ecx,ecx
+    test eax,eax
+    jz vb_ilog_done
+    bsr ecx,eax
+    inc ecx
+vb_ilog_done:
+    ret
+vb_ilog ENDP
+
+; EAX=bytes, aligned zeroed arena -> RAX. Failures are sticky.
+vb_alloc PROC
+    push rbx
+    push rsi
+    sub rsp,40
+    add eax,15
+    jc vb_alloc_bad
+    and eax,-16
+    mov edx,[vb_allocated]
+    add eax,edx
+    jc vb_alloc_bad
+    cmp eax,VB_ARENA
+    ja vb_alloc_bad
+    mov [vb_allocated],eax
+    mov esi,edx
+    cmp eax,[vb_committed]
+    jbe vb_alloc_ready
+    add eax,65535
+    and eax,-65536
+    mov ebx,eax
+    mov edx,[vb_committed]
+    mov rcx,[vb_arena]
+    add rcx,rdx
+    mov eax,ebx
+    sub eax,edx
+    mov edx,eax
+    mov r8d,1000h
+    mov r9d,4
+    call VirtualAlloc
+    test rax,rax
+    jz vb_alloc_bad
+    mov [vb_committed],ebx
+vb_alloc_ready:
+    mov rax,[vb_arena]
+    add rax,rsi
+    jmp vb_alloc_return
+vb_alloc_bad:
+    mov dword ptr [vb_bad],1
+    xor eax,eax
+vb_alloc_return:
+    add rsp,40
+    pop rsi
+    pop rbx
+    ret
+vb_alloc ENDP
+
+; EAX=Vorbis packed float -> XMM0; x87 handles signed binary exponent.
+vb_unpack PROC
+    mov edx,eax
+    and edx,1fffffh
+    test eax,80000000h
+    jz vb_unpack_positive
+    neg edx
+vb_unpack_positive:
+    mov [vb_float_mant],edx
+    shr eax,21
+    and eax,3ffh
+    sub eax,788
+    mov [vb_float_exp],eax
+    fild dword ptr [vb_float_exp]
+    fild dword ptr [vb_float_mant]
+    fscale
+    fstp dword ptr [vb_float_mant]
+    fstp st(0)
+    movss xmm0,dword ptr [vb_float_mant]
+    ret
+vb_unpack ENDP
+
+; ECX=codebook index -> EAX=symbol. Simple tree, maximum 32 bits.
+vb_symbol PROC
+    push rdx
+    push r8
+    push r9
+    cmp ecx,[vb_books_count]
+    jae vb_symbol_bad
+    mov eax,ecx
+    shl eax,6
+    lea r8,vb_books
+    mov r8,[r8+rax+CB_TREE]
+    xor r9d,r9d
+    xor edx,edx
+vb_symbol_bit:
+    VB_GET 1
+    lea rax,[rax+rdx*2]
+    mov edx,[r8+rax*4]
+    test edx,edx
+    js vb_symbol_leaf
+    test edx,edx
+    jz vb_symbol_bad
+    inc r9d
+    cmp r9d,32
+    jb vb_symbol_bit
+vb_symbol_bad:
+    mov dword ptr [vb_bad],1
+    xor eax,eax
+    jmp vb_symbol_done
+vb_symbol_leaf:
+    mov eax,edx
+    not eax
+vb_symbol_done:
+    pop r9
+    pop r8
+    pop rdx
+    ret
+vb_symbol ENDP
+
+vorbis_close PROC
+    sub rsp,40
+    mov rcx,[vb_arena]
+    test rcx,rcx
+    jz vb_close_done
+    xor edx,edx
+    mov r8d,8000h
+    call VirtualFree
+    mov qword ptr [vb_arena],0
+vb_close_done:
+    add rsp,40
+    ret
+vorbis_close ENDP
+
+vorbis_open PROC
+    push rbx
+    push rsi
+    push rdi
+    sub rsp,32
+    call ogg_open
+    test eax,eax
+    jz vb_open_bad
+    call vorbis_close
+    mov dword ptr [vb_bad],0
+    mov dword ptr [vb_allocated],0
+    mov dword ptr [vb_committed],0
+    mov dword ptr [vb_first],1
+    mov dword ptr [vb_previous],0
+    mov dword ptr [vb_available],0
+    mov dword ptr [vb_used],0
+    mov qword ptr [vb_emitted],0
+    call ogg_next
+    test rax,rax
+    jz vb_open_bad
+    cmp edx,30
+    jne vb_open_bad
+    cmp dword ptr [rax],726f7601h
+    jne vb_open_bad
+    cmp word ptr [rax+4],6962h
+    jne vb_open_bad
+    cmp byte ptr [rax+6],73h
+    jne vb_open_bad
+    cmp dword ptr [rax+7],0
+    jne vb_open_bad
+    movzx ecx,byte ptr [rax+11]
+    cmp ecx,1
+    jb vb_open_bad
+    cmp ecx,2
+    ja vb_open_bad
+    mov [source_channels],ecx
+    mov ecx,[rax+12]
+    cmp ecx,8000
+    jb vb_open_bad
+    cmp ecx,192000
+    ja vb_open_bad
+    mov [sample_rate],ecx
+    movzx ecx,byte ptr [rax+28]
+    mov edx,ecx
+    and ecx,15
+    shr edx,4
+    cmp ecx,6
+    jb vb_open_bad
+    cmp edx,13
+    ja vb_open_bad
+    cmp edx,ecx
+    jb vb_open_bad
+    mov ebx,1
+    shl ebx,cl
+    mov [vb_short],ebx
+    mov ecx,edx
+    mov ebx,1
+    shl ebx,cl
+    mov [vb_long],ebx
+    cmp byte ptr [rax+29],1
+    jne vb_open_bad
+    mov dword ptr [source_bits],32
+    mov rax,[ogg_total_granule]
+    mov [total_frames],rax
+    call ogg_next
+    test rax,rax
+    jz vb_open_bad
+    cmp edx,16
+    jb vb_open_bad
+    cmp dword ptr [rax],726f7603h
+    jne vb_open_bad
+    cmp word ptr [rax+4],6962h
+    jne vb_open_bad
+    cmp byte ptr [rax+6],73h
+    jne vb_open_bad
+    ; Validate bounded vendor and comment strings without allocating them.
+    mov rsi,rax
+    lea rdi,[rax+rdx]
+    add rsi,7
+    mov eax,[rsi]
+    add rsi,4
+    add rsi,rax
+    lea rax,[rsi+4]
+    cmp rax,rdi
+    ja vb_open_bad
+    mov ebx,[rsi]
+    add rsi,4
+vb_comment:
+    test ebx,ebx
+    jz vb_comment_end
+    lea rax,[rsi+4]
+    cmp rax,rdi
+    ja vb_open_bad
+    mov eax,[rsi]
+    add rsi,4
+    add rsi,rax
+    cmp rsi,rdi
+    ja vb_open_bad
+    dec ebx
+    jmp vb_comment
+vb_comment_end:
+    cmp rsi,rdi
+    jae vb_open_bad
+    test byte ptr [rsi],1
+    jz vb_open_bad
+    xor ecx,ecx
+    mov edx,VB_ARENA
+    mov r8d,2000h          ; reserve address space; commit setup pages as needed
+    mov r9d,4
+    call VirtualAlloc
+    test rax,rax
+    jz vb_open_bad
+    mov [vb_arena],rax
+    call ogg_next
+    test rax,rax
+    jz vb_open_bad
+    cmp edx,8
+    jb vb_open_bad
+    cmp dword ptr [rax],726f7605h
+    jne vb_open_bad
+    cmp word ptr [rax+4],6962h
+    jne vb_open_bad
+    cmp byte ptr [rax+6],73h
+    jne vb_open_bad
+    lea rcx,[rax+rdx]
+    mov [vb_end],rcx
+    add rax,7
+    mov [vb_ptr],rax
+    mov qword ptr [vb_acc],0
+    mov dword ptr [vb_count],0
+    call vb_setup
+    test eax,eax
+    jz vb_open_bad
+    mov ecx,[vb_short]
+    mov edx,[vb_long]
+    call vb_transform_init
+    mov eax,1
+    jmp vb_open_done
+vb_open_bad:
+    mov dword ptr [decode_error],23
+    xor eax,eax
+vb_open_done:
+    add rsp,32
+    pop rdi
+    pop rsi
+    pop rbx
+    ret
+vorbis_open ENDP
+include vorbis_setup.inc
+include vorbis_decode.inc
+END

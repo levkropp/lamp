@@ -1,0 +1,6 @@
+{
+  "result": "passed",
+  "operations": 524288,
+  "scope": "range symbols, state, whole and fractional bit counts; not audio decoding",
+  "stats": "Passed 524288 exact Opus range operations and state/tell comparisons."
+}

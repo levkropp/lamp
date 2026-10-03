@@ -1,0 +1,111 @@
+MP3 codebook and coefficient data, and algorithm reference:
+dr_mp3, Copyright 2023 David Reid
+https://github.com/mackron/dr_libs/blob/master/dr_mp3.h
+Selected license: MIT No Attribution (MIT-0).
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+Underlying minimp3 reference and data:
+https://github.com/lieff/minimp3
+To the extent possible under law, the author(s) have dedicated all copyright
+and related and neighboring rights to this software to the public domain
+worldwide. This software is distributed without any warranty.
+https://creativecommons.org/publicdomain/zero/1.0/
+
+The runtime MP3 code is handwritten x86-64 assembly. The reference C header
+is used to extract tables for the assembly include. No reference C source
+is linked into either player. FFmpeg is a separately
+installed test oracle and is not distributed with this project.
+
+Vorbis algorithm reference and inverse-dB coefficient data:
+stb_vorbis by Sean Barrett
+https://github.com/nothings/stb/blob/master/stb_vorbis.c
+Selected license: MIT.
+Copyright (c) 2017 Sean Barrett
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+Opus algorithm and probability table reference:
+Normative source archive embedded in RFC6716; not linked into either player.
+https://www.rfc-editor.org/rfc/rfc6716.html
+
+Adapted range/CELT algorithms:
+Copyright (c) 2001-2012 IETF Trust, Xiph.Org Foundation, CSIRO,
+Jean-Marc Valin and Timothy B. Terriberry. All rights reserved.
+Adapted SILK pulse algorithms and probability data:
+Copyright (c) 2006-2012 IETF Trust and Skype Limited. All rights reserved.
+Adapted Opus packet framing:
+Copyright (c) 2010-2012 IETF Trust, Xiph.Org Foundation and Skype Limited.
+All rights reserved.
+Individual source notices are retained in the bundled reference archive.
+Copyright 1994-2011 IETF Trust, Xiph.Org, Skype Limited, Octasic,
+                    Jean-Marc Valin, Timothy B. Terriberry,
+                    CSIRO, Gregory Maxwell, Mark Borgerding,
+                    Erik de Castro Lopo. All rights reserved.
+
+This file is extracted from RFC6716. Please see that RFC for additional
+information.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions
+are met:
+
+- Redistributions of source code must retain the above copyright
+notice, this list of conditions and the following disclaimer.
+
+- Redistributions in binary form must reproduce the above copyright
+notice, this list of conditions and the following disclaimer in the
+documentation and/or other materials provided with the distribution.
+
+- Neither the name of Internet Society, IETF or IETF Trust, nor the
+names of specific contributors, may be used to endorse or promote
+products derived from this software without specific prior written
+permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
+OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+
+Rhun style and implementation-model reference:
+https://github.com/vshvedov/rhun
+The custom pixel canvas, Win32 presentation and compact monospace UI model
+were used as design references. No Rhun source code or assets were copied.
+The UI uses the Windows system font Consolas; no font file is distributed.
+
+Reference C implementations and oracle programs are development/test inputs
+only. Native LAMP runtime sources and all codec implementations linked
+into its executables are x86-64 assembly.

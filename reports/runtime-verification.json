@@ -1,0 +1,51 @@
+[
+  {
+    "file": "lamp-cli.exe",
+    "bytes": 102400,
+    "architecture": "x86-64",
+    "subsystem": "console",
+    "imports": [
+      "KERNEL32.dll",
+      "ole32.dll",
+      "SHELL32.dll",
+      "AVRT.dll"
+    ],
+    "iconSizes": [
+      16,
+      24,
+      32,
+      48,
+      64,
+      128,
+      256
+    ],
+    "version": "0.3.0",
+    "result": "passed"
+  },
+  {
+    "file": "lamp.exe",
+    "bytes": 110080,
+    "architecture": "x86-64",
+    "subsystem": "windows",
+    "imports": [
+      "KERNEL32.dll",
+      "ole32.dll",
+      "SHELL32.dll",
+      "AVRT.dll",
+      "USER32.dll",
+      "GDI32.dll",
+      "COMDLG32.dll"
+    ],
+    "iconSizes": [
+      16,
+      24,
+      32,
+      48,
+      64,
+      128,
+      256
+    ],
+    "version": "0.3.0",
+    "result": "passed"
+  }
+]

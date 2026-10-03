@@ -1,0 +1,34 @@
+[
+  {
+    "codec": "wav",
+    "frames": 12000,
+    "rate": 48000,
+    "peak": 0.08837890625,
+    "result": "passed"
+  },
+  {
+    "codec": "flac",
+    "frames": 12000,
+    "rate": 48000,
+    "peak": 0.08837890625,
+    "result": "passed"
+  },
+  {
+    "codec": "mp3",
+    "frames": 12000,
+    "rate": 48000,
+    "peak": 0.0840023010969162,
+    "result": "passed"
+  },
+  {
+    "codec": "vorbis",
+    "frames": 12000,
+    "rate": 48000,
+    "peak": 0.08997303247451782,
+    "result": "passed"
+  },
+  {
+    "codec": "opus",
+    "result": "unsupported input rejected"
+  }
+]

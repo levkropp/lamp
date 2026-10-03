@@ -1,0 +1,8 @@
+{
+  "codec": "flac",
+  "workers": 4,
+  "seconds": 8,
+  "result": "passed",
+  "stats": "Playing. Space: pause / resume. Q or Ctrl+C: stop.\r\ncodec=2 rate=44100 channels=1 bits=16 frames=352800 underruns=0 decode_error=0 audio_error=0 elapsed_ms=8031 cpu_us=15625 endpoint_dry=0",
+  "scope": "bounded CPU pressure with digital silence; not whole-system saturation"
+}

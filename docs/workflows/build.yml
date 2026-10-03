@@ -1,0 +1,34 @@
+name: Build and verify
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  windows-x64:
+    runs-on: windows-2022
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - uses: actions/checkout@v6
+      - name: Build assembly players
+        run: ./build.ps1
+      - name: Check architecture, resources and runtime dependencies
+        run: node tests/verify-runtime.js
+      - name: Check advertised formats and unsupported Opus
+        run: node tests/smoke.js
+      - name: Check static site
+        run: node tests/verify-site.js
+      - name: Render actual assembly UI
+        run: ./tests/render-ui.ps1
+      - name: Package source and binaries
+        run: ./package.ps1
+      - uses: actions/upload-artifact@v7
+        with:
+          name: lamp-windows-x64
+          path: ../outputs/lamp-windows-x64-*.zip
+          if-no-files-found: error
+          retention-days: 14

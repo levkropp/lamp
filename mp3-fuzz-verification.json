@@ -1,0 +1,7 @@
+{
+  "cases": 256,
+  "accepted": 131,
+  "rejected": 125,
+  "result": "no crash or timeout",
+  "scope": "Seeded mutations of one transient VBR fixture. Accepted mutations have no PCM correctness guarantee; this is not exhaustive fuzzing."
+}

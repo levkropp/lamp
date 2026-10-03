@@ -1,0 +1,8 @@
+{
+  "codec": "mp3",
+  "workers": 4,
+  "seconds": 8,
+  "result": "passed",
+  "stats": "Playing. Space: pause / resume. Q or Ctrl+C: stop.\r\ncodec=3 rate=44100 channels=2 bits=0 frames=352800 underruns=0 decode_error=0 audio_error=0 elapsed_ms=8032 cpu_us=62500 endpoint_dry=0",
+  "scope": "bounded CPU pressure with digital silence; not whole-system saturation"
+}

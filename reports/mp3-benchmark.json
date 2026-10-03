@@ -1,0 +1,39 @@
+{
+  "fixture": "30 seconds, MPEG-1 Layer III, 48 kHz stereo, 320 kbps, independent seeded noise",
+  "executable_bytes": 65536,
+  "median_cpu_us": 62500,
+  "one_core_equivalent_percent": 0.20833333333333334,
+  "scope": "Offline decode including process setup. Coarse Windows process CPU accounting; excludes audio rendering. No comparison with other players.",
+  "runs": [
+    {
+      "run": 1,
+      "cpu_us": 62500,
+      "elapsed_ms": 47,
+      "stats": "codec=3 rate=48000 channels=2 bits=0 frames=1440000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=47 cpu_us=62500 endpoint_dry=0"
+    },
+    {
+      "run": 2,
+      "cpu_us": 62500,
+      "elapsed_ms": 47,
+      "stats": "codec=3 rate=48000 channels=2 bits=0 frames=1440000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=47 cpu_us=62500 endpoint_dry=0"
+    },
+    {
+      "run": 3,
+      "cpu_us": 62500,
+      "elapsed_ms": 63,
+      "stats": "codec=3 rate=48000 channels=2 bits=0 frames=1440000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=63 cpu_us=62500 endpoint_dry=0"
+    },
+    {
+      "run": 4,
+      "cpu_us": 62500,
+      "elapsed_ms": 46,
+      "stats": "codec=3 rate=48000 channels=2 bits=0 frames=1440000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=46 cpu_us=62500 endpoint_dry=0"
+    },
+    {
+      "run": 5,
+      "cpu_us": 62500,
+      "elapsed_ms": 63,
+      "stats": "codec=3 rate=48000 channels=2 bits=0 frames=1440000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=63 cpu_us=62500 endpoint_dry=0"
+    }
+  ]
+}

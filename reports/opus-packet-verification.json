@@ -1,0 +1,5 @@
+{
+  "result": "passed",
+  "scope": "packet framing, frame sizes and pointers, TOC and duration; not audio decoding",
+  "stats": "Passed 1216672 packet framing comparisons (351968 valid packets)."
+}

@@ -1,0 +1,5 @@
+{
+  "result": "passed",
+  "scope": "CELT Laplace symbols, coarse/fine/final energy and entropy state; not audio decoding",
+  "stats": "Passed 131072 exact Laplace symbols and 12288 energy-stage comparisons."
+}

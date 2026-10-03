@@ -1,0 +1,5 @@
+{
+  "result": "passed",
+  "scope": "CELT pulse enumeration and entropy state; not audio decoding",
+  "stats": "Passed 90678 signed-pulse enumeration and entropy comparisons."
+}

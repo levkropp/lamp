@@ -1,0 +1,7 @@
+{
+  "cases": 512,
+  "accepted": 121,
+  "rejected": 391,
+  "result": "no crash or timeout",
+  "scope": "Seeded setup/comment and audio mutations of one transient fixture, with page CRCs repaired. Accepted mutations are not verified for audio correctness; not exhaustive fuzzing."
+}

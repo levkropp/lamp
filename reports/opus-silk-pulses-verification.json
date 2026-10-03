@@ -1,0 +1,5 @@
+{
+  "result": "passed",
+  "scope": "SILK shell trees, excitation pulses, LSB and signs, entropy state; not audio synthesis",
+  "stats": "Passed 69632 SILK shell trees and 24576 excitation/state comparisons."
+}

@@ -1,0 +1,14 @@
+* text=auto
+*.asm text eol=crlf
+*.inc text eol=crlf
+*.ps1 text eol=crlf
+*.md text eol=lf
+*.yml text eol=lf
+*.png binary
+*.ico binary
+*.wav binary
+*.flac binary
+*.mp3 binary
+*.ogg binary
+*.opus binary
+*.gz binary

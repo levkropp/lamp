@@ -1,0 +1,39 @@
+{
+  "fixture": "30 seconds, vorbis, 48 kHz stereo, independent seeded noise; quality 8",
+  "executable_bytes": 76800,
+  "median_cpu_us": 140625,
+  "one_core_equivalent_percent": 0.46875,
+  "scope": "Offline decode including process setup. Coarse Windows process CPU accounting; excludes audio rendering. No comparison with other players.",
+  "runs": [
+    {
+      "run": 1,
+      "cpu_us": 93750,
+      "elapsed_ms": 125,
+      "stats": "codec=4 rate=48000 channels=2 bits=32 frames=1440000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=125 cpu_us=93750 endpoint_dry=0"
+    },
+    {
+      "run": 2,
+      "cpu_us": 156250,
+      "elapsed_ms": 140,
+      "stats": "codec=4 rate=48000 channels=2 bits=32 frames=1440000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=140 cpu_us=156250 endpoint_dry=0"
+    },
+    {
+      "run": 3,
+      "cpu_us": 156250,
+      "elapsed_ms": 141,
+      "stats": "codec=4 rate=48000 channels=2 bits=32 frames=1440000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=141 cpu_us=156250 endpoint_dry=0"
+    },
+    {
+      "run": 4,
+      "cpu_us": 140625,
+      "elapsed_ms": 141,
+      "stats": "codec=4 rate=48000 channels=2 bits=32 frames=1440000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=141 cpu_us=140625 endpoint_dry=0"
+    },
+    {
+      "run": 5,
+      "cpu_us": 125000,
+      "elapsed_ms": 140,
+      "stats": "codec=4 rate=48000 channels=2 bits=32 frames=1440000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=140 cpu_us=125000 endpoint_dry=0"
+    }
+  ]
+}

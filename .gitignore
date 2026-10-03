@@ -1,0 +1,11 @@
+bin/
+tests/generated/
+tests/reference/opus-rfc6716/
+outputs/
+manifest.json
+*.obj
+*.pdb
+*.ilk
+*.log
+*.tmp
+publish-state.json
