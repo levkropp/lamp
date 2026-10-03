@@ -22,6 +22,7 @@ foreach ($file in $files) {
 $files += 'manifest.json'
 if (Test-Path -LiteralPath $zipPath) { Remove-Item -LiteralPath $zipPath }
 Add-Type -AssemblyName System.IO.Compression
+Add-Type -AssemblyName System.IO.Compression.FileSystem
 $archive = [IO.Compression.ZipFile]::Open($zipPath,[IO.Compression.ZipArchiveMode]::Create)
 try {
     foreach ($file in $files) {
