@@ -9,13 +9,13 @@
         "test":  "pcm_u8-2.wav",
         "result":  "exact",
         "bytes":  115200,
-        "stats":  "codec=1 rate=48000 channels=2 bits=8 frames=14400 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+        "stats":  "codec=1 rate=48000 channels=2 bits=8 frames=14400 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
     },
     {
         "test":  "pcm_s16le-1.wav",
         "result":  "exact",
         "bytes":  115200,
-        "stats":  "codec=1 rate=48000 channels=1 bits=16 frames=14400 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+        "stats":  "codec=1 rate=48000 channels=1 bits=16 frames=14400 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
     },
     {
         "test":  "pcm_s16le-2.wav",
@@ -39,49 +39,49 @@
         "test":  "pcm_s32le-1.wav",
         "result":  "exact",
         "bytes":  115200,
-        "stats":  "codec=1 rate=48000 channels=1 bits=32 frames=14400 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+        "stats":  "codec=1 rate=48000 channels=1 bits=32 frames=14400 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
     },
     {
         "test":  "pcm_s32le-2.wav",
         "result":  "exact",
         "bytes":  115200,
-        "stats":  "codec=1 rate=48000 channels=2 bits=32 frames=14400 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=31250 endpoint_dry=0"
+        "stats":  "codec=1 rate=48000 channels=2 bits=32 frames=14400 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
     },
     {
         "test":  "pcm_f32le-1.wav",
         "result":  "exact",
         "bytes":  115200,
-        "stats":  "codec=1 rate=48000 channels=1 bits=32 frames=14400 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+        "stats":  "codec=1 rate=48000 channels=1 bits=32 frames=14400 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
     },
     {
         "test":  "pcm_f32le-2.wav",
         "result":  "exact",
         "bytes":  115200,
-        "stats":  "codec=1 rate=48000 channels=2 bits=32 frames=14400 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+        "stats":  "codec=1 rate=48000 channels=2 bits=32 frames=14400 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
     },
     {
         "test":  "flac-16-1-level0.flac",
         "result":  "exact",
         "bytes":  115200,
-        "stats":  "codec=2 rate=48000 channels=1 bits=16 frames=14400 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=31250 endpoint_dry=0"
+        "stats":  "codec=2 rate=48000 channels=1 bits=16 frames=14400 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
     },
     {
         "test":  "flac-16-1-level5.flac",
         "result":  "exact",
         "bytes":  115200,
-        "stats":  "codec=2 rate=48000 channels=1 bits=16 frames=14400 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+        "stats":  "codec=2 rate=48000 channels=1 bits=16 frames=14400 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
     },
     {
         "test":  "flac-16-1-level12.flac",
         "result":  "exact",
         "bytes":  115200,
-        "stats":  "codec=2 rate=48000 channels=1 bits=16 frames=14400 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+        "stats":  "codec=2 rate=48000 channels=1 bits=16 frames=14400 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
     },
     {
         "test":  "flac-16-2-level0.flac",
         "result":  "exact",
         "bytes":  115200,
-        "stats":  "codec=2 rate=48000 channels=2 bits=16 frames=14400 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+        "stats":  "codec=2 rate=48000 channels=2 bits=16 frames=14400 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
     },
     {
         "test":  "flac-16-2-level5.flac",
@@ -105,13 +105,13 @@
         "test":  "flac-24-1-level5.flac",
         "result":  "exact",
         "bytes":  115200,
-        "stats":  "codec=2 rate=48000 channels=1 bits=24 frames=14400 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+        "stats":  "codec=2 rate=48000 channels=1 bits=24 frames=14400 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=0 endpoint_dry=0"
     },
     {
         "test":  "flac-24-1-level12.flac",
         "result":  "exact",
         "bytes":  115200,
-        "stats":  "codec=2 rate=48000 channels=1 bits=24 frames=14400 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+        "stats":  "codec=2 rate=48000 channels=1 bits=24 frames=14400 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
     },
     {
         "test":  "flac-24-2-level0.flac",
@@ -123,19 +123,19 @@
         "test":  "flac-24-2-level5.flac",
         "result":  "exact",
         "bytes":  115200,
-        "stats":  "codec=2 rate=48000 channels=2 bits=24 frames=14400 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+        "stats":  "codec=2 rate=48000 channels=2 bits=24 frames=14400 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
     },
     {
         "test":  "flac-24-2-level12.flac",
         "result":  "exact",
         "bytes":  115200,
-        "stats":  "codec=2 rate=48000 channels=2 bits=24 frames=14400 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+        "stats":  "codec=2 rate=48000 channels=2 bits=24 frames=14400 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
     },
     {
         "test":  "silence.flac",
         "result":  "exact",
         "bytes":  105840,
-        "stats":  "codec=2 rate=44100 channels=2 bits=16 frames=13230 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+        "stats":  "codec=2 rate=44100 channels=2 bits=16 frames=13230 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
     },
     {
         "test":  "noise.flac",
@@ -153,49 +153,49 @@
         "test":  "vector-verbatim.flac",
         "result":  "exact",
         "bytes":  256,
-        "stats":  "codec=2 rate=48000 channels=2 bits=16 frames=32 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=0 endpoint_dry=0"
+        "stats":  "codec=2 rate=48000 channels=2 bits=16 frames=32 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
     },
     {
         "test":  "vector-fixed0.flac",
         "result":  "exact",
         "bytes":  256,
-        "stats":  "codec=2 rate=48000 channels=2 bits=16 frames=32 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+        "stats":  "codec=2 rate=48000 channels=2 bits=16 frames=32 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
     },
     {
         "test":  "vector-fixed1.flac",
         "result":  "exact",
         "bytes":  256,
-        "stats":  "codec=2 rate=48000 channels=2 bits=16 frames=32 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+        "stats":  "codec=2 rate=48000 channels=2 bits=16 frames=32 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
     },
     {
         "test":  "vector-fixed2.flac",
         "result":  "exact",
         "bytes":  256,
-        "stats":  "codec=2 rate=48000 channels=2 bits=16 frames=32 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+        "stats":  "codec=2 rate=48000 channels=2 bits=16 frames=32 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
     },
     {
         "test":  "vector-fixed3.flac",
         "result":  "exact",
         "bytes":  256,
-        "stats":  "codec=2 rate=48000 channels=2 bits=16 frames=32 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+        "stats":  "codec=2 rate=48000 channels=2 bits=16 frames=32 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=0 endpoint_dry=0"
     },
     {
         "test":  "vector-fixed4.flac",
         "result":  "exact",
         "bytes":  256,
-        "stats":  "codec=2 rate=48000 channels=2 bits=16 frames=32 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+        "stats":  "codec=2 rate=48000 channels=2 bits=16 frames=32 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=46875 endpoint_dry=0"
     },
     {
         "test":  "vector-lpc3.flac",
         "result":  "exact",
         "bytes":  256,
-        "stats":  "codec=2 rate=48000 channels=2 bits=16 frames=32 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+        "stats":  "codec=2 rate=48000 channels=2 bits=16 frames=32 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
     },
     {
         "test":  "vector-rice5.flac",
         "result":  "exact",
         "bytes":  256,
-        "stats":  "codec=2 rate=48000 channels=2 bits=16 frames=32 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+        "stats":  "codec=2 rate=48000 channels=2 bits=16 frames=32 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
     },
     {
         "test":  "vector-escape.flac",
@@ -219,25 +219,25 @@
         "test":  "vector-left-side.flac",
         "result":  "exact",
         "bytes":  256,
-        "stats":  "codec=2 rate=48000 channels=2 bits=16 frames=32 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+        "stats":  "codec=2 rate=48000 channels=2 bits=16 frames=32 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=0 endpoint_dry=0"
     },
     {
         "test":  "vector-side-right.flac",
         "result":  "exact",
         "bytes":  256,
-        "stats":  "codec=2 rate=48000 channels=2 bits=16 frames=32 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+        "stats":  "codec=2 rate=48000 channels=2 bits=16 frames=32 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
     },
     {
         "test":  "vector-mid-side.flac",
         "result":  "exact",
         "bytes":  256,
-        "stats":  "codec=2 rate=48000 channels=2 bits=16 frames=32 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+        "stats":  "codec=2 rate=48000 channels=2 bits=16 frames=32 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
     },
     {
         "test":  "corrupt-flac",
         "result":  "rejected",
         "bytes":  0,
-        "stats":  "codec=2 rate=48000 channels=2 bits=16 frames=13824 underruns=0 decode_error=3 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+        "stats":  "codec=2 rate=48000 channels=2 bits=16 frames=13824 underruns=0 decode_error=3 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
     },
     {
         "test":  "truncated-wav",
@@ -249,12 +249,12 @@
         "test":  "truncated-flac",
         "result":  "rejected",
         "bytes":  0,
-        "stats":  "codec=2 rate=48000 channels=2 bits=16 frames=13824 underruns=0 decode_error=3 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+        "stats":  "codec=2 rate=48000 channels=2 bits=16 frames=13824 underruns=0 decode_error=3 audio_error=0 elapsed_ms=16 cpu_us=0 endpoint_dry=0"
     },
     {
         "test":  "wasapi-silence",
         "result":  "played",
         "bytes":  0,
-        "stats":  "Playing. Space: pause / resume. Q or Ctrl+C: stop. codec=2 rate=48000 channels=2 bits=16 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1218 cpu_us=46875 endpoint_dry=0"
+        "stats":  "Playing. Space: pause / resume. Q or Ctrl+C: stop. codec=2 rate=48000 channels=2 bits=16 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1219 cpu_us=15625 endpoint_dry=0"
     }
 ]

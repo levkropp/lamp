@@ -9,27 +9,36 @@ void decoder_close(void);
 uint64_t decoder_seek(uint64_t);
 unsigned decoder_read(float *,unsigned);
 extern unsigned decode_error,codec_kind;
+extern unsigned decoder_seek_probes;
+extern unsigned *ogg_cancel_ptr;
 extern uint64_t total_frames;
 static struct {uint64_t before;float values[4096];uint64_t after;} pcm;
 int wmain(int argc,wchar_t **argv){
- if(argc!=4)return 2;
+ if(argc!=4&&argc!=5)return 2;
+ unsigned bound=argc==5?(unsigned)_wtoi(argv[4]):UINT32_MAX;
  int invalid=_wtoi(argv[3]);
  if(invalid){
   int opened=decoder_open(argv[1]);
   if(invalid==1){if(opened||!decode_error)return 1;}
-  else {if(!opened)return 1;decoder_seek(UINT64_MAX);if(!decode_error)return 1;}
+  else if(invalid==3){unsigned cancel=1;if(!opened)return 1;ogg_cancel_ptr=&cancel;if(decoder_seek(UINT64_MAX)||decode_error||decoder_seek_probes)return 1;ogg_cancel_ptr=NULL;}
+  else {if(!opened)return 1;decoder_seek(invalid==4?total_frames/2:UINT64_MAX);
+   if(invalid==4){for(unsigned i=0;i<4&&!decode_error;i++)decoder_read(pcm.values,2048);}
+   if(!decode_error)return 1;}
   decoder_close();puts("{\"result\":\"rejected\"}");return 0;
  }
  FILE *file=_wfopen(argv[2],L"rb");if(!file)return 2;
  if(fseek(file,0,SEEK_END))return 2;long bytes=ftell(file);if(bytes<=0||bytes%8)return 2;
  rewind(file);unsigned char *expected=(unsigned char *)malloc(bytes);if(!expected||fread(expected,1,bytes,file)!=(size_t)bytes)return 2;fclose(file);
- uint64_t frames=(uint64_t)bytes/8;unsigned checks=0,advanced=0;uint64_t discarded=0;
+ uint64_t frames=(uint64_t)bytes/8;unsigned checks=0,advanced=0,most_probes=0;uint64_t discarded=0,most_discarded=0;
  const uint64_t requests[]={0,1,119,120,4095,4096,4607,4608,9215,9216,frames/2+17,frames-1,frames,frames+1,UINT64_MAX};
  for(unsigned i=0;i<sizeof(requests)/sizeof(*requests);i++){
   uint64_t target=requests[i]>frames?frames:requests[i];
-  if(!decoder_open(argv[1])||total_frames!=frames)return 1;
+  if(!decoder_open(argv[1])||(total_frames&&total_frames!=frames))return 1;
   uint64_t base=decoder_seek(requests[i]);
   if(base>target||decode_error){fprintf(stderr,"Seek base error %u\n",i);return 1;}if(base)advanced++;
+  if(target-base>most_discarded)most_discarded=target-base;
+  if(target-base>bound||decoder_seek_probes>66){fprintf(stderr,"Seek work bound exceeded %u: %llu frames, %u probes\n",i,target-base,decoder_seek_probes);return 1;}
+  if(decoder_seek_probes>most_probes)most_probes=decoder_seek_probes;
   while(base<target){unsigned count=target-base>2048?2048:(unsigned)(target-base),n=decoder_read(pcm.values,count);if(n!=count||decode_error)return 1;base+=n;discarded+=n;}
   memset(pcm.values,0xa5,sizeof(pcm.values));pcm.before=0x13579bdf98765432ULL;pcm.after=0x2468ace012345678ULL;
   unsigned count=(i*37)%2048+1,n=decoder_read(pcm.values,count),wanted=frames-target<count?(unsigned)(frames-target):count;
@@ -37,5 +46,5 @@ int wmain(int argc,wchar_t **argv){
   for(unsigned j=n*8;j<sizeof(pcm.values);j++)if(((unsigned char *)pcm.values)[j]!=0xa5)return 1;
   decoder_close();if(decoder_seek(100)||decoder_read(pcm.values,1))return 1;checks++;
  }
- free(expected);printf("{\"result\":\"passed\",\"checks\":%u,\"advanced\":%u,\"discarded_frames\":%llu}\n",checks,advanced,discarded);return 0;
+ free(expected);printf("{\"result\":\"passed\",\"checks\":%u,\"advanced\":%u,\"discarded_frames\":%llu,\"maximum_discarded\":%llu,\"maximum_probes\":%u}\n",checks,advanced,discarded,most_discarded,most_probes);return 0;
 }

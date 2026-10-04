@@ -1,6 +1,6 @@
 # LAMP 0.4.0-dev technical details
 
-A Windows x86-64 audio player with handwritten assembly WAV, FLAC, MP3, Ogg/Vorbis and development Ogg/Opus decoders, plus a native assembly UI. The current console build is **180,736 bytes (176.5 KiB)**; the graphical build is **188,416 bytes (184 KiB)**. Both include LAMP's icon and version resources. The published v0.3.0 archive retains its earlier four-format build and manifest.
+A Windows x86-64 audio player with handwritten assembly WAV, FLAC, MP3, Ogg/Vorbis and development Ogg/Opus decoders, plus a native assembly UI. The current console build is **181,760 bytes (177.5 KiB)**; the graphical build is **189,440 bytes (185 KiB)**. Both include LAMP's icon and version resources. The published v0.3.0 archive retains its earlier four-format build and manifest.
 
 The dark canvas, compact playback controls and automatic hiding are inspired by mpv. The custom pixel buffer and Win32 presentation follow Rhun's documented assembly UI model. No Rhun source, fonts, icons, or other assets were copied.
 
@@ -38,9 +38,13 @@ Controls hide after 2.5 seconds of inactivity during playback, and reappear on m
 
 Console controls are Space to pause/resume and Q/Ctrl+C to stop. QuickEdit is disabled during playback and restored on exit.
 
-Seeking restarts the decoder on a worker. WAV seeks directly by sample offset. Native FLAC selects the nearest preceding seek-table point by binary search and decodes only the remaining distance. Tables require bounded offsets, ordered unique sample numbers and valid frame sizes; placeholders are ignored. The selected frame's coded position, sample count and CRC must agree with the table. Fixed/variable frame numbers are decoded canonically and checked throughout playback. FLAC without a table and MP3/Vorbis/Opus still discard PCM from the beginning. The UI remains responsive, and paused seeking keeps audio stopped until resume.
+Seeking restarts the decoder on a worker. WAV seeks directly by sample offset. Native FLAC selects a preceding seek-table point by binary search and decodes the remaining distance. Tables require bounded offsets, ordered unique sample numbers and valid frame sizes; placeholders are ignored. The selected frame's coded position, sample count and CRC must agree with the table. Fixed/variable frame numbers are decoded canonically and checked throughout playback.
 
-`decoder_seek(uint64_t absolute_frame)` is called once after opening a stream and returns the resume frame at or before the target. WAV clamps to EOF. Unsupported indexes return zero without changing fresh codec state; the worker uses sequential decoding for the rest. A malformed selected FLAC frame sets a sticky decoding error. Closed decoders refuse seeking and reading. No per-seek allocation is required.
+Without a usable table, native FLAC searches byte positions for complete, validated frames, also checking the following frame's chronology to avoid CRC-valid sync patterns inside PCM payloads. Byte bounds strictly shrink and sample bounds must agree. This works for fixed/variable frames and unknown total sample counts. Speculation is capped at 64 frame decodes, 64 MiB of scanned bytes and 1 MiB per speculative frame; initial/final validation adds at most two decodes. Reaching a cap restores frame zero for ordinary sequential decoding. No index allocation or persistent cache is needed. MP3/Vorbis/Opus still discard PCM from the beginning. The UI remains responsive, and paused seeking keeps audio stopped until resume.
+
+`decoder_seek(uint64_t absolute_frame)` is called once after opening a stream and returns the resume frame at or before the target. WAV clamps to EOF. Unsupported codecs return zero without changing fresh codec state; the worker uses sequential decoding for the rest. A malformed selected FLAC frame sets a sticky decoding error. Closed decoders refuse seeking and reading. `decoder_seek_probes` records full-frame decode attempts for diagnostics. No per-seek allocation is required.
+
+The seek suite records 1,470 exact PCM checks across 98 files: direct WAV; fixed/variable FLAC with tables, empty/placeholder-only tables or no tables; unknown durations; long changes between silence, tones and noise; CRC-valid payload decoys; EOF/clamping, untouched output and closed-state refusal. Ordinary frame searches discard at most one frame; the dense-decoy case exercises the 66-decode cap and correct sequential fallback. Its reference comes from FFmpeg conversion of the known verbatim PCM because FFmpeg's FLAC demuxer also misidentifies the densely embedded frames. Eleven malformed indexes, six noncanonical numbers and one contradictory frame sequence are rejected; a pre-cancelled search performs no frame decodes. These checks are not a same-machine latency benchmark against other players.
 
 ## Format coverage
 
@@ -166,7 +170,7 @@ node .\tests\fuzz-vorbis.js
 .\tests\verify-opus-components.ps1
 .\tests\verify-opus.ps1 -OutputDirectory .\bin\verify-build #51 modern libopus files
 .\tests\verify-opus-conformance.ps1 #120 official vector checks; first run downloads ~75 MB
-.\tests\verify-seek.ps1 -OutputDirectory .\bin\verify-build #990 exact WAV/FLAC seek checks
+.\tests\verify-seek.ps1 -OutputDirectory .\bin\verify-build #1470 exact WAV/FLAC seek checks
 .\tests\render-ui.ps1
 ```
 

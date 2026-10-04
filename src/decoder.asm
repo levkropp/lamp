@@ -11,6 +11,7 @@ EXTERN opus_open:PROC,opus_read:PROC,opus_close:PROC
 EXTERN ogg_cancel_ptr:QWORD
 PUBLIC decoder_open, decoder_read, decoder_close, decoder_seek
 PUBLIC sample_rate, source_channels, source_bits, decode_error, total_frames, codec_kind
+PUBLIC decoder_seek_probes
 
 .data
 sample_rate dd 0
@@ -31,6 +32,9 @@ flac_begin dq 0
 flac_seek_table dq 0
 flac_seek_count dd 0
 flac_next_sample dq 0
+flac_bit_end dq 0
+flac_seek_probe dd 0
+decoder_seek_probes dd 0
 frame_blocking dd 0
 frame_number_bytes dd 0
 frame_number dq 0
@@ -89,6 +93,7 @@ decoder_open PROC
     mov qword ptr [flac_seek_table],0
     mov dword ptr [flac_seek_count],0
     mov qword ptr [flac_next_sample],0
+    mov dword ptr [flac_seek_probe],0
     mov edx,80000000h
     mov r8d,1
     xor r9d,r9d
@@ -384,6 +389,8 @@ flac_meta_next:
     jz flac_metadata
     mov [input_cursor],r10
     mov [flac_begin],r10
+    mov rax,[input_end]
+    mov [flac_bit_end],rax
     ; Validate every table point before enabling indexed seeking. Placeholders
     ; are sorted last and their offset/sample-count fields are undefined.
     mov r9,[flac_seek_table]
@@ -485,12 +492,13 @@ decoder_close ENDP
 
 ; RCX=absolute requested frame. Call once on a newly opened stream.
 ; RAX=resume frame <= target; caller decodes/discards the remaining distance.
-; WAV seeks exactly; native FLAC uses the closest validated table point.
-; Other formats/no table return0 without changing their fresh decoder state.
+; WAV seeks exactly; native FLAC uses a table or bounded frame binary search.
+; Other formats return0 without changing their fresh decoder state.
 decoder_seek PROC
     push rbx
     push rsi
     sub rsp,40
+    mov dword ptr [decoder_seek_probes],0
     xor eax,eax
     cmp qword ptr [map_base],0
     je seek_return
@@ -506,6 +514,8 @@ decoder_seek PROC
     mov rbx,[flac_seek_table]
     xor r8d,r8d             ;lower bound, exclusive upper bound
     mov r9d,[flac_seek_count]
+    test r9d,r9d
+    jz seek_flac_without_table
 seek_flac_search:
     cmp r8d,r9d
     jae seek_flac_found
@@ -528,7 +538,7 @@ seek_flac_upper:
 seek_flac_found:
     xor eax,eax
     test r8d,r8d
-    jz seek_return
+    jz seek_flac_without_table
     dec r8d
     imul r8d,r8d,18
     add rbx,r8
@@ -545,6 +555,7 @@ seek_flac_not_cancelled:
     add rax,[flac_begin]    ;validated relative offset stays in mapped input
     mov [input_cursor],rax
     mov [flac_next_sample],rsi
+    inc dword ptr [decoder_seek_probes]
     call decode_frame      ;selected frame header and complete PCM CRC checks
     test eax,eax
     jz seek_failed
@@ -561,6 +572,10 @@ seek_flac_position:
     cmp rax,rsi
     jne seek_failed
     mov rax,rsi
+    jmp seek_return
+seek_flac_without_table:
+    mov rcx,rsi
+    call flac_seek_search
     jmp seek_return
 seek_wav:
     cmp rcx,[total_frames]
@@ -584,6 +599,184 @@ seek_return:
     ret
 decoder_seek ENDP
 
+; Search independent FLAC frames without allocating an index. Byte bounds
+; shrink on every iteration, and decoded sample bounds must agree with them.
+; Full header, subframe, sample-range and CRC validation precedes selection;
+; a following frame must also validate with consecutive sample numbering.
+; Cap speculative work at 64 probes, 64 MiB scanning, 1 MiB per frame. A cap
+; falls back to frame zero; cancellation stops speculation before more reads.
+flac_seek_search PROC
+    push rbx
+    push rsi
+    push rdi
+    push r12
+    push r13
+    push r14
+    push r15
+    sub rsp,96
+    mov rbx,rcx
+    mov r14,[flac_begin]
+    xor r15d,r15d
+    mov rax,[ogg_cancel_ptr]
+    test rax,rax
+    jz seek_search_first
+    cmp dword ptr [rax],0
+    jne seek_search_cancel
+seek_search_first:
+    inc dword ptr [decoder_seek_probes]
+    call decode_frame
+    test eax,eax
+    jz seek_search_bad
+    mov rax,[flac_next_sample]
+    cmp rbx,rax
+    jb seek_search_zero
+    mov [rsp+32],rax          ;smallest sample at the lower byte bound
+    mov rax,[total_frames]
+    test rax,rax
+    jnz seek_search_total
+    mov rax,-1
+seek_search_total:
+    mov [rsp+40],rax          ;sample boundary belonging to the upper bound
+    mov dword ptr [rsp+48],64
+    mov dword ptr [rsp+56],04000000h
+    mov rsi,[input_cursor]
+    mov rdi,[input_end]
+    mov dword ptr [flac_seek_probe],1
+seek_search_loop:
+    cmp rsi,rdi
+    jae seek_search_selected
+    mov r12,rdi
+    sub r12,rsi
+    shr r12,1
+    add r12,rsi
+    mov r13,r12
+seek_search_scan:
+    mov rax,[ogg_cancel_ptr]
+    test rax,rax
+    jz seek_search_scan_continue
+    cmp dword ptr [rax],0
+    jne seek_search_cancel
+seek_search_scan_continue:
+    cmp r13,rdi
+    jae seek_search_upper
+    lea rax,[r13+2]
+    cmp rax,[input_end]
+    ja seek_search_upper
+    cmp dword ptr [rsp+56],0
+    je seek_search_fallback
+    dec dword ptr [rsp+56]
+    cmp byte ptr [r13],0ffh
+    jne seek_search_next
+    movzx eax,byte ptr [r13+1]
+    and eax,0feh
+    cmp eax,0f8h
+    jne seek_search_next
+    cmp dword ptr [rsp+48],0
+    je seek_search_fallback
+    dec dword ptr [rsp+48]
+    mov [input_cursor],r13
+    lea rax,[r13+0100000h]
+    cmp rax,[input_end]
+    cmova rax,[input_end]
+    mov [flac_bit_end],rax
+    mov dword ptr [decode_error],0
+    inc dword ptr [decoder_seek_probes]
+    call decode_frame
+    test eax,eax
+    jz seek_search_next
+    mov rax,[flac_next_sample]
+    mov ecx,[frame_samples]
+    sub rax,rcx
+    mov [rsp+72],rax         ;candidate start sample, before neighbor decode
+    mov eax,[frame_samples]
+    mov [rsp+80],eax
+    mov rax,[input_cursor]
+    mov [rsp+64],rax
+    cmp rax,[input_end]
+    jae seek_search_candidate
+    cmp dword ptr [rsp+48],0
+    je seek_search_fallback
+    dec dword ptr [rsp+48]
+    lea rax,[rax+0100000h]
+    cmp rax,[input_end]
+    cmova rax,[input_end]
+    mov [flac_bit_end],rax
+    mov dword ptr [flac_seek_probe],0
+    inc dword ptr [decoder_seek_probes]
+    call decode_frame        ;reject CRC-valid sync patterns inside payloads
+    mov dword ptr [flac_seek_probe],1
+    test eax,eax
+    jz seek_search_next
+seek_search_candidate:
+    mov eax,[rsp+80]
+    add rax,[rsp+72]
+    mov [flac_next_sample],rax
+    mov rcx,[rsp+64]
+    mov [input_cursor],rcx
+    cmp rax,[rsp+40]
+    ja seek_search_bad
+    mov rax,[rsp+72]         ;absolute start of fully validated candidate
+    cmp rax,[rsp+32]
+    jb seek_search_bad
+    cmp rax,rbx
+    ja seek_search_upper_sample
+    mov r14,r13
+    mov r15,rax
+    cmp rbx,[flac_next_sample]
+    jb seek_search_selected
+    mov rax,[flac_next_sample]
+    mov [rsp+32],rax
+    mov rsi,[input_cursor]    ;strict progress past the decoded frame
+    jmp seek_search_loop
+seek_search_upper_sample:
+    mov [rsp+40],rax
+seek_search_upper:
+    mov rdi,r12              ;strictly shrink even when mid-frame
+    jmp seek_search_loop
+seek_search_next:
+    inc r13
+    jmp seek_search_scan
+seek_search_fallback:
+    mov r14,[flac_begin]
+    xor r15d,r15d
+seek_search_selected:
+    mov dword ptr [flac_seek_probe],0
+    mov rax,[input_end]
+    mov [flac_bit_end],rax
+    mov dword ptr [decode_error],0
+    mov [input_cursor],r14
+    mov [flac_next_sample],r15
+    inc dword ptr [decoder_seek_probes]
+    call decode_frame        ;restore selected PCM and ordinary chronology
+    test eax,eax
+    jz seek_search_bad
+    mov rax,r15
+    jmp seek_search_return
+seek_search_zero:
+    xor eax,eax              ;first frame is already decoded and buffered
+    jmp seek_search_return
+seek_search_bad:
+    mov dword ptr [decode_error],28
+    xor eax,eax
+    jmp seek_search_return
+seek_search_cancel:
+    mov dword ptr [decode_error],0
+    xor eax,eax
+seek_search_return:
+    mov dword ptr [flac_seek_probe],0
+    mov rdx,[input_end]
+    mov [flac_bit_end],rdx
+    add rsp,96
+    pop r15
+    pop r14
+    pop r13
+    pop r12
+    pop rdi
+    pop rsi
+    pop rbx
+    ret
+flac_seek_search ENDP
+
 ; Bounds-checked MSB-first reservoir. Width <=32, result unsigned in RAX.
 get_bits PROC
     mov r9d,ecx
@@ -593,8 +786,16 @@ gb_fill:
     cmp r8d,r9d
     jae gb_extract
     mov r10,[input_cursor]
-    cmp r10,[input_end]
+    cmp r10,[flac_bit_end]
     jae gb_bad
+    cmp dword ptr [flac_seek_probe],0
+    je gb_not_cancelled
+    mov rax,[ogg_cancel_ptr]
+    test rax,rax
+    jz gb_not_cancelled
+    cmp dword ptr [rax],0
+    jne gb_bad
+gb_not_cancelled:
     shl rdx,8
     movzx eax,byte ptr [r10]
     or rdx,rax
@@ -643,8 +844,16 @@ unary_chunk:
     test ecx,ecx
     jnz unary_scan
     mov r10,[input_cursor]
-    cmp r10,[input_end]
+    cmp r10,[flac_bit_end]
     jae unary_bad
+    cmp dword ptr [flac_seek_probe],0
+    je unary_not_cancelled
+    mov rax,[ogg_cancel_ptr]
+    test rax,rax
+    jz unary_not_cancelled
+    cmp dword ptr [rax],0
+    jne unary_bad
+unary_not_cancelled:
     movzx edx,byte ptr [r10]
     inc r10
     mov [input_cursor],r10
@@ -963,6 +1172,10 @@ depth_done:
     mov ecx,[maximum_block]
     mul rcx
 frame_position_check:
+    cmp dword ptr [flac_seek_probe],0
+    je frame_position_ordinary
+    mov [flac_next_sample],rax
+frame_position_ordinary:
     cmp rax,[flac_next_sample]
     jne frame_bad
     mov ecx,[frame_samples]

@@ -41,7 +41,7 @@ Windows 10/11 x64 and a working default audio output are the intended targets. B
 | Ogg/Vorbis | Single logical stream, mono/stereo, floor 1, mapping 0; CRC and granule checks |
 | Ogg/Opus | Development source: single logical stream, mapping family 0, mono/stereo, 48 kHz output, header gain/pre-skip/end trimming |
 
-See [precise coverage, limitations, and verification](docs/technical.md) before relying on a particular stream variant. Multichannel, chained Ogg streams and FLAC-in-Ogg are not implemented. Fast seeking covers WAV and native FLAC with valid seek tables; indexes for the other compressed formats remain unfinished.
+See [precise coverage, limitations, and verification](docs/technical.md) before relying on a particular stream variant. Multichannel, chained Ogg streams and FLAC-in-Ogg are not implemented. WAV seeks directly; native FLAC uses seek tables or searches validated frames. Indexes for the other compressed formats remain unfinished.
 
 ## Controls
 
@@ -55,7 +55,7 @@ See [precise coverage, limitations, and verification](docs/technical.md) before 
 | M | Mute/unmute to 100% |
 | Q | Close |
 
-The controls hide after 2.5 seconds of inactivity during playback. Seeking runs on a worker. WAV jumps directly to the sample; native FLAC uses a validated seek table when present. Other streams decode from the beginning, so distant seeks take longer. Paused seeking keeps audio stopped until resume. The console accepts Space to pause and Q/Ctrl+C to stop.
+The controls hide after 2.5 seconds of inactivity during playback. Seeking runs on a worker. WAV jumps directly to the sample; native FLAC uses a validated seek table or a bounded frame search, including files with unknown duration. Exhausting the search budget falls back to sequential decoding. MP3/Vorbis/Opus decode from the beginning, so distant seeks take longer. Paused seeking keeps audio stopped until resume. The console accepts Space to pause and Q/Ctrl+C to stop.
 
 ## Build and verify
 
@@ -69,7 +69,7 @@ node .\tests\smoke.js
 .\package.ps1
 ```
 
-The prebuilt ICO and decoder tables are included. A normal build needs no codec library or reference C compiler. Both players use custom assembly entry points and `/NODEFAULTLIB`. The development build measures **188,416 bytes for `lamp.exe`** and **180,736 bytes for `lamp-cli.exe`**, including icon resources; release manifests record exact sizes and hashes.
+The prebuilt ICO and decoder tables are included. A normal build needs no codec library or reference C compiler. Both players use custom assembly entry points and `/NODEFAULTLIB`. The development build measures **189,440 bytes for `lamp.exe`** and **181,760 bytes for `lamp-cli.exe`**, including icon resources; release manifests record exact sizes and hashes.
 
 To build while the player is open, use `./build.ps1 -OutputDirectory ./bin/verify-build`. Pass that directory to `node ./tests/verify-runtime.js ./bin/verify-build` and `node ./tests/smoke.js ./bin/verify-build` to check the new binaries, or `./package.ps1 -BinaryDirectory ./bin/verify-build` to package them. Packaging rejects a binary version that differs from `VERSION`.
 

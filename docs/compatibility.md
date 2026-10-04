@@ -13,7 +13,7 @@ LAMP's long-term goal is to support everything relevant that mpv supports. This 
 | Other audio codecs | Planned | AAC/HE-AAC, ALAC, AC-3/E-AC-3, DTS, WavPack, APE, MPEG I/II and relevant legacy formats | 3 |
 | Containers and media structure | Partial | MP4/MOV, Matroska/WebM, TS/PS, AVI/ASF; timestamps, attachments, chapters, editions and tags | 3 |
 | Audio output | Partial | WASAPI device selection/recovery, multichannel, resampling, exclusive mode and useful passthrough | 2–3 |
-| Seeking and playback state | WAV direct and native FLAC seek tables; exact PCM and paused seeking verified | Indexes for FLAC without tables, MP3/Vorbis/Opus; resume, A-B loops, repeat, gapless playlists and speed/pitch controls | 2, 6 |
+| Seeking and playback state | WAV direct; native FLAC seek tables or bounded frame search; exact PCM and paused seeking verified | MP3/Vorbis/Opus indexes; broader latency measurements, resume, A-B loops, repeat, gapless playlists and speed/pitch controls | 2, 6 |
 | Video decoding and A/V sync | Planned | H.264, HEVC, VP9, AV1 and relevant legacy codecs; frame stepping and accurate synchronization | 4 |
 | Hardware acceleration | Planned | Supported Windows GPU profiles, measured hardware decode, explicit software fallback | 4 |
 | Video rendering and color | Planned | Scaling, crop/zoom/pan/rotation, deinterlacing, HDR/tone mapping, ICC, user shaders and display sync | 4, 6 |

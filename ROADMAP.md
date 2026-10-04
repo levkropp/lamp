@@ -71,7 +71,7 @@ Passed in 0.4.0-dev source: 34 updated-reference suites, 51 independent modern-l
 
 **Gate:** repeated device/seek/track transitions without deadlocks or unintended paused playback; measured queue behavior and regression fixtures. No claim of immunity to arbitrary driver or system stalls.
 
-Current seeking progress: sample-exact WAV direct seeks and native FLAC fixed/variable seek-table seeks pass 990 checks across 66 independent PCM fixtures, with 11 malformed-index rejections. Playback and paused-seek lifecycle checks include indexed FLAC. FLAC without seek tables and MP3/Vorbis/Opus still decode from the beginning; broader indexing, reopen performance and the rest of this milestone remain unfinished.
+Current seeking progress: sample-exact WAV direct seeks and native FLAC fixed/variable seek-table or bounded frame-search seeks pass 1,470 checks across 98 PCM fixtures, with 18 malformed-index/frame rejections and a cancellation check. FLAC without usable tables resumes within one frame in the ordinary fixtures, including unknown duration and sharply varying compression; a dense false-frame fixture verifies the bounded sequential fallback. Playback and paused-seek lifecycle checks cover both FLAC paths. MP3/Vorbis/Opus still decode from the beginning; their indexes, broader reopen measurements and the rest of this milestone remain unfinished.
 
 ## 3 — Broad audio and container coverage
 

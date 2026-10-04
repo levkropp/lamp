@@ -9,7 +9,7 @@ Current 0.4.0-dev reports cover the assembly runtime, five-format smoke checks, 
 | [opus-stream-verification.json](opus-stream-verification.json) | 18,381 packet PCM/history calls, all 32 TOC configurations/five API rates/channel layouts/four framing codes, padding, FEC/loss/DTX, malformed packets, canaries and deterministic scratch |
 | [opus-ogg-verification.json](opus-ogg-verification.json) | 393 updated-reference streams, signed gain/pre-skip/end trimming, cropped origins, continued headers/audio, 4,157 bounded reads/canaries, 27 malformed streams, late failure and cancellation |
 | [engine-verification.json](engine-verification.json) | WAV/FLAC/MP3/Vorbis/Opus playback, pause/resume, stop/reopen, sequential/paused seek and cancelled open |
-| [seek-verification.json](seek-verification.json) | 990 sample-exact WAV direct and native FLAC fixed/variable seek-table checks across 66 independent PCM fixtures; 11 malformed indexes and six CRC-valid noncanonical coded numbers rejected |
+| [seek-verification.json](seek-verification.json) | 1,470 sample-exact WAV direct and native FLAC fixed/variable seek-table/frame-search checks across 98 PCM fixtures; unknown duration, changing compression, CRC-valid payload decoys, bounded fallback and cancellation; 11 malformed indexes, six noncanonical numbers and one contradictory frame sequence rejected |
 | [runtime-verification.json](runtime-verification.json) | x86-64 architecture, GUI/console subsystems, 0.4.0-dev resources, icon sizes and Windows-only runtime imports |
 | [branding-smoke-verification.json](branding-smoke-verification.json) | Current five-format PCM smoke checks |
 

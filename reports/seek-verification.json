@@ -1,6 +1,6 @@
 {
   "result": "passed",
-  "scope": "Sample-exact WAV direct seeking and FLAC fixed/variable seek-table positioning against independent FFmpeg PCM, fresh reopen per target, EOF/clamping, canaries/untouched output, closed-state refusal, malformed index bounds/frame validation and CRC-valid noncanonical coded numbers; MP3/Vorbis/Opus indexes remain pending",
+  "scope": "Sample-exact WAV direct seeking and FLAC fixed/variable seek-table or bounded byte/frame-search positioning against independent FFmpeg PCM; unknown total, sharply varying frame density, a CRC-valid decoy frame inside verbatim PCM, fresh reopen, EOF/clamping, one-frame discard bounds without tables, 66-probe cap, cancellation, canaries, closed-state refusal, malformed indexes, contradictory frame positions and noncanonical coded numbers; MP3/Vorbis/Opus indexes remain pending",
   "checks": [
     {
       "file": "seek-8000-1-pcm_u8.wav",
@@ -8,7 +8,9 @@
       "checks": 15,
       "advanced": 14,
       "discarded_frames": 0,
-      "indexed": true
+      "maximum_discarded": 0,
+      "maximum_probes": 0,
+      "method": "direct"
     },
     {
       "file": "seek-8000-1-pcm_s16le.wav",
@@ -16,7 +18,9 @@
       "checks": 15,
       "advanced": 14,
       "discarded_frames": 0,
-      "indexed": true
+      "maximum_discarded": 0,
+      "maximum_probes": 0,
+      "method": "direct"
     },
     {
       "file": "seek-8000-1-pcm_s24le.wav",
@@ -24,7 +28,9 @@
       "checks": 15,
       "advanced": 14,
       "discarded_frames": 0,
-      "indexed": true
+      "maximum_discarded": 0,
+      "maximum_probes": 0,
+      "method": "direct"
     },
     {
       "file": "seek-8000-1-pcm_s32le.wav",
@@ -32,7 +38,9 @@
       "checks": 15,
       "advanced": 14,
       "discarded_frames": 0,
-      "indexed": true
+      "maximum_discarded": 0,
+      "maximum_probes": 0,
+      "method": "direct"
     },
     {
       "file": "seek-8000-1-pcm_f32le.wav",
@@ -40,7 +48,9 @@
       "checks": 15,
       "advanced": 14,
       "discarded_frames": 0,
-      "indexed": true
+      "maximum_discarded": 0,
+      "maximum_probes": 0,
+      "method": "direct"
     },
     {
       "file": "seek-8000-2-pcm_u8.wav",
@@ -48,7 +58,9 @@
       "checks": 15,
       "advanced": 14,
       "discarded_frames": 0,
-      "indexed": true
+      "maximum_discarded": 0,
+      "maximum_probes": 0,
+      "method": "direct"
     },
     {
       "file": "seek-8000-2-pcm_s16le.wav",
@@ -56,7 +68,9 @@
       "checks": 15,
       "advanced": 14,
       "discarded_frames": 0,
-      "indexed": true
+      "maximum_discarded": 0,
+      "maximum_probes": 0,
+      "method": "direct"
     },
     {
       "file": "seek-8000-2-pcm_s24le.wav",
@@ -64,7 +78,9 @@
       "checks": 15,
       "advanced": 14,
       "discarded_frames": 0,
-      "indexed": true
+      "maximum_discarded": 0,
+      "maximum_probes": 0,
+      "method": "direct"
     },
     {
       "file": "seek-8000-2-pcm_s32le.wav",
@@ -72,7 +88,9 @@
       "checks": 15,
       "advanced": 14,
       "discarded_frames": 0,
-      "indexed": true
+      "maximum_discarded": 0,
+      "maximum_probes": 0,
+      "method": "direct"
     },
     {
       "file": "seek-8000-2-pcm_f32le.wav",
@@ -80,7 +98,9 @@
       "checks": 15,
       "advanced": 14,
       "discarded_frames": 0,
-      "indexed": true
+      "maximum_discarded": 0,
+      "maximum_probes": 0,
+      "method": "direct"
     },
     {
       "file": "seek-48000-1-pcm_u8.wav",
@@ -88,7 +108,9 @@
       "checks": 15,
       "advanced": 14,
       "discarded_frames": 0,
-      "indexed": true
+      "maximum_discarded": 0,
+      "maximum_probes": 0,
+      "method": "direct"
     },
     {
       "file": "seek-48000-1-pcm_s16le.wav",
@@ -96,7 +118,9 @@
       "checks": 15,
       "advanced": 14,
       "discarded_frames": 0,
-      "indexed": true
+      "maximum_discarded": 0,
+      "maximum_probes": 0,
+      "method": "direct"
     },
     {
       "file": "seek-48000-1-pcm_s24le.wav",
@@ -104,7 +128,9 @@
       "checks": 15,
       "advanced": 14,
       "discarded_frames": 0,
-      "indexed": true
+      "maximum_discarded": 0,
+      "maximum_probes": 0,
+      "method": "direct"
     },
     {
       "file": "seek-48000-1-pcm_s32le.wav",
@@ -112,7 +138,9 @@
       "checks": 15,
       "advanced": 14,
       "discarded_frames": 0,
-      "indexed": true
+      "maximum_discarded": 0,
+      "maximum_probes": 0,
+      "method": "direct"
     },
     {
       "file": "seek-48000-1-pcm_f32le.wav",
@@ -120,7 +148,9 @@
       "checks": 15,
       "advanced": 14,
       "discarded_frames": 0,
-      "indexed": true
+      "maximum_discarded": 0,
+      "maximum_probes": 0,
+      "method": "direct"
     },
     {
       "file": "seek-48000-2-pcm_u8.wav",
@@ -128,7 +158,9 @@
       "checks": 15,
       "advanced": 14,
       "discarded_frames": 0,
-      "indexed": true
+      "maximum_discarded": 0,
+      "maximum_probes": 0,
+      "method": "direct"
     },
     {
       "file": "seek-48000-2-pcm_s16le.wav",
@@ -136,7 +168,9 @@
       "checks": 15,
       "advanced": 14,
       "discarded_frames": 0,
-      "indexed": true
+      "maximum_discarded": 0,
+      "maximum_probes": 0,
+      "method": "direct"
     },
     {
       "file": "seek-48000-2-pcm_s24le.wav",
@@ -144,7 +178,9 @@
       "checks": 15,
       "advanced": 14,
       "discarded_frames": 0,
-      "indexed": true
+      "maximum_discarded": 0,
+      "maximum_probes": 0,
+      "method": "direct"
     },
     {
       "file": "seek-48000-2-pcm_s32le.wav",
@@ -152,7 +188,9 @@
       "checks": 15,
       "advanced": 14,
       "discarded_frames": 0,
-      "indexed": true
+      "maximum_discarded": 0,
+      "maximum_probes": 0,
+      "method": "direct"
     },
     {
       "file": "seek-48000-2-pcm_f32le.wav",
@@ -160,7 +198,9 @@
       "checks": 15,
       "advanced": 14,
       "discarded_frames": 0,
-      "indexed": true
+      "maximum_discarded": 0,
+      "maximum_probes": 0,
+      "method": "direct"
     },
     {
       "file": "seek-192000-1-pcm_u8.wav",
@@ -168,7 +208,9 @@
       "checks": 15,
       "advanced": 14,
       "discarded_frames": 0,
-      "indexed": true
+      "maximum_discarded": 0,
+      "maximum_probes": 0,
+      "method": "direct"
     },
     {
       "file": "seek-192000-1-pcm_s16le.wav",
@@ -176,7 +218,9 @@
       "checks": 15,
       "advanced": 14,
       "discarded_frames": 0,
-      "indexed": true
+      "maximum_discarded": 0,
+      "maximum_probes": 0,
+      "method": "direct"
     },
     {
       "file": "seek-192000-1-pcm_s24le.wav",
@@ -184,7 +228,9 @@
       "checks": 15,
       "advanced": 14,
       "discarded_frames": 0,
-      "indexed": true
+      "maximum_discarded": 0,
+      "maximum_probes": 0,
+      "method": "direct"
     },
     {
       "file": "seek-192000-1-pcm_s32le.wav",
@@ -192,7 +238,9 @@
       "checks": 15,
       "advanced": 14,
       "discarded_frames": 0,
-      "indexed": true
+      "maximum_discarded": 0,
+      "maximum_probes": 0,
+      "method": "direct"
     },
     {
       "file": "seek-192000-1-pcm_f32le.wav",
@@ -200,7 +248,9 @@
       "checks": 15,
       "advanced": 14,
       "discarded_frames": 0,
-      "indexed": true
+      "maximum_discarded": 0,
+      "maximum_probes": 0,
+      "method": "direct"
     },
     {
       "file": "seek-192000-2-pcm_u8.wav",
@@ -208,7 +258,9 @@
       "checks": 15,
       "advanced": 14,
       "discarded_frames": 0,
-      "indexed": true
+      "maximum_discarded": 0,
+      "maximum_probes": 0,
+      "method": "direct"
     },
     {
       "file": "seek-192000-2-pcm_s16le.wav",
@@ -216,7 +268,9 @@
       "checks": 15,
       "advanced": 14,
       "discarded_frames": 0,
-      "indexed": true
+      "maximum_discarded": 0,
+      "maximum_probes": 0,
+      "method": "direct"
     },
     {
       "file": "seek-192000-2-pcm_s24le.wav",
@@ -224,7 +278,9 @@
       "checks": 15,
       "advanced": 14,
       "discarded_frames": 0,
-      "indexed": true
+      "maximum_discarded": 0,
+      "maximum_probes": 0,
+      "method": "direct"
     },
     {
       "file": "seek-192000-2-pcm_s32le.wav",
@@ -232,7 +288,9 @@
       "checks": 15,
       "advanced": 14,
       "discarded_frames": 0,
-      "indexed": true
+      "maximum_discarded": 0,
+      "maximum_probes": 0,
+      "method": "direct"
     },
     {
       "file": "seek-192000-2-pcm_f32le.wav",
@@ -240,15 +298,19 @@
       "checks": 15,
       "advanced": 14,
       "discarded_frames": 0,
-      "indexed": true
+      "maximum_discarded": 0,
+      "maximum_probes": 0,
+      "method": "direct"
     },
     {
       "file": "seek-8000-1-s16.flac",
       "result": "passed",
       "checks": 15,
-      "advanced": 0,
-      "discarded_frames": 170121,
-      "indexed": false
+      "advanced": 11,
+      "discarded_frames": 3657,
+      "maximum_discarded": 575,
+      "maximum_probes": 16,
+      "method": "frame-search"
     },
     {
       "file": "seek-8000-1-s16.flac.index.flac",
@@ -256,7 +318,9 @@
       "checks": 15,
       "advanced": 11,
       "discarded_frames": 7689,
-      "indexed": true
+      "maximum_discarded": 1152,
+      "maximum_probes": 1,
+      "method": "seek-table"
     },
     {
       "file": "seek-8000-1-s16.flac.variable-index.flac",
@@ -264,15 +328,39 @@
       "checks": 15,
       "advanced": 11,
       "discarded_frames": 7689,
-      "indexed": true
+      "maximum_discarded": 1152,
+      "maximum_probes": 1,
+      "method": "seek-table"
+    },
+    {
+      "file": "seek-8000-1-s16.flac.variable.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 3657,
+      "maximum_discarded": 575,
+      "maximum_probes": 16,
+      "method": "frame-search"
+    },
+    {
+      "file": "seek-8000-1-s16.flac.variable.flac.unknown.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 3657,
+      "maximum_discarded": 575,
+      "maximum_probes": 16,
+      "method": "frame-search-unknown-total"
     },
     {
       "file": "seek-8000-1-s32.flac",
       "result": "passed",
       "checks": 15,
-      "advanced": 0,
-      "discarded_frames": 170121,
-      "indexed": false
+      "advanced": 11,
+      "discarded_frames": 3657,
+      "maximum_discarded": 575,
+      "maximum_probes": 16,
+      "method": "frame-search"
     },
     {
       "file": "seek-8000-1-s32.flac.index.flac",
@@ -280,7 +368,9 @@
       "checks": 15,
       "advanced": 11,
       "discarded_frames": 7689,
-      "indexed": true
+      "maximum_discarded": 1152,
+      "maximum_probes": 1,
+      "method": "seek-table"
     },
     {
       "file": "seek-8000-1-s32.flac.variable-index.flac",
@@ -288,15 +378,39 @@
       "checks": 15,
       "advanced": 11,
       "discarded_frames": 7689,
-      "indexed": true
+      "maximum_discarded": 1152,
+      "maximum_probes": 1,
+      "method": "seek-table"
+    },
+    {
+      "file": "seek-8000-1-s32.flac.variable.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 3657,
+      "maximum_discarded": 575,
+      "maximum_probes": 16,
+      "method": "frame-search"
+    },
+    {
+      "file": "seek-8000-1-s32.flac.variable.flac.unknown.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 3657,
+      "maximum_discarded": 575,
+      "maximum_probes": 16,
+      "method": "frame-search-unknown-total"
     },
     {
       "file": "seek-8000-2-s16.flac",
       "result": "passed",
       "checks": 15,
-      "advanced": 0,
-      "discarded_frames": 170121,
-      "indexed": false
+      "advanced": 11,
+      "discarded_frames": 3657,
+      "maximum_discarded": 575,
+      "maximum_probes": 16,
+      "method": "frame-search"
     },
     {
       "file": "seek-8000-2-s16.flac.index.flac",
@@ -304,7 +418,9 @@
       "checks": 15,
       "advanced": 11,
       "discarded_frames": 7689,
-      "indexed": true
+      "maximum_discarded": 1152,
+      "maximum_probes": 1,
+      "method": "seek-table"
     },
     {
       "file": "seek-8000-2-s16.flac.variable-index.flac",
@@ -312,15 +428,39 @@
       "checks": 15,
       "advanced": 11,
       "discarded_frames": 7689,
-      "indexed": true
+      "maximum_discarded": 1152,
+      "maximum_probes": 1,
+      "method": "seek-table"
+    },
+    {
+      "file": "seek-8000-2-s16.flac.variable.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 3657,
+      "maximum_discarded": 575,
+      "maximum_probes": 16,
+      "method": "frame-search"
+    },
+    {
+      "file": "seek-8000-2-s16.flac.variable.flac.unknown.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 3657,
+      "maximum_discarded": 575,
+      "maximum_probes": 16,
+      "method": "frame-search-unknown-total"
     },
     {
       "file": "seek-8000-2-s32.flac",
       "result": "passed",
       "checks": 15,
-      "advanced": 0,
-      "discarded_frames": 170121,
-      "indexed": false
+      "advanced": 11,
+      "discarded_frames": 3657,
+      "maximum_discarded": 575,
+      "maximum_probes": 16,
+      "method": "frame-search"
     },
     {
       "file": "seek-8000-2-s32.flac.index.flac",
@@ -328,7 +468,9 @@
       "checks": 15,
       "advanced": 11,
       "discarded_frames": 7689,
-      "indexed": true
+      "maximum_discarded": 1152,
+      "maximum_probes": 1,
+      "method": "seek-table"
     },
     {
       "file": "seek-8000-2-s32.flac.variable-index.flac",
@@ -336,15 +478,39 @@
       "checks": 15,
       "advanced": 11,
       "discarded_frames": 7689,
-      "indexed": true
+      "maximum_discarded": 1152,
+      "maximum_probes": 1,
+      "method": "seek-table"
+    },
+    {
+      "file": "seek-8000-2-s32.flac.variable.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 3657,
+      "maximum_discarded": 575,
+      "maximum_probes": 16,
+      "method": "frame-search"
+    },
+    {
+      "file": "seek-8000-2-s32.flac.variable.flac.unknown.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 3657,
+      "maximum_discarded": 575,
+      "maximum_probes": 16,
+      "method": "frame-search-unknown-total"
     },
     {
       "file": "seek-44100-1-s16.flac",
       "result": "passed",
       "checks": 15,
-      "advanced": 0,
-      "discarded_frames": 774921,
-      "indexed": false
+      "advanced": 8,
+      "discarded_frames": 33033,
+      "maximum_discarded": 4607,
+      "maximum_probes": 16,
+      "method": "frame-search"
     },
     {
       "file": "seek-44100-1-s16.flac.index.flac",
@@ -352,7 +518,9 @@
       "checks": 15,
       "advanced": 5,
       "discarded_frames": 97545,
-      "indexed": true
+      "maximum_discarded": 12989,
+      "maximum_probes": 1,
+      "method": "seek-table"
     },
     {
       "file": "seek-44100-1-s16.flac.variable-index.flac",
@@ -360,15 +528,39 @@
       "checks": 15,
       "advanced": 5,
       "discarded_frames": 97545,
-      "indexed": true
+      "maximum_discarded": 12989,
+      "maximum_probes": 1,
+      "method": "seek-table"
+    },
+    {
+      "file": "seek-44100-1-s16.flac.variable.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 8,
+      "discarded_frames": 33033,
+      "maximum_discarded": 4607,
+      "maximum_probes": 16,
+      "method": "frame-search"
+    },
+    {
+      "file": "seek-44100-1-s16.flac.variable.flac.unknown.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 8,
+      "discarded_frames": 33033,
+      "maximum_discarded": 4607,
+      "maximum_probes": 16,
+      "method": "frame-search-unknown-total"
     },
     {
       "file": "seek-44100-1-s32.flac",
       "result": "passed",
       "checks": 15,
-      "advanced": 0,
-      "discarded_frames": 774921,
-      "indexed": false
+      "advanced": 8,
+      "discarded_frames": 33033,
+      "maximum_discarded": 4607,
+      "maximum_probes": 17,
+      "method": "frame-search"
     },
     {
       "file": "seek-44100-1-s32.flac.index.flac",
@@ -376,7 +568,9 @@
       "checks": 15,
       "advanced": 5,
       "discarded_frames": 97545,
-      "indexed": true
+      "maximum_discarded": 12989,
+      "maximum_probes": 1,
+      "method": "seek-table"
     },
     {
       "file": "seek-44100-1-s32.flac.variable-index.flac",
@@ -384,15 +578,39 @@
       "checks": 15,
       "advanced": 5,
       "discarded_frames": 97545,
-      "indexed": true
+      "maximum_discarded": 12989,
+      "maximum_probes": 1,
+      "method": "seek-table"
+    },
+    {
+      "file": "seek-44100-1-s32.flac.variable.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 8,
+      "discarded_frames": 33033,
+      "maximum_discarded": 4607,
+      "maximum_probes": 17,
+      "method": "frame-search"
+    },
+    {
+      "file": "seek-44100-1-s32.flac.variable.flac.unknown.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 8,
+      "discarded_frames": 33033,
+      "maximum_discarded": 4607,
+      "maximum_probes": 17,
+      "method": "frame-search-unknown-total"
     },
     {
       "file": "seek-44100-2-s16.flac",
       "result": "passed",
       "checks": 15,
-      "advanced": 0,
-      "discarded_frames": 774921,
-      "indexed": false
+      "advanced": 8,
+      "discarded_frames": 33033,
+      "maximum_discarded": 4607,
+      "maximum_probes": 17,
+      "method": "frame-search"
     },
     {
       "file": "seek-44100-2-s16.flac.index.flac",
@@ -400,7 +618,9 @@
       "checks": 15,
       "advanced": 5,
       "discarded_frames": 97545,
-      "indexed": true
+      "maximum_discarded": 12989,
+      "maximum_probes": 1,
+      "method": "seek-table"
     },
     {
       "file": "seek-44100-2-s16.flac.variable-index.flac",
@@ -408,15 +628,39 @@
       "checks": 15,
       "advanced": 5,
       "discarded_frames": 97545,
-      "indexed": true
+      "maximum_discarded": 12989,
+      "maximum_probes": 1,
+      "method": "seek-table"
+    },
+    {
+      "file": "seek-44100-2-s16.flac.variable.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 8,
+      "discarded_frames": 33033,
+      "maximum_discarded": 4607,
+      "maximum_probes": 17,
+      "method": "frame-search"
+    },
+    {
+      "file": "seek-44100-2-s16.flac.variable.flac.unknown.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 8,
+      "discarded_frames": 33033,
+      "maximum_discarded": 4607,
+      "maximum_probes": 17,
+      "method": "frame-search-unknown-total"
     },
     {
       "file": "seek-44100-2-s32.flac",
       "result": "passed",
       "checks": 15,
-      "advanced": 0,
-      "discarded_frames": 774921,
-      "indexed": false
+      "advanced": 8,
+      "discarded_frames": 33033,
+      "maximum_discarded": 4607,
+      "maximum_probes": 16,
+      "method": "frame-search"
     },
     {
       "file": "seek-44100-2-s32.flac.index.flac",
@@ -424,7 +668,9 @@
       "checks": 15,
       "advanced": 5,
       "discarded_frames": 97545,
-      "indexed": true
+      "maximum_discarded": 12989,
+      "maximum_probes": 1,
+      "method": "seek-table"
     },
     {
       "file": "seek-44100-2-s32.flac.variable-index.flac",
@@ -432,15 +678,39 @@
       "checks": 15,
       "advanced": 5,
       "discarded_frames": 97545,
-      "indexed": true
+      "maximum_discarded": 12989,
+      "maximum_probes": 1,
+      "method": "seek-table"
+    },
+    {
+      "file": "seek-44100-2-s32.flac.variable.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 8,
+      "discarded_frames": 33033,
+      "maximum_discarded": 4607,
+      "maximum_probes": 16,
+      "method": "frame-search"
+    },
+    {
+      "file": "seek-44100-2-s32.flac.variable.flac.unknown.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 8,
+      "discarded_frames": 33033,
+      "maximum_discarded": 4607,
+      "maximum_probes": 16,
+      "method": "frame-search-unknown-total"
     },
     {
       "file": "seek-96000-1-s16.flac",
       "result": "passed",
       "checks": 15,
-      "advanced": 0,
-      "discarded_frames": 1644429,
-      "indexed": false
+      "advanced": 7,
+      "discarded_frames": 46989,
+      "maximum_discarded": 6689,
+      "maximum_probes": 16,
+      "method": "frame-search"
     },
     {
       "file": "seek-96000-1-s16.flac.index.flac",
@@ -448,7 +718,9 @@
       "checks": 15,
       "advanced": 5,
       "discarded_frames": 96141,
-      "indexed": true
+      "maximum_discarded": 13344,
+      "maximum_probes": 1,
+      "method": "seek-table"
     },
     {
       "file": "seek-96000-1-s16.flac.variable-index.flac",
@@ -456,15 +728,39 @@
       "checks": 15,
       "advanced": 5,
       "discarded_frames": 96141,
-      "indexed": true
+      "maximum_discarded": 13344,
+      "maximum_probes": 1,
+      "method": "seek-table"
+    },
+    {
+      "file": "seek-96000-1-s16.flac.variable.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 7,
+      "discarded_frames": 46989,
+      "maximum_discarded": 6689,
+      "maximum_probes": 16,
+      "method": "frame-search"
+    },
+    {
+      "file": "seek-96000-1-s16.flac.variable.flac.unknown.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 7,
+      "discarded_frames": 46989,
+      "maximum_discarded": 6689,
+      "maximum_probes": 16,
+      "method": "frame-search-unknown-total"
     },
     {
       "file": "seek-96000-1-s32.flac",
       "result": "passed",
       "checks": 15,
-      "advanced": 0,
-      "discarded_frames": 1644429,
-      "indexed": false
+      "advanced": 7,
+      "discarded_frames": 46989,
+      "maximum_discarded": 6689,
+      "maximum_probes": 17,
+      "method": "frame-search"
     },
     {
       "file": "seek-96000-1-s32.flac.index.flac",
@@ -472,7 +768,9 @@
       "checks": 15,
       "advanced": 5,
       "discarded_frames": 96141,
-      "indexed": true
+      "maximum_discarded": 13344,
+      "maximum_probes": 1,
+      "method": "seek-table"
     },
     {
       "file": "seek-96000-1-s32.flac.variable-index.flac",
@@ -480,15 +778,39 @@
       "checks": 15,
       "advanced": 5,
       "discarded_frames": 96141,
-      "indexed": true
+      "maximum_discarded": 13344,
+      "maximum_probes": 1,
+      "method": "seek-table"
+    },
+    {
+      "file": "seek-96000-1-s32.flac.variable.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 7,
+      "discarded_frames": 46989,
+      "maximum_discarded": 6689,
+      "maximum_probes": 17,
+      "method": "frame-search"
+    },
+    {
+      "file": "seek-96000-1-s32.flac.variable.flac.unknown.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 7,
+      "discarded_frames": 46989,
+      "maximum_discarded": 6689,
+      "maximum_probes": 17,
+      "method": "frame-search-unknown-total"
     },
     {
       "file": "seek-96000-2-s16.flac",
       "result": "passed",
       "checks": 15,
-      "advanced": 0,
-      "discarded_frames": 1644429,
-      "indexed": false
+      "advanced": 7,
+      "discarded_frames": 46989,
+      "maximum_discarded": 6689,
+      "maximum_probes": 16,
+      "method": "frame-search"
     },
     {
       "file": "seek-96000-2-s16.flac.index.flac",
@@ -496,7 +818,9 @@
       "checks": 15,
       "advanced": 5,
       "discarded_frames": 96141,
-      "indexed": true
+      "maximum_discarded": 13344,
+      "maximum_probes": 1,
+      "method": "seek-table"
     },
     {
       "file": "seek-96000-2-s16.flac.variable-index.flac",
@@ -504,15 +828,39 @@
       "checks": 15,
       "advanced": 5,
       "discarded_frames": 96141,
-      "indexed": true
+      "maximum_discarded": 13344,
+      "maximum_probes": 1,
+      "method": "seek-table"
+    },
+    {
+      "file": "seek-96000-2-s16.flac.variable.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 7,
+      "discarded_frames": 46989,
+      "maximum_discarded": 6689,
+      "maximum_probes": 16,
+      "method": "frame-search"
+    },
+    {
+      "file": "seek-96000-2-s16.flac.variable.flac.unknown.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 7,
+      "discarded_frames": 46989,
+      "maximum_discarded": 6689,
+      "maximum_probes": 16,
+      "method": "frame-search-unknown-total"
     },
     {
       "file": "seek-96000-2-s32.flac",
       "result": "passed",
       "checks": 15,
-      "advanced": 0,
-      "discarded_frames": 1644429,
-      "indexed": false
+      "advanced": 7,
+      "discarded_frames": 46989,
+      "maximum_discarded": 6689,
+      "maximum_probes": 16,
+      "method": "frame-search"
     },
     {
       "file": "seek-96000-2-s32.flac.index.flac",
@@ -520,7 +868,9 @@
       "checks": 15,
       "advanced": 5,
       "discarded_frames": 96141,
-      "indexed": true
+      "maximum_discarded": 13344,
+      "maximum_probes": 1,
+      "method": "seek-table"
     },
     {
       "file": "seek-96000-2-s32.flac.variable-index.flac",
@@ -528,10 +878,114 @@
       "checks": 15,
       "advanced": 5,
       "discarded_frames": 96141,
-      "indexed": true
+      "maximum_discarded": 13344,
+      "maximum_probes": 1,
+      "method": "seek-table"
+    },
+    {
+      "file": "seek-96000-2-s32.flac.variable.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 7,
+      "discarded_frames": 46989,
+      "maximum_discarded": 6689,
+      "maximum_probes": 16,
+      "method": "frame-search"
+    },
+    {
+      "file": "seek-96000-2-s32.flac.variable.flac.unknown.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 7,
+      "discarded_frames": 46989,
+      "maximum_discarded": 6689,
+      "maximum_probes": 16,
+      "method": "frame-search-unknown-total"
+    },
+    {
+      "file": "seek-density-8000-1.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 2505,
+      "maximum_discarded": 575,
+      "maximum_probes": 36,
+      "method": "frame-search"
+    },
+    {
+      "file": "seek-density-8000-2.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 2505,
+      "maximum_discarded": 575,
+      "maximum_probes": 34,
+      "method": "frame-search"
+    },
+    {
+      "file": "seek-density-96000-1.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 7,
+      "discarded_frames": 35469,
+      "maximum_discarded": 5409,
+      "maximum_probes": 46,
+      "method": "frame-search"
+    },
+    {
+      "file": "seek-density-96000-2.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 7,
+      "discarded_frames": 35469,
+      "maximum_discarded": 5409,
+      "maximum_probes": 46,
+      "method": "frame-search"
+    },
+    {
+      "file": "seek-empty-table.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 7,
+      "discarded_frames": 46989,
+      "maximum_discarded": 6689,
+      "maximum_probes": 16,
+      "method": "frame-search-empty-table"
+    },
+    {
+      "file": "seek-placeholder-only.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 7,
+      "discarded_frames": 46989,
+      "maximum_discarded": 6689,
+      "maximum_probes": 16,
+      "method": "frame-search-empty-table"
+    },
+    {
+      "file": "seek-payload-decoy.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 3837,
+      "maximum_discarded": 512,
+      "maximum_probes": 15,
+      "method": "frame-search-payload-decoy"
+    },
+    {
+      "file": "seek-budget-fallback.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 5,
+      "discarded_frames": 37629,
+      "maximum_discarded": 9216,
+      "maximum_probes": 66,
+      "method": "frame-search-capped-fallback"
     }
   ],
-  "rejected": 17,
+  "rejected": 18,
   "rejected_indexes": 11,
-  "rejected_coded_numbers": 6
+  "rejected_coded_numbers": 6,
+  "rejected_search_positions": 1,
+  "cancelled_searches": 1
 }
