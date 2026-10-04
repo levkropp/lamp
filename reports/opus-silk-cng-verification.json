@@ -1,0 +1,6 @@
+﻿{
+    "result":  "passed",
+    "scope":  "SILK comfort-noise rate resets, NLSF/gain smoothing, highest-gain excitation history, deterministic random residuals, LPC synthesis/history and saturated addition, including connected core/CNG/resampling; full PLC/concealment, stereo/packet framing and complete Opus audio conformance remain pending",
+    "comparison":  "exact complete CNG state and int16 PCM, immutable input histories/controls and capacity/canary guards",
+    "stats":  "SILK CNG: 58368 exact PCM/history frames (8706 parameter updates, 39936 lost frames, 14592 rate resets, 9216 connected synthesis/CNG/resampling), 5150475 int16 PCM samples, 20720640 history values, 6635520 connected resampled samples, 27 guards"
+}

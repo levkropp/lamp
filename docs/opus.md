@@ -19,6 +19,7 @@ LAMP's Opus work is handwritten MASM x86-64 assembly, based on the BSD normative
 | SILK gain division and LPC analysis/rewhitening | `opus_silk_prediction.asm` | 520,924 exact divisions, 24,576 zero-state filters, 4,859,251 int16 samples and 19 guards |
 | SILK inverse-NSQ source-rate mono synthesis | `opus_silk_synthesis.asm` | 20,480 exact PCM/history frames (8,192 connected), 3,686,080 int16 PCM samples, 16,793,600 history values and 36 guards |
 | SILK decoder resampling and delay compensation | `opus_silk_resampler.asm` | 8,192 raw up2 and 8,192 AR2 filters, 8,161 initializations/all 15 rate pairs, 32,640 PCM/history frames (3,840 connected core), 28,848,369 integer samples, 2,876,672 defined history values and 53 guards |
+| SILK comfort-noise estimation and synthesis | `opus_silk_cng.asm` | 58,368 exact PCM/history frames (9,216 connected core/CNG/resampling), 5,150,475 int16 PCM samples, 20,720,640 history values and 27 guards |
 | CELT static band allocation | `opus_allocation.asm` | 271,160 allocation/entropy and 52,479 pulse-cache comparisons |
 | CELT normalized PVQ bands/spreading | `opus_vq.asm` | 13,416 band/entropy, 15,864 spreading and 8,192 renormalization comparisons |
 | CELT Haar/Hadamard layout helpers | `opus_band_transform.asm` | 3,280 Haar and 5,888 layout/inverse comparisons |
@@ -80,7 +81,7 @@ Requirements: Windows x64, Visual Studio Build Tools with the C tools and Window
 
 ## Next dependencies
 
-1. Complete SILK concealment/comfort noise and stereo framing; handle hybrid transitions.
+1. Complete SILK packet-loss concealment and stereo framing; handle hybrid transitions.
 2. Integrate Ogg Opus pre-skip/gain/end trimming with the playback engine.
 3. Validate complete CELT/SILK/hybrid audio against official decoder vectors and reference PCM.
 
@@ -114,7 +115,7 @@ The 140-byte control output matches the normative layout: four pitch int32 value
 
 `op_silk_div32(numerator, denominator, Q)` matches the normative signed fixed-point gain-division approximation for Q 0–30. INT_MIN inputs, a zero denominator and unsupported Q values return zero. `op_silk_analysis_filter(request*)` implements zero-state LPC analysis/rewhitening with normative wrapped accumulation, rounded Q12 conversion and int16 saturation. Its 48-byte request in `src/opus_silk_prediction_layout.inc` selects output/input/Q12-coefficient pointers at 0/8/16, length/order at 24/28 and int16 capacities at 32/36/40. Order is even 6–16 and length is order–480. The first order output samples are zero; inputs, coefficients and inactive outputs remain unchanged. Buffers must be separate.
 
-`op_silk_synthesis(request*)` implements inverse NSQ: pulse offset/random signs, excitation, gain-adjusted LPC history, rewhitening/LTP scaling, long/short prediction, voiced-loss-to-unvoiced blending and saturated int16 PCM. It supports internal 8/12/16 kHz and 2/4 five-millisecond subframes. This produces source-rate mono **core** PCM; full frame concealment/glue/comfort noise, resampling and stereo processing remain separate.
+`op_silk_synthesis(request*)` implements inverse NSQ: pulse offset/random signs, excitation, gain-adjusted LPC history, rewhitening/LTP scaling, long/short prediction, voiced-loss-to-unvoiced blending and saturated int16 PCM. It supports internal 8/12/16 kHz and 2/4 five-millisecond subframes. This produces source-rate mono **core** PCM; full frame concealment/glue, comfort noise, resampling and stereo processing remain separate stages.
 
 Its 80-byte request in `src/opus_silk_synthesis_layout.inc` selects core state, mutable decoder controls, immutable side information, int32 pulses, int16 PCM and workspace at 0–40. Rate/subframes occupy 48/52; capacities at 56–76 specify state/control bytes, pulse/PCM element counts, workspace bytes and side-information bytes. Minimum byte capacities are 2,320/140/3,936/36; pulse/PCM arrays require rate-kHz × 5 × subframes elements. Buffers must be caller-owned and separate. Public rejection returns zero before changing buffers; success returns one.
 
@@ -132,7 +133,15 @@ The state layout matches the reference: six IIR int32 values at 0, 36 FIR int32 
 
 The normative fractional upsampler copies sixteen int16 scratch values into its FIR state, though only eight are initialized and used by future interpolation. LAMP copies the eight defined samples and preserves the unused state. Oracle comparisons therefore exclude only reference `sFIR[4..7]`; PCM, every defined history field, descriptor and inactive output match exactly. Separate checks prove LAMP's unused state stays unchanged and that different scratch fills produce identical complete LAMP state/PCM. This reference exception is recorded in the verification report.
 
-The seven generated resampling tables are verified against the hash-checked normative archive. Tests cover every rate pair, 1–60 ms lengths, repeated transitions across 10 ms blocks, silence/impulse/extreme/random inputs, arbitrary integer history, delay compensation, output/input canaries, malformed descriptors and connected assembly core PCM. These checks complete decoder-rate conversion; whole SILK packet/frame processing, concealment, comfort noise, stereo and Opus mode integration remain unfinished.
+The seven generated resampling tables are verified against the hash-checked normative archive. Tests cover every rate pair, 1–60 ms lengths, repeated transitions across 10 ms blocks, silence/impulse/extreme/random inputs, arbitrary integer history, delay compensation, output/input canaries, malformed descriptors and connected assembly core PCM. These checks complete decoder-rate conversion; whole SILK packet/frame processing, packet-loss concealment, stereo and Opus mode integration remain unfinished.
+
+## SILK comfort-noise interface
+
+`op_silk_cng(request*)` implements normative CNG rate resets, no-VAD NLSF/gain smoothing, highest-gain excitation history, deterministic random residual generation and LPC noise addition. The 88-byte request in `src/opus_silk_cng_layout.inc` has CNG/core/parameter/control/PCM/work pointers at 0/8/16/24/32/40, internal kHz at 48 (8/12/16), subframes at 52 (2/4), sample count at 56 (1 through the configured frame length), and capacities at 60/64/68/72/76/80. Required sizes are 1,388/2,320/48/140 bytes, sample-count int16 PCM elements and 1,376 workspace bytes. Buffers are caller-owned, separate and correctly sized. Success returns one; invalid public requests return zero before writes.
+
+CNG state uses the normative layout: 320 int32 Q14 excitation samples at 0, 16 int16 Q15 NLSFs at 1,280, 16 int32 Q10 synthesis values at 1,312, nonnegative Q16 gain at 1,376, random seed at 1,380 and previous internal kHz at 1,384. Rate changes reset active NLSFs, gain and seed; unrelated and inactive history is preserved. No-loss frames clear active synthesis history, and no-VAD frames also update noise estimates. Lost frames add synthesized noise to int16 PCM with normative wrap, rounding and saturation, then update seed/synthesis history. Core, parameters and controls remain unchanged; the frame caller supplies consistent previous-signal/loss fields.
+
+Tests call unchanged `CNG.c` and compare the complete CNG state and PCM, including rate changes, partial lengths, extreme histories/gains, clipping and unused suffixes. Connected checks feed assembly core PCM through CNG and 48 kHz resampling. Their loss frames isolate CNG with zero input; complete PLC concealment/recovery and packet framing remain separate unfinished work.
 
 ## Frame-prefix interface
 

@@ -4,7 +4,7 @@ A Windows x86-64 audio player with handwritten assembly WAV, FLAC, MP3, and Ogg/
 
 The dark canvas, compact playback controls and automatic hiding are inspired by mpv. The custom pixel buffer and Win32 presentation follow Rhun's documented assembly UI model. No Rhun source, fonts, icons, or other assets were copied.
 
-**Opus playback is unfinished.** The tested stateful assembly CELT decoder connects controls, energy/allocation, recursive spectral reconstruction, anti-collapse, inverse MDCT/overlap, postfilter and deemphasis to float PCM, with pitch/LPC and comfort-noise loss concealment. SILK parameters, interpolation/reset/loss history, excitation/LTP/LPC mono synthesis and all fifteen decoder resampling rate pairs are also tested. These development objects are not linked into either player. SILK concealment/comfort noise/stereo framing, hybrid transitions, Ogg integration and full audio-vector validation remain. An `.opus` file is rejected. [Opus stage documentation](opus.md) records interfaces, bounds, results and remaining work.
+**Opus playback is unfinished.** The tested stateful assembly CELT decoder connects controls, energy/allocation, recursive spectral reconstruction, anti-collapse, inverse MDCT/overlap, postfilter and deemphasis to float PCM, with pitch/LPC and comfort-noise loss concealment. SILK parameters, interpolation/reset/loss history, excitation/LTP/LPC mono synthesis, all fifteen decoder resampling rate pairs and comfort-noise estimation/synthesis are also tested. These development objects are not linked into either player. SILK packet-loss concealment/stereo framing, hybrid transitions, Ogg integration and full audio-vector validation remain. An `.opus` file is rejected. [Opus stage documentation](opus.md) records interfaces, bounds, results and remaining work.
 
 All runtime application and decoder code is MASM x64 assembly. No C/C++/Rust codec, codec DLL, CRT, FFmpeg process, or media-player engine is linked or invoked. Reference C source is used only for algorithms, permitted coefficient/probability data, and test oracles.
 
@@ -117,7 +117,9 @@ Fixed-point SILK LPC tests cover 749,568 reciprocals, 16,640 bandwidth expansion
 
 SILK prediction helpers add 520,924 exact divisions and 24,576 analysis/rewhitening filters. The inverse-NSQ core compares 20,480 source-rate mono PCM/history frames, including 8,192 connected index/pulse/parameter frames, 38,304 gain changes and 1,722 voiced-loss-to-unvoiced blends. All 3,686,080 int16 PCM samples and 16,793,600 history values match the reference exactly; extreme pulses/history exercise clipping and wrap arithmetic. These core sequences exclude full PLC/CNG and stereo framing.
 
-Decoder resampling adds 32,640 exact PCM/history frames across all fifteen internal/API-rate pairs, including 3,840 connected core frames. Raw up2/AR2, delay compensation, 1–60 ms blocks, full-range integer input/history and 53 guards are covered. The reference fractional upsampler copies an unused uninitialized FIR-state tail; the oracle excludes only that reference tail, and verifies deterministic preservation of LAMP's unused state with different scratch fills. Twenty-five suites pass locally; complete mode conformance and playback integration remain required.
+Decoder resampling adds 32,640 exact PCM/history frames across all fifteen internal/API-rate pairs, including 3,840 connected core frames. Raw up2/AR2, delay compensation, 1–60 ms blocks, full-range integer input/history and 53 guards are covered. The reference fractional upsampler copies an unused uninitialized FIR-state tail; the oracle excludes only that reference tail, and verifies deterministic preservation of LAMP's unused state with different scratch fills.
+
+Comfort noise adds 58,368 exact PCM/history frames, including 8,706 parameter updates, 39,936 lost frames, 14,592 rate resets and 9,216 connected core/CNG/48 kHz resampling frames. It checks the entire CNG state, 5,150,475 int16 PCM samples, unused history preservation, immutable core/parameter/control inputs and 27 guards. Lost-frame tests isolate CNG; full PLC/recovery is still required. Twenty-six suites pass locally; complete mode conformance and playback integration remain required.
 
 The UI preview uses the actual assembly renderer with synthetic playback state. **Desktop window interaction, open-dialog/drop behavior and monitor-DPI changes remain unverified** because the permitted desktop automation runtime was unavailable. Audio controls are tested separately by a native assembly harness.
 
@@ -149,7 +151,7 @@ The RFC reference archive is checked against its normative SHA-1 before extracti
 
 ## Remaining implementation
 
-Complete SILK concealment/comfort noise and stereo/packet framing, then hybrid switching, Ogg integration, pre-skip/gain/end trimming and official audio-vector validation. Further work includes indexed seeking, multichannel/chained streams, device changes, and same-machine CPU/RAM comparisons against existing players.
+Complete SILK packet-loss concealment and stereo/packet framing, then hybrid switching, Ogg integration, pre-skip/gain/end trimming and official audio-vector validation. Further work includes indexed seeking, multichannel/chained streams, device changes, and same-machine CPU/RAM comparisons against existing players.
 
 ## References
 

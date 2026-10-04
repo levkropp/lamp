@@ -91,6 +91,7 @@ decode_core.c, LPC_analysis_filter.c and the same Inlines.h/macros.h.
 Decoder resampling references resampler.c, resampler_private_up2_HQ.c,
 resampler_private_AR2.c, resampler_private_IIR_FIR.c,
 resampler_private_down_FIR.c and resampler_rom.c under the same conditions.
+Comfort-noise estimation and synthesis reference CNG.c under the same conditions.
 Adapted Opus packet framing:
 Copyright (c) 2010-2012 IETF Trust, Xiph.Org Foundation and Skype Limited.
 All rights reserved.
