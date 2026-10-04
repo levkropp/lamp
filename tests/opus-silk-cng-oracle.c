@@ -95,6 +95,7 @@ static int cn_invalid(void){
  }
  if(op_silk_cng(NULL))return 0;cn_guards++;return 1;
 }
+#ifndef SILK_CNG_ORACLE_EMBEDDED
 int main(void){
  if(!cn_standalone()){puts("CNG standalone failed");return 1;}
  if(!cn_connected_frames()){puts("CNG connected failed");return 1;}
@@ -102,3 +103,4 @@ int main(void){
  printf("SILK CNG: %u exact PCM/history frames (%u parameter updates, %u lost frames, %u rate resets, %u connected synthesis/CNG/resampling), %llu int16 PCM samples, %llu history values, %llu connected resampled samples, %u guards\n",cn_frames,cn_updates,cn_losses,cn_resets,cn_connected,cn_samples,cn_history,cn_resampled,cn_guards);
  return 0;
 }
+#endif
