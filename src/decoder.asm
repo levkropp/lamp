@@ -8,7 +8,7 @@ EXTERN MapViewOfFile:PROC, UnmapViewOfFile:PROC, CloseHandle:PROC
 EXTERN mp3_open:PROC, mp3_read:PROC,mp3_seek:PROC,mp3_close:PROC
 EXTERN vorbis_open:PROC, vorbis_read:PROC, vorbis_close:PROC, ogg_close:PROC
 EXTERN vorbis_seek:PROC
-EXTERN opus_open:PROC,opus_read:PROC,opus_close:PROC
+EXTERN opus_open:PROC,opus_read:PROC,opus_close:PROC,opus_seek:PROC
 EXTERN ogg_cancel_ptr:QWORD
 PUBLIC decoder_open, decoder_read, decoder_close, decoder_seek
 PUBLIC sample_rate, source_channels, source_bits, decode_error, total_frames, codec_kind
@@ -497,7 +497,7 @@ decoder_close ENDP
 ; WAV seeks exactly; native FLAC uses a table or bounded frame binary search.
 ; MP3 restores an indexed reservoir before two-frame PCM pre-roll.
 ; Vorbis restores a packet checkpoint and primes its preceding overlap.
-; Opus returns0 without changing its fresh decoder state.
+; Opus restores a packet checkpoint before at least80ms PCM pre-roll.
 decoder_seek PROC
     push rbx
     push rsi
@@ -514,6 +514,8 @@ decoder_seek PROC
     je seek_mp3
     cmp dword ptr [codec_kind],4
     je seek_vorbis
+    cmp dword ptr [codec_kind],5
+    je seek_opus
     cmp dword ptr [codec_kind],2
     jne seek_return
     test rcx,rcx
@@ -590,6 +592,9 @@ seek_mp3:
     jmp seek_return
 seek_vorbis:
     call vorbis_seek
+    jmp seek_return
+seek_opus:
+    call opus_seek
     jmp seek_return
 seek_wav:
     cmp rcx,[total_frames]

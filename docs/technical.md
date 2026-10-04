@@ -1,6 +1,6 @@
 # LAMP 0.4.0-dev technical details
 
-A Windows x86-64 audio player with handwritten assembly WAV, FLAC, MP3, Ogg/Vorbis and development Ogg/Opus decoders, plus a native assembly UI. The current console build is **184,320 bytes (180 KiB)**; the graphical build is **192,000 bytes (187.5 KiB)**. Both include LAMP's icon and version resources. The published v0.3.0 archive retains its earlier four-format build and manifest.
+A Windows x86-64 audio player with handwritten assembly WAV, FLAC, MP3, Ogg/Vorbis and development Ogg/Opus decoders, plus a native assembly UI. The current console build is **184,832 bytes (180.5 KiB)**; the graphical build is **192,512 bytes (188 KiB)**. Both include LAMP's icon and version resources. The published v0.3.0 archive retains its earlier four-format build and manifest.
 
 The dark canvas, compact playback controls and automatic hiding are inspired by mpv. The custom pixel buffer and Win32 presentation follow Rhun's documented assembly UI model. No Rhun source, fonts, icons, or other assets were copied.
 
@@ -50,7 +50,11 @@ Vorbis opening scans packet mode/window headers after Ogg CRC/sequence validatio
 
 Vorbis seeking restores the checkpoint preceding the selected packet and decodes that packet once with output suppressed to rebuild its exact overlap tail. The worker discards the remaining distance, bounded by the current index stride times 6,144 samples. Packet reconstruction resumes correctly within pages and across continued pages, including zero terminal laces. No extra index allocation or CRC pass occurs during seek. `vorbis_index_count`, `vorbis_index_stride` and `vorbis_seek_preroll` expose bounded-memory and one-packet pre-roll diagnostics.
 
-The Vorbis header scan validates neighboring overlap widths and page granules. Granules mark the packet center, before the extra samples produced by long-to-short lookahead. Nonzero origins require the second audio packet to finish a page. Positive origins shift timestamps; negative origins crop the initial PCM. Initial long-to-short packets retain their unwindowed right prefix, and final granules trim the end. Opus still discards PCM from the beginning. Seeking runs on the worker, and paused seeking keeps audio stopped until resume.
+The Vorbis header scan validates neighboring overlap widths and page granules. Granules mark the packet center, before the extra samples produced by long-to-short lookahead. Nonzero origins require the second audio packet to finish a page. Positive origins shift timestamps; negative origins crop the initial PCM. Initial long-to-short packets retain their unwindowed right prefix, and final granules trim the end.
+
+Opus builds a 64 KiB packet index during its existing structural/duration scan. Each of at most 2,048 32-byte points holds an Ogg page/lace checkpoint, the raw sample position before the packet and its ordinal. The initial stride is 16 packets; alternate-point compaction doubles it at capacity. Seeking adds pre-skip to the relative output target, subtracts 3,840 samples (80 ms), selects a preceding index point, and skims fewer than one stride of packets plus one lookahead packet to find the last permissible boundary. It restores that boundary and initializes fresh SILK/CELT state. The worker then decodes/discards the pre-roll and starts at the requested output sample. For targets at least 80 ms into the output, the discarded output is below 9,600 samples (200 ms), regardless of index compaction. Near the beginning it decodes from raw sample zero with the full original pre-skip. Gain, origin and end trimming retain their ordinary semantics.
+
+`opus_index_count`, `opus_index_stride`, `opus_seek_headers` and `opus_seek_raw` report index and selected-boundary diagnostics. Allocation failure uses sequential decoding; close releases the allocation and reopen rebuilds it. Opening still scans Ogg CRCs and packet headers. No cross-open cache or measured player-comparison latency result is claimed. Seeking runs on the worker, and paused seeking keeps audio stopped until resume.
 
 `decoder_seek(uint64_t absolute_frame)` is called once after opening a stream and returns the resume frame at or before the target. WAV clamps to EOF. Unsupported codecs return zero without changing fresh codec state; the worker uses sequential decoding for the rest. A malformed selected FLAC frame sets a sticky decoding error. Closed decoders refuse seeking and reading. `decoder_seek_probes` records full-frame decode attempts for diagnostics. No per-seek allocation is required.
 
@@ -59,6 +63,8 @@ The seek suite records 1,470 exact PCM checks across 98 files: direct WAV; fixed
 MP3 adds 1,650 byte-exact seeks across 110 files against uninterrupted assembly PCM. Each continuous file is independently compared with FFmpeg's `mp3float` decoder. Cases cover all nine rates, mono/stereo, CBR/VBR, delay/padding, absent tags, noise/transients and original intensity/short/mixed/CRC/Huffman vectors. Tests also verify EOF/clamping, canaries, untouched output, allocation release, cancelled seek/open and two contradictory Xing counts. A 65,537-frame stream exercises adaptive compaction; its nonzero midpoint PCM must match an independently checked smaller continuous window.
 
 Vorbis adds 1,305 byte-exact seeks across 87 files against uninterrupted assembly PCM independently compared with FFmpeg. Cases cover 8–192 kHz, mono/stereo, quality extremes, noise/transients, residue/codebooks, repaged continued audio, long continued comments, positive/cropped granule origins and streams starting with a long-to-short packet. A nonzero 65,537-packet stream exercises two compactions, ending with 1,025 points at stride 64. EOF/clamping, canaries, untouched output, fresh reopen, allocation release and cancelled seek/open also pass. Three CRC-valid contradictory timestamp streams are rejected. The existing 83 Vorbis regression checks pass with the new scan and trim behavior.
+
+Opus adds 6,768 sample-position/reference PCM seek checks across 141 files. A test-only independent Ogg reader and normative packet-duration APIs select the expected packet boundary; an RFC 8251 decoder initialized there supplies the seek PCM. Continuous playback is checked separately against uninterrupted reference PCM. Cases cover all 32 TOC configurations/four framing codes, mono/stereo, 2.5–120 ms packets, noise/transients/silence, mode/channel/DTX changes, gain extremes, pre-skip 0–65,535, cropped/positive origins, continued comments/audio and terminal zero laces. A nonzero 65,537-packet stream reaches 1,025 points at stride 64. All files exercise EOF/clamping, canaries, untouched output, fresh reopen, allocation release and cancelled seek/open. Maximum observed gain-scaled reference error is below 0.0000003 at tolerance 0.00004. Opus pre-roll approximates prior predictive history, so seek PCM need not be byte-identical to continuous playback; the report records that difference separately rather than treating it as a reference-decoder mismatch. Ogg's 393-stream reference regression and all five codec lifecycle checks also pass.
 
 ## Format coverage
 
@@ -116,6 +122,7 @@ Recorded snapshots are in `reports/` in a source checkout. The paths below descr
 | `bin/engine-verification.json` | Playback, pause, resume, stop, reopen, seek, paused seek and cancelled open for all five codecs plus indexed FLAC |
 | `bin/mp3-seek-verification.json` | 1,650 exact seeks, independent continuous PCM comparisons, bounded sparse index/header skims, adaptive compaction, cancelled seek/open and contradictory Xing counts |
 | `bin/vorbis-seek-verification.json` | 1,305 exact seeks, independent continuous PCM comparisons, packet/lace checkpoints, overlap pre-roll, origins/cropping, continued packets, adaptive compaction, cancelled seek/open and contradictory timestamps |
+| `bin/opus-seek-verification.json` | 6,768 independently positioned reset-reference seeks; all TOC configurations/framing codes, at least 80 ms pre-roll, gain/pre-skip, mode/channel/DTX transitions, continued/cropped streams, adaptive compaction and cancelled seek/open |
 | `vorbis-fuzz-verification.json` | 512 repaired-CRC setup/audio mutations without a crash/timeout; accepted audio correctness is not asserted |
 | `vorbis-benchmark.json` | Five 30-second offline CPU measurements |
 | `vorbis-stress-verification.json` | Eight-second WASAPI silence under four bounded CPU workers |
@@ -186,7 +193,8 @@ node .\tests\fuzz-vorbis.js
 .\tests\verify-opus-components.ps1
 .\tests\verify-opus.ps1 -OutputDirectory .\bin\verify-build #51 modern libopus files
 .\tests\verify-opus-conformance.ps1 #120 official vector checks; first run downloads ~75 MB
-.\tests\verify-seek.ps1 -OutputDirectory .\bin\verify-build #4425 exact WAV/FLAC/MP3/Vorbis seek checks
+.\tests\verify-seek.ps1 -OutputDirectory .\bin\verify-build #4425 exact WAV/FLAC/MP3/Vorbis +6768 Opus reference seeks
+.\tests\verify-opus-seek.ps1 -OutputDirectory .\bin\verify-build #Opus seek suite alone
 .\tests\render-ui.ps1
 ```
 
@@ -194,7 +202,7 @@ The RFC reference archive is checked against its normative SHA-1 before extracti
 
 ## Remaining implementation
 
-Next work includes an Opus seek index, reopen/seek latency measurements, multichannel/chained streams, device changes, and same-machine CPU/RAM comparisons against existing players.
+Next work includes reopen/seek latency measurements and caching, multichannel/chained streams, device changes, and same-machine CPU/RAM comparisons against existing players.
 
 ## References
 

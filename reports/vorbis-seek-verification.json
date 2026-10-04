@@ -1,6 +1,6 @@
 {
   "result": "passed",
-  "scope": "Sparse packet/lace seek checkpoints and exact previous-packet overlap; byte-exact continuous assembly PCM and independent FFmpeg PCM comparison, all supported rates/channels/quality extremes, transients/noise, continued audio and comments, zero terminal laces, positive/cropped granule origins, initial long-to-short prefixes, EOF/clamping/canaries, fresh reopen, allocation release, adaptive 64-KiB index compaction, CRC-valid contradictory timestamps and cancelled seek/open; Opus index remains pending",
+  "scope": "Sparse packet/lace seek checkpoints and exact previous-packet overlap; byte-exact continuous assembly PCM and independent FFmpeg PCM comparison, all supported rates/channels/quality extremes, transients/noise, continued audio and comments, zero terminal laces, positive/cropped granule origins, initial long-to-short prefixes, EOF/clamping/canaries, fresh reopen, allocation release, adaptive 64-KiB index compaction, CRC-valid contradictory timestamps and cancelled seek/open",
   "checks": [
     {
       "file": "seek-vorbis-8000-1-q0.ogg",

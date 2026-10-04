@@ -41,7 +41,7 @@ Windows 10/11 x64 and a working default audio output are the intended targets. B
 | Ogg/Vorbis | Single logical stream, mono/stereo, floor 1, mapping 0; CRC and granule checks |
 | Ogg/Opus | Development source: single logical stream, mapping family 0, mono/stereo, 48 kHz output, header gain/pre-skip/end trimming |
 
-See [precise coverage, limitations, and verification](docs/technical.md) before relying on a particular stream variant. Multichannel, chained Ogg streams and FLAC-in-Ogg are not implemented. WAV seeks directly; native FLAC uses seek tables or searches validated frames; MP3 and Vorbis use sparse indexes. The Opus seek index remains unfinished.
+See [precise coverage, limitations, and verification](docs/technical.md) before relying on a particular stream variant. Multichannel, chained Ogg streams and FLAC-in-Ogg are not implemented. WAV seeks directly; native FLAC uses seek tables or searches validated frames; MP3, Vorbis and Opus use sparse indexes.
 
 ## Controls
 
@@ -55,7 +55,7 @@ See [precise coverage, limitations, and verification](docs/technical.md) before 
 | M | Mute/unmute to 100% |
 | Q | Close |
 
-The controls hide after 2.5 seconds of inactivity during playback. Seeking runs on a worker. WAV jumps directly to the sample; native FLAC uses a validated seek table or a bounded frame search, including files with unknown duration. Exhausting the search budget falls back to sequential decoding. MP3 restores an indexed reservoir and decodes two frames of pre-roll before the target. Vorbis restores an Ogg packet boundary and decodes one packet to rebuild overlap. Both indexes are built from headers when opening a file. Opus still decodes from the beginning, so distant seeks take longer. Paused seeking keeps audio stopped until resume. The console accepts Space to pause and Q/Ctrl+C to stop.
+The controls hide after 2.5 seconds of inactivity during playback. Seeking runs on a worker. WAV jumps directly to the sample; native FLAC uses a validated seek table or a bounded frame search, including files with unknown duration. Exhausting the search budget falls back to sequential decoding. MP3 restores an indexed reservoir and decodes two frames of pre-roll before the target. Vorbis restores an Ogg packet boundary and decodes one packet to rebuild overlap. Opus restores a packet boundary at least 80 ms before the target to rebuild decoder state; near the beginning it applies normal pre-skip. These indexes are built from headers when opening a file. Paused seeking keeps audio stopped until resume. The console accepts Space to pause and Q/Ctrl+C to stop.
 
 ## Build and verify
 
@@ -69,17 +69,17 @@ node .\tests\smoke.js
 .\package.ps1
 ```
 
-The prebuilt ICO and decoder tables are included. A normal build needs no codec library or reference C compiler. Both players use custom assembly entry points and `/NODEFAULTLIB`. The development build measures **192,000 bytes for `lamp.exe`** and **184,320 bytes for `lamp-cli.exe`**, including icon resources; release manifests record exact sizes and hashes.
+The prebuilt ICO and decoder tables are included. A normal build needs no codec library or reference C compiler. Both players use custom assembly entry points and `/NODEFAULTLIB`. The development build measures **192,512 bytes for `lamp.exe`** and **184,832 bytes for `lamp-cli.exe`**, including icon resources; release manifests record exact sizes and hashes.
 
 To build while the player is open, use `./build.ps1 -OutputDirectory ./bin/verify-build`. Pass that directory to `node ./tests/verify-runtime.js ./bin/verify-build` and `node ./tests/smoke.js ./bin/verify-build` to check the new binaries, or `./package.ps1 -BinaryDirectory ./bin/verify-build` to package them. Packaging rejects a binary version that differs from `VERSION`.
 
-The codec suites record 43 WAV/FLAC, 103 MP3, and 83 Vorbis checks, plus 4,425 exact WAV/FLAC/MP3/Vorbis seek checks, engine lifecycle, malformed-input, stress, and Opus reference tests. Vorbis seeking includes continued packets, cropped starts, positive granule origins and bounded index compaction. These checks do not establish complete format conformance. [Test instructions](docs/technical.md#verification) and [recorded reports](reports/README.md) describe what was checked. Full fixture suites need FFmpeg and Node.js; seek and Opus oracle tests additionally use the C compiler for test executables only.
+The codec suites record 43 WAV/FLAC, 103 MP3, and 83 Vorbis checks, plus 4,425 exact WAV/FLAC/MP3/Vorbis seek checks and 6,768 Opus seeks against an independently positioned RFC 8251 reference decoder. Ogg seeking includes continued packets, cropped starts, granule origins and bounded index compaction. Engine lifecycle, malformed-input, stress and codec reference tests add separate coverage. These checks do not establish complete format conformance. [Test instructions](docs/technical.md#verification) and [recorded reports](reports/README.md) describe what was checked. Full fixture suites need FFmpeg and Node.js; seek and Opus oracle tests additionally use the C compiler for test executables only.
 
 The UI image comes from the actual assembly renderer with synthetic state. Open-dialog, drag/drop, and monitor-DPI interaction still require desktop verification.
 
 ## Roadmap and contribution
 
-Latest Opus work connects Ogg packets to playback, with header gain, pre-skip, cropped granule origins, end trimming and cancellation. Thirty-four suites include 18,381 packet calls and 393 Ogg streams against the RFC 8251 updated decoder, plus malformed input, capacity/canary and deterministic scratch checks. Independent modern-libopus comparisons pass all 51 tonal, noise, transient and silence cases, with maximum PCM error below 0.000023. All 120 official vector checks pass, including exact reference PCM/history and final-range validation for 200,750 packets. Playback, pause/resume, stop/reopen and sequential/paused seeking pass for Opus and the existing formats. Multistream/chaining remain unfinished. See [the decoder-stage notes](docs/opus.md) and run `./tests/verify-opus-components.ps1` to reproduce the component checks without FFmpeg or an audio device, or `./tests/verify-opus-conformance.ps1` for official vectors.
+Latest Opus work connects Ogg packets to playback, with header gain, pre-skip, cropped granule origins, end trimming, cancellation and a 64 KiB seek index. Thirty-four suites include 18,381 packet calls and 393 Ogg streams against the RFC 8251 updated decoder, plus malformed input, capacity/canary and deterministic scratch checks. Independent modern-libopus comparisons pass all 51 tonal, noise, transient and silence cases, with maximum PCM error below 0.000023. All 120 official vector checks pass, including exact reference PCM/history and final-range validation for 200,750 packets. Playback, pause/resume, stop/reopen and indexed/paused seeking pass for Opus and the existing formats. Multistream/chaining remain unfinished. See [the decoder-stage notes](docs/opus.md) and run `./tests/verify-opus-components.ps1` to reproduce the component checks without FFmpeg or an audio device, or `./tests/verify-opus-conformance.ps1` for official vectors.
 
 [ROADMAP.md](ROADMAP.md) covers Opus, reliable audio playback, broader codecs and containers, video, subtitles, streaming, and eventual support for everything relevant that mpv supports. The [compatibility matrix](docs/compatibility.md) tracks the current gaps. Goals have acceptance gates, not promised release dates. Hardware decode should be used when it lowers system cost; handwritten assembly alone does not guarantee a faster codec.
 

@@ -6,12 +6,18 @@ include opus_mode_layout.inc
 include opus_stream_layout.inc
 EXTERN opus_headers:PROC,op_opus_packet_parse:PROC,op_opus_decoder_init:PROC
 EXTERN op_opus_decode_packet:PROC,op_celt_exp2:PROC
-EXTERN ogg_next:PROC,ogg_rewind:PROC
+EXTERN ogg_next:PROC
+EXTERN ogg_checkpoint:PROC,ogg_resume:PROC,ogg_cancel_ptr:QWORD
+EXTERN VirtualAlloc:PROC,VirtualFree:PROC
 EXTERN ogg_packet_last:DWORD,ogg_eos:DWORD,ogg_granule:QWORD
 EXTERN op_preskip:DWORD,op_gain:DWORD,op_packet_samples:DWORD
 EXTERN sample_rate:DWORD,source_channels:DWORD,source_bits:DWORD
 EXTERN total_frames:QWORD,decode_error:DWORD
-PUBLIC opus_open,opus_read,opus_close
+PUBLIC opus_open,opus_read,opus_close,opus_seek
+PUBLIC opus_index_count,opus_index_stride,opus_seek_headers,opus_seek_raw
+OB_INDEX_CAP EQU 2048
+OB_INDEX_POINT EQU 32
+OB_PREROLL EQU 3840
 .const
 ob_db_exp real8 0.00064881407907956296 ;log2(10)/(20*256)
 .data
@@ -22,18 +28,39 @@ ob_eof dd 0
 ob_gain real4 1.0
 ob_end_sample dq 0
 ob_decoded dq 0
+ob_index dq 0
+opus_index_count dd 0
+opus_index_stride dq 16
+opus_seek_headers dq 0
+opus_seek_raw dq 0
 .data?
 ALIGN 16
+ob_audio_checkpoint dq 2 dup (?)
+ob_scan_checkpoint dq 2 dup (?)
+ob_seek_checkpoint dq 2 dup (?)
 ob_state db MO_SIZE dup (?)
 ob_work db MW_SIZE dup (?)
 ob_pcm real4 11520 dup (?)
 .code
 opus_close PROC
+    sub rsp,40
+    mov rcx,[ob_index]
+    test rcx,rcx
+    jz ob_close_reset
+    xor edx,edx
+    mov r8d,8000h
+    call VirtualFree
+    mov qword ptr [ob_index],0
+ob_close_reset:
+    mov dword ptr [opus_index_count],0
+    mov qword ptr [opus_seek_headers],0
+    mov qword ptr [opus_seek_raw],0
     mov dword ptr [ob_active],0
     mov dword ptr [ob_available],0
     mov dword ptr [ob_used],0
     mov dword ptr [ob_eof],0
     mov qword ptr [ob_decoded],0
+    add rsp,40
     ret
 opus_close ENDP
 
@@ -44,6 +71,8 @@ opus_open PROC
     push rdi
     push r12
     push r13
+    push r14
+    push r15
     sub rsp,64
     mov rsi,rcx
     mov rdi,rdx
@@ -53,10 +82,22 @@ opus_open PROC
     call opus_headers
     test eax,eax
     jz ob_open_bad
+    lea rcx,ob_audio_checkpoint
+    call ogg_checkpoint
+    xor ecx,ecx
+    mov edx,OB_INDEX_CAP*OB_INDEX_POINT
+    mov r8d,3000h
+    mov r9d,4
+    call VirtualAlloc
+    mov [ob_index],rax       ;allocation failure retains sequential decoding
+    mov qword ptr [opus_index_stride],16
     xor ebx,ebx             ;first completed audio page seen
     xor r12d,r12d           ;raw samples in complete packets
     xor r13d,r13d           ;initial granule offset
+    xor r14d,r14d           ;audio packet ordinal
 ob_scan_packet:
+    lea rcx,ob_scan_checkpoint
+    call ogg_checkpoint
     call ogg_next
     test rax,rax
     jz ob_open_bad          ;EOS must belong to a completed audio packet
@@ -64,6 +105,42 @@ ob_scan_packet:
     call op_opus_packet_parse
     test eax,eax
     jz ob_open_bad
+    cmp qword ptr [ob_index],0
+    je ob_scan_duration
+    mov rax,[opus_index_stride]
+    dec rax
+    test r14,rax
+    jnz ob_scan_duration
+    cmp dword ptr [opus_index_count],OB_INDEX_CAP
+    jb ob_scan_store
+    mov r15d,1
+ob_scan_compact:
+    mov rsi,r15
+    shl rsi,6
+    add rsi,[ob_index]
+    mov rdi,r15
+    shl rdi,5
+    add rdi,[ob_index]
+    mov ecx,4
+    rep movsq
+    inc r15d
+    cmp r15d,OB_INDEX_CAP/2
+    jb ob_scan_compact
+    mov dword ptr [opus_index_count],OB_INDEX_CAP/2
+    shl qword ptr [opus_index_stride],1
+ob_scan_store:
+    mov eax,[opus_index_count]
+    shl eax,5
+    add rax,[ob_index]
+    mov rcx,[ob_scan_checkpoint]
+    mov [rax],rcx
+    mov rcx,[ob_scan_checkpoint+8]
+    mov [rax+8],rcx
+    mov [rax+16],r12
+    mov [rax+24],r14
+    inc dword ptr [opus_index_count]
+ob_scan_duration:
+    inc r14
     mov eax,[op_packet_samples]
     add r12,rax
     jo ob_open_bad
@@ -107,12 +184,9 @@ ob_scan_end:
     sub rax,rcx
     jc ob_open_bad
     mov [total_frames],rax
-    call ogg_rewind
-    call ogg_next           ;validated identification header
-    test rax,rax
-    jz ob_open_bad
-    call ogg_next           ;validated comment header
-    test rax,rax
+    lea rcx,ob_audio_checkpoint
+    call ogg_resume
+    test eax,eax
     jz ob_open_bad
     lea rax,ob_state
     mov [rsp+32+MI_STATE],rax
@@ -138,6 +212,8 @@ ob_open_bad:
     xor eax,eax
 ob_open_done:
     add rsp,64
+    pop r15
+    pop r14
     pop r13
     pop r12
     pop rdi
@@ -145,6 +221,126 @@ ob_open_done:
     pop rbx
     ret
 opus_open ENDP
+
+; Fresh stream only. Restore a packet boundary at least80ms before the target,
+; reset codec history, and return its PCM position for worker decode/discard.
+; Skim fewer than one index stride of packet headers to minimize pre-roll.
+; Near the beginning, retain ordinary pre-skip and decode from raw sample0.
+opus_seek PROC
+    push rbx
+    push rsi
+    push rdi
+    sub rsp,64
+    xor eax,eax
+    mov qword ptr [opus_seek_headers],0
+    mov qword ptr [opus_seek_raw],0
+    cmp dword ptr [ob_active],1
+    jne ob_seek_return
+    cmp dword ptr [opus_index_count],0
+    je ob_seek_return
+    mov rax,[ogg_cancel_ptr]
+    test rax,rax
+    jz ob_seek_not_cancelled
+    cmp dword ptr [rax],0
+    jne ob_seek_zero
+ob_seek_not_cancelled:
+    cmp rcx,[total_frames]
+    cmova rcx,[total_frames]
+    cmp rcx,OB_PREROLL
+    jb ob_seek_zero
+    mov eax,[op_preskip]
+    add rcx,rax
+    sub rcx,OB_PREROLL
+    mov rsi,rcx             ;latest permissible raw starting sample
+    xor r8d,r8d
+    mov r9d,[opus_index_count]
+ob_seek_search:
+    cmp r8d,r9d
+    jae ob_seek_found
+    mov edx,r9d
+    sub edx,r8d
+    shr edx,1
+    add edx,r8d
+    mov eax,edx
+    shl eax,5
+    add rax,[ob_index]
+    cmp [rax+16],rsi
+    ja ob_seek_upper
+    lea r8d,[rdx+1]
+    jmp ob_seek_search
+ob_seek_upper:
+    mov r9d,edx
+    jmp ob_seek_search
+ob_seek_found:
+    dec r8d                ;point0 is raw0, so a preceding point always exists
+    mov eax,r8d
+    shl eax,5
+    add rax,[ob_index]
+    mov rbx,[rax+16]
+    mov rcx,[rax]
+    mov [ob_seek_checkpoint],rcx
+    mov rcx,[rax+8]
+    mov [ob_seek_checkpoint+8],rcx
+    lea rcx,ob_seek_checkpoint
+    call ogg_resume
+    test eax,eax
+    jz ob_seek_bad
+ob_seek_skim:
+    lea rcx,ob_scan_checkpoint
+    call ogg_checkpoint
+    call ogg_next
+    test rax,rax
+    jz ob_seek_bad
+    mov rcx,rax
+    call op_opus_packet_parse
+    test eax,eax
+    jz ob_seek_bad
+    mov eax,[op_packet_samples]
+    add rax,rbx
+    cmp rax,rsi
+    ja ob_seek_ready
+    mov rbx,rax
+    inc qword ptr [opus_seek_headers]
+    jmp ob_seek_skim
+ob_seek_ready:
+    lea rcx,ob_scan_checkpoint
+    call ogg_resume         ;rewind the first packet which crosses pre-roll
+    test eax,eax
+    jz ob_seek_bad
+    lea rax,ob_state
+    mov [rsp+32+MI_STATE],rax
+    mov dword ptr [rsp+32+MI_FS],48000
+    mov eax,[source_channels]
+    mov [rsp+32+MI_CHANNELS],eax
+    mov dword ptr [rsp+32+MI_CAP],MO_SIZE
+    lea rcx,[rsp+32]
+    call op_opus_decoder_init
+    test eax,eax
+    jz ob_seek_bad
+    mov dword ptr [ob_available],0
+    mov dword ptr [ob_used],0
+    mov dword ptr [ob_eof],0
+    mov [ob_decoded],rbx
+    mov [opus_seek_raw],rbx
+    mov eax,[op_preskip]
+    cmp rbx,rax
+    jb ob_seek_zero
+    mov rax,rbx
+    mov ecx,[op_preskip]    ;return raw sample minus original pre-skip
+    sub rax,rcx
+    jmp ob_seek_return
+ob_seek_bad:
+    mov dword ptr [decode_error],28
+    mov dword ptr [ob_active],0
+ob_seek_zero:
+    xor eax,eax
+ob_seek_return:
+    add rsp,64
+    pop rdi
+    pop rsi
+    pop rbx
+    ret
+opus_seek ENDP
 
 ; RCX=caller stereo float buffer,EDX=frame capacity. 0=EOF/error.
 ; No per-packet allocation. Decode every packet, including fully trimmed ones.

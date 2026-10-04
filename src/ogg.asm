@@ -78,7 +78,7 @@ ogg_checkpoint PROC
     cmp eax,[ogg_segments]
     jb ogg_checkpoint_current
     mov rdx,[ogg_cursor]
-    xor eax,eax
+    mov eax,[ogg_resume_segment] ;a restored page may not have been loaded yet
     jmp ogg_checkpoint_store
 ogg_checkpoint_current:
     mov rdx,[ogg_packet_page]
