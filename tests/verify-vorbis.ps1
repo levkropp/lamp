@@ -1,7 +1,8 @@
-param([string]$Ffmpeg='ffmpeg', [string]$Node='node', [switch]$SkipPlayback)
+param([string]$Ffmpeg='ffmpeg', [string]$Node='node', [switch]$SkipPlayback,[string]$OutputDirectory)
 $ErrorActionPreference='Stop'
 $root=Split-Path $PSScriptRoot -Parent
-$exe=Join-Path $root 'bin\lamp-cli.exe'
+$out=if($OutputDirectory){$ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($OutputDirectory)}else{Join-Path $root 'bin'}
+$exe=Join-Path $out 'lamp-cli.exe'
 $scratch=Join-Path $PSScriptRoot 'generated'
 $results=[Collections.Generic.List[object]]::new()
 New-Item -ItemType Directory -Force -Path $scratch | Out-Null
@@ -76,5 +77,6 @@ if(-not $SkipPlayback) {
     if($LASTEXITCODE -or "$stats" -notmatch 'underruns=0 ' -or "$stats" -notmatch 'endpoint_dry=0') { throw "Playback failed $stats" }
     $results.Add([pscustomobject]@{test='WASAPI Vorbis';result='played';stats="$stats"})
 }
-$results | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath (Join-Path $root 'bin\vorbis-verification.json') -Encoding utf8
+$results | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath (Join-Path $out 'vorbis-verification.json') -Encoding utf8
 Write-Output "Passed $($results.Count) Ogg/Vorbis checks."
+exit 0

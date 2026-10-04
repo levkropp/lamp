@@ -8,12 +8,12 @@ LAMP's long-term goal is to support everything relevant that mpv supports. This 
 
 | Capability | Current source status | Remaining coverage | Milestone |
 | --- | --- | --- | --- |
-| WAV / native FLAC / MP3 / Ogg Vorbis | Partial | Broader profiles, channel layouts, Ogg chaining and indexed seeking | 2–3 |
+| WAV / native FLAC / MP3 / Ogg Vorbis | Partial; direct, frame-search or indexed seeking within documented profiles | Broader profiles, channel layouts and Ogg chaining | 2–3 |
 | Opus | Development playback: Ogg family 0, SILK/hybrid/CELT, RFC 8251 updates, header gain/pre-skip/end trimming; [all 120 official vector checks pass](opus.md) | Multistream/chaining | 1–2 |
 | Other audio codecs | Planned | AAC/HE-AAC, ALAC, AC-3/E-AC-3, DTS, WavPack, APE, MPEG I/II and relevant legacy formats | 3 |
 | Containers and media structure | Partial | MP4/MOV, Matroska/WebM, TS/PS, AVI/ASF; timestamps, attachments, chapters, editions and tags | 3 |
 | Audio output | Partial | WASAPI device selection/recovery, multichannel, resampling, exclusive mode and useful passthrough | 2–3 |
-| Seeking and playback state | WAV direct; native FLAC tables/frame search; MP3 frame/reservoir index; exact PCM and paused seeking verified | Vorbis/Opus indexes; broader latency measurements, resume, A-B loops, repeat, gapless playlists and speed/pitch controls | 2, 6 |
+| Seeking and playback state | WAV direct; native FLAC tables/frame search; MP3 frame/reservoir index; Vorbis packet/overlap index; exact PCM and paused seeking verified | Opus index; broader latency measurements, resume, A-B loops, repeat, gapless playlists and speed/pitch controls | 2, 6 |
 | Video decoding and A/V sync | Planned | H.264, HEVC, VP9, AV1 and relevant legacy codecs; frame stepping and accurate synchronization | 4 |
 | Hardware acceleration | Planned | Supported Windows GPU profiles, measured hardware decode, explicit software fallback | 4 |
 | Video rendering and color | Planned | Scaling, crop/zoom/pan/rotation, deinterlacing, HDR/tone mapping, ICC, user shaders and display sync | 4, 6 |

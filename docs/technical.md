@@ -1,6 +1,6 @@
 # LAMP 0.4.0-dev technical details
 
-A Windows x86-64 audio player with handwritten assembly WAV, FLAC, MP3, Ogg/Vorbis and development Ogg/Opus decoders, plus a native assembly UI. The current console build is **182,784 bytes (178.5 KiB)**; the graphical build is **190,464 bytes (186 KiB)**. Both include LAMP's icon and version resources. The published v0.3.0 archive retains its earlier four-format build and manifest.
+A Windows x86-64 audio player with handwritten assembly WAV, FLAC, MP3, Ogg/Vorbis and development Ogg/Opus decoders, plus a native assembly UI. The current console build is **184,320 bytes (180 KiB)**; the graphical build is **192,000 bytes (187.5 KiB)**. Both include LAMP's icon and version resources. The published v0.3.0 archive retains its earlier four-format build and manifest.
 
 The dark canvas, compact playback controls and automatic hiding are inspired by mpv. The custom pixel buffer and Win32 presentation follow Rhun's documented assembly UI model. No Rhun source, fonts, icons, or other assets were copied.
 
@@ -44,13 +44,21 @@ Without a usable table, native FLAC searches byte positions for complete, valida
 
 MP3 opening performs a cancellable structural scan of headers/CRC, side information and main-data part lengths. It creates a sparse index of byte/sample positions and exact unused reservoirs, initially every 32 compressed frames. Each 544-byte point retains at most 511 reservoir bytes. A fixed 1,114,112-byte allocation holds at most 2,048 points; alternate points are compacted and the stride doubles when needed. The scan derives untagged duration and verifies Xing/Info counts against the actual frames. Allocation failure retains the original sequential path. Closing releases the index; reopening rebuilds it from the current file rather than retaining mapped pointers.
 
-MP3 seeking restores the preceding indexed reservoir and skims fewer than one stride of headers to two compressed frames before the target. Ordinary decoding rebuilds MDCT overlap and QMF history during that pre-roll. This bounds discarded PCM to less than three compressed frames: 3,456 samples for MPEG-1 or 1,728 for MPEG-2/2.5. Opening remains linear in the number of compressed headers; no cross-open index cache or player-comparison latency result is claimed. Vorbis/Opus still discard PCM from the beginning. The UI remains responsive, and paused seeking keeps audio stopped until resume.
+MP3 seeking restores the preceding indexed reservoir and skims fewer than one stride of headers to two compressed frames before the target. Ordinary decoding rebuilds MDCT overlap and QMF history during that pre-roll. This bounds discarded PCM to less than three compressed frames: 3,456 samples for MPEG-1 or 1,728 for MPEG-2/2.5. Opening remains linear in the number of compressed headers; no cross-open index cache or player-comparison latency result is claimed.
+
+Vorbis opening scans packet mode/window headers after Ogg CRC/sequence validation and setup parsing. A 64 KiB allocation holds at most 2,048 32-byte points: a 16-byte Ogg page/lace checkpoint, the raw emitted sample position after that packet, and its ordinal. Points initially occur every 16 packets; alternate points are compacted and the stride doubles at capacity. Checkpoints belong to the current validated mapping and are freed on close. Allocation failure retains correct sequential decoding. Reopening rebuilds the index; CRC, setup and header scanning remain linear costs.
+
+Vorbis seeking restores the checkpoint preceding the selected packet and decodes that packet once with output suppressed to rebuild its exact overlap tail. The worker discards the remaining distance, bounded by the current index stride times 6,144 samples. Packet reconstruction resumes correctly within pages and across continued pages, including zero terminal laces. No extra index allocation or CRC pass occurs during seek. `vorbis_index_count`, `vorbis_index_stride` and `vorbis_seek_preroll` expose bounded-memory and one-packet pre-roll diagnostics.
+
+The Vorbis header scan validates neighboring overlap widths and page granules. Granules mark the packet center, before the extra samples produced by long-to-short lookahead. Nonzero origins require the second audio packet to finish a page. Positive origins shift timestamps; negative origins crop the initial PCM. Initial long-to-short packets retain their unwindowed right prefix, and final granules trim the end. Opus still discards PCM from the beginning. Seeking runs on the worker, and paused seeking keeps audio stopped until resume.
 
 `decoder_seek(uint64_t absolute_frame)` is called once after opening a stream and returns the resume frame at or before the target. WAV clamps to EOF. Unsupported codecs return zero without changing fresh codec state; the worker uses sequential decoding for the rest. A malformed selected FLAC frame sets a sticky decoding error. Closed decoders refuse seeking and reading. `decoder_seek_probes` records full-frame decode attempts for diagnostics. No per-seek allocation is required.
 
 The seek suite records 1,470 exact PCM checks across 98 files: direct WAV; fixed/variable FLAC with tables, empty/placeholder-only tables or no tables; unknown durations; long changes between silence, tones and noise; CRC-valid payload decoys; EOF/clamping, untouched output and closed-state refusal. Ordinary frame searches discard at most one frame; the dense-decoy case exercises the 66-decode cap and correct sequential fallback. Its reference comes from FFmpeg conversion of the known verbatim PCM because FFmpeg's FLAC demuxer also misidentifies the densely embedded frames. Eleven malformed indexes, six noncanonical numbers and one contradictory frame sequence are rejected; a pre-cancelled search performs no frame decodes. These checks are not a same-machine latency benchmark against other players.
 
 MP3 adds 1,650 byte-exact seeks across 110 files against uninterrupted assembly PCM. Each continuous file is independently compared with FFmpeg's `mp3float` decoder. Cases cover all nine rates, mono/stereo, CBR/VBR, delay/padding, absent tags, noise/transients and original intensity/short/mixed/CRC/Huffman vectors. Tests also verify EOF/clamping, canaries, untouched output, allocation release, cancelled seek/open and two contradictory Xing counts. A 65,537-frame stream exercises adaptive compaction; its nonzero midpoint PCM must match an independently checked smaller continuous window.
+
+Vorbis adds 1,305 byte-exact seeks across 87 files against uninterrupted assembly PCM independently compared with FFmpeg. Cases cover 8–192 kHz, mono/stereo, quality extremes, noise/transients, residue/codebooks, repaged continued audio, long continued comments, positive/cropped granule origins and streams starting with a long-to-short packet. A nonzero 65,537-packet stream exercises two compactions, ending with 1,025 points at stride 64. EOF/clamping, canaries, untouched output, fresh reopen, allocation release and cancelled seek/open also pass. Three CRC-valid contradictory timestamp streams are rejected. The existing 83 Vorbis regression checks pass with the new scan and trim behavior.
 
 ## Format coverage
 
@@ -61,14 +69,14 @@ MP3 adds 1,650 byte-exact seeks across 110 files against uninterrupted assembly 
 | Native FLAC | Mono/stereo, 4–24-bit, 8–192 kHz; constant/verbatim, fixed predictors 0–4, LPC 1–32, Rice partitions/escapes, wasted bits, all stereo decorrelation modes |
 | MP3 Layer III | MPEG-1/2/2.5, all nine rates 8–48 kHz, mono/stereo, known bitrate CBR/ABR/VBR; reservoir, Huffman/linbits/count1, scalefactors, long/short/mixed blocks, MS/intensity stereo, hybrid/polyphase synthesis |
 | MP3 metadata | Leading ID3v2.2/2.3/2.4 and trailing ID3v1 skipped; Xing/Info frame counts and encoder delay/padding used for single-file trimming |
-| Ogg/Vorbis | Single Ogg v0 stream, CRC/sequence/continuation checks; mono/stereo 8–192 kHz, 64–8192 sample blocks; ordered/unordered/sparse codebooks, lookup 0/1/2, floor 1, residue 0/1/2, mapping 0, coupling/submaps, short/long overlap and final granule trimming |
+| Ogg/Vorbis | Single Ogg v0 stream, CRC/sequence/continuation checks; mono/stereo 8–192 kHz, 64–8192 sample blocks; ordered/unordered/sparse codebooks, lookup 0/1/2, floor 1, residue 0/1/2, mapping 0, coupling/submaps, short/long overlap, positive/cropped granule origins, final trimming and indexed seeking |
 | Ogg/Opus | Development: single Ogg v0 stream, mapping family 0, mono/stereo SILK/hybrid/CELT, RFC 8251 updates, 48 kHz output, signed header gain, pre-skip/end trimming and cropped initial granule offsets; all 120 official vector checks pass |
 
 WAV ADPCM/RF64/RIFX, FLAC in Ogg, 32-bit FLAC, more than two channels, playlists, tag display, and device reconnection are unsupported. FLAC CRC8/CRC16 are checked; STREAMINFO MD5 and coded frame-number continuity are not checked. Tested FLAC depths are 16/24 bits, with less fixture coverage for the broader implementation range.
 
 MP3 CRC headers/side information are checked. Free-format, Layers I/II, VBRI trimming, APE tags, arbitrary inter-frame junk and corruption recovery are unsupported. Missing reservoir dependencies reject input; rate/channel/version changes are unsupported. Untagged files keep encoder delay/padding. Metadata validation remains incomplete; with an index, declared frame counts must agree with the scanned stream, while main-data audio is validated when decoded.
 
-Vorbis floor 0, chained/multiplexed Ogg, multichannel mappings, nonzero initial granule offsets, and corruption recovery are unsupported. The container is validated at open, so large files can take time to open. Packet reconstruction is bounded to 4 MiB. Setup reserves a bounded 64 MiB arena and commits 64 KiB increments as needed. Oversized headers/codebooks are rejected. Nonfinite reconstructed PCM is rejected. This is a prototype with substantial tests, not full format conformance certification.
+Vorbis floor 0, chained/multiplexed Ogg, multichannel mappings and corruption recovery are unsupported. The container and timing headers are validated at open, so large files can take time to open. Packet reconstruction is bounded to 4 MiB. Setup reserves a bounded 64 MiB arena and commits 64 KiB increments as needed; the seek index adds 64 KiB. Oversized headers/codebooks are rejected. Nonfinite reconstructed PCM is rejected. This is a prototype with substantial tests, not full format conformance certification.
 
 ## Playback and CPU design
 
@@ -107,6 +115,7 @@ Recorded snapshots are in `reports/` in a source checkout. The paths below descr
 | `bin/vorbis-verification.json` | 83 checks: 32 rate/channel/quality cases, noise/transients/silence, continued long comment, 36 synthetic residue/codebook cases, 10 rejections and WASAPI silence |
 | `bin/engine-verification.json` | Playback, pause, resume, stop, reopen, seek, paused seek and cancelled open for all five codecs plus indexed FLAC |
 | `bin/mp3-seek-verification.json` | 1,650 exact seeks, independent continuous PCM comparisons, bounded sparse index/header skims, adaptive compaction, cancelled seek/open and contradictory Xing counts |
+| `bin/vorbis-seek-verification.json` | 1,305 exact seeks, independent continuous PCM comparisons, packet/lace checkpoints, overlap pre-roll, origins/cropping, continued packets, adaptive compaction, cancelled seek/open and contradictory timestamps |
 | `vorbis-fuzz-verification.json` | 512 repaired-CRC setup/audio mutations without a crash/timeout; accepted audio correctness is not asserted |
 | `vorbis-benchmark.json` | Five 30-second offline CPU measurements |
 | `vorbis-stress-verification.json` | Eight-second WASAPI silence under four bounded CPU workers |
@@ -177,7 +186,7 @@ node .\tests\fuzz-vorbis.js
 .\tests\verify-opus-components.ps1
 .\tests\verify-opus.ps1 -OutputDirectory .\bin\verify-build #51 modern libopus files
 .\tests\verify-opus-conformance.ps1 #120 official vector checks; first run downloads ~75 MB
-.\tests\verify-seek.ps1 -OutputDirectory .\bin\verify-build #3120 exact WAV/FLAC/MP3 seek checks
+.\tests\verify-seek.ps1 -OutputDirectory .\bin\verify-build #4425 exact WAV/FLAC/MP3/Vorbis seek checks
 .\tests\render-ui.ps1
 ```
 
@@ -185,7 +194,7 @@ The RFC reference archive is checked against its normative SHA-1 before extracti
 
 ## Remaining implementation
 
-Next work includes indexed seeking, multichannel/chained streams, device changes, and same-machine CPU/RAM comparisons against existing players.
+Next work includes an Opus seek index, reopen/seek latency measurements, multichannel/chained streams, device changes, and same-machine CPU/RAM comparisons against existing players.
 
 ## References
 

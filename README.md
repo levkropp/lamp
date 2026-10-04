@@ -41,7 +41,7 @@ Windows 10/11 x64 and a working default audio output are the intended targets. B
 | Ogg/Vorbis | Single logical stream, mono/stereo, floor 1, mapping 0; CRC and granule checks |
 | Ogg/Opus | Development source: single logical stream, mapping family 0, mono/stereo, 48 kHz output, header gain/pre-skip/end trimming |
 
-See [precise coverage, limitations, and verification](docs/technical.md) before relying on a particular stream variant. Multichannel, chained Ogg streams and FLAC-in-Ogg are not implemented. WAV seeks directly; native FLAC uses seek tables or searches validated frames; MP3 uses a sparse frame/reservoir index. Vorbis/Opus indexes remain unfinished.
+See [precise coverage, limitations, and verification](docs/technical.md) before relying on a particular stream variant. Multichannel, chained Ogg streams and FLAC-in-Ogg are not implemented. WAV seeks directly; native FLAC uses seek tables or searches validated frames; MP3 and Vorbis use sparse indexes. The Opus seek index remains unfinished.
 
 ## Controls
 
@@ -55,7 +55,7 @@ See [precise coverage, limitations, and verification](docs/technical.md) before 
 | M | Mute/unmute to 100% |
 | Q | Close |
 
-The controls hide after 2.5 seconds of inactivity during playback. Seeking runs on a worker. WAV jumps directly to the sample; native FLAC uses a validated seek table or a bounded frame search, including files with unknown duration. Exhausting the search budget falls back to sequential decoding. MP3 restores an indexed reservoir and decodes two frames of pre-roll before the target. Its index is built from headers when opening a file. Vorbis/Opus still decode from the beginning, so distant seeks take longer. Paused seeking keeps audio stopped until resume. The console accepts Space to pause and Q/Ctrl+C to stop.
+The controls hide after 2.5 seconds of inactivity during playback. Seeking runs on a worker. WAV jumps directly to the sample; native FLAC uses a validated seek table or a bounded frame search, including files with unknown duration. Exhausting the search budget falls back to sequential decoding. MP3 restores an indexed reservoir and decodes two frames of pre-roll before the target. Vorbis restores an Ogg packet boundary and decodes one packet to rebuild overlap. Both indexes are built from headers when opening a file. Opus still decodes from the beginning, so distant seeks take longer. Paused seeking keeps audio stopped until resume. The console accepts Space to pause and Q/Ctrl+C to stop.
 
 ## Build and verify
 
@@ -69,11 +69,11 @@ node .\tests\smoke.js
 .\package.ps1
 ```
 
-The prebuilt ICO and decoder tables are included. A normal build needs no codec library or reference C compiler. Both players use custom assembly entry points and `/NODEFAULTLIB`. The development build measures **190,464 bytes for `lamp.exe`** and **182,784 bytes for `lamp-cli.exe`**, including icon resources; release manifests record exact sizes and hashes.
+The prebuilt ICO and decoder tables are included. A normal build needs no codec library or reference C compiler. Both players use custom assembly entry points and `/NODEFAULTLIB`. The development build measures **192,000 bytes for `lamp.exe`** and **184,320 bytes for `lamp-cli.exe`**, including icon resources; release manifests record exact sizes and hashes.
 
 To build while the player is open, use `./build.ps1 -OutputDirectory ./bin/verify-build`. Pass that directory to `node ./tests/verify-runtime.js ./bin/verify-build` and `node ./tests/smoke.js ./bin/verify-build` to check the new binaries, or `./package.ps1 -BinaryDirectory ./bin/verify-build` to package them. Packaging rejects a binary version that differs from `VERSION`.
 
-The codec suites record 43 WAV/FLAC, 103 MP3, and 83 Vorbis checks, plus 3,120 exact WAV/FLAC/MP3 seek checks, engine lifecycle, malformed-input, stress, and Opus reference tests. They do not establish complete format conformance. [Test instructions](docs/technical.md#verification) and [recorded reports](reports/README.md) describe what was checked. Full fixture suites need FFmpeg and Node.js; seek and Opus oracle tests additionally use the C compiler for test executables only.
+The codec suites record 43 WAV/FLAC, 103 MP3, and 83 Vorbis checks, plus 4,425 exact WAV/FLAC/MP3/Vorbis seek checks, engine lifecycle, malformed-input, stress, and Opus reference tests. Vorbis seeking includes continued packets, cropped starts, positive granule origins and bounded index compaction. These checks do not establish complete format conformance. [Test instructions](docs/technical.md#verification) and [recorded reports](reports/README.md) describe what was checked. Full fixture suites need FFmpeg and Node.js; seek and Opus oracle tests additionally use the C compiler for test executables only.
 
 The UI image comes from the actual assembly renderer with synthetic state. Open-dialog, drag/drop, and monitor-DPI interaction still require desktop verification.
 

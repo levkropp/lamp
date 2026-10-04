@@ -11,7 +11,7 @@
                        "frames":  17760,
                        "snr_db":  80.9688448814023,
                        "peak_error":  0.000017508864402770996,
-                       "stats":  "codec=5 rate=48000 channels=1 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=0 endpoint_dry=0"
+                       "stats":  "codec=5 rate=48000 channels=1 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=15625 endpoint_dry=0"
                    },
                    {
                        "test":  "opus-8000-1-5.opus",
@@ -35,7 +35,7 @@
                        "frames":  17760,
                        "snr_db":  null,
                        "peak_error":  0,
-                       "stats":  "codec=5 rate=48000 channels=1 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=0 endpoint_dry=0"
+                       "stats":  "codec=5 rate=48000 channels=1 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
                    },
                    {
                        "test":  "opus-8000-1-40.opus",
@@ -51,7 +51,7 @@
                        "frames":  17760,
                        "snr_db":  null,
                        "peak_error":  0,
-                       "stats":  "codec=5 rate=48000 channels=1 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=0 endpoint_dry=0"
+                       "stats":  "codec=5 rate=48000 channels=1 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
                    },
                    {
                        "test":  "opus-8000-1-120.opus",
@@ -75,7 +75,7 @@
                        "frames":  17760,
                        "snr_db":  81.06920181577549,
                        "peak_error":  0.0000165402889251709,
-                       "stats":  "codec=5 rate=48000 channels=2 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+                       "stats":  "codec=5 rate=48000 channels=2 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=15625 endpoint_dry=0"
                    },
                    {
                        "test":  "opus-8000-2-10.opus",
@@ -91,7 +91,7 @@
                        "frames":  17760,
                        "snr_db":  null,
                        "peak_error":  0,
-                       "stats":  "codec=5 rate=48000 channels=2 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+                       "stats":  "codec=5 rate=48000 channels=2 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
                    },
                    {
                        "test":  "opus-8000-2-40.opus",
@@ -99,7 +99,7 @@
                        "frames":  17760,
                        "snr_db":  null,
                        "peak_error":  0,
-                       "stats":  "codec=5 rate=48000 channels=2 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+                       "stats":  "codec=5 rate=48000 channels=2 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=31250 endpoint_dry=0"
                    },
                    {
                        "test":  "opus-8000-2-60.opus",
@@ -107,7 +107,7 @@
                        "frames":  17760,
                        "snr_db":  null,
                        "peak_error":  0,
-                       "stats":  "codec=5 rate=48000 channels=2 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+                       "stats":  "codec=5 rate=48000 channels=2 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
                    },
                    {
                        "test":  "opus-8000-2-120.opus",
@@ -123,7 +123,7 @@
                        "frames":  17760,
                        "snr_db":  81.05930490976465,
                        "peak_error":  0.000017434358596801758,
-                       "stats":  "codec=5 rate=48000 channels=1 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=0 endpoint_dry=0"
+                       "stats":  "codec=5 rate=48000 channels=1 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
                    },
                    {
                        "test":  "opus-16000-1-5.opus",
@@ -139,7 +139,7 @@
                        "frames":  17760,
                        "snr_db":  null,
                        "peak_error":  0,
-                       "stats":  "codec=5 rate=48000 channels=1 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=46875 endpoint_dry=0"
+                       "stats":  "codec=5 rate=48000 channels=1 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
                    },
                    {
                        "test":  "opus-16000-1-20.opus",
@@ -147,7 +147,7 @@
                        "frames":  17760,
                        "snr_db":  null,
                        "peak_error":  0,
-                       "stats":  "codec=5 rate=48000 channels=1 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+                       "stats":  "codec=5 rate=48000 channels=1 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
                    },
                    {
                        "test":  "opus-16000-1-40.opus",
@@ -163,7 +163,7 @@
                        "frames":  17760,
                        "snr_db":  null,
                        "peak_error":  0,
-                       "stats":  "codec=5 rate=48000 channels=1 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+                       "stats":  "codec=5 rate=48000 channels=1 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=15625 endpoint_dry=0"
                    },
                    {
                        "test":  "opus-16000-1-120.opus",
@@ -179,7 +179,7 @@
                        "frames":  17760,
                        "snr_db":  81.03485322700834,
                        "peak_error":  0.000017449259757995605,
-                       "stats":  "codec=5 rate=48000 channels=2 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+                       "stats":  "codec=5 rate=48000 channels=2 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
                    },
                    {
                        "test":  "opus-16000-2-5.opus",
@@ -187,7 +187,7 @@
                        "frames":  17760,
                        "snr_db":  81.02989626418618,
                        "peak_error":  0.000016629695892333984,
-                       "stats":  "codec=5 rate=48000 channels=2 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+                       "stats":  "codec=5 rate=48000 channels=2 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
                    },
                    {
                        "test":  "opus-16000-2-10.opus",
@@ -195,7 +195,7 @@
                        "frames":  17760,
                        "snr_db":  null,
                        "peak_error":  0,
-                       "stats":  "codec=5 rate=48000 channels=2 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+                       "stats":  "codec=5 rate=48000 channels=2 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
                    },
                    {
                        "test":  "opus-16000-2-20.opus",
@@ -203,7 +203,7 @@
                        "frames":  17760,
                        "snr_db":  null,
                        "peak_error":  0,
-                       "stats":  "codec=5 rate=48000 channels=2 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+                       "stats":  "codec=5 rate=48000 channels=2 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
                    },
                    {
                        "test":  "opus-16000-2-40.opus",
@@ -211,7 +211,7 @@
                        "frames":  17760,
                        "snr_db":  null,
                        "peak_error":  0,
-                       "stats":  "codec=5 rate=48000 channels=2 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+                       "stats":  "codec=5 rate=48000 channels=2 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
                    },
                    {
                        "test":  "opus-16000-2-60.opus",
@@ -219,7 +219,7 @@
                        "frames":  17760,
                        "snr_db":  null,
                        "peak_error":  0,
-                       "stats":  "codec=5 rate=48000 channels=2 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+                       "stats":  "codec=5 rate=48000 channels=2 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=15625 endpoint_dry=0"
                    },
                    {
                        "test":  "opus-16000-2-120.opus",
@@ -227,7 +227,7 @@
                        "frames":  17760,
                        "snr_db":  80.33921826594849,
                        "peak_error":  0.000017076730728149414,
-                       "stats":  "codec=5 rate=48000 channels=2 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=15625 endpoint_dry=0"
+                       "stats":  "codec=5 rate=48000 channels=2 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=0 endpoint_dry=0"
                    },
                    {
                        "test":  "opus-48000-1-2.5.opus",
@@ -235,7 +235,7 @@
                        "frames":  17760,
                        "snr_db":  81.03687114704549,
                        "peak_error":  0.000017598271369934082,
-                       "stats":  "codec=5 rate=48000 channels=1 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+                       "stats":  "codec=5 rate=48000 channels=1 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=0 endpoint_dry=0"
                    },
                    {
                        "test":  "opus-48000-1-5.opus",
@@ -243,7 +243,7 @@
                        "frames":  17760,
                        "snr_db":  81.02336930375522,
                        "peak_error":  0.000016480684280395508,
-                       "stats":  "codec=5 rate=48000 channels=1 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+                       "stats":  "codec=5 rate=48000 channels=1 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
                    },
                    {
                        "test":  "opus-48000-1-10.opus",
@@ -251,7 +251,7 @@
                        "frames":  17760,
                        "snr_db":  81.05077283932681,
                        "peak_error":  0.000016242265701293945,
-                       "stats":  "codec=5 rate=48000 channels=1 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+                       "stats":  "codec=5 rate=48000 channels=1 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
                    },
                    {
                        "test":  "opus-48000-1-20.opus",
@@ -259,7 +259,7 @@
                        "frames":  17760,
                        "snr_db":  81.01901337233335,
                        "peak_error":  0.00001704692840576172,
-                       "stats":  "codec=5 rate=48000 channels=1 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=46875 endpoint_dry=0"
+                       "stats":  "codec=5 rate=48000 channels=1 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
                    },
                    {
                        "test":  "opus-48000-1-40.opus",
@@ -267,7 +267,7 @@
                        "frames":  17760,
                        "snr_db":  81.06011832206336,
                        "peak_error":  0.000017508864402770996,
-                       "stats":  "codec=5 rate=48000 channels=1 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+                       "stats":  "codec=5 rate=48000 channels=1 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
                    },
                    {
                        "test":  "opus-48000-1-60.opus",
@@ -275,7 +275,7 @@
                        "frames":  17760,
                        "snr_db":  81.06011832206336,
                        "peak_error":  0.000017508864402770996,
-                       "stats":  "codec=5 rate=48000 channels=1 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+                       "stats":  "codec=5 rate=48000 channels=1 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
                    },
                    {
                        "test":  "opus-48000-1-120.opus",
@@ -283,7 +283,7 @@
                        "frames":  17760,
                        "snr_db":  81.06011832206336,
                        "peak_error":  0.000017508864402770996,
-                       "stats":  "codec=5 rate=48000 channels=1 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+                       "stats":  "codec=5 rate=48000 channels=1 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=0 endpoint_dry=0"
                    },
                    {
                        "test":  "opus-48000-2-2.5.opus",
@@ -291,7 +291,7 @@
                        "frames":  17760,
                        "snr_db":  80.84262945307933,
                        "peak_error":  0.00001749396324157715,
-                       "stats":  "codec=5 rate=48000 channels=2 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=0 endpoint_dry=0"
+                       "stats":  "codec=5 rate=48000 channels=2 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=0 endpoint_dry=0"
                    },
                    {
                        "test":  "opus-48000-2-5.opus",
@@ -307,7 +307,7 @@
                        "frames":  17760,
                        "snr_db":  81.04559231668665,
                        "peak_error":  0.000017315149307250977,
-                       "stats":  "codec=5 rate=48000 channels=2 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+                       "stats":  "codec=5 rate=48000 channels=2 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
                    },
                    {
                        "test":  "opus-48000-2-20.opus",
@@ -323,7 +323,7 @@
                        "frames":  17760,
                        "snr_db":  81.01449229359419,
                        "peak_error":  0.000017121434211730957,
-                       "stats":  "codec=5 rate=48000 channels=2 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=31250 endpoint_dry=0"
+                       "stats":  "codec=5 rate=48000 channels=2 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
                    },
                    {
                        "test":  "opus-48000-2-60.opus",
@@ -347,7 +347,7 @@
                        "frames":  30240,
                        "snr_db":  77.7630146924522,
                        "peak_error":  0.000016883015632629395,
-                       "stats":  "codec=5 rate=48000 channels=2 bits=32 frames=30240 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+                       "stats":  "codec=5 rate=48000 channels=2 bits=32 frames=30240 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
                    },
                    {
                        "test":  "opus-noise-on.opus",
@@ -355,7 +355,7 @@
                        "frames":  30240,
                        "snr_db":  77.68956671599207,
                        "peak_error":  0.00001665949821472168,
-                       "stats":  "codec=5 rate=48000 channels=2 bits=32 frames=30240 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+                       "stats":  "codec=5 rate=48000 channels=2 bits=32 frames=30240 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
                    },
                    {
                        "test":  "opus-noise-constrained.opus",
@@ -371,7 +371,7 @@
                        "frames":  30240,
                        "snr_db":  87.274840582477,
                        "peak_error":  0.00002276897430419922,
-                       "stats":  "codec=5 rate=48000 channels=2 bits=32 frames=30240 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+                       "stats":  "codec=5 rate=48000 channels=2 bits=32 frames=30240 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=0 endpoint_dry=0"
                    },
                    {
                        "test":  "opus-transient-on.opus",
@@ -379,7 +379,7 @@
                        "frames":  30240,
                        "snr_db":  87.00172438179989,
                        "peak_error":  0.000022411346435546875,
-                       "stats":  "codec=5 rate=48000 channels=2 bits=32 frames=30240 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=15625 endpoint_dry=0"
+                       "stats":  "codec=5 rate=48000 channels=2 bits=32 frames=30240 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=0 endpoint_dry=0"
                    },
                    {
                        "test":  "opus-transient-constrained.opus",
@@ -387,7 +387,7 @@
                        "frames":  30240,
                        "snr_db":  87.00172438179989,
                        "peak_error":  0.000022411346435546875,
-                       "stats":  "codec=5 rate=48000 channels=2 bits=32 frames=30240 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=31250 endpoint_dry=0"
+                       "stats":  "codec=5 rate=48000 channels=2 bits=32 frames=30240 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
                    },
                    {
                        "test":  "opus-silence-off.opus",
@@ -395,7 +395,7 @@
                        "frames":  30240,
                        "snr_db":  69.54020782697403,
                        "peak_error":  2.0798252009512908E-08,
-                       "stats":  "codec=5 rate=48000 channels=2 bits=32 frames=30240 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+                       "stats":  "codec=5 rate=48000 channels=2 bits=32 frames=30240 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=0 endpoint_dry=0"
                    },
                    {
                        "test":  "opus-silence-on.opus",
@@ -403,7 +403,7 @@
                        "frames":  30240,
                        "snr_db":  69.32820319355565,
                        "peak_error":  2.3548262007011544E-08,
-                       "stats":  "codec=5 rate=48000 channels=2 bits=32 frames=30240 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+                       "stats":  "codec=5 rate=48000 channels=2 bits=32 frames=30240 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
                    },
                    {
                        "test":  "opus-silence-constrained.opus",
@@ -411,7 +411,7 @@
                        "frames":  30240,
                        "snr_db":  69.32820319355565,
                        "peak_error":  2.3548262007011544E-08,
-                       "stats":  "codec=5 rate=48000 channels=2 bits=32 frames=30240 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+                       "stats":  "codec=5 rate=48000 channels=2 bits=32 frames=30240 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
                    }
                ]
 }

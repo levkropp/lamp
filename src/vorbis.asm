@@ -4,11 +4,16 @@ option casemap:none
 include vorbis_layout.inc
 EXTERN VirtualAlloc:PROC, VirtualFree:PROC
 EXTERN ogg_open:PROC, ogg_next:PROC, ogg_close:PROC
+EXTERN ogg_checkpoint:PROC,ogg_resume:PROC
 EXTERN ogg_granule:QWORD, ogg_total_granule:QWORD, ogg_eos:DWORD
+EXTERN ogg_packet_last:DWORD,ogg_packet_page_end:DWORD,ogg_cancel_ptr:QWORD
 EXTERN sample_rate:DWORD, source_channels:DWORD, source_bits:DWORD
 EXTERN total_frames:QWORD, decode_error:DWORD
 EXTERN vb_transform_init:PROC, vb_imdct:PROC, vb_windows:QWORD
-PUBLIC vorbis_open, vorbis_read, vorbis_close
+PUBLIC vorbis_open, vorbis_read, vorbis_close,vorbis_seek
+PUBLIC vorbis_index_count,vorbis_index_stride,vorbis_seek_preroll
+VB_INDEX_CAP EQU 2048
+VB_INDEX_POINT EQU 32
 .data
 vb_arena dq 0
 vb_allocated dd 0
@@ -31,6 +36,15 @@ vb_previous dd 0
 vb_available dd 0
 vb_used dd 0
 vb_emitted dq 0
+vb_index dq 0
+vorbis_index_count dd 0
+vorbis_index_stride dq 16
+vorbis_seek_preroll dd 0
+vb_origin_known dd 0
+vb_origin dq 0
+vb_initial_skip dd 0
+vb_trim_start dd 0
+vb_frame_skip dd 0
 vb_n dd 0
 vb_block dd 0
 vb_left dd 0
@@ -74,6 +88,8 @@ vb_floor_channel dq 2 dup (?)
 vb_zero dd 2 dup (?)
 vb_really_zero dd 2 dup (?)
 vb_classdata dd 32768 dup (?)
+vb_audio_checkpoint dq 2 dup (?)
+vb_scan_checkpoint dq 2 dup (?)
 .code
 ; Bounded little-endian bit reader. Only EAX and flags are clobbered.
 vb_bits PROC
@@ -245,6 +261,16 @@ vb_symbol ENDP
 
 vorbis_close PROC
     sub rsp,40
+    mov rcx,[vb_index]
+    mov qword ptr [vb_index],0
+    mov dword ptr [vorbis_index_count],0
+    mov dword ptr [vorbis_seek_preroll],0
+    test rcx,rcx
+    jz vb_close_arena
+    xor edx,edx
+    mov r8d,8000h
+    call VirtualFree
+vb_close_arena:
     mov rcx,[vb_arena]
     test rcx,rcx
     jz vb_close_done
@@ -274,6 +300,8 @@ vorbis_open PROC
     mov dword ptr [vb_available],0
     mov dword ptr [vb_used],0
     mov qword ptr [vb_emitted],0
+    mov dword ptr [vb_initial_skip],0
+    mov dword ptr [vb_trim_start],0
     call ogg_next
     test rax,rax
     jz vb_open_bad
@@ -393,6 +421,11 @@ vb_comment_end:
     mov ecx,[vb_short]
     mov edx,[vb_long]
     call vb_transform_init
+    cmp dword ptr [ogg_packet_page_end],1
+    jne vb_open_bad
+    call vb_build_index
+    test eax,eax
+    jz vb_open_bad
     mov eax,1
     jmp vb_open_done
 vb_open_bad:
@@ -405,6 +438,279 @@ vb_open_done:
     pop rbx
     ret
 vorbis_open ENDP
+
+; Packet-mode/window scan only. Points capture a packet boundary and the raw
+; sample position after that packet. Decode it once to prime exact overlap.
+; Limit memory to 64 KiB and compact alternate points at the 2048-point cap.
+vb_build_index PROC
+    push rbx
+    push rsi
+    push rdi
+    push r12
+    push r13
+    push r14
+    push r15
+    sub rsp,48
+    lea rcx,vb_audio_checkpoint
+    call ogg_checkpoint
+    xor ecx,ecx
+    mov edx,VB_INDEX_CAP*VB_INDEX_POINT
+    mov r8d,3000h
+    mov r9d,4
+    call VirtualAlloc
+    mov [vb_index],rax       ;allocation failure keeps correct sequential use
+    mov qword ptr [vorbis_index_stride],16
+    mov dword ptr [vb_origin_known],0
+    mov qword ptr [vb_origin],0
+    xor ebx,ebx             ;audio packet ordinal
+    xor r12d,r12d           ;untrimmed emitted PCM after this packet
+    xor r13d,r13d           ;previous packet's right overlap width
+vb_index_packet:
+    lea rcx,vb_scan_checkpoint
+    call ogg_checkpoint
+    call ogg_next
+    test rax,rax
+    jz vb_index_complete
+    call vb_packet_header
+    test eax,eax
+    jz vb_index_bad
+    mov r14d,[vb_right]
+    sub r14d,[vb_left]
+    test r13d,r13d
+    jnz vb_index_following
+    mov eax,[vb_n]
+    shr eax,1
+    mov ecx,[vb_right]
+    sub ecx,eax
+    add r12,rcx             ;first long-to-short packet's unwindowed prefix
+    jmp vb_index_first
+vb_index_following:
+    mov eax,[vb_left_end]
+    sub eax,[vb_left]
+    cmp eax,r13d
+    jne vb_index_bad
+    add r12,r14
+vb_index_first:
+    mov r13d,[vb_right_end]
+    sub r13d,[vb_right]
+    cmp dword ptr [ogg_packet_last],1
+    jne vb_index_point
+    mov r15,r12
+    mov eax,[vb_n]
+    shr eax,1
+    sub eax,[vb_right]       ;granule is the center, before next-short lookahead
+    movsxd rax,eax
+    add r15,rax
+    mov rax,[ogg_granule]
+    test rax,rax
+    js vb_index_bad
+    cmp dword ptr [vb_origin_known],0
+    jne vb_index_granule
+    cmp dword ptr [ogg_eos],1
+    je vb_index_origin_ready ;first/final page only trims its end
+    test rbx,rbx
+    jz vb_index_point        ;first packet primes overlap but returns no PCM
+    sub rax,r15
+    jz vb_index_origin_ready
+    cmp rbx,1               ;nonzero origins require the second packet flush
+    jne vb_index_bad
+    test rax,rax
+    jns vb_index_origin_positive
+    mov rcx,rax
+    neg rcx
+    cmp rcx,r15
+    ja vb_index_bad
+    mov [vb_initial_skip],ecx
+vb_index_origin_positive:
+    mov [vb_origin],rax
+vb_index_origin_ready:
+    mov dword ptr [vb_origin_known],1
+vb_index_granule:
+    mov rax,r15
+    add rax,[vb_origin]
+    jo vb_index_bad
+    cmp dword ptr [ogg_eos],1
+    je vb_index_final_granule
+    cmp rax,[ogg_granule]
+    jne vb_index_bad
+    jmp vb_index_point
+vb_index_final_granule:
+    cmp rax,[ogg_granule]
+    jb vb_index_bad
+vb_index_point:
+    cmp qword ptr [vb_index],0
+    je vb_index_next
+    mov rax,[vorbis_index_stride]
+    dec rax
+    test rbx,rax
+    jnz vb_index_next
+    cmp dword ptr [vorbis_index_count],VB_INDEX_CAP
+    jb vb_index_store
+    mov r15,1
+vb_index_compact:
+    mov rsi,r15
+    shl rsi,6
+    add rsi,[vb_index]
+    mov rdi,r15
+    shl rdi,5
+    add rdi,[vb_index]
+    mov ecx,4
+    rep movsq
+    inc r15d
+    cmp r15d,VB_INDEX_CAP/2
+    jb vb_index_compact
+    mov dword ptr [vorbis_index_count],VB_INDEX_CAP/2
+    shl qword ptr [vorbis_index_stride],1
+vb_index_store:
+    mov eax,[vorbis_index_count]
+    shl eax,5
+    add rax,[vb_index]
+    mov rcx,[vb_scan_checkpoint]
+    mov [rax],rcx
+    mov rcx,[vb_scan_checkpoint+8]
+    mov [rax+8],rcx
+    mov [rax+16],r12
+    mov [rax+24],rbx
+    inc dword ptr [vorbis_index_count]
+vb_index_next:
+    inc rbx
+    jmp vb_index_packet
+vb_index_complete:
+    cmp dword ptr [decode_error],0
+    jne vb_index_bad
+    mov rax,[ogg_total_granule]
+    sub rax,[vb_origin]
+    jo vb_index_bad
+    test rax,rax
+    js vb_index_bad
+    cmp rax,r12
+    ja vb_index_bad
+    mov rdx,rax             ;raw end before start cropping
+    mov ecx,[vb_initial_skip]
+    sub rax,rcx
+    jc vb_index_bad
+    mov [total_frames],rax
+vb_index_trim_points:
+    mov eax,[vorbis_index_count]
+    test eax,eax
+    jz vb_index_reset
+    dec eax
+    shl eax,5
+    add rax,[vb_index]
+    cmp [rax+16],rdx
+    jbe vb_index_reset
+    dec dword ptr [vorbis_index_count]
+    jmp vb_index_trim_points
+vb_index_reset:
+    mov eax,[vb_initial_skip]
+    mov [vb_trim_start],eax
+    test rbx,rbx
+    jz vb_index_empty
+    lea rcx,vb_audio_checkpoint
+    call ogg_resume
+    test eax,eax
+    jz vb_index_bad
+vb_index_empty:
+    mov eax,1
+    jmp vb_index_return
+vb_index_bad:
+    xor eax,eax
+vb_index_return:
+    add rsp,48
+    pop r15
+    pop r14
+    pop r13
+    pop r12
+    pop rdi
+    pop rsi
+    pop rbx
+    ret
+vb_build_index ENDP
+
+vorbis_seek PROC
+    push rbx
+    push rsi
+    sub rsp,40
+    xor eax,eax
+    mov dword ptr [vorbis_seek_preroll],0
+    cmp dword ptr [vorbis_index_count],0
+    je vb_seek_return
+    test rcx,rcx
+    jz vb_seek_return
+    mov rax,[ogg_cancel_ptr]
+    test rax,rax
+    jz vb_seek_not_cancelled
+    cmp dword ptr [rax],0
+    jne vb_seek_zero
+vb_seek_not_cancelled:
+    cmp rcx,[total_frames]
+    cmova rcx,[total_frames]
+    mov eax,[vb_initial_skip]
+    add rcx,rax
+    mov rsi,rcx
+    xor r8d,r8d
+    mov r9d,[vorbis_index_count]
+vb_seek_search:
+    cmp r8d,r9d
+    jae vb_seek_found
+    mov edx,r9d
+    sub edx,r8d
+    shr edx,1
+    add edx,r8d
+    mov eax,edx
+    shl eax,5
+    add rax,[vb_index]
+    cmp [rax+16],rsi
+    ja vb_seek_upper
+    lea r8d,[rdx+1]
+    jmp vb_seek_search
+vb_seek_upper:
+    mov r9d,edx
+    jmp vb_seek_search
+vb_seek_found:
+    test r8d,r8d
+    jz vb_seek_zero         ;target precedes the first packet's optional prefix
+    dec r8d
+    mov eax,r8d
+    shl eax,5
+    add rax,[vb_index]
+    mov rbx,[rax+16]
+    mov rcx,rax
+    call ogg_resume
+    test eax,eax
+    jz vb_seek_bad
+    mov dword ptr [vb_previous],0
+    mov dword ptr [vb_first],0
+    mov dword ptr [vb_available],0
+    mov dword ptr [vb_used],0
+    mov dword ptr [vb_trim_start],0
+    mov eax,[vb_initial_skip]
+    cmp rbx,rax
+    jae vb_seek_emitted
+    sub eax,ebx
+    mov [vb_trim_start],eax
+    xor ebx,ebx
+    jmp vb_seek_prime
+vb_seek_emitted:
+    sub rbx,rax
+vb_seek_prime:
+    mov [vb_emitted],rbx
+    inc dword ptr [vorbis_seek_preroll]
+    call vb_frame           ;only reconstruct the preceding packet's tail
+    test eax,eax
+    jz vb_seek_bad
+    mov rax,rbx
+    jmp vb_seek_return
+vb_seek_bad:
+    mov dword ptr [decode_error],24
+vb_seek_zero:
+    xor eax,eax
+vb_seek_return:
+    add rsp,40
+    pop rsi
+    pop rbx
+    ret
+vorbis_seek ENDP
 include vorbis_setup.inc
 include vorbis_decode.inc
 END

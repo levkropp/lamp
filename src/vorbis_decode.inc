@@ -548,6 +548,91 @@ vb_rs_done:
 vb_residue ENDP
 
 ; Decode one complete packet into a fixed interleaved stereo PCM buffer.
+; Shared packet mode/window prefix for decoding and structural seek indexing.
+vb_packet_header PROC
+    push rbx
+    push rsi
+    push r13
+    push r14
+    sub rsp,40
+    lea rcx,[rax+rdx]
+    mov [vb_end],rcx
+    mov [vb_ptr],rax
+    mov qword ptr [vb_acc],0
+    mov dword ptr [vb_count],0
+    mov dword ptr [vb_bad],0
+    VB_GET 1
+    test eax,eax
+    jnz vb_packet_bad
+    mov ecx,[vb_mode_bits]
+    call vb_bits
+    cmp eax,[vb_modes_count]
+    jae vb_packet_bad
+    lea rdx,vb_modes
+    mov ecx,[rdx+rax*8+4]
+    mov eax,[rdx+rax*8]
+    mov [vb_block],eax
+    imul ecx,MP_SIZE
+    lea rsi,vb_maps
+    add rsi,rcx
+    mov [vb_current_map],rsi
+    mov ebx,[vb_short]
+    xor r13d,r13d
+    xor r14d,r14d
+    test eax,eax
+    jz vb_packet_window
+    mov ebx,[vb_long]
+    VB_GET 1
+    mov r13d,eax
+    VB_GET 1
+    mov r14d,eax
+vb_packet_window:
+    mov [vb_n],ebx
+    mov eax,ebx
+    shr eax,1
+    mov dword ptr [vb_left],0
+    mov [vb_left_end],eax
+    mov [vb_right],eax
+    mov [vb_right_end],ebx
+    cmp dword ptr [vb_block],0
+    je vb_packet_ready
+    test r13d,r13d
+    jnz vb_packet_right_window
+    mov eax,ebx
+    sub eax,[vb_short]
+    shr eax,2
+    mov [vb_left],eax
+    mov eax,ebx
+    add eax,[vb_short]
+    shr eax,2
+    mov [vb_left_end],eax
+vb_packet_right_window:
+    test r14d,r14d
+    jnz vb_packet_ready
+    lea eax,[rbx+rbx*2]
+    sub eax,[vb_short]
+    shr eax,2
+    mov [vb_right],eax
+    lea eax,[rbx+rbx*2]
+    add eax,[vb_short]
+    shr eax,2
+    mov [vb_right_end],eax
+vb_packet_ready:
+    cmp dword ptr [vb_bad],0
+    jne vb_packet_bad
+    mov eax,1
+    jmp vb_packet_return
+vb_packet_bad:
+    xor eax,eax
+vb_packet_return:
+    add rsp,40
+    pop r14
+    pop r13
+    pop rsi
+    pop rbx
+    ret
+vb_packet_header ENDP
+
 vb_frame PROC
     push rbp
     push rbx
@@ -561,68 +646,10 @@ vb_frame PROC
     call ogg_next
     test rax,rax
     jz vb_frame_eof
-    lea rcx,[rax+rdx]
-    mov [vb_end],rcx
-    mov [vb_ptr],rax
-    mov qword ptr [vb_acc],0
-    mov dword ptr [vb_count],0
-    mov dword ptr [vb_bad],0
-    VB_GET 1
+    call vb_packet_header
     test eax,eax
-    jnz vb_frame_bad
-    mov ecx,[vb_mode_bits]
-    call vb_bits
-    cmp eax,[vb_modes_count]
-    jae vb_frame_bad
-    lea rdx,vb_modes
-    mov ecx,[rdx+rax*8+4]
-    mov eax,[rdx+rax*8]
-    mov [vb_block],eax
-    imul ecx,MP_SIZE
-    lea rsi,vb_maps
-    add rsi,rcx
-    mov [vb_current_map],rsi
-    mov ebx,[vb_short]
-    xor r13d,r13d
-    xor r14d,r14d
-    test eax,eax
-    jz vb_frame_window
-    mov ebx,[vb_long]
-    VB_GET 1
-    mov r13d,eax
-    VB_GET 1
-    mov r14d,eax
-vb_frame_window:
-    mov [vb_n],ebx
-    mov eax,ebx
-    shr eax,1
-    mov dword ptr [vb_left],0
-    mov [vb_left_end],eax
-    mov [vb_right],eax
-    mov [vb_right_end],ebx
-    cmp dword ptr [vb_block],0
-    je vb_frame_clear
-    test r13d,r13d
-    jnz vb_frame_right_window
-    mov eax,ebx
-    sub eax,[vb_short]
-    shr eax,2
-    mov [vb_left],eax
-    mov eax,ebx
-    add eax,[vb_short]
-    shr eax,2
-    mov [vb_left_end],eax
-vb_frame_right_window:
-    test r14d,r14d
-    jnz vb_frame_clear
-    lea eax,[rbx+rbx*2]
-    sub eax,[vb_short]
-    shr eax,2
-    mov [vb_right],eax
-    lea eax,[rbx+rbx*2]
-    add eax,[vb_short]
-    shr eax,2
-    mov [vb_right_end],eax
+    jz vb_frame_bad
+    mov rsi,[vb_current_map]
 vb_frame_clear:
     lea rdi,vb_spectrum
     xor eax,eax
@@ -774,7 +801,17 @@ vb_frame_transform:
     mov dword ptr [vb_available],0
     mov dword ptr [vb_used],0
     test r13d,r13d
+    jnz vb_frame_with_overlap
+    cmp dword ptr [vb_first],1
+    jne vb_frame_save_tail
+    mov eax,[vb_n]
+    shr eax,1
+    mov [vb_left],eax
+    mov r14d,[vb_right]
+    sub r14d,eax
     jz vb_frame_save_tail
+    jmp vb_frame_post_overlap
+vb_frame_with_overlap:
     mov eax,[vb_left_end]
     sub eax,[vb_left]
     cmp eax,r13d
@@ -819,6 +856,14 @@ vb_frame_overlap_sample:
     inc r12d
     cmp r12d,[source_channels]
     jb vb_frame_overlap_channel
+vb_frame_post_overlap:
+    ; Initial negative granule origin crops at most the first overlap span.
+    mov eax,[vb_trim_start]
+    cmp eax,r14d
+    cmova eax,r14d
+    sub [vb_trim_start],eax
+    mov [vb_frame_skip],eax
+    sub r14d,eax
     ; End granule trims encoder padding. No unsigned wrap on malformed totals.
     mov rax,[total_frames]
     sub rax,[vb_emitted]
@@ -831,6 +876,7 @@ vb_frame_output_count:
     add [vb_emitted],r14
     lea rsi,vb_time
     mov eax,[vb_left]
+    add eax,[vb_frame_skip]
     lea rsi,[rsi+rax*4]
     lea rdi,vb_pcm
     xor ebx,ebx
@@ -876,6 +922,7 @@ vb_frame_tail_channel:
     inc r12d
     cmp r12d,[source_channels]
     jb vb_frame_tail_channel
+    mov dword ptr [vb_first],0
     mov eax,1
     jmp vb_frame_done
 vb_frame_bad:

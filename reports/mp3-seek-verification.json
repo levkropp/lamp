@@ -12,6 +12,8 @@
       "maximum_probes": 0,
       "index_points": 4,
       "maximum_skimmed_headers": 21,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 61784,
         "snrDb": 124.68405796992755,
@@ -29,6 +31,8 @@
       "maximum_probes": 0,
       "index_points": 4,
       "maximum_skimmed_headers": 21,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 61784,
         "snrDb": 124.82216411106342,
@@ -46,6 +50,8 @@
       "maximum_probes": 0,
       "index_points": 4,
       "maximum_skimmed_headers": 21,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 61784,
         "snrDb": 124.56130077562847,
@@ -63,6 +69,8 @@
       "maximum_probes": 0,
       "index_points": 4,
       "maximum_skimmed_headers": 21,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 61784,
         "snrDb": 124.7738672007612,
@@ -80,6 +88,8 @@
       "maximum_probes": 0,
       "index_points": 5,
       "maximum_skimmed_headers": 19,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 85146,
         "snrDb": 121.39364144421491,
@@ -97,6 +107,8 @@
       "maximum_probes": 0,
       "index_points": 5,
       "maximum_skimmed_headers": 19,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 85146,
         "snrDb": 121.4184958964675,
@@ -114,6 +126,8 @@
       "maximum_probes": 0,
       "index_points": 5,
       "maximum_skimmed_headers": 19,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 85146,
         "snrDb": 121.3054120267281,
@@ -131,6 +145,8 @@
       "maximum_probes": 0,
       "index_points": 5,
       "maximum_skimmed_headers": 19,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 85146,
         "snrDb": 121.2965198723336,
@@ -148,6 +164,8 @@
       "maximum_probes": 0,
       "index_points": 6,
       "maximum_skimmed_headers": 16,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 92676,
         "snrDb": 120.76524272885248,
@@ -165,6 +183,8 @@
       "maximum_probes": 0,
       "index_points": 6,
       "maximum_skimmed_headers": 16,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 92676,
         "snrDb": 120.71415382660918,
@@ -182,6 +202,8 @@
       "maximum_probes": 0,
       "index_points": 6,
       "maximum_skimmed_headers": 16,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 92676,
         "snrDb": 120.85230328468643,
@@ -199,6 +221,8 @@
       "maximum_probes": 0,
       "index_points": 6,
       "maximum_skimmed_headers": 16,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 92676,
         "snrDb": 120.76194325193647,
@@ -216,6 +240,8 @@
       "maximum_probes": 0,
       "index_points": 7,
       "maximum_skimmed_headers": 22,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 123568,
         "snrDb": 121.03759515442876,
@@ -233,6 +259,8 @@
       "maximum_probes": 0,
       "index_points": 7,
       "maximum_skimmed_headers": 22,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 123568,
         "snrDb": 120.97206771886422,
@@ -250,6 +278,8 @@
       "maximum_probes": 0,
       "index_points": 7,
       "maximum_skimmed_headers": 22,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 123568,
         "snrDb": 120.8433436953386,
@@ -267,6 +297,8 @@
       "maximum_probes": 0,
       "index_points": 7,
       "maximum_skimmed_headers": 22,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 123568,
         "snrDb": 120.96065422619914,
@@ -284,6 +316,8 @@
       "maximum_probes": 0,
       "index_points": 10,
       "maximum_skimmed_headers": 19,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 170292,
         "snrDb": 123.79792769216863,
@@ -301,6 +335,8 @@
       "maximum_probes": 0,
       "index_points": 10,
       "maximum_skimmed_headers": 19,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 170292,
         "snrDb": 123.74479259934381,
@@ -318,6 +354,8 @@
       "maximum_probes": 0,
       "index_points": 10,
       "maximum_skimmed_headers": 19,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 170292,
         "snrDb": 124.00270327247569,
@@ -335,6 +373,8 @@
       "maximum_probes": 0,
       "index_points": 10,
       "maximum_skimmed_headers": 19,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 170292,
         "snrDb": 124.06775166523641,
@@ -352,6 +392,8 @@
       "maximum_probes": 0,
       "index_points": 11,
       "maximum_skimmed_headers": 15,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 185352,
         "snrDb": 124.06566490865437,
@@ -369,6 +411,8 @@
       "maximum_probes": 0,
       "index_points": 11,
       "maximum_skimmed_headers": 15,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 185352,
         "snrDb": 124.05674461469448,
@@ -386,6 +430,8 @@
       "maximum_probes": 0,
       "index_points": 11,
       "maximum_skimmed_headers": 15,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 185352,
         "snrDb": 124.01429052904612,
@@ -403,6 +449,8 @@
       "maximum_probes": 0,
       "index_points": 11,
       "maximum_skimmed_headers": 15,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 185352,
         "snrDb": 124.0493111949891,
@@ -420,6 +468,8 @@
       "maximum_probes": 0,
       "index_points": 7,
       "maximum_skimmed_headers": 21,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 247136,
         "snrDb": 123.04111661763862,
@@ -437,6 +487,8 @@
       "maximum_probes": 0,
       "index_points": 7,
       "maximum_skimmed_headers": 21,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 247136,
         "snrDb": 123.17020149911393,
@@ -454,6 +506,8 @@
       "maximum_probes": 0,
       "index_points": 7,
       "maximum_skimmed_headers": 21,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 247136,
         "snrDb": 123.07100384106644,
@@ -471,6 +525,8 @@
       "maximum_probes": 0,
       "index_points": 7,
       "maximum_skimmed_headers": 21,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 247136,
         "snrDb": 122.88839388615736,
@@ -488,6 +544,8 @@
       "maximum_probes": 0,
       "index_points": 10,
       "maximum_skimmed_headers": 18,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 340584,
         "snrDb": 123.10656589110538,
@@ -505,6 +563,8 @@
       "maximum_probes": 0,
       "index_points": 10,
       "maximum_skimmed_headers": 18,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 340584,
         "snrDb": 123.110011158384,
@@ -522,6 +582,8 @@
       "maximum_probes": 0,
       "index_points": 10,
       "maximum_skimmed_headers": 18,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 340584,
         "snrDb": 123.08170454694718,
@@ -539,6 +601,8 @@
       "maximum_probes": 0,
       "index_points": 10,
       "maximum_skimmed_headers": 18,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 340584,
         "snrDb": 123.14489242832354,
@@ -556,6 +620,8 @@
       "maximum_probes": 0,
       "index_points": 11,
       "maximum_skimmed_headers": 31,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 370704,
         "snrDb": 123.83853160654917,
@@ -573,6 +639,8 @@
       "maximum_probes": 0,
       "index_points": 11,
       "maximum_skimmed_headers": 31,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 370704,
         "snrDb": 124.15345099748473,
@@ -590,6 +658,8 @@
       "maximum_probes": 0,
       "index_points": 11,
       "maximum_skimmed_headers": 31,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 370704,
         "snrDb": 123.96137728563077,
@@ -607,6 +677,8 @@
       "maximum_probes": 0,
       "index_points": 11,
       "maximum_skimmed_headers": 31,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 370704,
         "snrDb": 123.75211780670341,
@@ -624,6 +696,8 @@
       "maximum_probes": 0,
       "index_points": 4,
       "maximum_skimmed_headers": 21,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 63360,
         "snrDb": 125.66249921745674,
@@ -641,6 +715,8 @@
       "maximum_probes": 0,
       "index_points": 4,
       "maximum_skimmed_headers": 21,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 63360,
         "snrDb": 125.56306092478877,
@@ -658,6 +734,8 @@
       "maximum_probes": 0,
       "index_points": 11,
       "maximum_skimmed_headers": 14,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 186624,
         "snrDb": 121.50060506010726,
@@ -675,6 +753,8 @@
       "maximum_probes": 0,
       "index_points": 11,
       "maximum_skimmed_headers": 14,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 186624,
         "snrDb": 121.3939523028119,
@@ -692,6 +772,8 @@
       "maximum_probes": 0,
       "index_points": 11,
       "maximum_skimmed_headers": 31,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 372096,
         "snrDb": 123.25400394901195,
@@ -709,6 +791,8 @@
       "maximum_probes": 0,
       "index_points": 11,
       "maximum_skimmed_headers": 31,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 372096,
         "snrDb": 123.14176063931788,
@@ -726,6 +810,8 @@
       "maximum_probes": 0,
       "index_points": 8,
       "maximum_skimmed_headers": 27,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 141784,
         "snrDb": 114.01808633888356,
@@ -743,6 +829,8 @@
       "maximum_probes": 0,
       "index_points": 8,
       "maximum_skimmed_headers": 27,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 141784,
         "snrDb": 119.36715563760757,
@@ -760,6 +848,8 @@
       "maximum_probes": 0,
       "index_points": 8,
       "maximum_skimmed_headers": 27,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 141784,
         "snrDb": 114.06469441012581,
@@ -777,6 +867,8 @@
       "maximum_probes": 0,
       "index_points": 8,
       "maximum_skimmed_headers": 27,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 141784,
         "snrDb": 119.28411867125583,
@@ -794,6 +886,8 @@
       "maximum_probes": 0,
       "index_points": 22,
       "maximum_skimmed_headers": 19,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 390792,
         "snrDb": 113.82245597650376,
@@ -811,6 +905,8 @@
       "maximum_probes": 0,
       "index_points": 22,
       "maximum_skimmed_headers": 19,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 390792,
         "snrDb": 118.86829356622331,
@@ -828,6 +924,8 @@
       "maximum_probes": 0,
       "index_points": 22,
       "maximum_skimmed_headers": 19,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 390792,
         "snrDb": 113.77123449684541,
@@ -845,6 +943,8 @@
       "maximum_probes": 0,
       "index_points": 22,
       "maximum_skimmed_headers": 19,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 390792,
         "snrDb": 118.8647229195459,
@@ -862,6 +962,8 @@
       "maximum_probes": 0,
       "index_points": 24,
       "maximum_skimmed_headers": 16,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 850704,
         "snrDb": 113.25142326766533,
@@ -879,6 +981,8 @@
       "maximum_probes": 0,
       "index_points": 24,
       "maximum_skimmed_headers": 16,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 850704,
         "snrDb": 124.83471140018221,
@@ -896,6 +1000,8 @@
       "maximum_probes": 0,
       "index_points": 24,
       "maximum_skimmed_headers": 16,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 850704,
         "snrDb": 113.43591950933063,
@@ -913,6 +1019,8 @@
       "maximum_probes": 0,
       "index_points": 24,
       "maximum_skimmed_headers": 16,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 850704,
         "snrDb": 124.87946521204546,
@@ -930,6 +1038,8 @@
       "maximum_probes": 0,
       "index_points": 3,
       "maximum_skimmed_headers": 10,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 87552,
         "snrDb": 125.4529945053117,
@@ -947,6 +1057,8 @@
       "maximum_probes": 0,
       "index_points": 3,
       "maximum_skimmed_headers": 10,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 87552,
         "snrDb": 125.57389756571673,
@@ -964,6 +1076,8 @@
       "maximum_probes": 0,
       "index_points": 3,
       "maximum_skimmed_headers": 10,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 87552,
         "snrDb": 125.4529945053117,
@@ -981,6 +1095,8 @@
       "maximum_probes": 0,
       "index_points": 3,
       "maximum_skimmed_headers": 10,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 87552,
         "snrDb": 124.93466484853354,
@@ -998,6 +1114,8 @@
       "maximum_probes": 0,
       "index_points": 3,
       "maximum_skimmed_headers": 10,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 87552,
         "snrDb": 125.02290868518521,
@@ -1015,6 +1133,8 @@
       "maximum_probes": 0,
       "index_points": 3,
       "maximum_skimmed_headers": 10,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 87552,
         "snrDb": 124.93466484853354,
@@ -1032,6 +1152,8 @@
       "maximum_probes": 0,
       "index_points": 5,
       "maximum_skimmed_headers": 22,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 87552,
         "snrDb": 125.45299450531182,
@@ -1049,6 +1171,8 @@
       "maximum_probes": 0,
       "index_points": 5,
       "maximum_skimmed_headers": 22,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 87552,
         "snrDb": 125.57389756571682,
@@ -1066,6 +1190,8 @@
       "maximum_probes": 0,
       "index_points": 5,
       "maximum_skimmed_headers": 22,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 87552,
         "snrDb": 125.45299450531182,
@@ -1083,6 +1209,8 @@
       "maximum_probes": 0,
       "index_points": 5,
       "maximum_skimmed_headers": 22,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 87552,
         "snrDb": 124.93466484853366,
@@ -1100,6 +1228,8 @@
       "maximum_probes": 0,
       "index_points": 5,
       "maximum_skimmed_headers": 22,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 87552,
         "snrDb": 125.0229086851853,
@@ -1117,6 +1247,8 @@
       "maximum_probes": 0,
       "index_points": 5,
       "maximum_skimmed_headers": 22,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 87552,
         "snrDb": 124.93466484853366,
@@ -1134,6 +1266,8 @@
       "maximum_probes": 0,
       "index_points": 5,
       "maximum_skimmed_headers": 22,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 87552,
         "snrDb": 125.45299450531182,
@@ -1151,6 +1285,8 @@
       "maximum_probes": 0,
       "index_points": 5,
       "maximum_skimmed_headers": 22,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 87552,
         "snrDb": 125.57389756571682,
@@ -1168,6 +1304,8 @@
       "maximum_probes": 0,
       "index_points": 5,
       "maximum_skimmed_headers": 22,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 87552,
         "snrDb": 125.45299450531182,
@@ -1185,6 +1323,8 @@
       "maximum_probes": 0,
       "index_points": 5,
       "maximum_skimmed_headers": 22,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 87552,
         "snrDb": 124.93466484853366,
@@ -1202,6 +1342,8 @@
       "maximum_probes": 0,
       "index_points": 5,
       "maximum_skimmed_headers": 22,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 87552,
         "snrDb": 125.0229086851853,
@@ -1219,6 +1361,8 @@
       "maximum_probes": 0,
       "index_points": 5,
       "maximum_skimmed_headers": 22,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 87552,
         "snrDb": 124.93466484853366,
@@ -1236,6 +1380,8 @@
       "maximum_probes": 0,
       "index_points": 2,
       "maximum_skimmed_headers": 26,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 65664,
         "snrDb": 125.44961310000092,
@@ -1253,6 +1399,8 @@
       "maximum_probes": 0,
       "index_points": 2,
       "maximum_skimmed_headers": 26,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 32832,
         "snrDb": 126.2856548831421,
@@ -1270,6 +1418,8 @@
       "maximum_probes": 0,
       "index_points": 2,
       "maximum_skimmed_headers": 26,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 32832,
         "snrDb": 126.02235372015451,
@@ -1287,6 +1437,8 @@
       "maximum_probes": 0,
       "index_points": 2,
       "maximum_skimmed_headers": 26,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 32832,
         "snrDb": 126.2856548831421,
@@ -1304,6 +1456,8 @@
       "maximum_probes": 0,
       "index_points": 2,
       "maximum_skimmed_headers": 26,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 65664,
         "snrDb": 125.44961310000092,
@@ -1321,6 +1475,8 @@
       "maximum_probes": 0,
       "index_points": 2,
       "maximum_skimmed_headers": 26,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 65664,
         "snrDb": null,
@@ -1338,6 +1494,8 @@
       "maximum_probes": 0,
       "index_points": 2,
       "maximum_skimmed_headers": 26,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 65664,
         "snrDb": 127.16157158433714,
@@ -1355,6 +1513,8 @@
       "maximum_probes": 0,
       "index_points": 2,
       "maximum_skimmed_headers": 26,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 65664,
         "snrDb": 127.77506223942564,
@@ -1372,6 +1532,8 @@
       "maximum_probes": 0,
       "index_points": 2,
       "maximum_skimmed_headers": 26,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 65664,
         "snrDb": 127.77506223942564,
@@ -1389,6 +1551,8 @@
       "maximum_probes": 0,
       "index_points": 2,
       "maximum_skimmed_headers": 26,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 65664,
         "snrDb": 127.1382591518986,
@@ -1406,6 +1570,8 @@
       "maximum_probes": 0,
       "index_points": 2,
       "maximum_skimmed_headers": 26,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 65664,
         "snrDb": 127.1382591518986,
@@ -1423,6 +1589,8 @@
       "maximum_probes": 0,
       "index_points": 2,
       "maximum_skimmed_headers": 26,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 65664,
         "snrDb": 125.9736732188677,
@@ -1440,6 +1608,8 @@
       "maximum_probes": 0,
       "index_points": 2,
       "maximum_skimmed_headers": 26,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 65664,
         "snrDb": 125.9736732188677,
@@ -1457,6 +1627,8 @@
       "maximum_probes": 0,
       "index_points": 2,
       "maximum_skimmed_headers": 26,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 65664,
         "snrDb": 125.9736732188677,
@@ -1474,6 +1646,8 @@
       "maximum_probes": 0,
       "index_points": 2,
       "maximum_skimmed_headers": 26,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 65664,
         "snrDb": 126.23706014803675,
@@ -1491,6 +1665,8 @@
       "maximum_probes": 0,
       "index_points": 2,
       "maximum_skimmed_headers": 26,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 65664,
         "snrDb": 126.23706014803675,
@@ -1508,6 +1684,8 @@
       "maximum_probes": 0,
       "index_points": 2,
       "maximum_skimmed_headers": 26,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 65664,
         "snrDb": 126.23706014803675,
@@ -1525,6 +1703,8 @@
       "maximum_probes": 0,
       "index_points": 2,
       "maximum_skimmed_headers": 26,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 65664,
         "snrDb": 126.27504682823138,
@@ -1542,6 +1722,8 @@
       "maximum_probes": 0,
       "index_points": 2,
       "maximum_skimmed_headers": 26,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 65664,
         "snrDb": 126.27504682823138,
@@ -1559,6 +1741,8 @@
       "maximum_probes": 0,
       "index_points": 2,
       "maximum_skimmed_headers": 26,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 65664,
         "snrDb": 127.10554141424765,
@@ -1576,6 +1760,8 @@
       "maximum_probes": 0,
       "index_points": 2,
       "maximum_skimmed_headers": 26,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 65664,
         "snrDb": 126.67347838063105,
@@ -1593,6 +1779,8 @@
       "maximum_probes": 0,
       "index_points": 2,
       "maximum_skimmed_headers": 26,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 65664,
         "snrDb": 126.74772530420393,
@@ -1610,6 +1798,8 @@
       "maximum_probes": 0,
       "index_points": 2,
       "maximum_skimmed_headers": 26,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 65664,
         "snrDb": 127.45924318937548,
@@ -1627,6 +1817,8 @@
       "maximum_probes": 0,
       "index_points": 2,
       "maximum_skimmed_headers": 26,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 65664,
         "snrDb": 125.84960230683285,
@@ -1644,6 +1836,8 @@
       "maximum_probes": 0,
       "index_points": 2,
       "maximum_skimmed_headers": 26,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 65664,
         "snrDb": 126.37600848386454,
@@ -1661,6 +1855,8 @@
       "maximum_probes": 0,
       "index_points": 2,
       "maximum_skimmed_headers": 26,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 65664,
         "snrDb": 127.74223672331041,
@@ -1678,6 +1874,8 @@
       "maximum_probes": 0,
       "index_points": 2,
       "maximum_skimmed_headers": 26,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 65664,
         "snrDb": 127.203381818751,
@@ -1695,6 +1893,8 @@
       "maximum_probes": 0,
       "index_points": 2,
       "maximum_skimmed_headers": 26,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 65664,
         "snrDb": 127.45924318937548,
@@ -1712,6 +1912,8 @@
       "maximum_probes": 0,
       "index_points": 2,
       "maximum_skimmed_headers": 26,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 65664,
         "snrDb": 126.86732876878571,
@@ -1729,6 +1931,8 @@
       "maximum_probes": 0,
       "index_points": 2,
       "maximum_skimmed_headers": 26,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 65664,
         "snrDb": 125.84960230683285,
@@ -1746,6 +1950,8 @@
       "maximum_probes": 0,
       "index_points": 2,
       "maximum_skimmed_headers": 26,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 65664,
         "snrDb": 127.32019185429314,
@@ -1763,6 +1969,8 @@
       "maximum_probes": 0,
       "index_points": 2,
       "maximum_skimmed_headers": 26,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 65664,
         "snrDb": 126.37600848386454,
@@ -1780,6 +1988,8 @@
       "maximum_probes": 0,
       "index_points": 2,
       "maximum_skimmed_headers": 26,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 65664,
         "snrDb": 126.97145234921001,
@@ -1797,6 +2007,8 @@
       "maximum_probes": 0,
       "index_points": 2,
       "maximum_skimmed_headers": 26,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 65664,
         "snrDb": 126.76413991720739,
@@ -1814,6 +2026,8 @@
       "maximum_probes": 0,
       "index_points": 2,
       "maximum_skimmed_headers": 26,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 65664,
         "snrDb": 127.203381818751,
@@ -1831,6 +2045,8 @@
       "maximum_probes": 0,
       "index_points": 2,
       "maximum_skimmed_headers": 26,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 65664,
         "snrDb": 127.67233470615272,
@@ -1848,6 +2064,8 @@
       "maximum_probes": 0,
       "index_points": 2,
       "maximum_skimmed_headers": 26,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 65664,
         "snrDb": 127.67233470615272,
@@ -1865,6 +2083,8 @@
       "maximum_probes": 0,
       "index_points": 1,
       "maximum_skimmed_headers": 7,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
       "continuous_reference": {
         "frames": 5184,
         "snrDb": 124.41337802366682,

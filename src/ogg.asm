@@ -5,6 +5,7 @@ option casemap:none
 EXTERN VirtualAlloc:PROC, VirtualFree:PROC
 EXTERN decode_error:DWORD
 PUBLIC ogg_open, ogg_next, ogg_close, ogg_rewind
+PUBLIC ogg_checkpoint,ogg_resume
 PUBLIC ogg_granule, ogg_total_granule, ogg_eos, ogg_packet_length
 PUBLIC ogg_packet_page, ogg_packet_last, ogg_packet_page_end
 PUBLIC ogg_cancel_ptr
@@ -35,6 +36,7 @@ ogg_sequence dd 0
 ogg_continued dd 0
 ogg_seen_eos dd 0
 ogg_crc_ready dd 0
+ogg_resume_segment dd 0
 .data?
 ogg_crc_table dd 256 dup (?)
 .code
@@ -65,8 +67,59 @@ ogg_rewind PROC
     mov dword ptr [ogg_packet_page_end],0
     mov qword ptr [ogg_packet_page],0
     mov qword ptr [ogg_granule],-1
+    mov dword ptr [ogg_resume_segment],0
     ret
 ogg_rewind ENDP
+
+; Capture a packet boundary in 16 bytes: validated page pointer and next lace.
+; Normalize exhausted pages to the next page, keeping continued packets intact.
+ogg_checkpoint PROC
+    mov eax,[ogg_segment]
+    cmp eax,[ogg_segments]
+    jb ogg_checkpoint_current
+    mov rdx,[ogg_cursor]
+    xor eax,eax
+    jmp ogg_checkpoint_store
+ogg_checkpoint_current:
+    mov rdx,[ogg_packet_page]
+ogg_checkpoint_store:
+    mov [rcx],rdx
+    mov [rcx+8],eax
+    mov dword ptr [rcx+12],0
+    ret
+ogg_checkpoint ENDP
+
+; Restore a checkpoint from this still-open validated mapping, without a CRC
+; pass or allocation. Checks refuse closed/out-of-range or invalid lace state.
+ogg_resume PROC
+    push rbx
+    sub rsp,32
+    xor eax,eax
+    cmp qword ptr [ogg_buffer],0
+    je ogg_resume_return
+    mov rbx,rcx
+    mov rdx,[rbx]
+    cmp rdx,[ogg_begin]
+    jb ogg_resume_return
+    lea r8,[rdx+27]
+    cmp r8,[ogg_end]
+    ja ogg_resume_return
+    cmp dword ptr [rdx],5367674fh
+    jne ogg_resume_return
+    movzx r8d,byte ptr [rdx+26]
+    cmp [rbx+8],r8d
+    ja ogg_resume_return
+    call ogg_rewind
+    mov rax,[rbx]
+    mov [ogg_cursor],rax
+    mov eax,[rbx+8]
+    mov [ogg_resume_segment],eax
+    mov eax,1
+ogg_resume_return:
+    add rsp,32
+    pop rbx
+    ret
+ogg_resume ENDP
 
 ogg_crc_init PROC
     cmp dword ptr [ogg_crc_ready],0
@@ -336,7 +389,18 @@ ogg_next_lace_continue:
 ogg_next_page_ready:
     add rdi,rdx
     mov [ogg_cursor],rdi
-    jmp ogg_next_segment
+    mov ecx,[ogg_resume_segment]
+    mov dword ptr [ogg_resume_segment],0
+    mov [ogg_segment],ecx
+    xor eax,eax
+ogg_next_resume_laces:
+    cmp eax,ecx
+    jae ogg_next_segment
+    mov r8,[ogg_laces]
+    movzx edx,byte ptr [r8+rax]
+    add [ogg_body],rdx
+    inc eax
+    jmp ogg_next_resume_laces
 ogg_next_copy:
     mov r8,[ogg_laces]
     movzx r9d,byte ptr [r8+rax]

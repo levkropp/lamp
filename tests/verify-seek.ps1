@@ -18,3 +18,6 @@ Copy-Item -LiteralPath (Join-Path $scratch 'seek-verification.json') -Destinatio
 & node (Join-Path $PSScriptRoot 'mp3-seek-fixtures.js') (Join-Path $out 'lamp-cli.exe') (Join-Path $out 'seek-oracle.exe') (Join-Path $scratch 'mp3')
 if($LASTEXITCODE){throw 'MP3 indexed seek verification failed'}
 Copy-Item -LiteralPath (Join-Path $scratch 'mp3\mp3-seek-verification.json') -Destination (Join-Path $out 'mp3-seek-verification.json')
+& node (Join-Path $PSScriptRoot 'vorbis-seek-fixtures.js') (Join-Path $out 'lamp-cli.exe') (Join-Path $out 'seek-oracle.exe') (Join-Path $scratch 'vorbis')
+if($LASTEXITCODE){throw 'Vorbis indexed seek verification failed'}
+Copy-Item -LiteralPath (Join-Path $scratch 'vorbis\vorbis-seek-verification.json') -Destination (Join-Path $out 'vorbis-seek-verification.json')

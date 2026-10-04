@@ -1,0 +1,1749 @@
+{
+  "result": "passed",
+  "scope": "Sparse packet/lace seek checkpoints and exact previous-packet overlap; byte-exact continuous assembly PCM and independent FFmpeg PCM comparison, all supported rates/channels/quality extremes, transients/noise, continued audio and comments, zero terminal laces, positive/cropped granule origins, initial long-to-short prefixes, EOF/clamping/canaries, fresh reopen, allocation release, adaptive 64-KiB index compaction, CRC-valid contradictory timestamps and cancelled seek/open; Opus index remains pending",
+  "checks": [
+    {
+      "file": "seek-vorbis-8000-1-q0.ogg",
+      "kind": "encoded",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 10,
+      "discarded_frames": 11017,
+      "maximum_discarded": 4095,
+      "maximum_probes": 0,
+      "index_points": 16,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 61784,
+        "snrDb": 140.4664194565692,
+        "peakError": 1.1920928955078125e-7,
+        "referencePeak": 0.5498707294464111
+      }
+    },
+    {
+      "file": "seek-vorbis-8000-1-q8.ogg",
+      "kind": "encoded",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 10,
+      "discarded_frames": 11017,
+      "maximum_discarded": 4095,
+      "maximum_probes": 0,
+      "index_points": 16,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 61784,
+        "snrDb": 139.98983111230737,
+        "peakError": 1.1920928955078125e-7,
+        "referencePeak": 0.5062071681022644
+      }
+    },
+    {
+      "file": "seek-vorbis-8000-2-q0.ogg",
+      "kind": "encoded",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 10,
+      "discarded_frames": 11017,
+      "maximum_discarded": 4095,
+      "maximum_probes": 0,
+      "index_points": 16,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 61784,
+        "snrDb": 140.82451594008648,
+        "peakError": 1.1920928955078125e-7,
+        "referencePeak": 0.43193891644477844
+      }
+    },
+    {
+      "file": "seek-vorbis-8000-2-q8.ogg",
+      "kind": "encoded",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 10,
+      "discarded_frames": 11017,
+      "maximum_discarded": 4095,
+      "maximum_probes": 0,
+      "index_points": 16,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 61784,
+        "snrDb": 139.9954293763806,
+        "peakError": 1.4901161193847656e-7,
+        "referencePeak": 0.4030958116054535
+      }
+    },
+    {
+      "file": "seek-vorbis-16000-1-q0.ogg",
+      "kind": "encoded",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 7,
+      "discarded_frames": 26901,
+      "maximum_discarded": 4608,
+      "maximum_probes": 0,
+      "index_points": 16,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 123568,
+        "snrDb": 140.0919642814141,
+        "peakError": 1.7881393432617188e-7,
+        "referencePeak": 0.5661695599555969
+      }
+    },
+    {
+      "file": "seek-vorbis-16000-1-q8.ogg",
+      "kind": "encoded",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 7,
+      "discarded_frames": 27285,
+      "maximum_discarded": 4608,
+      "maximum_probes": 0,
+      "index_points": 16,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 123568,
+        "snrDb": 139.64994513389502,
+        "peakError": 1.4901161193847656e-7,
+        "referencePeak": 0.507513701915741
+      }
+    },
+    {
+      "file": "seek-vorbis-16000-2-q0.ogg",
+      "kind": "encoded",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 7,
+      "discarded_frames": 26901,
+      "maximum_discarded": 4608,
+      "maximum_probes": 0,
+      "index_points": 16,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 123568,
+        "snrDb": 140.44797240740135,
+        "peakError": 1.4901161193847656e-7,
+        "referencePeak": 0.4150228202342987
+      }
+    },
+    {
+      "file": "seek-vorbis-16000-2-q8.ogg",
+      "kind": "encoded",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 7,
+      "discarded_frames": 29589,
+      "maximum_discarded": 4841,
+      "maximum_probes": 0,
+      "index_points": 16,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 123568,
+        "snrDb": 139.54119000001327,
+        "peakError": 1.4901161193847656e-7,
+        "referencePeak": 0.4055706858634949
+      }
+    },
+    {
+      "file": "seek-vorbis-22050-1-q0.ogg",
+      "kind": "encoded",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 7,
+      "discarded_frames": 48743,
+      "maximum_discarded": 6452,
+      "maximum_probes": 0,
+      "index_points": 21,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 170292,
+        "snrDb": 139.7359486290185,
+        "peakError": 1.7881393432617188e-7,
+        "referencePeak": 0.5641061067581177
+      }
+    },
+    {
+      "file": "seek-vorbis-22050-1-q8.ogg",
+      "kind": "encoded",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 7,
+      "discarded_frames": 49639,
+      "maximum_discarded": 6580,
+      "maximum_probes": 0,
+      "index_points": 21,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 170292,
+        "snrDb": 139.7229772738107,
+        "peakError": 1.7881393432617188e-7,
+        "referencePeak": 0.5108893513679504
+      }
+    },
+    {
+      "file": "seek-vorbis-22050-2-q0.ogg",
+      "kind": "encoded",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 7,
+      "discarded_frames": 48743,
+      "maximum_discarded": 6452,
+      "maximum_probes": 0,
+      "index_points": 21,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 170292,
+        "snrDb": 140.380160296213,
+        "peakError": 1.4901161193847656e-7,
+        "referencePeak": 0.4175735414028168
+      }
+    },
+    {
+      "file": "seek-vorbis-22050-2-q8.ogg",
+      "kind": "encoded",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 7,
+      "discarded_frames": 51431,
+      "maximum_discarded": 6836,
+      "maximum_probes": 0,
+      "index_points": 21,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 170292,
+        "snrDb": 139.73351369167938,
+        "peakError": 1.4901161193847656e-7,
+        "referencePeak": 0.40544524788856506
+      }
+    },
+    {
+      "file": "seek-vorbis-32000-1-q0.ogg",
+      "kind": "encoded",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 5,
+      "discarded_frames": 52717,
+      "maximum_discarded": 9345,
+      "maximum_probes": 0,
+      "index_points": 16,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 247136,
+        "snrDb": 139.54331056619458,
+        "peakError": 1.7881393432617188e-7,
+        "referencePeak": 0.5197491645812988
+      }
+    },
+    {
+      "file": "seek-vorbis-32000-1-q8.ogg",
+      "kind": "encoded",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 5,
+      "discarded_frames": 52717,
+      "maximum_discarded": 9345,
+      "maximum_probes": 0,
+      "index_points": 16,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 247136,
+        "snrDb": 139.27528756095023,
+        "peakError": 1.7881393432617188e-7,
+        "referencePeak": 0.5076119899749756
+      }
+    },
+    {
+      "file": "seek-vorbis-32000-2-q0.ogg",
+      "kind": "encoded",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 5,
+      "discarded_frames": 52717,
+      "maximum_discarded": 9345,
+      "maximum_probes": 0,
+      "index_points": 16,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 247136,
+        "snrDb": 139.96145727900617,
+        "peakError": 1.7881393432617188e-7,
+        "referencePeak": 0.4158294200897217
+      }
+    },
+    {
+      "file": "seek-vorbis-32000-2-q8.ogg",
+      "kind": "encoded",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 5,
+      "discarded_frames": 52717,
+      "maximum_discarded": 9345,
+      "maximum_probes": 0,
+      "index_points": 16,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 247136,
+        "snrDb": 139.56942019496313,
+        "peakError": 1.4901161193847656e-7,
+        "referencePeak": 0.4054184854030609
+      }
+    },
+    {
+      "file": "seek-vorbis-44100-1-q0.ogg",
+      "kind": "encoded",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 5,
+      "discarded_frames": 96401,
+      "maximum_discarded": 13352,
+      "maximum_probes": 0,
+      "index_points": 21,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 340584,
+        "snrDb": 140.0336586752167,
+        "peakError": 1.4901161193847656e-7,
+        "referencePeak": 0.5248945951461792
+      }
+    },
+    {
+      "file": "seek-vorbis-44100-1-q8.ogg",
+      "kind": "encoded",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 5,
+      "discarded_frames": 96401,
+      "maximum_discarded": 13352,
+      "maximum_probes": 0,
+      "index_points": 21,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 340584,
+        "snrDb": 139.66624144435647,
+        "peakError": 1.7881393432617188e-7,
+        "referencePeak": 0.508543848991394
+      }
+    },
+    {
+      "file": "seek-vorbis-44100-2-q0.ogg",
+      "kind": "encoded",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 5,
+      "discarded_frames": 96401,
+      "maximum_discarded": 13352,
+      "maximum_probes": 0,
+      "index_points": 21,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 340584,
+        "snrDb": 140.33947130959726,
+        "peakError": 1.1920928955078125e-7,
+        "referencePeak": 0.4207784831523895
+      }
+    },
+    {
+      "file": "seek-vorbis-44100-2-q8.ogg",
+      "kind": "encoded",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 5,
+      "discarded_frames": 96401,
+      "maximum_discarded": 13352,
+      "maximum_probes": 0,
+      "index_points": 21,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 340584,
+        "snrDb": 139.7907488077562,
+        "peakError": 1.4901161193847656e-7,
+        "referencePeak": 0.40725964307785034
+      }
+    },
+    {
+      "file": "seek-vorbis-48000-1-q0.ogg",
+      "kind": "encoded",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 5,
+      "discarded_frames": 84485,
+      "maximum_discarded": 10704,
+      "maximum_probes": 0,
+      "index_points": 23,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 370704,
+        "snrDb": 139.99648040749545,
+        "peakError": 1.7881393432617188e-7,
+        "referencePeak": 0.5192423462867737
+      }
+    },
+    {
+      "file": "seek-vorbis-48000-1-q8.ogg",
+      "kind": "encoded",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 5,
+      "discarded_frames": 84485,
+      "maximum_discarded": 10704,
+      "maximum_probes": 0,
+      "index_points": 23,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 370704,
+        "snrDb": 139.8425866158455,
+        "peakError": 1.7881393432617188e-7,
+        "referencePeak": 0.509778618812561
+      }
+    },
+    {
+      "file": "seek-vorbis-48000-2-q0.ogg",
+      "kind": "encoded",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 5,
+      "discarded_frames": 84485,
+      "maximum_discarded": 10704,
+      "maximum_probes": 0,
+      "index_points": 23,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 370704,
+        "snrDb": 140.52643191636892,
+        "peakError": 1.4901161193847656e-7,
+        "referencePeak": 0.42131999135017395
+      }
+    },
+    {
+      "file": "seek-vorbis-48000-2-q8.ogg",
+      "kind": "encoded",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 5,
+      "discarded_frames": 84485,
+      "maximum_discarded": 10704,
+      "maximum_probes": 0,
+      "index_points": 23,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 370704,
+        "snrDb": 140.11855877664965,
+        "peakError": 1.4901161193847656e-7,
+        "referencePeak": 0.4074716567993164
+      }
+    },
+    {
+      "file": "seek-vorbis-96000-1-q0.ogg",
+      "kind": "encoded",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 5,
+      "discarded_frames": 65101,
+      "maximum_discarded": 10721,
+      "maximum_probes": 0,
+      "index_points": 46,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 741408,
+        "snrDb": 140.3526578362474,
+        "peakError": 1.7881393432617188e-7,
+        "referencePeak": 0.527610182762146
+      }
+    },
+    {
+      "file": "seek-vorbis-96000-1-q8.ogg",
+      "kind": "encoded",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 5,
+      "discarded_frames": 65101,
+      "maximum_discarded": 10721,
+      "maximum_probes": 0,
+      "index_points": 46,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 741408,
+        "snrDb": 140.03757257548108,
+        "peakError": 1.4901161193847656e-7,
+        "referencePeak": 0.5124002695083618
+      }
+    },
+    {
+      "file": "seek-vorbis-96000-2-q0.ogg",
+      "kind": "encoded",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 5,
+      "discarded_frames": 65101,
+      "maximum_discarded": 10721,
+      "maximum_probes": 0,
+      "index_points": 46,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 741408,
+        "snrDb": 140.34569687136587,
+        "peakError": 1.4901161193847656e-7,
+        "referencePeak": 0.433843731880188
+      }
+    },
+    {
+      "file": "seek-vorbis-96000-2-q8.ogg",
+      "kind": "encoded",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 5,
+      "discarded_frames": 65101,
+      "maximum_discarded": 10721,
+      "maximum_probes": 0,
+      "index_points": 46,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 741408,
+        "snrDb": 140.22413838050795,
+        "peakError": 1.4901161193847656e-7,
+        "referencePeak": 0.40957191586494446
+      }
+    },
+    {
+      "file": "seek-vorbis-192000-1-q0.ogg",
+      "kind": "encoded",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 5,
+      "discarded_frames": 75485,
+      "maximum_discarded": 9216,
+      "maximum_probes": 0,
+      "index_points": 91,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 1482816,
+        "snrDb": 140.60985463825685,
+        "peakError": 1.7881393432617188e-7,
+        "referencePeak": 0.5562271475791931
+      }
+    },
+    {
+      "file": "seek-vorbis-192000-1-q8.ogg",
+      "kind": "encoded",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 5,
+      "discarded_frames": 75485,
+      "maximum_discarded": 9216,
+      "maximum_probes": 0,
+      "index_points": 91,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 1482816,
+        "snrDb": 140.17935703128745,
+        "peakError": 1.7881393432617188e-7,
+        "referencePeak": 0.5118545889854431
+      }
+    },
+    {
+      "file": "seek-vorbis-192000-2-q0.ogg",
+      "kind": "encoded",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 5,
+      "discarded_frames": 75485,
+      "maximum_discarded": 9216,
+      "maximum_probes": 0,
+      "index_points": 91,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 1482816,
+        "snrDb": 140.90001837949092,
+        "peakError": 1.4901161193847656e-7,
+        "referencePeak": 0.43416687846183777
+      }
+    },
+    {
+      "file": "seek-vorbis-192000-2-q8.ogg",
+      "kind": "encoded",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 5,
+      "discarded_frames": 75485,
+      "maximum_discarded": 9216,
+      "maximum_probes": 0,
+      "index_points": 91,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 1482816,
+        "snrDb": 140.42110140254343,
+        "peakError": 1.4901161193847656e-7,
+        "referencePeak": 0.4078962206840515
+      }
+    },
+    {
+      "file": "seek-vorbis-8000-noise.ogg",
+      "kind": "encoded",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 10,
+      "discarded_frames": 18761,
+      "maximum_discarded": 4095,
+      "maximum_probes": 0,
+      "index_points": 35,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 141784,
+        "snrDb": 138.8104089582574,
+        "peakError": 1.4901161193847656e-7,
+        "referencePeak": 0.5743038654327393
+      }
+    },
+    {
+      "file": "seek-vorbis-8000-transients.ogg",
+      "kind": "encoded",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 10,
+      "discarded_frames": 18761,
+      "maximum_discarded": 4095,
+      "maximum_probes": 0,
+      "index_points": 35,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 141784,
+        "snrDb": 139.37470288445564,
+        "peakError": 1.7881393432617188e-7,
+        "referencePeak": 0.6234356760978699
+      }
+    },
+    {
+      "file": "seek-vorbis-48000-noise.ogg",
+      "kind": "encoded",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 5,
+      "discarded_frames": 38917,
+      "maximum_discarded": 9216,
+      "maximum_probes": 0,
+      "index_points": 53,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 850704,
+        "snrDb": 138.2554853241515,
+        "peakError": 1.7881393432617188e-7,
+        "referencePeak": 0.796812891960144
+      }
+    },
+    {
+      "file": "seek-vorbis-48000-transients.ogg",
+      "kind": "encoded",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 7,
+      "discarded_frames": 46853,
+      "maximum_discarded": 6288,
+      "maximum_probes": 0,
+      "index_points": 97,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 850704,
+        "snrDb": 140.10627057971396,
+        "peakError": 1.7881393432617188e-7,
+        "referencePeak": 0.6780507564544678
+      }
+    },
+    {
+      "file": "seek-vorbis-192000-noise.ogg",
+      "kind": "encoded",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 5,
+      "discarded_frames": 52573,
+      "maximum_discarded": 15217,
+      "maximum_probes": 0,
+      "index_points": 209,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 3402816,
+        "snrDb": 138.6573390639637,
+        "peakError": 8.940696716308594e-8,
+        "referencePeak": 0.47992223501205444
+      }
+    },
+    {
+      "file": "seek-vorbis-192000-transients.ogg",
+      "kind": "encoded",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 5,
+      "discarded_frames": 81821,
+      "maximum_discarded": 10112,
+      "maximum_probes": 0,
+      "index_points": 281,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 3402816,
+        "snrDb": 140.49898833760994,
+        "peakError": 2.384185791015625e-7,
+        "referencePeak": 0.737790584564209
+      }
+    },
+    {
+      "file": "seek-vorbis-continued-1.ogg",
+      "kind": "continued audio / zero terminal laces",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 7,
+      "discarded_frames": 46853,
+      "maximum_discarded": 6288,
+      "maximum_probes": 0,
+      "index_points": 97,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 850704,
+        "snrDb": 140.10627057971396,
+        "peakError": 1.7881393432617188e-7,
+        "referencePeak": 0.6780507564544678
+      }
+    },
+    {
+      "file": "seek-vorbis-continued-3.ogg",
+      "kind": "continued audio / zero terminal laces",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 7,
+      "discarded_frames": 46853,
+      "maximum_discarded": 6288,
+      "maximum_probes": 0,
+      "index_points": 97,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 850704,
+        "snrDb": 140.10627057971396,
+        "peakError": 1.7881393432617188e-7,
+        "referencePeak": 0.6780507564544678
+      }
+    },
+    {
+      "file": "seek-vorbis-continued-7.ogg",
+      "kind": "continued audio / zero terminal laces",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 7,
+      "discarded_frames": 46853,
+      "maximum_discarded": 6288,
+      "maximum_probes": 0,
+      "index_points": 97,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 850704,
+        "snrDb": 140.10627057971396,
+        "peakError": 1.7881393432617188e-7,
+        "referencePeak": 0.6780507564544678
+      }
+    },
+    {
+      "file": "seek-vorbis-continued-255.ogg",
+      "kind": "continued audio / zero terminal laces",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 7,
+      "discarded_frames": 46853,
+      "maximum_discarded": 6288,
+      "maximum_probes": 0,
+      "index_points": 97,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 850704,
+        "snrDb": 140.10627057971396,
+        "peakError": 1.7881393432617188e-7,
+        "referencePeak": 0.6780507564544678
+      }
+    },
+    {
+      "file": "seek-vorbis-origin--17.ogg",
+      "kind": "cropped/positive granule origin",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 5,
+      "discarded_frames": 84493,
+      "maximum_discarded": 10704,
+      "maximum_probes": 0,
+      "index_points": 23,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 370687,
+        "snrDb": 140.11854952874828,
+        "peakError": 1.4901161193847656e-7,
+        "referencePeak": 0.4074716567993164
+      }
+    },
+    {
+      "file": "seek-vorbis-origin--128.ogg",
+      "kind": "cropped/positive granule origin",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 5,
+      "discarded_frames": 84549,
+      "maximum_discarded": 10704,
+      "maximum_probes": 0,
+      "index_points": 23,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 370576,
+        "snrDb": 140.1185805532168,
+        "peakError": 1.4901161193847656e-7,
+        "referencePeak": 0.4074716567993164
+      }
+    },
+    {
+      "file": "seek-vorbis-origin-12345.ogg",
+      "kind": "cropped/positive granule origin",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 5,
+      "discarded_frames": 84485,
+      "maximum_discarded": 10704,
+      "maximum_probes": 0,
+      "index_points": 23,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 370704,
+        "snrDb": 140.11855877664965,
+        "peakError": 1.4901161193847656e-7,
+        "referencePeak": 0.4074716567993164
+      }
+    },
+    {
+      "file": "seek-vorbis-origin-48000.ogg",
+      "kind": "cropped/positive granule origin",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 5,
+      "discarded_frames": 84485,
+      "maximum_discarded": 10704,
+      "maximum_probes": 0,
+      "index_points": 23,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 370704,
+        "snrDb": 140.11855877664965,
+        "peakError": 1.4901161193847656e-7,
+        "referencePeak": 0.4074716567993164
+      }
+    },
+    {
+      "file": "seek-vorbis-first-long-0.ogg",
+      "kind": "first long-to-short prefix / granule origin",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 38949,
+      "maximum_discarded": 4432,
+      "maximum_probes": 0,
+      "index_points": 97,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 847952,
+        "snrDb": 140.1065564992622,
+        "peakError": 1.7881393432617188e-7,
+        "referencePeak": 0.6780507564544678
+      }
+    },
+    {
+      "file": "seek-vorbis-first-long--17.ogg",
+      "kind": "first long-to-short prefix / granule origin",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 39059,
+      "maximum_discarded": 4432,
+      "maximum_probes": 0,
+      "index_points": 97,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 847935,
+        "snrDb": 140.10647509951934,
+        "peakError": 1.7881393432617188e-7,
+        "referencePeak": 0.6780507564544678
+      }
+    },
+    {
+      "file": "seek-vorbis-first-long-23456.ogg",
+      "kind": "first long-to-short prefix / granule origin",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 38949,
+      "maximum_discarded": 4432,
+      "maximum_probes": 0,
+      "index_points": 97,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 847952,
+        "snrDb": 140.1065564992622,
+        "peakError": 1.7881393432617188e-7,
+        "referencePeak": 0.6780507564544678
+      }
+    },
+    {
+      "file": "ogg-large-comment.ogg",
+      "kind": "continued large comment",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 4,
+      "discarded_frames": 52269,
+      "maximum_discarded": 9216,
+      "maximum_probes": 0,
+      "index_points": 2,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 17760,
+        "snrDb": 140.5223571473901,
+        "peakError": 2.2351741790771484e-8,
+        "referencePeak": 0.09166018664836884
+      }
+    },
+    {
+      "file": "vorbis-vector-r0-c1-plain-s0-extended.ogg",
+      "kind": "residue/codebook structural vector",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 3774,
+      "maximum_discarded": 511,
+      "maximum_probes": 0,
+      "index_points": 13,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 6528,
+        "snrDb": 70.6994212031819,
+        "peakError": 0.00003099068999290466,
+        "referencePeak": 0.21099853515625
+      }
+    },
+    {
+      "file": "vorbis-vector-r0-c1-plain-s1-extended.ogg",
+      "kind": "residue/codebook structural vector",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 3774,
+      "maximum_discarded": 511,
+      "maximum_probes": 0,
+      "index_points": 13,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 6528,
+        "snrDb": 72.66296183671581,
+        "peakError": 0.00003695487976074219,
+        "referencePeak": 0.34722900390625
+      }
+    },
+    {
+      "file": "vorbis-vector-r0-c1-ordered-s0-extended.ogg",
+      "kind": "residue/codebook structural vector",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 3774,
+      "maximum_discarded": 511,
+      "maximum_probes": 0,
+      "index_points": 13,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 6528,
+        "snrDb": 70.6994212031819,
+        "peakError": 0.00003099068999290466,
+        "referencePeak": 0.21099853515625
+      }
+    },
+    {
+      "file": "vorbis-vector-r0-c1-ordered-s1-extended.ogg",
+      "kind": "residue/codebook structural vector",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 3774,
+      "maximum_discarded": 511,
+      "maximum_probes": 0,
+      "index_points": 13,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 6528,
+        "snrDb": 72.66296183671581,
+        "peakError": 0.00003695487976074219,
+        "referencePeak": 0.34722900390625
+      }
+    },
+    {
+      "file": "vorbis-vector-r0-c1-sparse-s0-extended.ogg",
+      "kind": "residue/codebook structural vector",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 3774,
+      "maximum_discarded": 511,
+      "maximum_probes": 0,
+      "index_points": 13,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 6528,
+        "snrDb": 70.6994212031819,
+        "peakError": 0.00003099068999290466,
+        "referencePeak": 0.21099853515625
+      }
+    },
+    {
+      "file": "vorbis-vector-r0-c1-sparse-s1-extended.ogg",
+      "kind": "residue/codebook structural vector",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 3774,
+      "maximum_discarded": 511,
+      "maximum_probes": 0,
+      "index_points": 13,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 6528,
+        "snrDb": 72.66296183671581,
+        "peakError": 0.00003695487976074219,
+        "referencePeak": 0.34722900390625
+      }
+    },
+    {
+      "file": "vorbis-vector-r0-c2-plain-s0-extended.ogg",
+      "kind": "residue/codebook structural vector",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 3774,
+      "maximum_discarded": 511,
+      "maximum_probes": 0,
+      "index_points": 13,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 6528,
+        "snrDb": 72.39088276977651,
+        "peakError": 0.00003826618194580078,
+        "referencePeak": 0.333831787109375
+      }
+    },
+    {
+      "file": "vorbis-vector-r0-c2-plain-s1-extended.ogg",
+      "kind": "residue/codebook structural vector",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 3774,
+      "maximum_discarded": 511,
+      "maximum_probes": 0,
+      "index_points": 13,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 6528,
+        "snrDb": 74.03368158749754,
+        "peakError": 0.000038951635360717773,
+        "referencePeak": 0.396575927734375
+      }
+    },
+    {
+      "file": "vorbis-vector-r0-c2-ordered-s0-extended.ogg",
+      "kind": "residue/codebook structural vector",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 3774,
+      "maximum_discarded": 511,
+      "maximum_probes": 0,
+      "index_points": 13,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 6528,
+        "snrDb": 72.39088276977651,
+        "peakError": 0.00003826618194580078,
+        "referencePeak": 0.333831787109375
+      }
+    },
+    {
+      "file": "vorbis-vector-r0-c2-ordered-s1-extended.ogg",
+      "kind": "residue/codebook structural vector",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 3774,
+      "maximum_discarded": 511,
+      "maximum_probes": 0,
+      "index_points": 13,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 6528,
+        "snrDb": 74.03368158749754,
+        "peakError": 0.000038951635360717773,
+        "referencePeak": 0.396575927734375
+      }
+    },
+    {
+      "file": "vorbis-vector-r0-c2-sparse-s0-extended.ogg",
+      "kind": "residue/codebook structural vector",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 3774,
+      "maximum_discarded": 511,
+      "maximum_probes": 0,
+      "index_points": 13,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 6528,
+        "snrDb": 72.39088276977651,
+        "peakError": 0.00003826618194580078,
+        "referencePeak": 0.333831787109375
+      }
+    },
+    {
+      "file": "vorbis-vector-r0-c2-sparse-s1-extended.ogg",
+      "kind": "residue/codebook structural vector",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 3774,
+      "maximum_discarded": 511,
+      "maximum_probes": 0,
+      "index_points": 13,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 6528,
+        "snrDb": 74.03368158749754,
+        "peakError": 0.000038951635360717773,
+        "referencePeak": 0.396575927734375
+      }
+    },
+    {
+      "file": "vorbis-vector-r1-c1-plain-s0-extended.ogg",
+      "kind": "residue/codebook structural vector",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 3774,
+      "maximum_discarded": 511,
+      "maximum_probes": 0,
+      "index_points": 13,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 6528,
+        "snrDb": 70.18785058573711,
+        "peakError": 0.000035002827644348145,
+        "referencePeak": 0.185638427734375
+      }
+    },
+    {
+      "file": "vorbis-vector-r1-c1-plain-s1-extended.ogg",
+      "kind": "residue/codebook structural vector",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 3774,
+      "maximum_discarded": 511,
+      "maximum_probes": 0,
+      "index_points": 13,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 6528,
+        "snrDb": 73.35559758737526,
+        "peakError": 0.00003403425216674805,
+        "referencePeak": 0.2979736328125
+      }
+    },
+    {
+      "file": "vorbis-vector-r1-c1-ordered-s0-extended.ogg",
+      "kind": "residue/codebook structural vector",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 3774,
+      "maximum_discarded": 511,
+      "maximum_probes": 0,
+      "index_points": 13,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 6528,
+        "snrDb": 70.18785058573711,
+        "peakError": 0.000035002827644348145,
+        "referencePeak": 0.185638427734375
+      }
+    },
+    {
+      "file": "vorbis-vector-r1-c1-ordered-s1-extended.ogg",
+      "kind": "residue/codebook structural vector",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 3774,
+      "maximum_discarded": 511,
+      "maximum_probes": 0,
+      "index_points": 13,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 6528,
+        "snrDb": 73.35559758737526,
+        "peakError": 0.00003403425216674805,
+        "referencePeak": 0.2979736328125
+      }
+    },
+    {
+      "file": "vorbis-vector-r1-c1-sparse-s0-extended.ogg",
+      "kind": "residue/codebook structural vector",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 3774,
+      "maximum_discarded": 511,
+      "maximum_probes": 0,
+      "index_points": 13,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 6528,
+        "snrDb": 70.18785058573711,
+        "peakError": 0.000035002827644348145,
+        "referencePeak": 0.185638427734375
+      }
+    },
+    {
+      "file": "vorbis-vector-r1-c1-sparse-s1-extended.ogg",
+      "kind": "residue/codebook structural vector",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 3774,
+      "maximum_discarded": 511,
+      "maximum_probes": 0,
+      "index_points": 13,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 6528,
+        "snrDb": 73.35559758737526,
+        "peakError": 0.00003403425216674805,
+        "referencePeak": 0.2979736328125
+      }
+    },
+    {
+      "file": "vorbis-vector-r1-c2-plain-s0-extended.ogg",
+      "kind": "residue/codebook structural vector",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 3774,
+      "maximum_discarded": 511,
+      "maximum_probes": 0,
+      "index_points": 13,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 6528,
+        "snrDb": 73.21926218410414,
+        "peakError": 0.00003898143768310547,
+        "referencePeak": 0.527008056640625
+      }
+    },
+    {
+      "file": "vorbis-vector-r1-c2-plain-s1-extended.ogg",
+      "kind": "residue/codebook structural vector",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 3774,
+      "maximum_discarded": 511,
+      "maximum_probes": 0,
+      "index_points": 13,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 6528,
+        "snrDb": 73.8134866536207,
+        "peakError": 0.00004953145980834961,
+        "referencePeak": 0.652008056640625
+      }
+    },
+    {
+      "file": "vorbis-vector-r1-c2-ordered-s0-extended.ogg",
+      "kind": "residue/codebook structural vector",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 3774,
+      "maximum_discarded": 511,
+      "maximum_probes": 0,
+      "index_points": 13,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 6528,
+        "snrDb": 73.21926218410414,
+        "peakError": 0.00003898143768310547,
+        "referencePeak": 0.527008056640625
+      }
+    },
+    {
+      "file": "vorbis-vector-r1-c2-ordered-s1-extended.ogg",
+      "kind": "residue/codebook structural vector",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 3774,
+      "maximum_discarded": 511,
+      "maximum_probes": 0,
+      "index_points": 13,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 6528,
+        "snrDb": 73.8134866536207,
+        "peakError": 0.00004953145980834961,
+        "referencePeak": 0.652008056640625
+      }
+    },
+    {
+      "file": "vorbis-vector-r1-c2-sparse-s0-extended.ogg",
+      "kind": "residue/codebook structural vector",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 3774,
+      "maximum_discarded": 511,
+      "maximum_probes": 0,
+      "index_points": 13,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 6528,
+        "snrDb": 73.21926218410414,
+        "peakError": 0.00003898143768310547,
+        "referencePeak": 0.527008056640625
+      }
+    },
+    {
+      "file": "vorbis-vector-r1-c2-sparse-s1-extended.ogg",
+      "kind": "residue/codebook structural vector",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 3774,
+      "maximum_discarded": 511,
+      "maximum_probes": 0,
+      "index_points": 13,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 6528,
+        "snrDb": 73.8134866536207,
+        "peakError": 0.00004953145980834961,
+        "referencePeak": 0.652008056640625
+      }
+    },
+    {
+      "file": "vorbis-vector-r2-c1-plain-s0-extended.ogg",
+      "kind": "residue/codebook structural vector",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 3774,
+      "maximum_discarded": 511,
+      "maximum_probes": 0,
+      "index_points": 13,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 6528,
+        "snrDb": 70.18785058573711,
+        "peakError": 0.000035002827644348145,
+        "referencePeak": 0.185638427734375
+      }
+    },
+    {
+      "file": "vorbis-vector-r2-c1-plain-s1-extended.ogg",
+      "kind": "residue/codebook structural vector",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 3774,
+      "maximum_discarded": 511,
+      "maximum_probes": 0,
+      "index_points": 13,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 6528,
+        "snrDb": 73.35559758737526,
+        "peakError": 0.00003403425216674805,
+        "referencePeak": 0.2979736328125
+      }
+    },
+    {
+      "file": "vorbis-vector-r2-c1-ordered-s0-extended.ogg",
+      "kind": "residue/codebook structural vector",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 3774,
+      "maximum_discarded": 511,
+      "maximum_probes": 0,
+      "index_points": 13,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 6528,
+        "snrDb": 70.18785058573711,
+        "peakError": 0.000035002827644348145,
+        "referencePeak": 0.185638427734375
+      }
+    },
+    {
+      "file": "vorbis-vector-r2-c1-ordered-s1-extended.ogg",
+      "kind": "residue/codebook structural vector",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 3774,
+      "maximum_discarded": 511,
+      "maximum_probes": 0,
+      "index_points": 13,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 6528,
+        "snrDb": 73.35559758737526,
+        "peakError": 0.00003403425216674805,
+        "referencePeak": 0.2979736328125
+      }
+    },
+    {
+      "file": "vorbis-vector-r2-c1-sparse-s0-extended.ogg",
+      "kind": "residue/codebook structural vector",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 3774,
+      "maximum_discarded": 511,
+      "maximum_probes": 0,
+      "index_points": 13,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 6528,
+        "snrDb": 70.18785058573711,
+        "peakError": 0.000035002827644348145,
+        "referencePeak": 0.185638427734375
+      }
+    },
+    {
+      "file": "vorbis-vector-r2-c1-sparse-s1-extended.ogg",
+      "kind": "residue/codebook structural vector",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 3774,
+      "maximum_discarded": 511,
+      "maximum_probes": 0,
+      "index_points": 13,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 6528,
+        "snrDb": 73.35559758737526,
+        "peakError": 0.00003403425216674805,
+        "referencePeak": 0.2979736328125
+      }
+    },
+    {
+      "file": "vorbis-vector-r2-c2-plain-s0-extended.ogg",
+      "kind": "residue/codebook structural vector",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 3774,
+      "maximum_discarded": 511,
+      "maximum_probes": 0,
+      "index_points": 13,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 6528,
+        "snrDb": 70.80500803144844,
+        "peakError": 0.00003261864185333252,
+        "referencePeak": 0.2906494140625
+      }
+    },
+    {
+      "file": "vorbis-vector-r2-c2-plain-s1-extended.ogg",
+      "kind": "residue/codebook structural vector",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 3774,
+      "maximum_discarded": 511,
+      "maximum_probes": 0,
+      "index_points": 13,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 6528,
+        "snrDb": 72.76424102532916,
+        "peakError": 0.000039964914321899414,
+        "referencePeak": 0.4532470703125
+      }
+    },
+    {
+      "file": "vorbis-vector-r2-c2-ordered-s0-extended.ogg",
+      "kind": "residue/codebook structural vector",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 3774,
+      "maximum_discarded": 511,
+      "maximum_probes": 0,
+      "index_points": 13,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 6528,
+        "snrDb": 70.80500803144844,
+        "peakError": 0.00003261864185333252,
+        "referencePeak": 0.2906494140625
+      }
+    },
+    {
+      "file": "vorbis-vector-r2-c2-ordered-s1-extended.ogg",
+      "kind": "residue/codebook structural vector",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 3774,
+      "maximum_discarded": 511,
+      "maximum_probes": 0,
+      "index_points": 13,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 6528,
+        "snrDb": 72.76424102532916,
+        "peakError": 0.000039964914321899414,
+        "referencePeak": 0.4532470703125
+      }
+    },
+    {
+      "file": "vorbis-vector-r2-c2-sparse-s0-extended.ogg",
+      "kind": "residue/codebook structural vector",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 3774,
+      "maximum_discarded": 511,
+      "maximum_probes": 0,
+      "index_points": 13,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 6528,
+        "snrDb": 70.80500803144844,
+        "peakError": 0.00003261864185333252,
+        "referencePeak": 0.2906494140625
+      }
+    },
+    {
+      "file": "vorbis-vector-r2-c2-sparse-s1-extended.ogg",
+      "kind": "residue/codebook structural vector",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 3774,
+      "maximum_discarded": 511,
+      "maximum_probes": 0,
+      "index_points": 13,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 16,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 6528,
+        "snrDb": 72.76424102532916,
+        "peakError": 0.000039964914321899414,
+        "referencePeak": 0.4532470703125
+      }
+    },
+    {
+      "file": "seek-vorbis-index-capacity.ogg",
+      "kind": "adaptive index compaction",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 7421,
+      "maximum_discarded": 2047,
+      "maximum_probes": 0,
+      "index_points": 1025,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 64,
+      "maximum_preroll": 1,
+      "continuous_reference": {
+        "frames": 2097152,
+        "snrDb": 72.75965369161821,
+        "peakError": 0.000039964914321899414,
+        "referencePeak": 0.4532470703125
+      }
+    }
+  ],
+  "cancelled_seeks": 1,
+  "cancelled_opens": 1,
+  "rejected_timestamps": 3
+}
