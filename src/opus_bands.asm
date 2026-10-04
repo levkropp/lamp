@@ -1,3 +1,4 @@
+; RFC8251 updates: Copyright (c) 2017 IETF Trust, Jean-Marc Valin, Koen Vos.
 ; Handwritten normal-mode CELT spectral frame orchestration.
 ; Normative BSD RFC6716 quant_all_bands, see THIRD_PARTY_NOTICES.
 ; Copyright (c) 2007-2012 IETF Trust, CSIRO, Xiph.Org Foundation.
@@ -272,7 +273,12 @@ oa_band_budget_ready:
     mov eax,[rsp+AA_POS]
     sub eax,[rsp+AA_N]
     cmp eax,ecx
-    jl oa_lowband_selected
+    jge oa_lowband_candidate
+    mov eax,[rbx+OA_START]
+    inc eax
+    cmp r12d,eax
+    jne oa_lowband_selected
+oa_lowband_candidate:
     cmp dword ptr [rsp+AA_UPDATE],0
     jne oa_lowband_update
     cmp dword ptr [rsp+AA_LOW_OFF],0
@@ -280,6 +286,41 @@ oa_band_budget_ready:
 oa_lowband_update:
     mov [rsp+AA_LOW_OFF],r12d
 oa_lowband_selected:
+    ; RFC8251: duplicate the tail of the first hybrid band for folding into
+    ; the wider second band. CELT-only bands have equal widths and copy zero.
+    mov ecx,[rbx+OA_START]
+    lea eax,[rcx+1]
+    cmp r12d,eax
+    jne oa_fold_duplicate_done
+    lea rdx,oa_ebands
+    movzx r8d,word ptr [rdx+rcx*2]       ;offset / M
+    movzx r9d,word ptr [rdx+rcx*2+2]
+    movzx r10d,word ptr [rdx+rcx*2+4]
+    sub r10d,r9d                      ;n2 / M
+    sub r9d,r8d                       ;n1 / M
+    imul r8d,r13d
+    imul r9d,r13d
+    imul r10d,r13d
+    sub r10d,r9d                      ;copy count n2-n1
+    lea ecx,[r8+r9]                    ;destination offset+n1
+    mov eax,ecx
+    sub eax,r10d                      ;source offset+2*n1-n2
+    mov rdx,[rbx+OA_NORM]
+oa_fold_duplicate:
+    test r10d,r10d
+    jle oa_fold_duplicate_done
+    mov r8d,[rdx+rax*4]
+    mov [rdx+rcx*4],r8d
+    cmp r14d,2
+    jne oa_fold_duplicate_next
+    mov r8d,[r15+rax*4]
+    mov [r15+rcx*4],r8d
+oa_fold_duplicate_next:
+    inc eax
+    inc ecx
+    dec r10d
+    jmp oa_fold_duplicate
+oa_fold_duplicate_done:
     mov rdx,[rbx+OA_TF]
     mov eax,[rdx+r12*4]
     mov [rsp+32+OB_TF],eax
@@ -321,10 +362,13 @@ oa_fold_start:
     add r8d,[rsp+AA_N]
 oa_fold_end:
     inc r9d
+    cmp r9d,r12d
+    jge oa_fold_end_ready
     movzx eax,word ptr [rdx+r9*2]
     imul eax,r13d
     cmp eax,r8d
     jl oa_fold_end
+oa_fold_end_ready:
     mov rdx,[rbx+OA_MASKS]
     xor r8d,r8d
     xor r10d,r10d

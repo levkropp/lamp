@@ -19,4 +19,4 @@ if($LASTEXITCODE) {throw 'SILK pulse test oracle failed to build'}
 $result=& (Join-Path $root 'bin\opus-silk-pulses-oracle.exe')
 if($LASTEXITCODE) {throw "Assembly SILK pulse mismatch $result"}
 Write-Output $result
-[pscustomobject]@{result='passed';scope='SILK shell trees, excitation pulses, LSB and signs, entropy state; not audio synthesis';stats="$result"} | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $root 'bin\opus-silk-pulses-verification.json') -Encoding utf8
+[pscustomobject]@{result='passed';reference='RFC6716 + RFC8251 (archive86a927223e73d2476646a1b933fcd3fffb6ecc8c,patch029e3aa88fc342c91e67a21e7bfbc9458661cd5f)';scope='SILK shell trees, excitation pulses, LSB and signs, entropy state; not audio synthesis';stats="$result"} | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $root 'bin\opus-silk-pulses-verification.json') -Encoding utf8

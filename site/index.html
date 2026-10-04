@@ -46,14 +46,14 @@
     <section id="formats" class="shell formats">
       <div class="section-label"><h2>What plays today.</h2><span>AUDIO FIRST</span></div>
       <div class="format-list"><span>WAV <b>ready</b></span><span>FLAC <b>ready</b></span><span>MP3 <b>ready</b></span><span>Ogg / Vorbis <b>ready</b></span><span class="pending">Opus <b>source preview</b></span></div>
-      <p>Mono/stereo within the documented codec profiles. Source builds play Ogg/Opus family 0; updated-reference and official conformance checks remain. Video, subtitles and streaming are not yet available. <a href="https://github.com/levkropp/lamp/blob/main/docs/technical.md">Read exact coverage and limits ↗</a></p>
+      <p>Mono/stereo within the documented codec profiles. Source builds play Ogg/Opus family 0 with RFC 8251 updates; all 120 official vector checks pass. Video, subtitles and streaming are not yet available. <a href="https://github.com/levkropp/lamp/blob/main/docs/technical.md">Read exact coverage and limits ↗</a></p>
     </section>
     <section id="roadmap" class="shell roadmap">
       <div class="section-label"><h2>Audio now. More media ahead.</h2><span>THE ROADMAP</span></div>
       <p class="roadmap-intro">The goal is to support everything relevant that mpv supports: formats, playback, rendering, subtitles, streaming and automation, while keeping the runtime small and measuring every performance claim.</p>
       <ol>
-        <li><span>01</span><div><h3>Finish Opus</h3><p>Ogg playback is connected; finish updated decoder behavior and official conformance.</p></div><em>next</em></li>
-        <li><span>02</span><div><h3>Everyday audio</h3><p>Fast seeking, playlists, multichannel and device changes.</p></div></li>
+        <li><span>01</span><div><h3>Opus foundation</h3><p>Ogg family 0 playback and all 120 official vector checks pass.</p></div><em>done</em></li>
+        <li><span>02</span><div><h3>Everyday audio</h3><p>Fast seeking, playlists, multichannel and device changes.</p></div><em>next</em></li>
         <li><span>03</span><div><h3>More formats</h3><p>AAC, ALAC and the broader audio/container ecosystem.</p></div></li>
         <li><span>04</span><div><h3>Video &amp; sync</h3><p>Modern video formats, hardware decode and efficient presentation.</p></div></li>
         <li><span>05</span><div><h3>Subtitles &amp; streaming</h3><p>Timed text, styled subtitles, HTTP, HLS and DASH.</p></div></li>

@@ -1,6 +1,7 @@
 ﻿{
     "result":  "passed",
-    "scope":  "Complete SILK gain/NLSF/LPC/pitch/LTP parameter orchestration, previous gain/NLSF history, first-frame interpolation reset, interpolation and bandwidth expansion after loss; atomic public and invalid-NLSF failures; synthesis, resampling and complete audio remain pending",
+    "reference":  "RFC6716 + RFC8251 (archive86a927223e73d2476646a1b933fcd3fffb6ecc8c,patch029e3aa88fc342c91e67a21e7bfbc9458661cd5f)",
+    "scope":  "Complete SILK gain/NLSF/LPC/pitch/LTP parameter orchestration, previous gain/NLSF history, first-frame interpolation reset, interpolation and bandwidth expansion after loss; atomic public and invalid-NLSF failures",
     "comparison":  "exact normative decoder controls, SideInfoIndices and parameter history",
-    "stats":  "SILK state: 129360 exact parameter/history frames (32768 connected side-information, 46164 voiced, 72041 interpolated, 22006 reset, 32335 after loss), 1712 atomic invalid-NLSF rejections, 7488340 integer coefficients, 31 guards"
+    "stats":  "SILK state: 131072 exact parameter/history frames (32768 connected side-information, 46740 voiced, 73211 interpolated, 22238 reset, 32768 after loss), 0 atomic invalid-NLSF rejections, 7602128 integer coefficients, 31 guards"
 }

@@ -1,3 +1,4 @@
+; RFC8251 updates: Copyright (c) 2017 IETF Trust, Jean-Marc Valin, Koen Vos.
 ; Handwritten SILK predictive NLSF residual reconstruction and stabilization.
 ; RFC6716 NLSF_decode.c,NLSF_stabilize.c,NLSF_VQ_weights_laroia.c,Inlines.h.
 ; Copyright(c)2006-2012 IETF Trust and Skype Limited. BSD conditions in
@@ -183,6 +184,12 @@ ns_forward_space:
     movsx eax,word ptr [rsi+rcx*2-2]
     movzx edx,word ptr [rdi+rcx*2]
     add edx,eax
+    mov eax,32767             ;RFC8251 saturating signed-16 spacing sum
+    cmp edx,eax
+    cmovg edx,eax
+    mov eax,-32768
+    cmp edx,eax
+    cmovl edx,eax
     movsx eax,word ptr [rsi+rcx*2]
     cmp eax,edx
     cmovl eax,edx
@@ -209,8 +216,7 @@ ns_backward_space:
     dec ecx
     jns ns_backward_space
 ns_good:
-    ; The 2012 reference fallback can wrap int16 on extreme vectors. Preserve
-    ; its arithmetic, then refuse invalid spacing/range before LPC conversion.
+    ; Refuse invalid spacing/range before LPC conversion.
     xor ecx,ecx
     xor edx,edx
 ns_output_guard:

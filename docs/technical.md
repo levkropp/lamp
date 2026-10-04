@@ -4,7 +4,7 @@ A Windows x86-64 audio player with handwritten assembly WAV, FLAC, MP3, Ogg/Vorb
 
 The dark canvas, compact playback controls and automatic hiding are inspired by mpv. The custom pixel buffer and Win32 presentation follow Rhun's documented assembly UI model. No Rhun source, fonts, icons, or other assets were copied.
 
-**Opus remains a development feature.** Source builds connect all four packet framing codes to SILK/hybrid/CELT PCM and play single-stream Ogg mapping family 0 with gain, pre-skip and end trimming. The implementation matches the original RFC 6716 decoder. RFC 8251 updates and official conformance remain pending: 42 modern-libopus tonal files match within 0.00004, but a low-bitrate noise case has 0.21057 maximum PCM difference. That file matches the original RFC decoder exactly; updated hybrid folding is required before claiming modern-reference equivalence. [Opus stage documentation](opus.md) records interfaces, bounds and results.
+**Opus remains a development feature.** Source builds connect all four packet framing codes to SILK/hybrid/CELT PCM and play single-stream Ogg mapping family 0 with gain, pre-skip and end trimming. The implementation includes RFC 8251 decoder updates. All 51 independent modern-libopus comparisons pass at tolerance 0.00004, with observed maximum error 0.00002277. Updated hybrid folding resolves the earlier low-bitrate noise mismatch. All 120 official vector/rate/channel checks pass. [Opus stage documentation](opus.md) records interfaces, bounds and results.
 
 All runtime application and decoder code is MASM x64 assembly. No C/C++/Rust codec, codec DLL, CRT, FFmpeg process, or media-player engine is linked or invoked. Reference C source is used only for algorithms, permitted coefficient/probability data, and test oracles.
 
@@ -50,7 +50,7 @@ Seeking restarts the decoder on a worker and discards PCM from the beginning to 
 | MP3 Layer III | MPEG-1/2/2.5, all nine rates 8–48 kHz, mono/stereo, known bitrate CBR/ABR/VBR; reservoir, Huffman/linbits/count1, scalefactors, long/short/mixed blocks, MS/intensity stereo, hybrid/polyphase synthesis |
 | MP3 metadata | Leading ID3v2.2/2.3/2.4 and trailing ID3v1 skipped; Xing/Info frame counts and encoder delay/padding used for single-file trimming |
 | Ogg/Vorbis | Single Ogg v0 stream, CRC/sequence/continuation checks; mono/stereo 8–192 kHz, 64–8192 sample blocks; ordered/unordered/sparse codebooks, lookup 0/1/2, floor 1, residue 0/1/2, mapping 0, coupling/submaps, short/long overlap and final granule trimming |
-| Ogg/Opus | Development: single Ogg v0 stream, mapping family 0, mono/stereo SILK/hybrid/CELT, 48 kHz output, signed header gain, pre-skip/end trimming and cropped initial granule offsets; original RFC behavior, updates/conformance pending |
+| Ogg/Opus | Development: single Ogg v0 stream, mapping family 0, mono/stereo SILK/hybrid/CELT, RFC 8251 updates, 48 kHz output, signed header gain, pre-skip/end trimming and cropped initial granule offsets; all 120 official vector checks pass |
 
 WAV ADPCM/RF64/RIFX, FLAC in Ogg, 32-bit FLAC, more than two channels, playlists, tag display, and device reconnection are unsupported. FLAC CRC8/CRC16 are checked; STREAMINFO MD5 and coded frame-number continuity are not checked. Tested FLAC depths are 16/24 bits, with less fixture coverage for the broader implementation range.
 
@@ -111,13 +111,13 @@ Synthesis-kernel suites add 21,632 anti-collapse and 21,632 denormalization fram
 
 The stateful CELT suite connects these stages into frame-to-float-PCM decoding and loss/recovery: 30,736 successful frames (4,090 concealed) and 115,916,510 PCM/history values with zero observed error (scale-adjusted tolerance 0.00004), 311 strict entropy rejections with sticky failure/reset, and 59 public guards. It includes real frames and generated/modified/truncated payloads, initial loss, pitch/noise concealment bursts and recovery, channel conversion, all frame sizes/output rates/bandwidths, high-band starts and primed entropy. Separate prediction/pitch suites add 3,072 autocorrelations/LPC solves, 49,152 stateful filter frames and 3,920 pitch searches with zero observed error.
 
-SILK suites add 98,304 side-information/state frames connected to excitation, 583,808 gain/state frames, 264,932 pitch/LTP frames, 45,056 decoded NLSF vectors and 12,288 stabilization vectors. All integer outputs, weights, residuals and entropy states match the normative reference exactly. NLSF tests retain 166 extreme vectors whose reference result violates range/spacing and verify rejection before LPC conversion.
+SILK suites add 98,304 side-information/state frames connected to excitation, 583,808 gain/state frames, 264,932 pitch/LTP frames, 45,056 decoded NLSF vectors and 12,288 stabilization vectors. All integer outputs, weights, residuals and entropy states match the updated normative reference exactly. RFC 8251 saturating stabilization now produces valid results for every tested NLSF vector, including the 166 previously invalid cases.
 
-Fixed-point SILK LPC tests cover 749,568 reciprocals, 16,640 bandwidth expansions, 104,391 inverse prediction gains and 71,623 NLSF-to-LPC vectors. The complete parameter stage checks 129,360 stateful frames (32,768 connected side-information requests), including 72,041 interpolated, 22,006 reset and 32,335 loss-recovery frames. All controls and history match exactly; 1,712 invalid NLSF results fail atomically.
+Fixed-point SILK LPC tests cover 749,568 reciprocals, 16,640 bandwidth expansions, 104,448 inverse prediction gains and 71,680 NLSF-to-LPC vectors. The complete parameter stage checks 131,072 stateful frames (32,768 connected side-information requests), including 73,211 interpolated, 22,238 reset and 32,768 loss-recovery frames. All controls and history match exactly; updated NLSF stabilization eliminates the earlier 1,712 invalid results.
 
 SILK prediction helpers add 520,924 exact divisions and 24,576 analysis/rewhitening filters. The inverse-NSQ core compares 20,480 source-rate mono PCM/history frames, including 8,192 connected index/pulse/parameter frames, 38,304 gain changes and 1,722 voiced-loss-to-unvoiced blends. All 3,686,080 int16 PCM samples and 16,793,600 history values match the reference exactly; extreme pulses/history exercise clipping and wrap arithmetic. These core sequences exclude full PLC/CNG and stereo framing.
 
-Decoder resampling adds 32,640 exact PCM/history frames across all fifteen internal/API-rate pairs, including 3,840 connected core frames. Raw up2/AR2, delay compensation, 1–60 ms blocks, full-range integer input/history and 53 guards are covered. The reference fractional upsampler copies an unused uninitialized FIR-state tail; the oracle excludes only that reference tail, and verifies deterministic preservation of LAMP's unused state with different scratch fills.
+Decoder resampling adds 32,640 exact PCM/history frames across all fifteen internal/API-rate pairs, including 3,840 connected core frames. Raw up2/AR2, delay compensation, 1–60 ms blocks, full-range integer input/history and 53 guards are covered. The RFC 8251 reference corrects the fractional upsampler's copy size; the oracle now compares the entire FIR state and verifies deterministic preservation of unused state with different scratch fills.
 
 Comfort noise adds 58,368 exact PCM/history frames, including 8,706 parameter updates, 39,936 lost frames, 14,592 rate resets and 9,216 connected core/CNG/48 kHz resampling frames. It checks the entire CNG state, 5,150,475 int16 PCM samples, unused history preservation, immutable core/parameter/control inputs and 27 guards. Lost-frame tests in that suite isolate CNG.
 
@@ -129,13 +129,15 @@ The complete source-rate channel frame suite calls unchanged `silk_decode_frame`
 
 Packet-header tests extract the unchanged VAD/LBRR/skip block from `dec_API.c` in the hash-verified archive. They compare 24,577 complete metadata/entropy/history headers, 11,517 skipped FEC frames (3,332 conditional, 3,784 stereo predictors, 1,443 mid-only flags), 21,504 connected mono header/frame PCM cases, one late/sticky/reset case and 38 guards. Inactive flags/history remain unchanged.
 
-The complete SILK API suite calls `silk_Decode` across all internal/output-rate pairs, channel layouts and packet durations. It compares entropy, every PCM sample, channel/stereo/packet state and all defined resampler history; it also runs assembly twice with different scratch fills and compares the entire resulting assembly state. Output-rate changes during stereo collapse explicitly reset the inactive right resampler in both implementations to avoid the RFC copying a new-rate sample count from old-rate output. All other cases use the unchanged reference API. Only unused uninitialized reference up-FIR history is excluded, as in the resampler suite.
+The complete SILK API suite calls `silk_Decode` across all internal/output-rate pairs, channel layouts and packet durations. It compares entropy, every PCM sample, channel/stereo/packet state and complete resampler history; it also runs assembly twice with different scratch fills and compares the entire resulting assembly state. Output-rate changes during stereo collapse explicitly reset the inactive right resampler in both implementations to avoid the RFC copying a new-rate sample count from old-rate output. All other cases use the RFC 8251 updated reference API. The complete up-FIR state is checked.
 
 The full mode oracle includes unchanged `opus_decoder.c`/`celt.c` and generates packets with the normative Opus encoder. It compares 19,204 frames (5,825 SILK, 5,322 hybrid, 7,997 CELT), 77,582,264 float PCM/history values and exact defined SILK history. It covers all 32 TOC configurations, five API rates and every mono/stereo conversion, 1,160 mode transitions, 446 CELT-to-SILK and 489 SILK-to-CELT redundant frames, 3,660 lost frames and 1,973 FEC calls. All tested float errors are zero at scale-adjusted tolerance 0.00004. Distinct-scratch assembly calls produce identical complete states and PCM. A bandwidth transition exposed empty high-band PLC; the implementation now reproduces the reference's zero spectrum while preserving overlap and random history. Tests add 2,048 malformed packets, 49 public guards and 74 strict rejection/sticky/reset cases.
 
 Complete normal packet dispatch adds 18,381 exact PCM/history calls across four framing codes, padding, up to 48 frames/120 ms, all 32 TOC configurations, five API rates and channel layouts, 2,560 losses, 5,196 FEC calls and 5,120 zero/one-byte DTX packets. It compares 25,775,010 float output samples, tests 2,048 malformed packets (1,588 rejections), 26 public guards and sticky failure/reset. A reference-call observer records intermediate CELT entropy errors that a later frame/reset can clear; LAMP rejects them immediately.
 
-The Ogg bridge adds 393 original-reference PCM streams, 4,628,232 stereo float comparisons, 4,157 bounded-read/canary checks, 27 malformed-stream rejections, late/sticky discard and two cancellation checks. It covers header placement, continued comments/audio, future minor extensions, gain extremes, pre-skip 0–65,535, cropped origins and end trimming. Maximum scaled error is 2.981e-7 across gain extremes. All thirty-four original-reference suites pass. The WASAPI lifecycle suite adds Opus playback/pause/resume/stop/reopen/seeking/paused seeking. RFC 8251 updates and official conformance remain required.
+The Ogg bridge adds 393 updated-reference PCM streams, 4,628,232 stereo float comparisons, 4,157 bounded-read/canary checks, 27 malformed-stream rejections, late/sticky discard and two cancellation checks. It covers header placement, continued comments/audio, future minor extensions, gain extremes, pre-skip 0–65,535, cropped origins and end trimming. Maximum scaled error is 2.981e-7 across gain extremes. All thirty-four updated-reference suites pass. The WASAPI lifecycle suite adds Opus playback/pause/resume/stop/reopen/seeking/paused seeking and cancelled opens.
+
+Official RFC 8251 conformance adds all 12 vectors at five output rates in mono/stereo, for 120 checks. Every output passes the unmodified normative `opus_compare`. The same run checks exact final ranges, PCM/history at scaled tolerance 0.00004, immutable input, canaries and distinct-scratch determinism for 200,750 packets. Zero observed reference error is recorded across 798,079,240 PCM/history values. All 36 downloaded vector hashes match RFC 8251 section 11.
 
 The UI preview uses the actual assembly renderer with synthetic playback state. **Desktop window interaction, open-dialog/drop behavior and monitor-DPI changes remain unverified** because the permitted desktop automation runtime was unavailable. Audio controls are tested separately by a native assembly harness.
 
@@ -160,7 +162,8 @@ node .\tests\fuzz-vorbis.js
 .\tests\verify-opus-controls.ps1
 .\tests\verify-opus-theta.ps1
 .\tests\verify-opus-components.ps1
-.\tests\verify-opus.ps1 -OutputDirectory .\bin\verify-build #modern reference regression;currently fails the noise case
+.\tests\verify-opus.ps1 -OutputDirectory .\bin\verify-build #51 modern libopus files
+.\tests\verify-opus-conformance.ps1 #120 official vector checks; first run downloads ~75 MB
 .\tests\render-ui.ps1
 ```
 
@@ -168,7 +171,7 @@ The RFC reference archive is checked against its normative SHA-1 before extracti
 
 ## Remaining implementation
 
-Apply RFC 8251 decoder updates, finish independent modern-libopus comparisons and validate official Opus vectors. Further work includes indexed seeking, multichannel/chained streams, device changes, and same-machine CPU/RAM comparisons against existing players.
+Next work includes indexed seeking, multichannel/chained streams, device changes, and same-machine CPU/RAM comparisons against existing players.
 
 ## References
 

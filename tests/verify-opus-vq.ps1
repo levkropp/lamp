@@ -20,4 +20,4 @@ if($LASTEXITCODE) {throw 'PVQ test oracle failed to build'}
 $result=& (Join-Path $root 'bin\opus-vq-oracle.exe')
 if($LASTEXITCODE) {throw "Assembly PVQ mismatch $result"}
 Write-Output $result
-[pscustomobject]@{result='passed';scope='CELT normalized PVQ bands, spreading, collapse masks, unit norm and entropy state; not complete recursive bands or audio decoding';maximum_absolute_tolerance=0.000003;stats="$result"} | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $root 'bin\opus-vq-verification.json') -Encoding utf8
+[pscustomobject]@{result='passed';reference='RFC6716 + RFC8251 (archive86a927223e73d2476646a1b933fcd3fffb6ecc8c,patch029e3aa88fc342c91e67a21e7bfbc9458661cd5f)';scope='CELT normalized PVQ bands, spreading, collapse masks, unit norm and entropy state; not complete recursive bands or audio decoding';maximum_absolute_tolerance=0.000003;stats="$result"} | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $root 'bin\opus-vq-verification.json') -Encoding utf8

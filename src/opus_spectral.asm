@@ -1,3 +1,4 @@
+; RFC8251 updates: Copyright (c) 2017 IETF Trust, Jean-Marc Valin, Koen Vos.
 ; Handwritten SSE2 CELT anti-collapse and energy denormalization.
 ; BSD RFC6716 bands.c/quant_bands.c algorithms, see THIRD_PARTY_NOTICES.
 ; Copyright (c) 2007-2012 IETF Trust, CSIRO, Xiph.Org Foundation,
@@ -17,6 +18,7 @@ os_sqrt2 real4 1.41421356
 os_min_exp real4 -150.0
 os_max_exp real4 128.0
 os_log_limit real4 100.0
+os_band_cap real4 32.0          ;RFC8251 maximum log2 band amplitude
 .code
 ; XMM0=float x, XMM0=float 2^x. Finite range [-150,128), else 0/inf/NaN.
 ; The double polynomial error is below float rounding precision. This is a
@@ -435,6 +437,7 @@ os_denorm_band:
     movss xmm0,dword ptr [rsi+rax*4]
     lea rsi,os_means
     addss xmm0,dword ptr [rsi+r12*4]
+    minss xmm0,dword ptr [os_band_cap]
     call op_celt_exp2
     movaps xmm3,xmm0
     mov eax,r15d

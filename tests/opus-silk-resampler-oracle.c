@@ -27,11 +27,7 @@ static int sr_description(const silk_resampler_state_struct *a,const silk_resamp
 }
 static int sr_state_equal(const silk_resampler_state_struct *a,const silk_resampler_state_struct *b){
  if(memcmp(a->sIIR,b->sIIR,sizeof(a->sIIR))||memcmp(a->delayBuf,b->delayBuf,sizeof(a->delayBuf))||!sr_description(a,b))return 0;
- if(a->resampler_function==2){
-  /* RFC copies eight extra int16 scratch values that are uninitialized and
-     unused. Compare every defined field, excluding only sFIR[4..7]. */
-  if(memcmp(a->sFIR,b->sFIR,16)||memcmp(a->sFIR+8,b->sFIR+8,28*4))return 0;
- }else if(memcmp(a->sFIR,b->sFIR,sizeof(a->sFIR)))return 0;
+ if(memcmp(a->sFIR,b->sFIR,sizeof(a->sFIR)))return 0;
  return 1;
 }
 static int sr_init(silk_resampler_state_struct *a,silk_resampler_state_struct *b,int in,int out){
@@ -51,14 +47,14 @@ static int sr_frame(silk_resampler_state_struct *a,silk_resampler_state_struct *
   printf("Resample frame=%u rate=%d/%d n=%d method=%d\n",sr_frames,b->Fs_in_kHz,b->Fs_out_kHz,n,b->resampler_function);
   for(int i=0;i<count;i++)if(x[i+1]!=y[i+1]){printf("PCM%d %d/%d\n",i,x[i+1],y[i+1]);break;}
   for(int i=0;i<6;i++)if(a->sIIR[i]!=guard.value.sIIR[i])printf("IIR%d %d/%d\n",i,a->sIIR[i],guard.value.sIIR[i]);
-  for(int i=0;i<36;i++)if((b->resampler_function!=2||i<4||i>=8)&&a->sFIR[i]!=guard.value.sFIR[i]){printf("FIR%d %d/%d\n",i,a->sFIR[i],guard.value.sFIR[i]);break;}
+  for(int i=0;i<36;i++)if(a->sFIR[i]!=guard.value.sFIR[i]){printf("FIR%d %d/%d\n",i,a->sFIR[i],guard.value.sFIR[i]);break;}
   return 0;
  }
  if(b->resampler_function==2){
   if(memcmp(guard.value.sFIR+4,saved_b.sFIR+4,32*4)){puts("Unused ASM up-FIR state changed");return 0;}
   sr_up_fir_frames++;
  }
- (void)saved_a;*b=guard.value;sr_frames++;sr_samples+=count;sr_history+=6+48+(b->resampler_function==2?32:36);return 1;
+ (void)saved_a;*b=guard.value;sr_frames++;sr_samples+=count;sr_history+=6+48+36;return 1;
 }
 static int sr_raw(void){
  for(unsigned trial=0;trial<8192;trial++){
@@ -152,6 +148,6 @@ int main(void){
  if(!sr_streaming()){puts("Streaming resampling failed");return 1;}
  if(!sr_core_connected()){puts("Connected core resampling failed");return 1;}
  if(!sr_invalid()){puts("Resampling guards failed");return 1;}
- printf("SILK resampler: %u exact raw up2 and %u AR2 filters, %u initializations across 15 rate pairs, %u PCM/history frames (%u connected core synthesis, %u fractional upsampling), %llu integer samples, %llu defined history values, %u guards; unused uninitialized RFC up-FIR tail excluded and ASM tail preserved deterministically\n",sr_up_checks,sr_ar_checks,sr_init_checks,sr_frames,sr_connected,sr_up_fir_frames,sr_samples,sr_history,sr_guards);
+ printf("SILK resampler: %u exact raw up2 and %u AR2 filters, %u initializations across 15 rate pairs, %u PCM/history frames (%u connected core synthesis, %u fractional upsampling), %llu integer samples, %llu defined history values, %u guards; full RFC8251 up-FIR history checked and ASM tail preserved deterministically\n",sr_up_checks,sr_ar_checks,sr_init_checks,sr_frames,sr_connected,sr_up_fir_frames,sr_samples,sr_history,sr_guards);
  return 0;
 }

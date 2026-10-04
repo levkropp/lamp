@@ -12,3 +12,4 @@
 *.ogg binary
 *.opus binary
 *.gz binary
+tests/reference/opus-rfc8251.patch -text

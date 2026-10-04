@@ -1,5 +1,6 @@
-{
+﻿{
     "result":  "passed",
+    "reference":  "RFC6716 + RFC8251 (archive86a927223e73d2476646a1b933fcd3fffb6ecc8c,patch029e3aa88fc342c91e67a21e7bfbc9458661cd5f)",
     "scope":  "normal-mode CELT recursive vectors and full spectral frame loop, stereo, folding, TF, collapse masks, exact entropy/budget/seed state and connected real-frame prefixes; not synthesis or audio decoding",
     "vector_absolute_tolerance":  1E-05,
     "folding_output_absolute_tolerance":  4E-05,

@@ -1,3 +1,4 @@
+; RFC8251 updates: Copyright (c) 2017 IETF Trust, Jean-Marc Valin, Koen Vos.
 ; Opus mode-frame orchestration adapted from RFC6716 opus_decoder.c.
 ; Copyright(c)2010-2012 IETF Trust,Xiph.Org Foundation,Skype Limited.
 ; BSD in THIRD_PARTY_NOTICES. MASM/SSE2; no codec DLL/CRT dependency.
@@ -163,8 +164,7 @@ ML_CFG_MODE EQU 264
 ML_CFG_END EQU 268
 ML_CFG_FS EQU 272
 ML_LIMIT EQU 276
-ML_STEREO EQU 280             ;12 preserved SILK super-struct bytes
-ML_SUPER EQU 292              ;API/internal channels and previous mid flag
+ML_SUPER EQU 292              ;preserved API/internal channel metadata
 op_opus_decode_frame PROC
     xor edx,edx
     jmp mf_core
@@ -510,17 +510,12 @@ mf_silk:
     je mf_redundancy
     cmp dword ptr [r12+MO_PREV],3
     jne mf_silk_control
-    ; RFC reset clears channel states but preserves stereo/super history.
-    mov rax,[r12+MO_SILK+KD_STEREO]
-    mov [rsp+ML_STEREO],rax
-    mov eax,[r12+MO_SILK+KD_STEREO+8]
-    mov [rsp+ML_STEREO+8],eax
+    ; RFC8251 reset clears stereo history and the previous middle-only flag.
+    ; The native initializer retains only API/internal channel metadata.
     mov eax,[r12+MO_SILK+KD_API_CH]
     mov [rsp+ML_SUPER],eax
     mov eax,[r12+MO_SILK+KD_INT_CH]
     mov [rsp+ML_SUPER+4],eax
-    mov eax,[r12+MO_SILK+KD_PREV_MID]
-    mov [rsp+ML_SUPER+8],eax
     lea rax,[r12+MO_SILK]
     mov [rsp+32+KI_STATE],rax
     mov dword ptr [rsp+32+KI_CAP],KD_SIZE
@@ -528,16 +523,10 @@ mf_silk:
     call op_silk_decoder_init
     test eax,eax
     jz mf_failed
-    mov rax,[rsp+ML_STEREO]
-    mov [r12+MO_SILK+KD_STEREO],rax
-    mov eax,[rsp+ML_STEREO+8]
-    mov [r12+MO_SILK+KD_STEREO+8],eax
     mov eax,[rsp+ML_SUPER]
     mov [r12+MO_SILK+KD_API_CH],eax
     mov eax,[rsp+ML_SUPER+4]
     mov [r12+MO_SILK+KD_INT_CH],eax
-    mov eax,[rsp+ML_SUPER+8]
-    mov [r12+MO_SILK+KD_PREV_MID],eax
 mf_silk_control:
     mov eax,[rsp+ML_N]
     imul eax,1000

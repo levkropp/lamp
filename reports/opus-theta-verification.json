@@ -1,5 +1,6 @@
-{
+﻿{
     "result":  "passed",
+    "reference":  "RFC6716 + RFC8251 (archive86a927223e73d2476646a1b933fcd3fffb6ecc8c,patch029e3aa88fc342c91e67a21e7bfbc9458661cd5f)",
     "scope":  "CELT recursive/stereo split angles, integer gains and allocation deltas, inversion/fill, entropy state and integer math; not recursive vector reconstruction or audio decoding",
     "stats":  "Passed 157936 split-angle/entropy comparisons, 16384 bit-exact cosine, 131072 log-tangent, 262144 integer-square-root checks and 26 invalid-request guards."
 }

@@ -1,6 +1,7 @@
 ﻿{
     "result":  "passed",
-    "scope":  "SILK signed fixed-point division for gain adjustment and zero-state LPC analysis/rewhitening, including integer wrap/rounding/saturation and public guards; excitation synthesis, resampling and complete audio remain pending",
+    "reference":  "RFC6716 + RFC8251 (archive86a927223e73d2476646a1b933fcd3fffb6ecc8c,patch029e3aa88fc342c91e67a21e7bfbc9458661cd5f)",
+    "scope":  "SILK signed fixed-point division for gain adjustment and zero-state LPC analysis/rewhitening, including integer wrap/rounding/saturation and public guards",
     "comparison":  "exact integers and complete output samples",
     "stats":  "SILK prediction: 520924 exact fixed-point divisions, 24576 zero-state LPC analysis/rewhitening filters, 4859251 int16 samples, 19 guards"
 }

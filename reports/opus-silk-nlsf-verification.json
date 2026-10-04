@@ -1,6 +1,7 @@
 ﻿{
     "result":  "passed",
-    "scope":  "SILK fixed-point NLSF codebook and predictive residual reconstruction, Laroia weights, integer square-root approximation, clipping and 20-iteration stabilization/fallback, including connected side information; invalid reference-result spacing/range is rejected before LPC conversion; LPC conversion, synthesis, resampling and complete audio remain pending",
+    "reference":  "RFC6716 + RFC8251 (archive86a927223e73d2476646a1b933fcd3fffb6ecc8c,patch029e3aa88fc342c91e67a21e7bfbc9458661cd5f)",
+    "scope":  "SILK fixed-point NLSF codebook and predictive residual reconstruction, Laroia weights, integer square-root approximation, clipping and 20-iteration stabilization/fallback, including connected side information; invalid reference-result spacing/range is rejected before LPC conversion",
     "comparison":  "exact integer vectors, residuals, weights and selectors, plus independent result-validity rejection checks",
-    "stats":  "SILK NLSF: 1310848 exact square-root approximations, 45056 decoded NLSF/residual/weight vectors (32768 connected side-information), 12288 stabilization vectors, 166 invalid reference-result rejections, 2310080 coefficients, 19 guards"
+    "stats":  "SILK NLSF: 1310848 exact square-root approximations, 45056 decoded NLSF/residual/weight vectors (32768 connected side-information), 12288 stabilization vectors, 0 invalid reference-result rejections, 2310080 coefficients, 19 guards"
 }

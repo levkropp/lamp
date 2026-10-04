@@ -1,8 +1,14 @@
+param([string]$BinaryDirectory)
 $ErrorActionPreference = 'Stop'
 $root = $PSScriptRoot
+$binaryRoot=if($BinaryDirectory){$ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($BinaryDirectory)}else{Join-Path $root 'bin'}
 $out = Join-Path (Split-Path $root -Parent) 'outputs'
 New-Item -ItemType Directory -Force -Path $out | Out-Null
 $version = (Get-Content -LiteralPath (Join-Path $root 'VERSION') -Raw).Trim()
+& node (Join-Path $root 'tests\verify-runtime.js') $binaryRoot
+if($LASTEXITCODE) {throw 'Runtime verification failed before packaging'}
+$runtime=Get-Content -LiteralPath (Join-Path $binaryRoot 'runtime-verification.json') -Raw -Encoding UTF8 | ConvertFrom-Json
+if(@($runtime | Where-Object {$_.version -ne $version}).Count) {throw 'Binary version differs from VERSION; rebuild before packaging'}
 $zipPath = Join-Path $out "lamp-windows-x64-v$version.zip"
 $files = @('README.md','ROADMAP.md','VERSION','LICENSE','THIRD_PARTY_NOTICES','build.ps1','package.ps1','.gitignore','.gitattributes','bin\lamp.exe','bin\lamp-cli.exe')
 foreach ($directory in @('src','assets','scripts','docs','reports','site','.github')) {
@@ -10,12 +16,12 @@ foreach ($directory in @('src','assets','scripts','docs','reports','site','.gith
 }
 $files += Get-ChildItem -LiteralPath (Join-Path $root 'tests') -File | ForEach-Object { $_.FullName.Substring($root.Length+1) }
 $files += Get-ChildItem -LiteralPath (Join-Path $root 'tests\fixtures') -File | ForEach-Object { $_.FullName.Substring($root.Length+1) }
-$files += @('tests\reference\dr_mp3.h','tests\reference\stb_vorbis.c','tests\reference\opus-rfc6716.tar.gz','tests\reference\opus-rfc8251.patch','tests\reference\opus-rfc8251-LICENSE.txt')
+$files += @('tests\reference\dr_mp3.h','tests\reference\stb_vorbis.c','tests\reference\opus-rfc6716.tar.gz','tests\reference\opus-rfc8251.patch','tests\reference\opus-rfc8251-LICENSE.txt','tests\reference\opus-rfc8251-vector-hashes.json')
 $files += Get-ChildItem -LiteralPath $root -Filter '*.json' -File | Where-Object Name -ne 'manifest.json' | ForEach-Object Name
 $files = $files | Sort-Object -Unique
 $manifest = @()
 foreach ($file in $files) {
-    $path = Join-Path $root $file
+    $path = if($file -in @('bin\lamp.exe','bin\lamp-cli.exe')) {Join-Path $binaryRoot ([IO.Path]::GetFileName($file))}else{Join-Path $root $file}
     $manifest += [pscustomobject]@{path=$file.Replace('\','/');bytes=(Get-Item -LiteralPath $path).Length;sha256=(Get-FileHash -LiteralPath $path -Algorithm SHA256).Hash}
 }
 [IO.File]::WriteAllText((Join-Path $root 'manifest.json'),($manifest | ConvertTo-Json -Depth 4),[Text.UTF8Encoding]::new($false))
@@ -26,7 +32,8 @@ Add-Type -AssemblyName System.IO.Compression.FileSystem
 $archive = [IO.Compression.ZipFile]::Open($zipPath,[IO.Compression.ZipArchiveMode]::Create)
 try {
     foreach ($file in $files) {
-        [void][IO.Compression.ZipFileExtensions]::CreateEntryFromFile($archive,(Join-Path $root $file),('lamp/'+$file.Replace('\','/')),[IO.Compression.CompressionLevel]::Optimal)
+        $path = if($file -in @('bin\lamp.exe','bin\lamp-cli.exe')) {Join-Path $binaryRoot ([IO.Path]::GetFileName($file))}else{Join-Path $root $file}
+        [void][IO.Compression.ZipFileExtensions]::CreateEntryFromFile($archive,$path,('lamp/'+$file.Replace('\','/')),[IO.Compression.CompressionLevel]::Optimal)
     }
 } finally { $archive.Dispose() }
 $archive = [IO.Compression.ZipFile]::OpenRead($zipPath)

@@ -1,5 +1,6 @@
-{
+﻿{
     "result":  "passed",
+    "reference":  "RFC6716 + RFC8251 (archive86a927223e73d2476646a1b933fcd3fffb6ecc8c,patch029e3aa88fc342c91e67a21e7bfbc9458661cd5f)",
     "scope":  "normal-mode CELT transient anti-collapse, mean energy/exponent conversion and denormalization with all output-rate boundaries; not inverse MDCT or PCM decoding",
     "anti_collapse_absolute_tolerance":  3E-06,
     "spectral_relative_tolerance":  3E-07,

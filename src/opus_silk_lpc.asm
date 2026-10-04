@@ -1,3 +1,4 @@
+; RFC8251 updates: Copyright (c) 2017 IETF Trust, Jean-Marc Valin, Koen Vos.
 ; Handwritten fixed-point SILK LPC conversion and stability helpers.
 ; RFC6716 NLSF2A.c,LPC_inv_pred_gain.c,bwexpander[_32].c,Inlines.h.
 ; Copyright(c)2006-2012 IETF Trust and Skype Limited. BSD conditions
@@ -229,6 +230,12 @@ sl_lpc_coef:
     sar rax,1                 ; round product>>31
     mov edx,[r15+rbx*4]
     sub edx,eax
+    jno sl_lpc_subtract_ready
+    ; Signed subtraction overflow: sign of the original minuend selects cap.
+    mov edx,[r15+rbx*4]
+    sar edx,31
+    xor edx,7fffffffh
+sl_lpc_subtract_ready:
     movsxd rax,edx
     movsxd rdx,dword ptr [rsp+172]
     imul rax,rdx
@@ -237,6 +244,9 @@ sl_lpc_coef:
     sar rax,cl
     inc rax
     sar rax,1
+    movsxd rdx,eax
+    cmp rax,rdx
+    jne sl_lpc_bad            ;RFC8251 rejects rounded 64-bit overflow
     mov [r14+rbx*4],eax
     inc ebx
     cmp ebx,r12d

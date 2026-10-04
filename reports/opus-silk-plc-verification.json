@@ -1,6 +1,7 @@
 ﻿{
     "result":  "passed",
-    "scope":  "SILK energy, saved prediction/gain parameters, reset, repeated voiced/unvoiced loss concealment and energy recovery glue, including connected core/PLC/CNG/resampling; stereo/packet framing and complete Opus audio conformance remain pending",
+    "reference":  "RFC6716 + RFC8251 (archive86a927223e73d2476646a1b933fcd3fffb6ecc8c,patch029e3aa88fc342c91e67a21e7bfbc9458661cd5f)",
+    "scope":  "SILK energy, saved prediction/gain parameters, reset, repeated voiced/unvoiced loss concealment and energy recovery glue, including connected core/PLC/CNG/resampling",
     "comparison":  "exact complete PLC/core/control state and int16 PCM, immutable parameter/indices, capacity/canary guards",
     "stats":  "SILK PLC: 16384 energy vectors, 43008 exact state/PCM frames (17024 updates, 25984 concealed, 9728 rate resets), 75776 glue frames (7463 faded), 18432 connected core/PLC/glue/CNG/resampling, 17637024 int16 PCM comparisons, 36685824 history values, 13271040 connected resampled samples, 63 guards"
 }

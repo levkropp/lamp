@@ -25,10 +25,6 @@ static int kd_rs_equal(const silk_resampler_state_struct *a,const silk_resampler
   int count=2+a->FIR_Order/2*a->FIR_Fracs;if(memcmp(a->Coefs,b->Coefs,count*2))return 0;
  }
  if(memcmp(a->sIIR,b->sIIR,sizeof(a->sIIR))||memcmp(a->delayBuf,b->delayBuf,sizeof(a->delayBuf)))return 0;
- if(a->resampler_function==2){
-  /* Exclude only the unused uninitialized reference up-FIR sFIR[4..7]. */
-  return !memcmp(a->sFIR,b->sFIR,16)&&!memcmp(a->sFIR+8,b->sFIR+8,28*4);
- }
  return !memcmp(a->sFIR,b->sFIR,sizeof(a->sFIR));
 }
 static void kd_map(DecoderState *out,const NativeDecoder *ref){
@@ -76,7 +72,7 @@ static int kd_frame(DecoderState *state,NativeDecoder *ref,ec_dec *ec,silk_DecCo
   printf("Decoder frame%u rate%d/%d ch%d/%d ms%d mode%u fresh%u count%d/%d/%d result%d adapted%d source%d\n",kd_frames,control.internalSampleRate,control.API_sampleRate,control.nChannelsInternal,control.nChannelsAPI,control.payloadSize_ms,mode,fresh,count,count_second,reference_n,result,adapted,source_n);
   for(int i=0;i<1922;i++)if(x[i]!=y[i]){printf("PCM%d %d/%d\n",i-1,x[i],y[i]);break;}
   for(unsigned i=0;i<sizeof(expected);i++){const unsigned char *u=(const unsigned char *)&expected,*v=(const unsigned char *)&guard.value;if(u[i]!=v[i]&&(i<7832||i>=8440)){printf("State byte%u %u/%u\n",i,u[i],v[i]);break;}}
-  for(int j=0;j<2;j++)if(!kd_rs_equal(&expected.rs[j],&guard.value.rs[j])){const unsigned char *u=(const unsigned char *)&expected.rs[j],*v=(const unsigned char *)&guard.value.rs[j];for(unsigned i=0;i<296;i++)if(u[i]!=v[i]&&(expected.rs[j].resampler_function!=2||i<40||i>=56)){printf("RS%d byte%u %u/%u\n",j,i,u[i],v[i]);break;}}
+  for(int j=0;j<2;j++)if(!kd_rs_equal(&expected.rs[j],&guard.value.rs[j])){const unsigned char *u=(const unsigned char *)&expected.rs[j],*v=(const unsigned char *)&guard.value.rs[j];for(unsigned i=0;i<296;i++)if(u[i]!=v[i]){printf("RS%d byte%u %u/%u\n",j,i,u[i],v[i]);break;}}
   if(memcmp(&a,&b,sizeof(a)))printf("Entropy tell%d/%d\n",ec_tell(&a),ec_tell(&b));return 0;
  }
  if(mode==1)kd_lost++;if(mode==2)kd_fec++;if(old_loss&&!ref->channel[0].lossCnt)kd_recovered++;if(ref->prev_mid)kd_midonly++;if(!fresh)kd_continued++;
@@ -150,6 +146,6 @@ static int kd_sticky(void){
 #ifndef SILK_DECODER_ORACLE_EMBEDDED
 int main(void){
  if(!kd_sequences()||!kd_transitions()||!kd_invalid()||!kd_sticky())return 1;
- printf("SILK decoder API: %u initializations, %u exact packet-to-PCM/history frames across 15 rate pairs and all mono/stereo layouts (%u lost, %u FEC, %u recovered, %u mid-only, %u continued), %u API-rate/%u internal-rate/%u channel transitions, %u stereo collapses (%u defined right-resampler rate adaptations), %u abandoned packets, %llu int16 samples, %llu history bytes, %u late/sticky/reset checks, %u guards; unused uninitialized RFC up-FIR tail excluded, distinct-scratch ASM history deterministic\n",kd_initializations,kd_frames,kd_lost,kd_fec,kd_recovered,kd_midonly,kd_continued,kd_api_changes,kd_rate_changes,kd_channel_changes,kd_collapse,kd_adapted,kd_abandoned,kd_samples,kd_history,kd_late,kd_guards);return 0;
+ printf("SILK decoder API: %u initializations, %u exact packet-to-PCM/history frames across 15 rate pairs and all mono/stereo layouts (%u lost, %u FEC, %u recovered, %u mid-only, %u continued), %u API-rate/%u internal-rate/%u channel transitions, %u stereo collapses (%u defined right-resampler rate adaptations), %u abandoned packets, %llu int16 samples, %llu history bytes, %u late/sticky/reset checks, %u guards; full RFC8251 up-FIR history checked, distinct-scratch ASM history deterministic\n",kd_initializations,kd_frames,kd_lost,kd_fec,kd_recovered,kd_midonly,kd_continued,kd_api_changes,kd_rate_changes,kd_channel_changes,kd_collapse,kd_adapted,kd_abandoned,kd_samples,kd_history,kd_late,kd_guards);return 0;
 }
 #endif

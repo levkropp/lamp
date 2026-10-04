@@ -1,7 +1,8 @@
 ﻿{
     "result":  "passed",
-    "scope":  "Complete SILK/hybrid/CELT mode frames, shared entropy, all32 TOC configurations, five output rates, mono/stereo conversion, FEC/loss/recovery, transition redundancy/crossfades, empty high-band PLC and defined persistent histories; whole packet/Ogg dispatch, mapping/gain/trimming, official conformance and player integration remain pending",
-    "comparison":  "exact mapped integer SILK history and defined resampler state; zero observed float PCM/CELT-history error at stated tolerance; deterministic complete ASM state with distinct scratch fills; unchanged full RFC decoder/encoder test-only",
+    "reference":  "RFC6716 + RFC8251 (archive86a927223e73d2476646a1b933fcd3fffb6ecc8c,patch029e3aa88fc342c91e67a21e7bfbc9458661cd5f)",
+    "scope":  "Complete SILK/hybrid/CELT mode frames, shared entropy, all32 TOC configurations, five output rates, mono/stereo conversion, FEC/loss/recovery, transition redundancy/crossfades, empty high-band PLC and defined persistent histories",
+    "comparison":  "exact mapped integer SILK history and defined resampler state; zero observed float PCM/CELT-history error at stated tolerance; deterministic complete ASM state with distinct scratch fills; RFC8251-updated full reference decoder and test-only encoder",
     "scale_adjusted_absolute_tolerance":  4E-05,
     "stats":  "Opus modes: 19204 frames (5825 SILK, 5322 hybrid, 7997 CELT, 3660 losses, 1973 FEC, 1160 transitions), 446 CELT-to-SILK/489 SILK-to-CELT redundant frames, all32 TOC configs, 2048 malformed cases, 77582264 float PCM/history values, 49 guards, 74 strict rejection/sticky/reset cases, max scaled error 0"
 }

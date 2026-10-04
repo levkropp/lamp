@@ -1,5 +1,6 @@
-{
-  "result": "passed",
-  "scope": "CELT Laplace symbols, coarse/fine/final energy and entropy state; not audio decoding",
-  "stats": "Passed 131072 exact Laplace symbols and 12288 energy-stage comparisons."
+﻿{
+    "result":  "passed",
+    "reference":  "RFC6716 + RFC8251 (archive86a927223e73d2476646a1b933fcd3fffb6ecc8c,patch029e3aa88fc342c91e67a21e7bfbc9458661cd5f)",
+    "scope":  "CELT Laplace symbols, coarse/fine/final energy and entropy state; not audio decoding",
+    "stats":  "Passed 131072 exact Laplace symbols and 12288 energy-stage comparisons."
 }

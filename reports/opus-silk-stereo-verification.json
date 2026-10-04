@@ -1,6 +1,7 @@
 ﻿{
     "result":  "passed",
-    "scope":  "SILK predictor and mid-only entropy decoding, adaptive mid/side reconstruction, interpolation, saturated left/right PCM and stereo history; full packet/frame integration and complete Opus audio remain pending",
+    "reference":  "RFC6716 + RFC8251 (archive86a927223e73d2476646a1b933fcd3fffb6ecc8c,patch029e3aa88fc342c91e67a21e7bfbc9458661cd5f)",
+    "scope":  "SILK predictor and mid-only entropy decoding, adaptive mid/side reconstruction, interpolation, saturated left/right PCM and stereo history",
     "comparison":  "exact complete entropy/stereo state and int16 PCM, capacity/canary guards",
     "stats":  "SILK stereo: 153572 exact predictor/mid-only entropy frames (11250 exhaustive codebook/flag cases), 90112 exact PCM/history frames (65536 connected predictors), 32440240 int16 PCM samples, 34 guards"
 }

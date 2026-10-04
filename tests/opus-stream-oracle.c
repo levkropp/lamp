@@ -15,6 +15,9 @@ void *ogg_next(void){return 0;}
 static unsigned sp_packets,sp_lost,sp_fec,sp_codes[4],sp_guards,sp_late,sp_malformed,sp_dtx_calls;
 static uint32_t sp_configs;
 static unsigned long long sp_samples;
+#ifdef OPUS_STREAM_VECTOR_OBSERVER
+static const float *sp_vector_pcm;
+#endif
 static int sp_decode(const unsigned char *data,unsigned len,unsigned count,unsigned fec,int malformed){
  static struct {uint64_t before;unsigned char bytes[118944];uint64_t after;} scratch;
  static struct {uint64_t before;float pcm[11520];uint64_t after;} output;
@@ -40,6 +43,9 @@ static int sp_decode(const unsigned char *data,unsigned len,unsigned count,unsig
  if(a!=b||b<=0||b!=c||memcmp(&ms,&duplicate,sizeof(ms))||memcmp(output.pcm,second_pcm,sizeof(second_pcm))||memcmp(&r,&saved,sizeof(r))||scratch.before!=before_guard||scratch.after!=after_guard||output.before!=before_guard||output.after!=after_guard||mode_state_guard.before!=before_guard||mode_state_guard.after!=after_guard||(data&&len&&memcmp(data,saved_payload,len))){printf("Packet result%d/%d/%d len%u count%u fec%u packet%u\n",a,b,c,len,count,fec,sp_packets);return 0;}
  if(!mode_float("packet PCM",expected,output.pcm,a*mr->channels)||memcmp(expected+a*mr->channels,output.pcm+a*mr->channels,(11520-a*mr->channels)*4)||!mode_history())return 0;
  if(ms.mode!=mode_number(mr->mode)||ms.prev!=mode_number(mr->prev_mode)||ms.frame!=mr->frame_size||ms.stream!=mr->stream_channels||ms.red!=mr->prev_redundancy||ms.range!=mr->rangeFinal||memcmp(&ms.ctrl,&mr->DecControl,sizeof(ms.ctrl))){puts("Packet control/history mismatch");return 0;}
+#ifdef OPUS_STREAM_VECTOR_OBSERVER
+ sp_vector_pcm=output.pcm;
+#endif
  if(!data||!len)sp_lost++;else {sp_codes[data[0]&3]++;sp_configs|=1u<<(data[0]>>3);}if(fec)sp_fec++;sp_samples+=a*mr->channels;sp_packets++;return 1;
 }
 static unsigned sp_build(unsigned char *out,unsigned toc,const unsigned char *payload,unsigned n,unsigned code,unsigned frames,unsigned vbr,unsigned padding){

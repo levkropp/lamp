@@ -45,4 +45,6 @@ foreach($pattern in $patterns){foreach($vbr in @('off','on','constrained')){
  FF @('-f','lavfi','-i',$pattern[1],'-ac','2','-c:a','libopus','-b:a','48k','-vbr',$vbr,'-fec','1','-packet_loss','20',$file)
  Check-Opus $file 2
 }}
-[pscustomobject]@{result='passed';scope='51 generated Ogg/Opus files; independent modern libopus PCM comparisons at 48kHz, mono/stereo, input rates,2.5..120ms packet durations, VBR/CBR/constrained VBR,noise/transients/silence/FEC; not official conformance';minimum_snr_db=60;maximum_absolute_error=0.00004;ffmpeg_version=(& $Ffmpeg -version | Select-Object -First 1);checks=@($report)} | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath (Join-Path $out 'opus-verification.json') -Encoding utf8
+$ffmpegVersion=@(& $Ffmpeg -version)
+if($LASTEXITCODE){throw 'Could not record the FFmpeg reference version'}
+[pscustomobject]@{result='passed';scope='51 generated Ogg/Opus files; independent modern libopus PCM comparisons at 48kHz, mono/stereo, input rates,2.5..120ms packet durations, VBR/CBR/constrained VBR,noise/transients/silence/FEC; not official conformance';minimum_snr_db=60;maximum_absolute_error=0.00004;ffmpeg_version=$ffmpegVersion[0];checks=@($report)} | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath (Join-Path $out 'opus-verification.json') -Encoding utf8

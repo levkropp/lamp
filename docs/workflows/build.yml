@@ -22,6 +22,8 @@ jobs:
         run: node tests/smoke.js
       - name: Verify Opus decoder stages against normative reference
         run: ./tests/verify-opus-components.ps1
+      - name: Verify official Opus vectors at all rates and channel layouts
+        run: ./tests/verify-opus-conformance.ps1
       - name: Check static site
         run: node tests/verify-site.js
       - name: Render actual assembly UI

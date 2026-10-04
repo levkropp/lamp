@@ -24,7 +24,7 @@ foreach($name in $objects){
 }
 $includes=@("/I$msvc\include","/I$sdkRoot\Include\$version\ucrt","/I$reference\include","/I$reference\celt","/I$reference\src","/I$reference\silk","/I$reference\silk\float","/I$root\bin")
 $flags=@('/nologo','/O2','/Gy','/MD','/DOPUS_BUILD','/DUSE_ALLOCA','/DWIN32','/DSMALL_FOOTPRINT')
-# Test includes unchanged celt.c/opus_decoder.c to inspect complete histories.
+# Test includes RFC8251-updated celt.c/opus_decoder.c to inspect complete histories.
 $cfiles=@(Join-Path $PSScriptRoot 'opus-ogg-oracle.c')
 $cfiles+=@(@('bands','cwrs','entcode','entdec','entenc','kiss_fft','laplace','mathops','mdct','modes','pitch','celt_lpc','rate','vq') | ForEach-Object {Join-Path $reference "celt\$_.c"})
 $cfiles+=@('src\opus.c','src\opus_encoder.c','src\repacketizer.c' | ForEach-Object {Join-Path $reference $_})
@@ -43,4 +43,4 @@ if($LASTEXITCODE){throw 'Ogg Opus bridge test oracle failed to build'}
 $result=& (Join-Path $root 'bin\opus-ogg-oracle.exe')
 if($LASTEXITCODE){throw "Assembly Ogg Opus bridge mismatch $result"}
 Write-Output $result
-[pscustomobject]@{result='passed';scope='Single-stream Ogg/Opus mapping family0,48kHz stereo output,mono duplication,full signed Q8 gain,pre-skip0..65535,nonzero initial granule offsets,end trimming,continued tags/audio,compatible minor extensions,header placement/granule/framing/CRC/sequence bounds,late failure and cancellation; RFC8251 updates,multistream/chaining and official conformance remain pending';comparison='393 generated streams against full original RFC6716 native PCM,independent double-precision gain reference,4157 bounded read/canary checks,immutable mapped input,27 malformed stream rejections,late/sticky discard and2 cancellation checks; zero observed error without header gain and at most2.99e-7 scaled error across gain extremes';scale_adjusted_absolute_tolerance=0.00004;stats="$result"} | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $root 'bin\opus-ogg-verification.json') -Encoding utf8
+[pscustomobject]@{result='passed';reference='RFC6716 + RFC8251 (archive86a927223e73d2476646a1b933fcd3fffb6ecc8c,patch029e3aa88fc342c91e67a21e7bfbc9458661cd5f)';scope='Single-stream Ogg/Opus mapping family0,48kHz stereo output,mono duplication,full signed Q8 gain,pre-skip0..65535,nonzero initial granule offsets,end trimming,continued tags/audio,compatible minor extensions,header placement/granule/framing/CRC/sequence bounds,late failure and cancellation';comparison='393 generated streams against full RFC8251-updated native PCM,independent double-precision gain reference,4157 bounded read/canary checks,immutable mapped input,27 malformed stream rejections,late/sticky discard and2 cancellation checks; zero observed error without header gain and at most2.99e-7 scaled error across gain extremes';scale_adjusted_absolute_tolerance=0.00004;stats="$result"} | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $root 'bin\opus-ogg-verification.json') -Encoding utf8

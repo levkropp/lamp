@@ -1,6 +1,7 @@
 ﻿{
     "result":  "passed",
-    "scope":  "SILK channel initialization/configuration, complete source-rate frame entropy/pulses/parameters/core/PLC/history/glue/CNG, loss/FEC and rate/reset transitions; packet/stereo/resampling orchestration and complete Opus playback remain pending",
+    "reference":  "RFC6716 + RFC8251 (archive86a927223e73d2476646a1b933fcd3fffb6ecc8c,patch029e3aa88fc342c91e67a21e7bfbc9458661cd5f)",
+    "scope":  "SILK channel initialization/configuration, complete source-rate frame entropy/pulses/parameters/core/PLC/history/glue/CNG, loss/FEC and rate/reset transitions",
     "comparison":  "exact full channel history, entropy and int16 PCM, sticky late failure/reset and public capacity/canary guards",
     "stats":  "SILK frame: 5575 initializations, 10752 configurations (7936 rate changes), 67589 exact entropy-to-PCM/history frames (28160 lost, 10752 FEC, 12288 voiced, 10240 recovered, 18432 continued entropy), 12166840 int16 PCM samples, 264137812 full-history bytes, 5 late component/sticky/reset checks, 63 guards"
 }

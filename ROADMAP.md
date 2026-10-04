@@ -52,10 +52,12 @@ The public repository includes build/test tooling, a Windows prerelease and a we
 - [x] Complete normal Opus packet-to-PCM dispatch: CBR/VBR framing and padding, up to 48 frames/120 ms, DTX/FEC/loss, output bounds and defined histories.
 - [x] Mapping family 0, signed header gain, pre-skip, cropped granule origins and end trimming, with reference PCM and malformed-stream checks.
 - [x] Integrate single-stream Ogg/Opus with cancellation, queueing, pause and sequential seeking; verify playback, stop/reopen and paused seeking.
-- [ ] Apply RFC 8251 decoder updates and compare updated reference PCM, including hybrid folding, stereo resets and arithmetic bounds.
-- [ ] Official decoder vectors, reference PCM tolerance/state checks, and malformed/truncated stream tests across modes and frame sizes.
+- [x] Apply RFC 8251 decoder updates and compare updated reference PCM, including hybrid folding, stereo resets and arithmetic bounds.
+- [x] Official decoder vectors, reference PCM tolerance/state checks, and malformed/truncated stream tests across modes and frame sizes.
 
 **Gate:** actual audio playback and validated PCM for CELT-only, SILK-only and hybrid streams. Existing packet/range/energy/pulse tests alone do not satisfy this gate.
+
+Passed in 0.4.0-dev source: 34 updated-reference suites, 51 independent modern-libopus files and all 120 official RFC 8251 vector/rate/channel checks. Mapping family 0 playback and lifecycle checks pass; multichannel/multistream and Ogg chaining belong to milestone 2.
 
 ## 2 — Reliable daily audio use
 

@@ -1,5 +1,6 @@
-{
-  "result": "passed",
-  "scope": "CELT Haar time/frequency transforms and Hadamard interleave/deinterleave; not recursive bands or audio decoding",
-  "stats": "Passed 3280 Haar comparisons, 5888 layout/inverse comparisons, 19 invalid-request guards."
+﻿{
+    "result":  "passed",
+    "reference":  "RFC6716 + RFC8251 (archive86a927223e73d2476646a1b933fcd3fffb6ecc8c,patch029e3aa88fc342c91e67a21e7bfbc9458661cd5f)",
+    "scope":  "CELT Haar time/frequency transforms and Hadamard interleave/deinterleave; not recursive bands or audio decoding",
+    "stats":  "Passed 3280 Haar comparisons, 5888 layout/inverse comparisons, 19 invalid-request guards."
 }

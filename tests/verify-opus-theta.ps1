@@ -22,4 +22,4 @@ if($LASTEXITCODE){throw 'Theta test oracle failed to build'}
 $result=& (Join-Path $root 'bin\opus-theta-oracle.exe')
 if($LASTEXITCODE){throw "Assembly split-angle mismatch $result"}
 Write-Output $result
-[pscustomobject]@{result='passed';scope='CELT recursive/stereo split angles, integer gains and allocation deltas, inversion/fill, entropy state and integer math; not recursive vector reconstruction or audio decoding';stats="$result"} | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $root 'bin\opus-theta-verification.json') -Encoding utf8
+[pscustomobject]@{result='passed';reference='RFC6716 + RFC8251 (archive86a927223e73d2476646a1b933fcd3fffb6ecc8c,patch029e3aa88fc342c91e67a21e7bfbc9458661cd5f)';scope='CELT recursive/stereo split angles, integer gains and allocation deltas, inversion/fill, entropy state and integer math; not recursive vector reconstruction or audio decoding';stats="$result"} | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $root 'bin\opus-theta-verification.json') -Encoding utf8

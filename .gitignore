@@ -1,6 +1,7 @@
 bin/
 tests/generated/
 tests/reference/opus-rfc6716/
+tests/reference/opus-rfc8251/
 outputs/
 manifest.json
 *.obj

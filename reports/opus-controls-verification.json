@@ -1,5 +1,6 @@
-{
+﻿{
     "result":  "passed",
+    "reference":  "RFC6716 + RFC8251 (archive86a927223e73d2476646a1b933fcd3fffb6ecc8c,patch029e3aa88fc342c91e67a21e7bfbc9458661cd5f)",
     "scope":  "CELT frame flags, postfilter parameters, coarse/fine energy, TF decisions, dynamic/static allocation and entropy state; not shape synthesis or audio decoding",
     "stats":  "Passed 48909 CELT frame-prefix/entropy comparisons, 48896 TF/entropy comparisons, 33 invalid-request guards, including 13 real CELT frames."
 }
