@@ -5,7 +5,7 @@
 option casemap:none
 EXTERN CreateFileW:PROC, GetFileSizeEx:PROC, CreateFileMappingW:PROC
 EXTERN MapViewOfFile:PROC, UnmapViewOfFile:PROC, CloseHandle:PROC
-EXTERN mp3_open:PROC, mp3_read:PROC
+EXTERN mp3_open:PROC, mp3_read:PROC,mp3_seek:PROC,mp3_close:PROC
 EXTERN vorbis_open:PROC, vorbis_read:PROC, vorbis_close:PROC, ogg_close:PROC
 EXTERN opus_open:PROC,opus_read:PROC,opus_close:PROC
 EXTERN ogg_cancel_ptr:QWORD
@@ -461,6 +461,7 @@ decoder_close PROC
     push rbp
     mov rbp,rsp
     sub rsp,32
+    call mp3_close
     call opus_close
     call vorbis_close
     call ogg_close
@@ -493,7 +494,8 @@ decoder_close ENDP
 ; RCX=absolute requested frame. Call once on a newly opened stream.
 ; RAX=resume frame <= target; caller decodes/discards the remaining distance.
 ; WAV seeks exactly; native FLAC uses a table or bounded frame binary search.
-; Other formats return0 without changing their fresh decoder state.
+; MP3 restores an indexed reservoir before two-frame PCM pre-roll.
+; Ogg formats return0 without changing their fresh decoder state.
 decoder_seek PROC
     push rbx
     push rsi
@@ -506,6 +508,8 @@ decoder_seek PROC
     jne seek_return
     cmp dword ptr [codec_kind],1
     je seek_wav
+    cmp dword ptr [codec_kind],3
+    je seek_mp3
     cmp dword ptr [codec_kind],2
     jne seek_return
     test rcx,rcx
@@ -576,6 +580,9 @@ seek_flac_position:
 seek_flac_without_table:
     mov rcx,rsi
     call flac_seek_search
+    jmp seek_return
+seek_mp3:
+    call mp3_seek
     jmp seek_return
 seek_wav:
     cmp rcx,[total_frames]

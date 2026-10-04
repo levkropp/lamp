@@ -15,3 +15,6 @@ $scratch=Join-Path $PSScriptRoot 'generated\seeking'
 & node (Join-Path $PSScriptRoot 'seek-fixtures.js') (Join-Path $out 'lamp-cli.exe') (Join-Path $out 'seek-oracle.exe') $scratch
 if($LASTEXITCODE){throw 'Sample-exact seek verification failed'}
 Copy-Item -LiteralPath (Join-Path $scratch 'seek-verification.json') -Destination (Join-Path $out 'seek-verification.json')
+& node (Join-Path $PSScriptRoot 'mp3-seek-fixtures.js') (Join-Path $out 'lamp-cli.exe') (Join-Path $out 'seek-oracle.exe') (Join-Path $scratch 'mp3')
+if($LASTEXITCODE){throw 'MP3 indexed seek verification failed'}
+Copy-Item -LiteralPath (Join-Path $scratch 'mp3\mp3-seek-verification.json') -Destination (Join-Path $out 'mp3-seek-verification.json')

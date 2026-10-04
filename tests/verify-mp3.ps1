@@ -1,7 +1,8 @@
-param([string]$Ffmpeg = 'ffmpeg', [string]$Node = 'node', [switch]$SkipPlayback)
+param([string]$Ffmpeg = 'ffmpeg', [string]$Node = 'node', [switch]$SkipPlayback,[string]$OutputDirectory)
 $ErrorActionPreference = 'Stop'
 $root = Split-Path $PSScriptRoot -Parent
-$exe = Join-Path $root 'bin\lamp-cli.exe'
+$out=if($OutputDirectory){$ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($OutputDirectory)}else{Join-Path $root 'bin'}
+$exe = Join-Path $out 'lamp-cli.exe'
 $scratch = Join-Path $PSScriptRoot 'generated'
 New-Item -ItemType Directory -Force -Path $scratch | Out-Null
 $results = [System.Collections.Generic.List[object]]::new()
@@ -74,6 +75,7 @@ if (-not $SkipPlayback) {
     if ($LASTEXITCODE -or "$stats" -notmatch 'underruns=0 ' -or "$stats" -notmatch 'endpoint_dry=0') { throw "MP3 WASAPI playback failed: $stats" }
     $results.Add([pscustomobject]@{test='mp3-wasapi-silence';result='played';frames=57600;snr_db=$null;peak_error=0;stats="$stats"})
 }
-$report = Join-Path $root 'mp3-verification.json'
+$report = if($OutputDirectory){Join-Path $out 'mp3-verification.json'}else{Join-Path $root 'mp3-verification.json'}
 $results | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath $report -Encoding utf8
 Write-Output "Passed $($results.Count) MP3 checks. Report: $report"
+exit 0

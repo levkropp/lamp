@@ -1,826 +1,826 @@
-[
-  {
-    "test": "mp3-8000-1.mp3",
-    "result": "matched",
-    "frames": 2800,
-    "snr_db": 112.0322092333428,
-    "peak_error": 7.748603820800781E-07,
-    "stats": "codec=3 rate=8000 channels=1 bits=0 frames=2800 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-8000-2.mp3",
-    "result": "matched",
-    "frames": 2800,
-    "snr_db": 112.21197084892574,
-    "peak_error": 1.043081283569336E-06,
-    "stats": "codec=3 rate=8000 channels=2 bits=0 frames=2800 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=46875 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-11025-1.mp3",
-    "result": "matched",
-    "frames": 3859,
-    "snr_db": 125.68862840548871,
-    "peak_error": 1.7881393432617188E-07,
-    "stats": "codec=3 rate=11025 channels=1 bits=0 frames=3859 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-11025-2.mp3",
-    "result": "matched",
-    "frames": 3859,
-    "snr_db": 125.46847380401326,
-    "peak_error": 2.086162567138672E-07,
-    "stats": "codec=3 rate=11025 channels=2 bits=0 frames=3859 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-12000-1.mp3",
-    "result": "matched",
-    "frames": 4200,
-    "snr_db": 124.51397650399193,
-    "peak_error": 2.086162567138672E-07,
-    "stats": "codec=3 rate=12000 channels=1 bits=0 frames=4200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-12000-2.mp3",
-    "result": "matched",
-    "frames": 4200,
-    "snr_db": 125.24943001969012,
-    "peak_error": 2.8312206268310547E-07,
-    "stats": "codec=3 rate=12000 channels=2 bits=0 frames=4200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-16000-1.mp3",
-    "result": "matched",
-    "frames": 5600,
-    "snr_db": 121.10894391142762,
-    "peak_error": 3.427267074584961E-07,
-    "stats": "codec=3 rate=16000 channels=1 bits=0 frames=5600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-16000-2.mp3",
-    "result": "matched",
-    "frames": 5600,
-    "snr_db": 120.97834885466936,
-    "peak_error": 4.0605664253234863E-07,
-    "stats": "codec=3 rate=16000 channels=2 bits=0 frames=5600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-22050-1.mp3",
-    "result": "matched",
-    "frames": 7718,
-    "snr_db": 122.21363075179069,
-    "peak_error": 2.8312206268310547E-07,
-    "stats": "codec=3 rate=22050 channels=1 bits=0 frames=7718 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-22050-2.mp3",
-    "result": "matched",
-    "frames": 7718,
-    "snr_db": 122.45039377526143,
-    "peak_error": 2.905726432800293E-07,
-    "stats": "codec=3 rate=22050 channels=2 bits=0 frames=7718 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-24000-1.mp3",
-    "result": "matched",
-    "frames": 8400,
-    "snr_db": 123.38963986922595,
-    "peak_error": 2.2910535335540771E-07,
-    "stats": "codec=3 rate=24000 channels=1 bits=0 frames=8400 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=46875 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-24000-2.mp3",
-    "result": "matched",
-    "frames": 8400,
-    "snr_db": 122.85515195886914,
-    "peak_error": 3.7997961044311523E-07,
-    "stats": "codec=3 rate=24000 channels=2 bits=0 frames=8400 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-32000-1.mp3",
-    "result": "matched",
-    "frames": 11200,
-    "snr_db": 123.34187901856825,
-    "peak_error": 2.5331974029541016E-07,
-    "stats": "codec=3 rate=32000 channels=1 bits=0 frames=11200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-32000-2.mp3",
-    "result": "matched",
-    "frames": 11200,
-    "snr_db": 123.22792425394518,
-    "peak_error": 3.5762786865234375E-07,
-    "stats": "codec=3 rate=32000 channels=2 bits=0 frames=11200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-44100-1.mp3",
-    "result": "matched",
-    "frames": 15435,
-    "snr_db": 122.02767054692522,
-    "peak_error": 2.868473529815674E-07,
-    "stats": "codec=3 rate=44100 channels=1 bits=0 frames=15435 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-44100-2.mp3",
-    "result": "matched",
-    "frames": 15435,
-    "snr_db": 122.24689801070959,
-    "peak_error": 3.948807716369629E-07,
-    "stats": "codec=3 rate=44100 channels=2 bits=0 frames=15435 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-48000-1.mp3",
-    "result": "matched",
-    "frames": 16800,
-    "snr_db": 122.01707793794372,
-    "peak_error": 2.980232238769531E-07,
-    "stats": "codec=3 rate=48000 channels=1 bits=0 frames=16800 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-48000-2.mp3",
-    "result": "matched",
-    "frames": 16800,
-    "snr_db": 122.39282625393011,
-    "peak_error": 4.172325134277344E-07,
-    "stats": "codec=3 rate=48000 channels=2 bits=0 frames=16800 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-noise-cbr-stereo.mp3",
-    "result": "matched",
-    "frames": 30870,
-    "snr_db": 113.62144240324747,
-    "peak_error": 1.1473894119262695E-06,
-    "stats": "codec=3 rate=44100 channels=2 bits=0 frames=30870 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-noise-cbr-joint.mp3",
-    "result": "matched",
-    "frames": 30870,
-    "snr_db": 113.72875883533146,
-    "peak_error": 9.834766387939453E-07,
-    "stats": "codec=3 rate=44100 channels=2 bits=0 frames=30870 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-noise-vbr.mp3",
-    "result": "matched",
-    "frames": 30870,
-    "snr_db": 113.104055784166,
-    "peak_error": 1.1101365089416504E-06,
-    "stats": "codec=3 rate=44100 channels=2 bits=0 frames=30870 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-transient-cbr-stereo.mp3",
-    "result": "matched",
-    "frames": 30870,
-    "snr_db": 122.14540761884155,
-    "peak_error": 1.7285346984863281E-06,
-    "stats": "codec=3 rate=44100 channels=2 bits=0 frames=30870 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-transient-cbr-joint.mp3",
-    "result": "matched",
-    "frames": 30870,
-    "snr_db": 122.4183045717756,
-    "peak_error": 1.5497207641601562E-06,
-    "stats": "codec=3 rate=44100 channels=2 bits=0 frames=30870 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-transient-vbr.mp3",
-    "result": "matched",
-    "frames": 30870,
-    "snr_db": 122.20454041788655,
-    "peak_error": 2.0265579223632812E-06,
-    "stats": "codec=3 rate=44100 channels=2 bits=0 frames=30870 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-correlated-cbr-stereo.mp3",
-    "result": "matched",
-    "frames": 30870,
-    "snr_db": 123.78357200027725,
-    "peak_error": 4.76837158203125E-07,
-    "stats": "codec=3 rate=44100 channels=2 bits=0 frames=30870 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-correlated-cbr-joint.mp3",
-    "result": "matched",
-    "frames": 30870,
-    "snr_db": 123.79635847579621,
-    "peak_error": 3.5762786865234375E-07,
-    "stats": "codec=3 rate=44100 channels=2 bits=0 frames=30870 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-correlated-vbr.mp3",
-    "result": "matched",
-    "frames": 30870,
-    "snr_db": 123.9011385759247,
-    "peak_error": 3.725290298461914E-07,
-    "stats": "codec=3 rate=44100 channels=2 bits=0 frames=30870 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-no-xing.mp3",
-    "result": "matched",
-    "frames": 10368,
-    "snr_db": 121.17320074871286,
-    "peak_error": 2.905726432800293E-07,
-    "stats": "codec=3 rate=44100 channels=1 bits=0 frames=10368 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-vector-v3-i1-m-1.mp3",
-    "result": "matched",
-    "frames": 4608,
-    "snr_db": 125.25219620559642,
-    "peak_error": 6.51925802230835E-08,
-    "stats": "codec=3 rate=44100 channels=2 bits=0 frames=4608 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-vector-v3-i1-m0.mp3",
-    "result": "matched",
-    "frames": 4608,
-    "snr_db": 125.33904236382087,
-    "peak_error": 6.51925802230835E-08,
-    "stats": "codec=3 rate=44100 channels=2 bits=0 frames=4608 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-vector-v3-i1-m1.mp3",
-    "result": "matched",
-    "frames": 4608,
-    "snr_db": 125.25219620559642,
-    "peak_error": 6.51925802230835E-08,
-    "stats": "codec=3 rate=44100 channels=2 bits=0 frames=4608 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-vector-v3-i3-m-1.mp3",
-    "result": "matched",
-    "frames": 4608,
-    "snr_db": 124.74611476874928,
-    "peak_error": 6.332993507385254E-08,
-    "stats": "codec=3 rate=44100 channels=2 bits=0 frames=4608 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=0 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-vector-v3-i3-m0.mp3",
-    "result": "matched",
-    "frames": 4608,
-    "snr_db": 124.80021184907017,
-    "peak_error": 7.450580596923828E-08,
-    "stats": "codec=3 rate=44100 channels=2 bits=0 frames=4608 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-vector-v3-i3-m1.mp3",
-    "result": "matched",
-    "frames": 4608,
-    "snr_db": 124.74611476874928,
-    "peak_error": 6.332993507385254E-08,
-    "stats": "codec=3 rate=44100 channels=2 bits=0 frames=4608 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-vector-v2-i1-m-1.mp3",
-    "result": "matched",
-    "frames": 4608,
-    "snr_db": 125.25219620559646,
-    "peak_error": 6.51925802230835E-08,
-    "stats": "codec=3 rate=22050 channels=2 bits=0 frames=4608 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-vector-v2-i1-m0.mp3",
-    "result": "matched",
-    "frames": 4608,
-    "snr_db": 125.33904236382087,
-    "peak_error": 6.51925802230835E-08,
-    "stats": "codec=3 rate=22050 channels=2 bits=0 frames=4608 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-vector-v2-i1-m1.mp3",
-    "result": "matched",
-    "frames": 4608,
-    "snr_db": 125.25219620559646,
-    "peak_error": 6.51925802230835E-08,
-    "stats": "codec=3 rate=22050 channels=2 bits=0 frames=4608 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-vector-v2-i3-m-1.mp3",
-    "result": "matched",
-    "frames": 4608,
-    "snr_db": 124.7461147687493,
-    "peak_error": 6.332993507385254E-08,
-    "stats": "codec=3 rate=22050 channels=2 bits=0 frames=4608 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=46875 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-vector-v2-i3-m0.mp3",
-    "result": "matched",
-    "frames": 4608,
-    "snr_db": 124.80021184907017,
-    "peak_error": 7.450580596923828E-08,
-    "stats": "codec=3 rate=22050 channels=2 bits=0 frames=4608 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-vector-v2-i3-m1.mp3",
-    "result": "matched",
-    "frames": 4608,
-    "snr_db": 124.7461147687493,
-    "peak_error": 6.332993507385254E-08,
-    "stats": "codec=3 rate=22050 channels=2 bits=0 frames=4608 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=0 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-vector-v0-i1-m-1.mp3",
-    "result": "matched",
-    "frames": 4608,
-    "snr_db": 125.25219620559646,
-    "peak_error": 6.51925802230835E-08,
-    "stats": "codec=3 rate=11025 channels=2 bits=0 frames=4608 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-vector-v0-i1-m0.mp3",
-    "result": "matched",
-    "frames": 4608,
-    "snr_db": 125.33904236382087,
-    "peak_error": 6.51925802230835E-08,
-    "stats": "codec=3 rate=11025 channels=2 bits=0 frames=4608 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-vector-v0-i1-m1.mp3",
-    "result": "matched",
-    "frames": 4608,
-    "snr_db": 125.25219620559646,
-    "peak_error": 6.51925802230835E-08,
-    "stats": "codec=3 rate=11025 channels=2 bits=0 frames=4608 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-vector-v0-i3-m-1.mp3",
-    "result": "matched",
-    "frames": 4608,
-    "snr_db": 124.7461147687493,
-    "peak_error": 6.332993507385254E-08,
-    "stats": "codec=3 rate=11025 channels=2 bits=0 frames=4608 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-vector-v0-i3-m0.mp3",
-    "result": "matched",
-    "frames": 4608,
-    "snr_db": 124.80021184907017,
-    "peak_error": 7.450580596923828E-08,
-    "stats": "codec=3 rate=11025 channels=2 bits=0 frames=4608 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=0 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-vector-v0-i3-m1.mp3",
-    "result": "matched",
-    "frames": 4608,
-    "snr_db": 124.7461147687493,
-    "peak_error": 6.332993507385254E-08,
-    "stats": "codec=3 rate=11025 channels=2 bits=0 frames=4608 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-vector-pan-3-15.mp3",
-    "result": "matched",
-    "frames": 3456,
-    "snr_db": 125.17145676234196,
-    "peak_error": 6.51925802230835E-08,
-    "stats": "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=0 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-vector-pan-2-160.mp3",
-    "result": "matched",
-    "frames": 1728,
-    "snr_db": 125.79273533584049,
-    "peak_error": 6.51925802230835E-08,
-    "stats": "codec=3 rate=22050 channels=2 bits=0 frames=1728 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-vector-pan-2-161.mp3",
-    "result": "matched",
-    "frames": 1728,
-    "snr_db": 125.51253102705886,
-    "peak_error": 6.51925802230835E-08,
-    "stats": "codec=3 rate=22050 channels=2 bits=0 frames=1728 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-vector-pan-0-160.mp3",
-    "result": "matched",
-    "frames": 1728,
-    "snr_db": 125.79273533584049,
-    "peak_error": 6.51925802230835E-08,
-    "stats": "codec=3 rate=11025 channels=2 bits=0 frames=1728 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-vector-crc.mp3",
-    "result": "matched",
-    "frames": 3456,
-    "snr_db": 125.17145676234196,
-    "peak_error": 6.51925802230835E-08,
-    "stats": "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-vector-id3v2-2.mp3",
-    "result": "matched",
-    "frames": 3456,
-    "snr_db": 125.17145676234196,
-    "peak_error": 6.51925802230835E-08,
-    "stats": "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-vector-id3v2-3.mp3",
-    "result": "matched",
-    "frames": 3456,
-    "snr_db": 125.17145676234196,
-    "peak_error": 6.51925802230835E-08,
-    "stats": "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-vector-id3v2-4.mp3",
-    "result": "matched",
-    "frames": 3456,
-    "snr_db": 125.17145676234196,
-    "peak_error": 6.51925802230835E-08,
-    "stats": "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-vector-id3-footer.mp3",
-    "result": "matched",
-    "frames": 3456,
-    "snr_db": 125.17145676234196,
-    "peak_error": 6.51925802230835E-08,
-    "stats": "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-vector-id3v1.mp3",
-    "result": "matched",
-    "frames": 3456,
-    "snr_db": 125.17145676234196,
-    "peak_error": 6.51925802230835E-08,
-    "stats": "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-vector-codebook-0.mp3",
-    "result": "matched",
-    "frames": 3456,
-    "snr_db": null,
-    "peak_error": 0,
-    "stats": "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=31250 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-vector-codebook-1.mp3",
-    "result": "matched",
-    "frames": 3456,
-    "snr_db": 127.10815960185235,
-    "peak_error": 5.960464477539063E-08,
-    "stats": "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-vector-codebook-2.mp3",
-    "result": "matched",
-    "frames": 3456,
-    "snr_db": 127.7726443404802,
-    "peak_error": 6.705522537231445E-08,
-    "stats": "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-vector-codebook-3.mp3",
-    "result": "matched",
-    "frames": 3456,
-    "snr_db": 127.7726443404802,
-    "peak_error": 6.705522537231445E-08,
-    "stats": "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-vector-codebook-5.mp3",
-    "result": "matched",
-    "frames": 3456,
-    "snr_db": 127.06602803419302,
-    "peak_error": 6.705522537231445E-08,
-    "stats": "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=0 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-vector-codebook-6.mp3",
-    "result": "matched",
-    "frames": 3456,
-    "snr_db": 127.06602803419302,
-    "peak_error": 6.705522537231445E-08,
-    "stats": "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=0 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-vector-codebook-7.mp3",
-    "result": "matched",
-    "frames": 3456,
-    "snr_db": 125.90750154724768,
-    "peak_error": 7.078051567077637E-08,
-    "stats": "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-vector-codebook-8.mp3",
-    "result": "matched",
-    "frames": 3456,
-    "snr_db": 125.90750154724768,
-    "peak_error": 7.078051567077637E-08,
-    "stats": "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-vector-codebook-9.mp3",
-    "result": "matched",
-    "frames": 3456,
-    "snr_db": 125.90750154724768,
-    "peak_error": 7.078051567077637E-08,
-    "stats": "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-vector-codebook-10.mp3",
-    "result": "matched",
-    "frames": 3456,
-    "snr_db": 126.26913310711915,
-    "peak_error": 7.078051567077637E-08,
-    "stats": "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-vector-codebook-11.mp3",
-    "result": "matched",
-    "frames": 3456,
-    "snr_db": 126.26913310711915,
-    "peak_error": 7.078051567077637E-08,
-    "stats": "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-vector-codebook-12.mp3",
-    "result": "matched",
-    "frames": 3456,
-    "snr_db": 126.26913310711915,
-    "peak_error": 7.078051567077637E-08,
-    "stats": "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-vector-codebook-13.mp3",
-    "result": "matched",
-    "frames": 3456,
-    "snr_db": 126.26257434769818,
-    "peak_error": 6.332993507385254E-08,
-    "stats": "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-vector-codebook-15.mp3",
-    "result": "matched",
-    "frames": 3456,
-    "snr_db": 126.26257434769818,
-    "peak_error": 6.332993507385254E-08,
-    "stats": "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-vector-codebook-16.mp3",
-    "result": "matched",
-    "frames": 3456,
-    "snr_db": 127.10097825071968,
-    "peak_error": 6.332993507385254E-08,
-    "stats": "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=0 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-vector-codebook-17.mp3",
-    "result": "matched",
-    "frames": 3456,
-    "snr_db": 126.58164754273537,
-    "peak_error": 6.705522537231445E-08,
-    "stats": "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=0 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-vector-codebook-18.mp3",
-    "result": "matched",
-    "frames": 3456,
-    "snr_db": 126.58912915893339,
-    "peak_error": 5.587935447692871E-08,
-    "stats": "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-vector-codebook-19.mp3",
-    "result": "matched",
-    "frames": 3456,
-    "snr_db": 127.44736264114573,
-    "peak_error": 5.587935447692871E-08,
-    "stats": "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-vector-codebook-20.mp3",
-    "result": "matched",
-    "frames": 3456,
-    "snr_db": 125.81062462623719,
-    "peak_error": 6.332993507385254E-08,
-    "stats": "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-vector-codebook-21.mp3",
-    "result": "matched",
-    "frames": 3456,
-    "snr_db": 126.21609226226417,
-    "peak_error": 5.587935447692871E-08,
-    "stats": "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=46875 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-vector-codebook-22.mp3",
-    "result": "matched",
-    "frames": 3456,
-    "snr_db": 127.67278389214178,
-    "peak_error": 5.960464477539063E-08,
-    "stats": "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-vector-codebook-23.mp3",
-    "result": "matched",
-    "frames": 3456,
-    "snr_db": 127.13851073830577,
-    "peak_error": 6.705522537231445E-08,
-    "stats": "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-vector-codebook-24.mp3",
-    "result": "matched",
-    "frames": 3456,
-    "snr_db": 127.44736264114573,
-    "peak_error": 5.587935447692871E-08,
-    "stats": "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=0 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-vector-codebook-25.mp3",
-    "result": "matched",
-    "frames": 3456,
-    "snr_db": 126.77860947561021,
-    "peak_error": 6.705522537231445E-08,
-    "stats": "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-vector-codebook-26.mp3",
-    "result": "matched",
-    "frames": 3456,
-    "snr_db": 125.81062462623719,
-    "peak_error": 6.332993507385254E-08,
-    "stats": "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-vector-codebook-27.mp3",
-    "result": "matched",
-    "frames": 3456,
-    "snr_db": 127.23670986084903,
-    "peak_error": 6.332993507385254E-08,
-    "stats": "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-vector-codebook-28.mp3",
-    "result": "matched",
-    "frames": 3456,
-    "snr_db": 126.21609226226417,
-    "peak_error": 5.587935447692871E-08,
-    "stats": "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-vector-codebook-29.mp3",
-    "result": "matched",
-    "frames": 3456,
-    "snr_db": 126.88544095456925,
-    "peak_error": 6.705522537231445E-08,
-    "stats": "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-vector-codebook-30.mp3",
-    "result": "matched",
-    "frames": 3456,
-    "snr_db": 126.80419469276538,
-    "peak_error": 5.960464477539063E-08,
-    "stats": "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=0 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-vector-codebook-31.mp3",
-    "result": "matched",
-    "frames": 3456,
-    "snr_db": 127.13851073830577,
-    "peak_error": 6.705522537231445E-08,
-    "stats": "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-vector-count1-0.mp3",
-    "result": "matched",
-    "frames": 3456,
-    "snr_db": 127.62838324411236,
-    "peak_error": 9.685754776000977E-08,
-    "stats": "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-vector-count1-1.mp3",
-    "result": "matched",
-    "frames": 3456,
-    "snr_db": 127.62838324411236,
-    "peak_error": 9.685754776000977E-08,
-    "stats": "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-invalid-missing-reservoir.mp3",
-    "result": "rejected",
-    "frames": 0,
-    "snr_db": null,
-    "peak_error": 0,
-    "stats": "codec=3 rate=44100 channels=2 bits=0 frames=0 underruns=0 decode_error=12 audio_error=0 elapsed_ms=15 cpu_us=0 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-invalid-big-values.mp3",
-    "result": "rejected",
-    "frames": 0,
-    "snr_db": null,
-    "peak_error": 0,
-    "stats": "codec=3 rate=44100 channels=2 bits=0 frames=0 underruns=0 decode_error=12 audio_error=0 elapsed_ms=15 cpu_us=15625 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-invalid-codebook4.mp3",
-    "result": "rejected",
-    "frames": 0,
-    "snr_db": null,
-    "peak_error": 0,
-    "stats": "codec=3 rate=44100 channels=2 bits=0 frames=0 underruns=0 decode_error=12 audio_error=0 elapsed_ms=16 cpu_us=0 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-invalid-codebook14.mp3",
-    "result": "rejected",
-    "frames": 0,
-    "snr_db": null,
-    "peak_error": 0,
-    "stats": "codec=3 rate=44100 channels=2 bits=0 frames=0 underruns=0 decode_error=12 audio_error=0 elapsed_ms=16 cpu_us=0 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-invalid-free-format.mp3",
-    "result": "rejected",
-    "frames": 0,
-    "snr_db": null,
-    "peak_error": 0,
-    "stats": "Unsupported, malformed, or inaccessible file. Supports WAV, native FLAC and MP3 Layer III."
-  },
-  {
-    "test": "mp3-invalid-reserved-version.mp3",
-    "result": "rejected",
-    "frames": 0,
-    "snr_db": null,
-    "peak_error": 0,
-    "stats": "Unsupported, malformed, or inaccessible file. Supports WAV, native FLAC and MP3 Layer III."
-  },
-  {
-    "test": "mp3-invalid-reserved-rate.mp3",
-    "result": "rejected",
-    "frames": 0,
-    "snr_db": null,
-    "peak_error": 0,
-    "stats": "Unsupported, malformed, or inaccessible file. Supports WAV, native FLAC and MP3 Layer III."
-  },
-  {
-    "test": "mp3-invalid-part-length.mp3",
-    "result": "rejected",
-    "frames": 0,
-    "snr_db": null,
-    "peak_error": 0,
-    "stats": "codec=3 rate=44100 channels=2 bits=0 frames=0 underruns=0 decode_error=15 audio_error=0 elapsed_ms=15 cpu_us=0 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-invalid-truncated.mp3",
-    "result": "rejected",
-    "frames": 0,
-    "snr_db": null,
-    "peak_error": 0,
-    "stats": "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=15 audio_error=0 elapsed_ms=16 cpu_us=0 endpoint_dry=0"
-  },
-  {
-    "test": "mp3-invalid-crc.mp3",
-    "result": "rejected",
-    "frames": 0,
-    "snr_db": null,
-    "peak_error": 0,
-    "stats": "Unsupported, malformed, or inaccessible file. Supports WAV, native FLAC and MP3 Layer III."
-  },
-  {
-    "test": "mp3-invalid-id3-size.mp3",
-    "result": "rejected",
-    "frames": 0,
-    "snr_db": null,
-    "peak_error": 0,
-    "stats": "Unsupported, malformed, or inaccessible file. Supports WAV, native FLAC and MP3 Layer III."
-  },
-  {
-    "test": "mp3-invalid-id3-version.mp3",
-    "result": "rejected",
-    "frames": 0,
-    "snr_db": null,
-    "peak_error": 0,
-    "stats": "Unsupported, malformed, or inaccessible file. Supports WAV, native FLAC and MP3 Layer III."
-  },
-  {
-    "test": "mp3-invalid-id3-flags.mp3",
-    "result": "rejected",
-    "frames": 0,
-    "snr_db": null,
-    "peak_error": 0,
-    "stats": "Unsupported, malformed, or inaccessible file. Supports WAV, native FLAC and MP3 Layer III."
-  },
-  {
-    "test": "mp3-invalid-id3-footer.mp3",
-    "result": "rejected",
-    "frames": 0,
-    "snr_db": null,
-    "peak_error": 0,
-    "stats": "Unsupported, malformed, or inaccessible file. Supports WAV, native FLAC and MP3 Layer III."
-  },
-  {
-    "test": "mp3-wasapi-silence",
-    "result": "played",
-    "frames": 57600,
-    "snr_db": null,
-    "peak_error": 0,
-    "stats": "Playing. Space: pause / resume. Q or Ctrl+C: stop. codec=3 rate=48000 channels=2 bits=0 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1219 cpu_us=78125 endpoint_dry=0"
-  }
+﻿[
+    {
+        "test":  "mp3-8000-1.mp3",
+        "result":  "matched",
+        "frames":  2800,
+        "snr_db":  112.0322092333428,
+        "peak_error":  7.7486038208007813E-07,
+        "stats":  "codec=3 rate=8000 channels=1 bits=0 frames=2800 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-8000-2.mp3",
+        "result":  "matched",
+        "frames":  2800,
+        "snr_db":  112.21197084892574,
+        "peak_error":  0.000001043081283569336,
+        "stats":  "codec=3 rate=8000 channels=2 bits=0 frames=2800 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-11025-1.mp3",
+        "result":  "matched",
+        "frames":  3859,
+        "snr_db":  125.68862840548871,
+        "peak_error":  1.7881393432617188E-07,
+        "stats":  "codec=3 rate=11025 channels=1 bits=0 frames=3859 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-11025-2.mp3",
+        "result":  "matched",
+        "frames":  3859,
+        "snr_db":  125.46847380401326,
+        "peak_error":  2.0861625671386719E-07,
+        "stats":  "codec=3 rate=11025 channels=2 bits=0 frames=3859 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-12000-1.mp3",
+        "result":  "matched",
+        "frames":  4200,
+        "snr_db":  124.51397650399193,
+        "peak_error":  2.0861625671386719E-07,
+        "stats":  "codec=3 rate=12000 channels=1 bits=0 frames=4200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-12000-2.mp3",
+        "result":  "matched",
+        "frames":  4200,
+        "snr_db":  125.24943001969012,
+        "peak_error":  2.8312206268310547E-07,
+        "stats":  "codec=3 rate=12000 channels=2 bits=0 frames=4200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-16000-1.mp3",
+        "result":  "matched",
+        "frames":  5600,
+        "snr_db":  121.10894391142762,
+        "peak_error":  3.4272670745849609E-07,
+        "stats":  "codec=3 rate=16000 channels=1 bits=0 frames=5600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-16000-2.mp3",
+        "result":  "matched",
+        "frames":  5600,
+        "snr_db":  120.97834885466936,
+        "peak_error":  4.0605664253234863E-07,
+        "stats":  "codec=3 rate=16000 channels=2 bits=0 frames=5600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-22050-1.mp3",
+        "result":  "matched",
+        "frames":  7718,
+        "snr_db":  122.21363075179069,
+        "peak_error":  2.8312206268310547E-07,
+        "stats":  "codec=3 rate=22050 channels=1 bits=0 frames=7718 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-22050-2.mp3",
+        "result":  "matched",
+        "frames":  7718,
+        "snr_db":  122.45039377526143,
+        "peak_error":  2.905726432800293E-07,
+        "stats":  "codec=3 rate=22050 channels=2 bits=0 frames=7718 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-24000-1.mp3",
+        "result":  "matched",
+        "frames":  8400,
+        "snr_db":  123.38963986922595,
+        "peak_error":  2.2910535335540771E-07,
+        "stats":  "codec=3 rate=24000 channels=1 bits=0 frames=8400 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-24000-2.mp3",
+        "result":  "matched",
+        "frames":  8400,
+        "snr_db":  122.85515195886914,
+        "peak_error":  3.7997961044311523E-07,
+        "stats":  "codec=3 rate=24000 channels=2 bits=0 frames=8400 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=0 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-32000-1.mp3",
+        "result":  "matched",
+        "frames":  11200,
+        "snr_db":  123.34187901856825,
+        "peak_error":  2.5331974029541016E-07,
+        "stats":  "codec=3 rate=32000 channels=1 bits=0 frames=11200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=0 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-32000-2.mp3",
+        "result":  "matched",
+        "frames":  11200,
+        "snr_db":  123.22792425394518,
+        "peak_error":  3.5762786865234375E-07,
+        "stats":  "codec=3 rate=32000 channels=2 bits=0 frames=11200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-44100-1.mp3",
+        "result":  "matched",
+        "frames":  15435,
+        "snr_db":  122.02767054692522,
+        "peak_error":  2.8684735298156738E-07,
+        "stats":  "codec=3 rate=44100 channels=1 bits=0 frames=15435 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-44100-2.mp3",
+        "result":  "matched",
+        "frames":  15435,
+        "snr_db":  122.24689801070959,
+        "peak_error":  3.9488077163696289E-07,
+        "stats":  "codec=3 rate=44100 channels=2 bits=0 frames=15435 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-48000-1.mp3",
+        "result":  "matched",
+        "frames":  16800,
+        "snr_db":  122.01707793794372,
+        "peak_error":  2.9802322387695313E-07,
+        "stats":  "codec=3 rate=48000 channels=1 bits=0 frames=16800 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-48000-2.mp3",
+        "result":  "matched",
+        "frames":  16800,
+        "snr_db":  122.39282625393011,
+        "peak_error":  4.1723251342773438E-07,
+        "stats":  "codec=3 rate=48000 channels=2 bits=0 frames=16800 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-noise-cbr-stereo.mp3",
+        "result":  "matched",
+        "frames":  30870,
+        "snr_db":  113.62144240324747,
+        "peak_error":  0.0000011473894119262695,
+        "stats":  "codec=3 rate=44100 channels=2 bits=0 frames=30870 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-noise-cbr-joint.mp3",
+        "result":  "matched",
+        "frames":  30870,
+        "snr_db":  113.72875883533146,
+        "peak_error":  9.8347663879394531E-07,
+        "stats":  "codec=3 rate=44100 channels=2 bits=0 frames=30870 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-noise-vbr.mp3",
+        "result":  "matched",
+        "frames":  30870,
+        "snr_db":  113.104055784166,
+        "peak_error":  0.0000011101365089416504,
+        "stats":  "codec=3 rate=44100 channels=2 bits=0 frames=30870 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-transient-cbr-stereo.mp3",
+        "result":  "matched",
+        "frames":  30870,
+        "snr_db":  122.14540761884155,
+        "peak_error":  0.0000017285346984863281,
+        "stats":  "codec=3 rate=44100 channels=2 bits=0 frames=30870 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-transient-cbr-joint.mp3",
+        "result":  "matched",
+        "frames":  30870,
+        "snr_db":  122.4183045717756,
+        "peak_error":  0.0000015497207641601562,
+        "stats":  "codec=3 rate=44100 channels=2 bits=0 frames=30870 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-transient-vbr.mp3",
+        "result":  "matched",
+        "frames":  30870,
+        "snr_db":  122.20454041788655,
+        "peak_error":  0.0000020265579223632812,
+        "stats":  "codec=3 rate=44100 channels=2 bits=0 frames=30870 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-correlated-cbr-stereo.mp3",
+        "result":  "matched",
+        "frames":  30870,
+        "snr_db":  123.78357200027725,
+        "peak_error":  4.76837158203125E-07,
+        "stats":  "codec=3 rate=44100 channels=2 bits=0 frames=30870 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-correlated-cbr-joint.mp3",
+        "result":  "matched",
+        "frames":  30870,
+        "snr_db":  123.79635847579621,
+        "peak_error":  3.5762786865234375E-07,
+        "stats":  "codec=3 rate=44100 channels=2 bits=0 frames=30870 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-correlated-vbr.mp3",
+        "result":  "matched",
+        "frames":  30870,
+        "snr_db":  123.9011385759247,
+        "peak_error":  3.7252902984619141E-07,
+        "stats":  "codec=3 rate=44100 channels=2 bits=0 frames=30870 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-no-xing.mp3",
+        "result":  "matched",
+        "frames":  10368,
+        "snr_db":  121.17320074871286,
+        "peak_error":  2.905726432800293E-07,
+        "stats":  "codec=3 rate=44100 channels=1 bits=0 frames=10368 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-vector-v3-i1-m-1.mp3",
+        "result":  "matched",
+        "frames":  4608,
+        "snr_db":  125.25219620559642,
+        "peak_error":  6.51925802230835E-08,
+        "stats":  "codec=3 rate=44100 channels=2 bits=0 frames=4608 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-vector-v3-i1-m0.mp3",
+        "result":  "matched",
+        "frames":  4608,
+        "snr_db":  125.33904236382087,
+        "peak_error":  6.51925802230835E-08,
+        "stats":  "codec=3 rate=44100 channels=2 bits=0 frames=4608 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-vector-v3-i1-m1.mp3",
+        "result":  "matched",
+        "frames":  4608,
+        "snr_db":  125.25219620559642,
+        "peak_error":  6.51925802230835E-08,
+        "stats":  "codec=3 rate=44100 channels=2 bits=0 frames=4608 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=0 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-vector-v3-i3-m-1.mp3",
+        "result":  "matched",
+        "frames":  4608,
+        "snr_db":  124.74611476874928,
+        "peak_error":  6.3329935073852539E-08,
+        "stats":  "codec=3 rate=44100 channels=2 bits=0 frames=4608 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-vector-v3-i3-m0.mp3",
+        "result":  "matched",
+        "frames":  4608,
+        "snr_db":  124.80021184907017,
+        "peak_error":  7.4505805969238281E-08,
+        "stats":  "codec=3 rate=44100 channels=2 bits=0 frames=4608 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-vector-v3-i3-m1.mp3",
+        "result":  "matched",
+        "frames":  4608,
+        "snr_db":  124.74611476874928,
+        "peak_error":  6.3329935073852539E-08,
+        "stats":  "codec=3 rate=44100 channels=2 bits=0 frames=4608 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-vector-v2-i1-m-1.mp3",
+        "result":  "matched",
+        "frames":  4608,
+        "snr_db":  125.25219620559646,
+        "peak_error":  6.51925802230835E-08,
+        "stats":  "codec=3 rate=22050 channels=2 bits=0 frames=4608 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=0 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-vector-v2-i1-m0.mp3",
+        "result":  "matched",
+        "frames":  4608,
+        "snr_db":  125.33904236382087,
+        "peak_error":  6.51925802230835E-08,
+        "stats":  "codec=3 rate=22050 channels=2 bits=0 frames=4608 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-vector-v2-i1-m1.mp3",
+        "result":  "matched",
+        "frames":  4608,
+        "snr_db":  125.25219620559646,
+        "peak_error":  6.51925802230835E-08,
+        "stats":  "codec=3 rate=22050 channels=2 bits=0 frames=4608 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-vector-v2-i3-m-1.mp3",
+        "result":  "matched",
+        "frames":  4608,
+        "snr_db":  124.7461147687493,
+        "peak_error":  6.3329935073852539E-08,
+        "stats":  "codec=3 rate=22050 channels=2 bits=0 frames=4608 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=0 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-vector-v2-i3-m0.mp3",
+        "result":  "matched",
+        "frames":  4608,
+        "snr_db":  124.80021184907017,
+        "peak_error":  7.4505805969238281E-08,
+        "stats":  "codec=3 rate=22050 channels=2 bits=0 frames=4608 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=0 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-vector-v2-i3-m1.mp3",
+        "result":  "matched",
+        "frames":  4608,
+        "snr_db":  124.7461147687493,
+        "peak_error":  6.3329935073852539E-08,
+        "stats":  "codec=3 rate=22050 channels=2 bits=0 frames=4608 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-vector-v0-i1-m-1.mp3",
+        "result":  "matched",
+        "frames":  4608,
+        "snr_db":  125.25219620559646,
+        "peak_error":  6.51925802230835E-08,
+        "stats":  "codec=3 rate=11025 channels=2 bits=0 frames=4608 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=0 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-vector-v0-i1-m0.mp3",
+        "result":  "matched",
+        "frames":  4608,
+        "snr_db":  125.33904236382087,
+        "peak_error":  6.51925802230835E-08,
+        "stats":  "codec=3 rate=11025 channels=2 bits=0 frames=4608 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-vector-v0-i1-m1.mp3",
+        "result":  "matched",
+        "frames":  4608,
+        "snr_db":  125.25219620559646,
+        "peak_error":  6.51925802230835E-08,
+        "stats":  "codec=3 rate=11025 channels=2 bits=0 frames=4608 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=0 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-vector-v0-i3-m-1.mp3",
+        "result":  "matched",
+        "frames":  4608,
+        "snr_db":  124.7461147687493,
+        "peak_error":  6.3329935073852539E-08,
+        "stats":  "codec=3 rate=11025 channels=2 bits=0 frames=4608 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=0 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-vector-v0-i3-m0.mp3",
+        "result":  "matched",
+        "frames":  4608,
+        "snr_db":  124.80021184907017,
+        "peak_error":  7.4505805969238281E-08,
+        "stats":  "codec=3 rate=11025 channels=2 bits=0 frames=4608 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-vector-v0-i3-m1.mp3",
+        "result":  "matched",
+        "frames":  4608,
+        "snr_db":  124.7461147687493,
+        "peak_error":  6.3329935073852539E-08,
+        "stats":  "codec=3 rate=11025 channels=2 bits=0 frames=4608 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-vector-pan-3-15.mp3",
+        "result":  "matched",
+        "frames":  3456,
+        "snr_db":  125.17145676234196,
+        "peak_error":  6.51925802230835E-08,
+        "stats":  "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-vector-pan-2-160.mp3",
+        "result":  "matched",
+        "frames":  1728,
+        "snr_db":  125.79273533584049,
+        "peak_error":  6.51925802230835E-08,
+        "stats":  "codec=3 rate=22050 channels=2 bits=0 frames=1728 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-vector-pan-2-161.mp3",
+        "result":  "matched",
+        "frames":  1728,
+        "snr_db":  125.51253102705886,
+        "peak_error":  6.51925802230835E-08,
+        "stats":  "codec=3 rate=22050 channels=2 bits=0 frames=1728 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=0 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-vector-pan-0-160.mp3",
+        "result":  "matched",
+        "frames":  1728,
+        "snr_db":  125.79273533584049,
+        "peak_error":  6.51925802230835E-08,
+        "stats":  "codec=3 rate=11025 channels=2 bits=0 frames=1728 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-vector-crc.mp3",
+        "result":  "matched",
+        "frames":  3456,
+        "snr_db":  125.17145676234196,
+        "peak_error":  6.51925802230835E-08,
+        "stats":  "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-vector-id3v2-2.mp3",
+        "result":  "matched",
+        "frames":  3456,
+        "snr_db":  125.17145676234196,
+        "peak_error":  6.51925802230835E-08,
+        "stats":  "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=31250 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-vector-id3v2-3.mp3",
+        "result":  "matched",
+        "frames":  3456,
+        "snr_db":  125.17145676234196,
+        "peak_error":  6.51925802230835E-08,
+        "stats":  "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=0 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-vector-id3v2-4.mp3",
+        "result":  "matched",
+        "frames":  3456,
+        "snr_db":  125.17145676234196,
+        "peak_error":  6.51925802230835E-08,
+        "stats":  "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=0 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-vector-id3-footer.mp3",
+        "result":  "matched",
+        "frames":  3456,
+        "snr_db":  125.17145676234196,
+        "peak_error":  6.51925802230835E-08,
+        "stats":  "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-vector-id3v1.mp3",
+        "result":  "matched",
+        "frames":  3456,
+        "snr_db":  125.17145676234196,
+        "peak_error":  6.51925802230835E-08,
+        "stats":  "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=0 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-vector-codebook-0.mp3",
+        "result":  "matched",
+        "frames":  3456,
+        "snr_db":  null,
+        "peak_error":  0,
+        "stats":  "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-vector-codebook-1.mp3",
+        "result":  "matched",
+        "frames":  3456,
+        "snr_db":  127.10815960185235,
+        "peak_error":  5.9604644775390625E-08,
+        "stats":  "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-vector-codebook-2.mp3",
+        "result":  "matched",
+        "frames":  3456,
+        "snr_db":  127.7726443404802,
+        "peak_error":  6.7055225372314453E-08,
+        "stats":  "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-vector-codebook-3.mp3",
+        "result":  "matched",
+        "frames":  3456,
+        "snr_db":  127.7726443404802,
+        "peak_error":  6.7055225372314453E-08,
+        "stats":  "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-vector-codebook-5.mp3",
+        "result":  "matched",
+        "frames":  3456,
+        "snr_db":  127.06602803419302,
+        "peak_error":  6.7055225372314453E-08,
+        "stats":  "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=0 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-vector-codebook-6.mp3",
+        "result":  "matched",
+        "frames":  3456,
+        "snr_db":  127.06602803419302,
+        "peak_error":  6.7055225372314453E-08,
+        "stats":  "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-vector-codebook-7.mp3",
+        "result":  "matched",
+        "frames":  3456,
+        "snr_db":  125.90750154724768,
+        "peak_error":  7.0780515670776367E-08,
+        "stats":  "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=0 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-vector-codebook-8.mp3",
+        "result":  "matched",
+        "frames":  3456,
+        "snr_db":  125.90750154724768,
+        "peak_error":  7.0780515670776367E-08,
+        "stats":  "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-vector-codebook-9.mp3",
+        "result":  "matched",
+        "frames":  3456,
+        "snr_db":  125.90750154724768,
+        "peak_error":  7.0780515670776367E-08,
+        "stats":  "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-vector-codebook-10.mp3",
+        "result":  "matched",
+        "frames":  3456,
+        "snr_db":  126.26913310711915,
+        "peak_error":  7.0780515670776367E-08,
+        "stats":  "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-vector-codebook-11.mp3",
+        "result":  "matched",
+        "frames":  3456,
+        "snr_db":  126.26913310711915,
+        "peak_error":  7.0780515670776367E-08,
+        "stats":  "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=0 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-vector-codebook-12.mp3",
+        "result":  "matched",
+        "frames":  3456,
+        "snr_db":  126.26913310711915,
+        "peak_error":  7.0780515670776367E-08,
+        "stats":  "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=0 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-vector-codebook-13.mp3",
+        "result":  "matched",
+        "frames":  3456,
+        "snr_db":  126.26257434769818,
+        "peak_error":  6.3329935073852539E-08,
+        "stats":  "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-vector-codebook-15.mp3",
+        "result":  "matched",
+        "frames":  3456,
+        "snr_db":  126.26257434769818,
+        "peak_error":  6.3329935073852539E-08,
+        "stats":  "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=0 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-vector-codebook-16.mp3",
+        "result":  "matched",
+        "frames":  3456,
+        "snr_db":  127.10097825071968,
+        "peak_error":  6.3329935073852539E-08,
+        "stats":  "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-vector-codebook-17.mp3",
+        "result":  "matched",
+        "frames":  3456,
+        "snr_db":  126.58164754273537,
+        "peak_error":  6.7055225372314453E-08,
+        "stats":  "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-vector-codebook-18.mp3",
+        "result":  "matched",
+        "frames":  3456,
+        "snr_db":  126.58912915893339,
+        "peak_error":  5.5879354476928711E-08,
+        "stats":  "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=0 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-vector-codebook-19.mp3",
+        "result":  "matched",
+        "frames":  3456,
+        "snr_db":  127.44736264114573,
+        "peak_error":  5.5879354476928711E-08,
+        "stats":  "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-vector-codebook-20.mp3",
+        "result":  "matched",
+        "frames":  3456,
+        "snr_db":  125.81062462623719,
+        "peak_error":  6.3329935073852539E-08,
+        "stats":  "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=0 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-vector-codebook-21.mp3",
+        "result":  "matched",
+        "frames":  3456,
+        "snr_db":  126.21609226226417,
+        "peak_error":  5.5879354476928711E-08,
+        "stats":  "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-vector-codebook-22.mp3",
+        "result":  "matched",
+        "frames":  3456,
+        "snr_db":  127.67278389214178,
+        "peak_error":  5.9604644775390625E-08,
+        "stats":  "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-vector-codebook-23.mp3",
+        "result":  "matched",
+        "frames":  3456,
+        "snr_db":  127.13851073830577,
+        "peak_error":  6.7055225372314453E-08,
+        "stats":  "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=0 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-vector-codebook-24.mp3",
+        "result":  "matched",
+        "frames":  3456,
+        "snr_db":  127.44736264114573,
+        "peak_error":  5.5879354476928711E-08,
+        "stats":  "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=0 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-vector-codebook-25.mp3",
+        "result":  "matched",
+        "frames":  3456,
+        "snr_db":  126.77860947561021,
+        "peak_error":  6.7055225372314453E-08,
+        "stats":  "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-vector-codebook-26.mp3",
+        "result":  "matched",
+        "frames":  3456,
+        "snr_db":  125.81062462623719,
+        "peak_error":  6.3329935073852539E-08,
+        "stats":  "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-vector-codebook-27.mp3",
+        "result":  "matched",
+        "frames":  3456,
+        "snr_db":  127.23670986084903,
+        "peak_error":  6.3329935073852539E-08,
+        "stats":  "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=0 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-vector-codebook-28.mp3",
+        "result":  "matched",
+        "frames":  3456,
+        "snr_db":  126.21609226226417,
+        "peak_error":  5.5879354476928711E-08,
+        "stats":  "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-vector-codebook-29.mp3",
+        "result":  "matched",
+        "frames":  3456,
+        "snr_db":  126.88544095456925,
+        "peak_error":  6.7055225372314453E-08,
+        "stats":  "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=0 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-vector-codebook-30.mp3",
+        "result":  "matched",
+        "frames":  3456,
+        "snr_db":  126.80419469276538,
+        "peak_error":  5.9604644775390625E-08,
+        "stats":  "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-vector-codebook-31.mp3",
+        "result":  "matched",
+        "frames":  3456,
+        "snr_db":  127.13851073830577,
+        "peak_error":  6.7055225372314453E-08,
+        "stats":  "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-vector-count1-0.mp3",
+        "result":  "matched",
+        "frames":  3456,
+        "snr_db":  127.62838324411236,
+        "peak_error":  9.6857547760009766E-08,
+        "stats":  "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=0 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-vector-count1-1.mp3",
+        "result":  "matched",
+        "frames":  3456,
+        "snr_db":  127.62838324411236,
+        "peak_error":  9.6857547760009766E-08,
+        "stats":  "codec=3 rate=44100 channels=2 bits=0 frames=3456 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+        "test":  "mp3-invalid-missing-reservoir.mp3",
+        "result":  "rejected",
+        "frames":  0,
+        "snr_db":  null,
+        "peak_error":  0,
+        "stats":  "Unsupported, malformed, or inaccessible file. Supports WAV, native FLAC, MP3, Ogg Vorbis and Opus."
+    },
+    {
+        "test":  "mp3-invalid-big-values.mp3",
+        "result":  "rejected",
+        "frames":  0,
+        "snr_db":  null,
+        "peak_error":  0,
+        "stats":  "Unsupported, malformed, or inaccessible file. Supports WAV, native FLAC, MP3, Ogg Vorbis and Opus."
+    },
+    {
+        "test":  "mp3-invalid-codebook4.mp3",
+        "result":  "rejected",
+        "frames":  0,
+        "snr_db":  null,
+        "peak_error":  0,
+        "stats":  "Unsupported, malformed, or inaccessible file. Supports WAV, native FLAC, MP3, Ogg Vorbis and Opus."
+    },
+    {
+        "test":  "mp3-invalid-codebook14.mp3",
+        "result":  "rejected",
+        "frames":  0,
+        "snr_db":  null,
+        "peak_error":  0,
+        "stats":  "Unsupported, malformed, or inaccessible file. Supports WAV, native FLAC, MP3, Ogg Vorbis and Opus."
+    },
+    {
+        "test":  "mp3-invalid-free-format.mp3",
+        "result":  "rejected",
+        "frames":  0,
+        "snr_db":  null,
+        "peak_error":  0,
+        "stats":  "Unsupported, malformed, or inaccessible file. Supports WAV, native FLAC, MP3, Ogg Vorbis and Opus."
+    },
+    {
+        "test":  "mp3-invalid-reserved-version.mp3",
+        "result":  "rejected",
+        "frames":  0,
+        "snr_db":  null,
+        "peak_error":  0,
+        "stats":  "Unsupported, malformed, or inaccessible file. Supports WAV, native FLAC, MP3, Ogg Vorbis and Opus."
+    },
+    {
+        "test":  "mp3-invalid-reserved-rate.mp3",
+        "result":  "rejected",
+        "frames":  0,
+        "snr_db":  null,
+        "peak_error":  0,
+        "stats":  "Unsupported, malformed, or inaccessible file. Supports WAV, native FLAC, MP3, Ogg Vorbis and Opus."
+    },
+    {
+        "test":  "mp3-invalid-part-length.mp3",
+        "result":  "rejected",
+        "frames":  0,
+        "snr_db":  null,
+        "peak_error":  0,
+        "stats":  "Unsupported, malformed, or inaccessible file. Supports WAV, native FLAC, MP3, Ogg Vorbis and Opus."
+    },
+    {
+        "test":  "mp3-invalid-truncated.mp3",
+        "result":  "rejected",
+        "frames":  0,
+        "snr_db":  null,
+        "peak_error":  0,
+        "stats":  "Unsupported, malformed, or inaccessible file. Supports WAV, native FLAC, MP3, Ogg Vorbis and Opus."
+    },
+    {
+        "test":  "mp3-invalid-crc.mp3",
+        "result":  "rejected",
+        "frames":  0,
+        "snr_db":  null,
+        "peak_error":  0,
+        "stats":  "Unsupported, malformed, or inaccessible file. Supports WAV, native FLAC, MP3, Ogg Vorbis and Opus."
+    },
+    {
+        "test":  "mp3-invalid-id3-size.mp3",
+        "result":  "rejected",
+        "frames":  0,
+        "snr_db":  null,
+        "peak_error":  0,
+        "stats":  "Unsupported, malformed, or inaccessible file. Supports WAV, native FLAC, MP3, Ogg Vorbis and Opus."
+    },
+    {
+        "test":  "mp3-invalid-id3-version.mp3",
+        "result":  "rejected",
+        "frames":  0,
+        "snr_db":  null,
+        "peak_error":  0,
+        "stats":  "Unsupported, malformed, or inaccessible file. Supports WAV, native FLAC, MP3, Ogg Vorbis and Opus."
+    },
+    {
+        "test":  "mp3-invalid-id3-flags.mp3",
+        "result":  "rejected",
+        "frames":  0,
+        "snr_db":  null,
+        "peak_error":  0,
+        "stats":  "Unsupported, malformed, or inaccessible file. Supports WAV, native FLAC, MP3, Ogg Vorbis and Opus."
+    },
+    {
+        "test":  "mp3-invalid-id3-footer.mp3",
+        "result":  "rejected",
+        "frames":  0,
+        "snr_db":  null,
+        "peak_error":  0,
+        "stats":  "Unsupported, malformed, or inaccessible file. Supports WAV, native FLAC, MP3, Ogg Vorbis and Opus."
+    },
+    {
+        "test":  "mp3-wasapi-silence",
+        "result":  "played",
+        "frames":  57600,
+        "snr_db":  null,
+        "peak_error":  0,
+        "stats":  "Playing. Space: pause / resume. Q or Ctrl+C: stop. codec=3 rate=48000 channels=2 bits=0 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1266 cpu_us=46875 endpoint_dry=0"
+    }
 ]

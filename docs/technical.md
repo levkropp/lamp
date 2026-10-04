@@ -1,6 +1,6 @@
 # LAMP 0.4.0-dev technical details
 
-A Windows x86-64 audio player with handwritten assembly WAV, FLAC, MP3, Ogg/Vorbis and development Ogg/Opus decoders, plus a native assembly UI. The current console build is **181,760 bytes (177.5 KiB)**; the graphical build is **189,440 bytes (185 KiB)**. Both include LAMP's icon and version resources. The published v0.3.0 archive retains its earlier four-format build and manifest.
+A Windows x86-64 audio player with handwritten assembly WAV, FLAC, MP3, Ogg/Vorbis and development Ogg/Opus decoders, plus a native assembly UI. The current console build is **182,784 bytes (178.5 KiB)**; the graphical build is **190,464 bytes (186 KiB)**. Both include LAMP's icon and version resources. The published v0.3.0 archive retains its earlier four-format build and manifest.
 
 The dark canvas, compact playback controls and automatic hiding are inspired by mpv. The custom pixel buffer and Win32 presentation follow Rhun's documented assembly UI model. No Rhun source, fonts, icons, or other assets were copied.
 
@@ -40,11 +40,17 @@ Console controls are Space to pause/resume and Q/Ctrl+C to stop. QuickEdit is di
 
 Seeking restarts the decoder on a worker. WAV seeks directly by sample offset. Native FLAC selects a preceding seek-table point by binary search and decodes the remaining distance. Tables require bounded offsets, ordered unique sample numbers and valid frame sizes; placeholders are ignored. The selected frame's coded position, sample count and CRC must agree with the table. Fixed/variable frame numbers are decoded canonically and checked throughout playback.
 
-Without a usable table, native FLAC searches byte positions for complete, validated frames, also checking the following frame's chronology to avoid CRC-valid sync patterns inside PCM payloads. Byte bounds strictly shrink and sample bounds must agree. This works for fixed/variable frames and unknown total sample counts. Speculation is capped at 64 frame decodes, 64 MiB of scanned bytes and 1 MiB per speculative frame; initial/final validation adds at most two decodes. Reaching a cap restores frame zero for ordinary sequential decoding. No index allocation or persistent cache is needed. MP3/Vorbis/Opus still discard PCM from the beginning. The UI remains responsive, and paused seeking keeps audio stopped until resume.
+Without a usable table, native FLAC searches byte positions for complete, validated frames, also checking the following frame's chronology to avoid CRC-valid sync patterns inside PCM payloads. Byte bounds strictly shrink and sample bounds must agree. This works for fixed/variable frames and unknown total sample counts. Speculation is capped at 64 frame decodes, 64 MiB of scanned bytes and 1 MiB per speculative frame; initial/final validation adds at most two decodes. Reaching a cap restores frame zero for ordinary sequential decoding. No index allocation or persistent cache is needed.
+
+MP3 opening performs a cancellable structural scan of headers/CRC, side information and main-data part lengths. It creates a sparse index of byte/sample positions and exact unused reservoirs, initially every 32 compressed frames. Each 544-byte point retains at most 511 reservoir bytes. A fixed 1,114,112-byte allocation holds at most 2,048 points; alternate points are compacted and the stride doubles when needed. The scan derives untagged duration and verifies Xing/Info counts against the actual frames. Allocation failure retains the original sequential path. Closing releases the index; reopening rebuilds it from the current file rather than retaining mapped pointers.
+
+MP3 seeking restores the preceding indexed reservoir and skims fewer than one stride of headers to two compressed frames before the target. Ordinary decoding rebuilds MDCT overlap and QMF history during that pre-roll. This bounds discarded PCM to less than three compressed frames: 3,456 samples for MPEG-1 or 1,728 for MPEG-2/2.5. Opening remains linear in the number of compressed headers; no cross-open index cache or player-comparison latency result is claimed. Vorbis/Opus still discard PCM from the beginning. The UI remains responsive, and paused seeking keeps audio stopped until resume.
 
 `decoder_seek(uint64_t absolute_frame)` is called once after opening a stream and returns the resume frame at or before the target. WAV clamps to EOF. Unsupported codecs return zero without changing fresh codec state; the worker uses sequential decoding for the rest. A malformed selected FLAC frame sets a sticky decoding error. Closed decoders refuse seeking and reading. `decoder_seek_probes` records full-frame decode attempts for diagnostics. No per-seek allocation is required.
 
 The seek suite records 1,470 exact PCM checks across 98 files: direct WAV; fixed/variable FLAC with tables, empty/placeholder-only tables or no tables; unknown durations; long changes between silence, tones and noise; CRC-valid payload decoys; EOF/clamping, untouched output and closed-state refusal. Ordinary frame searches discard at most one frame; the dense-decoy case exercises the 66-decode cap and correct sequential fallback. Its reference comes from FFmpeg conversion of the known verbatim PCM because FFmpeg's FLAC demuxer also misidentifies the densely embedded frames. Eleven malformed indexes, six noncanonical numbers and one contradictory frame sequence are rejected; a pre-cancelled search performs no frame decodes. These checks are not a same-machine latency benchmark against other players.
+
+MP3 adds 1,650 byte-exact seeks across 110 files against uninterrupted assembly PCM. Each continuous file is independently compared with FFmpeg's `mp3float` decoder. Cases cover all nine rates, mono/stereo, CBR/VBR, delay/padding, absent tags, noise/transients and original intensity/short/mixed/CRC/Huffman vectors. Tests also verify EOF/clamping, canaries, untouched output, allocation release, cancelled seek/open and two contradictory Xing counts. A 65,537-frame stream exercises adaptive compaction; its nonzero midpoint PCM must match an independently checked smaller continuous window.
 
 ## Format coverage
 
@@ -60,7 +66,7 @@ The seek suite records 1,470 exact PCM checks across 98 files: direct WAV; fixed
 
 WAV ADPCM/RF64/RIFX, FLAC in Ogg, 32-bit FLAC, more than two channels, playlists, tag display, and device reconnection are unsupported. FLAC CRC8/CRC16 are checked; STREAMINFO MD5 and coded frame-number continuity are not checked. Tested FLAC depths are 16/24 bits, with less fixture coverage for the broader implementation range.
 
-MP3 CRC headers/side information are checked. Free-format, Layers I/II, VBRI trimming, APE tags, arbitrary inter-frame junk and corruption recovery are unsupported. Missing reservoir dependencies reject input; rate/channel/version changes are unsupported. Untagged files keep encoder delay/padding. Metadata validation is incomplete; the declared trimmed duration can stop decoding before additional trailing frames.
+MP3 CRC headers/side information are checked. Free-format, Layers I/II, VBRI trimming, APE tags, arbitrary inter-frame junk and corruption recovery are unsupported. Missing reservoir dependencies reject input; rate/channel/version changes are unsupported. Untagged files keep encoder delay/padding. Metadata validation remains incomplete; with an index, declared frame counts must agree with the scanned stream, while main-data audio is validated when decoded.
 
 Vorbis floor 0, chained/multiplexed Ogg, multichannel mappings, nonzero initial granule offsets, and corruption recovery are unsupported. The container is validated at open, so large files can take time to open. Packet reconstruction is bounded to 4 MiB. Setup reserves a bounded 64 MiB arena and commits 64 KiB increments as needed. Oversized headers/codebooks are rejected. Nonfinite reconstructed PCM is rejected. This is a prototype with substantial tests, not full format conformance certification.
 
@@ -100,6 +106,7 @@ Recorded snapshots are in `reports/` in a source checkout. The paths below descr
 | `mp3-verification.json` | 103 MP3 checks: 88 PCM comparisons, 14 rejection cases, WASAPI silence; recorded SNR above 112 dB |
 | `bin/vorbis-verification.json` | 83 checks: 32 rate/channel/quality cases, noise/transients/silence, continued long comment, 36 synthetic residue/codebook cases, 10 rejections and WASAPI silence |
 | `bin/engine-verification.json` | Playback, pause, resume, stop, reopen, seek, paused seek and cancelled open for all five codecs plus indexed FLAC |
+| `bin/mp3-seek-verification.json` | 1,650 exact seeks, independent continuous PCM comparisons, bounded sparse index/header skims, adaptive compaction, cancelled seek/open and contradictory Xing counts |
 | `vorbis-fuzz-verification.json` | 512 repaired-CRC setup/audio mutations without a crash/timeout; accepted audio correctness is not asserted |
 | `vorbis-benchmark.json` | Five 30-second offline CPU measurements |
 | `vorbis-stress-verification.json` | Eight-second WASAPI silence under four bounded CPU workers |
@@ -170,7 +177,7 @@ node .\tests\fuzz-vorbis.js
 .\tests\verify-opus-components.ps1
 .\tests\verify-opus.ps1 -OutputDirectory .\bin\verify-build #51 modern libopus files
 .\tests\verify-opus-conformance.ps1 #120 official vector checks; first run downloads ~75 MB
-.\tests\verify-seek.ps1 -OutputDirectory .\bin\verify-build #1470 exact WAV/FLAC seek checks
+.\tests\verify-seek.ps1 -OutputDirectory .\bin\verify-build #3120 exact WAV/FLAC/MP3 seek checks
 .\tests\render-ui.ps1
 ```
 

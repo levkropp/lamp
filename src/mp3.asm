@@ -6,7 +6,9 @@ include mp3_layout.inc
 EXTERN sample_rate:DWORD, source_channels:DWORD, source_bits:DWORD
 EXTERN decode_error:DWORD, total_frames:QWORD
 EXTERN mp_hybrid:PROC, mp_synthesis:PROC
-PUBLIC mp3_open, mp3_read, mp_grbuf, mp_overlap, mp_qmf, mp_syn
+EXTERN VirtualAlloc:PROC,VirtualFree:PROC,ogg_cancel_ptr:QWORD
+PUBLIC mp3_open, mp3_read, mp3_seek,mp3_close,mp_grbuf, mp_overlap, mp_qmf, mp_syn
+PUBLIC mp3_index_count,mp3_index_stride,mp3_seek_headers
 PUBLIC mp_aa, mp_twid9, mp_mdct_win, mp_twid3, mp_synth_win, mp_dct9, mp_dct_sec
 
 .const
@@ -16,6 +18,10 @@ bitrate2 dd 0,8,16,24,32,40,48,56,64,80,96,112,128,144,160
 mp_rates dd 44100,48000,32000
 sqrt_two dd 3fb504f3h
 one_float dd 3f800000h
+; A seek point precedes a compressed frame and retains its exact unused
+; main-data reservoir. PCM overlap/QMF history is rebuilt by two full frames.
+MP_INDEX_POINT EQU 544
+MP_INDEX_CAP EQU 2048
 
 .data
 mp_cursor dq 0
@@ -58,6 +64,12 @@ mp_scale_count dd 0
 mp_max_band dd 3 dup (-1)
 mp_xing_count dd 0
 mp_xing_flags dd 0
+mp_stream_begin dq 0
+mp_initial_trim dd 0
+mp_index dq 0
+mp3_index_count dd 0
+mp3_index_stride dq 32
+mp3_seek_headers dq 0
 
 .data?
 ALIGN 16
@@ -84,6 +96,11 @@ mp3_open PROC
     push rdi
     push r12
     sub rsp,64
+    mov rsi,rcx
+    mov r12,rdx
+    call mp3_close
+    mov rcx,rsi
+    mov rdx,r12
     mov [mp_cursor],rcx
     mov [mp_end],rdx
     mov dword ptr [mp_reserv_size],0
@@ -254,6 +271,13 @@ xing_skip:
     mov rax,[mp_frame_end]
     mov [mp_cursor],rax
 mp_open_ok:
+    mov rax,[mp_cursor]
+    mov [mp_stream_begin],rax
+    mov eax,[mp_trim_start]
+    mov [mp_initial_trim],eax
+    call mp_build_index
+    test eax,eax
+    jz mp_open_bad
     mov eax,1
     jmp mp_open_return
 mp_open_bad:
@@ -267,6 +291,284 @@ mp_open_return:
     pop rbp
     ret
 mp3_open ENDP
+
+mp3_close PROC
+    sub rsp,40
+    mov rcx,[mp_index]
+    mov qword ptr [mp_index],0
+    mov dword ptr [mp3_index_count],0
+    mov qword ptr [mp3_seek_headers],0
+    test rcx,rcx
+    jz mp_index_closed
+    xor edx,edx
+    mov r8d,8000h
+    call VirtualFree
+mp_index_closed:
+    add rsp,40
+    ret
+mp3_close ENDP
+
+; Structural scan only: header/CRC, side information, part lengths and exact
+; unused reservoir. Huffman, IMDCT and synthesis are deferred until playback.
+; Each point occupies 544 bytes; compact alternate points on reaching the cap.
+mp_build_index PROC
+    push rbx
+    push rsi
+    push rdi
+    push r12
+    push r13
+    sub rsp,48
+    xor ecx,ecx
+    mov edx,MP_INDEX_POINT*MP_INDEX_CAP
+    mov r8d,3000h
+    mov r9d,4
+    call VirtualAlloc
+    test rax,rax
+    jz mp_index_optional
+    mov [mp_index],rax
+    mov qword ptr [mp3_index_stride],32
+    xor r12d,r12d            ;compressed frame ordinal
+    xor r13d,r13d            ;raw PCM sample count before this frame
+mp_index_scan:
+    mov rax,[ogg_cancel_ptr]
+    test rax,rax
+    jz mp_index_not_cancelled
+    cmp dword ptr [rax],0
+    jne mp_index_bad
+mp_index_not_cancelled:
+    mov rax,[mp_end]
+    sub rax,[mp_cursor]
+    jz mp_index_complete
+    cmp rax,128
+    jne mp_index_frame
+    mov rax,[mp_cursor]
+    cmp word ptr [rax],4154h
+    jne mp_index_frame
+    cmp byte ptr [rax+2],'G'
+    je mp_index_complete
+mp_index_frame:
+    mov rax,[mp3_index_stride]
+    dec rax
+    test r12,rax
+    jnz mp_index_skip
+    cmp dword ptr [mp3_index_count],MP_INDEX_CAP
+    jb mp_index_store
+    ; Entries are multiples of 16 bytes, and the source always follows its
+    ; destination. Keep 0,2,4,... then double the stride without growing memory.
+    mov rbx,1
+mp_index_compact:
+    imul rax,rbx,MP_INDEX_POINT*2
+    mov rsi,[mp_index]
+    add rsi,rax
+    imul rax,rbx,MP_INDEX_POINT
+    mov rdi,[mp_index]
+    add rdi,rax
+    mov ecx,MP_INDEX_POINT/8
+    rep movsq
+    inc ebx
+    cmp ebx,MP_INDEX_CAP/2
+    jb mp_index_compact
+    mov dword ptr [mp3_index_count],MP_INDEX_CAP/2
+    shl qword ptr [mp3_index_stride],1
+mp_index_store:
+    mov eax,[mp3_index_count]
+    imul rax,MP_INDEX_POINT
+    add rax,[mp_index]
+    mov rcx,[mp_cursor]
+    mov [rax],rcx
+    mov [rax+8],r13
+    mov ecx,[mp_reserv_size]
+    mov [rax+16],ecx
+    lea rdi,[rax+20]
+    lea rsi,mp_reserv
+    rep movsb
+    inc dword ptr [mp3_index_count]
+mp_index_skip:
+    call mp_skip_frame
+    test eax,eax
+    jz mp_index_bad
+    mov eax,[mp_samples]
+    add r13,rax
+    inc r12
+    jmp mp_index_scan
+mp_index_complete:
+    mov eax,[mp_initial_trim]
+    sub r13,rax
+    jc mp_index_bad
+    mov eax,[mp_trim_end]
+    sub r13,rax
+    jc mp_index_bad
+    cmp qword ptr [total_frames],0
+    je mp_index_duration
+    cmp r13,[total_frames]
+    jne mp_index_bad
+mp_index_duration:
+    mov [total_frames],r13
+mp_index_optional:
+    mov rax,[mp_stream_begin]
+    mov [mp_cursor],rax
+    mov dword ptr [mp_reserv_size],0
+    mov eax,1
+    jmp mp_index_return
+mp_index_bad:
+    xor eax,eax
+mp_index_return:
+    add rsp,48
+    pop r13
+    pop r12
+    pop rdi
+    pop rsi
+    pop rbx
+    ret
+mp_build_index ENDP
+
+mp_skip_frame PROC
+    push rbx
+    sub rsp,32
+    mov rcx,[mp_cursor]
+    call mp_parse_header
+    test eax,eax
+    jz mp_skip_bad
+    mov eax,[mp_version]
+    cmp eax,[mp_initial_version]
+    jne mp_skip_bad
+    mov eax,[mp_rate]
+    cmp eax,[sample_rate]
+    jne mp_skip_bad
+    mov eax,[mp_channels]
+    cmp eax,[mp_initial_channels]
+    jne mp_skip_bad
+    call mp_sideinfo
+    test eax,eax
+    jz mp_skip_bad
+    lea rdx,mp_info
+    xor eax,eax
+    xor ecx,ecx
+mp_skip_parts:
+    add eax,[rdx+GI_PART]
+    add rdx,GI_SIZE
+    inc ecx
+    cmp ecx,[mp_gr_count]
+    jb mp_skip_parts
+    cmp eax,[mp_bit_limit]
+    ja mp_skip_bad
+    mov [mp_bit_pos],eax
+    call mp_save_reservoir
+    test eax,eax
+    jz mp_skip_bad
+    mov rax,[mp_frame_end]
+    mov [mp_cursor],rax
+    mov eax,1
+    jmp mp_skip_return
+mp_skip_bad:
+    mov dword ptr [decode_error],15
+    xor eax,eax
+mp_skip_return:
+    add rsp,32
+    pop rbx
+    ret
+mp_skip_frame ENDP
+
+; Fresh-open only. Resume at least two compressed frames before the target so
+; ordinary reads reconstruct overlap/QMF exactly before returning target PCM.
+mp3_seek PROC
+    push rbx
+    push rsi
+    push rdi
+    push r12
+    sub rsp,40
+    xor eax,eax
+    mov qword ptr [mp3_seek_headers],0
+    test rcx,rcx
+    jz mp_seek_return
+    cmp dword ptr [mp3_index_count],0
+    je mp_seek_return
+    cmp rcx,[total_frames]
+    cmova rcx,[total_frames]
+    mov eax,[mp_initial_trim]
+    add rcx,rax
+    mov r12,rcx
+    mov eax,[mp_samples]
+    add rax,rax
+    sub r12,rax
+    jae mp_seek_warm_target
+    xor r12d,r12d
+mp_seek_warm_target:
+    xor r8d,r8d
+    mov r9d,[mp3_index_count]
+mp_seek_search:
+    cmp r8d,r9d
+    jae mp_seek_found
+    mov edx,r9d
+    sub edx,r8d
+    shr edx,1
+    add edx,r8d
+    imul eax,edx,MP_INDEX_POINT
+    add rax,[mp_index]
+    cmp [rax+8],r12
+    ja mp_seek_upper
+    lea r8d,[rdx+1]
+    jmp mp_seek_search
+mp_seek_upper:
+    mov r9d,edx
+    jmp mp_seek_search
+mp_seek_found:
+    dec r8d                 ;point zero always exists and is at raw sample0
+    imul eax,r8d,MP_INDEX_POINT
+    add rax,[mp_index]
+    mov rcx,[rax]
+    mov [mp_cursor],rcx
+    mov rbx,[rax+8]
+    mov ecx,[rax+16]
+    mov [mp_reserv_size],ecx
+    lea rsi,[rax+20]
+    lea rdi,mp_reserv
+    rep movsb
+mp_seek_skip:
+    mov rax,[ogg_cancel_ptr]
+    test rax,rax
+    jz mp_seek_not_cancelled
+    cmp dword ptr [rax],0
+    jne mp_seek_cancelled
+mp_seek_not_cancelled:
+    mov eax,[mp_samples]
+    add rax,rbx
+    cmp rax,r12
+    ja mp_seek_position
+    call mp_skip_frame
+    test eax,eax
+    jz mp_seek_cancelled
+    mov eax,[mp_samples]
+    add rbx,rax
+    inc qword ptr [mp3_seek_headers]
+    jmp mp_seek_skip
+mp_seek_position:
+    mov dword ptr [mp_frame_ready],0
+    mov dword ptr [mp_frame_used],0
+    mov eax,[mp_initial_trim]
+    mov dword ptr [mp_trim_start],0
+    cmp rbx,rax
+    jae mp_seek_emitted
+    sub eax,ebx
+    mov [mp_trim_start],eax
+    xor ebx,ebx
+    jmp mp_seek_ready
+mp_seek_emitted:
+    sub rbx,rax
+mp_seek_ready:
+    mov [mp_emitted],rbx
+    mov rax,rbx
+    jmp mp_seek_return
+mp_seek_cancelled:
+    xor eax,eax
+mp_seek_return:
+    add rsp,40
+    pop r12
+    pop rdi
+    pop rsi
+    pop rbx
+    ret
+mp3_seek ENDP
 
 ; Header inspection. State is only committed after bounds/field validation.
 mp_parse_header PROC
@@ -1599,25 +1901,9 @@ granule_hybrid:
     mov eax,[mp_granule]
     cmp eax,[mp_gr_count]
     jb granule_loop
-    ; Preserve only unused, whole bytes, capped at the MPEG-1 511-byte history.
-    mov eax,[mp_bit_pos]
-    add eax,7
-    shr eax,3
-    mov ecx,[mp_main_bytes]
-    sub ecx,eax
-    js mp_frame_bad
-    cmp ecx,511
-    jbe reservoir_ready
-    mov edx,ecx
-    sub edx,511
-    add eax,edx
-    mov ecx,511
-reservoir_ready:
-    mov [mp_reserv_size],ecx
-    lea rsi,mp_main
-    add rsi,rax
-    lea rdi,mp_reserv
-    rep movsb
+    call mp_save_reservoir
+    test eax,eax
+    jz mp_frame_bad
     mov rax,[mp_frame_end]
     mov [mp_cursor],rax
     mov eax,[mp_samples]
@@ -1640,6 +1926,40 @@ mp_frame_return:
     pop rbp
     ret
 mp_decode_frame ENDP
+
+; Shared by complete decoding and structural index scans. Part lengths fix
+; the final bit position independently of Huffman/synthesis work.
+mp_save_reservoir PROC
+    push rsi
+    push rdi
+    ; Preserve only unused, whole bytes, capped at the MPEG-1 511-byte history.
+    mov eax,[mp_bit_pos]
+    add eax,7
+    shr eax,3
+    mov ecx,[mp_main_bytes]
+    sub ecx,eax
+    js mp_save_bad
+    cmp ecx,511
+    jbe reservoir_ready
+    mov edx,ecx
+    sub edx,511
+    add eax,edx
+    mov ecx,511
+reservoir_ready:
+    mov [mp_reserv_size],ecx
+    lea rsi,mp_main
+    add rsi,rax
+    lea rdi,mp_reserv
+    rep movsb
+    mov eax,1
+    jmp mp_save_return
+mp_save_bad:
+    xor eax,eax
+mp_save_return:
+    pop rdi
+    pop rsi
+    ret
+mp_save_reservoir ENDP
 
 mp3_read PROC
     push rbp
