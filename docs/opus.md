@@ -24,6 +24,7 @@ LAMP's Opus work is handwritten MASM x86-64 assembly, based on the BSD normative
 | SILK stereo predictor/mid-only entropy and mid/side reconstruction | `opus_silk_stereo.asm` | 153,572 entropy comparisons (11,250 exhaustive codebook/flag cases), 90,112 exact PCM/history frames (65,536 connected predictors), 32,440,240 int16 samples and 34 guards |
 | Complete stateful source-rate SILK channel frames | `opus_silk_frame.asm` | 67,589 exact entropy-to-PCM/history frames (28,160 lost, 10,752 FEC, 18,432 continued entropy), 12,166,840 int16 samples, 264,137,812 full-history bytes, five late component/sticky/reset checks and 63 guards |
 | SILK packet headers and redundant-data skipping | `opus_silk_packet.asm` | 24,577 exact entropy/metadata/history headers, 11,517 skipped FEC frames (3,332 conditional), 21,504 connected mono frame PCM cases, 144,072,328 history bytes, one late/sticky/reset case and 38 guards |
+| Complete SILK packet-to-API PCM and transitions | `opus_silk_decoder.asm` | 84,873 exact PCM/defined-history frames (25,728 lost, 14,208 FEC, 32,448 continued), all 15 rate pairs and channel layouts, 2,304 stereo collapses (1,152 explicit rate adaptations), 384 abandoned packets, 49,485,800 int16 samples, four late/sticky/reset cases and 59 guards |
 | CELT static band allocation | `opus_allocation.asm` | 271,160 allocation/entropy and 52,479 pulse-cache comparisons |
 | CELT normalized PVQ bands/spreading | `opus_vq.asm` | 13,416 band/entropy, 15,864 spreading and 8,192 renormalization comparisons |
 | CELT Haar/Hadamard layout helpers | `opus_band_transform.asm` | 3,280 Haar and 5,888 layout/inverse comparisons |
@@ -85,7 +86,7 @@ Requirements: Windows x64, Visual Studio Build Tools with the C tools and Window
 
 ## Next dependencies
 
-1. Complete SILK stereo/channel/API-rate orchestration; handle hybrid transitions.
+1. Connect complete Opus packet dispatch and hybrid transitions.
 2. Integrate Ogg Opus pre-skip/gain/end trimming with the playback engine.
 3. Validate complete CELT/SILK/hybrid audio against official decoder vectors and reference PCM.
 
@@ -137,7 +138,7 @@ The state layout matches the reference: six IIR int32 values at 0, 36 FIR int32 
 
 The normative fractional upsampler copies sixteen int16 scratch values into its FIR state, though only eight are initialized and used by future interpolation. LAMP copies the eight defined samples and preserves the unused state. Oracle comparisons therefore exclude only reference `sFIR[4..7]`; PCM, every defined history field, descriptor and inactive output match exactly. Separate checks prove LAMP's unused state stays unchanged and that different scratch fills produce identical complete LAMP state/PCM. This reference exception is recorded in the verification report.
 
-The seven generated resampling tables are verified against the hash-checked normative archive. Tests cover every rate pair, 1–60 ms lengths, repeated transitions across 10 ms blocks, silence/impulse/extreme/random inputs, arbitrary integer history, delay compensation, output/input canaries, malformed descriptors and connected assembly core PCM. These checks complete decoder-rate conversion; whole SILK packet/frame processing and Opus mode integration remain unfinished.
+The seven generated resampling tables are verified against the hash-checked normative archive. Tests cover every rate pair, 1–60 ms lengths, repeated transitions across 10 ms blocks, silence/impulse/extreme/random inputs, arbitrary integer history, delay compensation, output/input canaries, malformed descriptors and connected assembly core PCM. The SILK API suite below connects decoder-rate conversion to complete packet/frame processing; complete Opus mode integration remains unfinished.
 
 ## SILK comfort-noise interface
 
@@ -181,7 +182,19 @@ Tests call unchanged initialization, rate-configuration and `silk_decode_frame` 
 
 Metadata contains two sets of three int32 VAD flags at 0, corresponding LBRR flags at 24, two per-channel LBRR flags at 48, frame count at 56 and channel count at 60. Active VAD frames are replaced; active channels' LBRR arrays are cleared/rebuilt. Inactive flags and channels are preserved. Skipping updates only side information and entropy index history, while PCM/parameter/PLC/CNG history remains unchanged. Success returns one; public invalid requests return zero before writes. Late component failure returns zero and marks every active channel failed, requiring explicit reset and discarded partial metadata/entropy/history.
 
-The test generator verifies both LBRR tables and compiles the unchanged packet-header block extracted from `dec_API.c`, preserving its notice. Tests compare complete metadata, channel and entropy state, including inactive flags, mono/stereo, all frame counts, normal/FEC modes, repeated headers, primed/truncated/zero-padded payloads, canaries, late failure/reset and connected mono frame PCM. Final entropy budgets, current-frame stereo dispatch, channel transitions and API-rate output remain the packet decoder caller's unfinished work.
+The test generator verifies both LBRR tables and compiles the unchanged packet-header block extracted from `dec_API.c`, preserving its notice. Tests compare complete metadata, channel and entropy state, including inactive flags, mono/stereo, all frame counts, normal/FEC modes, repeated headers, primed/truncated/zero-padded payloads, canaries, late failure/reset and connected mono frame PCM. The SILK API below connects current-frame stereo dispatch, channel transitions and API-rate output. Final Opus packet entropy enforcement remains the complete mode decoder caller's responsibility.
+
+## SILK packet-to-output decoder interface
+
+`op_silk_decoder_init(request*)` clears the 8,536-byte caller-owned decoder state, including both channel histories, stereo prediction/delay, resamplers, packet flags/counters and sticky failure. Its 16-byte request in `src/opus_silk_decoder_layout.inc` contains state pointer at 0 and byte capacity at 8. Success returns one; invalid public requests return zero before writes.
+
+`op_silk_decode(request*)` emits one 10/20 ms frame as interleaved int16 output. The 72-byte request contains state/range/PCM/work/control pointers at 0/8/16/24/32, mode at 40 (0 normal, 1 loss, 2 FEC), new-packet flag at 44 (0 continuation, 1 new), and state/range/PCM/work/control capacities at 48/52/56/60/64. PCM capacity counts int16 elements; all other capacities count bytes. State/range/work/control need 8,536/64/8,568/24 bytes. Range may be null for loss. Buffers must be separate, correctly sized and caller-owned. Success returns output samples per channel; failure returns zero. Public validation rejects before writes. A later component failure marks sticky failure; discard partial PCM/history and explicitly initialize before reuse.
+
+The 24-byte control uses the normative decoder control layout: API/internal channel counts at 0/4 (1/2), API/internal Hz at 8/12, packet duration at 16 and output pitch lag measured at 48 kHz at 20. Internal rates are 8/12/16 kHz and API rates 8/12/16/24/48 kHz. Duration is 0/10/20/40/60 ms; zero uses a 10 ms frame. Continue two/three-frame packets with the same entropy context and new-packet flag zero. Internal configuration and API rate remain fixed during continuation; API channel count may change. A new packet can abandon unfinished frames. The decoder parses/skips redundant data on the first nonlost frame, handles FEC availability and missing-side concealment, preserves the normative one-sample delay, and resamples after mid/side conversion. Lost packets retain the previous mid-only flag and reset gain clamping after output.
+
+The oracle calls full RFC `silk_Decode`, compares exact entropy, interleaved PCM and defined persistent state, and runs each assembly call with two different scratch fills to check deterministic complete assembly history. It covers initial loss/FEC, all rate/channel/duration combinations, mid-only transitions, loss/recovery, output-channel changes during continuation, unfinished-packet abandonment, resets, canaries and sticky failures. The resampler suite's unused uninitialized reference up-FIR `sFIR[4..7]` remains the only history exclusion.
+
+One API-rate transition has an explicit adaptation: the RFC's stereo-to-mono path retains the inactive right resampler at the old output rate but copies the newly requested output count. LAMP reinitializes that resampler when the API rate changes during collapse. The test applies only that same reinitialization before the reference call for those cases, then compares every defined output/history field. Stereo collapse at a fixed API rate uses the unchanged reference and retains separate right-channel history. Complete Opus packet dispatch, hybrid mixing/transitions, container trimming/gain and official conformance remain unfinished.
 
 ## Frame-prefix interface
 

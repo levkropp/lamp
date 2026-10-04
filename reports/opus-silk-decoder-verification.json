@@ -1,0 +1,6 @@
+﻿{
+    "result":  "passed",
+    "scope":  "Complete SILK packet/API orchestration, mono/stereo/mid-only/channel and rate transitions, FEC/loss/recovery, output resampling and pitch; hybrid mode, complete Opus framing/playback and official conformance remain pending",
+    "comparison":  "exact entropy, PCM and defined channel/stereo/resampler/packet history, deterministic distinct-scratch runs, sticky late failure/reset and public guards; unused uninitialized RFC up-FIR tail excluded; inactive right resampler reinitialized for stereo collapse with API-rate change",
+    "stats":  "SILK decoder API: 8087 initializations, 84873 exact packet-to-PCM/history frames across 15 rate pairs and all mono/stereo layouts (25728 lost, 14208 FEC, 7985 recovered, 2097 mid-only, 32448 continued), 2688 API-rate/1536 internal-rate/8897 channel transitions, 2304 stereo collapses (1152 defined right-resampler rate adaptations), 384 abandoned packets, 49485800 int16 samples, 724475928 history bytes, 4 late/sticky/reset checks, 59 guards; unused uninitialized RFC up-FIR tail excluded, distinct-scratch ASM history deterministic"
+}

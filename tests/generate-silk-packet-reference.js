@@ -1,6 +1,7 @@
 'use strict';
 const fs=require('fs'),path=require('path');
-const ref=path.resolve(process.argv[2]),out=path.resolve(process.argv[3]);
+const ref=path.resolve(process.argv[2]),check=process.argv[3]==='--check';
+const out=check?null:path.resolve(process.argv[3]);
 const tables=fs.readFileSync(path.join(ref,'silk','tables_other.c'),'utf8');
 let generated='; RFC6716 SILK LBRR flag data, IETF Trust/Skype2006-2012.\n; Verified against tables_other.c; BSD conditions in THIRD_PARTY_NOTICES.\n';
 for(const [symbol,label,size]of[['silk_LBRR_flags_2_iCDF','ph_lbrr2',3],['silk_LBRR_flags_3_iCDF','ph_lbrr3',7]]){
@@ -19,5 +20,5 @@ if(depth)throw Error('Unbalanced normative header');
 const body=source.slice(at,end);
 const notice=source.slice(0,source.indexOf('*/')+2);
 const code=notice+'\n/* Test-only unchanged packet-header block extracted from dec_API.c. */\n#include "API.h"\n#include "main.h"\nvoid lamp_silk_packet_reference(silk_decoder_state *channel_state,int channels,int lostFlag,ec_dec *psRangeDec){\n silk_DecControlStruct control={0},*decControl=&control;control.nChannelsInternal=channels;\n opus_int i,n,decode_only_middle=0;opus_int32 LBRR_symbol,MS_pred_Q13[2]={0};\n'+body+'\n}\n';
-fs.mkdirSync(path.dirname(out),{recursive:true});fs.writeFileSync(out,code);
-console.log('Verified two LBRR tables; extracted unchanged normative packet-header block.');
+if(!check){fs.mkdirSync(path.dirname(out),{recursive:true});fs.writeFileSync(out,code);}
+console.log(check?'Verified two normative SILK LBRR tables and packet-header source.':'Verified two LBRR tables; extracted unchanged normative packet-header block.');

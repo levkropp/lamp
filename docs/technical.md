@@ -4,7 +4,7 @@ A Windows x86-64 audio player with handwritten assembly WAV, FLAC, MP3, and Ogg/
 
 The dark canvas, compact playback controls and automatic hiding are inspired by mpv. The custom pixel buffer and Win32 presentation follow Rhun's documented assembly UI model. No Rhun source, fonts, icons, or other assets were copied.
 
-**Opus playback is unfinished.** The tested stateful assembly CELT decoder connects controls, energy/allocation, recursive spectral reconstruction, anti-collapse, inverse MDCT/overlap, postfilter and deemphasis to float PCM, with pitch/LPC and comfort-noise loss concealment. SILK packet headers/FEC skipping and the channel frame decoder connect entropy, parameters, source-rate mono synthesis, concealment/recovery and comfort noise; stereo and all fifteen decoder resampling rate pairs are separately tested. These development objects are not linked into either player. SILK stereo/channel/API-rate orchestration, hybrid transitions, Ogg integration and full audio-vector validation remain. An `.opus` file is rejected. [Opus stage documentation](opus.md) records interfaces, bounds, results and remaining work.
+**Opus playback is unfinished.** The tested stateful assembly CELT decoder connects controls, energy/allocation, recursive spectral reconstruction, anti-collapse, inverse MDCT/overlap, postfilter and deemphasis to float PCM, with pitch/LPC and comfort-noise loss concealment. SILK packet-to-output orchestration connects entropy, channel synthesis, concealment/recovery, comfort noise, stereo/channel transitions and all fifteen decoder resampling rate pairs. These development objects are not linked into either player. Complete Opus packet dispatch, hybrid transitions, Ogg integration and full audio-vector validation remain. An `.opus` file is rejected. [Opus stage documentation](opus.md) records interfaces, bounds, results and remaining work.
 
 All runtime application and decoder code is MASM x64 assembly. No C/C++/Rust codec, codec DLL, CRT, FFmpeg process, or media-player engine is linked or invoked. Reference C source is used only for algorithms, permitted coefficient/probability data, and test oracles.
 
@@ -127,7 +127,9 @@ Stereo adds 153,572 predictor/mid-only entropy comparisons, all 11,250 predictor
 
 The complete source-rate channel frame suite calls unchanged `silk_decode_frame`: 67,589 exact entropy-to-PCM/history frames include 28,160 lost, 10,752 FEC, 10,240 recovered and 18,432 continued-entropy frames. It checks 5,575 initializations, 10,752 configurations, 7,936 rate changes, 12,166,840 int16 PCM samples and every byte of channel history. Five injected late component failures verify sticky rejection and explicit reset; 63 public guards reject before writes.
 
-Packet-header tests extract the unchanged VAD/LBRR/skip block from `dec_API.c` in the hash-verified archive. They compare 24,577 complete metadata/entropy/history headers, 11,517 skipped FEC frames (3,332 conditional, 3,784 stereo predictors, 1,443 mid-only flags), 21,504 connected mono header/frame PCM cases, one late/sticky/reset case and 38 guards. Inactive flags/history remain unchanged. Thirty suites pass locally; complete stereo/channel/API-rate orchestration, official conformance and playback integration remain required.
+Packet-header tests extract the unchanged VAD/LBRR/skip block from `dec_API.c` in the hash-verified archive. They compare 24,577 complete metadata/entropy/history headers, 11,517 skipped FEC frames (3,332 conditional, 3,784 stereo predictors, 1,443 mid-only flags), 21,504 connected mono header/frame PCM cases, one late/sticky/reset case and 38 guards. Inactive flags/history remain unchanged.
+
+The complete SILK API suite calls `silk_Decode` across all internal/output-rate pairs, channel layouts and packet durations. It compares entropy, every PCM sample, channel/stereo/packet state and all defined resampler history; it also runs assembly twice with different scratch fills and compares the entire resulting assembly state. Output-rate changes during stereo collapse explicitly reset the inactive right resampler in both implementations to avoid the RFC copying a new-rate sample count from old-rate output. All other cases use the unchanged reference API. Only unused uninitialized reference up-FIR history is excluded, as in the resampler suite. Thirty-one suites pass locally; complete Opus packet dispatch, hybrid integration, official conformance and playback integration remain required.
 
 The UI preview uses the actual assembly renderer with synthetic playback state. **Desktop window interaction, open-dialog/drop behavior and monitor-DPI changes remain unverified** because the permitted desktop automation runtime was unavailable. Audio controls are tested separately by a native assembly harness.
 
@@ -159,7 +161,7 @@ The RFC reference archive is checked against its normative SHA-1 before extracti
 
 ## Remaining implementation
 
-Complete SILK stereo/channel/API-rate orchestration, then hybrid switching, Ogg integration, pre-skip/gain/end trimming and official audio-vector validation. Further work includes indexed seeking, multichannel/chained streams, device changes, and same-machine CPU/RAM comparisons against existing players.
+Complete Opus packet dispatch and hybrid switching, then Ogg integration, pre-skip/gain/end trimming and official audio-vector validation. Further work includes indexed seeking, multichannel/chained streams, device changes, and same-machine CPU/RAM comparisons against existing players.
 
 ## References
 
