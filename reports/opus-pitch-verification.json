@@ -1,0 +1,6 @@
+﻿{
+    "result":  "passed",
+    "scope":  "standard-mode CELT mono/stereo pitch downsample, LPC whitening, coarse/fine search and interpolation, also used by the separate CELT frame concealment suite",
+    "scale_adjusted_absolute_tolerance":  1E-05,
+    "stats":  "CELT pitch: 3920 mono/stereo downsample and exact pitch searches, 4014080 whitening coefficients, 12 guards; max scaled error 0"
+}

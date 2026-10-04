@@ -13,6 +13,7 @@ EXTERN op_ec_init:PROC, op_ec_tell:PROC, op_ec_bits:PROC
 EXTERN op_celt_controls:PROC, op_celt_bands:PROC, op_celt_final:PROC
 EXTERN op_celt_anti_collapse:PROC, op_celt_denormalize:PROC
 EXTERN op_celt_synthesis:PROC, op_celt_comb_filter:PROC, op_celt_deemphasis:PROC
+EXTERN op_celt_decode_lost:PROC
 PUBLIC op_celt_decoder_init, op_celt_decode_frame
 .const
 df_floor real4 -28.0
@@ -80,7 +81,7 @@ FD_HISTORY EQU 196
 ; failed entropy/numerical frame. Late failure poisons state until reset.
 ; Input request is immutable. State/work/PCM/payload/entropy do not overlap.
 ; Shared primitive scratch still requires one decode owner at a time.
-; Packet-loss/null/one-byte frames require PLC and currently reject with 0.
+; Null/zero/one-byte payloads invoke the bounded loss-concealment stage.
 op_celt_decode_frame PROC
     push rbx
     push rsi
@@ -99,15 +100,11 @@ op_celt_decode_frame PROC
     jz df_invalid
     test r13,r13
     jz df_invalid
-    cmp qword ptr [rbx+DF_DATA],0
-    je df_invalid
     cmp qword ptr [rbx+DF_PCM],0
     je df_invalid
     cmp dword ptr [rbx+DF_STATE_CAP],SD_SIZE
     jb df_invalid
     cmp dword ptr [rbx+DF_WORK_CAP],DW_SIZE
-    jb df_invalid
-    cmp dword ptr [rbx+DF_LEN],2
     jb df_invalid
     cmp dword ptr [rbx+DF_LEN],1275
     ja df_invalid
@@ -115,6 +112,8 @@ op_celt_decode_frame PROC
     jne df_invalid
     cmp dword ptr [r12+SD_ERROR],0
     jne df_invalid
+    cmp dword ptr [r12+SD_LOSS],7ffffffeh
+    ja df_invalid
     mov eax,[r12+SD_CHANNELS]
     cmp eax,1
     jb df_invalid
@@ -188,6 +187,15 @@ df_state_energy_guard:
     inc ecx
     cmp ecx,168
     jb df_state_energy_guard
+    xor ecx,ecx
+df_state_lpc_guard:
+    mov eax,[r12+SD_LPC+rcx*4]
+    and eax,7fffffffh
+    cmp eax,58800000h
+    ja df_invalid
+    inc ecx
+    cmp ecx,48
+    jb df_state_lpc_guard
     mov eax,[r12+SD_DEEMPH]
     and eax,7fffffffh
     cmp eax,7b800000h
@@ -196,6 +204,10 @@ df_state_energy_guard:
     and eax,7fffffffh
     cmp eax,7b800000h
     ja df_invalid
+    cmp qword ptr [rbx+DF_DATA],0
+    je df_lost_frame
+    cmp dword ptr [rbx+DF_LEN],1
+    jbe df_lost_frame
     mov rsi,[rbx+DF_EC]
     test rsi,rsi
     jz df_guards_done
@@ -730,6 +742,24 @@ df_gather_samples:
     cmp dword ptr [rsi+48],0
     jne df_failed
     mov eax,[rsp+FD_SAMPLES]
+    jmp df_done
+df_lost_frame:
+    ; Shared public state/capacity checks passed. PLC owns no entropy context.
+    cmp dword ptr [r12+SD_LOSS],0
+    je df_lost_ready
+    cmp dword ptr [r12+SD_LOSS],5
+    jge df_lost_ready
+    cmp dword ptr [rbx+DF_START],0
+    jne df_lost_ready
+    cmp dword ptr [r12+SD_LAST_PITCH],100
+    jb df_invalid
+    cmp dword ptr [r12+SD_LAST_PITCH],720
+    ja df_invalid
+df_lost_ready:
+    mov rcx,rbx
+    call op_celt_decode_lost
+    test eax,eax
+    jz df_failed
     jmp df_done
 df_failed:
     mov dword ptr [r12+SD_ERROR],1

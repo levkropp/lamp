@@ -9,7 +9,7 @@ $tools=Join-Path $msvc 'bin\Hostx64\x64'
 New-Item -ItemType Directory -Force -Path (Join-Path $root 'bin\decoder-oracle') | Out-Null
 . (Join-Path $PSScriptRoot 'opus-reference.ps1')
 $reference=Get-LampOpusReference
-$objects=@('opus_decoder','opus_range','opus_controls','opus_energy','opus_allocation','opus_band','opus_bands','opus_theta','opus_vq','opus_cwrs','opus_band_transform','opus_spectral','opus_fft','opus_mdct','opus_filter')
+$objects=@('opus_decoder','opus_plc','opus_pitch','opus_lpc','opus_range','opus_controls','opus_energy','opus_allocation','opus_band','opus_bands','opus_theta','opus_vq','opus_cwrs','opus_band_transform','opus_spectral','opus_fft','opus_mdct','opus_filter')
 foreach($name in $objects){
  & (Join-Path $tools 'ml64.exe') /nologo /c "/I$root\src" "/Fo$root\bin\$name.obj" (Join-Path $root "src\$name.asm")
  if($LASTEXITCODE){throw "Assembly failed $name"}
@@ -28,4 +28,4 @@ if($LASTEXITCODE){throw 'Stateful decoder test oracle failed to build'}
 $result=& (Join-Path $root 'bin\opus-decoder-oracle.exe') (Join-Path $PSScriptRoot 'fixtures\tone.opus')
 if($LASTEXITCODE){throw "Assembly stateful CELT decoder mismatch $result"}
 Write-Output $result
-[pscustomobject]@{result='passed';scope='stateful normal-mode CELT packet-to-float-PCM and histories, mono/stereo conversion, all frame sizes/output rates/bandwidths and primed entropy contexts, malformed/truncated payloads and sticky failure/reset; PLC, SILK, Hybrid, Ogg playback and complete Opus conformance remain pending';scale_adjusted_absolute_tolerance=0.00004;stats="$result"} | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $root 'bin\opus-decoder-verification.json') -Encoding utf8
+[pscustomobject]@{result='passed';scope='stateful normal-mode CELT frame-to-float-PCM, pitch/LPC/noise concealment and recovery with persistent histories, mono/stereo conversion, all frame sizes/output rates/bandwidths and primed entropy contexts, malformed/truncated payloads and sticky failure/reset; SILK, Hybrid, Ogg playback and complete Opus conformance remain pending';scale_adjusted_absolute_tolerance=0.00004;stats="$result"} | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $root 'bin\opus-decoder-verification.json') -Encoding utf8

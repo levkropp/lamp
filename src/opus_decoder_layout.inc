@@ -15,7 +15,7 @@ SD_LAST_PITCH EQU 52
 SD_LOSS EQU 56
 SD_DECODE EQU 64
 SD_DECODE_STRIDE EQU 8672       ; (2048+120)*4
-SD_LPC EQU 17408               ; two 24-float LPC histories, reserved for PLC
+SD_LPC EQU 17408               ; two 24-float loss-concealment LPC histories
 SD_OLD_E EQU 17600
 SD_OLD_LOG EQU 17768
 SD_OLD_LOG2 EQU 17936

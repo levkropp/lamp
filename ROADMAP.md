@@ -34,7 +34,7 @@ The public repository includes build/test tooling, a Windows prerelease and a we
 - [x] CELT recursive band splits, stereo/folding, and complete normalized spectral band reconstruction, including the frame loop.
 - [x] CELT inverse MDCT, denormalization, overlap, anti-collapse and postfilter/deemphasis kernels, checked against the normative reference.
 - [x] Assemble the stateful CELT frame decoder and validate packet-to-PCM, including energy/postfilter history, frame/bandwidth transitions and final entropy checks.
-- [ ] CELT packet-loss concealment, pitch/LPC reconstruction and comfort noise, with loss/recovery state validation.
+- [x] CELT packet-loss concealment, pitch/LPC reconstruction and comfort noise, with loss/recovery state validation.
 - [ ] SILK parameter decoding, NLSF/LPC/prediction, synthesis and resampling.
 - [ ] Hybrid modes, bandwidth/frame transitions, stereo, channel mapping, output gain, pre-skip and end trimming.
 - [ ] Integrate Ogg/Opus with cancellation, queueing, pause and seeking.

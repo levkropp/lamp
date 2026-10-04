@@ -1,0 +1,6 @@
+﻿{
+    "result":  "passed",
+    "scope":  "CELT float windowed autocorrelation, Levinson-Durbin LPC and stateful causal/in-place FIR/IIR kernels, also used by the separate CELT frame concealment suite; SILK prediction remains pending",
+    "scale_adjusted_absolute_tolerance":  1E-05,
+    "stats":  "CELT prediction: 3072 windowed autocorrelations, 3072 LPC solves, 24576 FIR and 24576 IIR stateful/in-place frames, 25932288 coefficients, 71 guards; max scaled error 0"
+}

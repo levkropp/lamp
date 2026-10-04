@@ -67,6 +67,10 @@ static_modes_float.h from that archive, under the same BSD conditions.
 The bands.c/celt.c synthesis and filter references also credit Gregory Maxwell.
 The stateful CELT frame decoder adapts the same celt.c decode/state algorithms,
 with the complete unchanged CELT C encoder/decoder used only by test oracles.
+CELT prediction and packet-loss concealment adapt celt_lpc.c, pitch.c and
+celt.c from the same archive: Copyright (c) 2009-2012 IETF Trust,
+Xiph.Org Foundation (celt_lpc.c), and Copyright (c) 2007-2012 IETF Trust,
+CSIRO, Xiph.Org Foundation (pitch.c), written by Jean-Marc Valin.
 The mixed-radix inverse FFT adapts kiss_fft.c:
 Copyright (c) 2003-2012 IETF Trust, Mark Borgerding, Jean-Marc Valin,
 Xiph.Org Foundation, CSIRO. All rights reserved.
