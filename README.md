@@ -69,7 +69,7 @@ node .\tests\smoke.js
 .\package.ps1
 ```
 
-The prebuilt ICO and decoder tables are included. A normal build needs no codec library or reference C compiler. Both players use custom assembly entry points and `/NODEFAULTLIB`. The development build measures **195,584 bytes for `lamp.exe`** and **188,416 bytes for `lamp-cli.exe`**, including icon resources; release manifests record exact sizes and hashes.
+The prebuilt ICO and decoder tables are included. A normal build needs no codec library or reference C compiler. Both players use custom assembly entry points and `/NODEFAULTLIB`. The development build measures **197,632 bytes for `lamp.exe`** and **189,952 bytes for `lamp-cli.exe`**, including icon resources; release manifests record exact sizes and hashes.
 
 To build while the player is open, use `./build.ps1 -OutputDirectory ./bin/verify-build`. Pass that directory to `node ./tests/verify-runtime.js ./bin/verify-build` and `node ./tests/smoke.js ./bin/verify-build` to check the new binaries, or `./package.ps1 -BinaryDirectory ./bin/verify-build` to package them. Packaging rejects a binary version that differs from `VERSION`.
 

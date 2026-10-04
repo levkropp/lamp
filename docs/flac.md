@@ -28,7 +28,7 @@ The engine currently renders two channels. The default horizontal layouts use th
 | Top back center | a/2 | a/2 |
 | Top back right | q/2 | a·q |
 
-Normalize both rows by the larger row sum: the target sum is 1 for up to four assigned speakers, and 2 for five or more. The assignment count determines this gain, so a four-track file tagged as front left/right retains ordinary stereo gain. Default mono duplicates its sample; ordinary stereo retains the existing exact conversion path. This policy includes LFE without a low-pass filter. It is a rendering choice, not a FLAC requirement or an Ambisonic decoder. Dense coherent surround signals can exceed unit float amplitude; the player applies its existing final output bounds.
+Normalize both rows by the larger row sum: the target sum is 1 for up to four assigned speakers, and 2 for five or more. The assignment count determines this gain, so a four-track file tagged as front left/right retains ordinary stereo gain. Default mono duplicates its sample; ordinary stereo retains the existing exact conversion path. This policy includes LFE without a low-pass filter. It is a rendering choice, not a FLAC requirement or an Ambisonic decoder. Dense coherent surround signals can exceed unit float amplitude. Exports preserve these values, and the player submits volume-scaled floats to WASAPI. Configurable headroom and limiting remain unfinished.
 
 Other layouts convert integer samples to double precision, multiply and accumulate in channel order, apply the exact power-of-two sample scale, then round once to float. This avoids losing small results when large channel contributions cancel. Native surround routing and configurable mixing remain roadmap work.
 
