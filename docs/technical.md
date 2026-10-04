@@ -1,6 +1,6 @@
 # LAMP 0.4.0-dev technical details
 
-A Windows x86-64 audio player with handwritten assembly WAV, FLAC, MP3, Ogg/Vorbis and development Ogg/Opus decoders, plus a native assembly UI. The current console build is **190,976 bytes (186.5 KiB)**; the graphical build is **198,656 bytes (194 KiB)**. Both include LAMP's icon and version resources. The published v0.3.0 archive retains its earlier four-format build and manifest.
+A Windows x86-64 audio player with handwritten assembly WAV, AIFF/AIFC, FLAC, MP3, Ogg/Vorbis and development Ogg/Opus decoders, plus a native assembly UI. The current console build is **194,048 bytes (189.5 KiB)**; the graphical build is **201,728 bytes (197 KiB)**. Both include LAMP's icon and version resources. The published v0.3.0 archive retains its earlier four-format build and manifest.
 
 The dark canvas, compact playback controls and automatic hiding are inspired by mpv. The custom pixel buffer and Win32 presentation follow Rhun's documented assembly UI model. No Rhun source, fonts, icons, or other assets were copied.
 
@@ -19,7 +19,7 @@ Windows 10/11 x64 with a working default audio output are the intended targets. 
 .\bin\lamp-cli.exe --decode 'C:\Music\track.ogg' '.\track.f32'
 ```
 
-`--check` decodes silently without an audio device. `--decode` exports little-endian float32 PCM with two interleaved channels; mono is duplicated at its original amplitude. Opus uses 48 kHz; other formats use their source rate. The destination must be a new file. Float32 WAV NaN/infinity samples become silence. A failed export can leave partial output.
+`--check` decodes silently without an audio device. `--decode` exports little-endian float32 PCM with two interleaved channels; mono is duplicated at its original amplitude. Opus uses 48 kHz; AIFF/AIFC rates round to integer hertz; other formats use their source rate. The destination must be a new file. Float32 WAV NaN/infinity samples become silence. A failed export can leave partial output.
 
 | UI control | Action |
 | --- | --- |
@@ -38,7 +38,7 @@ Controls hide after 2.5 seconds of inactivity during playback, and reappear on m
 
 Console controls are Space to pause/resume and Q/Ctrl+C to stop. QuickEdit is disabled during playback and restored on exit.
 
-Seeking restarts the decoder on a worker. WAV seeks directly by sample offset. Native FLAC selects a preceding seek-table point by binary search and decodes the remaining distance. Tables require bounded offsets, ordered unique sample numbers and valid frame sizes; placeholders are ignored. The selected frame's coded position, sample count and CRC must agree with the table. Fixed/variable frame numbers are decoded canonically and checked throughout playback.
+Seeking restarts the decoder on a worker. WAV and AIFF/AIFC seek directly by sample offset. Native FLAC selects a preceding seek-table point by binary search and decodes the remaining distance. Tables require bounded offsets, ordered unique sample numbers and valid frame sizes; placeholders are ignored. The selected frame's coded position, sample count and CRC must agree with the table. Fixed/variable frame numbers are decoded canonically and checked throughout playback.
 
 Without a usable table, native FLAC searches byte positions for complete, validated frames, also checking the following frame's chronology to avoid CRC-valid sync patterns inside PCM payloads. Byte bounds strictly shrink and sample bounds must agree. This works for fixed/variable frames and unknown total sample counts. Speculation is capped at 64 frame decodes, 64 MiB of scanned bytes and 1 MiB per speculative frame; initial/final validation adds at most two decodes. Reaching a cap restores frame zero for ordinary sequential decoding. No index allocation or persistent cache is needed.
 
@@ -70,6 +70,7 @@ Opus adds 6,768 sample-position/reference PCM seek checks across 141 files. A te
 
 | Format | Implemented coverage |
 | --- | --- |
+| AIFF / AIFC | Signed PCM 1–32-bit; NONE/twos/sowt/in24/in32, unsigned raw, IEEE float32/64; 1–8 channels with ordered CHAN mixing, declared-frame trimming and direct seeking; rounded 8–192 kHz rates; [limits](aiff.md) |
 | WAV | Little-endian RIFF/RF64/BW64 audio framing; PCM unsigned 8-bit, signed 16/24/32-bit, IEEE float32/64; 1–8 channels downmixed to stereo; 8–192 kHz |
 | Extensible WAV | PCM/float GUIDs; 1–container-width valid PCM bits, left-aligned with unused low bits ignored; speaker masks, direct-out and partial/excess mask bits; float precision equals container width |
 | Native FLAC | 1–8 channels, 4–32-bit, 8–192 kHz; constant/verbatim, fixed predictors 0–4, LPC 1–32, Rice partitions/escapes, wasted bits, all stereo decorrelation modes; default/tagged speaker layouts downmixed to stereo |
@@ -136,9 +137,10 @@ Recorded snapshots are in `reports/` in a source checkout. The paths below descr
 | `bin/flac-layout-verification.json` | 404 native FLAC files, all 4–32-bit depths/1–8 channels, tagged layouts, guarded reads, 6,060 exact seeks, cancellation/allocation release and malformed-input rejection |
 | `bin/wav-layout-verification.json` | 965 WAV files, all PCM container/valid-bit combinations, 1–8 channels, float32/64, speaker masks, Unicode paths, guarded reads, 14,475 exact seeks and cancelled seek/open/read |
 | `bin/rf64-verification.json` | 538 RF64/BW64 files, 16 sparse large-file fixtures, 8,950 exact seeks and 312 malformed-input rejections; size precedence, bounded tables, trailing metadata, guarded reads and cancellation |
+| `bin/aiff-verification.json` | 1,977 AIFF/AIFC files, 19 sparse inputs, 30,443 exact seeks and 303 malformed rejections; precision, byte order, float extremes, ordered Core Audio layouts, arbitrary chunk order, sparse large files, direct seeks, guarded reads, empty streams and cancellation; reference paths identify comparator limits |
 | `mp3-verification.json` | 103 MP3 checks: 88 PCM comparisons, 14 rejection cases, WASAPI silence; recorded SNR above 112 dB |
 | `bin/vorbis-verification.json` | 83 checks: 32 rate/channel/quality cases, noise/transients/silence, continued long comment, 36 synthetic residue/codebook cases, 10 rejections and WASAPI silence |
-| `bin/engine-verification.json` | Sixteen scenarios: all five codecs, RF64/BW64, indexed FLAC, family 1 Opus, 32-bit FLAC and 24-bit/float64 WAV 5.1/7.1 stereo downmix; playback, pause/resume, stop/reopen, seek, paused seek and cancelled open |
+| `bin/engine-verification.json` | Twenty-two scenarios: all six audio families, RF64/BW64 and AIFF/AIFC PCM16/24/float64, indexed FLAC, family 1 Opus, 32-bit FLAC and 24-bit/float64 WAV 5.1/7.1 stereo downmix; playback, pause/resume, stop/reopen, seek, paused seek and cancelled open |
 | `bin/mp3-seek-verification.json` | 1,650 exact seeks, independent continuous PCM comparisons, bounded sparse index/header skims, adaptive compaction, cancelled seek/open and contradictory Xing counts |
 | `bin/vorbis-seek-verification.json` | 1,305 exact seeks, independent continuous PCM comparisons, packet/lace checkpoints, overlap pre-roll, origins/cropping, continued packets, adaptive compaction, cancelled seek/open and contradictory timestamps |
 | `bin/opus-seek-verification.json` | 6,768 independently positioned reset-reference seeks; all TOC configurations/framing codes, at least 80 ms pre-roll, gain/pre-skip, mode/channel/DTX transitions, continued/cropped streams, adaptive compaction and cancelled seek/open |
@@ -222,6 +224,7 @@ node .\tests\fuzz-vorbis.js
 .\tests\verify-flac-layouts.ps1 -OutputDirectory .\bin\verify-build #404 depth/layout files +6060 exact seeks
 .\tests\verify-wav-layouts.ps1 -OutputDirectory .\bin\verify-build #965 precision/layout files +14475 exact seeks
 .\tests\verify-rf64.ps1 -OutputDirectory .\bin\verify-build #538 container files +16 sparse inputs +8950 exact seeks
+.\tests\verify-aiff.ps1 -OutputDirectory .\bin\verify-build #AIFF/AIFC precision, layouts and sparse large files
 .\tests\verify-opus-seek.ps1 -OutputDirectory .\bin\verify-build #Opus seek suite alone
 .\tests\verify-ogg-crc.ps1 -OutputDirectory .\bin\verify-build
 .\tests\benchmark-seek.ps1 -OutputDirectory .\bin\verify-build #creates ten-minute fixtures

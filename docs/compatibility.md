@@ -11,9 +11,10 @@ LAMP's long-term goal is to support everything relevant that mpv supports. This 
 | WAV / native FLAC / MP3 / Ogg Vorbis | Partial; direct, frame-search or indexed seeking; WAV 1–8 channels, valid PCM precision and float64; native FLAC 1–8 channels/4–32-bit; speaker layouts downmix to stereo | Multichannel Vorbis, native surround output, broader containers and Ogg chaining | 2–3 |
 | Opus | Development playback: Ogg families 0/1, SILK/hybrid/CELT, RFC 8251 updates, family 1 layouts with 1–8 speaker channels downmixed to stereo, header gain/pre-skip/end trimming; [all 120 official elementary-vector checks pass](opus.md) | Native surround output, other mapping families, Ogg chaining | 1–2 |
 | Other audio codecs | Planned | AAC/HE-AAC, ALAC, AC-3/E-AC-3, DTS, WavPack, APE, MPEG I/II and relevant legacy formats | 3 |
-| Containers and media structure | Partial; RIFF/RF64/BW64 audio framing and single-stream Ogg within documented limits | MP4/MOV, Matroska/WebM, TS/PS, AVI/ASF, WAVE64/RIFX; ADM rendering, timestamps, attachments, chapters, editions and tags | 3 |
+| AIFF / AIFC | Partial; [1–32-bit PCM, byte-order/fixed-container variants, float32/64 and ordered CHAN layouts](aiff.md); direct seeking and declared-frame trimming | Compressed AIFC codecs, native surround output, newer/spatial layouts and exact fractional-rate output | 3 |
+| Containers and media structure | Partial; RIFF/RF64/BW64 and FORM AIFF/AIFC audio framing, plus single-stream Ogg within documented limits | MP4/MOV, Matroska/WebM, TS/PS, AVI/ASF, WAVE64/RIFX; ADM rendering, timestamps, attachments, chapters, editions and tags | 3 |
 | Audio output | Partial | WASAPI device selection/recovery, multichannel, resampling, exclusive mode and useful passthrough | 2–3 |
-| Seeking and playback state | WAV direct; native FLAC tables/frame search; MP3 frame/reservoir index; Vorbis packet/overlap index; Opus packet index with pre-roll; PCM/reference and paused seeking verified | Broader reopen/latency measurements, resume, A-B loops, repeat, gapless playlists and speed/pitch controls | 2, 6 |
+| Seeking and playback state | WAV and AIFF/AIFC direct; native FLAC tables/frame search; MP3 frame/reservoir index; Vorbis packet/overlap index; Opus packet index with pre-roll; PCM/reference and paused seeking verified | Broader reopen/latency measurements, resume, A-B loops, repeat, gapless playlists and speed/pitch controls | 2, 6 |
 | Video decoding and A/V sync | Planned | H.264, HEVC, VP9, AV1 and relevant legacy codecs; frame stepping and accurate synchronization | 4 |
 | Hardware acceleration | Planned | Supported Windows GPU profiles, measured hardware decode, explicit software fallback | 4 |
 | Video rendering and color | Planned | Scaling, crop/zoom/pan/rotation, deinterlacing, HDR/tone mapping, ICC, user shaders and display sync | 4, 6 |
@@ -26,7 +27,7 @@ LAMP's long-term goal is to support everything relevant that mpv supports. This 
 | Filters, screenshots and diagnostics | Planned | Audio/video filters, equalization, screenshots, playback stats and useful export controls | 4, 6 |
 | Desktop platform coverage | Windows x86-64 only | Evaluate additional platforms after the Windows backend stabilizes; record platform exceptions | 6 |
 
-Existing support is documented in [technical details](technical.md). Small committed fixtures exercise WAV, FLAC, MP3, Vorbis and Opus decoding/export; broader results live in [reports](../reports/README.md). These checks establish the documented prototype coverage, not complete conformance or a performance advantage over mpv.
+Existing support is documented in [technical details](technical.md). Small committed fixtures exercise WAV, AIFF, FLAC, MP3, Vorbis and Opus decoding/export; broader results live in [reports](../reports/README.md). These checks establish the documented prototype coverage, not complete conformance or a performance advantage over mpv.
 
 ## Acceptance and updates
 

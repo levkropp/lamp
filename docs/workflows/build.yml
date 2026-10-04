@@ -33,6 +33,8 @@ jobs:
         run: ./tests/verify-wav-layouts.ps1
       - name: Verify RF64/BW64 framing and sparse large files
         run: ./tests/verify-rf64.ps1
+      - name: Verify AIFF/AIFC precision, layouts and large files
+        run: ./tests/verify-aiff.ps1
       - name: Check static site
         run: node tests/verify-site.js
       - name: Render actual assembly UI

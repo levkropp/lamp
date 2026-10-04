@@ -371,7 +371,7 @@ ui_status_ready:
     mov eax,[codec_kind]
     test eax,eax
     jz ui_draw_hints
-    cmp eax,5
+    cmp eax,6
     ja ui_draw_hints
     lea rcx,ui_codec_names
     mov rcx,[rcx+rax*8]

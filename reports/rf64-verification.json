@@ -36,8 +36,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4304896,
-      "private_bytes_after": 4304896
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "RF64-8-false-1-true.wav",
@@ -62,8 +62,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4308992,
-      "private_bytes_after": 4308992
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "RF64-8-false-2-false.wav",
@@ -88,8 +88,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "RF64-8-false-2-true.wav",
@@ -114,8 +114,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4308992,
+      "private_bytes_after": 4308992
     },
     {
       "file": "RF64-8-false-3-false.wav",
@@ -140,8 +140,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4325376,
+      "private_bytes_after": 4325376
     },
     {
       "file": "RF64-8-false-3-true.wav",
@@ -166,8 +166,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "RF64-8-false-4-false.wav",
@@ -192,8 +192,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "RF64-8-false-4-true.wav",
@@ -218,8 +218,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4284416,
-      "private_bytes_after": 4284416
+      "private_bytes_before": 4304896,
+      "private_bytes_after": 4304896
     },
     {
       "file": "RF64-8-false-5-false.wav",
@@ -244,8 +244,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4304896,
+      "private_bytes_after": 4304896
     },
     {
       "file": "RF64-8-false-5-true.wav",
@@ -270,8 +270,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "RF64-8-false-6-false.wav",
@@ -296,8 +296,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4308992,
+      "private_bytes_after": 4308992
     },
     {
       "file": "RF64-8-false-6-true.wav",
@@ -322,8 +322,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "RF64-8-false-7-false.wav",
@@ -400,8 +400,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4325376,
+      "private_bytes_after": 4325376
     },
     {
       "file": "RF64-8-false-8-true.wav",
@@ -426,8 +426,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "RF64-16-false-1-false.wav",
@@ -452,8 +452,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "RF64-16-false-1-true.wav",
@@ -478,8 +478,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "RF64-16-false-2-false.wav",
@@ -504,8 +504,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4292608,
-      "private_bytes_after": 4292608
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "RF64-16-false-2-true.wav",
@@ -530,8 +530,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4325376,
-      "private_bytes_after": 4325376
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "RF64-16-false-3-false.wav",
@@ -556,8 +556,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4325376,
+      "private_bytes_after": 4325376
     },
     {
       "file": "RF64-16-false-3-true.wav",
@@ -582,8 +582,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "RF64-16-false-4-false.wav",
@@ -608,8 +608,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4304896,
+      "private_bytes_after": 4304896
     },
     {
       "file": "RF64-16-false-4-true.wav",
@@ -634,8 +634,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4288512,
-      "private_bytes_after": 4288512
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "RF64-16-false-5-false.wav",
@@ -660,8 +660,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "RF64-16-false-5-true.wav",
@@ -686,8 +686,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4288512,
+      "private_bytes_after": 4288512
     },
     {
       "file": "RF64-16-false-6-false.wav",
@@ -738,8 +738,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4325376,
+      "private_bytes_after": 4325376
     },
     {
       "file": "RF64-16-false-7-false.wav",
@@ -764,8 +764,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4308992,
+      "private_bytes_after": 4308992
     },
     {
       "file": "RF64-16-false-7-true.wav",
@@ -816,8 +816,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4325376,
+      "private_bytes_after": 4325376
     },
     {
       "file": "RF64-16-false-8-true.wav",
@@ -842,8 +842,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4308992,
-      "private_bytes_after": 4308992
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "RF64-24-false-1-false.wav",
@@ -868,8 +868,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4304896,
+      "private_bytes_after": 4304896
     },
     {
       "file": "RF64-24-false-1-true.wav",
@@ -894,8 +894,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4325376,
+      "private_bytes_after": 4325376
     },
     {
       "file": "RF64-24-false-2-false.wav",
@@ -920,8 +920,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4288512,
-      "private_bytes_after": 4288512
+      "private_bytes_before": 4296704,
+      "private_bytes_after": 4296704
     },
     {
       "file": "RF64-24-false-2-true.wav",
@@ -946,8 +946,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4325376,
-      "private_bytes_after": 4325376
+      "private_bytes_before": 4308992,
+      "private_bytes_after": 4308992
     },
     {
       "file": "RF64-24-false-3-false.wav",
@@ -972,8 +972,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4325376,
+      "private_bytes_after": 4325376
     },
     {
       "file": "RF64-24-false-3-true.wav",
@@ -998,8 +998,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4304896,
-      "private_bytes_after": 4304896
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "RF64-24-false-4-false.wav",
@@ -1024,8 +1024,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4288512,
-      "private_bytes_after": 4288512
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "RF64-24-false-4-true.wav",
@@ -1050,8 +1050,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4325376,
+      "private_bytes_after": 4325376
     },
     {
       "file": "RF64-24-false-5-false.wav",
@@ -1102,8 +1102,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4308992,
-      "private_bytes_after": 4308992
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "RF64-24-false-6-false.wav",
@@ -1154,8 +1154,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4288512,
-      "private_bytes_after": 4288512
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "RF64-24-false-7-false.wav",
@@ -1180,8 +1180,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "RF64-24-false-7-true.wav",
@@ -1206,8 +1206,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4308992,
+      "private_bytes_after": 4308992
     },
     {
       "file": "RF64-24-false-8-false.wav",
@@ -1232,8 +1232,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "RF64-24-false-8-true.wav",
@@ -1284,8 +1284,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4308992,
+      "private_bytes_after": 4308992
     },
     {
       "file": "RF64-32-false-1-true.wav",
@@ -1310,8 +1310,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "RF64-32-false-2-false.wav",
@@ -1362,8 +1362,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "RF64-32-false-3-false.wav",
@@ -1388,8 +1388,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4284416,
-      "private_bytes_after": 4284416
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "RF64-32-false-3-true.wav",
@@ -1440,8 +1440,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4325376,
-      "private_bytes_after": 4325376
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "RF64-32-false-4-true.wav",
@@ -1466,8 +1466,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "RF64-32-false-5-false.wav",
@@ -1492,8 +1492,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4325376,
+      "private_bytes_after": 4325376
     },
     {
       "file": "RF64-32-false-5-true.wav",
@@ -1518,37 +1518,11 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "RF64-32-false-6-false.wav",
-      "kind": "RF64",
-      "channels": 6,
-      "container_bits": 32,
-      "valid_bits": 32,
-      "float": false,
-      "frames": 4609,
-      "reference": "original container",
-      "result": "passed",
-      "checks": 15,
-      "advanced": 14,
-      "discarded_frames": 0,
-      "maximum_discarded": 0,
-      "maximum_probes": 0,
-      "index_points": 0,
-      "maximum_skimmed_headers": 0,
-      "maximum_stride": 0,
-      "maximum_preroll": 0,
-      "depth": 32,
-      "guarded_reads": 15,
-      "cancel_checks": 4,
-      "reopen_checks": 64,
-      "private_bytes_before": 4325376,
-      "private_bytes_after": 4325376
-    },
-    {
-      "file": "RF64-32-false-6-true.wav",
       "kind": "RF64",
       "channels": 6,
       "container_bits": 32,
@@ -1574,6 +1548,32 @@
       "private_bytes_after": 4317184
     },
     {
+      "file": "RF64-32-false-6-true.wav",
+      "kind": "RF64",
+      "channels": 6,
+      "container_bits": 32,
+      "valid_bits": 32,
+      "float": false,
+      "frames": 4609,
+      "reference": "original container",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 14,
+      "discarded_frames": 0,
+      "maximum_discarded": 0,
+      "maximum_probes": 0,
+      "index_points": 0,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
+      "depth": 32,
+      "guarded_reads": 15,
+      "cancel_checks": 4,
+      "reopen_checks": 64,
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
+    },
+    {
       "file": "RF64-32-false-7-false.wav",
       "kind": "RF64",
       "channels": 7,
@@ -1596,8 +1596,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "RF64-32-false-7-true.wav",
@@ -1622,8 +1622,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "RF64-32-false-8-false.wav",
@@ -1674,8 +1674,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4308992,
-      "private_bytes_after": 4308992
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "RF64-32-true-1-false.wav",
@@ -1700,8 +1700,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4308992,
-      "private_bytes_after": 4308992
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "RF64-32-true-1-true.wav",
@@ -1726,8 +1726,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "RF64-32-true-2-false.wav",
@@ -1752,8 +1752,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4292608,
+      "private_bytes_after": 4292608
     },
     {
       "file": "RF64-32-true-2-true.wav",
@@ -1778,8 +1778,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "RF64-32-true-3-false.wav",
@@ -1804,8 +1804,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4325376,
+      "private_bytes_after": 4325376
     },
     {
       "file": "RF64-32-true-3-true.wav",
@@ -1830,8 +1830,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "RF64-32-true-4-false.wav",
@@ -1856,8 +1856,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4292608,
+      "private_bytes_after": 4292608
     },
     {
       "file": "RF64-32-true-4-true.wav",
@@ -1882,8 +1882,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4284416,
-      "private_bytes_after": 4284416
+      "private_bytes_before": 4325376,
+      "private_bytes_after": 4325376
     },
     {
       "file": "RF64-32-true-5-false.wav",
@@ -1908,8 +1908,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4288512,
-      "private_bytes_after": 4288512
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "RF64-32-true-5-true.wav",
@@ -1934,8 +1934,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "RF64-32-true-6-false.wav",
@@ -1960,8 +1960,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "RF64-32-true-6-true.wav",
@@ -2038,8 +2038,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "RF64-32-true-8-false.wav",
@@ -2064,8 +2064,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "RF64-32-true-8-true.wav",
@@ -2090,8 +2090,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4308992,
-      "private_bytes_after": 4308992
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "RF64-64-true-1-false.wav",
@@ -2116,8 +2116,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4325376,
+      "private_bytes_after": 4325376
     },
     {
       "file": "RF64-64-true-1-true.wav",
@@ -2142,8 +2142,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4325376,
-      "private_bytes_after": 4325376
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "RF64-64-true-2-false.wav",
@@ -2194,8 +2194,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "RF64-64-true-3-false.wav",
@@ -2220,8 +2220,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "RF64-64-true-3-true.wav",
@@ -2246,8 +2246,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "RF64-64-true-4-false.wav",
@@ -2272,8 +2272,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4292608,
+      "private_bytes_after": 4292608
     },
     {
       "file": "RF64-64-true-4-true.wav",
@@ -2298,8 +2298,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "RF64-64-true-5-false.wav",
@@ -2324,8 +2324,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "RF64-64-true-5-true.wav",
@@ -2350,8 +2350,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "RF64-64-true-6-false.wav",
@@ -2376,8 +2376,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4308992,
-      "private_bytes_after": 4308992
+      "private_bytes_before": 4325376,
+      "private_bytes_after": 4325376
     },
     {
       "file": "RF64-64-true-6-true.wav",
@@ -2402,8 +2402,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4308992,
+      "private_bytes_after": 4308992
     },
     {
       "file": "RF64-64-true-7-false.wav",
@@ -2454,8 +2454,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "RF64-64-true-8-false.wav",
@@ -2480,8 +2480,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4325376,
+      "private_bytes_after": 4325376
     },
     {
       "file": "RF64-64-true-8-true.wav",
@@ -2506,8 +2506,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "BW64-8-false-1-false.wav",
@@ -2532,8 +2532,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4325376,
-      "private_bytes_after": 4325376
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "BW64-8-false-1-true.wav",
@@ -2558,8 +2558,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4325376,
+      "private_bytes_after": 4325376
     },
     {
       "file": "BW64-8-false-2-false.wav",
@@ -2584,8 +2584,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4329472,
-      "private_bytes_after": 4329472
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "BW64-8-false-2-true.wav",
@@ -2610,8 +2610,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "BW64-8-false-3-false.wav",
@@ -2636,8 +2636,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "BW64-8-false-3-true.wav",
@@ -2662,8 +2662,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "BW64-8-false-4-false.wav",
@@ -2688,8 +2688,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4325376,
+      "private_bytes_after": 4325376
     },
     {
       "file": "BW64-8-false-4-true.wav",
@@ -2714,8 +2714,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "BW64-8-false-5-false.wav",
@@ -2740,8 +2740,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4325376,
-      "private_bytes_after": 4325376
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "BW64-8-false-5-true.wav",
@@ -2766,8 +2766,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "BW64-8-false-6-false.wav",
@@ -2792,8 +2792,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "BW64-8-false-6-true.wav",
@@ -2844,8 +2844,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "BW64-8-false-7-true.wav",
@@ -2870,8 +2870,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4329472,
-      "private_bytes_after": 4329472
+      "private_bytes_before": 4325376,
+      "private_bytes_after": 4325376
     },
     {
       "file": "BW64-8-false-8-false.wav",
@@ -2896,8 +2896,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4325376,
-      "private_bytes_after": 4325376
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "BW64-8-false-8-true.wav",
@@ -2922,8 +2922,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4308992,
-      "private_bytes_after": 4308992
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "BW64-16-false-1-false.wav",
@@ -2948,8 +2948,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4284416,
-      "private_bytes_after": 4284416
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "BW64-16-false-1-true.wav",
@@ -2974,8 +2974,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4304896,
-      "private_bytes_after": 4304896
+      "private_bytes_before": 4325376,
+      "private_bytes_after": 4325376
     },
     {
       "file": "BW64-16-false-2-false.wav",
@@ -3000,8 +3000,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "BW64-16-false-2-true.wav",
@@ -3026,8 +3026,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4345856,
-      "private_bytes_after": 4345856
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "BW64-16-false-3-false.wav",
@@ -3052,8 +3052,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4308992,
-      "private_bytes_after": 4308992
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "BW64-16-false-3-true.wav",
@@ -3078,8 +3078,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4288512,
+      "private_bytes_after": 4288512
     },
     {
       "file": "BW64-16-false-4-false.wav",
@@ -3104,8 +3104,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "BW64-16-false-4-true.wav",
@@ -3130,8 +3130,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "BW64-16-false-5-false.wav",
@@ -3156,8 +3156,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "BW64-16-false-5-true.wav",
@@ -3208,8 +3208,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "BW64-16-false-6-true.wav",
@@ -3260,8 +3260,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4308992,
-      "private_bytes_after": 4308992
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "BW64-16-false-7-true.wav",
@@ -3286,8 +3286,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4325376,
-      "private_bytes_after": 4325376
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "BW64-16-false-8-false.wav",
@@ -3312,8 +3312,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4308992,
+      "private_bytes_after": 4308992
     },
     {
       "file": "BW64-16-false-8-true.wav",
@@ -3338,8 +3338,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4284416,
-      "private_bytes_after": 4284416
+      "private_bytes_before": 4308992,
+      "private_bytes_after": 4308992
     },
     {
       "file": "BW64-24-false-1-false.wav",
@@ -3364,8 +3364,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "BW64-24-false-1-true.wav",
@@ -3390,8 +3390,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "BW64-24-false-2-false.wav",
@@ -3442,8 +3442,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4308992,
-      "private_bytes_after": 4308992
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "BW64-24-false-3-false.wav",
@@ -3468,8 +3468,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "BW64-24-false-3-true.wav",
@@ -3494,8 +3494,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4296704,
-      "private_bytes_after": 4296704
+      "private_bytes_before": 4325376,
+      "private_bytes_after": 4325376
     },
     {
       "file": "BW64-24-false-4-false.wav",
@@ -3520,8 +3520,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "BW64-24-false-4-true.wav",
@@ -3546,8 +3546,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4325376,
-      "private_bytes_after": 4325376
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "BW64-24-false-5-false.wav",
@@ -3572,8 +3572,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4288512,
+      "private_bytes_after": 4288512
     },
     {
       "file": "BW64-24-false-5-true.wav",
@@ -3598,8 +3598,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4308992,
+      "private_bytes_after": 4308992
     },
     {
       "file": "BW64-24-false-6-false.wav",
@@ -3624,8 +3624,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4325376,
-      "private_bytes_after": 4325376
+      "private_bytes_before": 4296704,
+      "private_bytes_after": 4296704
     },
     {
       "file": "BW64-24-false-6-true.wav",
@@ -3650,8 +3650,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "BW64-24-false-7-false.wav",
@@ -3676,8 +3676,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "BW64-24-false-7-true.wav",
@@ -3702,8 +3702,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4288512,
-      "private_bytes_after": 4288512
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "BW64-24-false-8-false.wav",
@@ -3728,8 +3728,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "BW64-24-false-8-true.wav",
@@ -3754,8 +3754,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "BW64-32-false-1-false.wav",
@@ -3780,8 +3780,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4308992,
-      "private_bytes_after": 4308992
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "BW64-32-false-1-true.wav",
@@ -3806,8 +3806,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "BW64-32-false-2-false.wav",
@@ -3832,8 +3832,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4308992,
+      "private_bytes_after": 4308992
     },
     {
       "file": "BW64-32-false-2-true.wav",
@@ -3858,8 +3858,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4284416,
+      "private_bytes_after": 4284416
     },
     {
       "file": "BW64-32-false-3-false.wav",
@@ -3884,8 +3884,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4304896,
-      "private_bytes_after": 4304896
+      "private_bytes_before": 4329472,
+      "private_bytes_after": 4329472
     },
     {
       "file": "BW64-32-false-3-true.wav",
@@ -3910,8 +3910,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "BW64-32-false-4-false.wav",
@@ -3936,8 +3936,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4308992,
-      "private_bytes_after": 4308992
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "BW64-32-false-4-true.wav",
@@ -3962,8 +3962,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "BW64-32-false-5-false.wav",
@@ -3988,8 +3988,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4329472,
+      "private_bytes_after": 4329472
     },
     {
       "file": "BW64-32-false-5-true.wav",
@@ -4014,8 +4014,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4325376,
+      "private_bytes_after": 4325376
     },
     {
       "file": "BW64-32-false-6-false.wav",
@@ -4040,8 +4040,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "BW64-32-false-6-true.wav",
@@ -4066,8 +4066,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "BW64-32-false-7-false.wav",
@@ -4092,8 +4092,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "BW64-32-false-7-true.wav",
@@ -4118,8 +4118,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "BW64-32-false-8-false.wav",
@@ -4144,8 +4144,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4325376,
-      "private_bytes_after": 4325376
+      "private_bytes_before": 4329472,
+      "private_bytes_after": 4329472
     },
     {
       "file": "BW64-32-false-8-true.wav",
@@ -4170,8 +4170,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4304896,
-      "private_bytes_after": 4304896
+      "private_bytes_before": 4308992,
+      "private_bytes_after": 4308992
     },
     {
       "file": "BW64-32-true-1-false.wav",
@@ -4196,8 +4196,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "BW64-32-true-1-true.wav",
@@ -4248,8 +4248,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "BW64-32-true-2-true.wav",
@@ -4274,8 +4274,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "BW64-32-true-3-false.wav",
@@ -4300,8 +4300,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4325376,
-      "private_bytes_after": 4325376
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "BW64-32-true-3-true.wav",
@@ -4326,37 +4326,11 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4329472,
-      "private_bytes_after": 4329472
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "BW64-32-true-4-false.wav",
-      "kind": "BW64",
-      "channels": 4,
-      "container_bits": 32,
-      "valid_bits": 32,
-      "float": true,
-      "frames": 4609,
-      "reference": "original container",
-      "result": "passed",
-      "checks": 15,
-      "advanced": 14,
-      "discarded_frames": 0,
-      "maximum_discarded": 0,
-      "maximum_probes": 0,
-      "index_points": 0,
-      "maximum_skimmed_headers": 0,
-      "maximum_stride": 0,
-      "maximum_preroll": 0,
-      "depth": 32,
-      "guarded_reads": 15,
-      "cancel_checks": 4,
-      "reopen_checks": 64,
-      "private_bytes_before": 4308992,
-      "private_bytes_after": 4308992
-    },
-    {
-      "file": "BW64-32-true-4-true.wav",
       "kind": "BW64",
       "channels": 4,
       "container_bits": 32,
@@ -4382,6 +4356,32 @@
       "private_bytes_after": 4313088
     },
     {
+      "file": "BW64-32-true-4-true.wav",
+      "kind": "BW64",
+      "channels": 4,
+      "container_bits": 32,
+      "valid_bits": 32,
+      "float": true,
+      "frames": 4609,
+      "reference": "original container",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 14,
+      "discarded_frames": 0,
+      "maximum_discarded": 0,
+      "maximum_probes": 0,
+      "index_points": 0,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
+      "depth": 32,
+      "guarded_reads": 15,
+      "cancel_checks": 4,
+      "reopen_checks": 64,
+      "private_bytes_before": 4325376,
+      "private_bytes_after": 4325376
+    },
+    {
       "file": "BW64-32-true-5-false.wav",
       "kind": "BW64",
       "channels": 5,
@@ -4404,8 +4404,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4304896,
-      "private_bytes_after": 4304896
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "BW64-32-true-5-true.wav",
@@ -4430,8 +4430,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "BW64-32-true-6-false.wav",
@@ -4482,8 +4482,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4308992,
+      "private_bytes_after": 4308992
     },
     {
       "file": "BW64-32-true-7-false.wav",
@@ -4508,8 +4508,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4308992,
+      "private_bytes_after": 4308992
     },
     {
       "file": "BW64-32-true-7-true.wav",
@@ -4534,8 +4534,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4325376,
+      "private_bytes_after": 4325376
     },
     {
       "file": "BW64-32-true-8-false.wav",
@@ -4560,8 +4560,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "BW64-32-true-8-true.wav",
@@ -4586,8 +4586,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4308992,
+      "private_bytes_after": 4308992
     },
     {
       "file": "BW64-64-true-1-false.wav",
@@ -4638,8 +4638,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4325376,
+      "private_bytes_after": 4325376
     },
     {
       "file": "BW64-64-true-2-false.wav",
@@ -4664,8 +4664,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "BW64-64-true-2-true.wav",
@@ -4690,8 +4690,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "BW64-64-true-3-false.wav",
@@ -4716,8 +4716,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4308992,
-      "private_bytes_after": 4308992
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "BW64-64-true-3-true.wav",
@@ -4742,8 +4742,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "BW64-64-true-4-false.wav",
@@ -4768,8 +4768,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "BW64-64-true-4-true.wav",
@@ -4794,8 +4794,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "BW64-64-true-5-false.wav",
@@ -4820,8 +4820,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4308992,
-      "private_bytes_after": 4308992
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "BW64-64-true-5-true.wav",
@@ -4846,8 +4846,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4325376,
-      "private_bytes_after": 4325376
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "BW64-64-true-6-false.wav",
@@ -4924,8 +4924,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "BW64-64-true-7-true.wav",
@@ -4950,8 +4950,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "BW64-64-true-8-false.wav",
@@ -5002,8 +5002,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4325376,
+      "private_bytes_after": 4325376
     },
     {
       "file": "RF64-precision-8-1-1.wav",
@@ -5028,8 +5028,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "RF64-precision-8-1-8.wav",
@@ -5054,8 +5054,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "RF64-precision-8-2-1.wav",
@@ -5080,8 +5080,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4325376,
-      "private_bytes_after": 4325376
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "RF64-precision-8-2-8.wav",
@@ -5106,8 +5106,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "RF64-precision-8-3-1.wav",
@@ -5158,8 +5158,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "RF64-precision-8-4-1.wav",
@@ -5210,8 +5210,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4325376,
-      "private_bytes_after": 4325376
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "RF64-precision-8-5-1.wav",
@@ -5236,8 +5236,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4325376,
+      "private_bytes_after": 4325376
     },
     {
       "file": "RF64-precision-8-5-8.wav",
@@ -5288,8 +5288,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "RF64-precision-8-6-8.wav",
@@ -5314,8 +5314,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "RF64-precision-8-7-1.wav",
@@ -5340,8 +5340,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4325376,
+      "private_bytes_after": 4325376
     },
     {
       "file": "RF64-precision-8-7-8.wav",
@@ -5366,8 +5366,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4284416,
+      "private_bytes_after": 4284416
     },
     {
       "file": "RF64-precision-8-8-1.wav",
@@ -5392,8 +5392,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4288512,
-      "private_bytes_after": 4288512
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "RF64-precision-8-8-8.wav",
@@ -5418,8 +5418,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4308992,
-      "private_bytes_after": 4308992
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "RF64-precision-16-1-1.wav",
@@ -5444,8 +5444,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4325376,
+      "private_bytes_after": 4325376
     },
     {
       "file": "RF64-precision-16-1-8.wav",
@@ -5470,8 +5470,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4308992,
-      "private_bytes_after": 4308992
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "RF64-precision-16-2-1.wav",
@@ -5496,8 +5496,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4308992,
+      "private_bytes_after": 4308992
     },
     {
       "file": "RF64-precision-16-2-8.wav",
@@ -5522,8 +5522,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "RF64-precision-16-3-1.wav",
@@ -5574,8 +5574,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4308992,
+      "private_bytes_after": 4308992
     },
     {
       "file": "RF64-precision-16-4-1.wav",
@@ -5600,8 +5600,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4325376,
+      "private_bytes_after": 4325376
     },
     {
       "file": "RF64-precision-16-4-8.wav",
@@ -5626,8 +5626,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "RF64-precision-16-5-1.wav",
@@ -5652,8 +5652,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "RF64-precision-16-5-8.wav",
@@ -5678,8 +5678,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4341760,
+      "private_bytes_after": 4341760
     },
     {
       "file": "RF64-precision-16-6-1.wav",
@@ -5704,8 +5704,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4308992,
-      "private_bytes_after": 4308992
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "RF64-precision-16-6-8.wav",
@@ -5730,8 +5730,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4304896,
-      "private_bytes_after": 4304896
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "RF64-precision-16-7-1.wav",
@@ -5860,8 +5860,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "RF64-precision-16-9-8.wav",
@@ -5886,8 +5886,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "RF64-precision-16-10-1.wav",
@@ -5912,8 +5912,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4325376,
+      "private_bytes_after": 4325376
     },
     {
       "file": "RF64-precision-16-10-8.wav",
@@ -5938,8 +5938,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "RF64-precision-16-11-1.wav",
@@ -5964,8 +5964,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4325376,
+      "private_bytes_after": 4325376
     },
     {
       "file": "RF64-precision-16-11-8.wav",
@@ -5990,8 +5990,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "RF64-precision-16-12-1.wav",
@@ -6042,8 +6042,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4308992,
+      "private_bytes_after": 4308992
     },
     {
       "file": "RF64-precision-16-13-1.wav",
@@ -6068,8 +6068,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "RF64-precision-16-13-8.wav",
@@ -6094,8 +6094,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "RF64-precision-16-14-1.wav",
@@ -6146,8 +6146,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "RF64-precision-16-15-1.wav",
@@ -6198,8 +6198,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4308992,
-      "private_bytes_after": 4308992
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "RF64-precision-16-16-1.wav",
@@ -6224,8 +6224,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4308992,
+      "private_bytes_after": 4308992
     },
     {
       "file": "RF64-precision-16-16-8.wav",
@@ -6250,8 +6250,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "RF64-precision-24-1-1.wav",
@@ -6276,8 +6276,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "RF64-precision-24-1-8.wav",
@@ -6302,8 +6302,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "RF64-precision-24-2-1.wav",
@@ -6328,8 +6328,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "RF64-precision-24-2-8.wav",
@@ -6354,8 +6354,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4333568,
+      "private_bytes_after": 4333568
     },
     {
       "file": "RF64-precision-24-3-1.wav",
@@ -6380,8 +6380,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4288512,
-      "private_bytes_after": 4288512
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "RF64-precision-24-3-8.wav",
@@ -6406,8 +6406,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4308992,
-      "private_bytes_after": 4308992
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "RF64-precision-24-4-1.wav",
@@ -6432,8 +6432,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4325376,
+      "private_bytes_after": 4325376
     },
     {
       "file": "RF64-precision-24-4-8.wav",
@@ -6458,8 +6458,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4329472,
+      "private_bytes_after": 4329472
     },
     {
       "file": "RF64-precision-24-5-1.wav",
@@ -6484,8 +6484,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "RF64-precision-24-5-8.wav",
@@ -6536,8 +6536,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4284416,
-      "private_bytes_after": 4284416
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "RF64-precision-24-6-8.wav",
@@ -6562,8 +6562,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "RF64-precision-24-7-1.wav",
@@ -6588,8 +6588,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "RF64-precision-24-7-8.wav",
@@ -6614,8 +6614,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4292608,
+      "private_bytes_after": 4292608
     },
     {
       "file": "RF64-precision-24-8-1.wav",
@@ -6640,8 +6640,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "RF64-precision-24-8-8.wav",
@@ -6692,8 +6692,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4308992,
+      "private_bytes_after": 4308992
     },
     {
       "file": "RF64-precision-24-9-8.wav",
@@ -6718,8 +6718,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "RF64-precision-24-10-1.wav",
@@ -6744,8 +6744,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "RF64-precision-24-10-8.wav",
@@ -6770,8 +6770,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "RF64-precision-24-11-1.wav",
@@ -6796,8 +6796,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4325376,
+      "private_bytes_after": 4325376
     },
     {
       "file": "RF64-precision-24-11-8.wav",
@@ -6822,8 +6822,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "RF64-precision-24-12-1.wav",
@@ -6848,8 +6848,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4304896,
-      "private_bytes_after": 4304896
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "RF64-precision-24-12-8.wav",
@@ -6926,8 +6926,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "RF64-precision-24-14-1.wav",
@@ -6952,8 +6952,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "RF64-precision-24-14-8.wav",
@@ -6978,8 +6978,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "RF64-precision-24-15-1.wav",
@@ -7004,8 +7004,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4325376,
-      "private_bytes_after": 4325376
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "RF64-precision-24-15-8.wav",
@@ -7030,8 +7030,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4304896,
-      "private_bytes_after": 4304896
+      "private_bytes_before": 4325376,
+      "private_bytes_after": 4325376
     },
     {
       "file": "RF64-precision-24-16-1.wav",
@@ -7056,8 +7056,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "RF64-precision-24-16-8.wav",
@@ -7082,8 +7082,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4292608,
+      "private_bytes_after": 4292608
     },
     {
       "file": "RF64-precision-24-17-1.wav",
@@ -7108,8 +7108,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "RF64-precision-24-17-8.wav",
@@ -7134,8 +7134,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4308992,
+      "private_bytes_after": 4308992
     },
     {
       "file": "RF64-precision-24-18-1.wav",
@@ -7160,8 +7160,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "RF64-precision-24-18-8.wav",
@@ -7186,8 +7186,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "RF64-precision-24-19-1.wav",
@@ -7264,8 +7264,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "RF64-precision-24-20-8.wav",
@@ -7290,8 +7290,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4284416,
+      "private_bytes_after": 4284416
     },
     {
       "file": "RF64-precision-24-21-1.wav",
@@ -7316,8 +7316,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "RF64-precision-24-21-8.wav",
@@ -7368,8 +7368,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4304896,
-      "private_bytes_after": 4304896
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "RF64-precision-24-22-8.wav",
@@ -7394,8 +7394,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "RF64-precision-24-23-1.wav",
@@ -7420,8 +7420,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4292608,
+      "private_bytes_after": 4292608
     },
     {
       "file": "RF64-precision-24-23-8.wav",
@@ -7446,8 +7446,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4304896,
+      "private_bytes_after": 4304896
     },
     {
       "file": "RF64-precision-24-24-1.wav",
@@ -7498,8 +7498,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4325376,
+      "private_bytes_after": 4325376
     },
     {
       "file": "RF64-precision-32-1-1.wav",
@@ -7576,8 +7576,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "RF64-precision-32-2-8.wav",
@@ -7602,8 +7602,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "RF64-precision-32-3-1.wav",
@@ -7628,8 +7628,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "RF64-precision-32-3-8.wav",
@@ -7654,8 +7654,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4329472,
+      "private_bytes_after": 4329472
     },
     {
       "file": "RF64-precision-32-4-1.wav",
@@ -7680,8 +7680,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "RF64-precision-32-4-8.wav",
@@ -7706,8 +7706,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4304896,
-      "private_bytes_after": 4304896
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "RF64-precision-32-5-1.wav",
@@ -7732,8 +7732,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "RF64-precision-32-5-8.wav",
@@ -7758,8 +7758,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4308992,
-      "private_bytes_after": 4308992
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "RF64-precision-32-6-1.wav",
@@ -7810,8 +7810,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4308992,
-      "private_bytes_after": 4308992
+      "private_bytes_before": 4292608,
+      "private_bytes_after": 4292608
     },
     {
       "file": "RF64-precision-32-7-1.wav",
@@ -7836,8 +7836,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4329472,
-      "private_bytes_after": 4329472
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "RF64-precision-32-7-8.wav",
@@ -7888,8 +7888,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "RF64-precision-32-8-8.wav",
@@ -7914,8 +7914,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4288512,
-      "private_bytes_after": 4288512
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "RF64-precision-32-9-1.wav",
@@ -7966,8 +7966,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4304896,
-      "private_bytes_after": 4304896
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "RF64-precision-32-10-1.wav",
@@ -7992,8 +7992,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4284416,
+      "private_bytes_after": 4284416
     },
     {
       "file": "RF64-precision-32-10-8.wav",
@@ -8018,8 +8018,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4292608,
-      "private_bytes_after": 4292608
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "RF64-precision-32-11-1.wav",
@@ -8044,8 +8044,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "RF64-precision-32-11-8.wav",
@@ -8070,8 +8070,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4304896,
+      "private_bytes_after": 4304896
     },
     {
       "file": "RF64-precision-32-12-1.wav",
@@ -8096,8 +8096,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "RF64-precision-32-12-8.wav",
@@ -8122,8 +8122,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4329472,
+      "private_bytes_after": 4329472
     },
     {
       "file": "RF64-precision-32-13-1.wav",
@@ -8148,8 +8148,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "RF64-precision-32-13-8.wav",
@@ -8174,8 +8174,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4325376,
-      "private_bytes_after": 4325376
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "RF64-precision-32-14-1.wav",
@@ -8200,8 +8200,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "RF64-precision-32-14-8.wav",
@@ -8226,8 +8226,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4308992,
-      "private_bytes_after": 4308992
+      "private_bytes_before": 4325376,
+      "private_bytes_after": 4325376
     },
     {
       "file": "RF64-precision-32-15-1.wav",
@@ -8278,8 +8278,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4288512,
-      "private_bytes_after": 4288512
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "RF64-precision-32-16-1.wav",
@@ -8304,8 +8304,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4325376,
+      "private_bytes_after": 4325376
     },
     {
       "file": "RF64-precision-32-16-8.wav",
@@ -8330,8 +8330,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4325376,
-      "private_bytes_after": 4325376
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "RF64-precision-32-17-1.wav",
@@ -8356,8 +8356,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4325376,
-      "private_bytes_after": 4325376
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "RF64-precision-32-17-8.wav",
@@ -8382,8 +8382,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4308992,
-      "private_bytes_after": 4308992
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "RF64-precision-32-18-1.wav",
@@ -8408,8 +8408,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4325376,
-      "private_bytes_after": 4325376
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "RF64-precision-32-18-8.wav",
@@ -8434,8 +8434,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4329472,
-      "private_bytes_after": 4329472
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "RF64-precision-32-19-1.wav",
@@ -8460,8 +8460,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4304896,
-      "private_bytes_after": 4304896
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "RF64-precision-32-19-8.wav",
@@ -8486,8 +8486,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4308992,
+      "private_bytes_after": 4308992
     },
     {
       "file": "RF64-precision-32-20-1.wav",
@@ -8512,8 +8512,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4329472,
+      "private_bytes_after": 4329472
     },
     {
       "file": "RF64-precision-32-20-8.wav",
@@ -8538,8 +8538,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "RF64-precision-32-21-1.wav",
@@ -8590,8 +8590,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4325376,
-      "private_bytes_after": 4325376
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "RF64-precision-32-22-1.wav",
@@ -8616,8 +8616,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4304896,
-      "private_bytes_after": 4304896
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "RF64-precision-32-22-8.wav",
@@ -8642,8 +8642,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "RF64-precision-32-23-1.wav",
@@ -8668,8 +8668,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4292608,
+      "private_bytes_after": 4292608
     },
     {
       "file": "RF64-precision-32-23-8.wav",
@@ -8694,8 +8694,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4308992,
+      "private_bytes_after": 4308992
     },
     {
       "file": "RF64-precision-32-24-1.wav",
@@ -8720,8 +8720,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "RF64-precision-32-24-8.wav",
@@ -8746,8 +8746,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4325376,
-      "private_bytes_after": 4325376
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "RF64-precision-32-25-1.wav",
@@ -8798,8 +8798,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "RF64-precision-32-26-1.wav",
@@ -8824,8 +8824,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4284416,
-      "private_bytes_after": 4284416
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "RF64-precision-32-26-8.wav",
@@ -8850,8 +8850,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4300800,
-      "private_bytes_after": 4300800
+      "private_bytes_before": 4308992,
+      "private_bytes_after": 4308992
     },
     {
       "file": "RF64-precision-32-27-1.wav",
@@ -8876,8 +8876,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4329472,
+      "private_bytes_after": 4329472
     },
     {
       "file": "RF64-precision-32-27-8.wav",
@@ -8902,8 +8902,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4325376,
-      "private_bytes_after": 4325376
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "RF64-precision-32-28-1.wav",
@@ -8928,8 +8928,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "RF64-precision-32-28-8.wav",
@@ -8954,8 +8954,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4325376,
-      "private_bytes_after": 4325376
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "RF64-precision-32-29-1.wav",
@@ -8980,8 +8980,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4325376,
-      "private_bytes_after": 4325376
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "RF64-precision-32-29-8.wav",
@@ -9006,8 +9006,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4300800,
+      "private_bytes_after": 4300800
     },
     {
       "file": "RF64-precision-32-30-1.wav",
@@ -9032,8 +9032,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4325376,
+      "private_bytes_after": 4325376
     },
     {
       "file": "RF64-precision-32-30-8.wav",
@@ -9058,8 +9058,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4325376,
-      "private_bytes_after": 4325376
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "RF64-precision-32-31-1.wav",
@@ -9084,8 +9084,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4329472,
+      "private_bytes_after": 4329472
     },
     {
       "file": "RF64-precision-32-31-8.wav",
@@ -9110,8 +9110,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "RF64-precision-32-32-1.wav",
@@ -9162,8 +9162,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "BW64-precision-8-1-1.wav",
@@ -9188,8 +9188,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4308992,
+      "private_bytes_after": 4308992
     },
     {
       "file": "BW64-precision-8-1-8.wav",
@@ -9240,8 +9240,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "BW64-precision-8-2-8.wav",
@@ -9266,8 +9266,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4329472,
-      "private_bytes_after": 4329472
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "BW64-precision-8-3-1.wav",
@@ -9292,8 +9292,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4288512,
-      "private_bytes_after": 4288512
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "BW64-precision-8-3-8.wav",
@@ -9318,8 +9318,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "BW64-precision-8-4-1.wav",
@@ -9396,8 +9396,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4325376,
-      "private_bytes_after": 4325376
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "BW64-precision-8-5-8.wav",
@@ -9422,8 +9422,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4329472,
-      "private_bytes_after": 4329472
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "BW64-precision-8-6-1.wav",
@@ -9448,8 +9448,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4304896,
+      "private_bytes_after": 4304896
     },
     {
       "file": "BW64-precision-8-6-8.wav",
@@ -9474,8 +9474,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4308992,
-      "private_bytes_after": 4308992
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "BW64-precision-8-7-1.wav",
@@ -9500,8 +9500,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "BW64-precision-8-7-8.wav",
@@ -9552,8 +9552,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "BW64-precision-8-8-8.wav",
@@ -9578,8 +9578,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4325376,
-      "private_bytes_after": 4325376
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "BW64-precision-16-1-1.wav",
@@ -9604,8 +9604,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4308992,
-      "private_bytes_after": 4308992
+      "private_bytes_before": 4325376,
+      "private_bytes_after": 4325376
     },
     {
       "file": "BW64-precision-16-1-8.wav",
@@ -9656,8 +9656,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4304896,
-      "private_bytes_after": 4304896
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "BW64-precision-16-2-8.wav",
@@ -9708,8 +9708,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4308992,
-      "private_bytes_after": 4308992
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "BW64-precision-16-3-8.wav",
@@ -9734,8 +9734,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "BW64-precision-16-4-1.wav",
@@ -9760,8 +9760,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4296704,
+      "private_bytes_after": 4296704
     },
     {
       "file": "BW64-precision-16-4-8.wav",
@@ -9786,8 +9786,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "BW64-precision-16-5-1.wav",
@@ -9812,8 +9812,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4292608,
+      "private_bytes_after": 4292608
     },
     {
       "file": "BW64-precision-16-5-8.wav",
@@ -9838,8 +9838,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4308992,
+      "private_bytes_after": 4308992
     },
     {
       "file": "BW64-precision-16-6-1.wav",
@@ -9864,8 +9864,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4329472,
-      "private_bytes_after": 4329472
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "BW64-precision-16-6-8.wav",
@@ -9994,8 +9994,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4325376,
+      "private_bytes_after": 4325376
     },
     {
       "file": "BW64-precision-16-9-1.wav",
@@ -10046,8 +10046,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4329472,
-      "private_bytes_after": 4329472
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "BW64-precision-16-10-1.wav",
@@ -10098,8 +10098,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "BW64-precision-16-11-1.wav",
@@ -10124,8 +10124,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4325376,
-      "private_bytes_after": 4325376
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "BW64-precision-16-11-8.wav",
@@ -10150,8 +10150,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4325376,
+      "private_bytes_after": 4325376
     },
     {
       "file": "BW64-precision-16-12-1.wav",
@@ -10202,8 +10202,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "BW64-precision-16-13-1.wav",
@@ -10280,8 +10280,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4325376,
-      "private_bytes_after": 4325376
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "BW64-precision-16-14-8.wav",
@@ -10332,8 +10332,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4325376,
-      "private_bytes_after": 4325376
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "BW64-precision-16-15-8.wav",
@@ -10358,8 +10358,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4288512,
+      "private_bytes_after": 4288512
     },
     {
       "file": "BW64-precision-16-16-1.wav",
@@ -10410,8 +10410,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4325376,
-      "private_bytes_after": 4325376
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "BW64-precision-24-1-1.wav",
@@ -10436,8 +10436,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "BW64-precision-24-1-8.wav",
@@ -10488,8 +10488,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4292608,
-      "private_bytes_after": 4292608
+      "private_bytes_before": 4296704,
+      "private_bytes_after": 4296704
     },
     {
       "file": "BW64-precision-24-2-8.wav",
@@ -10514,8 +10514,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4308992,
+      "private_bytes_after": 4308992
     },
     {
       "file": "BW64-precision-24-3-1.wav",
@@ -10540,8 +10540,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4292608,
+      "private_bytes_after": 4292608
     },
     {
       "file": "BW64-precision-24-3-8.wav",
@@ -10566,8 +10566,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4325376,
+      "private_bytes_after": 4325376
     },
     {
       "file": "BW64-precision-24-4-1.wav",
@@ -10592,8 +10592,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4284416,
+      "private_bytes_after": 4284416
     },
     {
       "file": "BW64-precision-24-4-8.wav",
@@ -10618,8 +10618,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4292608,
-      "private_bytes_after": 4292608
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "BW64-precision-24-5-1.wav",
@@ -10644,8 +10644,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "BW64-precision-24-5-8.wav",
@@ -10696,8 +10696,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4308992,
+      "private_bytes_after": 4308992
     },
     {
       "file": "BW64-precision-24-6-8.wav",
@@ -10722,8 +10722,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "BW64-precision-24-7-1.wav",
@@ -10748,8 +10748,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4325376,
-      "private_bytes_after": 4325376
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "BW64-precision-24-7-8.wav",
@@ -10774,8 +10774,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "BW64-precision-24-8-1.wav",
@@ -10800,8 +10800,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4325376,
-      "private_bytes_after": 4325376
+      "private_bytes_before": 4292608,
+      "private_bytes_after": 4292608
     },
     {
       "file": "BW64-precision-24-8-8.wav",
@@ -10826,8 +10826,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "BW64-precision-24-9-1.wav",
@@ -10852,8 +10852,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4325376,
+      "private_bytes_after": 4325376
     },
     {
       "file": "BW64-precision-24-9-8.wav",
@@ -10878,8 +10878,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "BW64-precision-24-10-1.wav",
@@ -10930,8 +10930,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4325376,
-      "private_bytes_after": 4325376
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "BW64-precision-24-11-1.wav",
@@ -10956,8 +10956,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4325376,
-      "private_bytes_after": 4325376
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "BW64-precision-24-11-8.wav",
@@ -10982,8 +10982,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "BW64-precision-24-12-1.wav",
@@ -11008,8 +11008,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4308992,
+      "private_bytes_after": 4308992
     },
     {
       "file": "BW64-precision-24-12-8.wav",
@@ -11034,8 +11034,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4300800,
-      "private_bytes_after": 4300800
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "BW64-precision-24-13-1.wav",
@@ -11060,8 +11060,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4308992,
+      "private_bytes_after": 4308992
     },
     {
       "file": "BW64-precision-24-13-8.wav",
@@ -11086,8 +11086,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "BW64-precision-24-14-1.wav",
@@ -11138,8 +11138,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4325376,
-      "private_bytes_after": 4325376
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "BW64-precision-24-15-1.wav",
@@ -11164,8 +11164,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "BW64-precision-24-15-8.wav",
@@ -11190,8 +11190,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4284416,
+      "private_bytes_after": 4284416
     },
     {
       "file": "BW64-precision-24-16-1.wav",
@@ -11242,8 +11242,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4308992,
-      "private_bytes_after": 4308992
+      "private_bytes_before": 4325376,
+      "private_bytes_after": 4325376
     },
     {
       "file": "BW64-precision-24-17-1.wav",
@@ -11268,8 +11268,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "BW64-precision-24-17-8.wav",
@@ -11294,8 +11294,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4308992,
-      "private_bytes_after": 4308992
+      "private_bytes_before": 4288512,
+      "private_bytes_after": 4288512
     },
     {
       "file": "BW64-precision-24-18-1.wav",
@@ -11320,8 +11320,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4308992,
+      "private_bytes_after": 4308992
     },
     {
       "file": "BW64-precision-24-18-8.wav",
@@ -11346,8 +11346,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4292608,
+      "private_bytes_after": 4292608
     },
     {
       "file": "BW64-precision-24-19-1.wav",
@@ -11424,8 +11424,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "BW64-precision-24-20-8.wav",
@@ -11450,8 +11450,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4288512,
-      "private_bytes_after": 4288512
+      "private_bytes_before": 4308992,
+      "private_bytes_after": 4308992
     },
     {
       "file": "BW64-precision-24-21-1.wav",
@@ -11476,8 +11476,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4308992,
-      "private_bytes_after": 4308992
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "BW64-precision-24-21-8.wav",
@@ -11502,8 +11502,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "BW64-precision-24-22-1.wav",
@@ -11528,8 +11528,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "BW64-precision-24-22-8.wav",
@@ -11554,8 +11554,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "BW64-precision-24-23-1.wav",
@@ -11580,8 +11580,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4284416,
+      "private_bytes_after": 4284416
     },
     {
       "file": "BW64-precision-24-23-8.wav",
@@ -11606,8 +11606,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4308992,
-      "private_bytes_after": 4308992
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "BW64-precision-24-24-1.wav",
@@ -11632,8 +11632,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4325376,
+      "private_bytes_after": 4325376
     },
     {
       "file": "BW64-precision-24-24-8.wav",
@@ -11658,8 +11658,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "BW64-precision-32-1-1.wav",
@@ -11684,8 +11684,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4308992,
-      "private_bytes_after": 4308992
+      "private_bytes_before": 4284416,
+      "private_bytes_after": 4284416
     },
     {
       "file": "BW64-precision-32-1-8.wav",
@@ -11710,8 +11710,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4288512,
-      "private_bytes_after": 4288512
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "BW64-precision-32-2-1.wav",
@@ -11736,8 +11736,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4308992,
+      "private_bytes_after": 4308992
     },
     {
       "file": "BW64-precision-32-2-8.wav",
@@ -11762,8 +11762,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4325376,
-      "private_bytes_after": 4325376
+      "private_bytes_before": 4280320,
+      "private_bytes_after": 4280320
     },
     {
       "file": "BW64-precision-32-3-1.wav",
@@ -11788,8 +11788,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "BW64-precision-32-3-8.wav",
@@ -11840,8 +11840,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "BW64-precision-32-4-8.wav",
@@ -11866,8 +11866,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "BW64-precision-32-5-1.wav",
@@ -11892,8 +11892,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4325376,
+      "private_bytes_after": 4325376
     },
     {
       "file": "BW64-precision-32-5-8.wav",
@@ -11918,8 +11918,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4329472,
+      "private_bytes_after": 4329472
     },
     {
       "file": "BW64-precision-32-6-1.wav",
@@ -11944,8 +11944,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4308992,
-      "private_bytes_after": 4308992
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "BW64-precision-32-6-8.wav",
@@ -11970,8 +11970,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4296704,
-      "private_bytes_after": 4296704
+      "private_bytes_before": 4329472,
+      "private_bytes_after": 4329472
     },
     {
       "file": "BW64-precision-32-7-1.wav",
@@ -11996,8 +11996,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4288512,
-      "private_bytes_after": 4288512
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "BW64-precision-32-7-8.wav",
@@ -12022,8 +12022,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "BW64-precision-32-8-1.wav",
@@ -12074,8 +12074,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "BW64-precision-32-9-1.wav",
@@ -12100,8 +12100,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4308992,
+      "private_bytes_after": 4308992
     },
     {
       "file": "BW64-precision-32-9-8.wav",
@@ -12152,8 +12152,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4325376,
-      "private_bytes_after": 4325376
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "BW64-precision-32-10-8.wav",
@@ -12178,8 +12178,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4308992,
+      "private_bytes_after": 4308992
     },
     {
       "file": "BW64-precision-32-11-1.wav",
@@ -12204,8 +12204,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4300800,
+      "private_bytes_after": 4300800
     },
     {
       "file": "BW64-precision-32-11-8.wav",
@@ -12230,8 +12230,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4296704,
-      "private_bytes_after": 4296704
+      "private_bytes_before": 4292608,
+      "private_bytes_after": 4292608
     },
     {
       "file": "BW64-precision-32-12-1.wav",
@@ -12256,8 +12256,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4325376,
-      "private_bytes_after": 4325376
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "BW64-precision-32-12-8.wav",
@@ -12282,8 +12282,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4300800,
+      "private_bytes_after": 4300800
     },
     {
       "file": "BW64-precision-32-13-1.wav",
@@ -12308,8 +12308,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4308992,
-      "private_bytes_after": 4308992
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "BW64-precision-32-13-8.wav",
@@ -12334,8 +12334,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "BW64-precision-32-14-1.wav",
@@ -12360,8 +12360,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "BW64-precision-32-14-8.wav",
@@ -12386,8 +12386,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4308992,
-      "private_bytes_after": 4308992
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "BW64-precision-32-15-1.wav",
@@ -12412,8 +12412,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4308992,
-      "private_bytes_after": 4308992
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "BW64-precision-32-15-8.wav",
@@ -12438,8 +12438,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "BW64-precision-32-16-1.wav",
@@ -12516,8 +12516,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "BW64-precision-32-17-8.wav",
@@ -12542,8 +12542,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4284416,
-      "private_bytes_after": 4284416
+      "private_bytes_before": 4288512,
+      "private_bytes_after": 4288512
     },
     {
       "file": "BW64-precision-32-18-1.wav",
@@ -12620,8 +12620,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4296704,
+      "private_bytes_after": 4296704
     },
     {
       "file": "BW64-precision-32-19-8.wav",
@@ -12646,8 +12646,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4325376,
-      "private_bytes_after": 4325376
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "BW64-precision-32-20-1.wav",
@@ -12672,8 +12672,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4325376,
-      "private_bytes_after": 4325376
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "BW64-precision-32-20-8.wav",
@@ -12698,8 +12698,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "BW64-precision-32-21-1.wav",
@@ -12750,8 +12750,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4325376,
-      "private_bytes_after": 4325376
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "BW64-precision-32-22-1.wav",
@@ -12776,8 +12776,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4308992,
-      "private_bytes_after": 4308992
+      "private_bytes_before": 4292608,
+      "private_bytes_after": 4292608
     },
     {
       "file": "BW64-precision-32-22-8.wav",
@@ -12802,8 +12802,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4308992,
+      "private_bytes_after": 4308992
     },
     {
       "file": "BW64-precision-32-23-1.wav",
@@ -12828,8 +12828,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4325376,
+      "private_bytes_after": 4325376
     },
     {
       "file": "BW64-precision-32-23-8.wav",
@@ -12854,8 +12854,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "BW64-precision-32-24-1.wav",
@@ -12880,8 +12880,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "BW64-precision-32-24-8.wav",
@@ -12906,8 +12906,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4308992,
-      "private_bytes_after": 4308992
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "BW64-precision-32-25-1.wav",
@@ -12932,8 +12932,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4288512,
-      "private_bytes_after": 4288512
+      "private_bytes_before": 4329472,
+      "private_bytes_after": 4329472
     },
     {
       "file": "BW64-precision-32-25-8.wav",
@@ -12958,8 +12958,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "BW64-precision-32-26-1.wav",
@@ -12984,8 +12984,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4308992,
-      "private_bytes_after": 4308992
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "BW64-precision-32-26-8.wav",
@@ -13010,8 +13010,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "BW64-precision-32-27-1.wav",
@@ -13036,8 +13036,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4304896,
+      "private_bytes_after": 4304896
     },
     {
       "file": "BW64-precision-32-27-8.wav",
@@ -13062,8 +13062,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4308992,
-      "private_bytes_after": 4308992
+      "private_bytes_before": 4333568,
+      "private_bytes_after": 4333568
     },
     {
       "file": "BW64-precision-32-28-1.wav",
@@ -13088,8 +13088,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4325376,
-      "private_bytes_after": 4325376
+      "private_bytes_before": 4308992,
+      "private_bytes_after": 4308992
     },
     {
       "file": "BW64-precision-32-28-8.wav",
@@ -13114,8 +13114,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4325376,
+      "private_bytes_after": 4325376
     },
     {
       "file": "BW64-precision-32-29-1.wav",
@@ -13140,8 +13140,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4325376,
-      "private_bytes_after": 4325376
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "BW64-precision-32-29-8.wav",
@@ -13192,8 +13192,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "BW64-precision-32-30-8.wav",
@@ -13218,8 +13218,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "BW64-precision-32-31-1.wav",
@@ -13244,8 +13244,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4304896,
-      "private_bytes_after": 4304896
+      "private_bytes_before": 4325376,
+      "private_bytes_after": 4325376
     },
     {
       "file": "BW64-precision-32-31-8.wav",
@@ -13270,8 +13270,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "BW64-precision-32-32-1.wav",
@@ -13296,8 +13296,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4304896,
-      "private_bytes_after": 4304896
+      "private_bytes_before": 4325376,
+      "private_bytes_after": 4325376
     },
     {
       "file": "BW64-precision-32-32-8.wav",
@@ -13322,8 +13322,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "RF64-finite-sizes.wav",
@@ -13348,8 +13348,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "RF64-finite-data.wav",
@@ -13374,8 +13374,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4329472,
+      "private_bytes_after": 4329472
     },
     {
       "file": "RF64-finite-top.wav",
@@ -13400,8 +13400,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4308992,
-      "private_bytes_after": 4308992
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "RF64-unknown-count.wav",
@@ -13426,8 +13426,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "RF64-ignored-count.wav",
@@ -13452,8 +13452,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4337664,
-      "private_bytes_after": 4337664
+      "private_bytes_before": 4308992,
+      "private_bytes_after": 4308992
     },
     {
       "file": "RF64-odd-metadata.wav",
@@ -13478,8 +13478,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4308992,
-      "private_bytes_after": 4308992
+      "private_bytes_before": 4325376,
+      "private_bytes_after": 4325376
     },
     {
       "file": "RF64-fact-before.wav",
@@ -13504,8 +13504,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "RF64-fact-after.wav",
@@ -13530,8 +13530,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "RF64-ds64-extension.wav",
@@ -13556,8 +13556,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4325376,
+      "private_bytes_after": 4325376
     },
     {
       "file": "RF64-repeat-tables.wav",
@@ -13582,8 +13582,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4325376,
+      "private_bytes_after": 4325376
     },
     {
       "file": "RF64-table-order.wav",
@@ -13608,8 +13608,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4308992,
-      "private_bytes_after": 4308992
+      "private_bytes_before": 4325376,
+      "private_bytes_after": 4325376
     },
     {
       "file": "RF64-table-limit.wav",
@@ -13634,8 +13634,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4300800,
+      "private_bytes_after": 4300800
     },
     {
       "file": "RF64-fact64.wav",
@@ -13660,8 +13660,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4317184,
-      "private_bytes_after": 4317184
+      "private_bytes_before": 4308992,
+      "private_bytes_after": 4308992
     },
     {
       "file": "BW64-finite-sizes.wav",
@@ -13686,8 +13686,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "BW64-finite-data.wav",
@@ -13712,8 +13712,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4325376,
+      "private_bytes_after": 4325376
     },
     {
       "file": "BW64-finite-top.wav",
@@ -13738,8 +13738,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4325376,
-      "private_bytes_after": 4325376
+      "private_bytes_before": 4313088,
+      "private_bytes_after": 4313088
     },
     {
       "file": "BW64-unknown-count.wav",
@@ -13764,8 +13764,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "BW64-ignored-count.wav",
@@ -13790,8 +13790,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4300800,
-      "private_bytes_after": 4300800
+      "private_bytes_before": 4325376,
+      "private_bytes_after": 4325376
     },
     {
       "file": "BW64-odd-metadata.wav",
@@ -13816,37 +13816,11 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4304896,
+      "private_bytes_after": 4304896
     },
     {
       "file": "BW64-fact-before.wav",
-      "kind": "BW64",
-      "channels": 2,
-      "container_bits": 16,
-      "valid_bits": 16,
-      "float": false,
-      "frames": 4609,
-      "reference": "original container",
-      "result": "passed",
-      "checks": 15,
-      "advanced": 14,
-      "discarded_frames": 0,
-      "maximum_discarded": 0,
-      "maximum_probes": 0,
-      "index_points": 0,
-      "maximum_skimmed_headers": 0,
-      "maximum_stride": 0,
-      "maximum_preroll": 0,
-      "depth": 16,
-      "guarded_reads": 15,
-      "cancel_checks": 4,
-      "reopen_checks": 64,
-      "private_bytes_before": 4308992,
-      "private_bytes_after": 4308992
-    },
-    {
-      "file": "BW64-fact-after.wav",
       "kind": "BW64",
       "channels": 2,
       "container_bits": 16,
@@ -13872,6 +13846,32 @@
       "private_bytes_after": 4321280
     },
     {
+      "file": "BW64-fact-after.wav",
+      "kind": "BW64",
+      "channels": 2,
+      "container_bits": 16,
+      "valid_bits": 16,
+      "float": false,
+      "frames": 4609,
+      "reference": "original container",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 14,
+      "discarded_frames": 0,
+      "maximum_discarded": 0,
+      "maximum_probes": 0,
+      "index_points": 0,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
+      "depth": 16,
+      "guarded_reads": 15,
+      "cancel_checks": 4,
+      "reopen_checks": 64,
+      "private_bytes_before": 4292608,
+      "private_bytes_after": 4292608
+    },
+    {
       "file": "BW64-ds64-extension.wav",
       "kind": "BW64",
       "channels": 2,
@@ -13894,8 +13894,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4304896,
-      "private_bytes_after": 4304896
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "BW64-repeat-tables.wav",
@@ -13920,11 +13920,37 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4313088,
-      "private_bytes_after": 4313088
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "BW64-table-order.wav",
+      "kind": "BW64",
+      "channels": 2,
+      "container_bits": 16,
+      "valid_bits": 16,
+      "float": false,
+      "frames": 4609,
+      "reference": "raw physical PCM; FFmpeg valid-precision, ds64-table, padding or ignored-field limitation",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 14,
+      "discarded_frames": 0,
+      "maximum_discarded": 0,
+      "maximum_probes": 0,
+      "index_points": 0,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
+      "depth": 16,
+      "guarded_reads": 15,
+      "cancel_checks": 4,
+      "reopen_checks": 64,
+      "private_bytes_before": 4288512,
+      "private_bytes_after": 4288512
+    },
+    {
+      "file": "BW64-table-limit.wav",
       "kind": "BW64",
       "channels": 2,
       "container_bits": 16,
@@ -13950,32 +13976,6 @@
       "private_bytes_after": 4317184
     },
     {
-      "file": "BW64-table-limit.wav",
-      "kind": "BW64",
-      "channels": 2,
-      "container_bits": 16,
-      "valid_bits": 16,
-      "float": false,
-      "frames": 4609,
-      "reference": "raw physical PCM; FFmpeg valid-precision, ds64-table, padding or ignored-field limitation",
-      "result": "passed",
-      "checks": 15,
-      "advanced": 14,
-      "discarded_frames": 0,
-      "maximum_discarded": 0,
-      "maximum_probes": 0,
-      "index_points": 0,
-      "maximum_skimmed_headers": 0,
-      "maximum_stride": 0,
-      "maximum_preroll": 0,
-      "depth": 16,
-      "guarded_reads": 15,
-      "cancel_checks": 4,
-      "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
-    },
-    {
       "file": "unicode-灯-лампа-ضوء-🎵.wav",
       "kind": "BW64",
       "channels": 2,
@@ -13998,8 +13998,8 @@
       "guarded_reads": 15,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4321280,
-      "private_bytes_after": 4321280
+      "private_bytes_before": 4276224,
+      "private_bytes_after": 4276224
     }
   ],
   "sparse": [
@@ -14020,8 +14020,8 @@
       "reopen_checks": 64,
       "reference_frame": 4294944000,
       "reference_seconds": 89478,
-      "private_bytes_before": 4333568,
-      "private_bytes_after": 4333568,
+      "private_bytes_before": 4337664,
+      "private_bytes_after": 4337664,
       "reference_duration_frames": 4294969349,
       "reference_pcm": "257 native-channel samples at a bounded offset/seek",
       "reference_header": "original RF64"
@@ -14043,8 +14043,8 @@
       "reopen_checks": 64,
       "reference_frame": 1073712000,
       "reference_seconds": 22369,
-      "private_bytes_before": 4333568,
-      "private_bytes_after": 4333568,
+      "private_bytes_before": 4341760,
+      "private_bytes_after": 4341760,
       "reference_duration_frames": 2147485701,
       "reference_pcm": "257 native-channel samples at a bounded offset/seek",
       "reference_header": "original RF64"
@@ -14089,8 +14089,8 @@
       "reopen_checks": 64,
       "reference_frame": 1073712000,
       "reference_seconds": 22369,
-      "private_bytes_before": 4345856,
-      "private_bytes_after": 4345856,
+      "private_bytes_before": 4337664,
+      "private_bytes_after": 4337664,
       "reference_duration_frames": 4294969349,
       "reference_pcm": "257 native-channel samples at a bounded offset/seek",
       "reference_header": "original RF64"
@@ -14135,8 +14135,8 @@
       "reopen_checks": 64,
       "reference_frame": 268416000,
       "reference_seconds": 5592,
-      "private_bytes_before": 4333568,
-      "private_bytes_after": 4333568,
+      "private_bytes_before": 4337664,
+      "private_bytes_after": 4337664,
       "reference_duration_frames": 536872965,
       "reference_pcm": "257 native-channel samples at a bounded offset/seek",
       "reference_header": "original RF64"
@@ -14158,8 +14158,8 @@
       "reopen_checks": 64,
       "reference_frame": 0,
       "reference_seconds": 0,
-      "private_bytes_before": 4325376,
-      "private_bytes_after": 4325376,
+      "private_bytes_before": 4337664,
+      "private_bytes_after": 4337664,
       "reference_duration_frames": null,
       "reference_pcm": "257 native-channel samples at a bounded offset/seek",
       "reference_header": "raw PCM at known 64-bit data offset; FFmpeg ignores ds64 metadata table"
@@ -14181,8 +14181,8 @@
       "reopen_checks": 64,
       "reference_frame": 0,
       "reference_seconds": 0,
-      "private_bytes_before": 4345856,
-      "private_bytes_after": 4345856,
+      "private_bytes_before": 4333568,
+      "private_bytes_after": 4333568,
       "reference_duration_frames": null,
       "reference_pcm": "257 native-channel samples at a bounded offset/seek",
       "reference_header": "raw PCM at known 64-bit data offset; FFmpeg ignores ds64 metadata table"
@@ -14204,8 +14204,8 @@
       "reopen_checks": 64,
       "reference_frame": 4294944000,
       "reference_seconds": 89478,
-      "private_bytes_before": 4341760,
-      "private_bytes_after": 4341760,
+      "private_bytes_before": 4345856,
+      "private_bytes_after": 4345856,
       "reference_duration_frames": 4294969349,
       "reference_pcm": "257 native-channel samples at a bounded offset/seek",
       "reference_header": "BW64 dummy normalized to zero; original UINT64_MAX checked by LAMP"
@@ -14227,8 +14227,8 @@
       "reopen_checks": 64,
       "reference_frame": 1073712000,
       "reference_seconds": 22369,
-      "private_bytes_before": 4341760,
-      "private_bytes_after": 4341760,
+      "private_bytes_before": 4345856,
+      "private_bytes_after": 4345856,
       "reference_duration_frames": 2147485701,
       "reference_pcm": "257 native-channel samples at a bounded offset/seek",
       "reference_header": "BW64 dummy normalized to zero; original UINT64_MAX checked by LAMP"
@@ -14250,8 +14250,8 @@
       "reopen_checks": 64,
       "reference_frame": 715824000,
       "reference_seconds": 14913,
-      "private_bytes_before": 4337664,
-      "private_bytes_after": 4337664,
+      "private_bytes_before": 4341760,
+      "private_bytes_after": 4345856,
       "reference_duration_frames": 1431657818,
       "reference_pcm": "257 native-channel samples at a bounded offset/seek",
       "reference_header": "BW64 dummy normalized to zero; original UINT64_MAX checked by LAMP"
@@ -14273,8 +14273,8 @@
       "reopen_checks": 64,
       "reference_frame": 1073712000,
       "reference_seconds": 22369,
-      "private_bytes_before": 4333568,
-      "private_bytes_after": 4333568,
+      "private_bytes_before": 4341760,
+      "private_bytes_after": 4341760,
       "reference_duration_frames": 4294969349,
       "reference_pcm": "257 native-channel samples at a bounded offset/seek",
       "reference_header": "BW64 dummy normalized to zero; original UINT64_MAX checked by LAMP"
@@ -14296,8 +14296,8 @@
       "reopen_checks": 64,
       "reference_frame": 536832000,
       "reference_seconds": 11184,
-      "private_bytes_before": 4341760,
-      "private_bytes_after": 4341760,
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280,
       "reference_duration_frames": 1073743877,
       "reference_pcm": "257 native-channel samples at a bounded offset/seek",
       "reference_header": "BW64 dummy normalized to zero; original UINT64_MAX checked by LAMP"
@@ -14319,8 +14319,8 @@
       "reopen_checks": 64,
       "reference_frame": 268416000,
       "reference_seconds": 5592,
-      "private_bytes_before": 4337664,
-      "private_bytes_after": 4337664,
+      "private_bytes_before": 4345856,
+      "private_bytes_after": 4345856,
       "reference_duration_frames": 536872965,
       "reference_pcm": "257 native-channel samples at a bounded offset/seek",
       "reference_header": "BW64 dummy normalized to zero; original UINT64_MAX checked by LAMP"
@@ -14342,8 +14342,8 @@
       "reopen_checks": 64,
       "reference_frame": 0,
       "reference_seconds": 0,
-      "private_bytes_before": 4337664,
-      "private_bytes_after": 4337664,
+      "private_bytes_before": 4333568,
+      "private_bytes_after": 4333568,
       "reference_duration_frames": null,
       "reference_pcm": "257 native-channel samples at a bounded offset/seek",
       "reference_header": "raw PCM at known 64-bit data offset; FFmpeg ignores ds64 metadata table"

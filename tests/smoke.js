@@ -8,7 +8,7 @@ const run=args=>{const r=cp.spawnSync(exe,args,{encoding:'utf8',timeout:10000,wi
 try{
  const help=run([]);
  assert.match(help.stdout,/LAMP 0\.4\.0-dev - Lev's Assembly Media Player/);
- for(const [codec,ext]of[['wav','wav'],['flac','flac'],['mp3','mp3'],['vorbis','ogg'],['opus','opus']]){
+ for(const [codec,ext]of[['wav','wav'],['aiff','aiff'],['flac','flac'],['mp3','mp3'],['vorbis','ogg'],['opus','opus']]){
   const fixture=path.join(__dirname,'fixtures','tone.'+ext),check=run(['--check',fixture]);
   assert.strictEqual(check.status,0,codec+' check failed '+check.stdout+check.stderr);
   assert.match(check.stdout,/rate=48000 channels=2/);
@@ -18,7 +18,7 @@ try{
   const pcm=fs.readFileSync(output);assert.strictEqual(pcm.length,12000*2*4);
   let peak=0;for(let i=0;i<pcm.length;i+=4){const x=pcm.readFloatLE(i);assert(Number.isFinite(x));peak=Math.max(peak,Math.abs(x));}
   assert(peak>.03&&peak<.2,codec+' invalid tone amplitude '+peak);
-  if(codec==='flac')assert.deepStrictEqual(pcm,fs.readFileSync(path.join(temp,'wav.f32')),'Lossless PCM mismatch');
+  if(codec==='flac'||codec==='aiff')assert.deepStrictEqual(pcm,fs.readFileSync(path.join(temp,'wav.f32')),'Lossless PCM mismatch');
   const overwrite=run(['--decode',fixture,output]);assert.notStrictEqual(overwrite.status,0,'Existing export must be rejected');
   report.push({codec,frames:12000,rate:48000,peak,result:'passed'});
  }

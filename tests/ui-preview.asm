@@ -1,5 +1,8 @@
 ; Test the exact assembly UI renderer without desktop automation.
 option casemap:none
+IFNDEF PREVIEW_CODEC
+PREVIEW_CODEC EQU 2
+ENDIF
 EXTERN ui_draw:PROC, ui_width:DWORD, ui_height:DWORD, ui_state:DWORD
 EXTERN ui_pixels:QWORD, ui_bmi:BYTE, ui_filename:QWORD, ui_thread:QWORD
 EXTERN sample_rate:DWORD, total_frames:QWORD, codec_kind:DWORD
@@ -9,7 +12,11 @@ EXTERN CreateFileW:PROC, WriteFile:PROC, CloseHandle:PROC, ExitProcess:PROC
 PUBLIC preview_start
 .data
 preview_name dw 'l','a','m','p','-','u','i','-','p','r','e','v','i','e','w','.','b','m','p',0
+IF PREVIEW_CODEC EQ 6
+preview_track dw 'A','I','F','F',' ','r','e','f','e','r','e','n','c','e','.','a','i','f','f',0
+ELSE
 preview_track dw 'A','u','r','o','r','a',' ','-',' ','N','i','g','h','t',' ','D','r','i','v','e','.','f','l','a','c',0
+ENDIF
 preview_header db 'B','M'
     dd 1440054
     dw 0,0
@@ -29,7 +36,7 @@ preview_start PROC
     mov dword ptr [sample_rate],48000
     mov qword ptr [total_frames],5760000
     mov qword ptr [engine_position],1776000
-    mov dword ptr [codec_kind],2
+    mov dword ptr [codec_kind],PREVIEW_CODEC
     call ui_draw
     cmp qword ptr [ui_pixels],0
     je preview_bad

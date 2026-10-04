@@ -79,4 +79,14 @@ foreach($kind in @('RF64','BW64')){
     $report+=[pscustomobject]@{codec=$kind;result='passed';tests=@('playback','pause','resume','stop','reopen','seek','paused seek','cancelled open');stats="$stats"}
     Write-Output "$kind $stats"
 }
-$report | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath (Join-Path $out 'engine-verification.json') -Encoding utf8
+foreach($spec in @(@('pcm_s16be','stereo'),@('pcm_s16le','stereo'),@('pcm_s24be','5.1'),@('pcm_s24be','7.1'),@('pcm_f64be','5.1'),@('pcm_f64be','7.1'))){
+    $encoding=$spec[0];$layout=$spec[1]
+    $path=Join-Path $scratch "engine-silence-aiff-$encoding-$layout.aiff"
+    & ffmpeg -hide_banner -loglevel error -y -f lavfi -i "anullsrc=r=48000:cl=$($layout):d=30" -c:a $encoding $path
+    if($LASTEXITCODE){throw 'AIFF/AIFC engine fixture failed'}
+    $stats=& (Join-Path $out 'engine-probe.exe') $path
+    if($LASTEXITCODE){throw "AIFF/AIFC engine lifecycle failed $encoding $layout $stats"}
+    $report+=[pscustomobject]@{codec="aiff-$encoding-$layout";result='passed';tests=@('playback','pause','resume','stop','reopen','seek','paused seek','cancelled open');stats="$stats"}
+    Write-Output "aiff-$encoding-$layout $stats"
+}
+[IO.File]::WriteAllText((Join-Path $out 'engine-verification.json'),(($report | ConvertTo-Json -Depth 4)+[Environment]::NewLine),[Text.UTF8Encoding]::new($false))

@@ -1,4 +1,4 @@
-﻿[
+[
     {
         "codec":  "wav",
         "result":  "passed",
@@ -226,6 +226,96 @@
     },
     {
         "codec":  "BW64",
+        "result":  "passed",
+        "tests":  [
+                      "playback",
+                      "pause",
+                      "resume",
+                      "stop",
+                      "reopen",
+                      "seek",
+                      "paused seek",
+                      "cancelled open"
+                  ],
+        "stats":  "Passed: playback, pause, resume, stop, reopen, seek, paused seek and cancelled open."
+    },
+    {
+        "codec":  "aiff-pcm_s16be-stereo",
+        "result":  "passed",
+        "tests":  [
+                      "playback",
+                      "pause",
+                      "resume",
+                      "stop",
+                      "reopen",
+                      "seek",
+                      "paused seek",
+                      "cancelled open"
+                  ],
+        "stats":  "Passed: playback, pause, resume, stop, reopen, seek, paused seek and cancelled open."
+    },
+    {
+        "codec":  "aiff-pcm_s16le-stereo",
+        "result":  "passed",
+        "tests":  [
+                      "playback",
+                      "pause",
+                      "resume",
+                      "stop",
+                      "reopen",
+                      "seek",
+                      "paused seek",
+                      "cancelled open"
+                  ],
+        "stats":  "Passed: playback, pause, resume, stop, reopen, seek, paused seek and cancelled open."
+    },
+    {
+        "codec":  "aiff-pcm_s24be-5.1",
+        "result":  "passed",
+        "tests":  [
+                      "playback",
+                      "pause",
+                      "resume",
+                      "stop",
+                      "reopen",
+                      "seek",
+                      "paused seek",
+                      "cancelled open"
+                  ],
+        "stats":  "Passed: playback, pause, resume, stop, reopen, seek, paused seek and cancelled open."
+    },
+    {
+        "codec":  "aiff-pcm_s24be-7.1",
+        "result":  "passed",
+        "tests":  [
+                      "playback",
+                      "pause",
+                      "resume",
+                      "stop",
+                      "reopen",
+                      "seek",
+                      "paused seek",
+                      "cancelled open"
+                  ],
+        "stats":  "Passed: playback, pause, resume, stop, reopen, seek, paused seek and cancelled open."
+    },
+    {
+        "codec":  "aiff-pcm_f64be-5.1",
+        "result":  "passed",
+        "tests":  [
+                      "playback",
+                      "pause",
+                      "resume",
+                      "stop",
+                      "reopen",
+                      "seek",
+                      "paused seek",
+                      "cancelled open"
+                  ],
+        "stats":  "Passed: playback, pause, resume, stop, reopen, seek, paused seek and cancelled open."
+    },
+    {
+        "codec":  "aiff-pcm_f64be-7.1",
         "result":  "passed",
         "tests":  [
                       "playback",

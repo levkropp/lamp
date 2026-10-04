@@ -4,7 +4,7 @@
 
 A small Windows x86-64 media player with handwritten assembly decoders and a native assembly UI. Audio comes first. The long-term goal is to support the relevant formats and playback features people use in **mpv**, with a small runtime and low CPU use.
 
-**Current source: 0.4.0-dev, an early audio prototype.** WAV, native FLAC, MP3, Ogg/Vorbis and Ogg/Opus play in source builds. Opus supports family 0 mono/stereo and family 1 layouts with 1–8 speaker channels, downmixed to stereo. Its elementary decoders include RFC 8251 updates and pass all 120 official vector checks across five output rates and mono/stereo. Video, subtitles and network streaming are future work. The published v0.3.0 prerelease contains the first four audio formats.
+**Current source: 0.4.0-dev, an early audio prototype.** WAV, AIFF/AIFC, native FLAC, MP3, Ogg/Vorbis and Ogg/Opus play in source builds. Opus supports family 0 mono/stereo and family 1 layouts with 1–8 speaker channels, downmixed to stereo. Its elementary decoders include RFC 8251 updates and pass all 120 official vector checks across five output rates and mono/stereo. Video, subtitles and network streaming are future work. The published v0.3.0 prerelease contains WAV, native FLAC, MP3 and Ogg/Vorbis.
 
 [Website](https://levkropp.github.io/lamp/) · [Download v0.3.0](https://github.com/levkropp/lamp/releases/tag/v0.3.0) · [Roadmap](ROADMAP.md) · [Compatibility matrix](docs/compatibility.md) · [Technical details and limits](docs/technical.md)
 
@@ -22,7 +22,7 @@ LAMP aims to reduce stutters. It cannot guarantee uninterrupted playback during 
 
 ## Run
 
-Windows 10/11 x64 and a working default audio output are the intended targets. Build from source for Opus support, or download the earlier [v0.3.0 Windows prerelease](https://github.com/levkropp/lamp/releases/tag/v0.3.0). Open `bin\lamp.exe` and drop a supported audio file onto the window.
+Windows 10/11 x64 and a working default audio output are the intended targets. Build from source for Opus and AIFF/AIFC support, or download the earlier [v0.3.0 Windows prerelease](https://github.com/levkropp/lamp/releases/tag/v0.3.0). Open `bin\lamp.exe` and drop a supported audio file onto the window.
 
 ```powershell
 .\bin\lamp.exe 'C:\Music\track.ogg'
@@ -31,19 +31,22 @@ Windows 10/11 x64 and a working default audio output are the intended targets. B
 .\bin\lamp-cli.exe --decode 'C:\Music\track.ogg' '.\track.f32'
 ```
 
-`--check` decodes without an audio device. `--decode` writes little-endian float32 PCM with two interleaved channels; mono is duplicated. Opus output is 48 kHz; other formats use their source rate. The destination must be new. Failed exports can leave partial output.
+`--check` decodes without an audio device. `--decode` writes little-endian float32 PCM with two interleaved channels; mono is duplicated. Opus output is 48 kHz; AIFF/AIFC rates round to integer hertz; other formats use their source rate. The destination must be new. Failed exports can leave partial output.
 
 | Format | Current support |
 | --- | --- |
+| AIFF / AIFC | Signed PCM 1–32-bit, AIFC byte-order/fixed-container variants and float32/64; 1–8 channels, ordered Core Audio layouts, rounded 8–192 kHz output |
 | WAV | Little-endian RIFF/RF64/BW64 audio framing, PCM 8/16/24/32-bit or float32/64; 1–8 channels, extensible valid bits/layouts, 8–192 kHz |
 | Native FLAC | 1–8 channels, 4–32-bit, 8–192 kHz; CRC checks; speaker-mask-aware stereo downmix |
 | MP3 | MPEG-1/2/2.5 Layer III, mono/stereo, CBR/VBR, encoder trimming when tagged |
 | Ogg/Vorbis | Single logical stream, mono/stereo, floor 1, mapping 0; CRC and granule checks |
 | Ogg/Opus | Development source: one logical Ogg stream; family 0 mono/stereo or family 1 with 1–8 speaker channels downmixed to stereo; 48 kHz output, header gain/pre-skip/end trimming |
 
-See [precise coverage, limitations, and verification](docs/technical.md) before relying on a particular stream variant. Native surround output, multichannel Vorbis, chained Ogg streams and FLAC-in-Ogg remain unfinished. [WAV](docs/wav.md) and [FLAC](docs/flac.md) speaker layouts downmix to stereo; WAV also accepts left-aligned valid bits and float64 samples. WAV seeks directly; native FLAC uses seek tables or searches validated frames; MP3, Vorbis and Opus use sparse indexes.
+See [precise coverage, limitations, and verification](docs/technical.md) before relying on a particular stream variant. Native surround output, multichannel Vorbis, chained Ogg streams and FLAC-in-Ogg remain unfinished. [WAV](docs/wav.md) and [FLAC](docs/flac.md) speaker layouts downmix to stereo; WAV also accepts left-aligned valid bits and float64 samples. WAV and AIFF/AIFC seek directly; native FLAC uses seek tables or searches validated frames; MP3, Vorbis and Opus use sparse indexes.
 
 RF64/BW64 audio framing adds checked 64-bit lengths and direct seeks beyond 4 GiB. Its suite checks 538 files, 16 sparse large-file fixtures, 8,950 exact seeks and 312 malformed-input rejections. BW64 uses the existing WAVE speaker policy; ADM scene/object rendering remains unfinished. See [container rules and comparator limits](docs/wav.md#rf64bw64-framing-and-large-files).
+
+AIFF/AIFC adds signed PCM, float32/64, ordered Core Audio layouts and sample-exact direct seeks. Its suite checks 1,977 files, 19 sparse large-file cases, 30,443 seeks and 303 malformed-input rejections. Output remains stereo; rates round to integer hertz. See [AIFF/AIFC coverage and reference limits](docs/aiff.md).
 
 ## Controls
 
@@ -57,7 +60,7 @@ RF64/BW64 audio framing adds checked 64-bit lengths and direct seeks beyond 4 Gi
 | M | Mute/unmute to 100% |
 | Q | Close |
 
-The controls hide after 2.5 seconds of inactivity during playback. Seeking runs on a worker. WAV jumps directly to the sample; native FLAC uses a validated seek table or a bounded frame search, including files with unknown duration. Exhausting the search budget falls back to sequential decoding. MP3 restores an indexed reservoir and decodes two frames of pre-roll before the target. Vorbis restores an Ogg packet boundary and decodes one packet to rebuild overlap. Opus restores a packet boundary at least 80 ms before the target to rebuild decoder state; near the beginning it applies normal pre-skip. These indexes are built from headers when opening a file. Paused seeking keeps audio stopped until resume. The console accepts Space to pause and Q/Ctrl+C to stop.
+The controls hide after 2.5 seconds of inactivity during playback. Seeking runs on a worker. WAV and AIFF/AIFC jump directly to the sample; native FLAC uses a validated seek table or a bounded frame search, including files with unknown duration. Exhausting the search budget falls back to sequential decoding. MP3 restores an indexed reservoir and decodes two frames of pre-roll before the target. Vorbis restores an Ogg packet boundary and decodes one packet to rebuild overlap. Opus restores a packet boundary at least 80 ms before the target to rebuild decoder state; near the beginning it applies normal pre-skip. These indexes are built from headers when opening a file. Paused seeking keeps audio stopped until resume. The console accepts Space to pause and Q/Ctrl+C to stop.
 
 ## Build and verify
 
@@ -71,7 +74,7 @@ node .\tests\smoke.js
 .\package.ps1
 ```
 
-The prebuilt ICO and decoder tables are included. A normal build needs no codec library or reference C compiler. Both players use custom assembly entry points and `/NODEFAULTLIB`. The development build measures **198,144 bytes for `lamp.exe`** and **190,464 bytes for `lamp-cli.exe`**, including icon resources; release manifests record exact sizes and hashes.
+The prebuilt ICO and decoder tables are included. A normal build needs no codec library or reference C compiler. Both players use custom assembly entry points and `/NODEFAULTLIB`. The development build measures **201,728 bytes for `lamp.exe`** and **194,048 bytes for `lamp-cli.exe`**, including icon resources; release manifests record exact sizes and hashes.
 
 To build while the player is open, use `./build.ps1 -OutputDirectory ./bin/verify-build`. Pass that directory to `node ./tests/verify-runtime.js ./bin/verify-build` and `node ./tests/smoke.js ./bin/verify-build` to check the new binaries, or `./package.ps1 -BinaryDirectory ./bin/verify-build` to package them. Packaging rejects a binary version that differs from `VERSION`.
 

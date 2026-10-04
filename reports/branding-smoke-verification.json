@@ -7,6 +7,13 @@
     "result": "passed"
   },
   {
+    "codec": "aiff",
+    "frames": 12000,
+    "rate": 48000,
+    "peak": 0.08837890625,
+    "result": "passed"
+  },
+  {
     "codec": "flac",
     "frames": 12000,
     "rate": 48000,

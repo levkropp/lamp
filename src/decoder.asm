@@ -20,7 +20,7 @@ sample_rate dd 0
 source_channels dd 0
 source_bits dd 0
 decode_error dd 0
-codec_kind dd 0                 ;1 WAV,2 native FLAC,3 MP3 Layer III,4 Vorbis,5 Opus
+codec_kind dd 0                 ;1 WAV,2 FLAC,3 MP3,4 Vorbis,5 Opus,6 AIFF/AIFC
 total_frames dq 0
 file_handle dq -1
 map_handle dq 0
@@ -52,6 +52,8 @@ wav_format dd 0
 wav_align dd 0
 wav_container_bits dd 0
 wav_valid_bits dd 0
+pcm_big_endian dd 0
+pcm_signed8 dd 0
 bits_count dd 0
 bits_buf dq 0
 frame_start dq 0
@@ -121,6 +123,7 @@ crc16_table dw 256 dup (?)
 wav_table_bits dq 64 dup (?)   ; at most 4096 ds64 entries, consumed once
 
 .code
+include aiff.inc
 decoder_open PROC
     push rbp
     mov rbp,rsp
@@ -149,6 +152,8 @@ decoder_open PROC
     mov dword ptr [pcm_mix],0
     mov dword ptr [pcm_ignore_extra],0
     mov dword ptr [wav_valid_bits],0
+    mov dword ptr [pcm_big_endian],0
+    mov dword ptr [pcm_signed8],0
     mov edx,80000000h
     mov r8d,1
     xor r9d,r9d
@@ -196,6 +201,8 @@ decoder_open PROC
     je open_rf64
     cmp dword ptr [rax],34365742h ; BW64
     je open_bw64
+    cmp dword ptr [rax],4d524f46h ; FORM AIFF/AIFC
+    je open_aiff
     cmp dword ptr [rax],43614c66h ; fLaC
     je open_flac
     cmp dword ptr [rax],5367674fh ; OggS
@@ -206,6 +213,15 @@ decoder_open PROC
     test eax,eax
     jz open_bad
     mov dword ptr [codec_kind],3
+    leave
+    ret
+open_aiff:
+    mov rcx,[map_base]
+    mov rdx,[input_end]
+    call aiff_open
+    test eax,eax
+    jz open_bad
+    mov dword ptr [codec_kind],6
     leave
     ret
 open_ogg:
@@ -1026,6 +1042,8 @@ decoder_seek PROC
     cmp dword ptr [decode_error],0
     jne seek_return
     cmp dword ptr [codec_kind],1
+    je seek_wav
+    cmp dword ptr [codec_kind],6
     je seek_wav
     cmp dword ptr [codec_kind],3
     je seek_mp3
@@ -2196,7 +2214,7 @@ decoder_read PROC
     jne read_done
     cmp dword ptr [codec_kind],1
     jb read_done
-    cmp dword ptr [codec_kind],5
+    cmp dword ptr [codec_kind],6
     ja read_done
     cmp dword ptr [codec_kind],5
     jne read_try_vorbis
@@ -2233,6 +2251,8 @@ read_existing:
     jmp read_done
 read_existing_dispatch:
     cmp dword ptr [codec_kind],1
+    je read_wav
+    cmp dword ptr [codec_kind],6
     je read_wav
 read_flac:
     cmp ebx,r12d
@@ -2371,6 +2391,10 @@ sample_float:
     je sample_float64
     mov eax,[rsi]
     add rsi,4
+    cmp dword ptr [pcm_big_endian],0
+    je sample_float32_ordered
+    bswap eax
+sample_float32_ordered:
     mov edx,eax
     and edx,7f800000h
     cmp edx,7f800000h
@@ -2381,6 +2405,10 @@ sample_float:
 sample_float64:
     mov rax,[rsi]
     add rsi,8
+    cmp dword ptr [pcm_big_endian],0
+    je sample_float64_ordered
+    bswap rax
+sample_float64_ordered:
     mov rdx,07ff0000000000000h
     and rdx,rax
     mov rcx,07ff0000000000000h
@@ -2396,6 +2424,8 @@ sample_float_bad:
 wav_sample_double ENDP
 
 wav_integer_sample PROC
+    cmp dword ptr [pcm_big_endian],0
+    jne sample_big_integer
     mov eax,[wav_container_bits]
     cmp eax,8
     je sample8
@@ -2407,9 +2437,15 @@ wav_integer_sample PROC
     add rsi,4
     jmp sample_padding
 sample8:
+    cmp dword ptr [pcm_signed8],0
+    jne sample_signed8
     movzx eax,byte ptr [rsi]
     sub eax,128
     movsxd rax,eax
+    inc rsi
+    jmp sample_padding
+sample_signed8:
+    movsx rax,byte ptr [rsi]
     inc rsi
     jmp sample_padding
 sample16:
@@ -2420,6 +2456,34 @@ sample24:
     movzx eax,word ptr [rsi]
     movsx edx,byte ptr [rsi+2]
     shl edx,16
+    or eax,edx
+    movsxd rax,eax
+    add rsi,3
+    jmp sample_padding
+sample_big_integer:
+    mov eax,[wav_container_bits]
+    cmp eax,8
+    je sample8
+    cmp eax,16
+    je sample_big16
+    cmp eax,24
+    je sample_big24
+    mov eax,[rsi]
+    bswap eax
+    movsxd rax,eax
+    add rsi,4
+    jmp sample_padding
+sample_big16:
+    mov ax,[rsi]
+    rol ax,8
+    movsx rax,ax
+    add rsi,2
+    jmp sample_padding
+sample_big24:
+    movsx eax,byte ptr [rsi]
+    shl eax,16
+    movzx edx,word ptr [rsi+1]
+    rol dx,8
     or eax,edx
     movsxd rax,eax
     add rsi,3

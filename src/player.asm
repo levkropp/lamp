@@ -30,15 +30,16 @@ CHUNK_FRAMES EQU 2048
 
 .data
 usage db "LAMP 0.4.0-dev - Lev's Assembly Media Player",13,10
-      db 'Handwritten x86-64 assembly WAV / FLAC / MP3 / Ogg Vorbis / Opus',13,10
+      db 'Handwritten x86-64 assembly WAV / AIFF / FLAC / MP3 / Vorbis / Opus',13,10
       db 'Usage: lamp-cli.exe file.mp3',13,10
       db '       lamp-cli.exe --check file.flac',13,10
       db '       lamp-cli.exe --decode file.flac output.f32',13,10
       db 'Playback: Space pauses/resumes; Q or Ctrl+C stops.',13,10
       db 'RIFF/RF64/BW64 WAV: 1..8 channels, PCM 8/16/24/32 or float32/64.',13,10
+      db 'AIFF/AIFC: signed PCM 1..32 bits or float32/64, 1..8 channels.',13,10
       db 'Native FLAC: 4..32 bit, 1..8 channels, speaker-mask-aware downmix.',13,10
       db 'Opus families 0/1; playback and float export output stereo.',13,10,0
-open_error db 'Unsupported, malformed, or inaccessible file. Supports WAV, native FLAC, MP3, Ogg Vorbis and Opus.',13,10,0
+open_error db 'Unsupported, malformed, or inaccessible file. Supports WAV, AIFF/AIFC, FLAC, MP3, Vorbis and Opus.',13,10,0
 audio_error db 'Audio endpoint unavailable or WASAPI failed. Try --check to verify decoding.',13,10,0
 output_error db 'Cannot create output file.',13,10,0
 play_text db 'Playing. Space: pause / resume. Q or Ctrl+C: stop.',13,10,0
