@@ -21,6 +21,7 @@ LAMP's Opus work is handwritten MASM x86-64 assembly, based on the BSD normative
 | SILK decoder resampling and delay compensation | `opus_silk_resampler.asm` | 8,192 raw up2 and 8,192 AR2 filters, 8,161 initializations/all 15 rate pairs, 32,640 PCM/history frames (3,840 connected core), 28,848,369 integer samples, 2,876,672 defined history values and 53 guards |
 | SILK comfort-noise estimation and synthesis | `opus_silk_cng.asm` | 58,368 exact PCM/history frames (9,216 connected core/CNG/resampling), 5,150,475 int16 PCM samples, 20,720,640 history values and 27 guards |
 | SILK packet-loss concealment and recovery glue | `opus_silk_plc.asm` | 16,384 energy vectors, 43,008 exact PLC/core/control frames (25,984 concealed), 75,776 glue frames (7,463 faded), 18,432 connected core/PLC/CNG/resampling, 17,637,024 PCM samples, 36,685,824 history values and 63 guards |
+| SILK stereo predictor/mid-only entropy and mid/side reconstruction | `opus_silk_stereo.asm` | 153,572 entropy comparisons (11,250 exhaustive codebook/flag cases), 90,112 exact PCM/history frames (65,536 connected predictors), 32,440,240 int16 samples and 34 guards |
 | CELT static band allocation | `opus_allocation.asm` | 271,160 allocation/entropy and 52,479 pulse-cache comparisons |
 | CELT normalized PVQ bands/spreading | `opus_vq.asm` | 13,416 band/entropy, 15,864 spreading and 8,192 renormalization comparisons |
 | CELT Haar/Hadamard layout helpers | `opus_band_transform.asm` | 3,280 Haar and 5,888 layout/inverse comparisons |
@@ -82,7 +83,7 @@ Requirements: Windows x64, Visual Studio Build Tools with the C tools and Window
 
 ## Next dependencies
 
-1. Complete SILK stereo and packet/frame processing; handle hybrid transitions.
+1. Complete SILK packet/frame processing; handle hybrid transitions.
 2. Integrate Ogg Opus pre-skip/gain/end trimming with the playback engine.
 3. Validate complete CELT/SILK/hybrid audio against official decoder vectors and reference PCM.
 
@@ -134,7 +135,7 @@ The state layout matches the reference: six IIR int32 values at 0, 36 FIR int32 
 
 The normative fractional upsampler copies sixteen int16 scratch values into its FIR state, though only eight are initialized and used by future interpolation. LAMP copies the eight defined samples and preserves the unused state. Oracle comparisons therefore exclude only reference `sFIR[4..7]`; PCM, every defined history field, descriptor and inactive output match exactly. Separate checks prove LAMP's unused state stays unchanged and that different scratch fills produce identical complete LAMP state/PCM. This reference exception is recorded in the verification report.
 
-The seven generated resampling tables are verified against the hash-checked normative archive. Tests cover every rate pair, 1–60 ms lengths, repeated transitions across 10 ms blocks, silence/impulse/extreme/random inputs, arbitrary integer history, delay compensation, output/input canaries, malformed descriptors and connected assembly core PCM. These checks complete decoder-rate conversion; whole SILK packet/frame processing, stereo and Opus mode integration remain unfinished.
+The seven generated resampling tables are verified against the hash-checked normative archive. Tests cover every rate pair, 1–60 ms lengths, repeated transitions across 10 ms blocks, silence/impulse/extreme/random inputs, arbitrary integer history, delay compensation, output/input canaries, malformed descriptors and connected assembly core PCM. These checks complete decoder-rate conversion; whole SILK packet/frame processing and Opus mode integration remain unfinished.
 
 ## SILK comfort-noise interface
 
@@ -152,7 +153,15 @@ PLC state follows the normative 92-byte x64 layout. It preserves inactive coeffi
 
 `op_silk_plc_glue(request*)` records energy after concealment and applies a reference square-root fade when recovered PCM has greater energy. Its 32-byte request supplies PLC/PCM at 0/8, length at 16 (1–320), current loss count at 20, state byte capacity at 24 and PCM element capacity at 28. `op_silk_sum_sqr(request*)` exposes the exact reference energy/shift kernel: output energy/shift/input pointers at 0/8/16, length at 24 (0–480), input element capacity at 28. Both return one on success or zero before writes for invalid public inputs. The energy kernel preserves the RFC implementation's reprocessing of the first overflowing pair.
 
-Tests call unchanged `PLC.c` and `sum_sqr_shift.c`, compare complete PLC/core/control state and PCM, and check immutable inputs, padding, capacities and canaries. They cover initial loss, repeated voiced/unvoiced loss, recovery, rate/subframe changes, extreme gains/taps/history and connected assembly core → PLC → output history → glue → CNG → 48 kHz resampling. These component sequences use reconstructed synthetic parameters; full entropy/frame/stereo integration and official conformance vectors remain required.
+Tests call unchanged `PLC.c` and `sum_sqr_shift.c`, compare complete PLC/core/control state and PCM, and check immutable inputs, padding, capacities and canaries. They cover initial loss, repeated voiced/unvoiced loss, recovery, rate/subframe changes, extreme gains/taps/history and connected assembly core → PLC → output history → glue → CNG → 48 kHz resampling. These component sequences use reconstructed synthetic parameters; full entropy/frame integration and official conformance vectors remain required.
+
+## SILK stereo interfaces
+
+`op_silk_stereo_indices(request*)` decodes either two int32 Q13 predictors or a mid-only flag. Its 32-byte request in `src/opus_silk_stereo_layout.inc` has range/output pointers at 0/8, kind at 16 (0 predictors/1 flag), output element capacity at 20 (2/1) and range byte capacity at 24 (64). The primed context is bounded to a 1,275-byte payload and checked before entropy/output changes. Zero padding follows the reference; final packet bit-budget enforcement belongs to the frame caller. Success returns one, invalid public requests zero before writes.
+
+`op_silk_stereo(request*)` reconstructs planar int16 left/right PCM from adaptive mid/side input, with saved two-sample history and eight-millisecond predictor interpolation. Its 56-byte request has state/mid/side/predictor pointers at 0/8/16/24, internal kHz at 32 (8/12/16), length at 36 (10/20 ms), and state byte/mid element/side element/predictor element capacities at 40/44/48/52. State is 12 bytes: two int16 previous predictors, two mid samples, two side samples. Each PCM plane requires length+2 samples, with output at indices 1 through length; its last lookahead sample is preserved. Predictor input is two immutable int32 values in -32,768 through 32,767. Buffers must be separate, caller-owned and correctly sized; invalid requests reject before writes.
+
+Five generated tables are checked against the hash-verified normative archive. Tests call unchanged stereo sources, compare complete entropy/stereo state and PCM, encode/decode every predictor-codebook and mid-only combination, and cover all rates/frame lengths, random/truncated/primed payloads, full-range predictor history, clipping, canaries and guards. Connected checks apply decoded predictors to synthetic mid/side PCM; whole two-channel SILK packet/frame integration remains unfinished.
 
 ## Frame-prefix interface
 

@@ -44,7 +44,8 @@ The public repository includes build/test tooling, a Windows prerelease and a we
 - [x] SILK decoder resampling across all fifteen input/output-rate pairs, including delay compensation, defined history and connected core PCM.
 - [x] SILK comfort-noise estimation/synthesis, rate resets and loss-state history, with exact PCM/state and connected core/resampler comparisons.
 - [x] SILK voiced/unvoiced packet-loss concealment and recovery glue, with exact prediction/core history, PCM, energy and connected CNG/resampling comparisons.
-- [ ] Finish SILK stereo and packet/frame integration.
+- [x] SILK stereo predictor/mid-only entropy decoding and adaptive mid/side-to-left/right reconstruction, with exhaustive codebook and exact PCM/history checks.
+- [ ] Finish SILK packet/frame integration.
 - [ ] Hybrid modes, bandwidth/frame transitions, stereo, channel mapping, output gain, pre-skip and end trimming.
 - [ ] Integrate Ogg/Opus with cancellation, queueing, pause and seeking.
 - [ ] Official decoder vectors, reference PCM tolerance/state checks, and malformed/truncated stream tests across modes and frame sizes.
