@@ -71,13 +71,15 @@ node .\tests\smoke.js
 
 The prebuilt ICO and decoder tables are included. A normal build needs no codec library or reference C compiler. Both players use custom assembly entry points and `/NODEFAULTLIB`. The branded build measures **110,080 bytes for `lamp.exe`** and **102,400 bytes for `lamp-cli.exe`**, including icon resources; release manifests record exact sizes and hashes.
 
+To build while the player is open, use `./build.ps1 -OutputDirectory ./bin/verify-build`. Pass that directory to `node ./tests/verify-runtime.js ./bin/verify-build` and `node ./tests/smoke.js ./bin/verify-build` to check the new binaries.
+
 The existing codec suites recorded 43 WAV/FLAC, 103 MP3, and 83 Vorbis checks, plus engine lifecycle, malformed-input, stress, and Opus primitive tests. They do not establish complete format conformance. [Test instructions](docs/technical.md#verification) and [recorded reports](reports/README.md) describe what was checked. Full fixture suites need FFmpeg and Node.js; Opus oracle tests additionally use the C compiler for test executables only.
 
 The UI image comes from the actual assembly renderer with synthetic state. Open-dialog, drag/drop, and monitor-DPI interaction still require desktop verification.
 
 ## Roadmap and contribution
 
-Latest Opus work adds a stateful assembly CELT frame decoder with pitch/LPC and comfort-noise loss concealment. Seventeen suites include 30,736 frame-to-PCM checks (4,090 concealed frames) with zero observed error against the normative decoder, plus 311 strict entropy rejections and failure/reset checks. Channel conversion, all output rates, frame sizes, bandwidth changes and loss/recovery history are covered. SILK, hybrid modes, Ogg playback integration and official conformance vectors remain unfinished. See [the decoder-stage notes](docs/opus.md) and run `./tests/verify-opus-components.ps1` to reproduce these checks without FFmpeg or an audio device.
+Latest Opus work adds exact reference checks for SILK side information, gains, pitch/LTP and stabilized NLSF vectors. Twenty suites also include 30,736 stateful CELT frame-to-PCM checks (4,090 concealed frames) with zero observed error against the normative decoder, plus 311 strict entropy rejections and failure/reset checks. Channel conversion, all output rates, frame sizes, bandwidth changes and loss/recovery history are covered. SILK LPC conversion/synthesis/resampling, hybrid modes, Ogg playback integration and official conformance vectors remain unfinished. See [the decoder-stage notes](docs/opus.md) and run `./tests/verify-opus-components.ps1` to reproduce these checks without FFmpeg or an audio device.
 
 [ROADMAP.md](ROADMAP.md) covers Opus, reliable audio playback, broader codecs and containers, video, subtitles, streaming, and eventual support for everything relevant that mpv supports. The [compatibility matrix](docs/compatibility.md) tracks the current gaps. Goals have acceptance gates, not promised release dates. Hardware decode should be used when it lowers system cost; handwritten assembly alone does not guarantee a faster codec.
 

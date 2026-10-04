@@ -1,0 +1,6 @@
+﻿{
+    "result":  "passed",
+    "scope":  "SILK integer log-to-linear gain reconstruction, persistent gain-index state, pitch contour/clamping, Q14 LTP taps and scaling, connected side-information parameter sequences; NLSF/LPC reconstruction and complete audio remain pending",
+    "comparison":  "exact integers and prior-gain state",
+    "stats":  "SILK parameters: 4096 log-to-linear values, 583808 gain/state frames, 264932 pitch/LTP frames, 32768 connected side-information sequences, 7462508 integer parameters, 37 guards; all exact"
+}

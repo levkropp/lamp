@@ -1,0 +1,6 @@
+﻿{
+    "result":  "passed",
+    "scope":  "SILK signal/gain/NLSF/pitch/LTP/seed side-information indices, NLSF selector/predictor unpack, persistent entropy-index state and connected excitation pulses; parameter reconstruction, synthesis, resampling and complete SILK audio remain pending",
+    "comparison":  "exact integer outputs, unused-field preservation and complete entropy state",
+    "stats":  "SILK indices: 98304 exact side-information/state frames (43002 voiced, 11286 conditional voiced, 14064 primed), 98304 connected excitation frames/17825792 pulses, 96 NLSF unpack vectors, 40 guards"
+}

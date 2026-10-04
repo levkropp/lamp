@@ -2,12 +2,13 @@
 'use strict';
 const fs=require('fs'),path=require('path');
 const root=path.resolve(__dirname,'..');
+const bin=process.argv[2]?path.resolve(process.argv[2]):path.join(root,'bin');
 const audio=['KERNEL32.dll','ole32.dll','SHELL32.dll','AVRT.dll'];
 const report=[];
 for(const [name,subsystem,expected]of[
  ['lamp-cli.exe',3,audio],['lamp.exe',2,[...audio,'USER32.dll','GDI32.dll','COMDLG32.dll']]
 ]){
- const data=fs.readFileSync(path.join(root,'bin',name)),pe=data.readUInt32LE(0x3c);
+ const data=fs.readFileSync(path.join(bin,name)),pe=data.readUInt32LE(0x3c);
  if(data.readUInt16LE(0)!==0x5a4d||data.readUInt32LE(pe)!==0x4550||data.readUInt16LE(pe+4)!==0x8664)throw Error('Invalid x86-64 PE '+name);
  const optional=pe+24,sectionCount=data.readUInt16LE(pe+6),sectionStart=optional+data.readUInt16LE(pe+20);
  if(data.readUInt16LE(optional)!==0x20b||data.readUInt16LE(optional+68)!==subsystem)throw Error('Wrong subsystem '+name);
@@ -46,5 +47,5 @@ for(const [name,subsystem,expected]of[
  if(!text.includes("Lev's Assembly Media Player")||!text.includes('0.3.0')||!text.includes(name))throw Error('Wrong LAMP version/filename '+name);
  report.push({file:name,bytes:data.length,architecture:'x86-64',subsystem:subsystem===2?'windows':'console',imports,iconSizes:sizes,version:'0.3.0',result:'passed'});
 }
-fs.writeFileSync(path.join(root,'bin','runtime-verification.json'),JSON.stringify(report,null,2)+'\n');
+fs.writeFileSync(path.join(bin,'runtime-verification.json'),JSON.stringify(report,null,2)+'\n');
 console.log(JSON.stringify(report));

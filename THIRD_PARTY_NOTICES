@@ -78,8 +78,12 @@ The SSE2 exponential polynomial is original assembly and mathematical data;
 reference libm is used only by the test executable.
 The applicable redistribution conditions and disclaimer follow below.
 
-Adapted SILK pulse algorithms and probability data:
+Adapted SILK pulse, side-information, gain/pitch/LTP and NLSF algorithms/data:
 Copyright (c) 2006-2012 IETF Trust and Skype Limited. All rights reserved.
+The additions reference decode_indices.c, NLSF_unpack.c, gain_quant.c,
+log2lin.c, decode_pitch.c, decode_parameters.c, NLSF_decode.c,
+NLSF_VQ_weights_laroia.c, NLSF_stabilize.c, sort.c, Inlines.h and the
+corresponding probability/codebook/pitch tables in the same normative archive.
 Adapted Opus packet framing:
 Copyright (c) 2010-2012 IETF Trust, Xiph.Org Foundation and Skype Limited.
 All rights reserved.

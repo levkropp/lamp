@@ -11,6 +11,9 @@ LAMP's Opus work is handwritten MASM x86-64 assembly, based on the BSD normative
 | Signed-pulse enumeration | `opus_cwrs.asm` | 90,678 comparisons |
 | CELT coarse/fine/final energy | `opus_energy.asm` | 131,072 Laplace and 12,288 energy-stage comparisons |
 | SILK shell/excitation pulses | `opus_silk_pulses.asm` | 69,632 shell and 24,576 excitation comparisons |
+| SILK side-information indices and NLSF unpack | `opus_silk_indices.asm` | 98,304 exact side-information/state frames connected to excitation (17,825,792 pulses), 96 unpack vectors and 40 guards |
+| SILK gains and pitch/LTP parameters | `opus_silk_parameters.asm` | 4,096 log-to-linear inputs, 583,808 gain/state frames, 264,932 pitch/LTP frames, 32,768 connected side-information sequences, 7,462,508 integer parameters and 37 guards |
+| SILK predictive NLSF reconstruction/stabilization | `opus_silk_nlsf.asm` | 1,310,848 square-root inputs, 45,056 decoded vectors (32,768 connected), 12,288 stabilization vectors, 2,310,080 coefficients, 166 invalid reference-result rejections and 19 guards |
 | CELT static band allocation | `opus_allocation.asm` | 271,160 allocation/entropy and 52,479 pulse-cache comparisons |
 | CELT normalized PVQ bands/spreading | `opus_vq.asm` | 13,416 band/entropy, 15,864 spreading and 8,192 renormalization comparisons |
 | CELT Haar/Hadamard layout helpers | `opus_band_transform.asm` | 3,280 Haar and 5,888 layout/inverse comparisons |
@@ -72,9 +75,23 @@ Requirements: Windows x64, Visual Studio Build Tools with the C tools and Window
 
 ## Next dependencies
 
-1. Complete SILK parameters, prediction, synthesis and resampling; handle hybrid transitions.
+1. Complete SILK LPC conversion/interpolation, parameter orchestration, prediction, synthesis and resampling; handle hybrid transitions.
 2. Integrate Ogg Opus pre-skip/gain/end trimming with the playback engine.
 3. Validate complete CELT/SILK/hybrid audio against official decoder vectors and reference PCM.
+
+## SILK parameter interfaces
+
+`op_silk_indices(request*)` consumes gain/NLSF/pitch/LTP/seed indices and advances the prior lag/signal state. Its 56-byte request is in `src/opus_silk_indices_layout.inc`: entropy/state/output pointers at 0/8/16, internal rate at 24 (8/12/16 kHz), subframes at 28 (2/4), VAD/LBRR flags at 32/36, coding mode at 40 (0 independent, 1 independent without LTP scaling, 2 conditional), and output/state byte capacities at 44/48. State is 8 bytes: signed previous lag index and previous signal type. Output uses the normative 36-byte `SideInfoIndices` layout; inactive fields/subframes and padding remain unchanged. `op_silk_nlsf_unpack` accepts a 32-byte request with selector/predictor pointers, rate, first-stage index 0–31 and element capacities, producing 10 entries at 8/12 kHz or 16 at 16 kHz.
+
+`op_silk_gains(request*)` reconstructs Q16 gains and updates one last-gain-index byte. Its 48-byte layout selects input indices/output/previous-index pointers at 0/8/16, subframes and conditional flag at 24/28, and byte/int32/byte capacities at 32/36/40. Last index is 0–63; an absolute first index is 0–63 and delta indices are 0–40. It preserves inactive outputs. `op_silk_log2lin(int32 Q7)` exposes the normative integer gain approximation for 0–3967, returning zero for negative or unsupported larger inputs.
+
+`op_silk_pitch_ltp(request*)` accepts immutable side information and produces 2/4 pitch lags, 10/20 Q14 LTP taps and one Q14 scale. Its 56-byte request in `src/opus_silk_parameters_layout.inc` selects four pointers, rate/subframes and three element capacities. Voiced indices select the fixed normative pitch contours and LTP codebooks; reconstructed lags clamp to 2–18 ms. Unvoiced frames clear active outputs and ignore unused pitch/LTP indices. The complete parameter caller must also reset its PER index to zero on unvoiced frames, as the reference does; this output-only helper preserves input side information.
+
+`op_silk_nlsf_decode(request*)` reconstructs the fixed codebook plus predictive residuals, computes Q2 Laroia weights, unweights the residuals and stabilizes the Q15 NLSFs. Its 40-byte request in `src/opus_silk_nlsf_layout.inc` selects signed-byte indices/output/workspace at 0/8/16, rate at 24 and capacities at 28/32/36. Indices require order+1 bytes, output order int16 values, and workspace 112 bytes. The workspace records selectors, predictors, Q10 residuals and weights; unused suffixes remain unchanged for order 10. First-stage index is 0–31 and residual indices are −10–10. `op_silk_sqrt_approx(int32)` matches the normative integer approximation throughout the signed domain. `op_silk_nlsf_stabilize` also exposes in-place stabilization with a 16-byte pointer/rate/int16-capacity request.
+
+All these public request functions return 1 for success, 0 for rejected input. Buffers are caller-owned, correctly sized and nonoverlapping with writable outputs. Null/rate/capacity/index/entropy-shape checks precede writes. Component entropy padding is permitted for short payloads; the complete frame caller must check final entropy error and budget. NLSF stabilization also checks the final range and minimum spacing: the 2012 reference fallback can wrap signed int16 values on extreme vectors. Such late rejection can leave partial outputs/workspace, which the caller must discard before LPC conversion. Tests compare the full integer reference result even on rejected vectors and independently verify this rejection policy.
+
+The three `generate-silk-*-tables.js` scripts verify probability, selector, codebook, predictor, contour and LTP data against the hash-checked normative archive. Side-information tests compare complete entropy and prior-index state, padding/unused-field preservation and connected excitation. Gain/pitch tests cover every gain-index combination, valid contours and signed lag boundaries. NLSF tests cover all first-stage vectors, extreme/random residuals, connected indices and stabilization fallback. These parameter checks do not yet establish complete SILK decoded PCM.
 
 ## Frame-prefix interface
 

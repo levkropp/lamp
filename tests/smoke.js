@@ -1,6 +1,6 @@
 'use strict';
 const fs=require('fs'),path=require('path'),cp=require('child_process'),assert=require('assert');
-const root=path.resolve(__dirname,'..'),exe=path.join(root,'bin','lamp-cli.exe');
+const root=path.resolve(__dirname,'..'),bin=process.argv[2]?path.resolve(process.argv[2]):path.join(root,'bin'),exe=path.join(bin,'lamp-cli.exe');
 const tempRoot=path.resolve(require('os').tmpdir());
 const temp=fs.mkdtempSync(path.join(tempRoot,'lamp-smoke-')),report=[];
 assert(path.dirname(temp)===tempRoot&&path.basename(temp).startsWith('lamp-smoke-'),'Unsafe temporary path');
@@ -24,7 +24,7 @@ try{
  }
  const opus=run(['--check',path.join(__dirname,'fixtures','tone.opus')]);assert.notStrictEqual(opus.status,0,'Opus must not be advertised as playable');
  report.push({codec:'opus',result:'unsupported input rejected'});
- fs.mkdirSync(path.join(root,'bin'),{recursive:true});
- fs.writeFileSync(path.join(root,'bin','branding-smoke-verification.json'),JSON.stringify(report,null,2)+'\n');
+ fs.mkdirSync(bin,{recursive:true});
+ fs.writeFileSync(path.join(bin,'branding-smoke-verification.json'),JSON.stringify(report,null,2)+'\n');
  console.log(JSON.stringify(report));
 }finally{fs.rmSync(temp,{recursive:true,force:true});}
