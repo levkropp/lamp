@@ -18,7 +18,7 @@ jobs:
         run: ./build.ps1
       - name: Check architecture, resources and runtime dependencies
         run: node tests/verify-runtime.js
-      - name: Check advertised formats and unsupported Opus
+      - name: Check advertised audio formats including Opus
         run: node tests/smoke.js
       - name: Verify Opus decoder stages against normative reference
         run: ./tests/verify-opus-components.ps1

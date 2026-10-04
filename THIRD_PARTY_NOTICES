@@ -104,7 +104,7 @@ and LBRR flag tables in tables_other.c under the same conditions.
 Adapted Opus packet framing:
 Opus SILK/hybrid/CELT mode orchestration, redundancy and transition fades
 also reference opus_decoder.c under the conditions below. The unchanged
-normative Opus encoder is compiled only into the mode verification executable.
+normative Opus encoder is compiled only into the mode/packet/Ogg verification executables.
 Copyright (c) 2010-2012 IETF Trust, Xiph.Org Foundation and Skype Limited.
 All rights reserved.
 Individual source notices are retained in the bundled reference archive.

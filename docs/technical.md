@@ -1,10 +1,10 @@
-# LAMP 0.3.0 technical details
+# LAMP 0.4.0-dev technical details
 
-A Windows x86-64 audio player with handwritten assembly WAV, FLAC, MP3, and Ogg/Vorbis decoders, plus a native assembly UI. The branded console executable is **102,400 bytes (100 KiB)**; the graphical executable is **110,080 bytes (107.5 KiB)**. Both include LAMP's icon and version resources. Exact packaged sizes and hashes are in the release `manifest.json`.
+A Windows x86-64 audio player with handwritten assembly WAV, FLAC, MP3, Ogg/Vorbis and development Ogg/Opus decoders, plus a native assembly UI. The current console build is **179,712 bytes (175.5 KiB)**; the graphical build is **187,392 bytes (183 KiB)**. Both include LAMP's icon and version resources. The published v0.3.0 archive retains its earlier four-format build and manifest.
 
 The dark canvas, compact playback controls and automatic hiding are inspired by mpv. The custom pixel buffer and Win32 presentation follow Rhun's documented assembly UI model. No Rhun source, fonts, icons, or other assets were copied.
 
-**Opus playback is unfinished.** The tested assembly packet decoder connects all four packet framing codes to SILK, hybrid and CELT float PCM, preserving histories across bandwidth/frame changes, stereo conversion, redundant transition audio, crossfades, FEC, loss and DTX. SILK packet/API and CELT component suites validate its underlying integer/float stages. These development objects are not linked into either player. Channel mapping, gain/trimming, Ogg integration and full audio-vector validation remain. An `.opus` file is rejected. [Opus stage documentation](opus.md) records interfaces, bounds, results and remaining work.
+**Opus remains a development feature.** Source builds connect all four packet framing codes to SILK/hybrid/CELT PCM and play single-stream Ogg mapping family 0 with gain, pre-skip and end trimming. The implementation matches the original RFC 6716 decoder. RFC 8251 updates and official conformance remain pending: 42 modern-libopus tonal files match within 0.00004, but a low-bitrate noise case has 0.21057 maximum PCM difference. That file matches the original RFC decoder exactly; updated hybrid folding is required before claiming modern-reference equivalence. [Opus stage documentation](opus.md) records interfaces, bounds and results.
 
 All runtime application and decoder code is MASM x64 assembly. No C/C++/Rust codec, codec DLL, CRT, FFmpeg process, or media-player engine is linked or invoked. Reference C source is used only for algorithms, permitted coefficient/probability data, and test oracles.
 
@@ -19,7 +19,7 @@ Windows 10/11 x64 with a working default audio output are the intended targets. 
 .\bin\lamp-cli.exe --decode 'C:\Music\track.ogg' '.\track.f32'
 ```
 
-`--check` decodes silently without an audio device. `--decode` exports little-endian float32 PCM at the source rate, always with two interleaved channels; mono is duplicated at its original amplitude. The destination must be a new file. Float32 WAV NaN/infinity samples become silence. A failed export can leave partial output.
+`--check` decodes silently without an audio device. `--decode` exports little-endian float32 PCM with two interleaved channels; mono is duplicated at its original amplitude. Opus uses 48 kHz; other formats use their source rate. The destination must be a new file. Float32 WAV NaN/infinity samples become silence. A failed export can leave partial output.
 
 | UI control | Action |
 | --- | --- |
@@ -50,7 +50,7 @@ Seeking restarts the decoder on a worker and discards PCM from the beginning to 
 | MP3 Layer III | MPEG-1/2/2.5, all nine rates 8–48 kHz, mono/stereo, known bitrate CBR/ABR/VBR; reservoir, Huffman/linbits/count1, scalefactors, long/short/mixed blocks, MS/intensity stereo, hybrid/polyphase synthesis |
 | MP3 metadata | Leading ID3v2.2/2.3/2.4 and trailing ID3v1 skipped; Xing/Info frame counts and encoder delay/padding used for single-file trimming |
 | Ogg/Vorbis | Single Ogg v0 stream, CRC/sequence/continuation checks; mono/stereo 8–192 kHz, 64–8192 sample blocks; ordered/unordered/sparse codebooks, lookup 0/1/2, floor 1, residue 0/1/2, mapping 0, coupling/submaps, short/long overlap and final granule trimming |
-| Ogg/Opus | Development components only; audio playback unavailable |
+| Ogg/Opus | Development: single Ogg v0 stream, mapping family 0, mono/stereo SILK/hybrid/CELT, 48 kHz output, signed header gain, pre-skip/end trimming and cropped initial granule offsets; original RFC behavior, updates/conformance pending |
 
 WAV ADPCM/RF64/RIFX, FLAC in Ogg, 32-bit FLAC, more than two channels, playlists, tag display, and device reconnection are unsupported. FLAC CRC8/CRC16 are checked; STREAMINFO MD5 and coded frame-number continuity are not checked. Tested FLAC depths are 16/24 bits, with less fixture coverage for the broader implementation range.
 
@@ -80,7 +80,7 @@ Install Visual Studio 2022 Build Tools with x64 tools and a Windows SDK:
 .\build.ps1
 ```
 
-Runtime builds use `ml64.exe`, `link.exe`, Windows import libraries, custom entry points, and `/NODEFAULTLIB`. The console imports KERNEL32, ole32, SHELL32 and AVRT; the UI adds USER32, GDI32 and COMDLG32. Opus development objects are assembled but not linked into the players. Decoders are single-instance and called only by the producer during playback.
+Runtime builds use `ml64.exe`, `link.exe`, Windows import libraries, custom entry points, and `/NODEFAULTLIB`. The console imports KERNEL32, ole32, SHELL32 and AVRT; the UI adds USER32, GDI32 and COMDLG32. Opus assembly objects are linked into both players; reference C remains confined to test executables. Decoders are single-instance and called only by the producer during playback.
 
 Generated tables and the application ICO are included. A normal build requires no reference C compiler. The Windows SDK resource compiler embeds the icon and version information. Preserve `THIRD_PARTY_NOTICES` with distributions.
 
@@ -105,7 +105,7 @@ Opus component tests cover 1,216,672 packet framing cases, 524,288 range operati
 
 The CELT suites add 271,160 exact allocation/entropy comparisons and 52,479 pulse-cache comparisons, 13,416 normalized pulse-vector/entropy comparisons, 15,864 spreading comparisons (including sixteen-block TF layouts), 8,192 renormalization comparisons, 3,280 Haar comparisons and 5,888 layout/inverse comparisons. Observed float error was zero in these tests; PVQ/spreading comparisons permit a 0.000003 absolute tolerance for platform libm differences. Guard tests check rejection before output/entropy writes.
 
-The connected CELT band suite checks 75,104 recursive bands and 24,589 full spectral frames, including 8,205 frame prefixes and 13 real CELT frames. It compares 31,254,098 coefficients and exact entropy, budget, seed and allocation-balance state, plus 80 invalid requests. Observed coefficient error is zero; tolerances are 0.00001 for vectors and 0.00004 for scaled folding output. These are normalized spectral outputs, not decoded Opus PCM. Synthesis and complete Opus mode integration remain unfinished; [stage interfaces and limits](opus.md) document the current development code.
+The connected CELT band suite checks 75,104 recursive bands and 24,589 full spectral frames, including 8,205 frame prefixes and 13 real CELT frames. It compares 31,254,098 coefficients and exact entropy, budget, seed and allocation-balance state, plus 80 invalid requests. Observed coefficient error is zero; tolerances are 0.00001 for vectors and 0.00004 for scaled folding output. These are normalized spectral outputs; connected packet/Ogg PCM checks are described below. [Stage interfaces and limits](opus.md) document the development code.
 
 Synthesis-kernel suites add 21,632 anti-collapse and 21,632 denormalization frames, 12,288 inverse FFTs, 12,288 MDCT/TDAC transforms, 16,384 overlap frames, 29,792 comb filters and 24,576 stateful deemphasis/downsample frames. Tested outputs match the normative reference exactly; the independent 1,310,721-value exponent sweep permits and observes at most one float ULP. The suites check capacities, canaries, rejected-request non-mutation, frame-size/long/transient changes and persistent filter memory.
 
@@ -133,7 +133,9 @@ The complete SILK API suite calls `silk_Decode` across all internal/output-rate 
 
 The full mode oracle includes unchanged `opus_decoder.c`/`celt.c` and generates packets with the normative Opus encoder. It compares 19,204 frames (5,825 SILK, 5,322 hybrid, 7,997 CELT), 77,582,264 float PCM/history values and exact defined SILK history. It covers all 32 TOC configurations, five API rates and every mono/stereo conversion, 1,160 mode transitions, 446 CELT-to-SILK and 489 SILK-to-CELT redundant frames, 3,660 lost frames and 1,973 FEC calls. All tested float errors are zero at scale-adjusted tolerance 0.00004. Distinct-scratch assembly calls produce identical complete states and PCM. A bandwidth transition exposed empty high-band PLC; the implementation now reproduces the reference's zero spectrum while preserving overlap and random history. Tests add 2,048 malformed packets, 49 public guards and 74 strict rejection/sticky/reset cases.
 
-Complete normal packet dispatch adds 18,381 exact PCM/history calls across four framing codes, padding, up to 48 frames/120 ms, all 32 TOC configurations, five API rates and channel layouts, 2,560 losses, 5,196 FEC calls and 5,120 zero/one-byte DTX packets. It compares 25,775,010 float output samples, tests 2,048 malformed packets (1,588 rejections), 26 public guards and sticky failure/reset. A reference-call observer records intermediate CELT entropy errors that a later frame/reset can clear; LAMP rejects them immediately. Thirty-three suites pass; player/Ogg integration, mapping/gain/trimming and official conformance remain required.
+Complete normal packet dispatch adds 18,381 exact PCM/history calls across four framing codes, padding, up to 48 frames/120 ms, all 32 TOC configurations, five API rates and channel layouts, 2,560 losses, 5,196 FEC calls and 5,120 zero/one-byte DTX packets. It compares 25,775,010 float output samples, tests 2,048 malformed packets (1,588 rejections), 26 public guards and sticky failure/reset. A reference-call observer records intermediate CELT entropy errors that a later frame/reset can clear; LAMP rejects them immediately.
+
+The Ogg bridge adds 393 original-reference PCM streams, 4,628,232 stereo float comparisons, 4,157 bounded-read/canary checks, 27 malformed-stream rejections, late/sticky discard and two cancellation checks. It covers header placement, continued comments/audio, future minor extensions, gain extremes, pre-skip 0–65,535, cropped origins and end trimming. Maximum scaled error is 2.981e-7 across gain extremes. All thirty-four original-reference suites pass. The WASAPI lifecycle suite adds Opus playback/pause/resume/stop/reopen/seeking/paused seeking. RFC 8251 updates and official conformance remain required.
 
 The UI preview uses the actual assembly renderer with synthetic playback state. **Desktop window interaction, open-dialog/drop behavior and monitor-DPI changes remain unverified** because the permitted desktop automation runtime was unavailable. Audio controls are tested separately by a native assembly harness.
 
@@ -158,6 +160,7 @@ node .\tests\fuzz-vorbis.js
 .\tests\verify-opus-controls.ps1
 .\tests\verify-opus-theta.ps1
 .\tests\verify-opus-components.ps1
+.\tests\verify-opus.ps1 -OutputDirectory .\bin\verify-build #modern reference regression;currently fails the noise case
 .\tests\render-ui.ps1
 ```
 
@@ -165,7 +168,7 @@ The RFC reference archive is checked against its normative SHA-1 before extracti
 
 ## Remaining implementation
 
-Connect Opus packets to Ogg/player integration, channel mapping, pre-skip/gain/end trimming and official audio-vector validation. Further work includes indexed seeking, multichannel/chained streams, device changes, and same-machine CPU/RAM comparisons against existing players.
+Apply RFC 8251 decoder updates, finish independent modern-libopus comparisons and validate official Opus vectors. Further work includes indexed seeking, multichannel/chained streams, device changes, and same-machine CPU/RAM comparisons against existing players.
 
 ## References
 
@@ -173,6 +176,7 @@ Connect Opus packets to Ogg/player integration, channel mapping, pre-skip/gain/e
 - [Vorbis I specification](https://xiph.org/vorbis/doc/Vorbis_I_spec.html)
 - [Ogg framing, RFC 3533](https://www.rfc-editor.org/rfc/rfc3533.html)
 - [Opus and normative reference, RFC 6716](https://www.rfc-editor.org/rfc/rfc6716.html)
+- [Opus decoder updates, RFC 8251](https://www.rfc-editor.org/rfc/rfc8251.html)
 - [Ogg Opus mapping, RFC 7845](https://www.rfc-editor.org/rfc/rfc7845.html)
 - [FLAC, RFC 9639](https://www.rfc-editor.org/rfc/rfc9639.html)
 - [WASAPI](https://learn.microsoft.com/en-us/windows/win32/api/audioclient/nf-audioclient-iaudioclient-initialize)

@@ -19,7 +19,7 @@ probe_expected dq 0
 probe_result dd 0
 probe_start_paused dd 0
 probe_written dd 0
-probe_pass db 'Passed: playback, pause, resume, stop, reopen, seek and paused seek.',13,10
+probe_pass db 'Passed: playback, pause, resume, stop, reopen, seek, paused seek and cancelled open.',13,10
 probe_pass_length EQU $-probe_pass
 .code
 probe_start PROC
@@ -112,6 +112,12 @@ probe_start PROC
     jne probe_bad
     cmp qword ptr [endpoint_dry],0
     jne probe_bad
+    ; A stop requested before open must return normally without playback.
+    mov dword ptr [engine_stop_requested],1
+    mov rcx,[probe_path]
+    call engine_play
+    test eax,eax
+    jnz probe_bad
     mov ecx,-11
     call GetStdHandle
     mov rcx,rax

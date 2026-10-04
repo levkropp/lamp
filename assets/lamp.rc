@@ -1,10 +1,10 @@
 101 ICON "lamp.ico"
 
 1 VERSIONINFO
- FILEVERSION 0,3,0,0
- PRODUCTVERSION 0,3,0,0
+ FILEVERSION 0,4,0,0
+ PRODUCTVERSION 0,4,0,0
  FILEFLAGSMASK 0x3fL
- FILEFLAGS 0
+ FILEFLAGS 0x2L
  FILEOS 0x40004L
  FILETYPE 1
  FILESUBTYPE 0
@@ -15,7 +15,7 @@ BEGIN
   BEGIN
    VALUE "CompanyName", "Lev Kropp and LAMP contributors\0"
    VALUE "FileDescription", "Lev's Assembly Media Player\0"
-   VALUE "FileVersion", "0.3.0\0"
+   VALUE "FileVersion", "0.4.0-dev\0"
    VALUE "InternalName", "LAMP\0"
    VALUE "LegalCopyright", "Copyright (c) 2026 LAMP contributors. MIT license.\0"
 #ifdef LAMP_CLI
@@ -24,7 +24,7 @@ BEGIN
    VALUE "OriginalFilename", "lamp.exe\0"
 #endif
    VALUE "ProductName", "LAMP - Lev's Assembly Media Player\0"
-   VALUE "ProductVersion", "0.3.0\0"
+   VALUE "ProductVersion", "0.4.0-dev\0"
   END
  END
  BLOCK "VarFileInfo"

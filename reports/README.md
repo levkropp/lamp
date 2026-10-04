@@ -1,6 +1,6 @@
 # Recorded verification
 
-These snapshots describe the assembly audio implementation at the 0.3 milestone. Codec/engine and offline benchmark reports were captured before the LAMP branding change; they retain their original measurements. Branding smoke and runtime reports cover the renamed executables and their resources.
+These snapshots include historical codec/benchmark measurements and current 0.4.0-dev runtime, smoke, engine and Opus reports. Older measurements retain their original scope; the current runtime/smoke/engine reports include development Ogg/Opus playback.
 
 Historical executable-size fields in CPU benchmark reports refer to the earlier unbranded binary, without the new icon resources. Neither the earlier CPU measurements nor stress runs establish an advantage over mpv/VLC or uninterrupted playback on other systems.
 
@@ -37,3 +37,7 @@ The new `opus-allocation`, `opus-vq` and `opus-band-transform` reports were capt
 `opus-silk-packet` compares the unchanged `dec_API.c` packet-header block: 24,577 exact metadata/entropy/history headers, 11,517 skipped FEC frames (including conditional/stereo/mid-only data), 21,504 connected mono frame PCM checks, one late/sticky/reset case and 38 guards. The thirty-suite runner passed locally. Full stereo/channel/API-rate orchestration, Opus mode integration and playback remain unfinished.
 
 `opus-stream` checks complete normal Opus packet dispatch: 18,381 exact PCM/history calls across four framing codes, all 32 TOC configurations, five API rates and channel layouts, CBR/VBR/padding and up to 48 frames/120 ms. It includes loss, FEC, 5,120 DTX packets, 2,048 malformed cases, 26 guards and sticky failure/reset. A wrapper observes intermediate errors from unchanged reference CELT calls, including errors cleared by later resets. Ogg/player integration, mapping/gain/trimming and official conformance remain unfinished.
+
+`opus-ogg` checks 393 streams against original RFC 6716 PCM, including gain/pre-skip/end trimming, cropped granule origins, continued headers/audio, DTX and variable read capacities. It includes 27 malformed-stream rejections, late discard/sticky refusal and cancellation. All thirty-four original-reference suites passed. The engine report verifies Opus and the existing formats through playback, pause/resume, stop/reopen and sequential/paused seeking. Modern-reference comparison exposed a low-bitrate noise difference while original-reference PCM remained exact; RFC 8251 updates and official conformance remain pending.
+
+`opus-modern-reference-progress` is deliberately marked **incomplete**. It records 42 matching tonal files and the first failing noise comparison. `tests/verify-opus.ps1` reproduces that remaining regression with the current source build; it is separate from the passing original-reference runner. Engine cancellation coverage also found stale released COM pointers: cleanup now clears resource pointers, and cancelled-open checks pass for all five formats.

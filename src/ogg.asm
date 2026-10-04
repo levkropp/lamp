@@ -4,12 +4,15 @@
 option casemap:none
 EXTERN VirtualAlloc:PROC, VirtualFree:PROC
 EXTERN decode_error:DWORD
-PUBLIC ogg_open, ogg_next, ogg_close
+PUBLIC ogg_open, ogg_next, ogg_close, ogg_rewind
 PUBLIC ogg_granule, ogg_total_granule, ogg_eos, ogg_packet_length
+PUBLIC ogg_packet_page, ogg_packet_last, ogg_packet_page_end
+PUBLIC ogg_cancel_ptr
 
 OGG_PACKET_CAP EQU 400000h
 .data
 ogg_begin dq 0
+ogg_cancel_ptr dq 0          ;optional caller-owned DWORD cancellation flag
 ogg_end dq 0
 ogg_cursor dq 0
 ogg_buffer dq 0
@@ -18,6 +21,9 @@ ogg_total_granule dq 0
 ogg_page_granule dq -1
 ogg_eos dd 0
 ogg_packet_length dd 0
+ogg_packet_page dq 0
+ogg_packet_last dd 0
+ogg_packet_page_end dd 0
 ogg_page_flags dd 0
 ogg_segments dd 0
 ogg_segment dd 0
@@ -45,6 +51,22 @@ ogg_close_done:
     add rsp,40
     ret
 ogg_close ENDP
+
+; Reuse an already validated mapped stream without allocation or a CRC pass.
+ogg_rewind PROC
+    mov rax,[ogg_begin]
+    mov [ogg_cursor],rax
+    mov dword ptr [ogg_segment],0
+    mov dword ptr [ogg_segments],0
+    mov dword ptr [ogg_page_flags],0
+    mov dword ptr [ogg_eos],0
+    mov dword ptr [ogg_packet_length],0
+    mov dword ptr [ogg_packet_last],0
+    mov dword ptr [ogg_packet_page_end],0
+    mov qword ptr [ogg_packet_page],0
+    mov qword ptr [ogg_granule],-1
+    ret
+ogg_rewind ENDP
 
 ogg_crc_init PROC
     cmp dword ptr [ogg_crc_ready],0
@@ -219,6 +241,12 @@ ogg_open PROC
     mov dword ptr [ogg_seen_eos],0
     mov qword ptr [ogg_total_granule],0
 ogg_open_page:
+    mov rax,[ogg_cancel_ptr]
+    test rax,rax
+    jz ogg_open_continue
+    cmp dword ptr [rax],0
+    jne ogg_open_bad
+ogg_open_continue:
     cmp rsi,[ogg_end]
     jae ogg_open_end
     mov rcx,rsi
@@ -240,14 +268,7 @@ ogg_open_end:
     test rax,rax
     jz ogg_open_bad
     mov [ogg_buffer],rax
-    mov rax,[ogg_begin]
-    mov [ogg_cursor],rax
-    mov dword ptr [ogg_segment],0
-    mov dword ptr [ogg_segments],0
-    mov dword ptr [ogg_page_flags],0
-    mov dword ptr [ogg_eos],0
-    mov dword ptr [ogg_packet_length],0
-    mov qword ptr [ogg_granule],-1
+    call ogg_rewind
     mov eax,1
     jmp ogg_open_return
 ogg_open_bad:
@@ -271,13 +292,22 @@ ogg_next PROC
     xor ebx,ebx
     mov qword ptr [ogg_granule],-1
     mov dword ptr [ogg_eos],0
+    mov dword ptr [ogg_packet_last],0
+    mov dword ptr [ogg_packet_page_end],0
 ogg_next_segment:
+    mov rax,[ogg_cancel_ptr]
+    test rax,rax
+    jz ogg_next_continue
+    cmp dword ptr [rax],0
+    jne ogg_next_bad
+ogg_next_continue:
     mov eax,[ogg_segment]
     cmp eax,[ogg_segments]
     jb ogg_next_copy
     mov rsi,[ogg_cursor]
     cmp rsi,[ogg_end]
     jae ogg_next_eof
+    mov [ogg_packet_page],rsi
     movzx eax,byte ptr [rsi+5]
     mov [ogg_page_flags],eax
     mov rax,[rsi+6]
@@ -325,9 +355,15 @@ ogg_next_copy:
     cmp r9d,255
     je ogg_next_segment
     mov eax,[ogg_segment]
+    cmp eax,[ogg_segments]
+    sete al
+    movzx eax,al
+    mov [ogg_packet_page_end],eax
+    mov eax,[ogg_segment]
     dec eax
     cmp eax,[ogg_last_complete]
     jne ogg_next_packet
+    mov dword ptr [ogg_packet_last],1
     mov rax,[ogg_page_granule]
     mov [ogg_granule],rax
     mov eax,[ogg_page_flags]

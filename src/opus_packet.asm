@@ -2,6 +2,7 @@
 ; Reference: RFC6716 section 3 and RFC7845 mapping family 0.
 option casemap:none
 EXTERN ogg_open:PROC, ogg_next:PROC, ogg_total_granule:QWORD
+EXTERN ogg_granule:QWORD,ogg_packet_page:QWORD,ogg_packet_page_end:DWORD
 EXTERN sample_rate:DWORD, source_channels:DWORD, source_bits:DWORD
 EXTERN total_frames:QWORD, decode_error:DWORD
 PUBLIC opus_headers, op_opus_packet_parse
@@ -237,19 +238,24 @@ opus_headers PROC
     push rsi
     push rdi
     sub rsp,32
+    mov rbx,rcx
     call ogg_open
     test eax,eax
     jz opus_header_bad
     call ogg_next
     test rax,rax
     jz opus_header_bad
+    cmp [ogg_packet_page],rbx
+    jne opus_header_bad
+    cmp dword ptr [ogg_packet_page_end],1
+    jne opus_header_bad
+    cmp qword ptr [ogg_granule],0
+    jne opus_header_bad
     cmp edx,19
     jb opus_header_bad
     mov r8,0646165487375704fh ; OpusHead
     cmp [rax],r8
     jne opus_header_bad
-    cmp byte ptr [rax+8],0
-    je opus_header_bad
     cmp byte ptr [rax+8],15
     ja opus_header_bad
     movzx ecx,byte ptr [rax+9]
@@ -259,8 +265,11 @@ opus_headers PROC
     ja opus_header_bad
     cmp byte ptr [rax+18],0
     jne opus_header_bad       ; mapping family 0, mono/stereo
+    cmp byte ptr [rax+8],1
+    ja opus_header_extended
     cmp edx,19
     jne opus_header_bad
+opus_header_extended:
     mov [source_channels],ecx
     movzx ecx,word ptr [rax+10]
     mov [op_preskip],ecx
@@ -268,14 +277,14 @@ opus_headers PROC
     mov [op_gain],ecx         ; signed Q8 dB; applied after synthesis
     mov dword ptr [sample_rate],48000
     mov dword ptr [source_bits],32
-    mov rax,[ogg_total_granule]
-    mov ecx,[op_preskip]
-    sub rax,rcx
-    jc opus_header_bad
-    mov [total_frames],rax
+    mov qword ptr [total_frames],0 ;audio-page anchoring establishes duration
     call ogg_next
     test rax,rax
     jz opus_header_bad
+    cmp dword ptr [ogg_packet_page_end],1
+    jne opus_header_bad
+    cmp qword ptr [ogg_granule],0
+    jne opus_header_bad
     cmp edx,16
     jb opus_header_bad
     mov r8,0736761547375704fh ; OpusTags

@@ -48,10 +48,11 @@ ui_codec_wav dw 'W','A','V',0
 ui_codec_flac dw 'F','L','A','C',0
 ui_codec_mp3 dw 'M','P','3',0
 ui_codec_vorbis dw 'V','O','R','B','I','S',0
-ui_codec_names dq 0,ui_codec_wav,ui_codec_flac,ui_codec_mp3,ui_codec_vorbis
+ui_codec_opus dw 'O','P','U','S',0
+ui_codec_names dq 0,ui_codec_wav,ui_codec_flac,ui_codec_mp3,ui_codec_vorbis,ui_codec_opus
 ui_font_name dw 'C','o','n','s','o','l','a','s',0
 ui_filter dw 'A','u','d','i','o',' ','f','i','l','e','s',0
-    dw '*','.','w','a','v',';','*','.','f','l','a','c',';','*','.','m','p','3',';','*','.','o','g','g',0
+    dw '*','.','w','a','v',';','*','.','f','l','a','c',';','*','.','m','p','3',';','*','.','o','g','g',';','*','.','o','p','u','s',';','*','.','o','g','a',0
     dw 'A','l','l',' ','f','i','l','e','s',0,'*','.','*',0,0
 ui_instance dq 0
 ui_hwnd dq 0

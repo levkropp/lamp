@@ -5,10 +5,13 @@
 typedef struct {ModeState *state;const unsigned char *data;float *pcm;void *work;unsigned len,count,fec,state_cap,work_cap,pcm_cap;} Packet;
 typedef char packet_size[(sizeof(Packet)==56)?1:-1];
 int op_opus_decode_packet(Packet *);
-uint64_t ogg_total_granule,total_frames;
+#ifndef OPUS_STREAM_OGG_EMBEDDED
+uint64_t ogg_total_granule,ogg_granule,ogg_packet_page,total_frames;
+unsigned ogg_packet_page_end;
 unsigned sample_rate,source_channels,source_bits,decode_error;
 int ogg_open(void *a,void *b){(void)a;(void)b;return 0;}
 void *ogg_next(void){return 0;}
+#endif
 static unsigned sp_packets,sp_lost,sp_fec,sp_codes[4],sp_guards,sp_late,sp_malformed,sp_dtx_calls;
 static uint32_t sp_configs;
 static unsigned long long sp_samples;
@@ -108,7 +111,9 @@ static int sp_malformed_packets(void){
   if(!mode_reset(1+trial%2,rates[trial/2%5])||!sp_decode(data,len,0,trial%7==0,1)){printf("Malformed trial %u rate%d channels%u\n",trial,rates[trial/2%5],1+trial%2);return 0;}
  }return 1;
 }
+#ifndef OPUS_STREAM_ORACLE_EMBEDDED
 int main(void){
  if(!sp_encoded()||!sp_invalid()||!sp_dtx()||!sp_malformed_packets())return 1;
  printf("Opus packets: %u exact packet-to-PCM/history calls (%u/%u/%u/%u framing codes, %u losses, %u FEC), all32 TOC configurations, five API rates and channel layouts, %u zero/one-byte DTX packets, %llu output samples, 2048 malformed cases (%u rejections), %u guards, %u late/sticky/reset checks, max scaled error %.9g\n",sp_packets,sp_codes[0],sp_codes[1],sp_codes[2],sp_codes[3],sp_lost,sp_fec,sp_dtx_calls,sp_samples,sp_malformed,sp_guards,sp_late,mode_max);return 0;
 }
+#endif

@@ -1,0 +1,7 @@
+﻿{
+    "result":  "passed",
+    "scope":  "Single-stream Ogg/Opus mapping family0,48kHz stereo output,mono duplication,full signed Q8 gain,pre-skip0..65535,nonzero initial granule offsets,end trimming,continued tags/audio,compatible minor extensions,header placement/granule/framing/CRC/sequence bounds,late failure and cancellation; RFC8251 updates,multistream/chaining and official conformance remain pending",
+    "comparison":  "393 generated streams against full original RFC6716 native PCM,independent double-precision gain reference,4157 bounded read/canary checks,immutable mapped input,27 malformed stream rejections,late/sticky discard and2 cancellation checks; zero observed error without header gain and at most2.99e-7 scaled error across gain extremes",
+    "scale_adjusted_absolute_tolerance":  4E-05,
+    "stats":  "Ogg Opus: 393 exact reference PCM streams, mono/stereo SILK/hybrid/CELT/DTX, pre-skip0..65535, signed gain extremes, initial offsets, single/multiple audio pages, continued tags/audio, future minor header fields, end trimming, 4628232 stereo PCM values, 4157 bounded read/canary checks, 27 malformed stream rejections, 1 late/sticky failure checks, 2 cancellation checks, max scaled error 2.98020183e-07"
+}

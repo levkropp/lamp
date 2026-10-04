@@ -1,0 +1,35 @@
+RFC 8251 decoder update patch
+
+Source: https://www.ietf.org/proceedings/98/slides/materials-98-codec-opus-update-00.patch
+RFC: https://www.rfc-editor.org/rfc/rfc8251.html
+SHA-1: 029e3aa88fc342c91e67a21e7bfbc9458661cd5f
+
+Copyright (c) 2017 IETF Trust and the persons identified as the
+document authors (Jean-Marc Valin and Koen Vos). All rights reserved.
+
+Code components extracted from RFC 8251 are subject to the Simplified
+BSD License under Section 4.e of the IETF Trust Legal Provisions:
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice,
+   this list of conditions and the following disclaimer.
+2. Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
+
+The unchanged patch is bundled for the next decoder-update stage. It has
+not yet been applied to the runtime or the original-reference oracles.

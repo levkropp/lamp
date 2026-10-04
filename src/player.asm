@@ -16,6 +16,7 @@ EXTERN AvSetMmThreadCharacteristicsW:PROC, AvRevertMmThreadCharacteristics:PROC
 EXTERN decoder_open:PROC, decoder_read:PROC, decoder_close:PROC
 EXTERN sample_rate:DWORD, source_channels:DWORD, source_bits:DWORD
 EXTERN decode_error:DWORD, total_frames:QWORD, codec_kind:DWORD
+EXTERN ogg_cancel_ptr:QWORD
 PUBLIC start
 PUBLIC engine_play, engine_stop, engine_pause, engine_mode, engine_stop_requested
 PUBLIC engine_position, engine_seek_seconds, engine_volume, pause_requested
@@ -27,14 +28,14 @@ RING_MASK EQU RING_FRAMES-1
 CHUNK_FRAMES EQU 2048
 
 .data
-usage db "LAMP 0.3.0 - Lev's Assembly Media Player",13,10
-      db 'Handwritten x86-64 assembly WAV / FLAC / MP3 / Ogg Vorbis',13,10
+usage db "LAMP 0.4.0-dev - Lev's Assembly Media Player",13,10
+      db 'Handwritten x86-64 assembly WAV / FLAC / MP3 / Ogg Vorbis / Opus',13,10
       db 'Usage: lamp-cli.exe file.mp3',13,10
       db '       lamp-cli.exe --check file.flac',13,10
       db '       lamp-cli.exe --decode file.flac output.f32',13,10
       db 'Playback: Space pauses/resumes; Q or Ctrl+C stops.',13,10
       db 'WAV: PCM 8/16/24/32 or float32; FLAC: 4..24 bit; mono/stereo.',13,10,0
-open_error db 'Unsupported, malformed, or inaccessible file. Supports WAV, native FLAC and MP3 Layer III.',13,10,0
+open_error db 'Unsupported, malformed, or inaccessible file. Supports WAV, native FLAC, MP3, Ogg Vorbis and Opus.',13,10,0
 audio_error db 'Audio endpoint unavailable or WASAPI failed. Try --check to verify decoding.',13,10,0
 output_error db 'Cannot create output file.',13,10,0
 play_text db 'Playing. Space: pause / resume. Q or Ctrl+C: stop.',13,10,0
@@ -152,6 +153,8 @@ engine_play PROC
     mov qword ptr [engine_position],0
     mov eax,[engine_seek_seconds]
     mov [engine_seek_frames],rax
+    lea rax,engine_stop_requested
+    mov [ogg_cancel_ptr],rax
     call decoder_open
     test eax,eax
     jz bad_input
@@ -243,6 +246,8 @@ play_args:
     mov rax,[argv]
     mov rcx,[rax+8]
 open_input:
+    lea rax,engine_stop_requested
+    mov [ogg_cancel_ptr],rax
     call decoder_open
     test eax,eax
     jz bad_input
@@ -597,6 +602,8 @@ report_finish:
     call report_stats
     jmp cleanup
 bad_input::
+    cmp dword ptr [engine_stop_requested],0
+    jne cleanup              ;cancelled open is a normal engine stop
     mov dword ptr [exit_code],2
     lea rcx,open_error
     call print_text
@@ -647,6 +654,7 @@ cleanup_no_com:
     call CloseHandle
 cleanup_args:
     mov rcx,[argv]
+    mov qword ptr [argv],0
     test rcx,rcx
     jz exit_now
     call LocalFree
@@ -1077,7 +1085,9 @@ report_stats ENDP
 
 release_com PROC
     sub rsp,40
-    mov rcx,[rcx]
+    mov rax,[rcx]
+    mov qword ptr [rcx],0
+    mov rcx,rax
     test rcx,rcx
     jz release_done
     mov rax,[rcx]
@@ -1089,7 +1099,9 @@ release_com ENDP
 
 close_pointer PROC
     sub rsp,40
-    mov rcx,[rcx]
+    mov rax,[rcx]
+    mov qword ptr [rcx],0
+    mov rcx,rax
     test rcx,rcx
     jz close_done
     call CloseHandle

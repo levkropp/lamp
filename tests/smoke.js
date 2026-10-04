@@ -7,8 +7,8 @@ assert(path.dirname(temp)===tempRoot&&path.basename(temp).startsWith('lamp-smoke
 const run=args=>{const r=cp.spawnSync(exe,args,{encoding:'utf8',timeout:10000,windowsHide:true});if(r.error)throw r.error;return r;};
 try{
  const help=run([]);
- assert.match(help.stdout,/LAMP 0\.3\.0 - Lev's Assembly Media Player/);
- for(const [codec,ext]of[['wav','wav'],['flac','flac'],['mp3','mp3'],['vorbis','ogg']]){
+ assert.match(help.stdout,/LAMP 0\.4\.0-dev - Lev's Assembly Media Player/);
+ for(const [codec,ext]of[['wav','wav'],['flac','flac'],['mp3','mp3'],['vorbis','ogg'],['opus','opus']]){
   const fixture=path.join(__dirname,'fixtures','tone.'+ext),check=run(['--check',fixture]);
   assert.strictEqual(check.status,0,codec+' check failed '+check.stdout+check.stderr);
   assert.match(check.stdout,/rate=48000 channels=2/);
@@ -22,8 +22,6 @@ try{
   const overwrite=run(['--decode',fixture,output]);assert.notStrictEqual(overwrite.status,0,'Existing export must be rejected');
   report.push({codec,frames:12000,rate:48000,peak,result:'passed'});
  }
- const opus=run(['--check',path.join(__dirname,'fixtures','tone.opus')]);assert.notStrictEqual(opus.status,0,'Opus must not be advertised as playable');
- report.push({codec:'opus',result:'unsupported input rejected'});
  fs.mkdirSync(bin,{recursive:true});
  fs.writeFileSync(path.join(bin,'branding-smoke-verification.json'),JSON.stringify(report,null,2)+'\n');
  console.log(JSON.stringify(report));

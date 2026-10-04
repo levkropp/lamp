@@ -1,7 +1,7 @@
 [
   {
     "file": "lamp-cli.exe",
-    "bytes": 102400,
+    "bytes": 179712,
     "architecture": "x86-64",
     "subsystem": "console",
     "imports": [
@@ -19,12 +19,12 @@
       128,
       256
     ],
-    "version": "0.3.0",
+    "version": "0.4.0-dev",
     "result": "passed"
   },
   {
     "file": "lamp.exe",
-    "bytes": 110080,
+    "bytes": 187392,
     "architecture": "x86-64",
     "subsystem": "windows",
     "imports": [
@@ -45,7 +45,7 @@
       128,
       256
     ],
-    "version": "0.3.0",
+    "version": "0.4.0-dev",
     "result": "passed"
   }
 ]

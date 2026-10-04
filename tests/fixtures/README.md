@@ -8,4 +8,4 @@ Created with FFmpeg 8.0.1 using:
 ffmpeg -f lavfi -i sine=frequency=440:sample_rate=48000:duration=0.25 -ac 2 [encoder] tone.[extension]
 ```
 
-Encoders: WAV pcm_s16le; FLAC flac; MP3 libmp3lame at 128k; Ogg/Vorbis libvorbis quality 4; Ogg/Opus libopus (rejection fixture until Opus playback exists). These are integration fixtures, not a complete conformance suite.
+Encoders: WAV pcm_s16le; FLAC flac; MP3 libmp3lame at 128k; Ogg/Vorbis libvorbis quality 4; Ogg/Opus libopus. These are integration fixtures, not a complete conformance suite.

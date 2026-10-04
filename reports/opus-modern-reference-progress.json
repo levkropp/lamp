@@ -1,0 +1,312 @@
+{
+  "result": "incomplete",
+  "scope": "Independent modern libopus comparisons; strict verification stopped at the first noise mismatch",
+  "minimum_snr_db": 60,
+  "maximum_absolute_error": 0.00004,
+  "matched_tonal_files": 42,
+  "checks": [
+    {
+      "test": "opus-8000-1-2.5.opus",
+      "frames": 17760,
+      "snrDb": 80.9688448814023,
+      "peakError": 0.000017508864402770996,
+      "referencePeak": 0.22650146484375
+    },
+    {
+      "test": "opus-8000-1-5.opus",
+      "frames": 17760,
+      "snrDb": 81.07546679511302,
+      "peakError": 0.000016957521438598633,
+      "referencePeak": 0.227203369140625
+    },
+    {
+      "test": "opus-8000-1-10.opus",
+      "frames": 17760,
+      "snrDb": null,
+      "peakError": 0,
+      "referencePeak": 0.224212646484375
+    },
+    {
+      "test": "opus-8000-1-20.opus",
+      "frames": 17760,
+      "snrDb": null,
+      "peakError": 0,
+      "referencePeak": 0.220306396484375
+    },
+    {
+      "test": "opus-8000-1-40.opus",
+      "frames": 17760,
+      "snrDb": null,
+      "peakError": 0,
+      "referencePeak": 0.220458984375
+    },
+    {
+      "test": "opus-8000-1-60.opus",
+      "frames": 17760,
+      "snrDb": null,
+      "peakError": 0,
+      "referencePeak": 0.219329833984375
+    },
+    {
+      "test": "opus-8000-1-120.opus",
+      "frames": 17760,
+      "snrDb": null,
+      "peakError": 0,
+      "referencePeak": 0.219329833984375
+    },
+    {
+      "test": "opus-8000-2-2.5.opus",
+      "frames": 17760,
+      "snrDb": 81.0607413855929,
+      "peakError": 0.000017717480659484863,
+      "referencePeak": 0.255157470703125
+    },
+    {
+      "test": "opus-8000-2-5.opus",
+      "frames": 17760,
+      "snrDb": 81.06920181577549,
+      "peakError": 0.0000165402889251709,
+      "referencePeak": 0.212738037109375
+    },
+    {
+      "test": "opus-8000-2-10.opus",
+      "frames": 17760,
+      "snrDb": null,
+      "peakError": 0,
+      "referencePeak": 0.21759033203125
+    },
+    {
+      "test": "opus-8000-2-20.opus",
+      "frames": 17760,
+      "snrDb": null,
+      "peakError": 0,
+      "referencePeak": 0.203216552734375
+    },
+    {
+      "test": "opus-8000-2-40.opus",
+      "frames": 17760,
+      "snrDb": null,
+      "peakError": 0,
+      "referencePeak": 0.20013427734375
+    },
+    {
+      "test": "opus-8000-2-60.opus",
+      "frames": 17760,
+      "snrDb": null,
+      "peakError": 0,
+      "referencePeak": 0.20111083984375
+    },
+    {
+      "test": "opus-8000-2-120.opus",
+      "frames": 17760,
+      "snrDb": null,
+      "peakError": 0,
+      "referencePeak": 0.408966064453125
+    },
+    {
+      "test": "opus-16000-1-2.5.opus",
+      "frames": 17760,
+      "snrDb": 81.05930490976465,
+      "peakError": 0.000017434358596801758,
+      "referencePeak": 0.231964111328125
+    },
+    {
+      "test": "opus-16000-1-5.opus",
+      "frames": 17760,
+      "snrDb": 81.06052004197642,
+      "peakError": 0.00001633167266845703,
+      "referencePeak": 0.2266845703125
+    },
+    {
+      "test": "opus-16000-1-10.opus",
+      "frames": 17760,
+      "snrDb": null,
+      "peakError": 0,
+      "referencePeak": 0.22100830078125
+    },
+    {
+      "test": "opus-16000-1-20.opus",
+      "frames": 17760,
+      "snrDb": null,
+      "peakError": 0,
+      "referencePeak": 0.22064208984375
+    },
+    {
+      "test": "opus-16000-1-40.opus",
+      "frames": 17760,
+      "snrDb": null,
+      "peakError": 0,
+      "referencePeak": 0.22064208984375
+    },
+    {
+      "test": "opus-16000-1-60.opus",
+      "frames": 17760,
+      "snrDb": null,
+      "peakError": 0,
+      "referencePeak": 0.222442626953125
+    },
+    {
+      "test": "opus-16000-1-120.opus",
+      "frames": 17760,
+      "snrDb": 80.92004362603502,
+      "peakError": 0.000017002224922180176,
+      "referencePeak": 0.229522705078125
+    },
+    {
+      "test": "opus-16000-2-2.5.opus",
+      "frames": 17760,
+      "snrDb": 81.03485322700834,
+      "peakError": 0.000017449259757995605,
+      "referencePeak": 0.2518310546875
+    },
+    {
+      "test": "opus-16000-2-5.opus",
+      "frames": 17760,
+      "snrDb": 81.02989626418618,
+      "peakError": 0.000016629695892333984,
+      "referencePeak": 0.213043212890625
+    },
+    {
+      "test": "opus-16000-2-10.opus",
+      "frames": 17760,
+      "snrDb": null,
+      "peakError": 0,
+      "referencePeak": 0.22125244140625
+    },
+    {
+      "test": "opus-16000-2-20.opus",
+      "frames": 17760,
+      "snrDb": null,
+      "peakError": 0,
+      "referencePeak": 0.2095947265625
+    },
+    {
+      "test": "opus-16000-2-40.opus",
+      "frames": 17760,
+      "snrDb": null,
+      "peakError": 0,
+      "referencePeak": 0.221343994140625
+    },
+    {
+      "test": "opus-16000-2-60.opus",
+      "frames": 17760,
+      "snrDb": null,
+      "peakError": 0,
+      "referencePeak": 0.21087646484375
+    },
+    {
+      "test": "opus-16000-2-120.opus",
+      "frames": 17760,
+      "snrDb": 80.33921826594849,
+      "peakError": 0.000017076730728149414,
+      "referencePeak": 0.2264404296875
+    },
+    {
+      "test": "opus-48000-1-2.5.opus",
+      "frames": 17760,
+      "snrDb": 81.03687114704549,
+      "peakError": 0.000017598271369934082,
+      "referencePeak": 0.2353515625
+    },
+    {
+      "test": "opus-48000-1-5.opus",
+      "frames": 17760,
+      "snrDb": 81.02336930375522,
+      "peakError": 0.000016480684280395508,
+      "referencePeak": 0.227081298828125
+    },
+    {
+      "test": "opus-48000-1-10.opus",
+      "frames": 17760,
+      "snrDb": 81.05077283932681,
+      "peakError": 0.000016242265701293945,
+      "referencePeak": 0.2274169921875
+    },
+    {
+      "test": "opus-48000-1-20.opus",
+      "frames": 17760,
+      "snrDb": 81.01901337233335,
+      "peakError": 0.00001704692840576172,
+      "referencePeak": 0.22735595703125
+    },
+    {
+      "test": "opus-48000-1-40.opus",
+      "frames": 17760,
+      "snrDb": 81.06011832206336,
+      "peakError": 0.000017508864402770996,
+      "referencePeak": 0.227935791015625
+    },
+    {
+      "test": "opus-48000-1-60.opus",
+      "frames": 17760,
+      "snrDb": 81.06011832206336,
+      "peakError": 0.000017508864402770996,
+      "referencePeak": 0.227935791015625
+    },
+    {
+      "test": "opus-48000-1-120.opus",
+      "frames": 17760,
+      "snrDb": 81.06011832206336,
+      "peakError": 0.000017508864402770996,
+      "referencePeak": 0.227935791015625
+    },
+    {
+      "test": "opus-48000-2-2.5.opus",
+      "frames": 17760,
+      "snrDb": 80.84262945307933,
+      "peakError": 0.00001749396324157715,
+      "referencePeak": 0.236053466796875
+    },
+    {
+      "test": "opus-48000-2-5.opus",
+      "frames": 17760,
+      "snrDb": 81.06575936367605,
+      "peakError": 0.000016219913959503174,
+      "referencePeak": 0.211639404296875
+    },
+    {
+      "test": "opus-48000-2-10.opus",
+      "frames": 17760,
+      "snrDb": 81.04559231668665,
+      "peakError": 0.000017315149307250977,
+      "referencePeak": 0.211212158203125
+    },
+    {
+      "test": "opus-48000-2-20.opus",
+      "frames": 17760,
+      "snrDb": 81.04567751176207,
+      "peakError": 0.000017434358596801758,
+      "referencePeak": 0.204986572265625
+    },
+    {
+      "test": "opus-48000-2-40.opus",
+      "frames": 17760,
+      "snrDb": 81.01449229359419,
+      "peakError": 0.000017121434211730957,
+      "referencePeak": 0.22900390625
+    },
+    {
+      "test": "opus-48000-2-60.opus",
+      "frames": 17760,
+      "snrDb": 81.01449229359419,
+      "peakError": 0.000017121434211730957,
+      "referencePeak": 0.22900390625
+    },
+    {
+      "test": "opus-48000-2-120.opus",
+      "frames": 17760,
+      "snrDb": 81.01449229359419,
+      "peakError": 0.000017121434211730957,
+      "referencePeak": 0.22900390625
+    }
+  ],
+  "known_mismatch": {
+    "test": "opus-noise-off.opus",
+    "frames": 30240,
+    "snr_db": 19.163217542758996,
+    "peak_error": 0.21056991815567017,
+    "original_rfc6716_maximum_error": 0,
+    "original_rfc6716_rms_error": 0
+  },
+  "remaining": "RFC8251 decoder updates and complete independent/official vector verification"
+}

@@ -7,6 +7,7 @@ EXTERN CreateFileW:PROC, GetFileSizeEx:PROC, CreateFileMappingW:PROC
 EXTERN MapViewOfFile:PROC, UnmapViewOfFile:PROC, CloseHandle:PROC
 EXTERN mp3_open:PROC, mp3_read:PROC
 EXTERN vorbis_open:PROC, vorbis_read:PROC, vorbis_close:PROC, ogg_close:PROC
+EXTERN opus_open:PROC,opus_read:PROC,opus_close:PROC
 PUBLIC decoder_open, decoder_read, decoder_close
 PUBLIC sample_rate, source_channels, source_bits, decode_error, total_frames, codec_kind
 
@@ -15,7 +16,7 @@ sample_rate dd 0
 source_channels dd 0
 source_bits dd 0
 decode_error dd 0
-codec_kind dd 0                 ; 1 WAV, 2 native FLAC, 3 MP3 Layer III, 4 Vorbis
+codec_kind dd 0                 ;1 WAV,2 native FLAC,3 MP3 Layer III,4 Vorbis,5 Opus
 total_frames dq 0
 file_handle dq -1
 map_handle dq 0
@@ -130,6 +131,28 @@ decoder_open PROC
     leave
     ret
 open_ogg:
+    ; Bounded codec signature probe; each codec validates its full Ogg stream.
+    mov rax,[input_cursor]
+    lea r8,[rax+27]
+    cmp r8,[input_end]
+    ja open_bad
+    movzx ecx,byte ptr [rax+26]
+    lea r8,[rax+rcx+27]
+    lea r9,[r8+8]
+    cmp r9,[input_end]
+    ja open_bad
+    mov r9,0646165487375704fh
+    cmp [r8],r9
+    jne open_vorbis
+    mov rcx,[input_cursor]
+    mov rdx,[input_end]
+    call opus_open
+    test eax,eax
+    jz open_bad
+    mov dword ptr [codec_kind],5
+    leave
+    ret
+open_vorbis:
     mov rcx,[input_cursor]
     mov rdx,[input_end]
     call vorbis_open
@@ -348,6 +371,7 @@ decoder_close PROC
     push rbp
     mov rbp,rsp
     sub rsp,32
+    call opus_close
     call vorbis_close
     call ogg_close
     mov rcx,[map_base]
@@ -1130,6 +1154,14 @@ decoder_read PROC
     xor ebx,ebx
     cmp dword ptr [decode_error],0
     jne read_done
+    cmp dword ptr [codec_kind],5
+    jne read_try_vorbis
+    mov rcx,rdi
+    mov edx,r12d
+    call opus_read
+    mov ebx,eax
+    jmp read_done
+read_try_vorbis:
     cmp dword ptr [codec_kind],4
     jne read_try_mp3
     mov rcx,rdi

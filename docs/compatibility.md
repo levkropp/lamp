@@ -2,14 +2,14 @@
 
 LAMP's long-term goal is to support everything relevant that mpv supports. This inventory makes gaps visible; it is not a claim of current mpv parity.
 
-**Baseline:** LAMP 0.3.0, Windows x86-64. The feature inventory uses the [stable mpv manual](https://mpv.io/manual/stable/), reviewed on 2026-10-03. A specific mpv executable version, build configuration and same-machine comparisons have not yet been recorded. The manual URL can change; future comparisons must record the exact reference version and available decoders, demuxers and outputs.
+**Current source:** LAMP 0.4.0-dev, Windows x86-64; published prerelease baseline 0.3.0. The feature inventory uses the [stable mpv manual](https://mpv.io/manual/stable/), reviewed on 2026-10-03. A specific mpv executable version, build configuration and same-machine comparisons have not yet been recorded. The manual URL can change; future comparisons must record the exact reference version and available decoders, demuxers and outputs.
 
 **Partial** means implemented within the linked limits. **In development** means components exist without end-to-end support. **Planned** means unavailable today. Milestone numbers refer to the [roadmap](../ROADMAP.md).
 
-| Capability | LAMP 0.3.0 status | Remaining coverage | Milestone |
+| Capability | Current source status | Remaining coverage | Milestone |
 | --- | --- | --- | --- |
 | WAV / native FLAC / MP3 / Ogg Vorbis | Partial | Broader profiles, channel layouts, Ogg chaining and indexed seeking | 2–3 |
-| Opus | In development; [tested complete packets and SILK/hybrid/CELT PCM](opus.md) | Player/Ogg integration, mapping, gain, trimming and full conformance vectors | 1 |
+| Opus | Development playback: Ogg family 0, SILK/hybrid/CELT, header gain/pre-skip/end trimming; [tested original RFC PCM](opus.md) | RFC 8251 updates and official conformance; multistream/chaining | 1–2 |
 | Other audio codecs | Planned | AAC/HE-AAC, ALAC, AC-3/E-AC-3, DTS, WavPack, APE, MPEG I/II and relevant legacy formats | 3 |
 | Containers and media structure | Partial | MP4/MOV, Matroska/WebM, TS/PS, AVI/ASF; timestamps, attachments, chapters, editions and tags | 3 |
 | Audio output | Partial | WASAPI device selection/recovery, multichannel, resampling, exclusive mode and useful passthrough | 2–3 |
@@ -26,7 +26,7 @@ LAMP's long-term goal is to support everything relevant that mpv supports. This 
 | Filters, screenshots and diagnostics | Planned | Audio/video filters, equalization, screenshots, playback stats and useful export controls | 4, 6 |
 | Desktop platform coverage | Windows x86-64 only | Evaluate additional platforms after the Windows backend stabilizes; record platform exceptions | 6 |
 
-Existing support is documented in [technical details](technical.md). Small committed fixtures exercise WAV, FLAC, MP3 and Vorbis decoding, export and unsupported Opus rejection; broader historical results live in [reports](../reports/README.md). These checks establish the documented prototype baseline, not complete conformance or a performance advantage over mpv.
+Existing support is documented in [technical details](technical.md). Small committed fixtures exercise WAV, FLAC, MP3, Vorbis and Opus decoding/export; broader results live in [reports](../reports/README.md). These checks establish the documented prototype coverage, not complete conformance or a performance advantage over mpv.
 
 ## Acceptance and updates
 

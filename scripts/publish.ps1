@@ -101,11 +101,13 @@ try {
     ./package.ps1
     if (-not $SkipRelease) {
         $version = (Get-Content -LiteralPath VERSION -Raw).Trim()
+        $releaseNotes=Join-Path $root "docs\release-v$version.md"
+        if(-not (Test-Path -LiteralPath $releaseNotes)){throw "Create and verify release notes for $version, or use -SkipRelease for development publication."}
         $tag = "v$version"
         $release = Get-Api "repos/$Repository/releases/tags/$tag" -AllowMissing
         if (-not $release) {
             $archive = Join-Path (Split-Path $root -Parent) "outputs/lamp-windows-x64-v$version.zip"
-            Invoke-Gh -Arguments @('release','create',$tag,$archive,'--repo',$Repository,'--target',$head,'--title',"LAMP $version",'--notes-file','docs/release-v0.3.0.md','--prerelease') | Out-Host
+            Invoke-Gh -Arguments @('release','create',$tag,$archive,'--repo',$Repository,'--target',$head,'--title',"LAMP $version",'--notes-file',$releaseNotes,'--prerelease') | Out-Host
         }
     }
     Write-Output "Published source commit $head with $login <$NoreplyEmail>."

@@ -44,8 +44,8 @@ for(const [name,subsystem,expected]of[
  for(let i=0;i<group.data.readUInt16LE(4);i++)sizes.push(group.data[6+i*14]||256);
  if(JSON.stringify(sizes)!==JSON.stringify([16,24,32,48,64,128,256])||leaves.filter(x=>x.keys[0]===3).length!==7)throw Error('Missing icon sizes '+name);
  const text=version.data.toString('utf16le');
- if(!text.includes("Lev's Assembly Media Player")||!text.includes('0.3.0')||!text.includes(name))throw Error('Wrong LAMP version/filename '+name);
- report.push({file:name,bytes:data.length,architecture:'x86-64',subsystem:subsystem===2?'windows':'console',imports,iconSizes:sizes,version:'0.3.0',result:'passed'});
+ if(!text.includes("Lev's Assembly Media Player")||!text.includes('0.4.0-dev')||!text.includes(name))throw Error('Wrong LAMP version/filename '+name);
+ report.push({file:name,bytes:data.length,architecture:'x86-64',subsystem:subsystem===2?'windows':'console',imports,iconSizes:sizes,version:'0.4.0-dev',result:'passed'});
 }
 fs.writeFileSync(path.join(bin,'runtime-verification.json'),JSON.stringify(report,null,2)+'\n');
 console.log(JSON.stringify(report));

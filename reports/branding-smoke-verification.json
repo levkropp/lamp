@@ -29,6 +29,9 @@
   },
   {
     "codec": "opus",
-    "result": "unsupported input rejected"
+    "frames": 12000,
+    "rate": 48000,
+    "peak": 0.08913379907608032,
+    "result": "passed"
   }
 ]

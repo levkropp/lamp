@@ -5,6 +5,7 @@
 #include <string.h>
 #include "opus_packet_reference.h"
 int op_opus_packet_parse(const unsigned char *,unsigned);
+uint64_t ogg_granule,ogg_packet_page;unsigned ogg_packet_page_end;
 extern const unsigned char *op_frame_ptr[48];
 extern unsigned op_frame_size[48],op_frame_count,op_frame_samples,op_packet_samples,op_config,op_stereo;
 /* Unused Ogg header entry point dependencies from the same assembly module. */
