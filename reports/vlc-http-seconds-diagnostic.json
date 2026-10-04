@@ -1,0 +1,276 @@
+{
+  "result": "incomplete",
+  "recorded_utc": "2026-10-04T20:00:07.521Z",
+  "source_version": "0.4.0-dev",
+  "hardware": {
+    "Name": "12th Gen Intel(R) Core(TM) i7-12700KF",
+    "NumberOfCores": 12,
+    "NumberOfLogicalProcessors": 20
+  },
+  "os": {
+    "Caption": "Microsoft Windows 11 Pro",
+    "Version": "10.0.26200",
+    "BuildNumber": "26200"
+  },
+  "decoder_objects": [
+    {
+      "object": "player.obj",
+      "sha256": "65FD39709B396B3D609B632C307F15C2AFBBA766F8F403DC7C7B61BC8293AA7F"
+    },
+    {
+      "object": "decoder.obj",
+      "sha256": "5E893298ADA8D7B0B6EE343F852877CAB096A1693C5BA8C28664FF0D0895428D"
+    },
+    {
+      "object": "mp3.obj",
+      "sha256": "3EA58808698D02F0CC095159575E2647B8DA999F928744041CFE4534712C28CE"
+    },
+    {
+      "object": "mp3_synthesis.obj",
+      "sha256": "AD72602ACAF55911677A2DCC608BE2D1B3699630105F3A2F8A83247D9C4D7366"
+    },
+    {
+      "object": "ogg.obj",
+      "sha256": "1C40B7B542B1BEB60096DAAD964AEE72C8749D515F075DC8D5995B1563447F3A"
+    },
+    {
+      "object": "vorbis.obj",
+      "sha256": "A573FBD8B3E3BB257F547A52D10B534B4E97C4DFE73F5597259C156B249396B8"
+    },
+    {
+      "object": "vorbis_transform.obj",
+      "sha256": "59E344506239F5C20E9E8D57C4BA1D5148AE026DF991DC0DD7A68ACE1F932FD1"
+    },
+    {
+      "object": "opus.obj",
+      "sha256": "67BD42C92B1906C478DB2722E7AEECAA1EF8E6BA6AF0E3C7B07F252A68C4C8C6"
+    },
+    {
+      "object": "opus_allocation.obj",
+      "sha256": "F06CAC769F9C4DCFAAE843E1DD643C19D225D8EA7F48EB6EE6CD5E13C9843439"
+    },
+    {
+      "object": "opus_band.obj",
+      "sha256": "A4E8843CBE0D2101286607E4A797F3CC34BBE44650745DE3DD0EC2FDE17888A8"
+    },
+    {
+      "object": "opus_bands.obj",
+      "sha256": "90685A648CBEF0362B49FE44D8AA30940617C10D78A2B861C34CB748E178AD88"
+    },
+    {
+      "object": "opus_band_transform.obj",
+      "sha256": "EFC38853F93DEC14FE09DEDA4C6D8849ACB3BEE0B82A92D01DD53FA45942C0EE"
+    },
+    {
+      "object": "opus_controls.obj",
+      "sha256": "0CD1C32BF245D4A08ED541FAB1DC8AB9DC86527BBFB49711D02E531E9B005DBE"
+    },
+    {
+      "object": "opus_cwrs.obj",
+      "sha256": "44B38CE396D36A39554B21ED783AE4A9E087743DA28EAE0F15F96C965AB00B02"
+    },
+    {
+      "object": "opus_decoder.obj",
+      "sha256": "C5E4AAC271AB95097148512D6A957E01D05EF3BAF5947237CF610BD3D8CB4EC1"
+    },
+    {
+      "object": "opus_energy.obj",
+      "sha256": "6F6FB0A8C0772D43F80DBFCC80A9A1773E127A5400FC3F9A7C0375B0600E7B92"
+    },
+    {
+      "object": "opus_fft.obj",
+      "sha256": "870A9E9FD245AC141DD6CC777E89496EE69DFA45E8B9AFE66CDEBE785208A76B"
+    },
+    {
+      "object": "opus_filter.obj",
+      "sha256": "D0C84073F44662EBAF78D56037737212B68C21B2626ADA2DF1C7593B0E4190D8"
+    },
+    {
+      "object": "opus_lpc.obj",
+      "sha256": "CEF6AA1D3873BD19813A06443BD674057F23CFAA17669A43A4A8E8062D12C4FF"
+    },
+    {
+      "object": "opus_mdct.obj",
+      "sha256": "068C5C5949BC5A84CF3B1B5A124643FD181188D24E7FF7D355994E22A9EB8555"
+    },
+    {
+      "object": "opus_mode.obj",
+      "sha256": "B8C3529D7DFBDB90CD96C31B94DE6C633F8B677583E0B7FA8ABD07424270395C"
+    },
+    {
+      "object": "opus_packet.obj",
+      "sha256": "42CB7D58D49FA3000A2779C07B221CCF94BB52915D3B8C213B816F4D6577FD1C"
+    },
+    {
+      "object": "opus_pitch.obj",
+      "sha256": "399A59740DE0D05BFE05C8C6BA196D0AF36742593A69516E4969BDB3F592BB2F"
+    },
+    {
+      "object": "opus_plc.obj",
+      "sha256": "1C03BB13DAA76F10A0A6E4B303ABEEAA2AE2A203DED945C7458C78E491F5376F"
+    },
+    {
+      "object": "opus_range.obj",
+      "sha256": "E4A4ADF1BC250F5B201F2EC39D0D31131ACE401C504C181CD7A03387484B6A6F"
+    },
+    {
+      "object": "opus_silk_cng.obj",
+      "sha256": "5182C25C77740B1FAF3216368F4234CE8EFDDEDD6A2E35FAC14F07AEA33EE95A"
+    },
+    {
+      "object": "opus_silk_decoder.obj",
+      "sha256": "CB852EE66BE0B00ADC9D1B9A596641F3767BC92A56748B097717D986F34CBD48"
+    },
+    {
+      "object": "opus_silk_frame.obj",
+      "sha256": "DC2F982B5F54422DD6D19605DCAF95B8DB75280288654980E969C9A497F852DB"
+    },
+    {
+      "object": "opus_silk_indices.obj",
+      "sha256": "147FC4C0DC0B540D294384F407C80DED57A38375863C74609005627CA753AEE6"
+    },
+    {
+      "object": "opus_silk_lpc.obj",
+      "sha256": "C8864D782B9C57919672E27F1B08BC919E2BAD8F7C06BEC40C95B75A7E44B011"
+    },
+    {
+      "object": "opus_silk_nlsf.obj",
+      "sha256": "943918569D0BB6275B189F21E72488F88BF4146FB694CDE2340F79D1CF7ECA61"
+    },
+    {
+      "object": "opus_silk_packet.obj",
+      "sha256": "E73148648E199FE106003896446FE93BA94C4AD2E4ED171988BB826C459D036A"
+    },
+    {
+      "object": "opus_silk_parameters.obj",
+      "sha256": "665C736CE0C10B5241D296D5BF8AEF91E5C5C0120CE4F61D1C0BC4A93C8B62DC"
+    },
+    {
+      "object": "opus_silk_plc.obj",
+      "sha256": "B6AF97E34F907D497B06E5CB465F51023E685A09E98A41A960965B19BF88BC4E"
+    },
+    {
+      "object": "opus_silk_prediction.obj",
+      "sha256": "A09EA28CA06BD8F4A76BEDC370D7EDD1545CF02FE3CAAC12B104A784D6D8D83F"
+    },
+    {
+      "object": "opus_silk_pulses.obj",
+      "sha256": "5DBE6A4BD5FEE4E650FB410706236AA05C8A35DA0DF19B20B4313B8EBCF465DA"
+    },
+    {
+      "object": "opus_silk_resampler.obj",
+      "sha256": "7B784947E2A1AC31AAD67FBBD33D5457E1307CE71B6DF5E65E1FFFD9D615DF01"
+    },
+    {
+      "object": "opus_silk_state.obj",
+      "sha256": "B805A063863EA5F5BA7C692B8A9736E6EC21DF108D0889AB2821E0C84C13151B"
+    },
+    {
+      "object": "opus_silk_stereo.obj",
+      "sha256": "21439CF3D116C99EB2ECCAB07481B80B46D3A5128E84C102A5327B4442EF027A"
+    },
+    {
+      "object": "opus_silk_synthesis.obj",
+      "sha256": "A41B4BBEDC53215ABB1FAF51CB142449BCFDC6548A4074202669FB375653E2FB"
+    },
+    {
+      "object": "opus_spectral.obj",
+      "sha256": "84EC2347032D03F96ACFA0CF0533B8F99F4E4679549CC0772E5254CFF060FF06"
+    },
+    {
+      "object": "opus_stream.obj",
+      "sha256": "C12B5FE89228E49F6FB04A0182ACE9F96D5B8E12945F6885FB812E3A1451A4F4"
+    },
+    {
+      "object": "opus_theta.obj",
+      "sha256": "19DB998F058A78DFA53D42E32279100EF57BE2F1BBC84C7390C20C11A5E40F6C"
+    },
+    {
+      "object": "opus_vq.obj",
+      "sha256": "6B3CAAD31785A6F39C83D2170E5573F5225526B480BBD3A4337D69096F5AFFBC"
+    }
+  ],
+  "harness_sha256": "3400FDC0B2B624368FC68904A25A1519906E933B4675C62D066964C382A4CEE4",
+  "controller_sha256": "C7B199A9C09025200D12534EC31D547C5A43717AA798FC4888476A7470BABD6E",
+  "production_gui_sha256": "932AAA5F6C2DC8376D33502BB3B5D42F68708EE0ABE688798257B7176CC6C0C5",
+  "mpv_build": [],
+  "vlc_core_libraries": [
+    {
+      "file": "libvlc.dll",
+      "sha256": "C0B1BEDBC8E11267B39111733920A6AF73D08791E333E4F8902EAFFE4DAF6DB9"
+    },
+    {
+      "file": "libvlccore.dll",
+      "sha256": "C089F281AFFE1E85C61EDD5996C2B496191F82FA5CDC7EF709B0C09BF754CDBE"
+    }
+  ],
+  "vlc_portable_archive": {
+    "file": "vlc-3.0.24-win64.zip",
+    "sha256": "FCF30850371AD10C9373CC4F0F4501E7DEE49E3E9AE9F20C72FB2661A1CA6323",
+    "bytes": 82765861,
+    "checksum_matched": true,
+    "source_url": "https://download.videolan.org/pub/videolan/vlc/3.0.24/win64/vlc-3.0.24-win64.zip",
+    "checksum_url": "https://download.videolan.org/pub/videolan/vlc/3.0.24/win64/vlc-3.0.24-win64.zip.sha256"
+  },
+  "fixture_encoder_version": "ffmpeg version 8.0.1-essentials_build-www.gyan.dev Copyright (c) 2000-2025 the FFmpeg developers",
+  "fixture_generation_report_sha256": "7F2C20E4EA66B8910578F507A760E4AD62E190064510E12AEA635B4584CA8D57",
+  "scope": "Headless audio-engine comparison, not shipping GUI or audible/physical endpoint latency. LAMP is the unchanged assembly engine in a test-only C/CRT stdin bridge; mpv uses JSON named-pipe IPC and VLC uses authenticated loopback HTTP. All use shared Windows audio and volume zero; decoding still processes noise. Windows process CPU times are coarse. Warm OS cache, no cache eviction, background user processes remain running. Operation timings include controller/IPC polling; readiness and clock semantics differ. No wakeup/ETW, GUI, cold disk, GPU, listening quality or other hardware measurements.",
+  "timing_definitions": {
+    "lamp_ready": "750ms queue prebuffer, before first WASAPI fill/Start",
+    "mpv_ready": "observed playback-restart event",
+    "vlc_ready": "HTTP playlist state playing/paused, not render-ready",
+    "progress": "first observed clock >= target+100ms after active operation; LAMP endpoint-consumption position, mpv audio-pts including driver delay, VLC fractional input position*integer duration. Not equivalent audible clocks. Paused operations record target observation only.",
+    "polling_delay_ms": 5
+  },
+  "runs": 1,
+  "sample_seconds": 3,
+  "requested_load_workers": 4,
+  "selected_players": [
+    "vlc"
+  ],
+  "vlc_seek_mode": "seconds",
+  "fixture_description": "600s 48kHz stereo seeded independent noise: 20s silence/40s noise; MP3 320k, Vorbis q8, Opus 128k",
+  "players": {
+    "lamp": {
+      "executable": "benchmark-playback.exe",
+      "sha256": "6c207d938461245a33cbbf76ce7145cd87301e12582867c8d34aab0a17055ce7"
+    },
+    "mpv": {
+      "executable": "mpv.exe",
+      "sha256": "7c87582006c31cf42c81747b7fec598a88430d46a45fbfb24161ec6bc213b591"
+    },
+    "vlc": {
+      "executable": "vlc.exe",
+      "sha256": "63d0d02df6e466d642b824dc66be6b5a134bf98b26747ffac8ec0d879dc180d7",
+      "version": "3.0.24 Vetinari",
+      "arguments": [
+        "--ignore-config",
+        "--no-one-instance",
+        "--no-media-library",
+        "--no-video",
+        "--no-video-title-show",
+        "--intf=dummy",
+        "--extraintf=http",
+        "--http-host=127.0.0.1",
+        "--http-port=<unique loopback port>",
+        "--http-password=<unique local benchmark password>",
+        "--aout=mmdevice",
+        "--mmdevice-backend=wasapi",
+        "--mmdevice-volume=0",
+        "--no-volume-save",
+        "--no-metadata-network-access"
+      ]
+    }
+  },
+  "fixtures": [
+    {
+      "codec": "vorbis",
+      "bytes": 13896309,
+      "sha256": "1954e8f371fa913d0d1eebb14939cabd11d2265c5adb105f5edc4f86a877d506",
+      "file": "vorbis-600.ogg"
+    }
+  ],
+  "checks": [],
+  "failure": "Timeout seek to 84s: {\"fullscreen\":0,\"stats\":{\"inputbitrate\":0.013786279596388,\"sentbytes\":0,\"lostabuffers\":0,\"averagedemuxbitrate\":0,\"readpackets\":22,\"demuxreadpackets\":0,\"lostpictures\":0,\"displayedpictures\":0,\"sentpackets\":0,\"demuxreadbytes\":58755,\"demuxbitrate\":0.000046812747314107,\"playedabuffers\":891,\"demuxdiscontinuity\":0,\"decodedaudio\":1783,\"sendbitrate\":0,\"readbytes\":144296,\"averageinputbitrate\":0,\"demuxcorrupted\":0,\"decodedvideo\":0},\"seek_sec\":10,\"apiversion\":3,\"currentplid\":2,\"time\":133,\"volume\":0,\"length\":600,\"random\":false,\"audiofilters\":{\"filter_0\":\"\"},\"information\":{\"chapter\":0,\"chapters\":[],\"title\":0,\"category\":{\"meta\":{\"encoded_by\":\"Lavc62.11.100 libvorbis\",\"filename\":\"vorbis-600.ogg\"},\"Stream 0\":{\"Type\":\"Audio\",\"Channels\":\"Stereo\",\"Sample_rate\":\"48000 Hz\",\"encoder\":\"Lavc62.11.100 libvorbis\",\"Codec\":\"Vorbis Audio (vorb)\",\"Decoded_Bitrate\":\"256 kb/s\",\"Decoded_format\":\"32 bits float LE (f32l)\",\"Bitrate\":\"256 kb/s\",\"Decoded_bits_per_sample\":\"32\"}},\"titles\":[]},\"rate\":1,\"videoeffects\":{\"hue\":0,\"saturation\":1,\"contrast\":1,\"brightness\":1,\"gamma\":1},\"state\":\"playing\",\"loop\":false,\"version\":\"3.0.24 Vetinari\",\"position\":133.27697217464402,\"audiodelay\":0,\"repeat\":false,\"subtitledelay\":0,\"equalizer\":[],\"paused\":false,\"ready\":true}",
+  "finished_utc": "2026-10-04T20:00:24.126Z"
+}

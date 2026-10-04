@@ -2,7 +2,7 @@
 
 LAMP's long-term goal is to support everything relevant that mpv supports. This inventory makes gaps visible; it is not a claim of current mpv parity.
 
-**Current source:** LAMP 0.4.0-dev, Windows x86-64; published prerelease baseline 0.3.0. The feature inventory uses the [stable mpv manual](https://mpv.io/manual/stable/), reviewed on 2026-10-03. A specific mpv executable version, build configuration and same-machine comparisons have not yet been recorded. The manual URL can change; future comparisons must record the exact reference version and available decoders, demuxers and outputs.
+**Current source:** LAMP 0.4.0-dev, Windows x86-64; published prerelease baseline 0.3.0. The feature inventory uses the [stable mpv manual](https://mpv.io/manual/stable/), reviewed on 2026-10-03. A [same-machine headless audio comparison](playback-benchmark.md) records mpv 0.41.0 and VLC 3.0.24, their build/executable identities and five audio fixtures. The complete comparator decoder/demuxer/output inventory remains unfinished. The manual URL can change; future coverage comparisons must retain exact reference versions and available capabilities.
 
 **Partial** means implemented within the linked limits. **In development** means components exist without end-to-end support. **Planned** means unavailable today. Milestone numbers refer to the [roadmap](../ROADMAP.md).
 

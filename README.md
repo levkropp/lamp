@@ -18,7 +18,7 @@ A small Windows x86-64 media player with handwritten assembly decoders and a nat
 - No codec DLL, C runtime, FFmpeg subprocess, or mpv engine in the player. Normal Windows system DLLs provide platform services.
 - MIT project license, with preserved MIT/MIT-0/CC0/BSD notices for reference-derived algorithms and data.
 
-LAMP aims to reduce stutters. It cannot guarantee uninterrupted playback during arbitrary system or driver stalls. We have not yet benchmarked it against mpv or VLC on the same machine.
+LAMP aims to reduce stutters. It cannot guarantee uninterrupted playback during arbitrary system or driver stalls. [Same-machine headless playback measurements](docs/playback-benchmark.md) compare its assembly engine with mpv and VLC; shipping-GUI, wakeup and audible-latency measurements remain pending.
 
 ## Run
 
@@ -75,7 +75,7 @@ To build while the player is open, use `./build.ps1 -OutputDirectory ./bin/verif
 
 The codec suites record 43 WAV/FLAC, 103 MP3, and 83 Vorbis checks, plus 4,425 exact WAV/FLAC/MP3/Vorbis seek checks and 6,768 Opus seeks against an independently positioned RFC 8251 reference decoder. Ogg seeking includes continued packets, cropped starts, granule origins and bounded index compaction. Engine lifecycle, malformed-input, stress and codec reference tests add separate coverage. These checks do not establish complete format conformance. [Test instructions](docs/technical.md#verification) and [recorded reports](reports/README.md) describe what was checked. Full fixture suites need FFmpeg and Node.js; seek and Opus oracle tests additionally use the C compiler for test executables only.
 
-The Ogg CRC pass uses eight-byte table updates while retaining complete validation. On this machine, median reopen time for the recorded ten-minute fixtures fell from 32.7 to 12.5 ms for Vorbis and from 13.8 to 5.3 ms for Opus. These are warm-filesystem decoder timings, excluding WASAPI, the UI and audible latency. [Measurements and scope](docs/technical.md#playback-and-cpu-design) include silence and noise targets; mpv/VLC comparisons remain pending.
+The Ogg CRC pass uses eight-byte table updates while retaining complete validation. On this machine, median reopen time for the recorded ten-minute fixtures fell from 32.7 to 12.5 ms for Vorbis and from 13.8 to 5.3 ms for Opus. These are warm-filesystem decoder timings, excluding WASAPI, the UI and audible latency. [Decoder measurements and scope](docs/technical.md#playback-and-cpu-design) include silence and noise targets. A separate [headless playback comparison](docs/playback-benchmark.md) records mpv 0.41.0 and VLC 3.0.24, startup/seek observations and CPU/RAM during playback, pause and idle across all five formats, with and without four CPU load workers. Its timing clocks differ between players; it does not establish audible latency or a universal performance advantage.
 
 The UI image comes from the actual assembly renderer with synthetic state. Open-dialog, drag/drop, and monitor-DPI interaction still require desktop verification.
 
