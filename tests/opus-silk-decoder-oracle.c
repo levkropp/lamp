@@ -147,7 +147,9 @@ static int kd_sticky(void){
   if(!kd_init(&state,&ref))return 0;memset(&ec,0,sizeof(ec));ec_dec_init(&ec,payload,sizeof(payload));if(!kd_frame(&state,&ref,&ec,ctrl,0,1))return 0;kd_late++;
  }return 1;
 }
+#ifndef SILK_DECODER_ORACLE_EMBEDDED
 int main(void){
  if(!kd_sequences()||!kd_transitions()||!kd_invalid()||!kd_sticky())return 1;
  printf("SILK decoder API: %u initializations, %u exact packet-to-PCM/history frames across 15 rate pairs and all mono/stereo layouts (%u lost, %u FEC, %u recovered, %u mid-only, %u continued), %u API-rate/%u internal-rate/%u channel transitions, %u stereo collapses (%u defined right-resampler rate adaptations), %u abandoned packets, %llu int16 samples, %llu history bytes, %u late/sticky/reset checks, %u guards; unused uninitialized RFC up-FIR tail excluded, distinct-scratch ASM history deterministic\n",kd_initializations,kd_frames,kd_lost,kd_fec,kd_recovered,kd_midonly,kd_continued,kd_api_changes,kd_rate_changes,kd_channel_changes,kd_collapse,kd_adapted,kd_abandoned,kd_samples,kd_history,kd_late,kd_guards);return 0;
 }
+#endif

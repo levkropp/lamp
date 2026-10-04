@@ -408,6 +408,8 @@ pl_decay_channel:
     lea r9,[r12+SD_OLD_E]
     lea r9,[r9+rax*4]
     mov ecx,[rbx+DF_START]
+    cmp ecx,[rbx+DF_END]
+    jae pl_decay_channel_done
 pl_decay_energy:
     movss xmm1,dword ptr [r9+rcx*4]
     subss xmm1,xmm0
@@ -415,6 +417,7 @@ pl_decay_energy:
     inc ecx
     cmp ecx,[rbx+DF_END]
     jb pl_decay_energy
+pl_decay_channel_done:
     inc r8d
     cmp r8d,r15d
     jb pl_decay_channel
@@ -471,6 +474,18 @@ pl_noise_sample:
     jb pl_noise_channel
     mov eax,[rsp+PL_SEED]
     mov [r12+SD_RNG],eax
+    mov eax,[rbx+DF_START]
+    cmp eax,[rbx+DF_END]
+    jb pl_noise_denormalize
+    ; log2Amp has zero energy in every band for an empty/reversed range.
+    ; The reference clears below start and above end after denormalizing.
+    lea rdi,[r13+DW_FREQ]
+    mov ecx,r14d
+    imul ecx,r15d
+    xor eax,eax
+    rep stosd
+    jmp pl_noise_denormalized
+pl_noise_denormalize:
     lea rax,[r13+DW_X]
     mov [rsp+32+OD_X],rax
     lea rax,[r13+DW_FREQ]
@@ -500,6 +515,7 @@ pl_noise_energy:
     call op_celt_denormalize
     test eax,eax
     jz pl_failed
+pl_noise_denormalized:
     xor r8d,r8d
 pl_noise_overlap_channel:
     imul eax,r8d,SD_DECODE_STRIDE

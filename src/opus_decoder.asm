@@ -153,8 +153,16 @@ df_rate_valid:
     mov edx,[rbx+DF_END]
     cmp edx,21
     ja df_invalid
+    test edx,edx
+    jz df_invalid
     cmp edx,eax
-    jle df_invalid
+    jg df_band_range_valid
+    ; Hybrid PLC during a bandwidth transition can have no active bands.
+    cmp qword ptr [rbx+DF_DATA],0
+    je df_band_range_valid
+    cmp dword ptr [rbx+DF_LEN],1
+    ja df_invalid
+df_band_range_valid:
     cmp dword ptr [r12+SD_PERIOD],1022
     ja df_invalid
     cmp dword ptr [r12+SD_PERIOD_OLD],1022
