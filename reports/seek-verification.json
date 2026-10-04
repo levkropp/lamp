@@ -1,0 +1,537 @@
+{
+  "result": "passed",
+  "scope": "Sample-exact WAV direct seeking and FLAC fixed/variable seek-table positioning against independent FFmpeg PCM, fresh reopen per target, EOF/clamping, canaries/untouched output, closed-state refusal, malformed index bounds/frame validation and CRC-valid noncanonical coded numbers; MP3/Vorbis/Opus indexes remain pending",
+  "checks": [
+    {
+      "file": "seek-8000-1-pcm_u8.wav",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 14,
+      "discarded_frames": 0,
+      "indexed": true
+    },
+    {
+      "file": "seek-8000-1-pcm_s16le.wav",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 14,
+      "discarded_frames": 0,
+      "indexed": true
+    },
+    {
+      "file": "seek-8000-1-pcm_s24le.wav",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 14,
+      "discarded_frames": 0,
+      "indexed": true
+    },
+    {
+      "file": "seek-8000-1-pcm_s32le.wav",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 14,
+      "discarded_frames": 0,
+      "indexed": true
+    },
+    {
+      "file": "seek-8000-1-pcm_f32le.wav",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 14,
+      "discarded_frames": 0,
+      "indexed": true
+    },
+    {
+      "file": "seek-8000-2-pcm_u8.wav",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 14,
+      "discarded_frames": 0,
+      "indexed": true
+    },
+    {
+      "file": "seek-8000-2-pcm_s16le.wav",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 14,
+      "discarded_frames": 0,
+      "indexed": true
+    },
+    {
+      "file": "seek-8000-2-pcm_s24le.wav",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 14,
+      "discarded_frames": 0,
+      "indexed": true
+    },
+    {
+      "file": "seek-8000-2-pcm_s32le.wav",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 14,
+      "discarded_frames": 0,
+      "indexed": true
+    },
+    {
+      "file": "seek-8000-2-pcm_f32le.wav",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 14,
+      "discarded_frames": 0,
+      "indexed": true
+    },
+    {
+      "file": "seek-48000-1-pcm_u8.wav",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 14,
+      "discarded_frames": 0,
+      "indexed": true
+    },
+    {
+      "file": "seek-48000-1-pcm_s16le.wav",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 14,
+      "discarded_frames": 0,
+      "indexed": true
+    },
+    {
+      "file": "seek-48000-1-pcm_s24le.wav",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 14,
+      "discarded_frames": 0,
+      "indexed": true
+    },
+    {
+      "file": "seek-48000-1-pcm_s32le.wav",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 14,
+      "discarded_frames": 0,
+      "indexed": true
+    },
+    {
+      "file": "seek-48000-1-pcm_f32le.wav",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 14,
+      "discarded_frames": 0,
+      "indexed": true
+    },
+    {
+      "file": "seek-48000-2-pcm_u8.wav",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 14,
+      "discarded_frames": 0,
+      "indexed": true
+    },
+    {
+      "file": "seek-48000-2-pcm_s16le.wav",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 14,
+      "discarded_frames": 0,
+      "indexed": true
+    },
+    {
+      "file": "seek-48000-2-pcm_s24le.wav",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 14,
+      "discarded_frames": 0,
+      "indexed": true
+    },
+    {
+      "file": "seek-48000-2-pcm_s32le.wav",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 14,
+      "discarded_frames": 0,
+      "indexed": true
+    },
+    {
+      "file": "seek-48000-2-pcm_f32le.wav",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 14,
+      "discarded_frames": 0,
+      "indexed": true
+    },
+    {
+      "file": "seek-192000-1-pcm_u8.wav",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 14,
+      "discarded_frames": 0,
+      "indexed": true
+    },
+    {
+      "file": "seek-192000-1-pcm_s16le.wav",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 14,
+      "discarded_frames": 0,
+      "indexed": true
+    },
+    {
+      "file": "seek-192000-1-pcm_s24le.wav",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 14,
+      "discarded_frames": 0,
+      "indexed": true
+    },
+    {
+      "file": "seek-192000-1-pcm_s32le.wav",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 14,
+      "discarded_frames": 0,
+      "indexed": true
+    },
+    {
+      "file": "seek-192000-1-pcm_f32le.wav",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 14,
+      "discarded_frames": 0,
+      "indexed": true
+    },
+    {
+      "file": "seek-192000-2-pcm_u8.wav",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 14,
+      "discarded_frames": 0,
+      "indexed": true
+    },
+    {
+      "file": "seek-192000-2-pcm_s16le.wav",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 14,
+      "discarded_frames": 0,
+      "indexed": true
+    },
+    {
+      "file": "seek-192000-2-pcm_s24le.wav",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 14,
+      "discarded_frames": 0,
+      "indexed": true
+    },
+    {
+      "file": "seek-192000-2-pcm_s32le.wav",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 14,
+      "discarded_frames": 0,
+      "indexed": true
+    },
+    {
+      "file": "seek-192000-2-pcm_f32le.wav",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 14,
+      "discarded_frames": 0,
+      "indexed": true
+    },
+    {
+      "file": "seek-8000-1-s16.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 0,
+      "discarded_frames": 170121,
+      "indexed": false
+    },
+    {
+      "file": "seek-8000-1-s16.flac.index.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 7689,
+      "indexed": true
+    },
+    {
+      "file": "seek-8000-1-s16.flac.variable-index.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 7689,
+      "indexed": true
+    },
+    {
+      "file": "seek-8000-1-s32.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 0,
+      "discarded_frames": 170121,
+      "indexed": false
+    },
+    {
+      "file": "seek-8000-1-s32.flac.index.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 7689,
+      "indexed": true
+    },
+    {
+      "file": "seek-8000-1-s32.flac.variable-index.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 7689,
+      "indexed": true
+    },
+    {
+      "file": "seek-8000-2-s16.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 0,
+      "discarded_frames": 170121,
+      "indexed": false
+    },
+    {
+      "file": "seek-8000-2-s16.flac.index.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 7689,
+      "indexed": true
+    },
+    {
+      "file": "seek-8000-2-s16.flac.variable-index.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 7689,
+      "indexed": true
+    },
+    {
+      "file": "seek-8000-2-s32.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 0,
+      "discarded_frames": 170121,
+      "indexed": false
+    },
+    {
+      "file": "seek-8000-2-s32.flac.index.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 7689,
+      "indexed": true
+    },
+    {
+      "file": "seek-8000-2-s32.flac.variable-index.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 7689,
+      "indexed": true
+    },
+    {
+      "file": "seek-44100-1-s16.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 0,
+      "discarded_frames": 774921,
+      "indexed": false
+    },
+    {
+      "file": "seek-44100-1-s16.flac.index.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 5,
+      "discarded_frames": 97545,
+      "indexed": true
+    },
+    {
+      "file": "seek-44100-1-s16.flac.variable-index.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 5,
+      "discarded_frames": 97545,
+      "indexed": true
+    },
+    {
+      "file": "seek-44100-1-s32.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 0,
+      "discarded_frames": 774921,
+      "indexed": false
+    },
+    {
+      "file": "seek-44100-1-s32.flac.index.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 5,
+      "discarded_frames": 97545,
+      "indexed": true
+    },
+    {
+      "file": "seek-44100-1-s32.flac.variable-index.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 5,
+      "discarded_frames": 97545,
+      "indexed": true
+    },
+    {
+      "file": "seek-44100-2-s16.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 0,
+      "discarded_frames": 774921,
+      "indexed": false
+    },
+    {
+      "file": "seek-44100-2-s16.flac.index.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 5,
+      "discarded_frames": 97545,
+      "indexed": true
+    },
+    {
+      "file": "seek-44100-2-s16.flac.variable-index.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 5,
+      "discarded_frames": 97545,
+      "indexed": true
+    },
+    {
+      "file": "seek-44100-2-s32.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 0,
+      "discarded_frames": 774921,
+      "indexed": false
+    },
+    {
+      "file": "seek-44100-2-s32.flac.index.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 5,
+      "discarded_frames": 97545,
+      "indexed": true
+    },
+    {
+      "file": "seek-44100-2-s32.flac.variable-index.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 5,
+      "discarded_frames": 97545,
+      "indexed": true
+    },
+    {
+      "file": "seek-96000-1-s16.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 0,
+      "discarded_frames": 1644429,
+      "indexed": false
+    },
+    {
+      "file": "seek-96000-1-s16.flac.index.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 5,
+      "discarded_frames": 96141,
+      "indexed": true
+    },
+    {
+      "file": "seek-96000-1-s16.flac.variable-index.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 5,
+      "discarded_frames": 96141,
+      "indexed": true
+    },
+    {
+      "file": "seek-96000-1-s32.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 0,
+      "discarded_frames": 1644429,
+      "indexed": false
+    },
+    {
+      "file": "seek-96000-1-s32.flac.index.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 5,
+      "discarded_frames": 96141,
+      "indexed": true
+    },
+    {
+      "file": "seek-96000-1-s32.flac.variable-index.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 5,
+      "discarded_frames": 96141,
+      "indexed": true
+    },
+    {
+      "file": "seek-96000-2-s16.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 0,
+      "discarded_frames": 1644429,
+      "indexed": false
+    },
+    {
+      "file": "seek-96000-2-s16.flac.index.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 5,
+      "discarded_frames": 96141,
+      "indexed": true
+    },
+    {
+      "file": "seek-96000-2-s16.flac.variable-index.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 5,
+      "discarded_frames": 96141,
+      "indexed": true
+    },
+    {
+      "file": "seek-96000-2-s32.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 0,
+      "discarded_frames": 1644429,
+      "indexed": false
+    },
+    {
+      "file": "seek-96000-2-s32.flac.index.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 5,
+      "discarded_frames": 96141,
+      "indexed": true
+    },
+    {
+      "file": "seek-96000-2-s32.flac.variable-index.flac",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 5,
+      "discarded_frames": 96141,
+      "indexed": true
+    }
+  ],
+  "rejected": 17,
+  "rejected_indexes": 11,
+  "rejected_coded_numbers": 6
+}

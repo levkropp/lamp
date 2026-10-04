@@ -26,5 +26,14 @@ foreach($codec in @('wav','flac','mp3','vorbis','opus')) {
     if($LASTEXITCODE){throw "Engine lifecycle failed $codec $stats"}
     $report+=[pscustomobject]@{codec=$codec;result='passed';tests=@('playback','pause','resume','stop','reopen','seek','paused seek','cancelled open');stats="$stats"}
     Write-Output "$codec $stats"
+    if($codec -eq 'flac') {
+        $indexedPath=Join-Path $scratch 'engine-silence-indexed.flac'
+        & node (Join-Path $PSScriptRoot 'seek-fixtures.js') --index-flac $path $indexedPath
+        if($LASTEXITCODE){throw 'Indexed engine fixture failed'}
+        $stats=& (Join-Path $out 'engine-probe.exe') $indexedPath
+        if($LASTEXITCODE){throw "Indexed FLAC engine lifecycle failed $stats"}
+        $report+=[pscustomobject]@{codec='flac-indexed';result='passed';tests=@('playback','pause','resume','stop','reopen','seek','paused seek','cancelled open');stats="$stats"}
+        Write-Output "flac-indexed $stats"
+    }
 }
 $report | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath (Join-Path $out 'engine-verification.json') -Encoding utf8

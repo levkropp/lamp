@@ -8,7 +8,8 @@ EXTERN MapViewOfFile:PROC, UnmapViewOfFile:PROC, CloseHandle:PROC
 EXTERN mp3_open:PROC, mp3_read:PROC
 EXTERN vorbis_open:PROC, vorbis_read:PROC, vorbis_close:PROC, ogg_close:PROC
 EXTERN opus_open:PROC,opus_read:PROC,opus_close:PROC
-PUBLIC decoder_open, decoder_read, decoder_close
+EXTERN ogg_cancel_ptr:QWORD
+PUBLIC decoder_open, decoder_read, decoder_close, decoder_seek
 PUBLIC sample_rate, source_channels, source_bits, decode_error, total_frames, codec_kind
 
 .data
@@ -25,6 +26,14 @@ file_size dq 0
 input_cursor dq 0
 input_end dq 0
 wav_end dq 0
+wav_begin dq 0
+flac_begin dq 0
+flac_seek_table dq 0
+flac_seek_count dd 0
+flac_next_sample dq 0
+frame_blocking dd 0
+frame_number_bytes dd 0
+frame_number dq 0
 wav_format dd 0
 wav_align dd 0
 bits_count dd 0
@@ -75,6 +84,11 @@ decoder_open PROC
     mov qword ptr [total_frames],0
     mov dword ptr [frame_samples],0
     mov dword ptr [frame_used],0
+    mov qword ptr [wav_begin],0
+    mov qword ptr [flac_begin],0
+    mov qword ptr [flac_seek_table],0
+    mov dword ptr [flac_seek_count],0
+    mov qword ptr [flac_next_sample],0
     mov edx,80000000h
     mov r8d,1
     xor r9d,r9d
@@ -269,6 +283,7 @@ wav_data:
     test r11d,r11d
     jz open_bad
     mov [input_cursor],rax
+    mov [wav_begin],rax
     mov [wav_end],r8
     mov rax,rdx
     xor edx,edx
@@ -351,11 +366,79 @@ flac_have_streaminfo:
     jz open_bad
     cmp ecx,127
     je open_bad
+    cmp ecx,3
+    jne flac_meta_next
+    cmp qword ptr [flac_seek_table],0
+    jne open_bad
+    mov [flac_seek_table],rax
+    mov eax,edx
+    xor edx,edx
+    mov ecx,18
+    div ecx
+    test edx,edx
+    jnz open_bad
+    mov [flac_seek_count],eax
 flac_meta_next:
     mov r10,r9
     test r8d,80000000h
     jz flac_metadata
     mov [input_cursor],r10
+    mov [flac_begin],r10
+    ; Validate every table point before enabling indexed seeking. Placeholders
+    ; are sorted last and their offset/sample-count fields are undefined.
+    mov r9,[flac_seek_table]
+    mov r8d,[flac_seek_count]
+    xor r11d,r11d
+    xor edx,edx
+flac_seek_validate:
+    test r8d,r8d
+    jz flac_seek_valid
+    mov rax,[ogg_cancel_ptr]
+    test rax,rax
+    jz flac_seek_validate_continue
+    cmp dword ptr [rax],0
+    jne open_bad
+flac_seek_validate_continue:
+    mov rax,[r9]
+    bswap rax
+    test edx,edx
+    jz flac_seek_first
+    cmp rax,r11
+    jb open_bad
+    cmp rax,-1
+    je flac_seek_point_next
+    cmp rax,r11
+    je open_bad
+flac_seek_first:
+    cmp rax,-1
+    je flac_seek_point_next
+    mov rcx,0fffffffffh
+    cmp rax,rcx
+    ja open_bad
+    cmp qword ptr [total_frames],0
+    je flac_seek_sample_valid
+    cmp rax,[total_frames]
+    jae open_bad
+flac_seek_sample_valid:
+    mov rcx,[r9+8]
+    bswap rcx
+    mov r11,[input_end]
+    sub r11,r10
+    cmp rcx,r11
+    jae open_bad
+    movzx ecx,word ptr [r9+16]
+    rol cx,8
+    test ecx,ecx
+    jz open_bad
+    cmp ecx,[maximum_block]
+    ja open_bad
+flac_seek_point_next:
+    mov r11,rax
+    mov edx,1
+    add r9,18
+    dec r8d
+    jmp flac_seek_validate
+flac_seek_valid:
     mov dword ptr [codec_kind],2
     ; Compute exact reciprocal 2^(1-bits), no library calls.
     mov eax,128
@@ -392,9 +475,114 @@ close_file:
     call CloseHandle
     mov qword ptr [file_handle],-1
 closed:
+    mov qword ptr [wav_begin],0
+    mov qword ptr [flac_begin],0
+    mov qword ptr [flac_seek_table],0
+    mov dword ptr [flac_seek_count],0
     leave
     ret
 decoder_close ENDP
+
+; RCX=absolute requested frame. Call once on a newly opened stream.
+; RAX=resume frame <= target; caller decodes/discards the remaining distance.
+; WAV seeks exactly; native FLAC uses the closest validated table point.
+; Other formats/no table return0 without changing their fresh decoder state.
+decoder_seek PROC
+    push rbx
+    push rsi
+    sub rsp,40
+    xor eax,eax
+    cmp qword ptr [map_base],0
+    je seek_return
+    cmp dword ptr [decode_error],0
+    jne seek_return
+    cmp dword ptr [codec_kind],1
+    je seek_wav
+    cmp dword ptr [codec_kind],2
+    jne seek_return
+    test rcx,rcx
+    jz seek_return
+    mov rsi,rcx
+    mov rbx,[flac_seek_table]
+    xor r8d,r8d             ;lower bound, exclusive upper bound
+    mov r9d,[flac_seek_count]
+seek_flac_search:
+    cmp r8d,r9d
+    jae seek_flac_found
+    mov edx,r9d
+    sub edx,r8d
+    shr edx,1
+    add edx,r8d
+    imul r10d,edx,18
+    mov rax,[rbx+r10]
+    bswap rax
+    cmp rax,-1
+    je seek_flac_upper
+    cmp rax,rsi
+    ja seek_flac_upper
+    lea r8d,[rdx+1]
+    jmp seek_flac_search
+seek_flac_upper:
+    mov r9d,edx
+    jmp seek_flac_search
+seek_flac_found:
+    xor eax,eax
+    test r8d,r8d
+    jz seek_return
+    dec r8d
+    imul r8d,r8d,18
+    add rbx,r8
+    mov rsi,[rbx]
+    bswap rsi
+    mov rax,[ogg_cancel_ptr]
+    test rax,rax
+    jz seek_flac_not_cancelled
+    cmp dword ptr [rax],0
+    jne seek_cancelled
+seek_flac_not_cancelled:
+    mov rax,[rbx+8]
+    bswap rax
+    add rax,[flac_begin]    ;validated relative offset stays in mapped input
+    mov [input_cursor],rax
+    mov [flac_next_sample],rsi
+    call decode_frame      ;selected frame header and complete PCM CRC checks
+    test eax,eax
+    jz seek_failed
+    movzx eax,word ptr [rbx+16]
+    rol ax,8
+    cmp eax,[frame_samples]
+    jne seek_failed
+    mov rax,[frame_number]
+    cmp dword ptr [frame_blocking],0
+    jne seek_flac_position
+    mov ecx,[maximum_block]
+    mul rcx
+seek_flac_position:
+    cmp rax,rsi
+    jne seek_failed
+    mov rax,rsi
+    jmp seek_return
+seek_wav:
+    cmp rcx,[total_frames]
+    cmova rcx,[total_frames]
+    mov rax,rcx
+    mov edx,[wav_align]
+    imul rdx,rcx
+    add rdx,[wav_begin]
+    mov [input_cursor],rdx
+    jmp seek_return
+seek_failed:
+    mov dword ptr [decode_error],28
+    xor eax,eax
+    jmp seek_return
+seek_cancelled:
+    xor eax,eax
+seek_return:
+    add rsp,40
+    pop rsi
+    pop rbx
+    ret
+decoder_seek ENDP
 
 ; Bounds-checked MSB-first reservoir. Width <=32, result unsigned in RAX.
 get_bits PROC
@@ -581,6 +769,7 @@ crc_tables_ready:
     jnz frame_bad
     mov ecx,1
     call get_bits             ; fixed / variable blocking
+    mov [frame_blocking],eax
     mov ecx,4
     call get_bits
     mov [block_code],eax
@@ -612,6 +801,8 @@ frame_ch_check:
     ; UTF-8 encoded frame / sample number; validate prefix and continuations.
     mov ecx,8
     call get_bits
+    mov [frame_number],rax
+    mov dword ptr [frame_number_bytes],1
     cmp eax,80h
     jb frame_number_done
     cmp eax,0c0h
@@ -627,16 +818,49 @@ number_prefix:
     shl edx,1
     jmp number_prefix
 number_counted:
+    mov [frame_number_bytes],ebx
+    mov ecx,ebx
+    mov eax,127
+    shr eax,cl
+    and [frame_number],rax
     dec ebx
 number_cont:
     mov ecx,8
     call get_bits
-    and eax,0c0h
-    cmp eax,80h
+    mov edx,eax
+    and edx,0c0h
+    cmp edx,80h
     jne frame_bad
+    and eax,3fh
+    mov rdx,[frame_number]
+    shl rdx,6
+    or rdx,rax
+    mov [frame_number],rdx
     dec ebx
     jnz number_cont
 frame_number_done:
+    mov rax,[frame_number]
+    mov ecx,[frame_number_bytes]
+    cmp ecx,1
+    je frame_number_limit
+    imul ecx,5
+    sub ecx,4
+    cmp ecx,6
+    jne frame_number_minimum
+    mov ecx,7
+frame_number_minimum:
+    mov rdx,1
+    shl rdx,cl
+    cmp rax,rdx
+    jb frame_bad              ;reject noncanonical extended UTF-8 encodings
+frame_number_limit:
+    mov rdx,0fffffffffh
+    cmp dword ptr [frame_blocking],0
+    jne frame_number_check
+    mov edx,7fffffffh
+frame_number_check:
+    cmp rax,rdx
+    ja frame_bad
     mov eax,[block_code]
     test eax,eax
     jz frame_bad
@@ -733,6 +957,21 @@ depth_done:
     call flac_crc
     cmp eax,ebx
     jne frame_bad
+    mov rax,[frame_number]
+    cmp dword ptr [frame_blocking],0
+    jne frame_position_check
+    mov ecx,[maximum_block]
+    mul rcx
+frame_position_check:
+    cmp rax,[flac_next_sample]
+    jne frame_bad
+    mov ecx,[frame_samples]
+    add rax,rcx
+    cmp qword ptr [total_frames],0
+    je frame_position_valid
+    cmp rax,[total_frames]
+    ja frame_bad
+frame_position_valid:
     lea rcx,left_samples
     mov edx,[frame_bps]
     cmp dword ptr [channel_mode],9
@@ -837,6 +1076,8 @@ decor_range_valid:
     inc ebx
     jmp decorrelate
 frame_ok:
+    mov eax,[frame_samples]
+    add [flac_next_sample],rax
     mov eax,1
     jmp frame_return
 frame_bad:
@@ -1152,8 +1393,14 @@ decoder_read PROC
     mov rdi,rcx
     mov r12d,edx
     xor ebx,ebx
+    cmp qword ptr [map_base],0
+    je read_done
     cmp dword ptr [decode_error],0
     jne read_done
+    cmp dword ptr [codec_kind],1
+    jb read_done
+    cmp dword ptr [codec_kind],5
+    ja read_done
     cmp dword ptr [codec_kind],5
     jne read_try_vorbis
     mov rcx,rdi

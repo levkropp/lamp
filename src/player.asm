@@ -14,6 +14,7 @@ EXTERN GetCurrentProcess:PROC, GetProcessTimes:PROC, GetTickCount64:PROC
 EXTERN CoInitializeEx:PROC, CoUninitialize:PROC, CoCreateInstance:PROC
 EXTERN AvSetMmThreadCharacteristicsW:PROC, AvRevertMmThreadCharacteristics:PROC
 EXTERN decoder_open:PROC, decoder_read:PROC, decoder_close:PROC
+EXTERN decoder_seek:PROC
 EXTERN sample_rate:DWORD, source_channels:DWORD, source_bits:DWORD
 EXTERN decode_error:DWORD, total_frames:QWORD, codec_kind:DWORD
 EXTERN ogg_cancel_ptr:QWORD
@@ -160,6 +161,11 @@ engine_play PROC
     jz bad_input
     mov eax,[sample_rate]
     mul qword ptr [engine_seek_frames]
+    cmp qword ptr [total_frames],0
+    je engine_seek_limit_ready
+    cmp rax,[total_frames]
+    cmova rax,[total_frames]
+engine_seek_limit_ready:
     mov [engine_seek_frames],rax
     mov [engine_position],rax
     cmp dword ptr [engine_stop_requested],0
@@ -679,6 +685,9 @@ producer PROC
     sub rsp,64
     cmp dword ptr [engine_mode],0
     je producer_loop
+    mov rcx,[engine_seek_frames]
+    call decoder_seek
+    mov [decoded_count],rax
 producer_seek:
     mov rcx,[stop_event]
     xor edx,edx

@@ -30,6 +30,21 @@
         "stats":  "Passed: playback, pause, resume, stop, reopen, seek, paused seek and cancelled open."
     },
     {
+        "codec":  "flac-indexed",
+        "result":  "passed",
+        "tests":  [
+                      "playback",
+                      "pause",
+                      "resume",
+                      "stop",
+                      "reopen",
+                      "seek",
+                      "paused seek",
+                      "cancelled open"
+                  ],
+        "stats":  "Passed: playback, pause, resume, stop, reopen, seek, paused seek and cancelled open."
+    },
+    {
         "codec":  "mp3",
         "result":  "passed",
         "tests":  [

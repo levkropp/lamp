@@ -1,7 +1,8 @@
-param([string]$Ffmpeg = 'ffmpeg', [switch]$SkipPlayback)
+param([string]$Ffmpeg = 'ffmpeg', [switch]$SkipPlayback,[string]$OutputDirectory)
 $ErrorActionPreference = 'Stop'
 $root = Split-Path $PSScriptRoot -Parent
-$exe = Join-Path $root 'bin\lamp-cli.exe'
+$out=if($OutputDirectory){$ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($OutputDirectory)}else{Join-Path $root 'bin'}
+$exe = Join-Path $out 'lamp-cli.exe'
 $scratch = Join-Path $PSScriptRoot 'generated'
 New-Item -ItemType Directory -Force -Path $scratch | Out-Null
 $results = [System.Collections.Generic.List[object]]::new()
@@ -86,7 +87,8 @@ if (-not $SkipPlayback) {
     if ("$stats" -notmatch 'underruns=0 ') { throw "Playback underrun: $stats" }
     $results.Add([pscustomobject]@{test='wasapi-silence';result='played';bytes=0;stats="$stats"})
 }
-$report = Join-Path $root 'verification.json'
+$report = if($OutputDirectory){Join-Path $out 'verification.json'}else{Join-Path $root 'verification.json'}
 $results | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath $report -Encoding utf8
 $results | Format-Table test,result,bytes -AutoSize
 Write-Output "Passed $($results.Count) checks. Report: $report"
+exit 0

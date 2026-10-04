@@ -1,6 +1,6 @@
 # LAMP 0.4.0-dev technical details
 
-A Windows x86-64 audio player with handwritten assembly WAV, FLAC, MP3, Ogg/Vorbis and development Ogg/Opus decoders, plus a native assembly UI. The current console build is **179,712 bytes (175.5 KiB)**; the graphical build is **187,392 bytes (183 KiB)**. Both include LAMP's icon and version resources. The published v0.3.0 archive retains its earlier four-format build and manifest.
+A Windows x86-64 audio player with handwritten assembly WAV, FLAC, MP3, Ogg/Vorbis and development Ogg/Opus decoders, plus a native assembly UI. The current console build is **180,736 bytes (176.5 KiB)**; the graphical build is **188,416 bytes (184 KiB)**. Both include LAMP's icon and version resources. The published v0.3.0 archive retains its earlier four-format build and manifest.
 
 The dark canvas, compact playback controls and automatic hiding are inspired by mpv. The custom pixel buffer and Win32 presentation follow Rhun's documented assembly UI model. No Rhun source, fonts, icons, or other assets were copied.
 
@@ -38,7 +38,9 @@ Controls hide after 2.5 seconds of inactivity during playback, and reappear on m
 
 Console controls are Space to pause/resume and Q/Ctrl+C to stop. QuickEdit is disabled during playback and restored on exit.
 
-Seeking restarts the decoder on a worker and discards PCM from the beginning to the requested second. Long seeks can take time. The UI remains responsive, and seeking while paused keeps audio stopped until resume. There is no compressed-stream seek index yet.
+Seeking restarts the decoder on a worker. WAV seeks directly by sample offset. Native FLAC selects the nearest preceding seek-table point by binary search and decodes only the remaining distance. Tables require bounded offsets, ordered unique sample numbers and valid frame sizes; placeholders are ignored. The selected frame's coded position, sample count and CRC must agree with the table. Fixed/variable frame numbers are decoded canonically and checked throughout playback. FLAC without a table and MP3/Vorbis/Opus still discard PCM from the beginning. The UI remains responsive, and paused seeking keeps audio stopped until resume.
+
+`decoder_seek(uint64_t absolute_frame)` is called once after opening a stream and returns the resume frame at or before the target. WAV clamps to EOF. Unsupported indexes return zero without changing fresh codec state; the worker uses sequential decoding for the rest. A malformed selected FLAC frame sets a sticky decoding error. Closed decoders refuse seeking and reading. No per-seek allocation is required.
 
 ## Format coverage
 
@@ -93,7 +95,7 @@ Recorded snapshots are in `reports/` in a source checkout. The paths below descr
 | `verification.json` | 43 WAV/FLAC checks, including exact reference PCM, malformed inputs and WASAPI silence |
 | `mp3-verification.json` | 103 MP3 checks: 88 PCM comparisons, 14 rejection cases, WASAPI silence; recorded SNR above 112 dB |
 | `bin/vorbis-verification.json` | 83 checks: 32 rate/channel/quality cases, noise/transients/silence, continued long comment, 36 synthetic residue/codebook cases, 10 rejections and WASAPI silence |
-| `bin/engine-verification.json` | Playback, pause, resume, stop, reopen, seek and paused seek for all four working codecs |
+| `bin/engine-verification.json` | Playback, pause, resume, stop, reopen, seek, paused seek and cancelled open for all five codecs plus indexed FLAC |
 | `vorbis-fuzz-verification.json` | 512 repaired-CRC setup/audio mutations without a crash/timeout; accepted audio correctness is not asserted |
 | `vorbis-benchmark.json` | Five 30-second offline CPU measurements |
 | `vorbis-stress-verification.json` | Eight-second WASAPI silence under four bounded CPU workers |
@@ -164,6 +166,7 @@ node .\tests\fuzz-vorbis.js
 .\tests\verify-opus-components.ps1
 .\tests\verify-opus.ps1 -OutputDirectory .\bin\verify-build #51 modern libopus files
 .\tests\verify-opus-conformance.ps1 #120 official vector checks; first run downloads ~75 MB
+.\tests\verify-seek.ps1 -OutputDirectory .\bin\verify-build #990 exact WAV/FLAC seek checks
 .\tests\render-ui.ps1
 ```
 
