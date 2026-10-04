@@ -30,7 +30,7 @@
         <p class="subtitle">Lev's Assembly Media Player.</p>
         <p class="intro">A small audio player with handwritten assembly decoders and a quiet, compact interface. Built to use fewer resources. Growing toward the media you play in mpv.</p>
         <div class="actions"><a class="button primary" href="https://github.com/levkropp/lamp/releases">Get LAMP <span>↓</span></a><a class="button" href="https://github.com/levkropp/lamp#build-and-verify">Build from source <span>↗</span></a></div>
-        <p class="fine">Source builds: WAV, FLAC, MP3, Vorbis and development Opus. Downloaded v0.3.0 includes the first four formats.</p>
+        <p class="fine">Source builds: WAV, AIFF/AIFC, FLAC, MP3, Vorbis and development Opus. Downloaded v0.3.0 includes WAV, FLAC, MP3 and Vorbis.</p>
       </div>
       <div class="hero-art"><img src="assets/lamp.png" width="440" height="440" alt="A geometric lamp with a teal shade and an ivory stem and base"><span class="art-caption">LAMP / 001</span></div>
     </section>
@@ -39,14 +39,14 @@
       <figure class="player"><img src="assets/player.png" width="800" height="450" alt="LAMP's dark playback canvas with a track title, seek bar, pause control and volume"><figcaption>Actual assembly renderer, shown with synthetic playback state. Inspired by mpv's compact controls and Rhun's assembly UI approach.</figcaption></figure>
     </section>
     <section class="shell principles" aria-label="Design goals">
-      <article><span class="number">01 / SMALL</span><h2>194 KiB GUI.</h2><p>The development Windows executable includes its icon and Opus decoder. Windows system services handle audio output and the window; the player brings its own assembly decoders.</p></article>
+      <article><span class="number">01 / SMALL</span><h2>197 KiB GUI.</h2><p>The development Windows executable includes its icon and Opus decoder. Windows system services handle audio output and the window; the player brings its own assembly decoders.</p></article>
       <article><span class="number">02 / BUFFERED</span><h2>Let audio breathe.</h2><p>A separate decoder feeds a PCM queue. Event-driven WASAPI playback absorbs short scheduling stalls, with no decoder work in the audio refill path.</p></article>
       <article><span class="number">03 / FOCUSED</span><h2>Just press play.</h2><p>Drop a file, pause with Space, seek with the arrows. Controls fade from view during playback, and redraw timers stop while idle or paused.</p></article>
     </section>
     <section id="formats" class="shell formats">
       <div class="section-label"><h2>What plays today.</h2><span>AUDIO FIRST</span></div>
-      <div class="format-list"><span>WAV <b>ready</b></span><span>FLAC <b>ready</b></span><span>MP3 <b>ready</b></span><span>Ogg / Vorbis <b>ready</b></span><span class="pending">Opus <b>source preview</b></span></div>
-      <p>Source builds play Ogg/Opus families 0 and 1 with RFC 8251 updates. Family 1 layouts with up to eight speaker channels are downmixed to stereo; 112 modern-libopus file comparisons pass. All 120 official elementary-decoder vector checks pass. Native FLAC adds 1–8 channels at 4–32-bit depths, with speaker-mask-aware stereo downmix and 404 verified files. WAV adds 1–8 channels, valid PCM precision and float64, with 965 verified files. RF64/BW64 audio framing adds 64-bit lengths, with 538 container files and 16 sparse large-file fixtures; ADM rendering remains unfinished. MP3 and Vorbis retain their documented mono/stereo profiles. WAV seeks directly, native FLAC searches validated frames, and MP3, Vorbis and Opus use sparse seek indexes. Video, subtitles and streaming are not yet available. <a href="https://github.com/levkropp/lamp/blob/main/docs/technical.md">Read exact coverage and limits ↗</a></p>
+      <div class="format-list"><span>WAV <b>ready</b></span><span>AIFF / AIFC <b>source</b></span><span>FLAC <b>ready</b></span><span>MP3 <b>ready</b></span><span>Ogg / Vorbis <b>ready</b></span><span class="pending">Opus <b>source preview</b></span></div>
+      <p>Source builds play Ogg/Opus families 0 and 1 with RFC 8251 updates. Family 1 layouts with up to eight speaker channels are downmixed to stereo; 112 modern-libopus file comparisons pass. All 120 official elementary-decoder vector checks pass. Native FLAC adds 1–8 channels at 4–32-bit depths, with speaker-mask-aware stereo downmix and 404 verified files. WAV adds 1–8 channels, valid PCM precision and float64, with 965 verified files. RF64/BW64 audio framing adds 64-bit lengths, with 538 container files and 16 sparse large-file fixtures; ADM rendering remains unfinished. AIFF/AIFC adds signed PCM and float audio, ordered Core Audio layouts and 1,977 verified files. MP3 and Vorbis retain their documented mono/stereo profiles. WAV and AIFF/AIFC seek directly, native FLAC searches validated frames, and MP3, Vorbis and Opus use sparse seek indexes. Video, subtitles and streaming are not yet available. <a href="https://github.com/levkropp/lamp/blob/main/docs/technical.md">Read exact coverage and limits ↗</a></p>
     </section>
     <section id="roadmap" class="shell roadmap">
       <div class="section-label"><h2>Audio now. More media ahead.</h2><span>THE ROADMAP</span></div>
@@ -54,7 +54,7 @@
       <ol>
         <li><span>01</span><div><h3>Opus foundation</h3><p>Ogg family 0 playback and all 120 official vector checks pass.</p></div><em>done</em></li>
         <li><span>02</span><div><h3>Everyday audio</h3><p>Indexed seeking and Opus multistream stereo downmix are in source. Playlists, broader multichannel support and device changes remain.</p></div><em>in progress</em></li>
-        <li><span>03</span><div><h3>More formats</h3><p>RF64/BW64 audio framing is in source. AAC, ALAC and broader containers remain.</p></div></li>
+        <li><span>03</span><div><h3>More formats</h3><p>RF64/BW64 and AIFF/AIFC audio are in source. AAC, ALAC and broader containers remain.</p></div></li>
         <li><span>04</span><div><h3>Video &amp; sync</h3><p>Modern video formats, hardware decode and efficient presentation.</p></div></li>
         <li><span>05</span><div><h3>Subtitles &amp; streaming</h3><p>Timed text, styled subtitles, HTTP, HLS and DASH.</p></div></li>
         <li><span>06</span><div><h3>mpv-relevant coverage</h3><p>Configurable controls, IPC and the relevant long tail of media.</p></div></li>
