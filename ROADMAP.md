@@ -46,7 +46,8 @@ The public repository includes build/test tooling, a Windows prerelease and a we
 - [x] SILK voiced/unvoiced packet-loss concealment and recovery glue, with exact prediction/core history, PCM, energy and connected CNG/resampling comparisons.
 - [x] SILK stereo predictor/mid-only entropy decoding and adaptive mid/side-to-left/right reconstruction, with exhaustive codebook and exact PCM/history checks.
 - [x] Stateful source-rate SILK channel frames: indices/pulses/parameters/core/PLC/output history/glue/CNG, with exact full-frame reference comparisons, loss/FEC, reset/rate transitions and sticky failure handling.
-- [ ] Finish SILK packet parsing, stereo/channel transitions and resampling orchestration.
+- [x] SILK packet VAD/LBRR headers and normal-playback redundant-data skipping, with exact metadata/entropy/history and connected mono frame checks.
+- [ ] Finish SILK stereo/channel transitions and packet/API-rate orchestration.
 - [ ] Hybrid modes, bandwidth/frame transitions, stereo, channel mapping, output gain, pre-skip and end trimming.
 - [ ] Integrate Ogg/Opus with cancellation, queueing, pause and seeking.
 - [ ] Official decoder vectors, reference PCM tolerance/state checks, and malformed/truncated stream tests across modes and frame sizes.

@@ -23,6 +23,7 @@ LAMP's Opus work is handwritten MASM x86-64 assembly, based on the BSD normative
 | SILK packet-loss concealment and recovery glue | `opus_silk_plc.asm` | 16,384 energy vectors, 43,008 exact PLC/core/control frames (25,984 concealed), 75,776 glue frames (7,463 faded), 18,432 connected core/PLC/CNG/resampling, 17,637,024 PCM samples, 36,685,824 history values and 63 guards |
 | SILK stereo predictor/mid-only entropy and mid/side reconstruction | `opus_silk_stereo.asm` | 153,572 entropy comparisons (11,250 exhaustive codebook/flag cases), 90,112 exact PCM/history frames (65,536 connected predictors), 32,440,240 int16 samples and 34 guards |
 | Complete stateful source-rate SILK channel frames | `opus_silk_frame.asm` | 67,589 exact entropy-to-PCM/history frames (28,160 lost, 10,752 FEC, 18,432 continued entropy), 12,166,840 int16 samples, 264,137,812 full-history bytes, five late component/sticky/reset checks and 63 guards |
+| SILK packet headers and redundant-data skipping | `opus_silk_packet.asm` | 24,577 exact entropy/metadata/history headers, 11,517 skipped FEC frames (3,332 conditional), 21,504 connected mono frame PCM cases, 144,072,328 history bytes, one late/sticky/reset case and 38 guards |
 | CELT static band allocation | `opus_allocation.asm` | 271,160 allocation/entropy and 52,479 pulse-cache comparisons |
 | CELT normalized PVQ bands/spreading | `opus_vq.asm` | 13,416 band/entropy, 15,864 spreading and 8,192 renormalization comparisons |
 | CELT Haar/Hadamard layout helpers | `opus_band_transform.asm` | 3,280 Haar and 5,888 layout/inverse comparisons |
@@ -84,7 +85,7 @@ Requirements: Windows x64, Visual Studio Build Tools with the C tools and Window
 
 ## Next dependencies
 
-1. Complete SILK packet/stereo/resampling orchestration; handle hybrid transitions.
+1. Complete SILK stereo/channel/API-rate orchestration; handle hybrid transitions.
 2. Integrate Ogg Opus pre-skip/gain/end trimming with the playback engine.
 3. Validate complete CELT/SILK/hybrid audio against official decoder vectors and reference PCM.
 
@@ -173,6 +174,14 @@ Five generated tables are checked against the hash-verified normative archive. T
 Success returns the source-rate sample count. Public request/header errors return zero before writes. A later component failure returns zero and marks sticky failure; discard that frame's partial PCM/history and explicitly reinitialize before reuse. Buffers are caller-owned, separate and correctly sized. Output history is maintained before glue/CNG; previous lag, signal/loss and reset flags follow `decode_frame.c`. Metadata/payload dispatch and final packet entropy budgets belong to the packet caller, which also connects stereo and API-rate resampling.
 
 Tests call unchanged initialization, rate-configuration and `silk_decode_frame` sources, compare complete mapped channel history and entropy/PCM, preserve canaries and cover loss, available/missing FEC, independent/conditional coding, reset/rate/frame changes and continuing range contexts. Random/truncated/zero-padded payloads exercise normative frame arithmetic. Late history corruption is injected to verify sticky failure/reset; malformed public requests reject without writes. These frame checks establish connected source-rate channel PCM, while complete Opus packet/mode integration and official conformance remain unfinished.
+
+## SILK packet header interface
+
+`op_silk_packet_header(request*)` parses VAD and LBRR availability for 1–3 frames and 1/2 internal channels. Normal mode consumes all redundant-frame data before current-frame decoding, including conditional redundancy, stereo predictors and optional mid-only flags; FEC mode leaves that data ready for the frame caller. The 64-byte request in `src/opus_silk_packet_layout.inc` has channel-state/metadata/range/work pointers at 0/8/16/24, frame/channel/mode values at 32/36/40 (mode 0 normal/2 FEC), and byte capacities at 44/48/52/56. Channel states are contiguous 3,908-byte initialized frame histories; metadata/range/work require 64/64/1,280 bytes. All buffers are separate, caller-owned and correctly sized. Multiple-frame packets require four subframes per channel; active channels share rate/frame configuration.
+
+Metadata contains two sets of three int32 VAD flags at 0, corresponding LBRR flags at 24, two per-channel LBRR flags at 48, frame count at 56 and channel count at 60. Active VAD frames are replaced; active channels' LBRR arrays are cleared/rebuilt. Inactive flags and channels are preserved. Skipping updates only side information and entropy index history, while PCM/parameter/PLC/CNG history remains unchanged. Success returns one; public invalid requests return zero before writes. Late component failure returns zero and marks every active channel failed, requiring explicit reset and discarded partial metadata/entropy/history.
+
+The test generator verifies both LBRR tables and compiles the unchanged packet-header block extracted from `dec_API.c`, preserving its notice. Tests compare complete metadata, channel and entropy state, including inactive flags, mono/stereo, all frame counts, normal/FEC modes, repeated headers, primed/truncated/zero-padded payloads, canaries, late failure/reset and connected mono frame PCM. Final entropy budgets, current-frame stereo dispatch, channel transitions and API-rate output remain the packet decoder caller's unfinished work.
 
 ## Frame-prefix interface
 

@@ -102,4 +102,6 @@ static int sf_invalid(void){
  }
  if(op_silk_decode_frame(NULL)||op_silk_frame_init(NULL)||op_silk_frame_config(NULL))return 0;sf_guards+=3;return 1;
 }
+#ifndef SILK_FRAME_ORACLE_EMBEDDED
 int main(void){if(!sf_sequences()||!sf_continuous()||!sf_sticky()||!sf_invalid())return 1;printf("SILK frame: %u initializations, %u configurations (%u rate changes), %u exact entropy-to-PCM/history frames (%u lost, %u FEC, %u voiced, %u recovered, %u continued entropy), %llu int16 PCM samples, %llu full-history bytes, %u late component/sticky/reset checks, %u guards\n",sf_initializations,sf_configurations,sf_rate_changes,sf_frames,sf_losses,sf_fec,sf_voiced,sf_recovered,sf_continued,sf_samples,sf_state_bytes,sf_late,sf_guards);return 0;}
+#endif

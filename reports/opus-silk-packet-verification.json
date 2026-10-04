@@ -1,0 +1,6 @@
+﻿{
+    "result":  "passed",
+    "scope":  "SILK packet VAD/LBRR flags, normal-playback FEC skipping, conditional redundancy, stereo predictors/mid-only flags and connected mono channel frames; whole packet stereo/resampling orchestration and complete Opus playback remain pending",
+    "comparison":  "exact metadata, complete channel/entropy history, connected mono PCM and capacity/canary guards against unchanged dec_API header block",
+    "stats":  "SILK packet header: 24577 exact entropy/metadata/history headers, 11517 skipped FEC frames (3332 conditional, 3784 stereo predictors, 1443 mid-only flags), 21504 connected mono header/frame PCM checks, 144072328 channel-history bytes, 1 late/sticky/reset checks, 38 guards"
+}
