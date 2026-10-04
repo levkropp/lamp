@@ -4,7 +4,7 @@ $ErrorActionPreference='Stop'
 $reference=Get-LampOpusReference
 & node (Join-Path $PSScriptRoot 'generate-celt-tables.js') $reference --check
 if($LASTEXITCODE){throw 'CELT table provenance verification failed'}
-foreach($stage in @('range','packet','cwrs','energy','silk-pulses','silk-indices','silk-parameters','silk-nlsf','silk-lpc','silk-state','silk-prediction','silk-synthesis','silk-resampler','silk-cng','silk-plc','silk-stereo','silk-frame','silk-packet','silk-decoder','allocation','vq','band-transform','controls','theta','band','spectral','transform','filter','lpc','pitch','decoder','mode')){
+foreach($stage in @('range','packet','cwrs','energy','silk-pulses','silk-indices','silk-parameters','silk-nlsf','silk-lpc','silk-state','silk-prediction','silk-synthesis','silk-resampler','silk-cng','silk-plc','silk-stereo','silk-frame','silk-packet','silk-decoder','allocation','vq','band-transform','controls','theta','band','spectral','transform','filter','lpc','pitch','decoder','mode','stream')){
     & (Join-Path $PSScriptRoot "verify-opus-$stage.ps1")
 }
-Write-Output 'All thirty-two Opus component suites passed, including connected SILK/hybrid/CELT mode frames, channel/rate/bandwidth transitions, redundant transition audio, FEC, loss concealment and recovery. Full Opus playback is not yet implemented.'
+Write-Output 'All thirty-three Opus component suites passed, including complete packet-to-PCM dispatch, connected SILK/hybrid/CELT mode frames, channel/rate/bandwidth transitions, redundant transition audio, FEC, DTX, loss concealment and recovery. Full Opus playback is not yet implemented.'

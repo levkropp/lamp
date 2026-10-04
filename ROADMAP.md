@@ -49,7 +49,8 @@ The public repository includes build/test tooling, a Windows prerelease and a we
 - [x] SILK packet VAD/LBRR headers and normal-playback redundant-data skipping, with exact metadata/entropy/history and connected mono frame checks.
 - [x] SILK stereo/channel transitions and packet/API-rate orchestration, with exact connected PCM/defined history, loss/FEC/recovery, rate changes and sticky failure checks.
 - [x] Connected SILK/hybrid/CELT mode frames, bandwidth/frame transitions, mono/stereo conversion, shared entropy, transition redundancy/crossfades, FEC and loss/recovery against the full RFC decoder.
-- [ ] Opus packet dispatch, channel mapping, output gain, pre-skip and end trimming.
+- [x] Complete normal Opus packet-to-PCM dispatch: CBR/VBR framing and padding, up to 48 frames/120 ms, DTX/FEC/loss, output bounds and defined histories.
+- [ ] Channel mapping, output gain, pre-skip and end trimming.
 - [ ] Integrate Ogg/Opus with cancellation, queueing, pause and seeking.
 - [ ] Official decoder vectors, reference PCM tolerance/state checks, and malformed/truncated stream tests across modes and frame sizes.
 

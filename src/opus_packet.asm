@@ -4,7 +4,7 @@ option casemap:none
 EXTERN ogg_open:PROC, ogg_next:PROC, ogg_total_granule:QWORD
 EXTERN sample_rate:DWORD, source_channels:DWORD, source_bits:DWORD
 EXTERN total_frames:QWORD, decode_error:DWORD
-PUBLIC opus_headers, opus_packet_parse
+PUBLIC opus_headers, op_opus_packet_parse
 PUBLIC op_frame_ptr, op_frame_size, op_frame_count, op_frame_samples
 PUBLIC op_config, op_stereo, op_preskip, op_gain, op_packet_samples
 .data
@@ -41,7 +41,7 @@ opus_size_bad:
 opus_read_size ENDP
 
 ; RCX=packet, EDX=bytes -> EAX=frame count or zero on invalid framing.
-opus_packet_parse PROC
+op_opus_packet_parse PROC
     push rbx
     push rsi
     push rdi
@@ -229,7 +229,7 @@ opus_packet_done:
     pop rsi
     pop rbx
     ret
-opus_packet_parse ENDP
+op_opus_packet_parse ENDP
 
 ; RCX=mapped beginning, RDX=end. PCM reconstruction is a separate stage.
 opus_headers PROC

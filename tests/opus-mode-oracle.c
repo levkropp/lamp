@@ -13,7 +13,20 @@
 #undef invalid
 #undef WorkGuard
 #undef Frame
+#ifdef OPUS_MODE_CELT_OBSERVER
+/* Observe intermediate entropy errors which another frame/reset can clear. */
+static unsigned mode_reference_celt_errors;
+static int mode_observe_celt(CELTDecoder *state,const unsigned char *data,int len,opus_val16 *pcm,int count,ec_dec *ec){
+ int result=celt_decode_with_ec(state,data,len,pcm,count,ec);
+ if(result<0||state->error)mode_reference_celt_errors++;
+ return result;
+}
+#define celt_decode_with_ec mode_observe_celt
+#endif
 #include "opus_decoder.c"
+#ifdef OPUS_MODE_CELT_OBSERVER
+#undef celt_decode_with_ec
+#endif
 typedef struct {
  uint32_t tag;int channels,fs,stream,mode,end,prev,frame,red;uint32_t range;int error,reserved;
  silk_DecControlStruct ctrl;DecoderState silk;LampState celt;
@@ -157,8 +170,10 @@ static int mode_invalid(void){
  if(op_opus_decode_frame(&r)||memcmp(&ms,&prior,sizeof(ms))||memcmp(pcm_out,prior_pcm,sizeof(pcm_out))||memcmp(scratch,prior_work,sizeof(scratch))){puts("Mode failure not sticky");return 0;}
  if(!mode_reset(2,48000)||!mode_decode(payload,2,31,2,0,0,0))return 0;mode_rejections++;return 1;
 }
+#ifndef OPUS_MODE_ORACLE_EMBEDDED
 int main(void){
  if(!mode_initial_loss()||!mode_encoded()||!mode_malformed_packets()||!mode_invalid())return 1;
  if(mode_configs!=UINT32_MAX||!mode_red_to_silk||!mode_red_to_celt){printf("Insufficient mode coverage toc%08x redundancy%u/%u\n",mode_configs,mode_red_to_silk,mode_red_to_celt);return 1;}
  printf("Opus modes: %u frames (%u SILK, %u hybrid, %u CELT, %u losses, %u FEC, %u transitions), %u CELT-to-SILK/%u SILK-to-CELT redundant frames, all32 TOC configs, %u malformed cases, %llu float PCM/history values, %u guards, %u strict rejection/sticky/reset cases, max scaled error %.9g\n",mode_frames,mode_silk,mode_hybrid,mode_celt,mode_losses,mode_fec,mode_transitions,mode_red_to_silk,mode_red_to_celt,mode_malformed,mode_values,mode_guards,mode_rejections,mode_max);return 0;
 }
+#endif

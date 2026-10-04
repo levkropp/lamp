@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include <string.h>
 #include "opus_packet_reference.h"
-int opus_packet_parse(const unsigned char *,unsigned);
+int op_opus_packet_parse(const unsigned char *,unsigned);
 extern const unsigned char *op_frame_ptr[48];
 extern unsigned op_frame_size[48],op_frame_count,op_frame_samples,op_packet_samples,op_config,op_stereo;
 /* Unused Ogg header entry point dependencies from the same assembly module. */
@@ -18,7 +18,7 @@ static unsigned checked,accepted;
 static int check(const unsigned char *p,unsigned n){
  const unsigned char *ptr[48];short sizes[48];unsigned char toc;int offset;
  int a=n?reference_packet_parse(p,n,&toc,ptr,sizes,&offset):-4;
- int b=opus_packet_parse(p,n);
+ int b=op_opus_packet_parse(p,n);
  checked++;
  if((a>0)!=(b>0)|| (a>0&&a!=b)){
   printf("Packet count mismatch test=%u length=%u toc=%02x C=%d ASM=%d\n",checked,n,p[0],a,b);return 0;

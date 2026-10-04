@@ -1,0 +1,7 @@
+﻿{
+    "result":  "passed",
+    "scope":  "Complete normal Opus packet-to-PCM dispatch: four framing codes, CBR/VBR, padding, up to48 frames/120ms, all32 TOC configurations, five output rates, mono/stereo conversion, FEC/loss and zero/one-byte DTX; 2048 malformed packets, capacity/canary/immutable-input/sticky failure checks; Ogg/player integration, mapping/gain/trimming and official conformance remain pending",
+    "comparison":  "exact mapped integer SILK history and defined resampler state; float PCM/CELT-history at stated tolerance; deterministic complete ASM state with distinct scratch fills; unchanged RFC decoder/encoder test-only, with a wrapper observing intermediate CELT errors that later frames/resets can clear",
+    "scale_adjusted_absolute_tolerance":  4E-05,
+    "stats":  "Opus packets: 18381 exact packet-to-PCM/history calls (3989/3986/3981/3865 framing codes, 2560 losses, 5196 FEC), all32 TOC configurations, five API rates and channel layouts, 5120 zero/one-byte DTX packets, 25775010 output samples, 2048 malformed cases (1588 rejections), 26 guards, 1 late/sticky/reset checks, max scaled error 0"
+}
