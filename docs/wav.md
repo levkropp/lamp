@@ -1,6 +1,6 @@
-# RIFF/WAVE precision and speaker layouts
+# RIFF/RF64/BW64 audio, precision and speaker layouts
 
-Current 0.4.0-dev source accepts little-endian RIFF/WAVE with 1–8 channels and rates from 8–192 kHz. PCM containers are unsigned 8-bit or signed 16/24/32-bit; IEEE input can be float32 or float64. Both basic and extensible headers are supported. The public v0.3.0 download retains its earlier mono/stereo PCM/float32 implementation.
+Current 0.4.0-dev source accepts little-endian RIFF/RF64/BW64 audio framing with 1–8 channels and rates from 8–192 kHz. PCM containers are unsigned 8-bit or signed 16/24/32-bit; IEEE input can be float32 or float64. Both basic and extensible headers are supported. The public v0.3.0 download retains its earlier mono/stereo RIFF PCM/float32 implementation.
 
 ## Precision and numeric conversion
 
@@ -16,11 +16,21 @@ WAVE-specific rules differ from FLAC comment masks. A nonzero mask with fewer se
 
 ## Bounds, seeking and cancellation
 
-RIFF/chunk lengths, format extensions, subtype GUID, channel/rate/container values, byte rate and block alignment are checked before playback. A data payload must contain whole interleaved frames. Unknown chunks are skipped with RIFF word padding; duplicate format chunks and data preceding the format are rejected. Declared extension bytes must fit their chunk; future extension bytes can be skipped after the known fields.
+Container/chunk lengths, format extensions, subtype GUID, channel/rate/container values, byte rate and block alignment are checked before playback. A data payload must contain whole interleaved frames. Unknown chunks are skipped with word padding, including chunks after audio. Duplicate format/data/fact chunks, data preceding the format, missing padding and incomplete trailing headers fail cleanly. One contiguous data chunk is required; segmented data and `wavl` remain unsupported. Declared extension bytes must fit their chunk; future extension bytes can be skipped after the known fields.
 
 The decoder reads directly from its existing file mapping. Multichannel WAV adds no PCM/index allocation. Direct seeking multiplies the frame position by the physical block alignment, regardless of valid precision, and clamps at EOF. Zero-capacity reads write nothing. Cancelled open/read requests fail cleanly; read errors remain sticky until close/reopen. A cancelled seek performs no work and leaves decoding state untouched.
 
-RF64, RIFX, WAVE64 and compressed WAV codecs remain roadmap work. The current RIFF length is 32-bit; this extension does not claim large-file container support or complete WAV coverage.
+## RF64/BW64 framing and large files
+
+The original assembly parser follows the size-selection rules in [EBU Tech 3306 (2009)](https://tech.ebu.ch/docs/tech/tech3306-2009.pdf) and [ITU-R BS.2088-2](https://www.itu.int/dms_pubrec/itu-r/rec/bs/R-REC-BS.2088-2-202511-I!!PDF-E.pdf). RF64/BW64 require a first `ds64` chunk with its complete 28-byte prefix. A `0xffffffff` container or data size selects its 64-bit replacement; finite 32-bit sizes take precedence. The optional table contains at most 4,096 entries and must fit its payload. Other sentinel-sized chunks consume the first unused matching FourCC entry. Repeated IDs consume entries in order; different IDs may appear in another order. Unresolved sentinel sizes and unused entries fail cleanly. A fixed 512-byte bitmap bounds parser state without per-open allocation. Future `ds64` bytes use ordinary word padding.
+
+Frame counts come from effective data length divided by physical block alignment. A nonzero `fact` count must agree; zero means unspecified. An RF64 `fact` sentinel selects the 64-bit sample-count field. Otherwise that field is unused. BW64's corresponding eight bytes are always ignored, as required by its standard, and do not control duration or allocation. BW64 has no defined `fact` sentinel replacement. Addition, payload ends, padding and mapped-file bounds use checked 64-bit arithmetic. Unknown multi-gigabyte metadata is skipped by offset without scanning or copying its contents. Direct seeks retain 64-bit positions, including more than `2^32` frames. Whole-file mapping still depends on available virtual address space and Windows mapping support.
+
+BW64 support covers audio framing and the existing WAVE speaker policy. ADM XML, `chna` track relationships, scene/object rendering, embedded control/bitstream channels, metadata display and native surround output remain unfinished. Metadata can be skipped without interpreting scene semantics. RIFX, WAVE64 and compressed WAV also remain roadmap work; this is partial WAV/BW64 coverage.
+
+Run `tests/verify-rf64.ps1 -OutputDirectory bin/verify-build` for the [recorded report](../reports/rf64-verification.json): 538 files, 16 sparse large-file fixtures, 8,950 exact seeks and 312 malformed-input rejections, including 256 seeded size/table mutations. Tests cover basic/extensible PCM/float across all channel counts, every valid PCM precision with mono/eight-channel input, finite/sentinel precedence, `fact` replacement, repeated/reordered entries, the table limit, trailing chunks, future bytes and Unicode paths. NTFS sparse inputs reach 17,179,877,476 logical bytes with large data/metadata and more than `2^32` frames. Guarded reads around 4 GiB offsets, EOF clamping, cancellation and 64 open/close cycles per file operate on original inputs. Sparse files are flushed before measuring allocation and removed after verification. Actual WASAPI lifecycle checks also cover ordinary RF64 and BW64 silence, including a nonzero BW64 dummy.
+
+Independent FFmpeg comparisons use original containers where supported. FFmpeg n8.0.1's [WAV demuxer](https://github.com/FFmpeg/FFmpeg/blob/n8.0.1/libavformat/wavdec.c) skips the optional size table, reads BW64's dummy as a signed RF64 count, uses `ds64` data length even when the data header is finite, and omits odd `ds64` padding. Cases outside those limits use its raw physical-PCM reader at a known data offset. The large BW64 comparator pass zeros only the ignored dummy after LAMP verifies the original nonzero value. Reports identify each reference path; they do not claim complete independent container conformance. The precision suite below also records FFmpeg's valid-bit header limitation.
 
 ## Verification and reference limits
 

@@ -1,6 +1,6 @@
 # LAMP 0.4.0-dev technical details
 
-A Windows x86-64 audio player with handwritten assembly WAV, FLAC, MP3, Ogg/Vorbis and development Ogg/Opus decoders, plus a native assembly UI. The current console build is **190,464 bytes (186 KiB)**; the graphical build is **198,144 bytes (193.5 KiB)**. Both include LAMP's icon and version resources. The published v0.3.0 archive retains its earlier four-format build and manifest.
+A Windows x86-64 audio player with handwritten assembly WAV, FLAC, MP3, Ogg/Vorbis and development Ogg/Opus decoders, plus a native assembly UI. The current console build is **190,976 bytes (186.5 KiB)**; the graphical build is **198,656 bytes (194 KiB)**. Both include LAMP's icon and version resources. The published v0.3.0 archive retains its earlier four-format build and manifest.
 
 The dark canvas, compact playback controls and automatic hiding are inspired by mpv. The custom pixel buffer and Win32 presentation follow Rhun's documented assembly UI model. No Rhun source, fonts, icons, or other assets were copied.
 
@@ -70,7 +70,7 @@ Opus adds 6,768 sample-position/reference PCM seek checks across 141 files. A te
 
 | Format | Implemented coverage |
 | --- | --- |
-| WAV | Little-endian RIFF; PCM unsigned 8-bit, signed 16/24/32-bit, IEEE float32/64; 1–8 channels downmixed to stereo; 8–192 kHz |
+| WAV | Little-endian RIFF/RF64/BW64 audio framing; PCM unsigned 8-bit, signed 16/24/32-bit, IEEE float32/64; 1–8 channels downmixed to stereo; 8–192 kHz |
 | Extensible WAV | PCM/float GUIDs; 1–container-width valid PCM bits, left-aligned with unused low bits ignored; speaker masks, direct-out and partial/excess mask bits; float precision equals container width |
 | Native FLAC | 1–8 channels, 4–32-bit, 8–192 kHz; constant/verbatim, fixed predictors 0–4, LPC 1–32, Rice partitions/escapes, wasted bits, all stereo decorrelation modes; default/tagged speaker layouts downmixed to stereo |
 | MP3 Layer III | MPEG-1/2/2.5, all nine rates 8–48 kHz, mono/stereo, known bitrate CBR/ABR/VBR; reservoir, Huffman/linbits/count1, scalefactors, long/short/mixed blocks, MS/intensity stereo, hybrid/polyphase synthesis |
@@ -78,7 +78,7 @@ Opus adds 6,768 sample-position/reference PCM seek checks across 141 files. A te
 | Ogg/Vorbis | Single Ogg v0 stream, CRC/sequence/continuation checks; mono/stereo 8–192 kHz, 64–8192 sample blocks; ordered/unordered/sparse codebooks, lookup 0/1/2, floor 1, residue 0/1/2, mapping 0, coupling/submaps, short/long overlap, positive/cropped granule origins, final trimming and indexed seeking |
 | Ogg/Opus | Development: one Ogg v0 logical stream; family 0 mono/stereo and family 1 with 1–8 speaker channels downmixed to stereo; SILK/hybrid/CELT, RFC 8251 updates, 48 kHz output, signed header gain, pre-skip/end trimming and cropped initial granule offsets; all 120 official elementary-vector checks pass |
 
-WAV ADPCM/RF64/RIFX, FLAC in Ogg, multichannel Vorbis, native surround output, playlists, tag display, and device reconnection are unsupported. Opus family 1 input is downmixed to stereo using RFC 7845 matrices; separate histories cover valid stream/coupling counts and repeated/silent maps. Packed packets remain capped at 4 MiB. Native FLAC checks CRC8/CRC16 and coded frame/sample chronology; STREAMINFO MD5 remains unchecked. All 29 FLAC depths and eight channel counts have exact lossless-channel/stereo/seek fixtures. [WAV](wav.md) and [FLAC](flac.md) implementation notes define speaker policies, resources and test scope. WAV uses double mixing, silences NaN/Inf and bounds finite float64 inputs and mixed outputs to the representable float32 range; exports preserve headroom beyond unit amplitude.
+WAV ADPCM/RIFX/WAVE64, ADM scene/object rendering, FLAC in Ogg, multichannel Vorbis, native surround output, playlists, tag display, and device reconnection are unsupported. Opus family 1 input is downmixed to stereo using RFC 7845 matrices; separate histories cover valid stream/coupling counts and repeated/silent maps. Packed packets remain capped at 4 MiB. Native FLAC checks CRC8/CRC16 and coded frame/sample chronology; STREAMINFO MD5 remains unchecked. All 29 FLAC depths and eight channel counts have exact lossless-channel/stereo/seek fixtures. [WAV](wav.md) and [FLAC](flac.md) implementation notes define speaker policies, resources and test scope. WAV uses double mixing, silences NaN/Inf and bounds finite float64 inputs and mixed outputs to the representable float32 range; exports preserve headroom beyond unit amplitude.
 
 MP3 CRC headers/side information are checked. Free-format, Layers I/II, VBRI trimming, APE tags, arbitrary inter-frame junk and corruption recovery are unsupported. Missing reservoir dependencies reject input; rate/channel/version changes are unsupported. Untagged files keep encoder delay/padding. Metadata validation remains incomplete; with an index, declared frame counts must agree with the scanned stream, while main-data audio is validated when decoded.
 
@@ -135,9 +135,10 @@ Recorded snapshots are in `reports/` in a source checkout. The paths below descr
 | `verification.json` | 43 WAV/FLAC checks, including exact reference PCM, malformed inputs and WASAPI silence |
 | `bin/flac-layout-verification.json` | 404 native FLAC files, all 4–32-bit depths/1–8 channels, tagged layouts, guarded reads, 6,060 exact seeks, cancellation/allocation release and malformed-input rejection |
 | `bin/wav-layout-verification.json` | 965 WAV files, all PCM container/valid-bit combinations, 1–8 channels, float32/64, speaker masks, Unicode paths, guarded reads, 14,475 exact seeks and cancelled seek/open/read |
+| `bin/rf64-verification.json` | 538 RF64/BW64 files, 16 sparse large-file fixtures, 8,950 exact seeks and 312 malformed-input rejections; size precedence, bounded tables, trailing metadata, guarded reads and cancellation |
 | `mp3-verification.json` | 103 MP3 checks: 88 PCM comparisons, 14 rejection cases, WASAPI silence; recorded SNR above 112 dB |
 | `bin/vorbis-verification.json` | 83 checks: 32 rate/channel/quality cases, noise/transients/silence, continued long comment, 36 synthetic residue/codebook cases, 10 rejections and WASAPI silence |
-| `bin/engine-verification.json` | Fourteen scenarios: all five codecs, indexed FLAC, family 1 Opus, 32-bit FLAC and 24-bit/float64 WAV 5.1/7.1 stereo downmix; playback, pause/resume, stop/reopen, seek, paused seek and cancelled open |
+| `bin/engine-verification.json` | Sixteen scenarios: all five codecs, RF64/BW64, indexed FLAC, family 1 Opus, 32-bit FLAC and 24-bit/float64 WAV 5.1/7.1 stereo downmix; playback, pause/resume, stop/reopen, seek, paused seek and cancelled open |
 | `bin/mp3-seek-verification.json` | 1,650 exact seeks, independent continuous PCM comparisons, bounded sparse index/header skims, adaptive compaction, cancelled seek/open and contradictory Xing counts |
 | `bin/vorbis-seek-verification.json` | 1,305 exact seeks, independent continuous PCM comparisons, packet/lace checkpoints, overlap pre-roll, origins/cropping, continued packets, adaptive compaction, cancelled seek/open and contradictory timestamps |
 | `bin/opus-seek-verification.json` | 6,768 independently positioned reset-reference seeks; all TOC configurations/framing codes, at least 80 ms pre-roll, gain/pre-skip, mode/channel/DTX transitions, continued/cropped streams, adaptive compaction and cancelled seek/open |
@@ -220,6 +221,7 @@ node .\tests\fuzz-vorbis.js
 .\tests\verify-seek.ps1 -OutputDirectory .\bin\verify-build #4425 exact WAV/FLAC/MP3/Vorbis +6768 Opus reference seeks
 .\tests\verify-flac-layouts.ps1 -OutputDirectory .\bin\verify-build #404 depth/layout files +6060 exact seeks
 .\tests\verify-wav-layouts.ps1 -OutputDirectory .\bin\verify-build #965 precision/layout files +14475 exact seeks
+.\tests\verify-rf64.ps1 -OutputDirectory .\bin\verify-build #538 container files +16 sparse inputs +8950 exact seeks
 .\tests\verify-opus-seek.ps1 -OutputDirectory .\bin\verify-build #Opus seek suite alone
 .\tests\verify-ogg-crc.ps1 -OutputDirectory .\bin\verify-build
 .\tests\benchmark-seek.ps1 -OutputDirectory .\bin\verify-build #creates ten-minute fixtures

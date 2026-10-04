@@ -63,4 +63,20 @@ foreach($layout in @('5.1','7.1')){
         Write-Output "wav-$encoding-$layout $stats"
     }
 }
+$rf64=Join-Path $scratch 'engine-silence-rf64.wav'
+& ffmpeg -hide_banner -loglevel error -y -f lavfi -i 'anullsrc=r=48000:cl=stereo:d=30' -c:a pcm_s16le -rf64 always $rf64
+if($LASTEXITCODE){throw 'RF64 engine fixture failed'}
+foreach($kind in @('RF64','BW64')){
+    $path=if($kind -eq 'RF64'){$rf64}else{Join-Path $scratch 'engine-silence-bw64.wav'}
+    if($kind -eq 'BW64'){
+        $bytes=[IO.File]::ReadAllBytes($rf64)
+        [Text.Encoding]::ASCII.GetBytes('BW64').CopyTo($bytes,0)
+        [BitConverter]::GetBytes([uint64]::MaxValue).CopyTo($bytes,36)
+        [IO.File]::WriteAllBytes($path,$bytes)
+    }
+    $stats=& (Join-Path $out 'engine-probe.exe') $path
+    if($LASTEXITCODE){throw "$kind engine lifecycle failed $stats"}
+    $report+=[pscustomobject]@{codec=$kind;result='passed';tests=@('playback','pause','resume','stop','reopen','seek','paused seek','cancelled open');stats="$stats"}
+    Write-Output "$kind $stats"
+}
 $report | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath (Join-Path $out 'engine-verification.json') -Encoding utf8

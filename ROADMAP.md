@@ -81,6 +81,8 @@ Multichannel progress: Opus mapping family 1 now supports 1–8 speaker channels
 
 ## 3 — Broad audio and container coverage
 
+Current container progress: RIFF/RF64/BW64 audio framing now uses checked 64-bit lengths, occurrence-aware `ds64` tables and validation of chunks after audio. The suite passes 538 files, 16 sparse inputs up to 17,179,877,476 logical bytes, 8,950 exact seeks and 312 malformed-input rejections. It covers large data/metadata, more than `2^32` frames, bounded table state, cancellation and guarded output. RF64/BW64 WASAPI lifecycle checks pass. ADM rendering, segmented WAV data, RIFX/WAVE64, compressed WAV and the broader containers/codecs below remain unfinished.
+
 | Area | Planned coverage, in approximate priority order |
 | --- | --- |
 | Mainstream lossy audio | AAC LC/HE-AAC, AC-3/E-AC-3, MPEG Layers I/II; then DTS families, WMA variants and other relevant legacy formats |

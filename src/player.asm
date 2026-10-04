@@ -35,7 +35,7 @@ usage db "LAMP 0.4.0-dev - Lev's Assembly Media Player",13,10
       db '       lamp-cli.exe --check file.flac',13,10
       db '       lamp-cli.exe --decode file.flac output.f32',13,10
       db 'Playback: Space pauses/resumes; Q or Ctrl+C stops.',13,10
-      db 'WAV: 1..8 channels, PCM 8/16/24/32 or float32/64; valid-bit packing.',13,10
+      db 'RIFF/RF64/BW64 WAV: 1..8 channels, PCM 8/16/24/32 or float32/64.',13,10
       db 'Native FLAC: 4..32 bit, 1..8 channels, speaker-mask-aware downmix.',13,10
       db 'Opus families 0/1; playback and float export output stereo.',13,10,0
 open_error db 'Unsupported, malformed, or inaccessible file. Supports WAV, native FLAC, MP3, Ogg Vorbis and Opus.',13,10,0

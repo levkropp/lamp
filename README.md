@@ -35,13 +35,15 @@ Windows 10/11 x64 and a working default audio output are the intended targets. B
 
 | Format | Current support |
 | --- | --- |
-| WAV | Little-endian RIFF, PCM 8/16/24/32-bit or float32/64; 1–8 channels, extensible valid bits/layouts, 8–192 kHz |
+| WAV | Little-endian RIFF/RF64/BW64 audio framing, PCM 8/16/24/32-bit or float32/64; 1–8 channels, extensible valid bits/layouts, 8–192 kHz |
 | Native FLAC | 1–8 channels, 4–32-bit, 8–192 kHz; CRC checks; speaker-mask-aware stereo downmix |
 | MP3 | MPEG-1/2/2.5 Layer III, mono/stereo, CBR/VBR, encoder trimming when tagged |
 | Ogg/Vorbis | Single logical stream, mono/stereo, floor 1, mapping 0; CRC and granule checks |
 | Ogg/Opus | Development source: one logical Ogg stream; family 0 mono/stereo or family 1 with 1–8 speaker channels downmixed to stereo; 48 kHz output, header gain/pre-skip/end trimming |
 
 See [precise coverage, limitations, and verification](docs/technical.md) before relying on a particular stream variant. Native surround output, multichannel Vorbis, chained Ogg streams and FLAC-in-Ogg remain unfinished. [WAV](docs/wav.md) and [FLAC](docs/flac.md) speaker layouts downmix to stereo; WAV also accepts left-aligned valid bits and float64 samples. WAV seeks directly; native FLAC uses seek tables or searches validated frames; MP3, Vorbis and Opus use sparse indexes.
+
+RF64/BW64 audio framing adds checked 64-bit lengths and direct seeks beyond 4 GiB. Its suite checks 538 files, 16 sparse large-file fixtures, 8,950 exact seeks and 312 malformed-input rejections. BW64 uses the existing WAVE speaker policy; ADM scene/object rendering remains unfinished. See [container rules and comparator limits](docs/wav.md#rf64bw64-framing-and-large-files).
 
 ## Controls
 

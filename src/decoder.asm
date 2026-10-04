@@ -30,6 +30,14 @@ input_cursor dq 0
 input_end dq 0
 wav_end dq 0
 wav_begin dq 0
+wav_kind dd 0                  ; 0 RIFF, 1 RF64, 2 BW64
+wav_ds64 dq 0
+wav_size_table dq 0
+wav_table_count dd 0
+wav_table_used dd 0
+wav_data_seen dd 0
+wav_fact_seen dd 0
+wav_fact_frames dq 0
 flac_begin dq 0
 flac_seek_table dq 0
 flac_seek_count dd 0
@@ -110,6 +118,7 @@ right_samples dq 65536 dup (?)
 lpc_coeff dq 32 dup (?)
 crc8_table db 256 dup (?)
 crc16_table dw 256 dup (?)
+wav_table_bits dq 64 dup (?)   ; at most 4096 ds64 entries, consumed once
 
 .code
 decoder_open PROC
@@ -122,6 +131,14 @@ decoder_open PROC
     mov dword ptr [frame_samples],0
     mov dword ptr [frame_used],0
     mov qword ptr [wav_begin],0
+    mov dword ptr [wav_kind],0
+    mov qword ptr [wav_ds64],0
+    mov qword ptr [wav_size_table],0
+    mov dword ptr [wav_table_count],0
+    mov dword ptr [wav_table_used],0
+    mov dword ptr [wav_data_seen],0
+    mov dword ptr [wav_fact_seen],0
+    mov qword ptr [wav_fact_frames],0
     mov qword ptr [flac_begin],0
     mov qword ptr [flac_seek_table],0
     mov dword ptr [flac_seek_count],0
@@ -175,6 +192,10 @@ decoder_open PROC
     mov [input_cursor],rax
     cmp dword ptr [rax],46464952h ; RIFF
     je open_wav
+    cmp dword ptr [rax],34364652h ; RF64
+    je open_rf64
+    cmp dword ptr [rax],34365742h ; BW64
+    je open_bw64
     cmp dword ptr [rax],43614c66h ; fLaC
     je open_flac
     cmp dword ptr [rax],5367674fh ; OggS
@@ -223,17 +244,77 @@ open_bad:
     xor eax,eax
     leave
     ret
+open_rf64:
+    mov dword ptr [wav_kind],1
+    jmp open_wav
+open_bw64:
+    mov dword ptr [wav_kind],2
 open_wav:
     cmp dword ptr [rax+8],45564157h
     jne open_bad
+    cmp dword ptr [wav_kind],0
+    je wav_riff_size
+    ; RF64/BW64 require ds64 immediately after the twelve-byte header.
+    ; Bound its fixed prefix before reading any 64-bit fields or table count.
+    lea r8,[rax+48]
+    cmp r8,[input_end]
+    ja open_bad
+    cmp dword ptr [rax+12],34367364h
+    jne open_bad
+    mov edx,[rax+16]
+    cmp edx,28
+    jb open_bad
+    cmp edx,0ffffffffh
+    je open_bad
+    lea r9,[rax+20]
+    mov [wav_ds64],r9
+    mov r8,r9
+    add r8,rdx
+    jc open_bad
+    cmp r8,[input_end]
+    ja open_bad
+    mov ecx,[r9+24]
+    cmp ecx,4096
+    ja open_bad
+    mov [wav_table_count],ecx
+    imul rcx,12
+    add rcx,28
+    cmp rcx,rdx
+    ja open_bad
+    lea rcx,[r9+28]
+    mov [wav_size_table],rcx
+    lea rcx,wav_table_bits
+    xor edx,edx
+wav_clear_table:
+    mov qword ptr [rcx+rdx*8],0
+    inc edx
+    cmp edx,64
+    jb wav_clear_table
     mov edx,[rax+4]
+    cmp edx,0ffffffffh
+    jne wav_container_size
+    mov rdx,[r9]
+    jmp wav_container_size
+wav_riff_size:
+    mov edx,[rax+4]
+    lea r8,[rax+12]
+wav_container_size:
+    cmp rdx,4
+    jb open_bad
     add rdx,8
+    jc open_bad
     cmp rdx,[file_size]
     ja open_bad
     add rdx,rax
+    jc open_bad
     mov [input_end],rdx
-    add rax,12
-    mov r10,rax
+    ; Chunk payload padding is relative to the even file base.
+    mov r10,r8
+    add r10,1
+    jc open_bad
+    and r10,-2
+    cmp r10,rdx
+    ja open_bad
     xor r11d,r11d              ; fmt found
 wav_chunks:
     mov rax,[ogg_cancel_ptr]
@@ -242,10 +323,46 @@ wav_chunks:
     cmp dword ptr [rax],0
     jne open_bad
 wav_chunk_continue:
+    cmp r10,[input_end]
+    je wav_complete
     lea rax,[r10+8]
+    cmp rax,r10
+    jb open_bad
     cmp rax,[input_end]
     ja open_bad
     mov edx,[r10+4]
+    cmp edx,0ffffffffh
+    jne wav_chunk_size
+    cmp dword ptr [wav_kind],0
+    je open_bad
+    cmp dword ptr [r10],61746164h
+    jne wav_table_lookup
+    mov r9,[wav_ds64]
+    mov rdx,[r9+8]
+    jmp wav_chunk_size
+wav_table_lookup:
+    ; Match the first unused entry for this FourCC. Different chunk IDs may
+    ; appear in another order; repeated IDs consume their entries in order.
+    mov r9,[wav_size_table]
+    xor ecx,ecx
+wav_table_scan:
+    cmp ecx,[wav_table_count]
+    jae open_bad
+    mov edx,[r9]
+    cmp edx,[r10]
+    jne wav_table_skip
+    lea rdx,wav_table_bits
+    bt qword ptr [rdx],rcx
+    jc wav_table_skip
+    bts qword ptr [rdx],rcx
+    inc dword ptr [wav_table_used]
+    mov rdx,[r9+4]
+    jmp wav_chunk_size
+wav_table_skip:
+    add r9,12
+    inc ecx
+    jmp wav_table_scan
+wav_chunk_size:
     mov r8,rax
     add r8,rdx
     jc open_bad
@@ -255,29 +372,36 @@ wav_chunk_continue:
     je wav_fmt
     cmp dword ptr [r10],61746164h
     je wav_data
+    cmp dword ptr [r10],74636166h
+    je wav_fact
+    cmp dword ptr [r10],34367364h
+    je open_bad
 wav_next:
     add r8,1
+    jc open_bad
     and r8,-2
+    cmp r8,[input_end]
+    ja open_bad
     mov r10,r8
     jmp wav_chunks
 wav_fmt:
     test r11d,r11d
     jnz open_bad
-    cmp edx,16
+    cmp rdx,16
     jb open_bad
-    cmp edx,16
+    cmp rdx,16
     je wav_fmt_size_valid
-    cmp edx,18
+    cmp rdx,18
     jb open_bad
     movzx ecx,word ptr [rax+16]
     add ecx,18
-    cmp ecx,edx
+    cmp rcx,rdx
     ja open_bad
 wav_fmt_size_valid:
     movzx ecx,word ptr [rax]
     cmp ecx,0fffeh
     jne wav_basic_fmt
-    cmp edx,40
+    cmp rdx,40
     jb open_bad
     cmp word ptr [rax+16],22
     jb open_bad
@@ -368,6 +492,9 @@ wav_precision_valid:
 wav_data:
     test r11d,r11d
     jz open_bad
+    cmp dword ptr [wav_data_seen],0
+    jne open_bad
+    mov dword ptr [wav_data_seen],1
     mov [input_cursor],rax
     mov [wav_begin],rax
     mov [wav_end],r8
@@ -378,6 +505,35 @@ wav_data:
     test edx,edx
     jnz open_bad
     mov [total_frames],rax
+    jmp wav_next
+wav_fact:
+    cmp dword ptr [wav_fact_seen],0
+    jne open_bad
+    cmp rdx,4
+    jb open_bad
+    mov dword ptr [wav_fact_seen],1
+    mov ecx,[rax]
+    cmp ecx,0ffffffffh
+    jne wav_fact_count
+    cmp dword ptr [wav_kind],1
+    jne open_bad
+    mov r9,[wav_ds64]
+    mov rcx,[r9+16]
+wav_fact_count:
+    mov [wav_fact_frames],rcx
+    jmp wav_next
+wav_complete:
+    cmp dword ptr [wav_data_seen],0
+    je open_bad
+    mov eax,[wav_table_used]
+    cmp eax,[wav_table_count]
+    jne open_bad
+    mov rax,[wav_fact_frames]
+    test rax,rax               ; zero means unspecified for PCM/float
+    jz wav_frame_count_valid
+    cmp rax,[total_frames]
+    jne open_bad
+wav_frame_count_valid:
     call pcm_build_mix
     test eax,eax
     jz open_bad
