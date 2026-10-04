@@ -36,4 +36,15 @@ foreach($codec in @('wav','flac','mp3','vorbis','opus')) {
         Write-Output "flac-indexed $stats"
     }
 }
+# Exercise family1 through the actual WASAPI worker/queue path. Silence keeps
+# the lifecycle check unobtrusive while all elementary streams are decoded.
+foreach($layout in @('5.1','7.1')){
+    $path=Join-Path $scratch "engine-silence-family1-$layout.opus"
+    & ffmpeg -hide_banner -loglevel error -y -f lavfi -i "anullsrc=r=48000:cl=$($layout):d=30" -c:a libopus -mapping_family 1 -b:a 128k $path
+    if($LASTEXITCODE){throw 'Family1 engine fixture failed'}
+    $stats=& (Join-Path $out 'engine-probe.exe') $path
+    if($LASTEXITCODE){throw "Family1 engine lifecycle failed $layout $stats"}
+    $report+=[pscustomobject]@{codec="opus-family1-$layout";result='passed';tests=@('stereo downmix playback','pause','resume','stop','reopen','seek','paused seek','cancelled open');stats="$stats"}
+    Write-Output "opus-family1-$layout $stats"
+}
 $report | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath (Join-Path $out 'engine-verification.json') -Encoding utf8

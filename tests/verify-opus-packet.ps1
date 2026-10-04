@@ -6,6 +6,7 @@ $msvc=(Get-ChildItem -LiteralPath (Join-Path $vs 'VC\Tools\MSVC') -Directory | S
 $sdkRoot=Join-Path ${env:ProgramFiles(x86)} 'Windows Kits\10'
 $version=(Get-ChildItem -LiteralPath (Join-Path $sdkRoot 'Lib') -Directory | Sort-Object Name -Descending | Select-Object -First 1).Name
 $tools=Join-Path $msvc 'bin\Hostx64\x64'
+New-Item -ItemType Directory -Force -Path (Join-Path $root 'bin\packet-oracle') | Out-Null
 . (Join-Path $PSScriptRoot 'opus-reference.ps1')
 $reference=Get-LampOpusReference
 $source=Get-Content -Raw -LiteralPath (Join-Path $reference 'src\opus_decoder.c')
@@ -21,9 +22,9 @@ $generated=Join-Path $root 'bin\opus_packet_reference.h'
 [IO.File]::WriteAllText($generated,$header+"`n"+$duration+"`n"+$parser+"`n")
 & (Join-Path $tools 'ml64.exe') /nologo /c "/Fo$root\bin\opus_packet.obj" (Join-Path $root 'src\opus_packet.asm')
 if($LASTEXITCODE) {throw 'Packet assembly failed'}
-& (Join-Path $tools 'cl.exe') /nologo /O2 /MD "/I$msvc\include" "/I$sdkRoot\Include\$version\ucrt" "/I$root\bin" "/Fo$root\bin\\" "/Fe$root\bin\opus-packet-oracle.exe" (Join-Path $PSScriptRoot 'opus-packet-oracle.c') "$root\bin\opus_packet.obj" /link "/libpath:$msvc\lib\x64" "/libpath:$sdkRoot\Lib\$version\ucrt\x64" "/libpath:$sdkRoot\Lib\$version\um\x64"
+& (Join-Path $tools 'cl.exe') /nologo /O2 /MD "/I$msvc\include" "/I$sdkRoot\Include\$version\ucrt" "/I$sdkRoot\Include\$version\um" "/I$sdkRoot\Include\$version\shared" "/I$root\bin" "/Fo$root\bin\packet-oracle\\" "/Fe$root\bin\opus-packet-oracle.exe" (Join-Path $PSScriptRoot 'opus-packet-oracle.c') "$root\bin\opus_packet.obj" /link kernel32.lib "/libpath:$msvc\lib\x64" "/libpath:$sdkRoot\Lib\$version\ucrt\x64" "/libpath:$sdkRoot\Lib\$version\um\x64"
 if($LASTEXITCODE) {throw 'Packet test oracle failed to build'}
 $result=& (Join-Path $root 'bin\opus-packet-oracle.exe')
 if($LASTEXITCODE) {throw "Assembly packet mismatch $result"}
 Write-Output $result
-[pscustomobject]@{result='passed';reference='RFC6716 + RFC8251 (archive86a927223e73d2476646a1b933fcd3fffb6ecc8c,patch029e3aa88fc342c91e67a21e7bfbc9458661cd5f)';scope='packet framing, frame sizes and pointers, TOC and duration; not audio decoding';stats="$result"} | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $root 'bin\opus-packet-verification.json') -Encoding utf8
+[pscustomobject]@{result='passed';reference='RFC6716 + RFC8251 for regular packets; test-only Opus1.5.2 parser (full opus.c SHA256 f5ae5ff3e9cef998addeee777dcb283cffcaf0f6ee4452108127e9157cdb2458) for self-delimited packets';scope='regular and RFC6716 AppendixB self-delimited packet framing, frame sizes/pointers, TOC/duration and consumed bytes including padding; protected-page boundaries and invalid/null API inputs; not audio decoding';stats="$result"} | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $root 'bin\opus-packet-verification.json') -Encoding utf8

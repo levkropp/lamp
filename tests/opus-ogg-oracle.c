@@ -182,8 +182,10 @@ static int og_external(const char *path,const char *pcm_path){
  float maximum=0;double error=0;for(unsigned i=0;i<values;i++){float wanted=raw[(op_preskip+i/2)*source_channels+(source_channels==1?0:i%2)],diff=wanted-actual[i];maximum=fmaxf(maximum,fabsf(diff));error+=(double)diff*diff;}
  printf("External RFC PCM: %u packets,%u samples,max error%.9g,RMS%.9g\n",packets,values,maximum,sqrt(error/values));ogg_close();return maximum<=0.00004f;
 }
+#ifndef OPUS_OGG_ORACLE_EMBEDDED
 int main(int argc,char **argv){
  if(argc==3)return og_external(argv[1],argv[2])?0:1;
  if(!og_encoded()||!og_bad()||!og_more_bounds())return 1;
  printf("Ogg Opus: %u exact reference PCM streams, mono/stereo SILK/hybrid/CELT/DTX, pre-skip0..65535, signed gain extremes, initial offsets, single/multiple audio pages, continued tags/audio, future minor header fields, end trimming, %llu stereo PCM values, %u bounded read/canary checks, %u malformed stream rejections, %u late/sticky failure checks, %u cancellation checks, max scaled error %.9g\n",og_cases,og_samples,og_checks,og_rejects,og_late,og_cancel,og_max);return 0;
 }
+#endif

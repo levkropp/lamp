@@ -16,7 +16,7 @@ foreach ($directory in @('src','assets','scripts','docs','reports','site','.gith
 }
 $files += Get-ChildItem -LiteralPath (Join-Path $root 'tests') -File | ForEach-Object { $_.FullName.Substring($root.Length+1) }
 $files += Get-ChildItem -LiteralPath (Join-Path $root 'tests\fixtures') -File | ForEach-Object { $_.FullName.Substring($root.Length+1) }
-$files += @('tests\reference\dr_mp3.h','tests\reference\stb_vorbis.c','tests\reference\opus-rfc6716.tar.gz','tests\reference\opus-rfc8251.patch','tests\reference\opus-rfc8251-LICENSE.txt','tests\reference\opus-rfc8251-vector-hashes.json')
+$files += @('tests\reference\dr_mp3.h','tests\reference\stb_vorbis.c','tests\reference\opus-rfc6716.tar.gz','tests\reference\opus-rfc8251.patch','tests\reference\opus-rfc8251-LICENSE.txt','tests\reference\opus-rfc8251-vector-hashes.json','tests\reference\opus-1.5.2-packet.h')
 $files += Get-ChildItem -LiteralPath $root -Filter '*.json' -File | Where-Object Name -ne 'manifest.json' | ForEach-Object Name
 $files = $files | Sort-Object -Unique
 $manifest = @()

@@ -1,0 +1,8 @@
+﻿{
+    "result":  "passed",
+    "reference":  "RFC6716 + RFC8251 (archive86a927223e73d2476646a1b933fcd3fffb6ecc8c,patch029e3aa88fc342c91e67a21e7bfbc9458661cd5f); Opus1.5.2 self-delimited parser, full opus.c SHA256 f5ae5ff3e9cef998addeee777dcb283cffcaf0f6ee4452108127e9157cdb2458",
+    "scope":  "Ogg/Opus mapping family1,1..8 logical speaker channels,1..255 elementary streams, full coupled/channel-map bounds, separate histories, RFC7845 stereo downmix, framing/padding, gain/pre-skip/granules/end trim, seek reset and cancellation",
+    "comparison":  "Generated independent native elementary-stream PCM plus independent double-precision speaker matrices; bounded/canary and immutable-input checks, reset-reference seeking, malformed packed streams/header maps, unmapped entropy/sticky error and cancellation checks",
+    "scale_adjusted_absolute_tolerance":  4E-05,
+    "stats":  "Opus family1: 86 generated reference PCM streams, C1..8, N1..255, M0..127, all speaker matrices, repeated/silent/unmapped channels, mixed mode/channel transitions, four framing codes, 48-frame/120ms packets, padding, pre-skip0..65535, signed gain extremes, continued audio and future minor headers; 4465524 stereo values, 2278 bounded read/canary checks, 1032 reset-reference seeks, 15 malformed rejections, 1 unmapped late/sticky errors, 3 cancellation checks, TOC maskccc1f303 framing maskf, max scaled error2.97969166e-07"
+}

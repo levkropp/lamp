@@ -2,9 +2,12 @@
 #define OPUS_MODE_ORACLE_EMBEDDED
 #define OPUS_MODE_CELT_OBSERVER
 #include "opus-mode-oracle.c"
+#include "reference/opus-1.5.2-packet.h"
 typedef struct {ModeState *state;const unsigned char *data;float *pcm;void *work;unsigned len,count,fec,state_cap,work_cap,pcm_cap;} Packet;
 typedef char packet_size[(sizeof(Packet)==56)?1:-1];
 int op_opus_decode_packet(Packet *);
+int op_opus_decode_packet_ex(Packet *,unsigned);
+extern unsigned op_packet_bytes;
 #ifndef OPUS_STREAM_OGG_EMBEDDED
 uint64_t ogg_total_granule,ogg_granule,ogg_packet_page,total_frames;
 unsigned ogg_packet_page_end;
@@ -13,6 +16,7 @@ int ogg_open(void *a,void *b){(void)a;(void)b;return 0;}
 void *ogg_next(void){return 0;}
 #endif
 static unsigned sp_packets,sp_lost,sp_fec,sp_codes[4],sp_guards,sp_late,sp_malformed,sp_dtx_calls;
+static unsigned sp_self_delimited,sp_self_calls;
 static uint32_t sp_configs;
 static unsigned long long sp_samples;
 #ifdef OPUS_STREAM_VECTOR_OBSERVER
@@ -27,9 +31,16 @@ static int sp_decode(const unsigned char *data,unsigned len,unsigned count,unsig
  memset(expected,0xa5,sizeof(expected));memset(second_pcm,0xa5,sizeof(second_pcm));memset(second_work,0x71,sizeof(second_work));duplicate=ms;ModeState prior=ms;
  Packet r={&ms,data,output.pcm,scratch.bytes,len,count,fec,26880,118944,11520},saved=r;
  Packet s=r;s.state=&duplicate;s.pcm=second_pcm;s.work=second_work;
- int b=op_opus_decode_packet(&r),c=op_opus_decode_packet(&s);
+ int b=sp_self_delimited?op_opus_decode_packet_ex(&r,1):op_opus_decode_packet(&r);unsigned consumed=op_packet_bytes;
+ int c=sp_self_delimited?op_opus_decode_packet_ex(&s,1):op_opus_decode_packet(&s);
+ if(!len&&b>0&&(consumed||op_packet_bytes)){puts("PLC consumed encoded bytes");return 0;}
  mode_reference_celt_errors=0;
- int a=opus_decode_native(mr,data,len,expected,count?count:mr->Fs*120/1000,fec,0,NULL);
+ int a=opus_decode_native(mr,data,len,expected,count?count:mr->Fs*120/1000,fec,sp_self_delimited,NULL);
+ if(data&&len&&b>0){
+  short frame_sizes[48];int prefix;
+  if(modern_packet_parse_impl(data,len,sp_self_delimited,NULL,NULL,frame_sizes,NULL,&prefix,NULL,NULL)<=0||consumed!=prefix||op_packet_bytes!=prefix){printf("Packet consumed bytes %u/%u/%d\n",consumed,op_packet_bytes,prefix);return 0;}
+  if(sp_self_delimited)sp_self_calls++;
+ }
  if(malformed&&(a<0||b<=0)){
   CELTDecoder *celt=(CELTDecoder *)((unsigned char *)mr+mr->celt_dec_offset);
   if(b==0){
@@ -57,7 +68,10 @@ static unsigned sp_build(unsigned char *out,unsigned toc,const unsigned char *pa
   if(padding){unsigned remain=padding;while(remain>=255){out[at++]=255;remain-=254;}out[at++]=(unsigned char)remain;}
   if(vbr)for(unsigned i=1;i<frames;i++)at+=encode_size(n,out+at);
  }
- for(unsigned i=0;i<frames;i++){memcpy(out+at,payload,n);at+=n;}memset(out+at,0,padding);return at+padding;
+ if(sp_self_delimited)at+=encode_size(n,out+at);
+ for(unsigned i=0;i<frames;i++){memcpy(out+at,payload,n);at+=n;}memset(out+at,0,padding);at+=padding;
+ /* Packed-stream callers pass all remaining bytes, not just this prefix. */
+ if(sp_self_delimited){memset(out+at,0x6d,23);at+=23;}return at;
 }
 static int sp_encoded(void){
  const int rates[]={8000,12000,16000,24000,48000},celt_bands[]={OPUS_BANDWIDTH_NARROWBAND,OPUS_BANDWIDTH_WIDEBAND,OPUS_BANDWIDTH_SUPERWIDEBAND,OPUS_BANDWIDTH_FULLBAND};
@@ -94,6 +108,8 @@ static int sp_invalid(void){
   if(op_opus_decode_packet(&r)||memcmp(&r,&saved,sizeof(r))||memcmp(&ms,&prior,sizeof(ms))||memcmp(out,prior_pcm,sizeof(out))||memcmp(workbuf,prior_work,sizeof(workbuf))){printf("Packet guard%u\n",k);return 0;}ms=original;sp_guards++;
  }
  if(op_opus_decode_packet(NULL))return 0;sp_guards++;
+ Packet flag=base;ModeState flag_prior=ms;
+ if(op_opus_decode_packet_ex(&flag,2)||op_opus_decode_packet_ex(NULL,1)||memcmp(&ms,&flag_prior,sizeof(ms)))return 0;sp_guards+=2;
  ms.celt.period=1023;Packet r=base;if(op_opus_decode_packet(&r)!=-1||ms.error!=1)return 0;ModeState failed=ms;memcpy(prior_work,workbuf,sizeof(workbuf));memcpy(prior_pcm,out,sizeof(out));if(op_opus_decode_packet(&r)||memcmp(&ms,&failed,sizeof(ms))||memcmp(out,prior_pcm,sizeof(out))||memcmp(workbuf,prior_work,sizeof(workbuf)))return 0;
  if(!mode_reset(2,48000)||!sp_decode(payload,3,0,0,0))return 0;sp_late++;return 1;
 }
@@ -120,6 +136,7 @@ static int sp_malformed_packets(void){
 #ifndef OPUS_STREAM_ORACLE_EMBEDDED
 int main(void){
  if(!sp_encoded()||!sp_invalid()||!sp_dtx()||!sp_malformed_packets())return 1;
- printf("Opus packets: %u exact packet-to-PCM/history calls (%u/%u/%u/%u framing codes, %u losses, %u FEC), all32 TOC configurations, five API rates and channel layouts, %u zero/one-byte DTX packets, %llu output samples, 2048 malformed cases (%u rejections), %u guards, %u late/sticky/reset checks, max scaled error %.9g\n",sp_packets,sp_codes[0],sp_codes[1],sp_codes[2],sp_codes[3],sp_lost,sp_fec,sp_dtx_calls,sp_samples,sp_malformed,sp_guards,sp_late,mode_max);return 0;
+ sp_self_delimited=1;if(!sp_encoded()||!sp_dtx())return 1;
+ printf("Opus packets: %u exact packet-to-PCM/history calls (%u/%u/%u/%u framing codes, %u losses, %u FEC), including %u self-delimited packets with trailing stream bytes; all32 TOC configurations, five API rates and channel layouts, %u zero/one-byte DTX packets, %llu output samples, 2048 malformed cases (%u rejections), %u guards, %u late/sticky/reset checks, max scaled error %.9g\n",sp_packets,sp_codes[0],sp_codes[1],sp_codes[2],sp_codes[3],sp_lost,sp_fec,sp_self_calls,sp_dtx_calls,sp_samples,sp_malformed,sp_guards,sp_late,mode_max);return 0;
 }
 #endif

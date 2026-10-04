@@ -1,6 +1,6 @@
 ﻿{
     "result":  "passed",
-    "reference":  "RFC6716 + RFC8251 (archive86a927223e73d2476646a1b933fcd3fffb6ecc8c,patch029e3aa88fc342c91e67a21e7bfbc9458661cd5f)",
-    "scope":  "packet framing, frame sizes and pointers, TOC and duration; not audio decoding",
-    "stats":  "Passed 1216672 packet framing comparisons (351968 valid packets)."
+    "reference":  "RFC6716 + RFC8251 for regular packets; test-only Opus1.5.2 parser (full opus.c SHA256 f5ae5ff3e9cef998addeee777dcb283cffcaf0f6ee4452108127e9157cdb2458) for self-delimited packets",
+    "scope":  "regular and RFC6716 AppendixB self-delimited packet framing, frame sizes/pointers, TOC/duration and consumed bytes including padding; protected-page boundaries and invalid/null API inputs; not audio decoding",
+    "stats":  "Passed 1220769 regular packet framing comparisons (352997 valid) and 1220769 self-delimited comparisons (412876 valid), including 4097 guarded boundary cases; sizes, pointers, duration and consumed bytes including padding."
 }

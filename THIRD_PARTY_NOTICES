@@ -105,6 +105,14 @@ Adapted Opus packet framing:
 Opus SILK/hybrid/CELT mode orchestration, redundancy and transition fades
 also reference opus_decoder.c under the conditions below. The unchanged
 normative Opus encoder is compiled only into the mode/packet/Ogg verification executables.
+Additional test-only self-delimited packet parser:
+tests/reference/opus-1.5.2-packet.h extracts helpers from Opus1.5.2 src/opus.c,
+with renamed functions/types and its complete BSD notice retained in that file.
+Copyright (c) 2011 Xiph.Org Foundation, Skype Limited.
+Written by Jean-Marc Valin and Koen Vos.
+https://github.com/xiph/opus/blob/v1.5.2/src/opus.c
+Full source SHA256: f5ae5ff3e9cef998addeee777dcb283cffcaf0f6ee4452108127e9157cdb2458
+This C parser is confined to verification; runtime framing is handwritten ASM.
 Copyright (c) 2010-2012 IETF Trust, Xiph.Org Foundation and Skype Limited.
 All rights reserved.
 Individual source notices are retained in the bundled reference archive.

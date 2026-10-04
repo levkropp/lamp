@@ -5,12 +5,21 @@
 option casemap:none
 include opus_stream_layout.inc
 include opus_mode_layout.inc
-EXTERN op_opus_packet_parse:PROC,op_opus_decode_frame:PROC
+EXTERN op_opus_packet_parse_ex:PROC,op_opus_decode_frame:PROC
 EXTERN op_frame_ptr:QWORD,op_frame_size:DWORD,op_frame_count:DWORD
-EXTERN op_frame_samples:DWORD,op_packet_samples:DWORD,op_config:DWORD,op_stereo:DWORD
-PUBLIC op_opus_decode_packet
+EXTERN op_frame_samples:DWORD,op_packet_samples:DWORD,op_config:DWORD,op_stereo:DWORD,op_packet_bytes:DWORD
+PUBLIC op_opus_decode_packet,op_opus_decode_packet_ex
 .code
 op_opus_decode_packet PROC
+    xor edx,edx
+    jmp op_opus_decode_packet_ex
+op_opus_decode_packet ENDP
+
+; The existing56-byte request ABI is unchanged. EDX=1 accepts a self-delimited
+; prefix for multistream; EDX=0 is ordinary packet framing. Packet bytes are
+; reported by the framing parser in op_packet_bytes. Decoder storage is owned
+; by the caller and can be separate for each mono/stereo stream.
+op_opus_decode_packet_ex PROC
     push rbx
     push rsi
     push rdi
@@ -18,7 +27,10 @@ op_opus_decode_packet PROC
     push r13
     push r14
     push r15
-    sub rsp,128
+    sub rsp,144
+    mov [rsp+128],edx
+    cmp edx,1
+    ja pk_bad
     mov rbx,rcx
     test rbx,rbx
     jz pk_bad
@@ -74,7 +86,8 @@ pk_rate_valid:
     jz pk_bad
     mov rcx,r15
     mov edx,[rbx+PK_LEN]
-    call op_opus_packet_parse
+    mov r8d,[rsp+128]
+    call op_opus_packet_parse_ex
     test eax,eax
     jz pk_bad
     mov [rsp+104],eax          ;frames
@@ -114,6 +127,7 @@ pk_frame:
     mov [rsp+32+MF_FEC],eax
     jmp pk_call
 pk_loss:
+    mov dword ptr [op_packet_bytes],0 ;PLC consumes no encoded bytes
     mov eax,[r12+MO_FRAME]
     cmp eax,[rsp+96]
     jb pk_bad
@@ -214,7 +228,7 @@ pk_failed:
 pk_bad:
     xor eax,eax
 pk_done:
-    add rsp,128
+    add rsp,144
     pop r15
     pop r14
     pop r13
@@ -223,5 +237,5 @@ pk_done:
     pop rsi
     pop rbx
     ret
-op_opus_decode_packet ENDP
+op_opus_decode_packet_ex ENDP
 END

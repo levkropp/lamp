@@ -4,7 +4,7 @@
 
 A small Windows x86-64 media player with handwritten assembly decoders and a native assembly UI. Audio comes first. The long-term goal is to support the relevant formats and playback features people use in **mpv**, with a small runtime and low CPU use.
 
-**Current source: 0.4.0-dev, an early audio prototype.** WAV, native FLAC, MP3, Ogg/Vorbis and mono/stereo Ogg/Opus family 0 play in source builds. Opus includes the RFC 8251 decoder updates and passes all 120 official vector checks across five output rates and mono/stereo. Video, subtitles and network streaming are future work. The published v0.3.0 prerelease contains the first four audio formats.
+**Current source: 0.4.0-dev, an early audio prototype.** WAV, native FLAC, MP3, Ogg/Vorbis and Ogg/Opus play in source builds. Opus supports family 0 mono/stereo and family 1 layouts with 1–8 speaker channels, downmixed to stereo. Its elementary decoders include RFC 8251 updates and pass all 120 official vector checks across five output rates and mono/stereo. Video, subtitles and network streaming are future work. The published v0.3.0 prerelease contains the first four audio formats.
 
 [Website](https://levkropp.github.io/lamp/) · [Download v0.3.0](https://github.com/levkropp/lamp/releases/tag/v0.3.0) · [Roadmap](ROADMAP.md) · [Compatibility matrix](docs/compatibility.md) · [Technical details and limits](docs/technical.md)
 
@@ -39,9 +39,9 @@ Windows 10/11 x64 and a working default audio output are the intended targets. B
 | Native FLAC | Mono/stereo, 4–24-bit, 8–192 kHz; CRC checks |
 | MP3 | MPEG-1/2/2.5 Layer III, mono/stereo, CBR/VBR, encoder trimming when tagged |
 | Ogg/Vorbis | Single logical stream, mono/stereo, floor 1, mapping 0; CRC and granule checks |
-| Ogg/Opus | Development source: single logical stream, mapping family 0, mono/stereo, 48 kHz output, header gain/pre-skip/end trimming |
+| Ogg/Opus | Development source: one logical Ogg stream; family 0 mono/stereo or family 1 with 1–8 speaker channels downmixed to stereo; 48 kHz output, header gain/pre-skip/end trimming |
 
-See [precise coverage, limitations, and verification](docs/technical.md) before relying on a particular stream variant. Multichannel, chained Ogg streams and FLAC-in-Ogg are not implemented. WAV seeks directly; native FLAC uses seek tables or searches validated frames; MP3, Vorbis and Opus use sparse indexes.
+See [precise coverage, limitations, and verification](docs/technical.md) before relying on a particular stream variant. Native surround output, multichannel Vorbis/FLAC, chained Ogg streams and FLAC-in-Ogg remain unfinished. WAV seeks directly; native FLAC uses seek tables or searches validated frames; MP3, Vorbis and Opus use sparse indexes.
 
 ## Controls
 
@@ -69,7 +69,7 @@ node .\tests\smoke.js
 .\package.ps1
 ```
 
-The prebuilt ICO and decoder tables are included. A normal build needs no codec library or reference C compiler. Both players use custom assembly entry points and `/NODEFAULTLIB`. The development build measures **193,024 bytes for `lamp.exe`** and **185,344 bytes for `lamp-cli.exe`**, including icon resources; release manifests record exact sizes and hashes.
+The prebuilt ICO and decoder tables are included. A normal build needs no codec library or reference C compiler. Both players use custom assembly entry points and `/NODEFAULTLIB`. The development build measures **195,584 bytes for `lamp.exe`** and **188,416 bytes for `lamp-cli.exe`**, including icon resources; release manifests record exact sizes and hashes.
 
 To build while the player is open, use `./build.ps1 -OutputDirectory ./bin/verify-build`. Pass that directory to `node ./tests/verify-runtime.js ./bin/verify-build` and `node ./tests/smoke.js ./bin/verify-build` to check the new binaries, or `./package.ps1 -BinaryDirectory ./bin/verify-build` to package them. Packaging rejects a binary version that differs from `VERSION`.
 
@@ -81,7 +81,7 @@ The UI image comes from the actual assembly renderer with synthetic state. Open-
 
 ## Roadmap and contribution
 
-Latest Opus work connects Ogg packets to playback, with header gain, pre-skip, cropped granule origins, end trimming, cancellation and a 64 KiB seek index. Thirty-four suites include 18,381 packet calls and 393 Ogg streams against the RFC 8251 updated decoder, plus malformed input, capacity/canary and deterministic scratch checks. Independent modern-libopus comparisons pass all 51 tonal, noise, transient and silence cases, with maximum PCM error below 0.000023. All 120 official vector checks pass, including exact reference PCM/history and final-range validation for 200,750 packets. Playback, pause/resume, stop/reopen and indexed/paused seeking pass for Opus and the existing formats. Multistream/chaining remain unfinished. See [the decoder-stage notes](docs/opus.md) and run `./tests/verify-opus-components.ps1` to reproduce the component checks without FFmpeg or an audio device, or `./tests/verify-opus-conformance.ps1` for official vectors.
+Latest Opus work adds family 1 multistream decoding and the RFC stereo downmix. The new integration suite checks 86 generated streams, 1,032 reset-reference seeks, repeated/silent/unmapped channels, gain/trim bounds, malformed packets and cancellation. Another 112 modern-libopus family 1 files pass independent float PCM comparisons, with peak error below 0.000002. The original family 0 suite retains 393 reference streams and 51 modern-libopus fixtures. All 120 official elementary-decoder vector checks pass, including reference PCM/history and final-range validation for 200,750 packets. Playback, pause/resume, stop/reopen and indexed/paused seeking pass for Opus and the existing formats. Ogg chaining and native surround routing remain unfinished. See [the decoder-stage notes](docs/opus.md); `./tests/verify-opus-components.ps1` runs 35 suites without FFmpeg or an audio device, and `./tests/verify-opus-conformance.ps1` runs official vectors.
 
 [ROADMAP.md](ROADMAP.md) covers Opus, reliable audio playback, broader codecs and containers, video, subtitles, streaming, and eventual support for everything relevant that mpv supports. The [compatibility matrix](docs/compatibility.md) tracks the current gaps. Goals have acceptance gates, not promised release dates. Hardware decode should be used when it lowers system cost; handwritten assembly alone does not guarantee a faster codec.
 
