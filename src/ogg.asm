@@ -38,7 +38,7 @@ ogg_seen_eos dd 0
 ogg_crc_ready dd 0
 ogg_resume_segment dd 0
 .data?
-ogg_crc_table dd 256 dup (?)
+ogg_crc_table dd 8*256 dup (?)
 .code
 ogg_close PROC
     sub rsp,40
@@ -141,16 +141,87 @@ ogg_crc_init_next:
     inc r9d
     cmp r9d,256
     jb ogg_crc_init_byte
+    lea r11,ogg_crc_table+1024
+    mov r10d,7
+ogg_crc_init_slice:
+    xor r9d,r9d
+ogg_crc_init_slice_byte:
+    mov eax,[r11+r9*4-1024]
+    mov ecx,eax
+    shr ecx,24
+    shl eax,8
+    xor eax,[r8+rcx*4]
+    mov [r11+r9*4],eax
+    inc r9d
+    cmp r9d,256
+    jb ogg_crc_init_slice_byte
+    add r11,1024
+    dec r10d
+    jnz ogg_crc_init_slice
     mov dword ptr [ogg_crc_ready],1
 ogg_crc_init_done:
     ret
 ogg_crc_init ENDP
+
+; RCX=bounded bytes,EDX=count,EAX=incoming nonreflected Ogg CRC.
+; Eight independent table lookups avoid the serial dependency per input byte.
+; Reads never cross the supplied extent; tails retain the original byte step.
+ogg_crc_bytes PROC
+    lea r8,ogg_crc_table
+    cmp edx,8
+    jb ogg_crc_tail
+ogg_crc_eight:
+    mov r10d,[rcx]
+    bswap r10d
+    xor r10d,eax
+    movzx r11d,r10b
+    mov eax,[r8+r11*4+4096]
+    shr r10d,8
+    movzx r11d,r10b
+    xor eax,[r8+r11*4+5120]
+    shr r10d,8
+    movzx r11d,r10b
+    xor eax,[r8+r11*4+6144]
+    shr r10d,8
+    xor eax,[r8+r10*4+7168]
+    mov r9d,[rcx+4]
+    movzx r11d,r9b
+    xor eax,[r8+r11*4+3072]
+    shr r9d,8
+    movzx r11d,r9b
+    xor eax,[r8+r11*4+2048]
+    shr r9d,8
+    movzx r11d,r9b
+    xor eax,[r8+r11*4+1024]
+    shr r9d,8
+    xor eax,[r8+r9*4]
+    add rcx,8
+    sub edx,8
+    cmp edx,8
+    jae ogg_crc_eight
+ogg_crc_tail:
+    test edx,edx
+    jz ogg_crc_bytes_done
+ogg_crc_tail_byte:
+    mov r9d,eax
+    shr r9d,24
+    movzx r10d,byte ptr [rcx]
+    xor r9d,r10d
+    shl eax,8
+    xor eax,[r8+r9*4]
+    inc rcx
+    dec edx
+    jnz ogg_crc_tail_byte
+ogg_crc_bytes_done:
+    ret
+ogg_crc_bytes ENDP
 
 ; RCX=page. RAX=next page or zero. Sequence/continuation state is updated.
 ogg_validate_page PROC
     push rbx
     push rsi
     push rdi
+    sub rsp,32
     mov rsi,rcx
     lea rax,[rsi+27]
     cmp rax,[ogg_end]
@@ -243,27 +314,21 @@ ogg_page_unknown:
     jnz ogg_page_bad
 ogg_page_crc:
     xor eax,eax
-    xor ecx,ecx
-    lea r8,ogg_crc_table
-    mov r9,rdi
-    sub r9,rsi
-ogg_page_crc_byte:
-    xor edx,edx
-    cmp ecx,22
-    jb ogg_page_crc_read
-    cmp ecx,26
-    jb ogg_page_crc_update
-ogg_page_crc_read:
-    movzx edx,byte ptr [rsi+rcx]
-ogg_page_crc_update:
-    mov r10d,eax
-    shr r10d,24
-    xor edx,r10d
+    mov rcx,rsi
+    mov edx,22
+    call ogg_crc_bytes
+    mov ecx,4              ;checksum bytes22..25 are defined as zero
+ogg_page_crc_zero:
+    mov edx,eax
+    shr edx,24
     shl eax,8
     xor eax,[r8+rdx*4]
-    inc ecx
-    cmp rcx,r9
-    jb ogg_page_crc_byte
+    dec ecx
+    jnz ogg_page_crc_zero
+    lea rcx,[rsi+26]
+    mov rdx,rdi
+    sub rdx,rcx
+    call ogg_crc_bytes
     cmp eax,[rsi+22]
     jne ogg_page_bad
     inc dword ptr [ogg_sequence]
@@ -272,6 +337,7 @@ ogg_page_crc_update:
 ogg_page_bad:
     xor eax,eax
 ogg_page_return:
+    add rsp,32
     pop rdi
     pop rsi
     pop rbx

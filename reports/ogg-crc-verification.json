@@ -1,0 +1,1 @@
+﻿{"result":"passed","valid_streams":4096,"rejected_crc_mutations":8191,"reference_bytes":108791975,"guarded_mapped_end":true,"scope":"Independent bitwise CRC; all body lengths0..1024,maximum page sizes,random lengths/alignments,checksum-field exclusion,payload corruption and no overread past mapped end"}

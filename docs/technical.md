@@ -1,6 +1,6 @@
 # LAMP 0.4.0-dev technical details
 
-A Windows x86-64 audio player with handwritten assembly WAV, FLAC, MP3, Ogg/Vorbis and development Ogg/Opus decoders, plus a native assembly UI. The current console build is **184,832 bytes (180.5 KiB)**; the graphical build is **192,512 bytes (188 KiB)**. Both include LAMP's icon and version resources. The published v0.3.0 archive retains its earlier four-format build and manifest.
+A Windows x86-64 audio player with handwritten assembly WAV, FLAC, MP3, Ogg/Vorbis and development Ogg/Opus decoders, plus a native assembly UI. The current console build is **185,344 bytes (181 KiB)**; the graphical build is **193,024 bytes (188.5 KiB)**. Both include LAMP's icon and version resources. The published v0.3.0 archive retains its earlier four-format build and manifest.
 
 The dark canvas, compact playback controls and automatic hiding are inspired by mpv. The custom pixel buffer and Win32 presentation follow Rhun's documented assembly UI model. No Rhun source, fonts, icons, or other assets were copied.
 
@@ -92,6 +92,20 @@ The UI message pump runs independently of both audio workers. Cancellation wakes
 
 MP3 synthesis uses factored SSE2 DCT butterflies. Vorbis inverse MDCT uses a positive-sign N-point complex FFT with paired SSE2 double-precision butterflies and precomputed windows/twiddles. A smaller transform formulation remains an optimization opportunity. Decoding reuses static buffers without per-frame heap allocation.
 
+Ogg CRC validation uses eight-byte table updates, with eight derived 256-entry tables occupying 8 KiB. The table is initialized once. Bounded loads retain a bytewise tail and treat checksum bytes 22–25 as zero. Every page is still checked before packet output; no validation cache or hardware CRC extension is required. An independent bit-at-a-time oracle accepts 4,096 streams across small/maximum/random page sizes and alignments, rejects 8,191 checksum/payload mutations, and places a guard page immediately after each mapped input to detect overreads.
+
+The reopen benchmark uses ten-minute 48 kHz stereo seeded-noise files with alternating 20 seconds of silence and 40 seconds of noise. Five runs each target 10/14/50/54/90/94 percent, giving three silence/noise pairs. Each operation closes the prior mapping, reopens, positions the index, discards the remaining samples and decodes 750 ms of PCM. The following medians are QPC wall times on an i7-12700KF, Windows 11 build 26200, with warm filesystem data; they exclude process creation, WASAPI, UI and audible endpoint latency.
+
+| Codec | Reopen before CRC change (ms) | Current reopen (ms) | Current reopen + seek + 750 ms PCM at noise targets (ms) |
+| --- | ---: | ---: | ---: |
+| WAV | 0.027 | 0.020 | 0.176 |
+| Native FLAC | 0.083 | 0.085 | 5.821 |
+| MP3 | 17.202 | 16.439 | 18.460 |
+| Vorbis | 32.685 | 12.495 | 17.299 |
+| Opus | 13.847 | 5.261 | 8.798 |
+
+[Before](../reports/seek-benchmark-before-crc.json) and [after](../reports/seek-benchmark.json) reports record every stage/run, fixture and decoder-object hashes, reference encoder version and hardware. Only the Ogg object differs between the measured builds; non-Ogg differences reflect run variation. The before Ogg module was compiled from `f70c0b09fe8da987c7b7e15ffd65966b6830729c:src/ogg.asm`. Process CPU accounting is coarse, and harness memory includes its test-only C runtime and mapped input; those memory values are not production-player working-set measurements. This is a baseline without deliberately added load, not a controlled cold-disk or mpv/VLC comparison.
+
 Input is mapped rather than copied into a heap. Static workspaces, the queue, committed setup pages, resident input pages, DIB pixels and Windows DLLs all contribute to RAM use; executable size is not a bound on working set.
 
 The recorded Vorbis benchmark used **140,625 microseconds median process CPU** across five offline decodes of 30 seconds of seeded 48 kHz stereo noise at quality 8: about **0.47% of one core per second of audio** on this machine. This includes process setup and excludes audio rendering/UI; Windows accounting is coarse. The earlier MP3 result was about 0.21%. No VLC/mpv comparison has been performed.
@@ -123,6 +137,8 @@ Recorded snapshots are in `reports/` in a source checkout. The paths below descr
 | `bin/mp3-seek-verification.json` | 1,650 exact seeks, independent continuous PCM comparisons, bounded sparse index/header skims, adaptive compaction, cancelled seek/open and contradictory Xing counts |
 | `bin/vorbis-seek-verification.json` | 1,305 exact seeks, independent continuous PCM comparisons, packet/lace checkpoints, overlap pre-roll, origins/cropping, continued packets, adaptive compaction, cancelled seek/open and contradictory timestamps |
 | `bin/opus-seek-verification.json` | 6,768 independently positioned reset-reference seeks; all TOC configurations/framing codes, at least 80 ms pre-roll, gain/pre-skip, mode/channel/DTX transitions, continued/cropped streams, adaptive compaction and cancelled seek/open |
+| `bin/ogg-crc-verification.json` | 4,096 valid independent bitwise CRC streams, 8,191 rejected checksum/payload mutations, page-size/alignment/tail coverage and guarded mapped ends |
+| `bin/seek-benchmark.json` | Five runs/six distant silence/noise targets per codec, open/position/discard/750 ms decode stages; warm filesystem, test-only C harness, hardware and object/fixture hashes |
 | `vorbis-fuzz-verification.json` | 512 repaired-CRC setup/audio mutations without a crash/timeout; accepted audio correctness is not asserted |
 | `vorbis-benchmark.json` | Five 30-second offline CPU measurements |
 | `vorbis-stress-verification.json` | Eight-second WASAPI silence under four bounded CPU workers |
@@ -195,6 +211,10 @@ node .\tests\fuzz-vorbis.js
 .\tests\verify-opus-conformance.ps1 #120 official vector checks; first run downloads ~75 MB
 .\tests\verify-seek.ps1 -OutputDirectory .\bin\verify-build #4425 exact WAV/FLAC/MP3/Vorbis +6768 Opus reference seeks
 .\tests\verify-opus-seek.ps1 -OutputDirectory .\bin\verify-build #Opus seek suite alone
+.\tests\verify-ogg-crc.ps1 -OutputDirectory .\bin\verify-build
+.\tests\benchmark-seek.ps1 -OutputDirectory .\bin\verify-build #creates ten-minute fixtures
+# Repeat timings without re-encoding; an optional -OggObject selects a comparison module:
+.\tests\benchmark-seek.ps1 -OutputDirectory .\bin\verify-build -ReuseFixtures
 .\tests\render-ui.ps1
 ```
 

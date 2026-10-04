@@ -39,7 +39,7 @@
       <figure class="player"><img src="assets/player.png" width="800" height="450" alt="LAMP's dark playback canvas with a track title, seek bar, pause control and volume"><figcaption>Actual assembly renderer, shown with synthetic playback state. Inspired by mpv's compact controls and Rhun's assembly UI approach.</figcaption></figure>
     </section>
     <section class="shell principles" aria-label="Design goals">
-      <article><span class="number">01 / SMALL</span><h2>188 KiB GUI.</h2><p>The development Windows executable includes its icon and Opus decoder. Windows system services handle audio output and the window; the player brings its own assembly decoders.</p></article>
+      <article><span class="number">01 / SMALL</span><h2>188.5 KiB GUI.</h2><p>The development Windows executable includes its icon and Opus decoder. Windows system services handle audio output and the window; the player brings its own assembly decoders.</p></article>
       <article><span class="number">02 / BUFFERED</span><h2>Let audio breathe.</h2><p>A separate decoder feeds a PCM queue. Event-driven WASAPI playback absorbs short scheduling stalls, with no decoder work in the audio refill path.</p></article>
       <article><span class="number">03 / FOCUSED</span><h2>Just press play.</h2><p>Drop a file, pause with Space, seek with the arrows. Controls fade from view during playback, and redraw timers stop while idle or paused.</p></article>
     </section>
