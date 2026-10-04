@@ -26,6 +26,9 @@ jobs:
         run: ./tests/verify-opus-conformance.ps1
       - name: Verify direct and indexed seek PCM
         run: ./tests/verify-seek.ps1
+      - name: Verify native FLAC depths and speaker layouts
+        shell: pwsh
+        run: ./tests/verify-flac-layouts.ps1
       - name: Check static site
         run: node tests/verify-site.js
       - name: Render actual assembly UI

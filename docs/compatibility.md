@@ -8,7 +8,7 @@ LAMP's long-term goal is to support everything relevant that mpv supports. This 
 
 | Capability | Current source status | Remaining coverage | Milestone |
 | --- | --- | --- | --- |
-| WAV / native FLAC / MP3 / Ogg Vorbis | Partial; direct, frame-search or indexed seeking within documented profiles | Broader profiles, channel layouts and Ogg chaining | 2–3 |
+| WAV / native FLAC / MP3 / Ogg Vorbis | Partial; direct, frame-search or indexed seeking within documented profiles; native FLAC 1–8 channels/4–32-bit with tagged-layout stereo downmix | Multichannel WAV/Vorbis, native surround output, broader containers and Ogg chaining | 2–3 |
 | Opus | Development playback: Ogg families 0/1, SILK/hybrid/CELT, RFC 8251 updates, family 1 layouts with 1–8 speaker channels downmixed to stereo, header gain/pre-skip/end trimming; [all 120 official elementary-vector checks pass](opus.md) | Native surround output, other mapping families, Ogg chaining | 1–2 |
 | Other audio codecs | Planned | AAC/HE-AAC, ALAC, AC-3/E-AC-3, DTS, WavPack, APE, MPEG I/II and relevant legacy formats | 3 |
 | Containers and media structure | Partial | MP4/MOV, Matroska/WebM, TS/PS, AVI/ASF; timestamps, attachments, chapters, editions and tags | 3 |

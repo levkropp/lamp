@@ -5,6 +5,7 @@
 option casemap:none
 EXTERN CreateFileW:PROC, GetFileSizeEx:PROC, CreateFileMappingW:PROC
 EXTERN MapViewOfFile:PROC, UnmapViewOfFile:PROC, CloseHandle:PROC
+EXTERN VirtualAlloc:PROC,VirtualFree:PROC
 EXTERN mp3_open:PROC, mp3_read:PROC,mp3_seek:PROC,mp3_close:PROC
 EXTERN vorbis_open:PROC, vorbis_read:PROC, vorbis_close:PROC, ogg_close:PROC
 EXTERN vorbis_seek:PROC
@@ -69,6 +70,32 @@ scale16 dd 38000000h
 scale24 dd 34000000h
 scale32 dd 30000000h
 float_scale real4 0.0
+flac_extra dq 0
+flac_channel_ptrs dq 8 dup (0)
+flac_channel_mask dd 0
+flac_mask_seen dd 0
+flac_comments_seen dd 0
+flac_mix dd 0
+; RFC 9639 channel order is increasing WAVE speaker bit order.
+flac_default_masks dd 4,3,7,33h,37h,3fh,70fh,63fh
+flac_mask_name db 'waveformatextensible_channel_mask='
+; Horizontal fronts, center/LFE, rear/side spread, and height folds.
+; q=1/sqrt(2), a=sqrt(3)/2. Height speakers use q times their base route.
+flac_speaker_weights real8 1.0,0.0, 0.0,1.0
+ real8 0.7071067811865475244,0.7071067811865475244
+ real8 0.7071067811865475244,0.7071067811865475244
+ real8 0.8660254037844386468,0.5, 0.5,0.8660254037844386468
+ real8 0.7071067811865475244,0.0, 0.0,0.7071067811865475244
+ real8 0.6123724356957945245,0.6123724356957945245
+ real8 0.8660254037844386468,0.5, 0.5,0.8660254037844386468
+ real8 0.5,0.5
+ real8 0.7071067811865475244,0.0, 0.5,0.5, 0.0,0.7071067811865475244
+ real8 0.6123724356957945245,0.3535533905932737622
+ real8 0.4330127018922193234,0.4330127018922193234
+ real8 0.3535533905932737622,0.6123724356957945245
+flac_mix_one real8 1.0
+flac_mix_two real8 2.0
+flac_mix_coeff real8 16 dup (0.0)
 rate_table dd 0,88200,176400,192000,8000,16000,22050,24000,32000,44100,48000,96000
 depth_table dd 0,8,12,0,16,20,24,32
 
@@ -95,6 +122,9 @@ decoder_open PROC
     mov dword ptr [flac_seek_count],0
     mov qword ptr [flac_next_sample],0
     mov dword ptr [flac_seek_probe],0
+    mov dword ptr [flac_mask_seen],0
+    mov dword ptr [flac_comments_seen],0
+    mov dword ptr [flac_mix],0
     mov edx,80000000h
     mov r8d,1
     xor r9d,r9d
@@ -308,6 +338,12 @@ open_flac:
     mov r10,rax
     xor r11d,r11d
 flac_metadata:
+    mov rax,[ogg_cancel_ptr]
+    test rax,rax
+    jz flac_metadata_continue
+    cmp dword ptr [rax],0
+    jne open_bad
+flac_metadata_continue:
     lea rax,[r10+4]
     cmp rax,[input_end]
     ja open_bad
@@ -350,8 +386,6 @@ flac_metadata:
     shr rcx,41
     and ecx,7
     inc ecx
-    cmp ecx,2
-    ja open_bad
     mov [source_channels],ecx
     mov rcx,rdx
     shr rcx,36
@@ -359,7 +393,7 @@ flac_metadata:
     inc ecx
     cmp ecx,4
     jb open_bad
-    cmp ecx,24
+    cmp ecx,32
     ja open_bad
     mov [source_bits],ecx
     mov rcx,0fffffffffh
@@ -372,6 +406,8 @@ flac_have_streaminfo:
     jz open_bad
     cmp ecx,127
     je open_bad
+    cmp ecx,4
+    je flac_comments
     cmp ecx,3
     jne flac_meta_next
     cmp qword ptr [flac_seek_table],0
@@ -384,6 +420,22 @@ flac_have_streaminfo:
     test edx,edx
     jnz open_bad
     mov [flac_seek_count],eax
+    jmp flac_meta_next
+flac_comments:
+    cmp dword ptr [flac_comments_seen],0
+    jne open_bad
+    mov dword ptr [flac_comments_seen],1
+    mov [rsp+56],r8
+    mov [rsp+64],r9
+    mov [rsp+72],r11
+    mov rcx,rax
+    mov rdx,r9
+    call flac_parse_comments
+    mov r8,[rsp+56]
+    mov r9,[rsp+64]
+    mov r11,[rsp+72]
+    test eax,eax
+    jz open_bad
 flac_meta_next:
     mov r10,r9
     test r8d,80000000h
@@ -447,6 +499,38 @@ flac_seek_point_next:
     dec r8d
     jmp flac_seek_validate
 flac_seek_valid:
+    call flac_build_mix
+    test eax,eax
+    jz open_bad
+    lea rax,left_samples
+    mov [flac_channel_ptrs],rax
+    lea rax,right_samples
+    mov [flac_channel_ptrs+8],rax
+    mov eax,[source_channels]
+    cmp eax,2
+    jbe flac_buffers_ready
+    sub eax,2
+    imul eax,[maximum_block]
+    shl eax,3
+    mov edx,eax
+    xor ecx,ecx
+    mov r8d,3000h
+    mov r9d,4
+    call VirtualAlloc
+    test rax,rax
+    jz open_bad
+    mov [flac_extra],rax
+    mov ecx,2
+    mov edx,[maximum_block]
+    shl edx,3
+    lea r8,flac_channel_ptrs
+flac_buffers_loop:
+    mov [r8+rcx*8],rax
+    add rax,rdx
+    inc ecx
+    cmp ecx,[source_channels]
+    jb flac_buffers_loop
+flac_buffers_ready:
     mov dword ptr [codec_kind],2
     ; Compute exact reciprocal 2^(1-bits), no library calls.
     mov eax,128
@@ -458,6 +542,214 @@ flac_seek_valid:
     ret
 decoder_open ENDP
 
+; RCX=comment payload, RDX=bounded end. Little-endian lengths, no framing bit.
+; Conflicting repeated masks are rejected; identical repeats are harmless.
+flac_parse_comments PROC
+    push rbx
+    push rsi
+    push rdi
+    push r12
+    mov rsi,rcx
+    mov r12,rdx
+    lea rax,[rsi+4]
+    cmp rax,r12
+    ja comments_bad
+    mov ecx,[rsi]
+    lea rsi,[rax+rcx]
+    cmp rsi,r12
+    ja comments_bad
+    cmp rsi,r12
+    je comments_ok
+    lea rax,[rsi+4]
+    cmp rax,r12
+    ja comments_bad
+    mov ebx,[rsi]
+    mov rsi,rax
+comments_field:
+    test ebx,ebx
+    jz comments_end
+    mov rax,[ogg_cancel_ptr]
+    test rax,rax
+    jz comments_not_cancelled
+    cmp dword ptr [rax],0
+    jne comments_bad
+comments_not_cancelled:
+    lea rax,[rsi+4]
+    cmp rax,r12
+    ja comments_bad
+    mov ecx,[rsi]
+    lea rdi,[rax+rcx]
+    cmp rdi,r12
+    ja comments_bad
+    mov rsi,rdi
+    cmp ecx,SIZEOF flac_mask_name
+    jb comments_next
+    xor edx,edx
+    lea r8,flac_mask_name
+comments_key:
+    movzx ecx,byte ptr [rax+rdx]
+    cmp ecx,'A'
+    jb comments_key_compare
+    cmp ecx,'Z'
+    ja comments_key_compare
+    add ecx,32
+comments_key_compare:
+    cmp cl,[r8+rdx]
+    jne comments_next
+    inc edx
+    cmp edx,SIZEOF flac_mask_name
+    jb comments_key
+    add rax,SIZEOF flac_mask_name
+    lea r8,[rax+3]
+    cmp r8,rdi
+    ja comments_bad
+    cmp byte ptr [rax],'0'
+    jne comments_bad
+    movzx ecx,byte ptr [rax+1]
+    or ecx,20h
+    cmp ecx,'x'
+    jne comments_bad
+    add rax,2
+    xor r9d,r9d
+comments_hex:
+    mov r10,[ogg_cancel_ptr]
+    test r10,r10
+    jz comments_hex_continue
+    cmp dword ptr [r10],0
+    jne comments_bad
+comments_hex_continue:
+    movzx ecx,byte ptr [rax]
+    sub ecx,'0'
+    cmp ecx,9
+    jbe comments_digit
+    add ecx,'0'
+    or ecx,20h
+    sub ecx,'a'
+    cmp ecx,5
+    ja comments_bad
+    add ecx,10
+comments_digit:
+    test r9d,0f0000000h
+    jnz comments_bad
+    shl r9d,4
+    or r9d,ecx
+    inc rax
+    cmp rax,rdi
+    jb comments_hex
+    cmp dword ptr [flac_mask_seen],0
+    je comments_save_mask
+    cmp r9d,[flac_channel_mask]
+    jne comments_bad
+comments_save_mask:
+    mov [flac_channel_mask],r9d
+    mov dword ptr [flac_mask_seen],1
+comments_next:
+    dec ebx
+    jmp comments_field
+comments_end:
+    cmp rsi,r12
+    jne comments_bad
+comments_ok:
+    mov eax,1
+    jmp comments_return
+comments_bad:
+    xor eax,eax
+comments_return:
+    pop r12
+    pop rdi
+    pop rsi
+    pop rbx
+    ret
+flac_parse_comments ENDP
+
+; Original stereo rendering policy. Canonical layouts match RFC 7845 gains,
+; reordered into FLAC/WAVE order. Unassigned channels have zero coefficients.
+; Normalize the larger row sum to 1 (<=4 speakers) or 2 (>=5 speakers).
+flac_build_mix PROC
+    cmp dword ptr [flac_mask_seen],0
+    jne mix_mask_ready
+    mov eax,[source_channels]
+    dec eax
+    lea rcx,flac_default_masks
+    mov eax,[rcx+rax*4]
+    mov [flac_channel_mask],eax
+mix_mask_ready:
+    mov r11d,[flac_channel_mask]
+    test r11d,0fffc0000h
+    jnz mix_bad
+    lea r8,flac_mix_coeff
+    xorpd xmm0,xmm0
+    xor eax,eax
+mix_zero:
+    movupd [r8+rax],xmm0
+    add eax,16
+    cmp eax,128
+    jb mix_zero
+    xorpd xmm1,xmm1
+    xor ecx,ecx
+    xor edx,edx
+    lea r10,flac_speaker_weights
+mix_speaker:
+    bt r11d,ecx
+    jnc mix_next_speaker
+    cmp edx,[source_channels]
+    jae mix_bad
+    movsd xmm2,qword ptr [r10]
+    movsd xmm3,qword ptr [r10+8]
+    movsd qword ptr [r8],xmm2
+    movsd qword ptr [r8+8],xmm3
+    addsd xmm0,xmm2
+    addsd xmm1,xmm3
+    add r8,16
+    inc edx
+mix_next_speaker:
+    add r10,16
+    inc ecx
+    cmp ecx,18
+    jb mix_speaker
+    maxsd xmm0,xmm1
+    test edx,edx
+    jz mix_enable
+    movsd xmm2,[flac_mix_one]
+    cmp edx,4
+    jbe mix_normalize
+    movsd xmm2,[flac_mix_two]
+mix_normalize:
+    divsd xmm2,xmm0
+    lea r8,flac_mix_coeff
+    mov ecx,[source_channels]
+mix_scale:
+    movsd xmm0,qword ptr [r8]
+    movsd xmm1,qword ptr [r8+8]
+    mulsd xmm0,xmm2
+    mulsd xmm1,xmm2
+    movsd qword ptr [r8],xmm0
+    movsd qword ptr [r8+8],xmm1
+    add r8,16
+    dec ecx
+    jnz mix_scale
+mix_enable:
+    mov dword ptr [flac_mix],1
+    cmp dword ptr [source_channels],2
+    jne mix_check_mono
+    cmp r11d,3
+    jne mix_ok
+    mov dword ptr [flac_mix],0
+    jmp mix_ok
+mix_check_mono:
+    cmp dword ptr [source_channels],1
+    jne mix_ok
+    cmp r11d,4
+    jne mix_ok
+    mov dword ptr [flac_mix],0
+mix_ok:
+    mov eax,1
+    ret
+mix_bad:
+    xor eax,eax
+    ret
+flac_build_mix ENDP
+
 decoder_close PROC
     push rbp
     mov rbp,rsp
@@ -466,6 +758,14 @@ decoder_close PROC
     call opus_close
     call vorbis_close
     call ogg_close
+    mov rcx,[flac_extra]
+    test rcx,rcx
+    jz close_flac_buffers
+    xor edx,edx
+    mov r8d,8000h
+    call VirtualFree
+    mov qword ptr [flac_extra],0
+close_flac_buffers:
     mov rcx,[map_base]
     test rcx,rcx
     jz close_mapping
@@ -796,7 +1096,7 @@ seek_search_return:
     ret
 flac_seek_search ENDP
 
-; Bounds-checked MSB-first reservoir. Width <=32, result unsigned in RAX.
+; Bounds-checked MSB-first reservoir. Width <=33, result unsigned in RAX.
 get_bits PROC
     mov r9d,ecx
     mov rdx,[bits_buf]
@@ -807,8 +1107,6 @@ gb_fill:
     mov r10,[input_cursor]
     cmp r10,[flac_bit_end]
     jae gb_bad
-    cmp dword ptr [flac_seek_probe],0
-    je gb_not_cancelled
     mov rax,[ogg_cancel_ptr]
     test rax,rax
     jz gb_not_cancelled
@@ -865,8 +1163,6 @@ unary_chunk:
     mov r10,[input_cursor]
     cmp r10,[flac_bit_end]
     jae unary_bad
-    cmp dword ptr [flac_seek_probe],0
-    je unary_not_cancelled
     mov rax,[ogg_cancel_ptr]
     test rax,rax
     jz unary_not_cancelled
@@ -1227,6 +1523,18 @@ right_depth_done:
     call decode_subframe
     test eax,eax
     jz frame_bad
+    mov r12d,2
+additional_subframes:
+    cmp r12d,[source_channels]
+    jae subframes_done
+    lea rax,flac_channel_ptrs
+    mov rcx,[rax+r12*8]
+    mov edx,[frame_bps]
+    call decode_subframe
+    test eax,eax
+    jz frame_bad
+    inc r12d
+    jmp additional_subframes
 subframes_done:
     mov ecx,[bits_count]
     test ecx,ecx
@@ -1259,7 +1567,7 @@ last_block_valid:
     lea rdi,right_samples
 decorrelate:
     cmp ebx,[frame_samples]
-    jae frame_ok
+    jae additional_range_start
     mov rax,[rsi+rbx*8]
     mov rdx,[rdi+rbx*8]
     cmp dword ptr [channel_mode],8
@@ -1307,6 +1615,30 @@ decor_next:
 decor_range_valid:
     inc ebx
     jmp decorrelate
+additional_range_start:
+    mov r12d,2
+additional_range_channel:
+    cmp r12d,[source_channels]
+    jae frame_ok
+    lea rax,flac_channel_ptrs
+    mov rsi,[rax+r12*8]
+    xor ebx,ebx
+    mov ecx,64
+    sub ecx,[source_bits]
+additional_range_sample:
+    cmp ebx,[frame_samples]
+    jae additional_range_next
+    mov rax,[rsi+rbx*8]
+    mov rdx,rax
+    shl rdx,cl
+    sar rdx,cl
+    cmp rax,rdx
+    jne frame_bad
+    inc ebx
+    jmp additional_range_sample
+additional_range_next:
+    inc r12d
+    jmp additional_range_channel
 frame_ok:
     mov eax,[frame_samples]
     add [flac_next_sample],rax
@@ -1463,7 +1795,7 @@ rice_remainder:
     mov ecx,[rice_k]
     shl r14,cl
     or rax,r14
-    mov edx,0ffffffffh
+    mov edx,0fffffffeh     ; RFC 9639 excludes INT_MIN residuals
     cmp rax,rdx
     ja sub_bad
     mov rdx,rax
@@ -1552,7 +1884,17 @@ lpc_shift:
     mov ecx,[predict_shift]
     sar rax,cl
 predicted:
-    add [rsi+rbx*8],rax
+    add rax,[rsi+rbx*8]
+    ; Reject an out-of-range prediction before it can enter LPC history.
+    ; Valid history bounds every later 32-tap accumulator to 53 bits.
+    mov ecx,64
+    sub ecx,[sub_bps]
+    mov rdx,rax
+    shl rdx,cl
+    sar rdx,cl
+    cmp rax,rdx
+    jne sub_bad
+    mov [rsi+rbx*8],rax
     inc ebx
     jmp prediction_loop
 sub_constant:
@@ -1659,6 +2001,15 @@ read_try_mp3:
 read_existing:
     cmp dword ptr [codec_kind],1
     je read_wav
+    test r12d,r12d
+    jz read_done
+    mov rax,[ogg_cancel_ptr]
+    test rax,rax
+    jz read_flac
+    cmp dword ptr [rax],0
+    je read_flac
+    mov dword ptr [decode_error],3
+    jmp read_done
 read_flac:
     cmp ebx,r12d
     jae read_done
@@ -1670,6 +2021,8 @@ read_flac:
     jz read_done
 flac_emit:
     mov ecx,[frame_used]
+    cmp dword ptr [flac_mix],0
+    jne flac_emit_mix
     lea rsi,left_samples
     cvtsi2ss xmm0,qword ptr [rsi+rcx*8]
     mulss xmm0,[float_scale]
@@ -1681,6 +2034,33 @@ flac_emit:
     mulss xmm0,[float_scale]
 flac_mono:
     movss dword ptr [rdi+rbx*8+4],xmm0
+    jmp flac_emit_done
+flac_emit_mix:
+    xor r9d,r9d
+    lea r10,flac_channel_ptrs
+    lea r11,flac_mix_coeff
+    xorpd xmm0,xmm0
+    xorpd xmm1,xmm1
+flac_emit_channel:
+    mov rax,[r10+r9*8]
+    cvtsi2sd xmm2,qword ptr [rax+rcx*8]
+    movapd xmm3,xmm2
+    mulsd xmm2,qword ptr [r11]
+    mulsd xmm3,qword ptr [r11+8]
+    addsd xmm0,xmm2
+    addsd xmm1,xmm3
+    add r11,16
+    inc r9d
+    cmp r9d,[source_channels]
+    jb flac_emit_channel
+    cvtss2sd xmm2,[float_scale]
+    mulsd xmm0,xmm2
+    mulsd xmm1,xmm2
+    cvtsd2ss xmm0,xmm0
+    cvtsd2ss xmm1,xmm1
+    movss dword ptr [rdi+rbx*8],xmm0
+    movss dword ptr [rdi+rbx*8+4],xmm1
+flac_emit_done:
     inc dword ptr [frame_used]
     inc ebx
     jmp read_flac

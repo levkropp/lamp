@@ -36,12 +36,12 @@ Windows 10/11 x64 and a working default audio output are the intended targets. B
 | Format | Current support |
 | --- | --- |
 | WAV | Little-endian RIFF, PCM 8/16/24/32-bit or float32, mono/stereo, 8–192 kHz |
-| Native FLAC | Mono/stereo, 4–24-bit, 8–192 kHz; CRC checks |
+| Native FLAC | 1–8 channels, 4–32-bit, 8–192 kHz; CRC checks; speaker-mask-aware stereo downmix |
 | MP3 | MPEG-1/2/2.5 Layer III, mono/stereo, CBR/VBR, encoder trimming when tagged |
 | Ogg/Vorbis | Single logical stream, mono/stereo, floor 1, mapping 0; CRC and granule checks |
 | Ogg/Opus | Development source: one logical Ogg stream; family 0 mono/stereo or family 1 with 1–8 speaker channels downmixed to stereo; 48 kHz output, header gain/pre-skip/end trimming |
 
-See [precise coverage, limitations, and verification](docs/technical.md) before relying on a particular stream variant. Native surround output, multichannel Vorbis/FLAC, chained Ogg streams and FLAC-in-Ogg remain unfinished. WAV seeks directly; native FLAC uses seek tables or searches validated frames; MP3, Vorbis and Opus use sparse indexes.
+See [precise coverage, limitations, and verification](docs/technical.md) before relying on a particular stream variant. Native surround output, multichannel WAV/Vorbis, chained Ogg streams and FLAC-in-Ogg remain unfinished. [FLAC layouts](docs/flac.md) use the default speaker order or a channel-mask tag; unassigned tracks remain silent. WAV seeks directly; native FLAC uses seek tables or searches validated frames; MP3, Vorbis and Opus use sparse indexes.
 
 ## Controls
 
@@ -73,7 +73,7 @@ The prebuilt ICO and decoder tables are included. A normal build needs no codec 
 
 To build while the player is open, use `./build.ps1 -OutputDirectory ./bin/verify-build`. Pass that directory to `node ./tests/verify-runtime.js ./bin/verify-build` and `node ./tests/smoke.js ./bin/verify-build` to check the new binaries, or `./package.ps1 -BinaryDirectory ./bin/verify-build` to package them. Packaging rejects a binary version that differs from `VERSION`.
 
-The codec suites record 43 WAV/FLAC, 103 MP3, and 83 Vorbis checks, plus 4,425 exact WAV/FLAC/MP3/Vorbis seek checks and 6,768 Opus seeks against an independently positioned RFC 8251 reference decoder. Ogg seeking includes continued packets, cropped starts, granule origins and bounded index compaction. Engine lifecycle, malformed-input, stress and codec reference tests add separate coverage. These checks do not establish complete format conformance. [Test instructions](docs/technical.md#verification) and [recorded reports](reports/README.md) describe what was checked. Full fixture suites need FFmpeg and Node.js; seek and Opus oracle tests additionally use the C compiler for test executables only.
+The codec suites record 43 WAV/FLAC, 103 MP3, and 83 Vorbis checks, plus 4,425 exact WAV/FLAC/MP3/Vorbis seek checks and 6,768 Opus seeks against an independently positioned RFC 8251 reference decoder. A separate FLAC depth/layout suite checks 404 files, 6,060 exact seeks, guarded reads, cancellation and allocation release. Ogg seeking includes continued packets, cropped starts, granule origins and bounded index compaction. Engine lifecycle, malformed-input, stress and codec reference tests add separate coverage. These checks do not establish complete format conformance. [Test instructions](docs/technical.md#verification) and [recorded reports](reports/README.md) describe what was checked. Full fixture suites need FFmpeg and Node.js; seek and Opus oracle tests additionally use the C compiler for test executables only.
 
 The Ogg CRC pass uses eight-byte table updates while retaining complete validation. On this machine, median reopen time for the recorded ten-minute fixtures fell from 32.7 to 12.5 ms for Vorbis and from 13.8 to 5.3 ms for Opus. These are warm-filesystem decoder timings, excluding WASAPI, the UI and audible latency. [Decoder measurements and scope](docs/technical.md#playback-and-cpu-design) include silence and noise targets. A separate [headless playback comparison](docs/playback-benchmark.md) records mpv 0.41.0 and VLC 3.0.24, startup/seek observations and CPU/RAM during playback, pause and idle across all five formats, with and without four CPU load workers. Its timing clocks differ between players; it does not establish audible latency or a universal performance advantage.
 

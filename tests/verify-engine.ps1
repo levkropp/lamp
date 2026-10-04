@@ -46,5 +46,12 @@ foreach($layout in @('5.1','7.1')){
     if($LASTEXITCODE){throw "Family1 engine lifecycle failed $layout $stats"}
     $report+=[pscustomobject]@{codec="opus-family1-$layout";result='passed';tests=@('stereo downmix playback','pause','resume','stop','reopen','seek','paused seek','cancelled open');stats="$stats"}
     Write-Output "opus-family1-$layout $stats"
+    $path=Join-Path $scratch "engine-silence-flac-$layout.flac"
+    & ffmpeg -hide_banner -loglevel error -y -f lavfi -i "anullsrc=r=48000:cl=$($layout):d=30" -c:a flac -sample_fmt s32 -bits_per_raw_sample 32 -strict experimental $path
+    if($LASTEXITCODE){throw 'Multichannel 32-bit FLAC engine fixture failed'}
+    $stats=& (Join-Path $out 'engine-probe.exe') $path
+    if($LASTEXITCODE){throw "Multichannel FLAC engine lifecycle failed $layout $stats"}
+    $report+=[pscustomobject]@{codec="flac-32-$layout";result='passed';tests=@('stereo downmix playback','pause','resume','stop','reopen','seek','paused seek','cancelled open');stats="$stats"}
+    Write-Output "flac-32-$layout $stats"
 }
 $report | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath (Join-Path $out 'engine-verification.json') -Encoding utf8
