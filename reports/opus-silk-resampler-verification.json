@@ -1,0 +1,6 @@
+﻿{
+    "result":  "passed",
+    "scope":  "All 15 SILK decoder input/output-rate pairs, delay compensation, raw up2/AR2, fractional up/down FIR, repeated whole-millisecond blocks, defined history and connected core PCM; complete Opus mode/framing/concealment and audio conformance remain pending",
+    "comparison":  "exact PCM and defined persistent fields; unused uninitialized reference up-FIR sFIR[4..7] excluded, ASM unused tail preserved and checked across distinct scratch fills",
+    "stats":  "SILK resampler: 8192 exact raw up2 and 8192 AR2 filters, 8161 initializations across 15 rate pairs, 32640 PCM/history frames (3840 connected core synthesis, 15232 fractional upsampling), 28848369 integer samples, 2876672 defined history values, 53 guards; unused uninitialized RFC up-FIR tail excluded and ASM tail preserved deterministically"
+}

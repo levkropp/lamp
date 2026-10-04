@@ -88,6 +88,9 @@ Fixed-point LPC conversion/stability also references NLSF2A.c,
 LPC_inv_pred_gain.c, bwexpander.c, bwexpander_32.c and table_LSF_cos.c.
 SILK inverse-NSQ synthesis, gain adjustment and rewhitening also reference
 decode_core.c, LPC_analysis_filter.c and the same Inlines.h/macros.h.
+Decoder resampling references resampler.c, resampler_private_up2_HQ.c,
+resampler_private_AR2.c, resampler_private_IIR_FIR.c,
+resampler_private_down_FIR.c and resampler_rom.c under the same conditions.
 Adapted Opus packet framing:
 Copyright (c) 2010-2012 IETF Trust, Xiph.Org Foundation and Skype Limited.
 All rights reserved.

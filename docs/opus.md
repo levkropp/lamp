@@ -18,6 +18,7 @@ LAMP's Opus work is handwritten MASM x86-64 assembly, based on the BSD normative
 | Stateful SILK parameter orchestration/interpolation | `opus_silk_state.asm` | 129,360 exact parameter/history frames (32,768 connected), 1,712 atomic invalid-NLSF rejections, 7,488,340 integer coefficients and 31 guards |
 | SILK gain division and LPC analysis/rewhitening | `opus_silk_prediction.asm` | 520,924 exact divisions, 24,576 zero-state filters, 4,859,251 int16 samples and 19 guards |
 | SILK inverse-NSQ source-rate mono synthesis | `opus_silk_synthesis.asm` | 20,480 exact PCM/history frames (8,192 connected), 3,686,080 int16 PCM samples, 16,793,600 history values and 36 guards |
+| SILK decoder resampling and delay compensation | `opus_silk_resampler.asm` | 8,192 raw up2 and 8,192 AR2 filters, 8,161 initializations/all 15 rate pairs, 32,640 PCM/history frames (3,840 connected core), 28,848,369 integer samples, 2,876,672 defined history values and 53 guards |
 | CELT static band allocation | `opus_allocation.asm` | 271,160 allocation/entropy and 52,479 pulse-cache comparisons |
 | CELT normalized PVQ bands/spreading | `opus_vq.asm` | 13,416 band/entropy, 15,864 spreading and 8,192 renormalization comparisons |
 | CELT Haar/Hadamard layout helpers | `opus_band_transform.asm` | 3,280 Haar and 5,888 layout/inverse comparisons |
@@ -79,7 +80,7 @@ Requirements: Windows x64, Visual Studio Build Tools with the C tools and Window
 
 ## Next dependencies
 
-1. Complete SILK resampling/concealment/comfort noise and stereo framing; handle hybrid transitions.
+1. Complete SILK concealment/comfort noise and stereo framing; handle hybrid transitions.
 2. Integrate Ogg Opus pre-skip/gain/end trimming with the playback engine.
 3. Validate complete CELT/SILK/hybrid audio against official decoder vectors and reference PCM.
 
@@ -120,6 +121,18 @@ Its 80-byte request in `src/opus_silk_synthesis_layout.inc` selects core state, 
 The 2,320-byte core state stores previous Q16 gain at 0, 320 Q14 excitation int32 values at 4, sixteen Q14 LPC-history int32 values at 1,284, 480 history int16 samples at 1,348 and previous lag/signal/loss int32 values at 2,308/2,312/2,316. Previous gain and active gains must be positive. Signal types are 0–2, quantization offset 0/1, interpolation 0–4, seed 0–3 and LTP scale 0–16,384. Active pulses are −32,768–32,767. Voiced pitch and a reused voiced-loss pitch must be 2–18 ms; consecutive voiced pitch increases may not exceed one subframe, protecting initialized LTP history. Normative contours satisfy this bound. Integer history can span the full int32/int16 domains; wrap, rounding and saturation follow the reference.
 
 The core updates active excitation, LPC history, previous gain and the rewhitening portion of output history. Controls may change for voiced-loss blending. The complete frame caller owns final output-history maintenance, previous lag/signal/loss counters and PLC/CNG. Tests call unchanged `decode_core.c`, compare full PCM/core state/controls and canaries, preserve inactive suffixes and reject malformed requests before writes. Connected sequences consume the same range-decoded indices and pulses, then reconstructed parameters; test-side frame-history maintenance is applied identically. Extreme histories/pulses exercise clipping and wrap arithmetic. These exact component PCM checks do not establish complete Opus stream conformance or playback availability.
+
+## SILK decoder resampling interfaces
+
+`op_silk_resampler_init(request*)` initializes the normative 304-byte x64 decoder resampler state. The 24-byte request in `src/opus_silk_resampler_layout.inc` selects state at 0, input/output Hz at 8/12 and state byte capacity at 16. Input is 8/12/16 kHz; output is 8/12/16/24/48 kHz, covering all fifteen decoder pairs. It chooses copy, direct 2× allpass upsampling, upsampling plus eight-tap fractional FIR, or AR2 plus 18/24-tap fractional downsampling. Invalid requests return zero without writes; success returns one. Reset clears all history and applies the normative rate-dependent delay and rounded Q16 index increment.
+
+`op_silk_resampler(request*)` accepts state/output/input/work pointers at 0/8/16/24, input length at 32, input/output int16 capacities at 36/40 and state/work byte capacities at 44/48. The 56-byte request requires 304 state bytes and 736 workspace bytes. Input is 1–60 whole milliseconds at the input rate. It returns the exact output sample count or zero for public rejection before writes. All buffers must be separate, caller-owned and correctly sized; input is unchanged. Every immutable state descriptor, including the internal coefficient-table pointer, is checked against the rates before it is followed. Continuous filtering uses at most 10 ms per internal block and compensates delay with a 1 ms prefix.
+
+The state layout matches the reference: six IIR int32 values at 0, 36 FIR int32 values at 24, 48 delay int16 values at 168, eight scalar descriptors at 264 and a coefficient pointer at 296. Raw helpers `op_silk_up2` and `op_silk_ar2` expose the same integer kernels through capacity-checked 40/56-byte requests. Up2 supports 0–960 input int16 samples and six int32 history values; AR2 supports 0–480 int16 samples, two int16 coefficients, two int32 history values and Q8 int32 output. Zero-length calls preserve history. Both return one for success and zero for invalid input; request layouts specify element capacities.
+
+The normative fractional upsampler copies sixteen int16 scratch values into its FIR state, though only eight are initialized and used by future interpolation. LAMP copies the eight defined samples and preserves the unused state. Oracle comparisons therefore exclude only reference `sFIR[4..7]`; PCM, every defined history field, descriptor and inactive output match exactly. Separate checks prove LAMP's unused state stays unchanged and that different scratch fills produce identical complete LAMP state/PCM. This reference exception is recorded in the verification report.
+
+The seven generated resampling tables are verified against the hash-checked normative archive. Tests cover every rate pair, 1–60 ms lengths, repeated transitions across 10 ms blocks, silence/impulse/extreme/random inputs, arbitrary integer history, delay compensation, output/input canaries, malformed descriptors and connected assembly core PCM. These checks complete decoder-rate conversion; whole SILK packet/frame processing, concealment, comfort noise, stereo and Opus mode integration remain unfinished.
 
 ## Frame-prefix interface
 

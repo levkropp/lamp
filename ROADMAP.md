@@ -41,7 +41,8 @@ The public repository includes build/test tooling, a Windows prerelease and a we
 - [x] SILK fixed-point NLSF-to-LPC conversion, inverse prediction gain and bandwidth expansion, with exact stability/coefficient comparisons.
 - [x] Stateful SILK parameter orchestration, NLSF interpolation, reset/loss handling and gain/NLSF history, with atomic failure checks.
 - [x] SILK gain division/rewhitening and source-rate mono excitation/LTP/LPC synthesis, checked against normative PCM/history and connected indices/pulses.
-- [ ] Finish SILK resampling, concealment, comfort noise, stereo and packet/frame integration.
+- [x] SILK decoder resampling across all fifteen input/output-rate pairs, including delay compensation, defined history and connected core PCM.
+- [ ] Finish SILK concealment, comfort noise, stereo and packet/frame integration.
 - [ ] Hybrid modes, bandwidth/frame transitions, stereo, channel mapping, output gain, pre-skip and end trimming.
 - [ ] Integrate Ogg/Opus with cancellation, queueing, pause and seeking.
 - [ ] Official decoder vectors, reference PCM tolerance/state checks, and malformed/truncated stream tests across modes and frame sizes.
