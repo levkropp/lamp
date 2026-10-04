@@ -16,6 +16,8 @@ LAMP's Opus work is handwritten MASM x86-64 assembly, based on the BSD normative
 | SILK predictive NLSF reconstruction/stabilization | `opus_silk_nlsf.asm` | 1,310,848 square-root inputs, 45,056 decoded vectors (32,768 connected), 12,288 stabilization vectors, 2,310,080 coefficients, 166 invalid reference-result rejections and 19 guards |
 | SILK fixed-point LPC conversion/stability | `opus_silk_lpc.asm` | 749,568 reciprocals, 16,640 int16/int32 bandwidth expansions, 104,391 inverse prediction gains, 71,623 NLSF-to-LPC vectors (38,855 connected), 1,033,500 coefficients and 28 guards |
 | Stateful SILK parameter orchestration/interpolation | `opus_silk_state.asm` | 129,360 exact parameter/history frames (32,768 connected), 1,712 atomic invalid-NLSF rejections, 7,488,340 integer coefficients and 31 guards |
+| SILK gain division and LPC analysis/rewhitening | `opus_silk_prediction.asm` | 520,924 exact divisions, 24,576 zero-state filters, 4,859,251 int16 samples and 19 guards |
+| SILK inverse-NSQ source-rate mono synthesis | `opus_silk_synthesis.asm` | 20,480 exact PCM/history frames (8,192 connected), 3,686,080 int16 PCM samples, 16,793,600 history values and 36 guards |
 | CELT static band allocation | `opus_allocation.asm` | 271,160 allocation/entropy and 52,479 pulse-cache comparisons |
 | CELT normalized PVQ bands/spreading | `opus_vq.asm` | 13,416 band/entropy, 15,864 spreading and 8,192 renormalization comparisons |
 | CELT Haar/Hadamard layout helpers | `opus_band_transform.asm` | 3,280 Haar and 5,888 layout/inverse comparisons |
@@ -77,7 +79,7 @@ Requirements: Windows x64, Visual Studio Build Tools with the C tools and Window
 
 ## Next dependencies
 
-1. Complete SILK synthesis/resampling/concealment and stereo framing; handle hybrid transitions.
+1. Complete SILK resampling/concealment/comfort noise and stereo framing; handle hybrid transitions.
 2. Integrate Ogg Opus pre-skip/gain/end trimming with the playback engine.
 3. Validate complete CELT/SILK/hybrid audio against official decoder vectors and reference PCM.
 
@@ -105,7 +107,19 @@ The three `generate-silk-*-tables.js` scripts verify probability, selector, code
 
 The 140-byte control output matches the normative layout: four pitch int32 values, four Q16 gains, two sixteen-int16 Q12 filters, twenty Q14 LTP taps and one Q14 scale. Inactive subframes/filter suffixes are preserved. A reset forces the interpolation index to 4; unvoiced parameters set PER index to zero. The function returns 1 on success or 0 on failure. It reconstructs into bounded stack copies and commits only after success, so public validation and late invalid-NLSF rejection leave all caller-visible buffers unchanged. Buffers must remain separate and correctly sized.
 
-`generate-silk-lpc-tables.js` verifies the normative cosine and coefficient ordering tables. The stateful oracle calls unchanged `decode_parameters.c` and compares complete controls, side information, active/unused history and canaries across all rates, subframe counts and coding modes. It covers interpolated/noninterpolated frames, resets and recovery after loss, and connected range-decoded side information. Parameter reconstruction remains development-only; excitation synthesis and complete SILK PCM are the next stage.
+`generate-silk-lpc-tables.js` verifies the normative cosine and coefficient ordering tables. The stateful oracle calls unchanged `decode_parameters.c` and compares complete controls, side information, active/unused history and canaries across all rates, subframe counts and coding modes. It covers interpolated/noninterpolated frames, resets and recovery after loss, and connected range-decoded side information. The synthesis suite below connects these parameters to core PCM; complete SILK mode integration remains development work.
+
+## SILK prediction and synthesis interfaces
+
+`op_silk_div32(numerator, denominator, Q)` matches the normative signed fixed-point gain-division approximation for Q 0–30. INT_MIN inputs, a zero denominator and unsupported Q values return zero. `op_silk_analysis_filter(request*)` implements zero-state LPC analysis/rewhitening with normative wrapped accumulation, rounded Q12 conversion and int16 saturation. Its 48-byte request in `src/opus_silk_prediction_layout.inc` selects output/input/Q12-coefficient pointers at 0/8/16, length/order at 24/28 and int16 capacities at 32/36/40. Order is even 6–16 and length is order–480. The first order output samples are zero; inputs, coefficients and inactive outputs remain unchanged. Buffers must be separate.
+
+`op_silk_synthesis(request*)` implements inverse NSQ: pulse offset/random signs, excitation, gain-adjusted LPC history, rewhitening/LTP scaling, long/short prediction, voiced-loss-to-unvoiced blending and saturated int16 PCM. It supports internal 8/12/16 kHz and 2/4 five-millisecond subframes. This produces source-rate mono **core** PCM; full frame concealment/glue/comfort noise, resampling and stereo processing remain separate.
+
+Its 80-byte request in `src/opus_silk_synthesis_layout.inc` selects core state, mutable decoder controls, immutable side information, int32 pulses, int16 PCM and workspace at 0–40. Rate/subframes occupy 48/52; capacities at 56–76 specify state/control bytes, pulse/PCM element counts, workspace bytes and side-information bytes. Minimum byte capacities are 2,320/140/3,936/36; pulse/PCM arrays require rate-kHz × 5 × subframes elements. Buffers must be caller-owned and separate. Public rejection returns zero before changing buffers; success returns one.
+
+The 2,320-byte core state stores previous Q16 gain at 0, 320 Q14 excitation int32 values at 4, sixteen Q14 LPC-history int32 values at 1,284, 480 history int16 samples at 1,348 and previous lag/signal/loss int32 values at 2,308/2,312/2,316. Previous gain and active gains must be positive. Signal types are 0–2, quantization offset 0/1, interpolation 0–4, seed 0–3 and LTP scale 0–16,384. Active pulses are −32,768–32,767. Voiced pitch and a reused voiced-loss pitch must be 2–18 ms; consecutive voiced pitch increases may not exceed one subframe, protecting initialized LTP history. Normative contours satisfy this bound. Integer history can span the full int32/int16 domains; wrap, rounding and saturation follow the reference.
+
+The core updates active excitation, LPC history, previous gain and the rewhitening portion of output history. Controls may change for voiced-loss blending. The complete frame caller owns final output-history maintenance, previous lag/signal/loss counters and PLC/CNG. Tests call unchanged `decode_core.c`, compare full PCM/core state/controls and canaries, preserve inactive suffixes and reject malformed requests before writes. Connected sequences consume the same range-decoded indices and pulses, then reconstructed parameters; test-side frame-history maintenance is applied identically. Extreme histories/pulses exercise clipping and wrap arithmetic. These exact component PCM checks do not establish complete Opus stream conformance or playback availability.
 
 ## Frame-prefix interface
 

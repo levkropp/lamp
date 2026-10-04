@@ -4,7 +4,7 @@ $ErrorActionPreference='Stop'
 $reference=Get-LampOpusReference
 & node (Join-Path $PSScriptRoot 'generate-celt-tables.js') $reference --check
 if($LASTEXITCODE){throw 'CELT table provenance verification failed'}
-foreach($stage in @('range','packet','cwrs','energy','silk-pulses','silk-indices','silk-parameters','silk-nlsf','silk-lpc','silk-state','allocation','vq','band-transform','controls','theta','band','spectral','transform','filter','lpc','pitch','decoder')){
+foreach($stage in @('range','packet','cwrs','energy','silk-pulses','silk-indices','silk-parameters','silk-nlsf','silk-lpc','silk-state','silk-prediction','silk-synthesis','allocation','vq','band-transform','controls','theta','band','spectral','transform','filter','lpc','pitch','decoder')){
     & (Join-Path $PSScriptRoot "verify-opus-$stage.ps1")
 }
-Write-Output 'All twenty-two Opus component suites passed, including stateful SILK parameters/LPC and CELT frame-to-PCM, loss concealment and recovery. Full Opus playback is not yet implemented.'
+Write-Output 'All twenty-four Opus component suites passed, including stateful SILK parameters/source-rate synthesis and CELT frame-to-PCM, loss concealment and recovery. Full Opus playback is not yet implemented.'

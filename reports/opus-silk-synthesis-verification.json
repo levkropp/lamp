@@ -1,0 +1,6 @@
+﻿{
+    "result":  "passed",
+    "scope":  "SILK inverse-NSQ excitation/random signs, LTP rewhitening/prediction/gain scaling, LPC synthesis, int16 PCM saturation, loss-to-normal blending and core history, including connected indices/pulses/parameters; concealment/CNG, resampling, stereo framing and complete audio conformance remain pending",
+    "comparison":  "exact source-rate mono int16 PCM, excitation/LPC/output history and mutable controls",
+    "stats":  "SILK synthesis: 20480 exact source-rate PCM/history frames (8192 connected indices/pulses, 7564 voiced, 8836 interpolated, 1722 voiced-loss-to-unvoiced blends), 38304 gain changes, 3686080 int16 PCM samples (2182573 clipped), 16793600 history values, 0 invalid NLSF parameter skips, 36 guards"
+}
