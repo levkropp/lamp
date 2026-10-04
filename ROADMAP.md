@@ -31,7 +31,7 @@ The public repository includes build/test tooling, a Windows prerelease and a we
 - [x] CELT Haar time/frequency kernels, Hadamard layout transforms and vector renormalization.
 - [x] CELT frame flags/postfilter parameters, energy integration, TF decisions and dynamic allocation, checked against the normative frame prefix.
 - [x] CELT recursive/stereo split-angle decoding, gains/allocation deltas, inversion and fill masks, with exact entropy and integer-math comparisons.
-- [ ] CELT recursive band splits, stereo/folding, and complete band reconstruction.
+- [x] CELT recursive band splits, stereo/folding, and complete normalized spectral band reconstruction, including the frame loop.
 - [ ] CELT inverse MDCT, denormalization, overlap, anti-collapse and postfilters.
 - [ ] SILK parameter decoding, NLSF/LPC/prediction, synthesis and resampling.
 - [ ] Hybrid modes, bandwidth/frame transitions, stereo, channel mapping, output gain, pre-skip and end trimming.

@@ -93,7 +93,7 @@ ov_rotation_done:
     ret
 ov_rotation1 ENDP
 
-; RCX=X, EDX=N, R8D=dir (-1 inverse/+1 forward), R9D=blocks (1,2,4,8),
+; RCX=X, EDX=N, R8D=dir (-1 inverse/+1 forward), R9D=blocks (1,2,4,8,16),
 ; stack argument 5=K (0..32767), argument 6=spread (0..3). EAX=1/0.
 ; Buffers are caller-owned and contain N float32 entries.
 op_celt_spread PROC
@@ -124,7 +124,7 @@ op_celt_spread PROC
 ov_spread_direction:
     cmp r14d,1
     jb ov_spread_bad
-    cmp r14d,8
+    cmp r14d,16
     ja ov_spread_bad
     lea eax,[r14-1]
     test eax,r14d
@@ -277,7 +277,7 @@ op_celt_unquant PROC
     ja ov_unquant_bad
     cmp r12d,1
     jb ov_unquant_bad
-    cmp r12d,8
+    cmp r12d,16
     ja ov_unquant_bad
     lea eax,[r12-1]
     test eax,r12d

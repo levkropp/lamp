@@ -88,14 +88,14 @@ int main(void){
   if(op_celt_renormalize(x,2,1.0f)||memcmp(x,copy,sizeof(x)))return 1;guards++;
   if(op_celt_renormalize(x,0,1.0f)||op_celt_renormalize(x,1025,1.0f)||op_celt_renormalize(0,2,1.0f)||op_celt_renormalize(x,2,-.1f))return 1;guards+=4;
  }
- for(int n=2;n<=176;n++)for(int k=1;k<=128&&fits(n,k);k++)for(int B=1;B<=8;B*=2){
+ for(int n=2;n<=176;n++)for(int k=1;k<=128&&fits(n,k);k++)for(int B=1;B<=16;B*=2){
   if(n%B)continue;
   for(int spread=0;spread<=3;spread++)if(!pulse(n,k,spread,B,(next()&3)==0?0.0f:((next()%4096)+1)/4096.0f))return 1;
  }
- for(int n=192;n<=1024;n+=64)for(int k=1;k<14&&fits(n,k);k++)for(int B=1;B<=8;B*=2)for(int spread=0;spread<=3;spread++)if(!pulse(n,k,spread,B,1.0f))return 1;
+ for(int n=192;n<=1024;n+=64)for(int k=1;k<14&&fits(n,k);k++)for(int B=1;B<=16;B*=2)for(int spread=0;spread<=3;spread++)if(!pulse(n,k,spread,B,1.0f))return 1;
  const int longk[]={256,1024,4096,16384,32767};
  for(unsigned i=0;i<sizeof(longk)/sizeof(longk[0]);i++)for(int spread=0;spread<=3;spread++)if(!pulse(2,longk[i],spread,1,1.0f))return 1;
- for(int n=2;n<=1024;n++)for(int B=1;B<=8;B*=2){
+ for(int n=2;n<=1024;n++)for(int B=1;B<=16;B*=2){
   if(n%B)continue;
   for(int spread=0;spread<=3;spread++)for(int dir=-1;dir<=1;dir+=2)if(!rotation(n,next()%16,spread,B,dir))return 1;
  }

@@ -1,0 +1,7 @@
+{
+    "result":  "passed",
+    "scope":  "normal-mode CELT recursive vectors and full spectral frame loop, stereo, folding, TF, collapse masks, exact entropy/budget/seed state and connected real-frame prefixes; not synthesis or audio decoding",
+    "vector_absolute_tolerance":  1E-05,
+    "folding_output_absolute_tolerance":  4E-05,
+    "stats":  "Passed 75104 recursive band comparisons, 24589 full spectral frames (8205 connected prefixes including 13 real frames), 31254098 coefficient checks and 80 invalid guards; exact entropy/budget/seed; maximum float error 0."
+}

@@ -11,3 +11,5 @@ The new `opus-allocation`, `opus-vq` and `opus-band-transform` reports were capt
 `opus-controls-verification.json` adds connected frame-prefix coverage: flags/postfilter parameters, coarse/fine energy, TF, dynamic boosts and allocation, including real CELT frames and output/entropy guards. The expanded nine-suite component runner passed locally. Complete Opus audio decoding remains unfinished.
 
 `opus-theta-verification.json` covers recursive/stereo split angles, gains, allocation deltas, inversion/fill and exact entropy/integer math. The ten-suite component runner passed locally after adding this stage; recursive vector reconstruction and audio synthesis are still required.
+
+`opus-band-verification.json` adds recursive vector reconstruction and the full spectral-frame loop: stereo, folding, TF, masks, entropy, budget, seed and allocation balance. It includes connected frame prefixes and real CELT packets. The expanded eleven-suite runner also checks sixteen-block PVQ/spreading. These stages remain development-only until synthesis and complete PCM verification are ready.
