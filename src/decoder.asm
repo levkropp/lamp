@@ -42,6 +42,8 @@ frame_number_bytes dd 0
 frame_number dq 0
 wav_format dd 0
 wav_align dd 0
+wav_container_bits dd 0
+wav_valid_bits dd 0
 bits_count dd 0
 bits_buf dq 0
 frame_start dq 0
@@ -72,16 +74,17 @@ scale32 dd 30000000h
 float_scale real4 0.0
 flac_extra dq 0
 flac_channel_ptrs dq 8 dup (0)
-flac_channel_mask dd 0
-flac_mask_seen dd 0
+pcm_channel_mask dd 0
+pcm_mask_seen dd 0
 flac_comments_seen dd 0
-flac_mix dd 0
-; RFC 9639 channel order is increasing WAVE speaker bit order.
-flac_default_masks dd 4,3,7,33h,37h,3fh,70fh,63fh
+pcm_mix dd 0
+pcm_ignore_extra dd 0
+; Canonical FLAC/WAVE channel order is increasing WAVE speaker bit order.
+pcm_default_masks dd 4,3,7,33h,37h,3fh,70fh,63fh
 flac_mask_name db 'waveformatextensible_channel_mask='
 ; Horizontal fronts, center/LFE, rear/side spread, and height folds.
 ; q=1/sqrt(2), a=sqrt(3)/2. Height speakers use q times their base route.
-flac_speaker_weights real8 1.0,0.0, 0.0,1.0
+pcm_speaker_weights real8 1.0,0.0, 0.0,1.0
  real8 0.7071067811865475244,0.7071067811865475244
  real8 0.7071067811865475244,0.7071067811865475244
  real8 0.8660254037844386468,0.5, 0.5,0.8660254037844386468
@@ -93,9 +96,11 @@ flac_speaker_weights real8 1.0,0.0, 0.0,1.0
  real8 0.6123724356957945245,0.3535533905932737622
  real8 0.4330127018922193234,0.4330127018922193234
  real8 0.3535533905932737622,0.6123724356957945245
-flac_mix_one real8 1.0
-flac_mix_two real8 2.0
-flac_mix_coeff real8 16 dup (0.0)
+pcm_mix_one real8 1.0
+pcm_mix_two real8 2.0
+pcm_mix_coeff real8 16 dup (0.0)
+wav_float_max real8 3.4028234663852885981e38
+wav_float_min real8 -3.4028234663852885981e38
 rate_table dd 0,88200,176400,192000,8000,16000,22050,24000,32000,44100,48000,96000
 depth_table dd 0,8,12,0,16,20,24,32
 
@@ -122,9 +127,11 @@ decoder_open PROC
     mov dword ptr [flac_seek_count],0
     mov qword ptr [flac_next_sample],0
     mov dword ptr [flac_seek_probe],0
-    mov dword ptr [flac_mask_seen],0
+    mov dword ptr [pcm_mask_seen],0
     mov dword ptr [flac_comments_seen],0
-    mov dword ptr [flac_mix],0
+    mov dword ptr [pcm_mix],0
+    mov dword ptr [pcm_ignore_extra],0
+    mov dword ptr [wav_valid_bits],0
     mov edx,80000000h
     mov r8d,1
     xor r9d,r9d
@@ -229,6 +236,12 @@ open_wav:
     mov r10,rax
     xor r11d,r11d              ; fmt found
 wav_chunks:
+    mov rax,[ogg_cancel_ptr]
+    test rax,rax
+    jz wav_chunk_continue
+    cmp dword ptr [rax],0
+    jne open_bad
+wav_chunk_continue:
     lea rax,[r10+8]
     cmp rax,[input_end]
     ja open_bad
@@ -248,8 +261,19 @@ wav_next:
     mov r10,r8
     jmp wav_chunks
 wav_fmt:
+    test r11d,r11d
+    jnz open_bad
     cmp edx,16
     jb open_bad
+    cmp edx,16
+    je wav_fmt_size_valid
+    cmp edx,18
+    jb open_bad
+    movzx ecx,word ptr [rax+16]
+    add ecx,18
+    cmp ecx,edx
+    ja open_bad
+wav_fmt_size_valid:
     movzx ecx,word ptr [rax]
     cmp ecx,0fffeh
     jne wav_basic_fmt
@@ -267,8 +291,19 @@ wav_fmt:
     jne open_bad
     movzx ecx,word ptr [rax+24]
     movzx r9d,word ptr [rax+18]
-    cmp r9w,[rax+14]
-    jne open_bad             ; uncommon packed valid-bits layouts deferred
+    mov [wav_valid_bits],r9d
+    mov r9d,[rax+20]
+    mov [pcm_channel_mask],r9d
+    mov dword ptr [pcm_mask_seen],1
+    mov dword ptr [pcm_ignore_extra],1
+    test r9d,r9d
+    jnz wav_basic_fmt
+    ; Direct-out has no speaker positions: present the first two ports as
+    ; stereo (duplicate a single port), without interpreting extra tracks.
+    mov dword ptr [pcm_channel_mask],3
+    cmp word ptr [rax+2],1
+    jne wav_basic_fmt
+    mov dword ptr [pcm_channel_mask],4
 wav_basic_fmt:
     cmp ecx,1
     je wav_valid_type
@@ -279,7 +314,7 @@ wav_valid_type:
     movzx ecx,word ptr [rax+2]
     cmp ecx,1
     jb open_bad
-    cmp ecx,2
+    cmp ecx,8
     ja open_bad
     mov [source_channels],ecx
     mov ecx,[rax+4]
@@ -289,9 +324,12 @@ wav_valid_type:
     ja open_bad
     mov [sample_rate],ecx
     movzx ecx,word ptr [rax+14]
+    mov [wav_container_bits],ecx
     cmp dword ptr [wav_format],3
     jne wav_pcm_bits
     cmp ecx,32
+    je wav_bits_ok
+    cmp ecx,64
     jne open_bad
     jmp wav_bits_ok
 wav_pcm_bits:
@@ -304,7 +342,6 @@ wav_pcm_bits:
     cmp ecx,32
     jne open_bad
 wav_bits_ok:
-    mov [source_bits],ecx
     shr ecx,3
     imul ecx,[source_channels]
     cmp cx,[rax+12]
@@ -313,6 +350,19 @@ wav_bits_ok:
     imul ecx,[sample_rate]
     cmp ecx,[rax+8]
     jne open_bad
+    mov ecx,[wav_valid_bits]
+    test ecx,ecx
+    jnz wav_precision_set
+    mov ecx,[wav_container_bits]
+wav_precision_set:
+    cmp ecx,[wav_container_bits]
+    ja open_bad
+    cmp dword ptr [wav_format],3
+    jne wav_precision_valid
+    cmp ecx,[wav_container_bits]
+    jne open_bad
+wav_precision_valid:
+    mov [source_bits],ecx
     mov r11d,1
     jmp wav_next
 wav_data:
@@ -328,6 +378,13 @@ wav_data:
     test edx,edx
     jnz open_bad
     mov [total_frames],rax
+    call pcm_build_mix
+    test eax,eax
+    jz open_bad
+    mov eax,128
+    sub eax,[wav_container_bits]
+    shl eax,23
+    mov [float_scale],eax
     mov dword ptr [codec_kind],1
     mov eax,1
     leave
@@ -499,7 +556,7 @@ flac_seek_point_next:
     dec r8d
     jmp flac_seek_validate
 flac_seek_valid:
-    call flac_build_mix
+    call pcm_build_mix
     test eax,eax
     jz open_bad
     lea rax,left_samples
@@ -636,13 +693,13 @@ comments_digit:
     inc rax
     cmp rax,rdi
     jb comments_hex
-    cmp dword ptr [flac_mask_seen],0
+    cmp dword ptr [pcm_mask_seen],0
     je comments_save_mask
-    cmp r9d,[flac_channel_mask]
+    cmp r9d,[pcm_channel_mask]
     jne comments_bad
 comments_save_mask:
-    mov [flac_channel_mask],r9d
-    mov dword ptr [flac_mask_seen],1
+    mov [pcm_channel_mask],r9d
+    mov dword ptr [pcm_mask_seen],1
 comments_next:
     dec ebx
     jmp comments_field
@@ -665,19 +722,19 @@ flac_parse_comments ENDP
 ; Original stereo rendering policy. Canonical layouts match RFC 7845 gains,
 ; reordered into FLAC/WAVE order. Unassigned channels have zero coefficients.
 ; Normalize the larger row sum to 1 (<=4 speakers) or 2 (>=5 speakers).
-flac_build_mix PROC
-    cmp dword ptr [flac_mask_seen],0
+pcm_build_mix PROC
+    cmp dword ptr [pcm_mask_seen],0
     jne mix_mask_ready
     mov eax,[source_channels]
     dec eax
-    lea rcx,flac_default_masks
+    lea rcx,pcm_default_masks
     mov eax,[rcx+rax*4]
-    mov [flac_channel_mask],eax
+    mov [pcm_channel_mask],eax
 mix_mask_ready:
-    mov r11d,[flac_channel_mask]
+    mov r11d,[pcm_channel_mask]
     test r11d,0fffc0000h
     jnz mix_bad
-    lea r8,flac_mix_coeff
+    lea r8,pcm_mix_coeff
     xorpd xmm0,xmm0
     xor eax,eax
 mix_zero:
@@ -688,12 +745,16 @@ mix_zero:
     xorpd xmm1,xmm1
     xor ecx,ecx
     xor edx,edx
-    lea r10,flac_speaker_weights
+    lea r10,pcm_speaker_weights
 mix_speaker:
     bt r11d,ecx
     jnc mix_next_speaker
     cmp edx,[source_channels]
-    jae mix_bad
+    jb mix_assign_speaker
+    cmp dword ptr [pcm_ignore_extra],0
+    je mix_bad
+    jmp mix_next_speaker
+mix_assign_speaker:
     movsd xmm2,qword ptr [r10]
     movsd xmm3,qword ptr [r10+8]
     movsd qword ptr [r8],xmm2
@@ -710,13 +771,13 @@ mix_next_speaker:
     maxsd xmm0,xmm1
     test edx,edx
     jz mix_enable
-    movsd xmm2,[flac_mix_one]
+    movsd xmm2,[pcm_mix_one]
     cmp edx,4
     jbe mix_normalize
-    movsd xmm2,[flac_mix_two]
+    movsd xmm2,[pcm_mix_two]
 mix_normalize:
     divsd xmm2,xmm0
-    lea r8,flac_mix_coeff
+    lea r8,pcm_mix_coeff
     mov ecx,[source_channels]
 mix_scale:
     movsd xmm0,qword ptr [r8]
@@ -729,26 +790,26 @@ mix_scale:
     dec ecx
     jnz mix_scale
 mix_enable:
-    mov dword ptr [flac_mix],1
+    mov dword ptr [pcm_mix],1
     cmp dword ptr [source_channels],2
     jne mix_check_mono
     cmp r11d,3
     jne mix_ok
-    mov dword ptr [flac_mix],0
+    mov dword ptr [pcm_mix],0
     jmp mix_ok
 mix_check_mono:
     cmp dword ptr [source_channels],1
     jne mix_ok
     cmp r11d,4
     jne mix_ok
-    mov dword ptr [flac_mix],0
+    mov dword ptr [pcm_mix],0
 mix_ok:
     mov eax,1
     ret
 mix_bad:
     xor eax,eax
     ret
-flac_build_mix ENDP
+pcm_build_mix ENDP
 
 decoder_close PROC
     push rbp
@@ -897,6 +958,12 @@ seek_opus:
     call opus_seek
     jmp seek_return
 seek_wav:
+    mov rdx,[ogg_cancel_ptr]
+    test rdx,rdx
+    jz seek_wav_continue
+    cmp dword ptr [rdx],0
+    jne seek_return
+seek_wav_continue:
     cmp rcx,[total_frames]
     cmova rcx,[total_frames]
     mov rax,rcx
@@ -1999,17 +2066,18 @@ read_try_mp3:
     mov ebx,eax
     jmp read_done
 read_existing:
-    cmp dword ptr [codec_kind],1
-    je read_wav
     test r12d,r12d
     jz read_done
     mov rax,[ogg_cancel_ptr]
     test rax,rax
-    jz read_flac
+    jz read_existing_dispatch
     cmp dword ptr [rax],0
-    je read_flac
+    je read_existing_dispatch
     mov dword ptr [decode_error],3
     jmp read_done
+read_existing_dispatch:
+    cmp dword ptr [codec_kind],1
+    je read_wav
 read_flac:
     cmp ebx,r12d
     jae read_done
@@ -2021,7 +2089,7 @@ read_flac:
     jz read_done
 flac_emit:
     mov ecx,[frame_used]
-    cmp dword ptr [flac_mix],0
+    cmp dword ptr [pcm_mix],0
     jne flac_emit_mix
     lea rsi,left_samples
     cvtsi2ss xmm0,qword ptr [rsi+rcx*8]
@@ -2038,7 +2106,7 @@ flac_mono:
 flac_emit_mix:
     xor r9d,r9d
     lea r10,flac_channel_ptrs
-    lea r11,flac_mix_coeff
+    lea r11,pcm_mix_coeff
     xorpd xmm0,xmm0
     xorpd xmm1,xmm1
 flac_emit_channel:
@@ -2071,6 +2139,8 @@ wav_emit:
     jae wav_read_done
     cmp rsi,[wav_end]
     jae wav_read_done
+    cmp dword ptr [pcm_mix],0
+    jne wav_emit_mix
     call wav_sample
     movss dword ptr [rdi+rbx*8],xmm0
     cmp dword ptr [source_channels],1
@@ -2078,6 +2148,32 @@ wav_emit:
     call wav_sample
 wav_mono:
     movss dword ptr [rdi+rbx*8+4],xmm0
+    jmp wav_emit_done
+wav_emit_mix:
+    xor r9d,r9d
+    lea r10,pcm_mix_coeff
+    xorpd xmm4,xmm4
+    xorpd xmm5,xmm5
+wav_mix_channel:
+    call wav_sample_double
+    movapd xmm1,xmm0
+    mulsd xmm0,qword ptr [r10]
+    mulsd xmm1,qword ptr [r10+8]
+    addsd xmm4,xmm0
+    addsd xmm5,xmm1
+    add r10,16
+    inc r9d
+    cmp r9d,[source_channels]
+    jb wav_mix_channel
+    minsd xmm4,[wav_float_max]
+    maxsd xmm4,[wav_float_min]
+    minsd xmm5,[wav_float_max]
+    maxsd xmm5,[wav_float_min]
+    cvtsd2ss xmm0,xmm4
+    cvtsd2ss xmm1,xmm5
+    movss dword ptr [rdi+rbx*8],xmm0
+    movss dword ptr [rdi+rbx*8+4],xmm1
+wav_emit_done:
     inc ebx
     jmp wav_emit
 wav_read_done:
@@ -2094,9 +2190,57 @@ read_done:
 decoder_read ENDP
 
 wav_sample PROC
+    sub rsp,40
+    call wav_sample_double
+    cvtsd2ss xmm0,xmm0
+    add rsp,40
+    ret
+wav_sample ENDP
+
+; RSI advances by the physical container width. Caller accumulation uses
+; XMM4/5 and R9/10; this helper preserves them. Finite float64 inputs clamp
+; to the representable float32 range before mixing; NaN/Inf become silence.
+wav_sample_double PROC
     cmp dword ptr [wav_format],3
     je sample_float
-    mov eax,[source_bits]
+    sub rsp,40
+    call wav_integer_sample
+    cvtsi2sd xmm0,rax
+    cvtss2sd xmm1,[float_scale]
+    mulsd xmm0,xmm1
+    add rsp,40
+    ret
+sample_float:
+    cmp dword ptr [wav_container_bits],64
+    je sample_float64
+    mov eax,[rsi]
+    add rsi,4
+    mov edx,eax
+    and edx,7f800000h
+    cmp edx,7f800000h
+    je sample_float_bad
+    movd xmm0,eax
+    cvtss2sd xmm0,xmm0
+    ret
+sample_float64:
+    mov rax,[rsi]
+    add rsi,8
+    mov rdx,07ff0000000000000h
+    and rdx,rax
+    mov rcx,07ff0000000000000h
+    cmp rdx,rcx
+    je sample_float_bad
+    movq xmm0,rax
+    minsd xmm0,[wav_float_max]
+    maxsd xmm0,[wav_float_min]
+    ret
+sample_float_bad:
+    xorpd xmm0,xmm0
+    ret
+wav_sample_double ENDP
+
+wav_integer_sample PROC
+    mov eax,[wav_container_bits]
     cmp eax,8
     je sample8
     cmp eax,16
@@ -2104,42 +2248,30 @@ wav_sample PROC
     cmp eax,24
     je sample24
     movsxd rax,dword ptr [rsi]
-    cvtsi2ss xmm0,rax
-    mulss xmm0,[scale32]
     add rsi,4
-    ret
+    jmp sample_padding
 sample8:
     movzx eax,byte ptr [rsi]
     sub eax,128
-    cvtsi2ss xmm0,eax
-    mulss xmm0,[scale8]
+    movsxd rax,eax
     inc rsi
-    ret
+    jmp sample_padding
 sample16:
-    movsx eax,word ptr [rsi]
-    cvtsi2ss xmm0,eax
-    mulss xmm0,[scale16]
+    movsx rax,word ptr [rsi]
     add rsi,2
-    ret
+    jmp sample_padding
 sample24:
     movzx eax,word ptr [rsi]
     movsx edx,byte ptr [rsi+2]
     shl edx,16
     or eax,edx
-    cvtsi2ss xmm0,eax
-    mulss xmm0,[scale24]
+    movsxd rax,eax
     add rsi,3
+sample_padding:
+    mov ecx,[wav_container_bits]
+    sub ecx,[source_bits]
+    sar rax,cl
+    shl rax,cl
     ret
-sample_float:
-    mov eax,[rsi]
-    mov edx,eax
-    and edx,7f800000h
-    cmp edx,7f800000h
-    jne sample_float_ok
-    xor eax,eax             ; NaN / Infinity sanitized to silence
-sample_float_ok:
-    movd xmm0,eax
-    add rsi,4
-    ret
-wav_sample ENDP
+wav_integer_sample ENDP
 END

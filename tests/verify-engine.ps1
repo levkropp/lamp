@@ -53,5 +53,14 @@ foreach($layout in @('5.1','7.1')){
     if($LASTEXITCODE){throw "Multichannel FLAC engine lifecycle failed $layout $stats"}
     $report+=[pscustomobject]@{codec="flac-32-$layout";result='passed';tests=@('stereo downmix playback','pause','resume','stop','reopen','seek','paused seek','cancelled open');stats="$stats"}
     Write-Output "flac-32-$layout $stats"
+    foreach($encoding in @('pcm_s24le','pcm_f64le')){
+        $path=Join-Path $scratch "engine-silence-wav-$encoding-$layout.wav"
+        & ffmpeg -hide_banner -loglevel error -y -f lavfi -i "anullsrc=r=48000:cl=$($layout):d=30" -c:a $encoding $path
+        if($LASTEXITCODE){throw 'Multichannel WAV engine fixture failed'}
+        $stats=& (Join-Path $out 'engine-probe.exe') $path
+        if($LASTEXITCODE){throw "Multichannel WAV engine lifecycle failed $encoding $layout $stats"}
+        $report+=[pscustomobject]@{codec="wav-$encoding-$layout";result='passed';tests=@('stereo downmix playback','pause','resume','stop','reopen','seek','paused seek','cancelled open');stats="$stats"}
+        Write-Output "wav-$encoding-$layout $stats"
+    }
 }
 $report | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath (Join-Path $out 'engine-verification.json') -Encoding utf8

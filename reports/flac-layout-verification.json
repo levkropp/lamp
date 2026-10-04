@@ -31,8 +31,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4272128,
-      "private_bytes_after": 4272128
+      "private_bytes_before": 4268032,
+      "private_bytes_after": 4268032
     },
     {
       "file": "depth-4-channels-2.flac",
@@ -54,8 +54,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-4-channels-3.flac",
@@ -100,8 +100,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4239360,
+      "private_bytes_after": 4239360
     },
     {
       "file": "depth-4-channels-5.flac",
@@ -123,8 +123,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-4-channels-6.flac",
@@ -146,8 +146,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4272128,
-      "private_bytes_after": 4272128
+      "private_bytes_before": 4268032,
+      "private_bytes_after": 4268032
     },
     {
       "file": "depth-4-channels-7.flac",
@@ -169,8 +169,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-4-channels-8.flac",
@@ -192,8 +192,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4272128,
-      "private_bytes_after": 4272128
+      "private_bytes_before": 4276224,
+      "private_bytes_after": 4276224
     },
     {
       "file": "depth-5-channels-1.flac",
@@ -215,8 +215,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4284416,
-      "private_bytes_after": 4284416
+      "private_bytes_before": 4276224,
+      "private_bytes_after": 4276224
     },
     {
       "file": "depth-5-channels-2.flac",
@@ -238,8 +238,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4268032,
-      "private_bytes_after": 4268032
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-5-channels-3.flac",
@@ -261,8 +261,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4268032,
-      "private_bytes_after": 4268032
+      "private_bytes_before": 4276224,
+      "private_bytes_after": 4276224
     },
     {
       "file": "depth-5-channels-4.flac",
@@ -284,8 +284,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-5-channels-5.flac",
@@ -307,8 +307,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4284416,
-      "private_bytes_after": 4284416
+      "private_bytes_before": 4276224,
+      "private_bytes_after": 4276224
     },
     {
       "file": "depth-5-channels-6.flac",
@@ -330,8 +330,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4276224,
+      "private_bytes_after": 4276224
     },
     {
       "file": "depth-5-channels-7.flac",
@@ -353,8 +353,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4272128,
-      "private_bytes_after": 4272128
+      "private_bytes_before": 4276224,
+      "private_bytes_after": 4276224
     },
     {
       "file": "depth-5-channels-8.flac",
@@ -376,8 +376,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4268032,
-      "private_bytes_after": 4268032
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-6-channels-1.flac",
@@ -399,8 +399,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4268032,
-      "private_bytes_after": 4268032
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-6-channels-2.flac",
@@ -422,8 +422,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-6-channels-3.flac",
@@ -445,8 +445,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4263936,
+      "private_bytes_after": 4263936
     },
     {
       "file": "depth-6-channels-4.flac",
@@ -468,8 +468,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4272128,
-      "private_bytes_after": 4272128
+      "private_bytes_before": 4268032,
+      "private_bytes_after": 4268032
     },
     {
       "file": "depth-6-channels-5.flac",
@@ -491,8 +491,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4280320,
+      "private_bytes_after": 4280320
     },
     {
       "file": "depth-6-channels-6.flac",
@@ -560,8 +560,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4268032,
-      "private_bytes_after": 4268032
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-7-channels-1.flac",
@@ -629,8 +629,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4284416,
-      "private_bytes_after": 4284416
+      "private_bytes_before": 4268032,
+      "private_bytes_after": 4268032
     },
     {
       "file": "depth-7-channels-4.flac",
@@ -652,8 +652,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4243456,
-      "private_bytes_after": 4243456
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-7-channels-5.flac",
@@ -675,8 +675,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4263936,
+      "private_bytes_after": 4263936
     },
     {
       "file": "depth-7-channels-6.flac",
@@ -698,8 +698,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4263936,
+      "private_bytes_after": 4263936
     },
     {
       "file": "depth-7-channels-7.flac",
@@ -721,8 +721,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-7-channels-8.flac",
@@ -790,8 +790,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4284416,
-      "private_bytes_after": 4284416
+      "private_bytes_before": 4280320,
+      "private_bytes_after": 4280320
     },
     {
       "file": "depth-8-channels-3.flac",
@@ -813,8 +813,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4263936,
+      "private_bytes_after": 4263936
     },
     {
       "file": "depth-8-channels-4.flac",
@@ -836,8 +836,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4272128,
-      "private_bytes_after": 4272128
+      "private_bytes_before": 4268032,
+      "private_bytes_after": 4268032
     },
     {
       "file": "depth-8-channels-5.flac",
@@ -859,8 +859,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4272128,
-      "private_bytes_after": 4272128
+      "private_bytes_before": 4276224,
+      "private_bytes_after": 4276224
     },
     {
       "file": "depth-8-channels-6.flac",
@@ -882,8 +882,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4284416,
-      "private_bytes_after": 4284416
+      "private_bytes_before": 4276224,
+      "private_bytes_after": 4276224
     },
     {
       "file": "depth-8-channels-7.flac",
@@ -905,8 +905,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4263936,
-      "private_bytes_after": 4263936
+      "private_bytes_before": 4239360,
+      "private_bytes_after": 4239360
     },
     {
       "file": "depth-8-channels-8.flac",
@@ -928,8 +928,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4276224,
+      "private_bytes_after": 4276224
     },
     {
       "file": "depth-9-channels-1.flac",
@@ -974,8 +974,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4268032,
+      "private_bytes_after": 4268032
     },
     {
       "file": "depth-9-channels-3.flac",
@@ -997,8 +997,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4272128,
-      "private_bytes_after": 4272128
+      "private_bytes_before": 4268032,
+      "private_bytes_after": 4268032
     },
     {
       "file": "depth-9-channels-4.flac",
@@ -1020,8 +1020,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4268032,
-      "private_bytes_after": 4268032
+      "private_bytes_before": 4276224,
+      "private_bytes_after": 4276224
     },
     {
       "file": "depth-9-channels-5.flac",
@@ -1066,8 +1066,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4284416,
-      "private_bytes_after": 4284416
+      "private_bytes_before": 4276224,
+      "private_bytes_after": 4276224
     },
     {
       "file": "depth-9-channels-7.flac",
@@ -1089,8 +1089,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4276224,
+      "private_bytes_after": 4276224
     },
     {
       "file": "depth-9-channels-8.flac",
@@ -1112,8 +1112,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-10-channels-1.flac",
@@ -1135,8 +1135,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-10-channels-2.flac",
@@ -1158,8 +1158,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4268032,
+      "private_bytes_after": 4268032
     },
     {
       "file": "depth-10-channels-3.flac",
@@ -1181,8 +1181,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4259840,
-      "private_bytes_after": 4259840
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-10-channels-4.flac",
@@ -1204,8 +1204,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-10-channels-5.flac",
@@ -1227,8 +1227,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4268032,
+      "private_bytes_after": 4268032
     },
     {
       "file": "depth-10-channels-6.flac",
@@ -1250,8 +1250,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-10-channels-7.flac",
@@ -1273,8 +1273,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4268032,
+      "private_bytes_after": 4268032
     },
     {
       "file": "depth-10-channels-8.flac",
@@ -1296,8 +1296,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4272128,
-      "private_bytes_after": 4272128
+      "private_bytes_before": 4268032,
+      "private_bytes_after": 4268032
     },
     {
       "file": "depth-11-channels-1.flac",
@@ -1319,8 +1319,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4284416,
-      "private_bytes_after": 4284416
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-11-channels-2.flac",
@@ -1342,8 +1342,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4272128,
-      "private_bytes_after": 4272128
+      "private_bytes_before": 4268032,
+      "private_bytes_after": 4268032
     },
     {
       "file": "depth-11-channels-3.flac",
@@ -1365,8 +1365,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4292608,
-      "private_bytes_after": 4292608
+      "private_bytes_before": 4263936,
+      "private_bytes_after": 4263936
     },
     {
       "file": "depth-11-channels-4.flac",
@@ -1411,8 +1411,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4263936,
+      "private_bytes_after": 4263936
     },
     {
       "file": "depth-11-channels-6.flac",
@@ -1457,8 +1457,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4272128,
-      "private_bytes_after": 4272128
+      "private_bytes_before": 4263936,
+      "private_bytes_after": 4263936
     },
     {
       "file": "depth-11-channels-8.flac",
@@ -1480,8 +1480,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4268032,
-      "private_bytes_after": 4268032
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-12-channels-1.flac",
@@ -1503,8 +1503,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4259840,
+      "private_bytes_after": 4259840
     },
     {
       "file": "depth-12-channels-2.flac",
@@ -1526,8 +1526,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4268032,
+      "private_bytes_after": 4268032
     },
     {
       "file": "depth-12-channels-3.flac",
@@ -1549,8 +1549,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4268032,
+      "private_bytes_after": 4268032
     },
     {
       "file": "depth-12-channels-4.flac",
@@ -1572,8 +1572,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4284416,
-      "private_bytes_after": 4284416
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-12-channels-5.flac",
@@ -1618,8 +1618,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4288512,
-      "private_bytes_after": 4288512
+      "private_bytes_before": 4280320,
+      "private_bytes_after": 4280320
     },
     {
       "file": "depth-12-channels-7.flac",
@@ -1641,8 +1641,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4284416,
-      "private_bytes_after": 4284416
+      "private_bytes_before": 4276224,
+      "private_bytes_after": 4276224
     },
     {
       "file": "depth-12-channels-8.flac",
@@ -1664,8 +1664,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4280320,
+      "private_bytes_after": 4280320
     },
     {
       "file": "depth-13-channels-1.flac",
@@ -1710,8 +1710,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4268032,
+      "private_bytes_after": 4268032
     },
     {
       "file": "depth-13-channels-3.flac",
@@ -1756,8 +1756,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4272128,
-      "private_bytes_after": 4272128
+      "private_bytes_before": 4280320,
+      "private_bytes_after": 4280320
     },
     {
       "file": "depth-13-channels-5.flac",
@@ -1779,8 +1779,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4272128,
-      "private_bytes_after": 4272128
+      "private_bytes_before": 4268032,
+      "private_bytes_after": 4268032
     },
     {
       "file": "depth-13-channels-6.flac",
@@ -1802,8 +1802,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4239360,
+      "private_bytes_after": 4239360
     },
     {
       "file": "depth-13-channels-7.flac",
@@ -1825,8 +1825,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-13-channels-8.flac",
@@ -1848,8 +1848,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4288512,
-      "private_bytes_after": 4288512
+      "private_bytes_before": 4276224,
+      "private_bytes_after": 4276224
     },
     {
       "file": "depth-14-channels-1.flac",
@@ -1871,8 +1871,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4263936,
-      "private_bytes_after": 4263936
+      "private_bytes_before": 4268032,
+      "private_bytes_after": 4268032
     },
     {
       "file": "depth-14-channels-2.flac",
@@ -1894,8 +1894,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-14-channels-3.flac",
@@ -1917,8 +1917,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4263936,
-      "private_bytes_after": 4263936
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-14-channels-4.flac",
@@ -1940,8 +1940,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4263936,
+      "private_bytes_after": 4263936
     },
     {
       "file": "depth-14-channels-5.flac",
@@ -1986,8 +1986,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4272128,
-      "private_bytes_after": 4272128
+      "private_bytes_before": 4263936,
+      "private_bytes_after": 4263936
     },
     {
       "file": "depth-14-channels-7.flac",
@@ -2055,8 +2055,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4284416,
-      "private_bytes_after": 4284416
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-15-channels-2.flac",
@@ -2101,8 +2101,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4284416,
-      "private_bytes_after": 4284416
+      "private_bytes_before": 4276224,
+      "private_bytes_after": 4276224
     },
     {
       "file": "depth-15-channels-4.flac",
@@ -2124,8 +2124,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4276224,
+      "private_bytes_after": 4276224
     },
     {
       "file": "depth-15-channels-5.flac",
@@ -2170,8 +2170,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-15-channels-7.flac",
@@ -2193,8 +2193,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-15-channels-8.flac",
@@ -2216,8 +2216,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-16-channels-1.flac",
@@ -2239,8 +2239,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4284416,
-      "private_bytes_after": 4284416
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-16-channels-2.flac",
@@ -2262,8 +2262,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4272128,
-      "private_bytes_after": 4272128
+      "private_bytes_before": 4268032,
+      "private_bytes_after": 4268032
     },
     {
       "file": "depth-16-channels-3.flac",
@@ -2285,8 +2285,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4272128,
-      "private_bytes_after": 4272128
+      "private_bytes_before": 4243456,
+      "private_bytes_after": 4243456
     },
     {
       "file": "depth-16-channels-4.flac",
@@ -2308,8 +2308,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4272128,
-      "private_bytes_after": 4272128
+      "private_bytes_before": 4259840,
+      "private_bytes_after": 4259840
     },
     {
       "file": "depth-16-channels-5.flac",
@@ -2331,8 +2331,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4268032,
+      "private_bytes_after": 4268032
     },
     {
       "file": "depth-16-channels-6.flac",
@@ -2354,8 +2354,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-16-channels-7.flac",
@@ -2377,8 +2377,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4243456,
+      "private_bytes_after": 4243456
     },
     {
       "file": "depth-16-channels-8.flac",
@@ -2400,8 +2400,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4259840,
+      "private_bytes_after": 4259840
     },
     {
       "file": "depth-17-channels-1.flac",
@@ -2423,8 +2423,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4272128,
-      "private_bytes_after": 4272128
+      "private_bytes_before": 4268032,
+      "private_bytes_after": 4268032
     },
     {
       "file": "depth-17-channels-2.flac",
@@ -2446,8 +2446,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4280320,
+      "private_bytes_after": 4280320
     },
     {
       "file": "depth-17-channels-3.flac",
@@ -2469,8 +2469,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4268032,
+      "private_bytes_after": 4268032
     },
     {
       "file": "depth-17-channels-4.flac",
@@ -2515,8 +2515,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4263936,
+      "private_bytes_after": 4263936
     },
     {
       "file": "depth-17-channels-6.flac",
@@ -2538,8 +2538,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4284416,
+      "private_bytes_after": 4284416
     },
     {
       "file": "depth-17-channels-7.flac",
@@ -2561,8 +2561,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4272128,
-      "private_bytes_after": 4272128
+      "private_bytes_before": 4243456,
+      "private_bytes_after": 4243456
     },
     {
       "file": "depth-17-channels-8.flac",
@@ -2584,8 +2584,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-18-channels-1.flac",
@@ -2607,8 +2607,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4263936,
-      "private_bytes_after": 4263936
+      "private_bytes_before": 4280320,
+      "private_bytes_after": 4280320
     },
     {
       "file": "depth-18-channels-2.flac",
@@ -2630,8 +2630,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4263936,
-      "private_bytes_after": 4263936
+      "private_bytes_before": 4276224,
+      "private_bytes_after": 4276224
     },
     {
       "file": "depth-18-channels-3.flac",
@@ -2653,8 +2653,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-18-channels-4.flac",
@@ -2676,8 +2676,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4272128,
-      "private_bytes_after": 4272128
+      "private_bytes_before": 4276224,
+      "private_bytes_after": 4276224
     },
     {
       "file": "depth-18-channels-5.flac",
@@ -2722,8 +2722,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4284416,
-      "private_bytes_after": 4284416
+      "private_bytes_before": 4276224,
+      "private_bytes_after": 4276224
     },
     {
       "file": "depth-18-channels-7.flac",
@@ -2745,8 +2745,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4284416,
-      "private_bytes_after": 4284416
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-18-channels-8.flac",
@@ -2768,8 +2768,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4263936,
+      "private_bytes_after": 4263936
     },
     {
       "file": "depth-19-channels-1.flac",
@@ -2791,8 +2791,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-19-channels-2.flac",
@@ -2814,8 +2814,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4288512,
-      "private_bytes_after": 4288512
+      "private_bytes_before": 4263936,
+      "private_bytes_after": 4263936
     },
     {
       "file": "depth-19-channels-3.flac",
@@ -2837,8 +2837,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-19-channels-4.flac",
@@ -2860,8 +2860,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-19-channels-5.flac",
@@ -2883,8 +2883,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4272128,
-      "private_bytes_after": 4272128
+      "private_bytes_before": 4276224,
+      "private_bytes_after": 4276224
     },
     {
       "file": "depth-19-channels-6.flac",
@@ -2906,8 +2906,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4272128,
-      "private_bytes_after": 4272128
+      "private_bytes_before": 4276224,
+      "private_bytes_after": 4276224
     },
     {
       "file": "depth-19-channels-7.flac",
@@ -2929,8 +2929,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4284416,
-      "private_bytes_after": 4284416
+      "private_bytes_before": 4276224,
+      "private_bytes_after": 4276224
     },
     {
       "file": "depth-19-channels-8.flac",
@@ -2952,8 +2952,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4268032,
-      "private_bytes_after": 4268032
+      "private_bytes_before": 4243456,
+      "private_bytes_after": 4243456
     },
     {
       "file": "depth-20-channels-1.flac",
@@ -2975,8 +2975,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4247552,
-      "private_bytes_after": 4247552
+      "private_bytes_before": 4268032,
+      "private_bytes_after": 4268032
     },
     {
       "file": "depth-20-channels-2.flac",
@@ -2998,8 +2998,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4280320,
+      "private_bytes_after": 4280320
     },
     {
       "file": "depth-20-channels-3.flac",
@@ -3021,8 +3021,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4272128,
-      "private_bytes_after": 4272128
+      "private_bytes_before": 4276224,
+      "private_bytes_after": 4276224
     },
     {
       "file": "depth-20-channels-4.flac",
@@ -3044,8 +3044,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4255744,
-      "private_bytes_after": 4255744
+      "private_bytes_before": 4263936,
+      "private_bytes_after": 4263936
     },
     {
       "file": "depth-20-channels-5.flac",
@@ -3067,8 +3067,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4263936,
+      "private_bytes_after": 4263936
     },
     {
       "file": "depth-20-channels-6.flac",
@@ -3090,8 +3090,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4284416,
+      "private_bytes_after": 4284416
     },
     {
       "file": "depth-20-channels-7.flac",
@@ -3113,8 +3113,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4268032,
+      "private_bytes_after": 4268032
     },
     {
       "file": "depth-20-channels-8.flac",
@@ -3136,8 +3136,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-21-channels-1.flac",
@@ -3182,8 +3182,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4263936,
+      "private_bytes_after": 4263936
     },
     {
       "file": "depth-21-channels-3.flac",
@@ -3205,8 +3205,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-21-channels-4.flac",
@@ -3228,8 +3228,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4288512,
-      "private_bytes_after": 4288512
+      "private_bytes_before": 4276224,
+      "private_bytes_after": 4276224
     },
     {
       "file": "depth-21-channels-5.flac",
@@ -3251,8 +3251,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4263936,
-      "private_bytes_after": 4263936
+      "private_bytes_before": 4276224,
+      "private_bytes_after": 4276224
     },
     {
       "file": "depth-21-channels-6.flac",
@@ -3274,8 +3274,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4243456,
-      "private_bytes_after": 4243456
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-21-channels-7.flac",
@@ -3297,8 +3297,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4255744,
-      "private_bytes_after": 4255744
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-21-channels-8.flac",
@@ -3320,8 +3320,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-22-channels-1.flac",
@@ -3366,8 +3366,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4276224,
+      "private_bytes_after": 4276224
     },
     {
       "file": "depth-22-channels-3.flac",
@@ -3389,8 +3389,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4284416,
-      "private_bytes_after": 4284416
+      "private_bytes_before": 4263936,
+      "private_bytes_after": 4263936
     },
     {
       "file": "depth-22-channels-4.flac",
@@ -3435,8 +3435,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4263936,
-      "private_bytes_after": 4263936
+      "private_bytes_before": 4239360,
+      "private_bytes_after": 4239360
     },
     {
       "file": "depth-22-channels-6.flac",
@@ -3504,8 +3504,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4276224,
+      "private_bytes_after": 4276224
     },
     {
       "file": "depth-23-channels-1.flac",
@@ -3550,8 +3550,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4284416,
-      "private_bytes_after": 4284416
+      "private_bytes_before": 4276224,
+      "private_bytes_after": 4276224
     },
     {
       "file": "depth-23-channels-3.flac",
@@ -3573,8 +3573,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4272128,
-      "private_bytes_after": 4272128
+      "private_bytes_before": 4280320,
+      "private_bytes_after": 4280320
     },
     {
       "file": "depth-23-channels-4.flac",
@@ -3596,8 +3596,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4247552,
-      "private_bytes_after": 4247552
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-23-channels-5.flac",
@@ -3619,8 +3619,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-23-channels-6.flac",
@@ -3642,8 +3642,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4276224,
+      "private_bytes_after": 4276224
     },
     {
       "file": "depth-23-channels-7.flac",
@@ -3665,8 +3665,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4284416,
-      "private_bytes_after": 4284416
+      "private_bytes_before": 4268032,
+      "private_bytes_after": 4268032
     },
     {
       "file": "depth-23-channels-8.flac",
@@ -3688,8 +3688,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4268032,
+      "private_bytes_after": 4268032
     },
     {
       "file": "depth-24-channels-1.flac",
@@ -3711,8 +3711,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4284416,
-      "private_bytes_after": 4284416
+      "private_bytes_before": 4280320,
+      "private_bytes_after": 4280320
     },
     {
       "file": "depth-24-channels-2.flac",
@@ -3734,8 +3734,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4268032,
-      "private_bytes_after": 4268032
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-24-channels-3.flac",
@@ -3757,8 +3757,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4268032,
+      "private_bytes_after": 4268032
     },
     {
       "file": "depth-24-channels-4.flac",
@@ -3780,8 +3780,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4268032,
-      "private_bytes_after": 4268032
+      "private_bytes_before": 4276224,
+      "private_bytes_after": 4276224
     },
     {
       "file": "depth-24-channels-5.flac",
@@ -3803,8 +3803,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-24-channels-6.flac",
@@ -3826,8 +3826,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4280320,
+      "private_bytes_after": 4280320
     },
     {
       "file": "depth-24-channels-7.flac",
@@ -3849,8 +3849,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4268032,
+      "private_bytes_after": 4268032
     },
     {
       "file": "depth-24-channels-8.flac",
@@ -3872,8 +3872,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4276224,
+      "private_bytes_after": 4276224
     },
     {
       "file": "depth-25-channels-1.flac",
@@ -3895,8 +3895,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-25-channels-2.flac",
@@ -3918,8 +3918,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-25-channels-3.flac",
@@ -3941,8 +3941,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4272128,
-      "private_bytes_after": 4272128
+      "private_bytes_before": 4268032,
+      "private_bytes_after": 4268032
     },
     {
       "file": "depth-25-channels-4.flac",
@@ -3964,8 +3964,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4284416,
-      "private_bytes_after": 4284416
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-25-channels-5.flac",
@@ -3987,8 +3987,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4263936,
+      "private_bytes_after": 4263936
     },
     {
       "file": "depth-25-channels-6.flac",
@@ -4010,8 +4010,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4276224,
+      "private_bytes_after": 4276224
     },
     {
       "file": "depth-25-channels-7.flac",
@@ -4033,8 +4033,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-25-channels-8.flac",
@@ -4056,8 +4056,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4272128,
-      "private_bytes_after": 4272128
+      "private_bytes_before": 4268032,
+      "private_bytes_after": 4268032
     },
     {
       "file": "depth-26-channels-1.flac",
@@ -4079,8 +4079,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4268032,
-      "private_bytes_after": 4268032
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-26-channels-2.flac",
@@ -4102,8 +4102,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-26-channels-3.flac",
@@ -4125,8 +4125,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4259840,
-      "private_bytes_after": 4259840
+      "private_bytes_before": 4276224,
+      "private_bytes_after": 4276224
     },
     {
       "file": "depth-26-channels-4.flac",
@@ -4148,8 +4148,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4276224,
+      "private_bytes_after": 4276224
     },
     {
       "file": "depth-26-channels-5.flac",
@@ -4171,8 +4171,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4268032,
-      "private_bytes_after": 4268032
+      "private_bytes_before": 4280320,
+      "private_bytes_after": 4280320
     },
     {
       "file": "depth-26-channels-6.flac",
@@ -4217,8 +4217,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4247552,
-      "private_bytes_after": 4247552
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-26-channels-8.flac",
@@ -4240,8 +4240,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-27-channels-1.flac",
@@ -4263,8 +4263,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4288512,
-      "private_bytes_after": 4288512
+      "private_bytes_before": 4276224,
+      "private_bytes_after": 4276224
     },
     {
       "file": "depth-27-channels-2.flac",
@@ -4286,8 +4286,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4272128,
-      "private_bytes_after": 4272128
+      "private_bytes_before": 4280320,
+      "private_bytes_after": 4280320
     },
     {
       "file": "depth-27-channels-3.flac",
@@ -4355,8 +4355,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4263936,
+      "private_bytes_after": 4263936
     },
     {
       "file": "depth-27-channels-6.flac",
@@ -4378,8 +4378,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4276224,
+      "private_bytes_after": 4276224
     },
     {
       "file": "depth-27-channels-7.flac",
@@ -4401,8 +4401,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4276224,
+      "private_bytes_after": 4276224
     },
     {
       "file": "depth-27-channels-8.flac",
@@ -4424,8 +4424,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4272128,
-      "private_bytes_after": 4272128
+      "private_bytes_before": 4276224,
+      "private_bytes_after": 4276224
     },
     {
       "file": "depth-28-channels-1.flac",
@@ -4447,8 +4447,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-28-channels-2.flac",
@@ -4493,8 +4493,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4284416,
+      "private_bytes_after": 4284416
     },
     {
       "file": "depth-28-channels-4.flac",
@@ -4516,8 +4516,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4288512,
-      "private_bytes_after": 4288512
+      "private_bytes_before": 4268032,
+      "private_bytes_after": 4268032
     },
     {
       "file": "depth-28-channels-5.flac",
@@ -4539,8 +4539,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-28-channels-6.flac",
@@ -4562,8 +4562,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4263936,
-      "private_bytes_after": 4263936
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-28-channels-7.flac",
@@ -4585,8 +4585,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-28-channels-8.flac",
@@ -4608,8 +4608,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4247552,
-      "private_bytes_after": 4247552
+      "private_bytes_before": 4268032,
+      "private_bytes_after": 4268032
     },
     {
       "file": "depth-29-channels-1.flac",
@@ -4631,8 +4631,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-29-channels-2.flac",
@@ -4677,8 +4677,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4243456,
+      "private_bytes_after": 4243456
     },
     {
       "file": "depth-29-channels-4.flac",
@@ -4700,8 +4700,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4268032,
+      "private_bytes_after": 4268032
     },
     {
       "file": "depth-29-channels-5.flac",
@@ -4723,8 +4723,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-29-channels-6.flac",
@@ -4746,8 +4746,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4268032,
+      "private_bytes_after": 4268032
     },
     {
       "file": "depth-29-channels-7.flac",
@@ -4769,8 +4769,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4268032,
+      "private_bytes_after": 4268032
     },
     {
       "file": "depth-29-channels-8.flac",
@@ -4792,8 +4792,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-30-channels-1.flac",
@@ -4815,8 +4815,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4239360,
+      "private_bytes_after": 4239360
     },
     {
       "file": "depth-30-channels-2.flac",
@@ -4838,8 +4838,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4247552,
-      "private_bytes_after": 4247552
+      "private_bytes_before": 4268032,
+      "private_bytes_after": 4268032
     },
     {
       "file": "depth-30-channels-3.flac",
@@ -4861,8 +4861,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4268032,
+      "private_bytes_after": 4268032
     },
     {
       "file": "depth-30-channels-4.flac",
@@ -4884,8 +4884,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4272128,
-      "private_bytes_after": 4272128
+      "private_bytes_before": 4276224,
+      "private_bytes_after": 4276224
     },
     {
       "file": "depth-30-channels-5.flac",
@@ -4930,8 +4930,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4263936,
+      "private_bytes_after": 4263936
     },
     {
       "file": "depth-30-channels-7.flac",
@@ -4953,8 +4953,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4276224,
+      "private_bytes_after": 4276224
     },
     {
       "file": "depth-30-channels-8.flac",
@@ -4976,8 +4976,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4276224,
+      "private_bytes_after": 4276224
     },
     {
       "file": "depth-31-channels-1.flac",
@@ -4999,8 +4999,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4280320,
+      "private_bytes_after": 4280320
     },
     {
       "file": "depth-31-channels-2.flac",
@@ -5045,8 +5045,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4268032,
-      "private_bytes_after": 4268032
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-31-channels-4.flac",
@@ -5068,8 +5068,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4276224,
+      "private_bytes_after": 4276224
     },
     {
       "file": "depth-31-channels-5.flac",
@@ -5091,8 +5091,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4284416,
-      "private_bytes_after": 4284416
+      "private_bytes_before": 4268032,
+      "private_bytes_after": 4268032
     },
     {
       "file": "depth-31-channels-6.flac",
@@ -5114,8 +5114,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4272128,
-      "private_bytes_after": 4272128
+      "private_bytes_before": 4243456,
+      "private_bytes_after": 4243456
     },
     {
       "file": "depth-31-channels-7.flac",
@@ -5137,8 +5137,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-31-channels-8.flac",
@@ -5206,8 +5206,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-32-channels-3.flac",
@@ -5229,8 +5229,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4276224,
+      "private_bytes_after": 4276224
     },
     {
       "file": "depth-32-channels-4.flac",
@@ -5275,8 +5275,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4268032,
-      "private_bytes_after": 4268032
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-32-channels-6.flac",
@@ -5298,8 +5298,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-32-channels-7.flac",
@@ -5321,8 +5321,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "depth-32-channels-8.flac",
@@ -5344,8 +5344,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4288512,
-      "private_bytes_after": 4288512
+      "private_bytes_before": 4243456,
+      "private_bytes_after": 4243456
     },
     {
       "file": "stereo-4-mode-8.flac",
@@ -5367,8 +5367,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4280320,
+      "private_bytes_after": 4280320
     },
     {
       "file": "stereo-4-mode-9.flac",
@@ -5390,8 +5390,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4276224,
+      "private_bytes_after": 4276224
     },
     {
       "file": "stereo-4-mode-10.flac",
@@ -5413,8 +5413,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4284416,
-      "private_bytes_after": 4284416
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "stereo-16-mode-8.flac",
@@ -5436,11 +5436,34 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4288512,
-      "private_bytes_after": 4288512
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "stereo-16-mode-9.flac",
+      "channels": 2,
+      "depth": 16,
+      "mask": 3,
+      "frames": 480,
+      "independent_channels": true,
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 1264,
+      "maximum_discarded": 120,
+      "maximum_probes": 1,
+      "index_points": 0,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
+      "guarded_reads": 6,
+      "cancel_checks": 4,
+      "reopen_checks": 64,
+      "private_bytes_before": 4280320,
+      "private_bytes_after": 4280320
+    },
+    {
+      "file": "stereo-16-mode-10.flac",
       "channels": 2,
       "depth": 16,
       "mask": 3,
@@ -5463,29 +5486,6 @@
       "private_bytes_after": 4276224
     },
     {
-      "file": "stereo-16-mode-10.flac",
-      "channels": 2,
-      "depth": 16,
-      "mask": 3,
-      "frames": 480,
-      "independent_channels": true,
-      "result": "passed",
-      "checks": 15,
-      "advanced": 11,
-      "discarded_frames": 1264,
-      "maximum_discarded": 120,
-      "maximum_probes": 1,
-      "index_points": 0,
-      "maximum_skimmed_headers": 0,
-      "maximum_stride": 0,
-      "maximum_preroll": 0,
-      "guarded_reads": 6,
-      "cancel_checks": 4,
-      "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
-    },
-    {
       "file": "stereo-24-mode-8.flac",
       "channels": 2,
       "depth": 24,
@@ -5505,8 +5505,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4255744,
-      "private_bytes_after": 4255744
+      "private_bytes_before": 4280320,
+      "private_bytes_after": 4280320
     },
     {
       "file": "stereo-24-mode-9.flac",
@@ -5528,8 +5528,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4276224,
+      "private_bytes_after": 4276224
     },
     {
       "file": "stereo-24-mode-10.flac",
@@ -5597,8 +5597,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4272128,
-      "private_bytes_after": 4272128
+      "private_bytes_before": 4243456,
+      "private_bytes_after": 4243456
     },
     {
       "file": "stereo-25-mode-10.flac",
@@ -5620,8 +5620,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4268032,
+      "private_bytes_after": 4268032
     },
     {
       "file": "stereo-31-mode-8.flac",
@@ -5643,8 +5643,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4272128,
-      "private_bytes_after": 4272128
+      "private_bytes_before": 4268032,
+      "private_bytes_after": 4268032
     },
     {
       "file": "stereo-31-mode-9.flac",
@@ -5689,57 +5689,11 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4284416,
-      "private_bytes_after": 4284416
+      "private_bytes_before": 4280320,
+      "private_bytes_after": 4280320
     },
     {
       "file": "stereo-32-mode-8.flac",
-      "channels": 2,
-      "depth": 32,
-      "mask": 3,
-      "frames": 480,
-      "independent_channels": true,
-      "result": "passed",
-      "checks": 15,
-      "advanced": 11,
-      "discarded_frames": 1264,
-      "maximum_discarded": 120,
-      "maximum_probes": 1,
-      "index_points": 0,
-      "maximum_skimmed_headers": 0,
-      "maximum_stride": 0,
-      "maximum_preroll": 0,
-      "guarded_reads": 6,
-      "cancel_checks": 4,
-      "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
-    },
-    {
-      "file": "stereo-32-mode-9.flac",
-      "channels": 2,
-      "depth": 32,
-      "mask": 3,
-      "frames": 480,
-      "independent_channels": true,
-      "result": "passed",
-      "checks": 15,
-      "advanced": 11,
-      "discarded_frames": 1264,
-      "maximum_discarded": 120,
-      "maximum_probes": 1,
-      "index_points": 0,
-      "maximum_skimmed_headers": 0,
-      "maximum_stride": 0,
-      "maximum_preroll": 0,
-      "guarded_reads": 6,
-      "cancel_checks": 4,
-      "reopen_checks": 64,
-      "private_bytes_before": 4284416,
-      "private_bytes_after": 4284416
-    },
-    {
-      "file": "stereo-32-mode-10.flac",
       "channels": 2,
       "depth": 32,
       "mask": 3,
@@ -5762,10 +5716,10 @@
       "private_bytes_after": 4280320
     },
     {
-      "file": "predictor-0-1.flac",
-      "channels": 1,
+      "file": "stereo-32-mode-9.flac",
+      "channels": 2,
       "depth": 32,
-      "mask": 4,
+      "mask": 3,
       "frames": 480,
       "independent_channels": true,
       "result": "passed",
@@ -5781,11 +5735,11 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4268032,
+      "private_bytes_after": 4268032
     },
     {
-      "file": "predictor-0-2.flac",
+      "file": "stereo-32-mode-10.flac",
       "channels": 2,
       "depth": 32,
       "mask": 3,
@@ -5808,6 +5762,52 @@
       "private_bytes_after": 4272128
     },
     {
+      "file": "predictor-0-1.flac",
+      "channels": 1,
+      "depth": 32,
+      "mask": 4,
+      "frames": 480,
+      "independent_channels": true,
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 1264,
+      "maximum_discarded": 120,
+      "maximum_probes": 1,
+      "index_points": 0,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
+      "guarded_reads": 6,
+      "cancel_checks": 4,
+      "reopen_checks": 64,
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
+    },
+    {
+      "file": "predictor-0-2.flac",
+      "channels": 2,
+      "depth": 32,
+      "mask": 3,
+      "frames": 480,
+      "independent_channels": true,
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 1264,
+      "maximum_discarded": 120,
+      "maximum_probes": 1,
+      "index_points": 0,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
+      "guarded_reads": 6,
+      "cancel_checks": 4,
+      "reopen_checks": 64,
+      "private_bytes_before": 4268032,
+      "private_bytes_after": 4268032
+    },
+    {
       "file": "predictor-0-5.flac",
       "channels": 5,
       "depth": 32,
@@ -5827,8 +5827,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "predictor-0-8.flac",
@@ -5850,8 +5850,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4263936,
-      "private_bytes_after": 4263936
+      "private_bytes_before": 4276224,
+      "private_bytes_after": 4276224
     },
     {
       "file": "predictor-8-1.flac",
@@ -5919,8 +5919,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "predictor-8-8.flac",
@@ -5942,8 +5942,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4263936,
-      "private_bytes_after": 4263936
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "predictor-9-1.flac",
@@ -5965,8 +5965,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4272128,
-      "private_bytes_after": 4272128
+      "private_bytes_before": 4268032,
+      "private_bytes_after": 4268032
     },
     {
       "file": "predictor-9-2.flac",
@@ -5988,8 +5988,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4268032,
+      "private_bytes_after": 4268032
     },
     {
       "file": "predictor-9-5.flac",
@@ -6011,8 +6011,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4263936,
-      "private_bytes_after": 4263936
+      "private_bytes_before": 4276224,
+      "private_bytes_after": 4276224
     },
     {
       "file": "predictor-9-8.flac",
@@ -6034,8 +6034,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4263936,
+      "private_bytes_after": 4263936
     },
     {
       "file": "predictor-10-1.flac",
@@ -6057,8 +6057,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4268032,
+      "private_bytes_after": 4268032
     },
     {
       "file": "predictor-10-2.flac",
@@ -6080,8 +6080,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4288512,
-      "private_bytes_after": 4288512
+      "private_bytes_before": 4280320,
+      "private_bytes_after": 4280320
     },
     {
       "file": "predictor-10-5.flac",
@@ -6103,8 +6103,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4280320,
+      "private_bytes_after": 4280320
     },
     {
       "file": "predictor-10-8.flac",
@@ -6149,8 +6149,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4268032,
+      "private_bytes_after": 4268032
     },
     {
       "file": "predictor-11-2.flac",
@@ -6172,8 +6172,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4288512,
-      "private_bytes_after": 4288512
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "predictor-11-5.flac",
@@ -6195,8 +6195,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4272128,
-      "private_bytes_after": 4272128
+      "private_bytes_before": 4276224,
+      "private_bytes_after": 4276224
     },
     {
       "file": "predictor-11-8.flac",
@@ -6218,8 +6218,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "predictor-12-1.flac",
@@ -6264,8 +6264,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4288512,
-      "private_bytes_after": 4288512
+      "private_bytes_before": 4263936,
+      "private_bytes_after": 4263936
     },
     {
       "file": "predictor-12-5.flac",
@@ -6287,8 +6287,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4292608,
-      "private_bytes_after": 4292608
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "predictor-12-8.flac",
@@ -6310,8 +6310,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4276224,
+      "private_bytes_after": 4276224
     },
     {
       "file": "predictor-32-1.flac",
@@ -6333,8 +6333,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4280320,
+      "private_bytes_after": 4280320
     },
     {
       "file": "predictor-32-2.flac",
@@ -6356,8 +6356,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4276224,
+      "private_bytes_after": 4276224
     },
     {
       "file": "predictor-32-5.flac",
@@ -6379,8 +6379,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "predictor-32-8.flac",
@@ -6402,8 +6402,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4272128,
-      "private_bytes_after": 4272128
+      "private_bytes_before": 4239360,
+      "private_bytes_after": 4239360
     },
     {
       "file": "predictor-33-1.flac",
@@ -6425,8 +6425,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4243456,
+      "private_bytes_after": 4243456
     },
     {
       "file": "predictor-33-2.flac",
@@ -6448,8 +6448,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4288512,
+      "private_bytes_after": 4288512
     },
     {
       "file": "predictor-33-5.flac",
@@ -6471,8 +6471,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4288512,
-      "private_bytes_after": 4288512
+      "private_bytes_before": 4280320,
+      "private_bytes_after": 4280320
     },
     {
       "file": "predictor-33-8.flac",
@@ -6517,8 +6517,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4268032,
+      "private_bytes_after": 4268032
     },
     {
       "file": "predictor-34-2.flac",
@@ -6540,8 +6540,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "predictor-34-5.flac",
@@ -6586,8 +6586,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "predictor-35-1.flac",
@@ -6609,8 +6609,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4288512,
-      "private_bytes_after": 4288512
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "predictor-35-2.flac",
@@ -6632,8 +6632,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4272128,
-      "private_bytes_after": 4272128
+      "private_bytes_before": 4280320,
+      "private_bytes_after": 4280320
     },
     {
       "file": "predictor-35-5.flac",
@@ -6655,8 +6655,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "predictor-35-8.flac",
@@ -6678,8 +6678,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4288512,
-      "private_bytes_after": 4288512
+      "private_bytes_before": 4276224,
+      "private_bytes_after": 4276224
     },
     {
       "file": "predictor-63-1.flac",
@@ -6724,8 +6724,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4243456,
+      "private_bytes_after": 4243456
     },
     {
       "file": "predictor-63-5.flac",
@@ -6747,34 +6747,11 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4272128,
-      "private_bytes_after": 4272128
+      "private_bytes_before": 4268032,
+      "private_bytes_after": 4268032
     },
     {
       "file": "predictor-63-8.flac",
-      "channels": 8,
-      "depth": 32,
-      "mask": 1599,
-      "frames": 480,
-      "independent_channels": true,
-      "result": "passed",
-      "checks": 15,
-      "advanced": 11,
-      "discarded_frames": 1264,
-      "maximum_discarded": 120,
-      "maximum_probes": 1,
-      "index_points": 0,
-      "maximum_skimmed_headers": 0,
-      "maximum_stride": 0,
-      "maximum_preroll": 0,
-      "guarded_reads": 6,
-      "cancel_checks": 4,
-      "reopen_checks": 64,
-      "private_bytes_before": 4284416,
-      "private_bytes_after": 4284416
-    },
-    {
-      "file": "escape-0-0.flac",
       "channels": 8,
       "depth": 32,
       "mask": 1599,
@@ -6797,53 +6774,7 @@
       "private_bytes_after": 4280320
     },
     {
-      "file": "escape-0-15.flac",
-      "channels": 8,
-      "depth": 32,
-      "mask": 1599,
-      "frames": 480,
-      "independent_channels": true,
-      "result": "passed",
-      "checks": 15,
-      "advanced": 11,
-      "discarded_frames": 1264,
-      "maximum_discarded": 120,
-      "maximum_probes": 1,
-      "index_points": 0,
-      "maximum_skimmed_headers": 0,
-      "maximum_stride": 0,
-      "maximum_preroll": 0,
-      "guarded_reads": 6,
-      "cancel_checks": 4,
-      "reopen_checks": 64,
-      "private_bytes_before": 4263936,
-      "private_bytes_after": 4263936
-    },
-    {
-      "file": "escape-0-31.flac",
-      "channels": 8,
-      "depth": 32,
-      "mask": 1599,
-      "frames": 480,
-      "independent_channels": true,
-      "result": "passed",
-      "checks": 15,
-      "advanced": 11,
-      "discarded_frames": 1264,
-      "maximum_discarded": 120,
-      "maximum_probes": 1,
-      "index_points": 0,
-      "maximum_skimmed_headers": 0,
-      "maximum_stride": 0,
-      "maximum_preroll": 0,
-      "guarded_reads": 6,
-      "cancel_checks": 4,
-      "reopen_checks": 64,
-      "private_bytes_before": 4284416,
-      "private_bytes_after": 4284416
-    },
-    {
-      "file": "escape-1-0.flac",
+      "file": "escape-0-0.flac",
       "channels": 8,
       "depth": 32,
       "mask": 1599,
@@ -6866,7 +6797,7 @@
       "private_bytes_after": 4272128
     },
     {
-      "file": "escape-1-15.flac",
+      "file": "escape-0-15.flac",
       "channels": 8,
       "depth": 32,
       "mask": 1599,
@@ -6889,6 +6820,75 @@
       "private_bytes_after": 4276224
     },
     {
+      "file": "escape-0-31.flac",
+      "channels": 8,
+      "depth": 32,
+      "mask": 1599,
+      "frames": 480,
+      "independent_channels": true,
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 1264,
+      "maximum_discarded": 120,
+      "maximum_probes": 1,
+      "index_points": 0,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
+      "guarded_reads": 6,
+      "cancel_checks": 4,
+      "reopen_checks": 64,
+      "private_bytes_before": 4280320,
+      "private_bytes_after": 4280320
+    },
+    {
+      "file": "escape-1-0.flac",
+      "channels": 8,
+      "depth": 32,
+      "mask": 1599,
+      "frames": 480,
+      "independent_channels": true,
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 1264,
+      "maximum_discarded": 120,
+      "maximum_probes": 1,
+      "index_points": 0,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
+      "guarded_reads": 6,
+      "cancel_checks": 4,
+      "reopen_checks": 64,
+      "private_bytes_before": 4276224,
+      "private_bytes_after": 4276224
+    },
+    {
+      "file": "escape-1-15.flac",
+      "channels": 8,
+      "depth": 32,
+      "mask": 1599,
+      "frames": 480,
+      "independent_channels": true,
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 1264,
+      "maximum_discarded": 120,
+      "maximum_probes": 1,
+      "index_points": 0,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
+      "guarded_reads": 6,
+      "cancel_checks": 4,
+      "reopen_checks": 64,
+      "private_bytes_before": 4235264,
+      "private_bytes_after": 4235264
+    },
+    {
       "file": "escape-1-31.flac",
       "channels": 8,
       "depth": 32,
@@ -6908,8 +6908,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4272128,
-      "private_bytes_after": 4272128
+      "private_bytes_before": 4268032,
+      "private_bytes_after": 4268032
     },
     {
       "file": "wasted-4.flac",
@@ -6931,8 +6931,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "wasted-16.flac",
@@ -6954,8 +6954,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4276224,
+      "private_bytes_after": 4276224
     },
     {
       "file": "wasted-24.flac",
@@ -7000,8 +7000,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4243456,
-      "private_bytes_after": 4243456
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "residual-2147483647.flac",
@@ -7023,8 +7023,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "residual--2147483647.flac",
@@ -7046,8 +7046,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4263936,
-      "private_bytes_after": 4263936
+      "private_bytes_before": 4280320,
+      "private_bytes_after": 4280320
     },
     {
       "file": "speaker-0.flac",
@@ -7069,8 +7069,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "speaker-1.flac",
@@ -7115,8 +7115,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4247552,
+      "private_bytes_after": 4247552
     },
     {
       "file": "speaker-3.flac",
@@ -7138,8 +7138,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4263936,
+      "private_bytes_after": 4263936
     },
     {
       "file": "speaker-4.flac",
@@ -7184,8 +7184,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4284416,
-      "private_bytes_after": 4284416
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "speaker-6.flac",
@@ -7207,8 +7207,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4272128,
-      "private_bytes_after": 4272128
+      "private_bytes_before": 4276224,
+      "private_bytes_after": 4276224
     },
     {
       "file": "speaker-7.flac",
@@ -7230,8 +7230,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4268032,
+      "private_bytes_after": 4268032
     },
     {
       "file": "speaker-8.flac",
@@ -7253,8 +7253,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4272128,
-      "private_bytes_after": 4272128
+      "private_bytes_before": 4247552,
+      "private_bytes_after": 4247552
     },
     {
       "file": "speaker-9.flac",
@@ -7276,8 +7276,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4284416,
-      "private_bytes_after": 4284416
+      "private_bytes_before": 4268032,
+      "private_bytes_after": 4268032
     },
     {
       "file": "speaker-10.flac",
@@ -7299,8 +7299,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4263936,
-      "private_bytes_after": 4263936
+      "private_bytes_before": 4268032,
+      "private_bytes_after": 4268032
     },
     {
       "file": "speaker-11.flac",
@@ -7322,8 +7322,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4239360,
+      "private_bytes_after": 4239360
     },
     {
       "file": "speaker-12.flac",
@@ -7345,8 +7345,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "speaker-13.flac",
@@ -7368,8 +7368,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4288512,
-      "private_bytes_after": 4288512
+      "private_bytes_before": 4280320,
+      "private_bytes_after": 4280320
     },
     {
       "file": "speaker-14.flac",
@@ -7391,8 +7391,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4276224,
+      "private_bytes_after": 4276224
     },
     {
       "file": "speaker-15.flac",
@@ -7414,8 +7414,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4272128,
-      "private_bytes_after": 4272128
+      "private_bytes_before": 4268032,
+      "private_bytes_after": 4268032
     },
     {
       "file": "speaker-16.flac",
@@ -7437,8 +7437,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4268032,
-      "private_bytes_after": 4268032
+      "private_bytes_before": 4284416,
+      "private_bytes_after": 4284416
     },
     {
       "file": "speaker-17.flac",
@@ -7460,8 +7460,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4251648,
-      "private_bytes_after": 4251648
+      "private_bytes_before": 4268032,
+      "private_bytes_after": 4268032
     },
     {
       "file": "mask-4-20483.flac",
@@ -7506,8 +7506,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "mask-4-3.flac",
@@ -7529,8 +7529,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4284416,
-      "private_bytes_after": 4284416
+      "private_bytes_before": 4280320,
+      "private_bytes_after": 4280320
     },
     {
       "file": "mask-8-0.flac",
@@ -7575,8 +7575,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4276224,
-      "private_bytes_after": 4276224
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "mask-6-1551.flac",
@@ -7598,8 +7598,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4272128,
+      "private_bytes_after": 4272128
     },
     {
       "file": "mask-8-176147.flac",
@@ -7621,8 +7621,8 @@
       "guarded_reads": 6,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4280320,
-      "private_bytes_after": 4280320
+      "private_bytes_before": 4268032,
+      "private_bytes_after": 4268032
     },
     {
       "file": "maximum-block.flac",
@@ -7644,8 +7644,8 @@
       "guarded_reads": 312,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 5337088,
-      "private_bytes_after": 5337088
+      "private_bytes_before": 5316608,
+      "private_bytes_after": 5316608
     },
     {
       "file": "modern-16-1-0.flac",
@@ -7667,8 +7667,8 @@
       "guarded_reads": 25,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4354048,
-      "private_bytes_after": 4354048
+      "private_bytes_before": 4341760,
+      "private_bytes_after": 4341760
     },
     {
       "file": "modern-16-1-5.flac",
@@ -7690,8 +7690,8 @@
       "guarded_reads": 25,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4354048,
-      "private_bytes_after": 4354048
+      "private_bytes_before": 4349952,
+      "private_bytes_after": 4349952
     },
     {
       "file": "modern-16-1-12.flac",
@@ -7713,8 +7713,8 @@
       "guarded_reads": 25,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4349952,
-      "private_bytes_after": 4349952
+      "private_bytes_before": 4354048,
+      "private_bytes_after": 4354048
     },
     {
       "file": "modern-16-2-0.flac",
@@ -7736,8 +7736,8 @@
       "guarded_reads": 25,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4358144,
-      "private_bytes_after": 4358144
+      "private_bytes_before": 4349952,
+      "private_bytes_after": 4349952
     },
     {
       "file": "modern-16-2-5.flac",
@@ -7759,8 +7759,8 @@
       "guarded_reads": 25,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4358144,
-      "private_bytes_after": 4358144
+      "private_bytes_before": 4345856,
+      "private_bytes_after": 4345856
     },
     {
       "file": "modern-16-2-12.flac",
@@ -7805,8 +7805,8 @@
       "guarded_reads": 25,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4349952,
-      "private_bytes_after": 4349952
+      "private_bytes_before": 4337664,
+      "private_bytes_after": 4337664
     },
     {
       "file": "modern-16-3-5.flac",
@@ -7828,8 +7828,8 @@
       "guarded_reads": 25,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4349952,
-      "private_bytes_after": 4349952
+      "private_bytes_before": 4337664,
+      "private_bytes_after": 4337664
     },
     {
       "file": "modern-16-3-12.flac",
@@ -7851,8 +7851,8 @@
       "guarded_reads": 25,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4378624,
-      "private_bytes_after": 4378624
+      "private_bytes_before": 4345856,
+      "private_bytes_after": 4345856
     },
     {
       "file": "modern-16-4-0.flac",
@@ -7874,8 +7874,8 @@
       "guarded_reads": 25,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4358144,
-      "private_bytes_after": 4358144
+      "private_bytes_before": 4341760,
+      "private_bytes_after": 4341760
     },
     {
       "file": "modern-16-4-5.flac",
@@ -7897,8 +7897,8 @@
       "guarded_reads": 25,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4358144,
-      "private_bytes_after": 4358144
+      "private_bytes_before": 4349952,
+      "private_bytes_after": 4349952
     },
     {
       "file": "modern-16-4-12.flac",
@@ -7920,8 +7920,8 @@
       "guarded_reads": 25,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4354048,
-      "private_bytes_after": 4354048
+      "private_bytes_before": 4349952,
+      "private_bytes_after": 4349952
     },
     {
       "file": "modern-16-5-0.flac",
@@ -7943,8 +7943,8 @@
       "guarded_reads": 25,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4345856,
-      "private_bytes_after": 4345856
+      "private_bytes_before": 4337664,
+      "private_bytes_after": 4337664
     },
     {
       "file": "modern-16-5-5.flac",
@@ -7966,8 +7966,8 @@
       "guarded_reads": 25,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4354048,
-      "private_bytes_after": 4354048
+      "private_bytes_before": 4349952,
+      "private_bytes_after": 4349952
     },
     {
       "file": "modern-16-5-12.flac",
@@ -7989,8 +7989,8 @@
       "guarded_reads": 25,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4362240,
-      "private_bytes_after": 4362240
+      "private_bytes_before": 4321280,
+      "private_bytes_after": 4321280
     },
     {
       "file": "modern-16-6-0.flac",
@@ -8058,8 +8058,8 @@
       "guarded_reads": 25,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4329472,
-      "private_bytes_after": 4329472
+      "private_bytes_before": 4358144,
+      "private_bytes_after": 4358144
     },
     {
       "file": "modern-16-7-0.flac",
@@ -8081,8 +8081,8 @@
       "guarded_reads": 25,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4345856,
-      "private_bytes_after": 4345856
+      "private_bytes_before": 4329472,
+      "private_bytes_after": 4329472
     },
     {
       "file": "modern-16-7-5.flac",
@@ -8104,8 +8104,8 @@
       "guarded_reads": 25,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4354048,
-      "private_bytes_after": 4354048
+      "private_bytes_before": 4349952,
+      "private_bytes_after": 4349952
     },
     {
       "file": "modern-16-7-12.flac",
@@ -8127,8 +8127,8 @@
       "guarded_reads": 25,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4354048,
-      "private_bytes_after": 4354048
+      "private_bytes_before": 4358144,
+      "private_bytes_after": 4358144
     },
     {
       "file": "modern-16-8-0.flac",
@@ -8150,8 +8150,8 @@
       "guarded_reads": 25,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4366336,
-      "private_bytes_after": 4366336
+      "private_bytes_before": 4349952,
+      "private_bytes_after": 4349952
     },
     {
       "file": "modern-16-8-5.flac",
@@ -8196,8 +8196,8 @@
       "guarded_reads": 25,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4354048,
-      "private_bytes_after": 4354048
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "modern-24-1-0.flac",
@@ -8219,8 +8219,8 @@
       "guarded_reads": 25,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4349952,
-      "private_bytes_after": 4349952
+      "private_bytes_before": 4358144,
+      "private_bytes_after": 4358144
     },
     {
       "file": "modern-24-1-5.flac",
@@ -8242,8 +8242,8 @@
       "guarded_reads": 25,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4358144,
-      "private_bytes_after": 4358144
+      "private_bytes_before": 4345856,
+      "private_bytes_after": 4345856
     },
     {
       "file": "modern-24-1-12.flac",
@@ -8265,8 +8265,8 @@
       "guarded_reads": 25,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4358144,
-      "private_bytes_after": 4358144
+      "private_bytes_before": 4345856,
+      "private_bytes_after": 4345856
     },
     {
       "file": "modern-24-2-0.flac",
@@ -8288,8 +8288,8 @@
       "guarded_reads": 25,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4358144,
-      "private_bytes_after": 4358144
+      "private_bytes_before": 4345856,
+      "private_bytes_after": 4345856
     },
     {
       "file": "modern-24-2-5.flac",
@@ -8311,8 +8311,8 @@
       "guarded_reads": 25,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4358144,
-      "private_bytes_after": 4358144
+      "private_bytes_before": 4345856,
+      "private_bytes_after": 4345856
     },
     {
       "file": "modern-24-2-12.flac",
@@ -8357,8 +8357,8 @@
       "guarded_reads": 25,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4349952,
-      "private_bytes_after": 4349952
+      "private_bytes_before": 4345856,
+      "private_bytes_after": 4345856
     },
     {
       "file": "modern-24-3-5.flac",
@@ -8403,8 +8403,8 @@
       "guarded_reads": 25,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4292608,
-      "private_bytes_after": 4292608
+      "private_bytes_before": 4345856,
+      "private_bytes_after": 4345856
     },
     {
       "file": "modern-24-4-0.flac",
@@ -8426,8 +8426,8 @@
       "guarded_reads": 25,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4354048,
-      "private_bytes_after": 4354048
+      "private_bytes_before": 4341760,
+      "private_bytes_after": 4341760
     },
     {
       "file": "modern-24-4-5.flac",
@@ -8449,8 +8449,8 @@
       "guarded_reads": 25,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4354048,
-      "private_bytes_after": 4354048
+      "private_bytes_before": 4349952,
+      "private_bytes_after": 4349952
     },
     {
       "file": "modern-24-4-12.flac",
@@ -8472,8 +8472,8 @@
       "guarded_reads": 25,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4362240,
-      "private_bytes_after": 4362240
+      "private_bytes_before": 4341760,
+      "private_bytes_after": 4341760
     },
     {
       "file": "modern-24-5-0.flac",
@@ -8495,8 +8495,8 @@
       "guarded_reads": 25,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4349952,
-      "private_bytes_after": 4349952
+      "private_bytes_before": 4354048,
+      "private_bytes_after": 4354048
     },
     {
       "file": "modern-24-5-5.flac",
@@ -8518,8 +8518,8 @@
       "guarded_reads": 25,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4358144,
-      "private_bytes_after": 4358144
+      "private_bytes_before": 4345856,
+      "private_bytes_after": 4345856
     },
     {
       "file": "modern-24-5-12.flac",
@@ -8564,8 +8564,8 @@
       "guarded_reads": 25,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4349952,
-      "private_bytes_after": 4349952
+      "private_bytes_before": 4345856,
+      "private_bytes_after": 4345856
     },
     {
       "file": "modern-24-6-5.flac",
@@ -8587,8 +8587,8 @@
       "guarded_reads": 25,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4362240,
-      "private_bytes_after": 4362240
+      "private_bytes_before": 4358144,
+      "private_bytes_after": 4358144
     },
     {
       "file": "modern-24-6-12.flac",
@@ -8610,8 +8610,8 @@
       "guarded_reads": 25,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4349952,
-      "private_bytes_after": 4349952
+      "private_bytes_before": 4341760,
+      "private_bytes_after": 4341760
     },
     {
       "file": "modern-24-7-0.flac",
@@ -8633,8 +8633,8 @@
       "guarded_reads": 25,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4349952,
-      "private_bytes_after": 4349952
+      "private_bytes_before": 4354048,
+      "private_bytes_after": 4354048
     },
     {
       "file": "modern-24-7-5.flac",
@@ -8656,8 +8656,8 @@
       "guarded_reads": 25,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4349952,
-      "private_bytes_after": 4349952
+      "private_bytes_before": 4341760,
+      "private_bytes_after": 4341760
     },
     {
       "file": "modern-24-7-12.flac",
@@ -8679,8 +8679,8 @@
       "guarded_reads": 25,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4358144,
-      "private_bytes_after": 4358144
+      "private_bytes_before": 4345856,
+      "private_bytes_after": 4345856
     },
     {
       "file": "modern-24-8-0.flac",
@@ -8702,8 +8702,8 @@
       "guarded_reads": 25,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4349952,
-      "private_bytes_after": 4349952
+      "private_bytes_before": 4345856,
+      "private_bytes_after": 4345856
     },
     {
       "file": "modern-24-8-5.flac",
@@ -8748,8 +8748,8 @@
       "guarded_reads": 25,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4354048,
-      "private_bytes_after": 4354048
+      "private_bytes_before": 4349952,
+      "private_bytes_after": 4349952
     },
     {
       "file": "modern-32-1-0.flac",
@@ -8771,8 +8771,8 @@
       "guarded_reads": 25,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4345856,
-      "private_bytes_after": 4345856
+      "private_bytes_before": 4354048,
+      "private_bytes_after": 4354048
     },
     {
       "file": "modern-32-1-5.flac",
@@ -8794,8 +8794,8 @@
       "guarded_reads": 25,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4358144,
-      "private_bytes_after": 4358144
+      "private_bytes_before": 4345856,
+      "private_bytes_after": 4345856
     },
     {
       "file": "modern-32-1-12.flac",
@@ -8886,8 +8886,8 @@
       "guarded_reads": 25,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4354048,
-      "private_bytes_after": 4354048
+      "private_bytes_before": 4349952,
+      "private_bytes_after": 4349952
     },
     {
       "file": "modern-32-3-0.flac",
@@ -8909,8 +8909,8 @@
       "guarded_reads": 25,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4325376,
-      "private_bytes_after": 4325376
+      "private_bytes_before": 4349952,
+      "private_bytes_after": 4349952
     },
     {
       "file": "modern-32-3-5.flac",
@@ -8932,8 +8932,8 @@
       "guarded_reads": 25,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4354048,
-      "private_bytes_after": 4354048
+      "private_bytes_before": 4362240,
+      "private_bytes_after": 4362240
     },
     {
       "file": "modern-32-3-12.flac",
@@ -8955,8 +8955,8 @@
       "guarded_reads": 25,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4358144,
-      "private_bytes_after": 4358144
+      "private_bytes_before": 4349952,
+      "private_bytes_after": 4349952
     },
     {
       "file": "modern-32-4-0.flac",
@@ -8978,8 +8978,8 @@
       "guarded_reads": 25,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4354048,
-      "private_bytes_after": 4354048
+      "private_bytes_before": 4349952,
+      "private_bytes_after": 4349952
     },
     {
       "file": "modern-32-4-5.flac",
@@ -9001,8 +9001,8 @@
       "guarded_reads": 25,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4349952,
-      "private_bytes_after": 4349952
+      "private_bytes_before": 4358144,
+      "private_bytes_after": 4358144
     },
     {
       "file": "modern-32-4-12.flac",
@@ -9047,8 +9047,8 @@
       "guarded_reads": 25,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4345856,
-      "private_bytes_after": 4345856
+      "private_bytes_before": 4362240,
+      "private_bytes_after": 4362240
     },
     {
       "file": "modern-32-5-5.flac",
@@ -9070,8 +9070,8 @@
       "guarded_reads": 25,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4362240,
-      "private_bytes_after": 4362240
+      "private_bytes_before": 4317184,
+      "private_bytes_after": 4317184
     },
     {
       "file": "modern-32-5-12.flac",
@@ -9116,8 +9116,8 @@
       "guarded_reads": 25,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4354048,
-      "private_bytes_after": 4354048
+      "private_bytes_before": 4341760,
+      "private_bytes_after": 4341760
     },
     {
       "file": "modern-32-6-5.flac",
@@ -9139,8 +9139,8 @@
       "guarded_reads": 25,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4358144,
-      "private_bytes_after": 4358144
+      "private_bytes_before": 4349952,
+      "private_bytes_after": 4349952
     },
     {
       "file": "modern-32-6-12.flac",
@@ -9162,8 +9162,8 @@
       "guarded_reads": 25,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4358144,
-      "private_bytes_after": 4358144
+      "private_bytes_before": 4345856,
+      "private_bytes_after": 4345856
     },
     {
       "file": "modern-32-7-0.flac",
@@ -9208,8 +9208,8 @@
       "guarded_reads": 25,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4358144,
-      "private_bytes_after": 4358144
+      "private_bytes_before": 4345856,
+      "private_bytes_after": 4345856
     },
     {
       "file": "modern-32-7-12.flac",
@@ -9231,8 +9231,8 @@
       "guarded_reads": 25,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4354048,
-      "private_bytes_after": 4354048
+      "private_bytes_before": 4345856,
+      "private_bytes_after": 4345856
     },
     {
       "file": "modern-32-8-0.flac",
@@ -9254,8 +9254,8 @@
       "guarded_reads": 25,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4354048,
-      "private_bytes_after": 4354048
+      "private_bytes_before": 4362240,
+      "private_bytes_after": 4362240
     },
     {
       "file": "modern-32-8-5.flac",
@@ -9300,8 +9300,8 @@
       "guarded_reads": 25,
       "cancel_checks": 4,
       "reopen_checks": 64,
-      "private_bytes_before": 4354048,
-      "private_bytes_after": 4354048
+      "private_bytes_before": 4358144,
+      "private_bytes_after": 4358144
     }
   ],
   "malformed": [

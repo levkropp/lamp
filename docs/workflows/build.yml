@@ -29,6 +29,8 @@ jobs:
       - name: Verify native FLAC depths and speaker layouts
         shell: pwsh
         run: ./tests/verify-flac-layouts.ps1
+      - name: Verify WAV precision and speaker layouts
+        run: ./tests/verify-wav-layouts.ps1
       - name: Check static site
         run: node tests/verify-site.js
       - name: Render actual assembly UI

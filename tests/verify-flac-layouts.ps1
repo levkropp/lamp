@@ -13,7 +13,7 @@ $oracle=Join-Path $out 'flac-layout-oracle'
 New-Item -ItemType Directory -Force -Path $oracle | Out-Null
 & (Join-Path $msvc 'bin\Hostx64\x64\cl.exe') /nologo /O2 /MD "/I$msvc\include" "/I$sdkRoot\Include\$version\ucrt" "/Fo$oracle\seek-oracle.obj" "/Fe$oracle\seek-oracle.exe" (Join-Path $PSScriptRoot 'seek-oracle.c') @objects /link "/libpath:$msvc\lib\x64" "/libpath:$sdkRoot\Lib\$version\ucrt\x64" "/libpath:$sdkRoot\Lib\$version\um\x64" kernel32.lib
 if($LASTEXITCODE){throw 'FLAC layout seek oracle compilation failed'}
-& (Join-Path $msvc 'bin\Hostx64\x64\cl.exe') /nologo /O2 /MD "/I$msvc\include" "/I$sdkRoot\Include\$version\ucrt" "/I$sdkRoot\Include\$version\um" "/I$sdkRoot\Include\$version\shared" "/Fo$oracle\flac-bounds-oracle.obj" "/Fe$oracle\flac-bounds-oracle.exe" (Join-Path $PSScriptRoot 'flac-bounds-oracle.c') @objects /link "/libpath:$msvc\lib\x64" "/libpath:$sdkRoot\Lib\$version\ucrt\x64" "/libpath:$sdkRoot\Lib\$version\um\x64" kernel32.lib psapi.lib
+& (Join-Path $msvc 'bin\Hostx64\x64\cl.exe') /nologo /O2 /MD "/I$msvc\include" "/I$sdkRoot\Include\$version\ucrt" "/I$sdkRoot\Include\$version\um" "/I$sdkRoot\Include\$version\shared" "/Fo$oracle\flac-bounds-oracle.obj" "/Fe$oracle\flac-bounds-oracle.exe" (Join-Path $PSScriptRoot 'pcm-bounds-oracle.c') @objects /link "/libpath:$msvc\lib\x64" "/libpath:$sdkRoot\Lib\$version\ucrt\x64" "/libpath:$sdkRoot\Lib\$version\um\x64" kernel32.lib psapi.lib
 if($LASTEXITCODE){throw 'FLAC guarded buffer oracle compilation failed'}
 $scratch=Join-Path $PSScriptRoot 'generated\flac-layouts'
 & node (Join-Path $PSScriptRoot 'flac-layout-fixtures.js') (Join-Path $out 'lamp-cli.exe') (Join-Path $oracle 'seek-oracle.exe') $scratch (Join-Path $oracle 'flac-bounds-oracle.exe')

@@ -120,6 +120,36 @@
         "stats":  "Passed: playback, pause, resume, stop, reopen, seek, paused seek and cancelled open."
     },
     {
+        "codec":  "wav-pcm_s24le-5.1",
+        "result":  "passed",
+        "tests":  [
+                      "stereo downmix playback",
+                      "pause",
+                      "resume",
+                      "stop",
+                      "reopen",
+                      "seek",
+                      "paused seek",
+                      "cancelled open"
+                  ],
+        "stats":  "Passed: playback, pause, resume, stop, reopen, seek, paused seek and cancelled open."
+    },
+    {
+        "codec":  "wav-pcm_f64le-5.1",
+        "result":  "passed",
+        "tests":  [
+                      "stereo downmix playback",
+                      "pause",
+                      "resume",
+                      "stop",
+                      "reopen",
+                      "seek",
+                      "paused seek",
+                      "cancelled open"
+                  ],
+        "stats":  "Passed: playback, pause, resume, stop, reopen, seek, paused seek and cancelled open."
+    },
+    {
         "codec":  "opus-family1-7.1",
         "result":  "passed",
         "tests":  [
@@ -136,6 +166,36 @@
     },
     {
         "codec":  "flac-32-7.1",
+        "result":  "passed",
+        "tests":  [
+                      "stereo downmix playback",
+                      "pause",
+                      "resume",
+                      "stop",
+                      "reopen",
+                      "seek",
+                      "paused seek",
+                      "cancelled open"
+                  ],
+        "stats":  "Passed: playback, pause, resume, stop, reopen, seek, paused seek and cancelled open."
+    },
+    {
+        "codec":  "wav-pcm_s24le-7.1",
+        "result":  "passed",
+        "tests":  [
+                      "stereo downmix playback",
+                      "pause",
+                      "resume",
+                      "stop",
+                      "reopen",
+                      "seek",
+                      "paused seek",
+                      "cancelled open"
+                  ],
+        "stats":  "Passed: playback, pause, resume, stop, reopen, seek, paused seek and cancelled open."
+    },
+    {
+        "codec":  "wav-pcm_f64le-7.1",
         "result":  "passed",
         "tests":  [
                       "stereo downmix playback",
