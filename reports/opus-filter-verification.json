@@ -1,0 +1,6 @@
+{
+    "result":  "passed",
+    "scope":  "CELT causal/window-transition comb postfilter, tapsets, standard-mode deemphasis, PCM scaling and all output rates with persistent memory; not complete Opus decoding",
+    "scale_adjusted_absolute_tolerance":  1E-05,
+    "stats":  "Passed 29792 causal/separate comb filters, 24576 stateful deemphasis/downsample frames, 21242014 coefficient comparisons and 51 invalid guards; maximum scale-adjusted error 0."
+}

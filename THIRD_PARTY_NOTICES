@@ -61,6 +61,15 @@ The CELT allocation/PVQ/Haar/Hadamard and frame-control additions reference
 celt.c, rate.c, vq.c, bands.c, mathops.c, modes.c, and static_modes_float.h in that same normative archive:
 Copyright (c) 2007-2012 IETF Trust, CSIRO, Xiph.Org Foundation.
 The frame-control reference also credits Gregory Maxwell.
+CELT anti-collapse, energy conversion, inverse MDCT, overlap and output-filter
+additions reference bands.c, quant_bands.c, mdct.c, celt.c, mathops.h and
+static_modes_float.h from that archive, under the same BSD conditions.
+The bands.c/celt.c synthesis and filter references also credit Gregory Maxwell.
+The mixed-radix inverse FFT adapts kiss_fft.c:
+Copyright (c) 2003-2012 IETF Trust, Mark Borgerding, Jean-Marc Valin,
+Xiph.Org Foundation, CSIRO. All rights reserved.
+The SSE2 exponential polynomial is original assembly and mathematical data;
+reference libm is used only by the test executable.
 The applicable redistribution conditions and disclaimer follow below.
 
 Adapted SILK pulse algorithms and probability data:

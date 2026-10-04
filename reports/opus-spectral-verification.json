@@ -1,0 +1,8 @@
+{
+    "result":  "passed",
+    "scope":  "normal-mode CELT transient anti-collapse, mean energy/exponent conversion and denormalization with all output-rate boundaries; not inverse MDCT or PCM decoding",
+    "anti_collapse_absolute_tolerance":  3E-06,
+    "spectral_relative_tolerance":  3E-07,
+    "exponent_maximum_ulp":  1,
+    "stats":  "Passed 1310721 exponent comparisons (max 1 ULP), 21632 anti-collapse and 21632 denormalization frames, 29763849 coefficients and 57 invalid guards; max anti error 0, max relative spectral error 0."
+}

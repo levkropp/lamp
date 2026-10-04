@@ -1,0 +1,6 @@
+{
+    "result":  "passed",
+    "scope":  "normal-mode CELT mixed-radix inverse FFT, inverse MDCT/TDAC and long/transient mono/stereo overlap synthesis including state transitions; not postfilter or complete PCM decoding",
+    "scale_adjusted_absolute_tolerance":  3E-05,
+    "stats":  "Passed 12288 inverse FFTs, 12288 MDCT/TDAC transforms, 16384 long/transient overlap frames, 26645400 coefficients and 49 invalid guards; max scale-adjusted errors FFT 0 / MDCT 0 / synthesis 0."
+}
