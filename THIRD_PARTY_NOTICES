@@ -65,6 +65,8 @@ CELT anti-collapse, energy conversion, inverse MDCT, overlap and output-filter
 additions reference bands.c, quant_bands.c, mdct.c, celt.c, mathops.h and
 static_modes_float.h from that archive, under the same BSD conditions.
 The bands.c/celt.c synthesis and filter references also credit Gregory Maxwell.
+The stateful CELT frame decoder adapts the same celt.c decode/state algorithms,
+with the complete unchanged CELT C encoder/decoder used only by test oracles.
 The mixed-radix inverse FFT adapts kiss_fft.c:
 Copyright (c) 2003-2012 IETF Trust, Mark Borgerding, Jean-Marc Valin,
 Xiph.Org Foundation, CSIRO. All rights reserved.

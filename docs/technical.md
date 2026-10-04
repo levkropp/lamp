@@ -4,7 +4,7 @@ A Windows x86-64 audio player with handwritten assembly WAV, FLAC, MP3, and Ogg/
 
 The dark canvas, compact playback controls and automatic hiding are inspired by mpv. The custom pixel buffer and Win32 presentation follow Rhun's documented assembly UI model. No Rhun source, fonts, icons, or other assets were copied.
 
-**Opus playback is unfinished.** Tested assembly components cover packet framing, range decoding, connected CELT frame controls/energy/dynamic and static allocation, base PVQ shapes, spreading/collapse masks, Haar/Hadamard transforms and renormalization, and SILK shell/excitation reconstruction. They are not a complete audio decoder and are not linked into either player. Recursive band/stereo/folding reconstruction, inverse MDCT/overlap/postfilters, SILK prediction/synthesis/resampling, hybrid transitions, and PCM integration still need implementation and audio-vector validation. An `.opus` file is rejected. [Opus stage documentation](opus.md) records interfaces, bounds, results and remaining work.
+**Opus playback is unfinished.** The tested stateful assembly CELT decoder connects controls, energy/allocation, recursive spectral reconstruction, anti-collapse, inverse MDCT/overlap, postfilter and deemphasis to float PCM. Packet framing and SILK shell/excitation primitives are also tested. These development objects are not linked into either player. CELT loss concealment, SILK parameters/prediction/synthesis/resampling, hybrid transitions, Ogg integration and full audio-vector validation remain. An `.opus` file is rejected. [Opus stage documentation](opus.md) records interfaces, bounds, results and remaining work.
 
 All runtime application and decoder code is MASM x64 assembly. No C/C++/Rust codec, codec DLL, CRT, FFmpeg process, or media-player engine is linked or invoked. Reference C source is used only for algorithms, permitted coefficient/probability data, and test oracles.
 
@@ -107,7 +107,9 @@ The CELT suites add 271,160 exact allocation/entropy comparisons and 52,479 puls
 
 The connected CELT band suite checks 75,104 recursive bands and 24,589 full spectral frames, including 8,205 frame prefixes and 13 real CELT frames. It compares 31,254,098 coefficients and exact entropy, budget, seed and allocation-balance state, plus 80 invalid requests. Observed coefficient error is zero; tolerances are 0.00001 for vectors and 0.00004 for scaled folding output. These are normalized spectral outputs, not decoded Opus PCM. Synthesis and complete Opus mode integration remain unfinished; [stage interfaces and limits](opus.md) document the current development code.
 
-Synthesis-kernel suites add 21,632 anti-collapse and 21,632 denormalization frames, 12,288 inverse FFTs, 12,288 MDCT/TDAC transforms, 16,384 overlap frames, 29,792 comb filters and 24,576 stateful deemphasis/downsample frames. Tested outputs match the normative reference exactly; the independent 1,310,721-value exponent sweep permits and observes at most one float ULP. The suites check capacities, canaries, rejected-request non-mutation, frame-size/long/transient changes and persistent filter memory. Fourteen component suites pass locally. Stateful packet-to-PCM orchestration, playback integration and full CELT/SILK/hybrid conformance remain required.
+Synthesis-kernel suites add 21,632 anti-collapse and 21,632 denormalization frames, 12,288 inverse FFTs, 12,288 MDCT/TDAC transforms, 16,384 overlap frames, 29,792 comb filters and 24,576 stateful deemphasis/downsample frames. Tested outputs match the normative reference exactly; the independent 1,310,721-value exponent sweep permits and observes at most one float ULP. The suites check capacities, canaries, rejected-request non-mutation, frame-size/long/transient changes and persistent filter memory.
+
+The stateful CELT suite connects these stages into frame-to-float-PCM decoding: 26,326 successful frames and 98,382,620 PCM/history values with zero observed error (scale-adjusted tolerance 0.00004), 311 strict entropy rejections with sticky failure/reset, and 53 public guards. It includes real frames and generated/modified/truncated payloads, channel conversion, all frame sizes/output rates/bandwidths, high-band starts and primed entropy. Fifteen suites pass locally. PLC, SILK/hybrid conformance and playback integration remain required.
 
 The UI preview uses the actual assembly renderer with synthetic playback state. **Desktop window interaction, open-dialog/drop behavior and monitor-DPI changes remain unverified** because the permitted desktop automation runtime was unavailable. Audio controls are tested separately by a native assembly harness.
 
@@ -139,7 +141,7 @@ The RFC reference archive is checked against its normative SHA-1 before extracti
 
 ## Remaining implementation
 
-Complete Opus CELT recursive shape/stereo/folding reconstruction, inverse MDCT/overlap/postfilters, and SILK parameter/prediction/synthesis/resampling, then hybrid switching, pre-skip/gain/end trimming and official audio-vector validation. Further work includes indexed seeking, multichannel/chained streams, device changes, and same-machine CPU/RAM comparisons against existing players.
+Complete CELT packet-loss concealment and SILK parameter/prediction/synthesis/resampling, then hybrid switching, Ogg integration, pre-skip/gain/end trimming and official audio-vector validation. Further work includes indexed seeking, multichannel/chained streams, device changes, and same-machine CPU/RAM comparisons against existing players.
 
 ## References
 

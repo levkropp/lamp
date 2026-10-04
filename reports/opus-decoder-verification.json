@@ -1,0 +1,6 @@
+﻿{
+    "result":  "passed",
+    "scope":  "stateful normal-mode CELT packet-to-float-PCM and histories, mono/stereo conversion, all frame sizes/output rates/bandwidths and primed entropy contexts, malformed/truncated payloads and sticky failure/reset; PLC, SILK, Hybrid, Ogg playback and complete Opus conformance remain pending",
+    "scale_adjusted_absolute_tolerance":  4E-05,
+    "stats":  "CELT decoder: 26326 stateful frames (13 real, 2045 silent, 6631 transient, 6970 postfilter, 3272 anti-reserved, 1692 primed), 311 strict entropy rejections with sticky failure/reset, 98382620 PCM/history coefficients, 53 guards; max scaled error 0, max PCM error 0"
+}

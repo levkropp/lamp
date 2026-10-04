@@ -20,6 +20,7 @@ LAMP's Opus work is handwritten MASM x86-64 assembly, based on the BSD normative
 | CELT anti-collapse and energy denormalization | `opus_spectral.asm` | 21,632 anti-collapse and 21,632 denormalization frames; 1,310,721 exponent checks (maximum one ULP); 29,763,849 coefficient checks and 57 guards |
 | CELT inverse FFT/MDCT and overlap synthesis | `opus_fft.asm`, `opus_mdct.asm` | 12,288 FFTs, 12,288 MDCT/TDAC transforms, 16,384 long/transient overlap frames; 26,645,400 coefficients and 49 guards |
 | CELT postfilter and deemphasis/output rates | `opus_filter.asm` | 29,792 comb filters, 24,576 stateful deemphasis/downsample frames; 21,242,014 coefficients and 51 guards |
+| Stateful CELT frame-to-PCM | `opus_decoder.asm` | 26,326 decoded frames, 98,382,620 PCM/history coefficients, 311 strict entropy rejections with sticky failure/reset and 53 guards; zero observed error |
 
 The new suites also cover 83 invalid-request cases, output canaries, entropy non-consumption on rejected requests, unit-energy checks and inverse layout recovery. Allocation/cache/entropy and Haar/layout/renormalization comparisons are exact. The tested PVQ/spreading outputs also had zero observed error; their allowed absolute tolerance is 0.000003 for differences between platform math implementations. These numbers concern component outputs, not complete decoded audio.
 
@@ -69,7 +70,7 @@ Requirements: Windows x64, Visual Studio Build Tools with the C tools and Window
 
 ## Next dependencies
 
-1. Assemble stateful CELT frame decoding: connect final energy/anti-collapse flags, synthesis, postfilter and energy history, entropy checks and output state. Verify packet-to-PCM against the complete decoder.
+1. Complete CELT packet-loss concealment, pitch/LPC reconstruction and comfort noise; compare loss/recovery sequences against the complete decoder.
 2. Complete SILK parameters, prediction, synthesis and resampling; handle hybrid transitions.
 3. Integrate Ogg Opus pre-skip/gain/end trimming with the playback engine.
 4. Validate complete CELT/SILK/hybrid audio against official decoder vectors and reference PCM.
@@ -100,7 +101,7 @@ The test extracts the angle decisions directly from the normative source, compar
 
 Buffers are caller-owned and nonoverlapping. A supplied lowband requires separate scratch and finite values with magnitude at most 32; normative folding output is bounded by sqrt(N). Capacity, parameter, active-band TF/budget and entropy structure checks precede writes. A later helper failure can leave partially decoded output, so callers must discard failed frames. Kernels still share bounded single-producer scratch; a separate instance is required before concurrent decoding is added.
 
-The test calls the unchanged normative `quant_band` and extracts `quant_all_bands` directly from the verified archive, exposing only scratch and final-budget observations. It compares every coefficient, mask, folding buffer, complete entropy context, remaining budget, seed and allocation balance, including canaries and rejected-request non-mutation. The observed coefficient error is zero on this machine; allowed absolute tolerances are 0.00001 for vectors and 0.00004 for scaled folding output. Random payloads cover all LM/channel values, band ranges, short/long blocks, TF modes, allocation limits and primed entropy. Connected tests feed actual frame-prefix outputs into the band loop, including the committed Ogg/Opus fixture. These are normalized spectral coefficients, not PCM: anti-collapse, final-frame energy handling and synthesis still need integration.
+The test calls the unchanged normative `quant_band` and extracts `quant_all_bands` directly from the verified archive, exposing only scratch and final-budget observations. It compares every coefficient, mask, folding buffer, complete entropy context, remaining budget, seed and allocation balance, including canaries and rejected-request non-mutation. The observed coefficient error is zero on this machine; allowed absolute tolerances are 0.00001 for vectors and 0.00004 for scaled folding output. Random payloads cover all LM/channel values, band ranges, short/long blocks, TF modes, allocation limits and primed entropy. Connected tests feed actual frame-prefix outputs into the band loop, including the committed Ogg/Opus fixture. This suite checks normalized spectral coefficients; the separate stateful frame suite below connects them to decoded PCM.
 
 ## Spectral and synthesis interfaces
 
@@ -120,6 +121,18 @@ The test calls the unchanged normative `quant_band` and extracts `quant_all_band
 
 `op_celt_deemphasis(request*)` applies standard-mode deemphasis, advances per-channel filter memory through every input sample, scales by 1/32,768 and writes interleaved float PCM at the requested output rate. Its 48-byte request selects planar input/PCM/memory, N/channels/downsample and three capacities. N is 120/240/480/960, C is 1/2 and downsample is 1/2/3/4/6. PCM requires C × N/downsample floats; memory requires C. Finite inputs and memory have magnitude at most 2^120. The test covers separate and causal comb outputs, old/new periods/gains/tapsets, partial/full transitions and persistent deemphasis memory across all output rates. Observed error is zero; the scale-adjusted absolute tolerance is 0.00001.
 
-These stages return 1 on success or 0 on rejected input/helper failure. Capacity, parameter and finite-value checks precede writes. Buffers are caller-owned with the documented overlap exceptions. Synthesis scratch is caller-owned and bounded, with no per-frame allocation. Complete frame orchestration must handle final energy, silence, history updates and entropy errors before these kernels establish working CELT audio; the player still rejects all Opus input.
+These stages return 1 on success or 0 on rejected input/helper failure. Capacity, parameter and finite-value checks precede writes. Buffers are caller-owned with the documented overlap exceptions. Synthesis scratch is caller-owned and bounded, with no per-frame allocation. The stateful frame stage below connects these kernels; the player still rejects all Opus input.
+
+## Stateful frame decoder
+
+`op_celt_decoder_init(state*, byte_capacity, output_channels, output_rate)` initializes or resets an independent 18,272-byte state. Channels are 1/2; rates are 48/24/16/12/8 kHz. State contains two bounded 2,168-float decode/overlap planes, energy and postfilter histories, deterministic seed and deemphasis memory. Reserved LPC storage is for the pending loss-concealment stage.
+
+`op_celt_decode_frame(request*)` returns samples per output channel on success, 0 for a rejected public request, or -1 for a late helper/entropy failure. A late failure sets a sticky error: discard its PCM and reset before reuse. Both final entropy overconsumption and the range decoder's error flag reject the frame. The normative decoder reports the latter as a sticky error alongside positive output; LAMP deliberately requires the caller to discard it immediately.
+
+`src/opus_decoder_layout.inc` defines the 72-byte request. State/payload/float-PCM/optional entropy/workspace pointers occupy offsets 0–32. Payload length, stream channels, LM, start/end bands, PCM float capacity, workspace byte capacity and state byte capacity occupy 40–68. Workspace requires 44,048 bytes, PCM requires output_channels × (120 << LM) / downsample floats. Standard-mode LM 0–3 covers 2.5/5/10/20 ms. Active bands satisfy 0 ≤ start < end ≤ 21. Payloads are 2–1,275 bytes; null/zero/one-byte frames currently reject because PLC is unfinished. An optional entropy context must already reference that payload and its exact length, allowing future high-band hybrid orchestration after earlier entropy consumption.
+
+The caller supplies correctly sized, nonoverlapping buffers and owns the state/workspace. Parameter, capacity, entropy-structure and finite-history checks happen before writes. Shared primitive scratch still restricts decoding to one producer at a time. The frame stage merges mono history, decodes controls/shapes/final energy and anti-collapse, synthesizes long/transient overlap, applies causal postfilters, updates energy/background state and outputs interleaved float PCM. Frame-size, band and stream-channel transitions preserve the normative state.
+
+The oracle compiles the complete unchanged RFC CELT decoder/encoder only into a test executable. It compares 26,326 successful frames and 98,382,620 PCM/history values, including the 13 real fixture frames, generated tonal/noise/silent/transient frames, all channel conversions, rates, sizes and bandwidths, high-band starts and primed entropy. It also exercises 8,192 malformed/truncated cases, 311 strict entropy rejections with non-mutating sticky-state refusal and reset recovery, and 53 public guards. Observed PCM and history error is zero; the scale-adjusted absolute tolerance is 0.00004. This establishes the tested CELT frame path, not PLC, complete Opus conformance or Ogg playback.
 
 [Normative reference](https://www.rfc-editor.org/rfc/rfc6716.html) · [Roadmap](../ROADMAP.md) · [Required notices](../THIRD_PARTY_NOTICES)
