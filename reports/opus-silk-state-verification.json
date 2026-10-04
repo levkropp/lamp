@@ -1,0 +1,6 @@
+﻿{
+    "result":  "passed",
+    "scope":  "Complete SILK gain/NLSF/LPC/pitch/LTP parameter orchestration, previous gain/NLSF history, first-frame interpolation reset, interpolation and bandwidth expansion after loss; atomic public and invalid-NLSF failures; synthesis, resampling and complete audio remain pending",
+    "comparison":  "exact normative decoder controls, SideInfoIndices and parameter history",
+    "stats":  "SILK state: 129360 exact parameter/history frames (32768 connected side-information, 46164 voiced, 72041 interpolated, 22006 reset, 32335 after loss), 1712 atomic invalid-NLSF rejections, 7488340 integer coefficients, 31 guards"
+}

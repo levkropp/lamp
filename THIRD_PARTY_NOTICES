@@ -84,6 +84,8 @@ The additions reference decode_indices.c, NLSF_unpack.c, gain_quant.c,
 log2lin.c, decode_pitch.c, decode_parameters.c, NLSF_decode.c,
 NLSF_VQ_weights_laroia.c, NLSF_stabilize.c, sort.c, Inlines.h and the
 corresponding probability/codebook/pitch tables in the same normative archive.
+Fixed-point LPC conversion/stability also references NLSF2A.c,
+LPC_inv_pred_gain.c, bwexpander.c, bwexpander_32.c and table_LSF_cos.c.
 Adapted Opus packet framing:
 Copyright (c) 2010-2012 IETF Trust, Xiph.Org Foundation and Skype Limited.
 All rights reserved.

@@ -1,0 +1,6 @@
+﻿{
+    "result":  "passed",
+    "scope":  "SILK fixed-point reciprocal, int16/int32 bandwidth expansion, inverse prediction gain and NLSF-to-Q12-LPC conversion, including connected reconstructed NLSF vectors; interpolation, parameter orchestration, synthesis, resampling and complete audio remain pending",
+    "comparison":  "exact integer coefficients and stability/gain outputs",
+    "stats":  "SILK LPC: 749568 exact reciprocals, 16640 int16/int32 bandwidth expansions, 104391 inverse prediction gains, 71623 NLSF-to-LPC vectors (38855 connected NLSF, 57 invalid NLSF results discarded), 1033500 coefficients, 28 guards"
+}

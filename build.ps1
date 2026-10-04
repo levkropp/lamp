@@ -8,7 +8,7 @@ $version = Get-ChildItem -LiteralPath (Join-Path $vs 'VC\Tools\MSVC') -Directory
 $tools = Join-Path $version.FullName 'bin\Hostx64\x64'
 $sdkRoot = Join-Path ${env:ProgramFiles(x86)} 'Windows Kits\10\Lib'
 $sdk = Get-ChildItem -LiteralPath $sdkRoot -Directory | Sort-Object Name -Descending | Select-Object -First 1
-$out = if ($OutputDirectory) { [System.IO.Path]::GetFullPath($OutputDirectory) } else { Join-Path $root 'bin' }
+$out = if ($OutputDirectory) { $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($OutputDirectory) } else { Join-Path $root 'bin' }
 New-Item -ItemType Directory -Force -Path $out | Out-Null
 $rc = Join-Path ${env:ProgramFiles(x86)} "Windows Kits\10\bin\$($sdk.Name)\x64\rc.exe"
 if (-not (Test-Path -LiteralPath $rc)) { throw "Windows SDK resource compiler is missing: $rc" }
@@ -19,7 +19,7 @@ try {
     & $rc /nologo /d LAMP_CLI "/fo$out\lamp-cli.res" lamp.rc
     if ($LASTEXITCODE) { throw 'CLI resource compilation failed.' }
 } finally { Pop-Location }
-foreach ($name in @('player', 'decoder', 'mp3', 'mp3_synthesis', 'ogg', 'vorbis', 'vorbis_transform', 'ui', 'opus_range', 'opus_packet', 'opus_cwrs', 'opus_energy', 'opus_silk_pulses', 'opus_silk_indices', 'opus_silk_parameters', 'opus_silk_nlsf', 'opus_allocation', 'opus_vq', 'opus_band_transform', 'opus_controls', 'opus_theta', 'opus_band', 'opus_bands', 'opus_spectral', 'opus_fft', 'opus_mdct', 'opus_filter', 'opus_lpc', 'opus_pitch', 'opus_plc', 'opus_decoder')) {
+foreach ($name in @('player', 'decoder', 'mp3', 'mp3_synthesis', 'ogg', 'vorbis', 'vorbis_transform', 'ui', 'opus_range', 'opus_packet', 'opus_cwrs', 'opus_energy', 'opus_silk_pulses', 'opus_silk_indices', 'opus_silk_parameters', 'opus_silk_nlsf', 'opus_silk_lpc', 'opus_silk_state', 'opus_allocation', 'opus_vq', 'opus_band_transform', 'opus_controls', 'opus_theta', 'opus_band', 'opus_bands', 'opus_spectral', 'opus_fft', 'opus_mdct', 'opus_filter', 'opus_lpc', 'opus_pitch', 'opus_plc', 'opus_decoder')) {
     & (Join-Path $tools 'ml64.exe') /nologo /c "/I$root\src" "/Fo$out\$name.obj" (Join-Path $root "src\$name.asm")
     if ($LASTEXITCODE) { throw "Assembly failed: $name" }
 }

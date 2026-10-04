@@ -14,6 +14,8 @@ LAMP's Opus work is handwritten MASM x86-64 assembly, based on the BSD normative
 | SILK side-information indices and NLSF unpack | `opus_silk_indices.asm` | 98,304 exact side-information/state frames connected to excitation (17,825,792 pulses), 96 unpack vectors and 40 guards |
 | SILK gains and pitch/LTP parameters | `opus_silk_parameters.asm` | 4,096 log-to-linear inputs, 583,808 gain/state frames, 264,932 pitch/LTP frames, 32,768 connected side-information sequences, 7,462,508 integer parameters and 37 guards |
 | SILK predictive NLSF reconstruction/stabilization | `opus_silk_nlsf.asm` | 1,310,848 square-root inputs, 45,056 decoded vectors (32,768 connected), 12,288 stabilization vectors, 2,310,080 coefficients, 166 invalid reference-result rejections and 19 guards |
+| SILK fixed-point LPC conversion/stability | `opus_silk_lpc.asm` | 749,568 reciprocals, 16,640 int16/int32 bandwidth expansions, 104,391 inverse prediction gains, 71,623 NLSF-to-LPC vectors (38,855 connected), 1,033,500 coefficients and 28 guards |
+| Stateful SILK parameter orchestration/interpolation | `opus_silk_state.asm` | 129,360 exact parameter/history frames (32,768 connected), 1,712 atomic invalid-NLSF rejections, 7,488,340 integer coefficients and 31 guards |
 | CELT static band allocation | `opus_allocation.asm` | 271,160 allocation/entropy and 52,479 pulse-cache comparisons |
 | CELT normalized PVQ bands/spreading | `opus_vq.asm` | 13,416 band/entropy, 15,864 spreading and 8,192 renormalization comparisons |
 | CELT Haar/Hadamard layout helpers | `opus_band_transform.asm` | 3,280 Haar and 5,888 layout/inverse comparisons |
@@ -75,7 +77,7 @@ Requirements: Windows x64, Visual Studio Build Tools with the C tools and Window
 
 ## Next dependencies
 
-1. Complete SILK LPC conversion/interpolation, parameter orchestration, prediction, synthesis and resampling; handle hybrid transitions.
+1. Complete SILK synthesis/resampling/concealment and stereo framing; handle hybrid transitions.
 2. Integrate Ogg Opus pre-skip/gain/end trimming with the playback engine.
 3. Validate complete CELT/SILK/hybrid audio against official decoder vectors and reference PCM.
 
@@ -92,6 +94,18 @@ Requirements: Windows x64, Visual Studio Build Tools with the C tools and Window
 All these public request functions return 1 for success, 0 for rejected input. Buffers are caller-owned, correctly sized and nonoverlapping with writable outputs. Null/rate/capacity/index/entropy-shape checks precede writes. Component entropy padding is permitted for short payloads; the complete frame caller must check final entropy error and budget. NLSF stabilization also checks the final range and minimum spacing: the 2012 reference fallback can wrap signed int16 values on extreme vectors. Such late rejection can leave partial outputs/workspace, which the caller must discard before LPC conversion. Tests compare the full integer reference result even on rejected vectors and independently verify this rejection policy.
 
 The three `generate-silk-*-tables.js` scripts verify probability, selector, codebook, predictor, contour and LTP data against the hash-checked normative archive. Side-information tests compare complete entropy and prior-index state, padding/unused-field preservation and connected excitation. Gain/pitch tests cover every gain-index combination, valid contours and signed lag boundaries. NLSF tests cover all first-stage vectors, extreme/random residuals, connected indices and stabilization fallback. These parameter checks do not yet establish complete SILK decoded PCM.
+
+## SILK LPC and stateful parameter interfaces
+
+`op_silk_nlsf2a(request*)` converts Q15 NLSFs into Q12 prediction coefficients using normative cosine-table interpolation, polynomial convolution, coefficient limiting and stability-driven bandwidth expansion. Its 32-byte request in `src/opus_silk_lpc_layout.inc` selects input/output pointers at 0/8, order 10/16 at 16, and int16 capacities at 20/24. Every input must be 0–32767; validation precedes writes and inputs remain unchanged. Separate buffers are required. The test covers decoded/stabilized vectors, zeros, clustered/boundary/unsorted vectors and integer coefficient saturation/stability.
+
+`op_silk_lpc_inverse(request*)` returns inverse prediction gain in Q30, or zero for instability/invalid input. Its 16-byte request selects int16 Q12 coefficients, order 10/16 and element capacity. It leaves input unchanged. `op_silk_inverse32(denominator, Q)` exposes the exact normative reciprocal approximation for any nonzero signed denominator except INT_MIN and Q 1–61; invalid arguments return zero. `op_silk_bwexpand(request*)` mutates 1–16 int16/int32 coefficients with Q16 chirp 0–65536. Its 24-byte request contains coefficient pointer, order, chirp, element capacity and width 16/32 at offsets 0/8/12/16/20. Signed multiplication, intermediate overflow and rounded chirp evolution follow the normative integer order.
+
+`op_silk_decode_parameters(request*)` connects gains, stabilized NLSF decoding, LPC conversion, NLSF interpolation, reset suppression, bandwidth expansion after loss, and pitch/LTP reconstruction. Its 48-byte request in `src/opus_silk_state_layout.inc` selects mutable side information, history and decoder-control output at 0/8/16, rate/subframes/coding mode at 24/28/32 and byte capacities at 36/40/44. The buffers require 36/48/140 bytes. The 48-byte history stores last-gain-index byte at 0, sixteen previous Q15 NLSFs at 4, first-frame flag at 36 and nonnegative loss count at 40; padding is preserved. It updates gain/NLSF history while the complete audio caller owns reset/loss counters.
+
+The 140-byte control output matches the normative layout: four pitch int32 values, four Q16 gains, two sixteen-int16 Q12 filters, twenty Q14 LTP taps and one Q14 scale. Inactive subframes/filter suffixes are preserved. A reset forces the interpolation index to 4; unvoiced parameters set PER index to zero. The function returns 1 on success or 0 on failure. It reconstructs into bounded stack copies and commits only after success, so public validation and late invalid-NLSF rejection leave all caller-visible buffers unchanged. Buffers must remain separate and correctly sized.
+
+`generate-silk-lpc-tables.js` verifies the normative cosine and coefficient ordering tables. The stateful oracle calls unchanged `decode_parameters.c` and compares complete controls, side information, active/unused history and canaries across all rates, subframe counts and coding modes. It covers interpolated/noninterpolated frames, resets and recovery after loss, and connected range-decoded side information. Parameter reconstruction remains development-only; excitation synthesis and complete SILK PCM are the next stage.
 
 ## Frame-prefix interface
 

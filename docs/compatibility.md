@@ -9,7 +9,7 @@ LAMP's long-term goal is to support everything relevant that mpv supports. This 
 | Capability | LAMP 0.3.0 status | Remaining coverage | Milestone |
 | --- | --- | --- | --- |
 | WAV / native FLAC / MP3 / Ogg Vorbis | Partial | Broader profiles, channel layouts, Ogg chaining and indexed seeking | 2–3 |
-| Opus | In development; [tested stateful CELT decoding/concealment and SILK indices/gains/pitch/NLSF](opus.md) | SILK LPC/synthesis/resampling and hybrid playback, Ogg integration, mapping, gain, trimming and full conformance vectors | 1 |
+| Opus | In development; [tested stateful CELT decoding/concealment and SILK parameter/LPC reconstruction](opus.md) | SILK synthesis/resampling and hybrid playback, Ogg integration, mapping, gain, trimming and full conformance vectors | 1 |
 | Other audio codecs | Planned | AAC/HE-AAC, ALAC, AC-3/E-AC-3, DTS, WavPack, APE, MPEG I/II and relevant legacy formats | 3 |
 | Containers and media structure | Partial | MP4/MOV, Matroska/WebM, TS/PS, AVI/ASF; timestamps, attachments, chapters, editions and tags | 3 |
 | Audio output | Partial | WASAPI device selection/recovery, multichannel, resampling, exclusive mode and useful passthrough | 2–3 |

@@ -4,7 +4,7 @@ A Windows x86-64 audio player with handwritten assembly WAV, FLAC, MP3, and Ogg/
 
 The dark canvas, compact playback controls and automatic hiding are inspired by mpv. The custom pixel buffer and Win32 presentation follow Rhun's documented assembly UI model. No Rhun source, fonts, icons, or other assets were copied.
 
-**Opus playback is unfinished.** The tested stateful assembly CELT decoder connects controls, energy/allocation, recursive spectral reconstruction, anti-collapse, inverse MDCT/overlap, postfilter and deemphasis to float PCM, with pitch/LPC and comfort-noise loss concealment. SILK shell/excitation, side-information indices, gains, pitch/LTP and NLSF reconstruction/stabilization are also tested. These development objects are not linked into either player. SILK LPC conversion/prediction/synthesis/resampling, hybrid transitions, Ogg integration and full audio-vector validation remain. An `.opus` file is rejected. [Opus stage documentation](opus.md) records interfaces, bounds, results and remaining work.
+**Opus playback is unfinished.** The tested stateful assembly CELT decoder connects controls, energy/allocation, recursive spectral reconstruction, anti-collapse, inverse MDCT/overlap, postfilter and deemphasis to float PCM, with pitch/LPC and comfort-noise loss concealment. SILK shell/excitation and complete gain/NLSF/LPC/pitch/LTP parameter reconstruction, interpolation and reset/loss history are also tested. These development objects are not linked into either player. SILK synthesis/resampling/concealment, hybrid transitions, Ogg integration and full audio-vector validation remain. An `.opus` file is rejected. [Opus stage documentation](opus.md) records interfaces, bounds, results and remaining work.
 
 All runtime application and decoder code is MASM x64 assembly. No C/C++/Rust codec, codec DLL, CRT, FFmpeg process, or media-player engine is linked or invoked. Reference C source is used only for algorithms, permitted coefficient/probability data, and test oracles.
 
@@ -111,7 +111,9 @@ Synthesis-kernel suites add 21,632 anti-collapse and 21,632 denormalization fram
 
 The stateful CELT suite connects these stages into frame-to-float-PCM decoding and loss/recovery: 30,736 successful frames (4,090 concealed) and 115,916,510 PCM/history values with zero observed error (scale-adjusted tolerance 0.00004), 311 strict entropy rejections with sticky failure/reset, and 59 public guards. It includes real frames and generated/modified/truncated payloads, initial loss, pitch/noise concealment bursts and recovery, channel conversion, all frame sizes/output rates/bandwidths, high-band starts and primed entropy. Separate prediction/pitch suites add 3,072 autocorrelations/LPC solves, 49,152 stateful filter frames and 3,920 pitch searches with zero observed error.
 
-SILK suites add 98,304 side-information/state frames connected to excitation, 583,808 gain/state frames, 264,932 pitch/LTP frames, 45,056 decoded NLSF vectors and 12,288 stabilization vectors. All integer outputs, weights, residuals and entropy states match the normative reference exactly. NLSF tests retain 166 extreme vectors whose reference result violates range/spacing and verify rejection before LPC conversion. Twenty suites pass locally. Complete SILK/hybrid conformance and playback integration remain required.
+SILK suites add 98,304 side-information/state frames connected to excitation, 583,808 gain/state frames, 264,932 pitch/LTP frames, 45,056 decoded NLSF vectors and 12,288 stabilization vectors. All integer outputs, weights, residuals and entropy states match the normative reference exactly. NLSF tests retain 166 extreme vectors whose reference result violates range/spacing and verify rejection before LPC conversion.
+
+Fixed-point SILK LPC tests cover 749,568 reciprocals, 16,640 bandwidth expansions, 104,391 inverse prediction gains and 71,623 NLSF-to-LPC vectors. The complete parameter stage checks 129,360 stateful frames (32,768 connected side-information requests), including 72,041 interpolated, 22,006 reset and 32,335 loss-recovery frames. All controls and history match exactly; 1,712 invalid NLSF results fail atomically. Twenty-two suites pass locally. SILK synthesis/resampling, complete mode conformance and playback integration remain required.
 
 The UI preview uses the actual assembly renderer with synthetic playback state. **Desktop window interaction, open-dialog/drop behavior and monitor-DPI changes remain unverified** because the permitted desktop automation runtime was unavailable. Audio controls are tested separately by a native assembly harness.
 
@@ -143,7 +145,7 @@ The RFC reference archive is checked against its normative SHA-1 before extracti
 
 ## Remaining implementation
 
-Complete SILK LPC conversion/interpolation, parameter orchestration, prediction/synthesis/resampling, then hybrid switching, Ogg integration, pre-skip/gain/end trimming and official audio-vector validation. Further work includes indexed seeking, multichannel/chained streams, device changes, and same-machine CPU/RAM comparisons against existing players.
+Complete SILK synthesis/resampling/concealment and stereo framing, then hybrid switching, Ogg integration, pre-skip/gain/end trimming and official audio-vector validation. Further work includes indexed seeking, multichannel/chained streams, device changes, and same-machine CPU/RAM comparisons against existing players.
 
 ## References
 
