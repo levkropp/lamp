@@ -96,6 +96,8 @@ SILK packet-loss concealment/recovery references PLC.c, PLC.h and
 sum_sqr_shift.c under the same conditions.
 SILK stereo prediction/reconstruction references stereo_decode_pred.c,
 stereo_MS_to_LR.c and the stereo tables in tables_other.c under the same conditions.
+SILK channel/frame orchestration references init_decoder.c, decoder_set_fs.c
+and decode_frame.c under the same conditions.
 Adapted Opus packet framing:
 Copyright (c) 2010-2012 IETF Trust, Xiph.Org Foundation and Skype Limited.
 All rights reserved.

@@ -22,6 +22,7 @@ LAMP's Opus work is handwritten MASM x86-64 assembly, based on the BSD normative
 | SILK comfort-noise estimation and synthesis | `opus_silk_cng.asm` | 58,368 exact PCM/history frames (9,216 connected core/CNG/resampling), 5,150,475 int16 PCM samples, 20,720,640 history values and 27 guards |
 | SILK packet-loss concealment and recovery glue | `opus_silk_plc.asm` | 16,384 energy vectors, 43,008 exact PLC/core/control frames (25,984 concealed), 75,776 glue frames (7,463 faded), 18,432 connected core/PLC/CNG/resampling, 17,637,024 PCM samples, 36,685,824 history values and 63 guards |
 | SILK stereo predictor/mid-only entropy and mid/side reconstruction | `opus_silk_stereo.asm` | 153,572 entropy comparisons (11,250 exhaustive codebook/flag cases), 90,112 exact PCM/history frames (65,536 connected predictors), 32,440,240 int16 samples and 34 guards |
+| Complete stateful source-rate SILK channel frames | `opus_silk_frame.asm` | 67,589 exact entropy-to-PCM/history frames (28,160 lost, 10,752 FEC, 18,432 continued entropy), 12,166,840 int16 samples, 264,137,812 full-history bytes, five late component/sticky/reset checks and 63 guards |
 | CELT static band allocation | `opus_allocation.asm` | 271,160 allocation/entropy and 52,479 pulse-cache comparisons |
 | CELT normalized PVQ bands/spreading | `opus_vq.asm` | 13,416 band/entropy, 15,864 spreading and 8,192 renormalization comparisons |
 | CELT Haar/Hadamard layout helpers | `opus_band_transform.asm` | 3,280 Haar and 5,888 layout/inverse comparisons |
@@ -83,7 +84,7 @@ Requirements: Windows x64, Visual Studio Build Tools with the C tools and Window
 
 ## Next dependencies
 
-1. Complete SILK packet/frame processing; handle hybrid transitions.
+1. Complete SILK packet/stereo/resampling orchestration; handle hybrid transitions.
 2. Integrate Ogg Opus pre-skip/gain/end trimming with the playback engine.
 3. Validate complete CELT/SILK/hybrid audio against official decoder vectors and reference PCM.
 
@@ -162,6 +163,16 @@ Tests call unchanged `PLC.c` and `sum_sqr_shift.c`, compare complete PLC/core/co
 `op_silk_stereo(request*)` reconstructs planar int16 left/right PCM from adaptive mid/side input, with saved two-sample history and eight-millisecond predictor interpolation. Its 56-byte request has state/mid/side/predictor pointers at 0/8/16/24, internal kHz at 32 (8/12/16), length at 36 (10/20 ms), and state byte/mid element/side element/predictor element capacities at 40/44/48/52. State is 12 bytes: two int16 previous predictors, two mid samples, two side samples. Each PCM plane requires length+2 samples, with output at indices 1 through length; its last lookahead sample is preserved. Predictor input is two immutable int32 values in -32,768 through 32,767. Buffers must be separate, caller-owned and correctly sized; invalid requests reject before writes.
 
 Five generated tables are checked against the hash-verified normative archive. Tests call unchanged stereo sources, compare complete entropy/stereo state and PCM, encode/decode every predictor-codebook and mid-only combination, and cover all rates/frame lengths, random/truncated/primed payloads, full-range predictor history, clipping, canaries and guards. Connected checks apply decoded predictors to synthetic mid/side PCM; whole two-channel SILK packet/frame integration remains unfinished.
+
+## SILK channel frame interfaces
+
+`op_silk_frame_init(request*)` clears all channel history and initializes a selected internal rate/frame size; `op_silk_frame_config(request*)` applies normative internal-rate resets while preserving excitation, prior gain/NLSFs and entropy/PLC/CNG history. The 24-byte request in `src/opus_silk_frame_layout.inc` has state at 0, internal kHz at 8 (8/12/16), subframes at 12 (2/4) and state byte capacity at 16 (3,908). Configuration rejects failed/uninitialized state; explicit initialization clears sticky failure. Rate changes reset output/LPC history, prior signal/lag, last gain index and interpolation/reset flags. Changing only subframe count preserves histories.
+
+`op_silk_decode_frame(request*)` connects side information and excitation through parameter reconstruction, inverse NSQ, PLC, output history, recovery glue and CNG. Its 64-byte request has channel/range/PCM/work pointers at 0/8/16/24, mode at 32 (0 normal/1 lost/2 FEC), VAD/LBRR availability at 36/40 (0/1), coding mode at 44 (0/1/2) and byte/byte/int16-element/byte capacities at 48/52/56/60. State/workspace require 3,908/5,360 bytes; PCM capacity is the full 10/20 ms source-rate mono frame. Range capacity is 64 bytes when normal or available-FEC decoding consumes entropy. Missing FEC uses concealment; loss needs no range pointer.
+
+Success returns the source-rate sample count. Public request/header errors return zero before writes. A later component failure returns zero and marks sticky failure; discard that frame's partial PCM/history and explicitly reinitialize before reuse. Buffers are caller-owned, separate and correctly sized. Output history is maintained before glue/CNG; previous lag, signal/loss and reset flags follow `decode_frame.c`. Metadata/payload dispatch and final packet entropy budgets belong to the packet caller, which also connects stereo and API-rate resampling.
+
+Tests call unchanged initialization, rate-configuration and `silk_decode_frame` sources, compare complete mapped channel history and entropy/PCM, preserve canaries and cover loss, available/missing FEC, independent/conditional coding, reset/rate/frame changes and continuing range contexts. Random/truncated/zero-padded payloads exercise normative frame arithmetic. Late history corruption is injected to verify sticky failure/reset; malformed public requests reject without writes. These frame checks establish connected source-rate channel PCM, while complete Opus packet/mode integration and official conformance remain unfinished.
 
 ## Frame-prefix interface
 
