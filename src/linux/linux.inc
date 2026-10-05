@@ -50,3 +50,44 @@
 
 .equ EINTR, 4
 .equ EAGAIN, 11
+
+.equ SYS_writev, 20
+.equ SYS_rt_sigreturn, 15
+
+.equ AF_UNIX, 1
+.equ SOCK_STREAM, 1
+.equ SOCK_CLOEXEC, 0x80000
+.equ MSG_NOSIGNAL, 0x4000
+.equ POLLIN, 1
+.equ POLLERR, 8
+.equ POLLHUP, 0x10
+.equ EFD_NONBLOCK, 0x800
+.equ EFD_CLOEXEC, 0x80000
+
+.equ CLONE_VM, 0x100
+.equ CLONE_FS, 0x200
+.equ CLONE_FILES, 0x400
+.equ CLONE_SIGHAND, 0x800
+.equ CLONE_THREAD, 0x10000
+.equ CLONE_SYSVSEM, 0x40000
+.equ CLONE_PARENT_SETTID, 0x100000
+.equ CLONE_CHILD_CLEARTID, 0x200000
+.equ FUTEX_WAIT, 0
+
+.equ SIGINT, 2
+.equ SIGPIPE, 13
+.equ SIGTERM, 15
+.equ SIG_IGN, 1
+.equ SA_RESTORER, 0x04000000
+.equ SA_RESTART, 0x10000000
+
+# struct termios (asm-generic, x86-64): c_iflag, c_oflag, c_cflag, c_lflag, ...
+.equ TCGETS, 0x5401
+.equ TCSETS, 0x5402
+.equ TERMIOS_LFLAG, 12
+.equ TERMIOS_CC, 17
+.equ TERMIOS_SIZE, 36           # kernel struct termios used by TCGETS/TCSETS
+.equ ICANON, 2
+.equ ECHO, 8
+.equ VTIME, 5
+.equ VMIN, 6

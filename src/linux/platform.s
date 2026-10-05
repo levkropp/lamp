@@ -182,3 +182,40 @@ FN file_unmap
     pop rdi
     ret
 ENDFN file_unmap
+
+.data
+.globl linux_envp
+linux_envp: .quad 0                  # set by _start
+
+.text
+# RCX=NUL-terminated variable name -> RAX=value or 0.
+FN env_get
+    mov r8, [rip + linux_envp]
+    test r8, r8
+    jz .Lenv_none
+.Lenv_entry:
+    mov r9, [r8]
+    test r9, r9
+    jz .Lenv_none
+    mov r10, rcx
+.Lenv_compare:
+    mov al, [r10]
+    test al, al
+    jz .Lenv_name_end
+    cmp al, [r9]
+    jne .Lenv_next
+    inc r10
+    inc r9
+    jmp .Lenv_compare
+.Lenv_name_end:
+    cmp byte ptr [r9], '='
+    jne .Lenv_next
+    lea rax, [r9 + 1]
+    ret
+.Lenv_next:
+    add r8, 8
+    jmp .Lenv_entry
+.Lenv_none:
+    xor eax, eax
+    ret
+ENDFN env_get
