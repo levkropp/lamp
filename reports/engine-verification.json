@@ -90,6 +90,21 @@
         "stats":  "Passed: playback, pause, resume, stop, reopen, seek, paused seek and cancelled open."
     },
     {
+        "codec":  "vorbis-5.1",
+        "result":  "passed",
+        "tests":  [
+                      "stereo downmix playback",
+                      "pause",
+                      "resume",
+                      "stop",
+                      "reopen",
+                      "seek",
+                      "paused seek",
+                      "cancelled open"
+                  ],
+        "stats":  "Passed: playback, pause, resume, stop, reopen, seek, paused seek and cancelled open."
+    },
+    {
         "codec":  "opus-family1-5.1",
         "result":  "passed",
         "tests":  [
@@ -136,6 +151,21 @@
     },
     {
         "codec":  "wav-pcm_f64le-5.1",
+        "result":  "passed",
+        "tests":  [
+                      "stereo downmix playback",
+                      "pause",
+                      "resume",
+                      "stop",
+                      "reopen",
+                      "seek",
+                      "paused seek",
+                      "cancelled open"
+                  ],
+        "stats":  "Passed: playback, pause, resume, stop, reopen, seek, paused seek and cancelled open."
+    },
+    {
+        "codec":  "vorbis-7.1",
         "result":  "passed",
         "tests":  [
                       "stereo downmix playback",

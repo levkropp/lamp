@@ -39,14 +39,16 @@ Windows 10/11 x64 and a working default audio output are the intended targets. B
 | WAV | Little-endian RIFF/RF64/BW64 audio framing, PCM 8/16/24/32-bit or float32/64; 1–8 channels, extensible valid bits/layouts, 8–192 kHz |
 | Native FLAC | 1–8 channels, 4–32-bit, 8–192 kHz; CRC checks; speaker-mask-aware stereo downmix |
 | MP3 | MPEG-1/2/2.5 Layer III, mono/stereo, CBR/VBR, encoder trimming when tagged |
-| Ogg/Vorbis | Single logical stream, mono/stereo, floor 1, mapping 0; CRC and granule checks |
+| Ogg/Vorbis | Single logical stream, 1–255 channels, floor 1, mapping 0; stereo output, CRC and granule checks |
 | Ogg/Opus | Development source: one logical Ogg stream; family 0 mono/stereo or family 1 with 1–8 speaker channels downmixed to stereo; 48 kHz output, header gain/pre-skip/end trimming |
 
-See [precise coverage, limitations, and verification](docs/technical.md) before relying on a particular stream variant. Native surround output, multichannel Vorbis, chained Ogg streams and FLAC-in-Ogg remain unfinished. [WAV](docs/wav.md) and [FLAC](docs/flac.md) speaker layouts downmix to stereo; WAV also accepts left-aligned valid bits and float64 samples. WAV and AIFF/AIFC seek directly; native FLAC uses seek tables or searches validated frames; MP3, Vorbis and Opus use sparse indexes.
+See [precise coverage, limitations, and verification](docs/technical.md) before relying on a particular stream variant. Native surround output, chained Ogg streams and FLAC-in-Ogg remain unfinished. [WAV](docs/wav.md), [FLAC](docs/flac.md) and [Vorbis](docs/vorbis.md) speaker layouts downmix to stereo; WAV also accepts left-aligned valid bits and float64 samples. WAV and AIFF/AIFC seek directly; native FLAC uses seek tables or searches validated frames; MP3, Vorbis and Opus use sparse indexes.
 
 RF64/BW64 audio framing adds checked 64-bit lengths and direct seeks beyond 4 GiB. Its suite checks 538 files, 16 sparse large-file fixtures, 8,950 exact seeks and 312 malformed-input rejections. BW64 uses the existing WAVE speaker policy; ADM scene/object rendering remains unfinished. See [container rules and comparator limits](docs/wav.md#rf64bw64-framing-and-large-files).
 
 AIFF/AIFC adds signed PCM, float32/64, ordered Core Audio layouts and sample-exact direct seeks. Its suite checks 1,977 files, 19 sparse large-file cases, 30,443 seeks and 303 malformed-input rejections. Output remains stereo; rates round to integer hertz. See [AIFF/AIFC coverage and reference limits](docs/aiff.md).
+
+Vorbis now decodes 1–255 native channels. Standard 1–8-channel layouts use the documented stereo speaker policy; larger application-defined layouts output ports 0/1 while every channel is decoded and validated. Its suite checks 797 files, 23,910 native/stereo seeks, protected output, cancellation, allocation release and 14 malformed/resource-limit rejections. Independent Xiph and specification references check native PCM before mixing. See [Vorbis coverage and comparator limits](docs/vorbis.md).
 
 ## Controls
 
@@ -74,7 +76,7 @@ node .\tests\smoke.js
 .\package.ps1
 ```
 
-The prebuilt ICO and decoder tables are included. A normal build needs no codec library or reference C compiler. Both players use custom assembly entry points and `/NODEFAULTLIB`. The development build measures **201,728 bytes for `lamp.exe`** and **194,048 bytes for `lamp-cli.exe`**, including icon resources; release manifests record exact sizes and hashes.
+The prebuilt ICO and decoder tables are included. A normal build needs no codec library or reference C compiler. Both players use custom assembly entry points and `/NODEFAULTLIB`. The development build measures **205,312 bytes for `lamp.exe`** and **197,632 bytes for `lamp-cli.exe`**, including icon resources; release manifests record exact sizes and hashes.
 
 To build while the player is open, use `./build.ps1 -OutputDirectory ./bin/verify-build`. Pass that directory to `node ./tests/verify-runtime.js ./bin/verify-build` and `node ./tests/smoke.js ./bin/verify-build` to check the new binaries, or `./package.ps1 -BinaryDirectory ./bin/verify-build` to package them. Packaging rejects a binary version that differs from `VERSION`.
 

@@ -39,6 +39,13 @@ foreach($codec in @('wav','flac','mp3','vorbis','opus')) {
 # Exercise family1 through the actual WASAPI worker/queue path. Silence keeps
 # the lifecycle check unobtrusive while all elementary streams are decoded.
 foreach($layout in @('5.1','7.1')){
+    $path=Join-Path $scratch "engine-silence-vorbis-$layout.ogg"
+    & ffmpeg -hide_banner -loglevel error -y -f lavfi -i "anullsrc=r=48000:cl=$($layout):d=30" -c:a libvorbis -q:a 4 $path
+    if($LASTEXITCODE){throw 'Multichannel Vorbis engine fixture failed'}
+    $stats=& (Join-Path $out 'engine-probe.exe') $path
+    if($LASTEXITCODE){throw "Multichannel Vorbis engine lifecycle failed $layout $stats"}
+    $report+=[pscustomobject]@{codec="vorbis-$layout";result='passed';tests=@('stereo downmix playback','pause','resume','stop','reopen','seek','paused seek','cancelled open');stats="$stats"}
+    Write-Output "vorbis-$layout $stats"
     $path=Join-Path $scratch "engine-silence-family1-$layout.opus"
     & ffmpeg -hide_banner -loglevel error -y -f lavfi -i "anullsrc=r=48000:cl=$($layout):d=30" -c:a libopus -mapping_family 1 -b:a 128k $path
     if($LASTEXITCODE){throw 'Family1 engine fixture failed'}

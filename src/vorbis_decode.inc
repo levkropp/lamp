@@ -282,7 +282,7 @@ vb_fa_done:
 vb_floor_apply ENDP
 
 ; RCX=book index, EDX=partition offset, R8D=partition length,
-; R9D=group channel. Adds vectors to one or both spectrum buffers.
+; R9D=group channel. Adds vectors to the mapped spectrum buffers.
 vb_residue_vector PROC
     push rbp
     push rbx
@@ -328,7 +328,7 @@ vb_rv_type0_component:
     mov edx,[rdx+r14*4]
     shl edx,12
     add eax,edx
-    lea rdx,vb_spectrum
+    mov rdx,[vb_spectrum_ptr]
     movss xmm0,dword ptr [rdi+r8*4]
     addss xmm0,dword ptr [rdx+rax*4]
     movss dword ptr [rdx+rax*4],xmm0
@@ -363,7 +363,7 @@ vb_rv_channel:
     mov edx,[rdx+rcx*4]
     shl edx,12
     add eax,edx
-    lea rdx,vb_spectrum
+    mov rdx,[vb_spectrum_ptr]
     movss xmm0,dword ptr [rdi+r8*4]
     addss xmm0,dword ptr [rdx+rax*4]
     movss dword ptr [rdx+rax*4],xmm0
@@ -385,7 +385,7 @@ vb_rv_done:
     ret
 vb_residue_vector ENDP
 
-; RCX=residue, RDX=mapping, R8D=submap. All types, mono/stereo.
+; RCX=residue, RDX=mapping, R8D=submap. All types, 1..255 channels.
 vb_residue PROC
     push rbp
     push rbx
@@ -426,11 +426,14 @@ vb_rs_channels_done:
     cmp eax,2
     jne vb_rs_size
     mov dword ptr [vb_rs_groups],1
-    mov eax,[vb_rs_active]
-    cmp edi,2
-    jne vb_rs_type2_active
-    or eax,[vb_rs_active+4]
+    xor eax,eax
+    xor ecx,ecx
+    lea rdx,vb_rs_active
 vb_rs_type2_active:
+    or eax,[rdx+rcx*4]
+    inc ecx
+    cmp ecx,edi
+    jb vb_rs_type2_active
     mov [vb_rs_active],eax
 vb_rs_size:
     mov eax,[vb_n]
@@ -462,6 +465,14 @@ vb_rs_limit:
 vb_rs_pass:
     xor r13d,r13d           ; partition base for classword
 vb_rs_group:
+    mov rax,[ogg_cancel_ptr]
+    test rax,rax
+    jz vb_rs_not_cancelled
+    cmp dword ptr [rax],0
+    je vb_rs_not_cancelled
+    mov dword ptr [vb_bad],1
+    jmp vb_rs_done
+vb_rs_not_cancelled:
     cmp r13d,[vb_rs_parts]
     jae vb_rs_pass_next
     test r12d,r12d
@@ -482,7 +493,7 @@ vb_rs_class_digit:
     shl ecx,14
     add ecx,r13d
     add ecx,ebx
-    lea rdi,vb_classdata
+    mov rdi,[vb_classdata_ptr]
     mov [rdi+rcx*4],edx
     dec ebx
     jns vb_rs_class_digit
@@ -505,7 +516,7 @@ vb_rs_partition_channel:
     shl eax,14
     add eax,r13d
     add eax,r14d
-    lea rdi,vb_classdata
+    mov rdi,[vb_classdata_ptr]
     mov eax,[rdi+rax*4]
     shl eax,5
     lea eax,[rax+r12*4]
@@ -651,9 +662,10 @@ vb_frame PROC
     jz vb_frame_bad
     mov rsi,[vb_current_map]
 vb_frame_clear:
-    lea rdi,vb_spectrum
+    mov rdi,[vb_spectrum_ptr]
     xor eax,eax
-    mov ecx,4096
+    mov ecx,[source_channels]
+    shl ecx,11
     rep stosq
     xor r12d,r12d
 vb_frame_floor:
@@ -666,9 +678,9 @@ vb_frame_floor:
     mov [rdx+r12*8],rcx
     mov eax,r12d
     shl eax,10
-    lea rdx,vb_y
+    mov rdx,[vb_y_ptr]
     add rdx,rax
-    lea r8,vb_active
+    mov r8,[vb_active_ptr]
     add r8,rax
     call vb_floor_decode
     xor eax,1
@@ -720,7 +732,7 @@ vb_frame_couple:
     mov edx,[rsi+rbx*4+MP_ANGLE]
     shl eax,14
     shl edx,14
-    lea rdi,vb_spectrum
+    mov rdi,[vb_spectrum_ptr]
     lea rcx,[rdi+rax]
     add rdi,rdx
     xor r8d,r8d
@@ -757,9 +769,15 @@ vb_frame_pair_store:
 vb_frame_apply_start:
     xor r12d,r12d
 vb_frame_apply:
+    mov rax,[ogg_cancel_ptr]
+    test rax,rax
+    jz vb_frame_apply_not_cancelled
+    cmp dword ptr [rax],0
+    jne vb_frame_bad
+vb_frame_apply_not_cancelled:
     mov eax,r12d
     shl eax,14
-    lea r13,vb_spectrum
+    mov r13,[vb_spectrum_ptr]
     add r13,rax
     lea rdx,vb_really_zero
     cmp dword ptr [rdx+r12*4],0
@@ -768,9 +786,9 @@ vb_frame_apply:
     mov rcx,[rcx+r12*8]
     mov eax,r12d
     shl eax,10
-    lea rdx,vb_y
+    mov rdx,[vb_y_ptr]
     add rdx,rax
-    lea r8,vb_active
+    mov r8,[vb_active_ptr]
     add r8,rax
     mov r9,r13
     call vb_floor_apply
@@ -784,7 +802,7 @@ vb_frame_zero_channel:
 vb_frame_transform:
     mov eax,r12d
     shl eax,15
-    lea rdx,vb_time
+    mov rdx,[vb_time_ptr]
     add rdx,rax
     mov rcx,r13
     mov r8d,[vb_n]
@@ -830,11 +848,11 @@ vb_frame_window_ready:
 vb_frame_overlap_channel:
     mov eax,r12d
     shl eax,15
-    lea rsi,vb_time
+    mov rsi,[vb_time_ptr]
     add rsi,rax
     mov eax,r12d
     shl eax,14
-    lea rdi,vb_tail
+    mov rdi,[vb_tail_ptr]
     add rdi,rax
     xor ebx,ebx
 vb_frame_overlap_sample:
@@ -874,7 +892,7 @@ vb_frame_post_overlap:
 vb_frame_output_count:
     mov [vb_available],r14d
     add [vb_emitted],r14
-    lea rsi,vb_time
+    mov rsi,[vb_time_ptr]
     mov eax,[vb_left]
     add eax,[vb_frame_skip]
     lea rsi,[rsi+rax*4]
@@ -883,6 +901,56 @@ vb_frame_output_count:
 vb_frame_interleave:
     cmp ebx,r14d
     jae vb_frame_save_tail
+    ; Validate all native channels, including application-defined ports that
+    ; are not included in stereo output. No corrupt channel is silently lost.
+    mov r8,rsi
+    xor ecx,ecx
+vb_frame_validate_channel:
+    mov edx,[r8+rbx*4]
+    and edx,7fffffffh
+    cmp edx,7f800000h
+    jae vb_frame_bad
+    add r8,32768
+    inc ecx
+    cmp ecx,[source_channels]
+    jb vb_frame_validate_channel
+    cmp dword ptr [source_channels],2
+    jbe vb_frame_ports
+    cmp dword ptr [source_channels],8
+    ja vb_frame_ports
+    lea r9,vb_mix_coeff
+    mov r8,rsi
+    xor ecx,ecx
+    xorpd xmm4,xmm4
+    xorpd xmm5,xmm5
+vb_frame_mix_channel:
+    cvtss2sd xmm0,dword ptr [r8+rbx*4]
+    movapd xmm1,xmm0
+    mulsd xmm0,qword ptr [r9]
+    mulsd xmm1,qword ptr [r9+8]
+    addsd xmm4,xmm0
+    addsd xmm5,xmm1
+    add r8,32768
+    add r9,16
+    inc ecx
+    cmp ecx,[source_channels]
+    jb vb_frame_mix_channel
+    cvtsd2ss xmm4,xmm4
+    cvtsd2ss xmm5,xmm5
+    movd eax,xmm4
+    movd edx,xmm5
+    mov ecx,eax
+    and ecx,7fffffffh
+    cmp ecx,7f800000h
+    jae vb_frame_bad
+    mov ecx,edx
+    and ecx,7fffffffh
+    cmp ecx,7f800000h
+    jae vb_frame_bad
+    mov [rdi+rbx*8],eax
+    mov [rdi+rbx*8+4],edx
+    jmp vb_frame_interleave_next
+vb_frame_ports:
     mov eax,[rsi+rbx*4]
     mov edx,eax
     and edx,7fffffffh
@@ -898,6 +966,7 @@ vb_frame_mono:
     cmp edx,7f800000h
     jae vb_frame_bad
     mov [rdi+rbx*8+4],eax
+vb_frame_interleave_next:
     inc ebx
     jmp vb_frame_interleave
 vb_frame_save_tail:
@@ -909,13 +978,13 @@ vb_frame_save_tail:
 vb_frame_tail_channel:
     mov eax,r12d
     shl eax,15
-    lea rsi,vb_time
+    mov rsi,[vb_time_ptr]
     add rsi,rax
     mov eax,[vb_right]
     lea rsi,[rsi+rax*4]
     mov eax,r12d
     shl eax,14
-    lea rdi,vb_tail
+    mov rdi,[vb_tail_ptr]
     add rdi,rax
     mov ecx,r14d
     rep movsd
@@ -955,6 +1024,16 @@ vorbis_read PROC
 vb_read_more:
     cmp ebx,r12d
     jae vb_read_done
+    cmp qword ptr [vb_arena],0
+    je vb_read_done
+    cmp dword ptr [decode_error],0
+    jne vb_read_done
+    mov rax,[ogg_cancel_ptr]
+    test rax,rax
+    jz vb_read_not_cancelled
+    cmp dword ptr [rax],0
+    jne vb_read_cancelled
+vb_read_not_cancelled:
     mov eax,[vb_used]
     cmp eax,[vb_available]
     jb vb_read_copy
@@ -976,6 +1055,8 @@ vb_read_copy:
     add [vb_used],r13d
     add ebx,r13d
     jmp vb_read_more
+vb_read_cancelled:
+    mov dword ptr [decode_error],24
 vb_read_done:
     mov eax,ebx
     add rsp,32
@@ -986,3 +1067,78 @@ vb_read_done:
     pop rbx
     ret
 vorbis_read ENDP
+
+; RCX=interleaved native-channel float32 destination; EDX=frame capacity.
+; Shares the stereo reader's cursor and validated frame cache. Channels retain
+; encoded Vorbis order; no duplicate multichannel PCM allocation is needed.
+vorbis_read_native PROC
+    push rbx
+    push rsi
+    push rdi
+    push r12
+    push r13
+    sub rsp,32
+    mov rdi,rcx
+    mov r12d,edx
+    xor ebx,ebx
+vb_native_more:
+    cmp ebx,r12d
+    jae vb_native_done
+    cmp qword ptr [vb_arena],0
+    je vb_native_done
+    cmp dword ptr [decode_error],0
+    jne vb_native_done
+    mov rax,[ogg_cancel_ptr]
+    test rax,rax
+    jz vb_native_not_cancelled
+    cmp dword ptr [rax],0
+    jne vb_native_cancelled
+vb_native_not_cancelled:
+    mov eax,[vb_used]
+    cmp eax,[vb_available]
+    jb vb_native_copy
+    call vb_frame
+    test eax,eax
+    jz vb_native_done
+    jmp vb_native_more
+vb_native_copy:
+    mov r13d,[vb_available]
+    sub r13d,eax
+    mov edx,r12d
+    sub edx,ebx
+    cmp r13d,edx
+    cmova r13d,edx
+    add eax,[vb_left]
+    add eax,[vb_frame_skip]
+    mov rsi,[vb_time_ptr]
+    lea rsi,[rsi+rax*4]
+    xor r9d,r9d
+vb_native_frame:
+    mov r8,rsi
+    xor ecx,ecx
+vb_native_channel:
+    mov eax,[r8+r9*4]
+    mov [rdi],eax
+    add rdi,4
+    add r8,32768
+    inc ecx
+    cmp ecx,[source_channels]
+    jb vb_native_channel
+    inc r9d
+    cmp r9d,r13d
+    jb vb_native_frame
+    add [vb_used],r13d
+    add ebx,r13d
+    jmp vb_native_more
+vb_native_cancelled:
+    mov dword ptr [decode_error],24
+vb_native_done:
+    mov eax,ebx
+    add rsp,32
+    pop r13
+    pop r12
+    pop rdi
+    pop rsi
+    pop rbx
+    ret
+vorbis_read_native ENDP

@@ -1,5 +1,5 @@
 ; Original bounded Vorbis decoder in x86-64 assembly. MIT, see LICENSE.
-; Floor 1, residue 0/1/2, mapping 0, mono/stereo. Reference: Xiph Vorbis I.
+; Floor 1, residue 0/1/2, mapping 0, 1..255 channels. Reference: Xiph Vorbis I.
 option casemap:none
 include vorbis_layout.inc
 EXTERN VirtualAlloc:PROC, VirtualFree:PROC
@@ -9,9 +9,11 @@ EXTERN ogg_granule:QWORD, ogg_total_granule:QWORD, ogg_eos:DWORD
 EXTERN ogg_packet_last:DWORD,ogg_packet_page_end:DWORD,ogg_cancel_ptr:QWORD
 EXTERN sample_rate:DWORD, source_channels:DWORD, source_bits:DWORD
 EXTERN total_frames:QWORD, decode_error:DWORD
+EXTERN pcm_speaker_weights:QWORD
 EXTERN vb_transform_init:PROC, vb_imdct:PROC, vb_windows:QWORD
 PUBLIC vorbis_open, vorbis_read, vorbis_close,vorbis_seek
 PUBLIC vorbis_index_count,vorbis_index_stride,vorbis_seek_preroll
+PUBLIC vorbis_read_native
 VB_INDEX_CAP EQU 2048
 VB_INDEX_POINT EQU 32
 .data
@@ -63,12 +65,30 @@ vb_delta real4 0.0
 vb_rs_ptr dq 0
 vb_rs_channels dd 0
 vb_rs_groups dd 0
-vb_rs_active dd 2 dup (0)
-vb_rs_channel dd 2 dup (0)
+vb_rs_active dd 255 dup (0)
+vb_rs_channel dd 255 dup (0)
 vb_rs_parts dd 0
 vb_rs_words dd 0
 vb_rs_begin dd 0
 vb_rs_type dd 0
+vb_spectrum_ptr dq 0
+vb_time_ptr dq 0
+vb_tail_ptr dq 0
+vb_y_ptr dq 0
+vb_active_ptr dq 0
+vb_classdata_ptr dq 0
+vb_mix_one real8 1.0
+vb_mix_two real8 2.0
+vb_mix_coeff real8 16 dup (0.0)
+; Zero-based WAVE roles, in Vorbis's specified encoded channel order.
+vb_channel_roles db 2,255,255,255,255,255,255,255
+ db 0,1,255,255,255,255,255,255
+ db 0,2,1,255,255,255,255,255
+ db 0,1,4,5,255,255,255,255
+ db 0,2,1,4,5,255,255,255
+ db 0,2,1,4,5,3,255,255
+ db 0,2,1,9,10,8,3,255
+ db 0,2,1,9,10,4,5,3
 include vorbis_tables.inc
 .data?
 ALIGN 16
@@ -84,9 +104,9 @@ vb_tail real4 8192 dup (?)
 vb_pcm real4 16384 dup (?)
 vb_y dd 512 dup (?)
 vb_active dd 512 dup (?)
-vb_floor_channel dq 2 dup (?)
-vb_zero dd 2 dup (?)
-vb_really_zero dd 2 dup (?)
+vb_floor_channel dq 255 dup (?)
+vb_zero dd 255 dup (?)
+vb_really_zero dd 255 dup (?)
 vb_classdata dd 32768 dup (?)
 vb_audio_checkpoint dq 2 dup (?)
 vb_scan_checkpoint dq 2 dup (?)
@@ -198,6 +218,124 @@ vb_alloc_return:
     pop rbx
     ret
 vb_alloc ENDP
+
+; Channel working buffers share the bounded setup arena. Mono/stereo retain
+; their original static buffers; larger streams allocate only their count.
+vb_workspace PROC
+    sub rsp,40
+    lea rax,vb_spectrum
+    mov [vb_spectrum_ptr],rax
+    lea rax,vb_time
+    mov [vb_time_ptr],rax
+    lea rax,vb_tail
+    mov [vb_tail_ptr],rax
+    lea rax,vb_y
+    mov [vb_y_ptr],rax
+    lea rax,vb_active
+    mov [vb_active_ptr],rax
+    lea rax,vb_classdata
+    mov [vb_classdata_ptr],rax
+    cmp dword ptr [source_channels],2
+    jbe vb_workspace_ready
+    mov eax,[source_channels]
+    shl eax,14
+    call vb_alloc
+    test rax,rax
+    jz vb_workspace_bad
+    mov [vb_spectrum_ptr],rax
+    mov eax,[source_channels]
+    shl eax,15
+    call vb_alloc
+    test rax,rax
+    jz vb_workspace_bad
+    mov [vb_time_ptr],rax
+    mov eax,[source_channels]
+    shl eax,14
+    call vb_alloc
+    test rax,rax
+    jz vb_workspace_bad
+    mov [vb_tail_ptr],rax
+    mov eax,[source_channels]
+    shl eax,10
+    call vb_alloc
+    test rax,rax
+    jz vb_workspace_bad
+    mov [vb_y_ptr],rax
+    mov eax,[source_channels]
+    shl eax,10
+    call vb_alloc
+    test rax,rax
+    jz vb_workspace_bad
+    mov [vb_active_ptr],rax
+    ; Per-group stride remains 16384 classification integers. Residue 2
+    ; has one group and can use the whole channel-count-sized allocation.
+    mov eax,[source_channels]
+    shl eax,16
+    call vb_alloc
+    test rax,rax
+    jz vb_workspace_bad
+    mov [vb_classdata_ptr],rax
+vb_workspace_ready:
+    mov eax,1
+    add rsp,40
+    ret
+vb_workspace_bad:
+    xor eax,eax
+    add rsp,40
+    ret
+vb_workspace ENDP
+
+; Standard 1..8-channel roles use the shared stereo weights/headroom policy.
+; Larger channel layouts are application-defined: output ports 0/1 directly.
+vb_build_mix PROC
+    mov ecx,[source_channels]
+    cmp ecx,2
+    jbe vb_mix_done
+    cmp ecx,8
+    ja vb_mix_done
+    mov eax,ecx
+    dec eax
+    lea r9,vb_channel_roles
+    lea r9,[r9+rax*8]
+    lea r8,vb_mix_coeff
+    lea r10,pcm_speaker_weights
+    xorpd xmm0,xmm0
+    xorpd xmm1,xmm1
+    xor edx,edx
+vb_mix_role:
+    movzx eax,byte ptr [r9+rdx]
+    shl eax,4
+    movsd xmm2,qword ptr [r10+rax]
+    movsd xmm3,qword ptr [r10+rax+8]
+    movsd qword ptr [r8],xmm2
+    movsd qword ptr [r8+8],xmm3
+    addsd xmm0,xmm2
+    addsd xmm1,xmm3
+    add r8,16
+    inc edx
+    cmp edx,ecx
+    jb vb_mix_role
+    maxsd xmm0,xmm1
+    movsd xmm2,[vb_mix_one]
+    cmp ecx,4
+    jbe vb_mix_normalize
+    movsd xmm2,[vb_mix_two]
+vb_mix_normalize:
+    divsd xmm2,xmm0
+    lea r8,vb_mix_coeff
+vb_mix_scale:
+    movsd xmm0,qword ptr [r8]
+    movsd xmm1,qword ptr [r8+8]
+    mulsd xmm0,xmm2
+    mulsd xmm1,xmm2
+    movsd qword ptr [r8],xmm0
+    movsd qword ptr [r8+8],xmm1
+    add r8,16
+    dec ecx
+    jnz vb_mix_scale
+vb_mix_done:
+    ret
+vb_build_mix ENDP
 
 ; EAX=Vorbis packed float -> XMM0; x87 handles signed binary exponent.
 vb_unpack PROC
@@ -318,8 +456,6 @@ vorbis_open PROC
     movzx ecx,byte ptr [rax+11]
     cmp ecx,1
     jb vb_open_bad
-    cmp ecx,2
-    ja vb_open_bad
     mov [source_channels],ecx
     mov ecx,[rax+12]
     cmp ecx,8000
@@ -418,6 +554,10 @@ vb_comment_end:
     call vb_setup
     test eax,eax
     jz vb_open_bad
+    call vb_workspace
+    test eax,eax
+    jz vb_open_bad
+    call vb_build_mix
     mov ecx,[vb_short]
     mov edx,[vb_long]
     call vb_transform_init

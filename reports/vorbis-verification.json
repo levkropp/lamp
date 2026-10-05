@@ -1,4 +1,4 @@
-﻿[
+[
     {
         "test":  "vorbis-8000-1-q0.ogg",
         "result":  "matched",
@@ -21,7 +21,7 @@
         "frames":  2960,
         "snr_db":  140.80222467019775,
         "peak_error":  3.7252902984619141E-08,
-        "stats":  "codec=4 rate=8000 channels=2 bits=32 frames=2960 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=0 endpoint_dry=0"
+        "stats":  "codec=4 rate=8000 channels=2 bits=32 frames=2960 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
     },
     {
         "test":  "vorbis-8000-2-q8.ogg",
@@ -29,7 +29,7 @@
         "frames":  2960,
         "snr_db":  140.47887925800956,
         "peak_error":  4.4703483581542969E-08,
-        "stats":  "codec=4 rate=8000 channels=2 bits=32 frames=2960 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+        "stats":  "codec=4 rate=8000 channels=2 bits=32 frames=2960 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=0 endpoint_dry=0"
     },
     {
         "test":  "vorbis-16000-1-q0.ogg",
@@ -37,7 +37,7 @@
         "frames":  5920,
         "snr_db":  139.99779787350334,
         "peak_error":  4.4703483581542969E-08,
-        "stats":  "codec=4 rate=16000 channels=1 bits=32 frames=5920 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+        "stats":  "codec=4 rate=16000 channels=1 bits=32 frames=5920 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
     },
     {
         "test":  "vorbis-16000-1-q8.ogg",
@@ -45,7 +45,7 @@
         "frames":  5920,
         "snr_db":  139.94789047103575,
         "peak_error":  4.4703483581542969E-08,
-        "stats":  "codec=4 rate=16000 channels=1 bits=32 frames=5920 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+        "stats":  "codec=4 rate=16000 channels=1 bits=32 frames=5920 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
     },
     {
         "test":  "vorbis-16000-2-q0.ogg",
@@ -85,7 +85,7 @@
         "frames":  8159,
         "snr_db":  139.9653876153952,
         "peak_error":  5.9604644775390625E-08,
-        "stats":  "codec=4 rate=22050 channels=2 bits=32 frames=8159 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+        "stats":  "codec=4 rate=22050 channels=2 bits=32 frames=8159 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
     },
     {
         "test":  "vorbis-22050-2-q8.ogg",
@@ -93,7 +93,7 @@
         "frames":  8159,
         "snr_db":  139.5959214945492,
         "peak_error":  4.4703483581542969E-08,
-        "stats":  "codec=4 rate=22050 channels=2 bits=32 frames=8159 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+        "stats":  "codec=4 rate=22050 channels=2 bits=32 frames=8159 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
     },
     {
         "test":  "vorbis-32000-1-q0.ogg",
@@ -117,7 +117,7 @@
         "frames":  11840,
         "snr_db":  140.65617156294664,
         "peak_error":  5.9604644775390625E-08,
-        "stats":  "codec=4 rate=32000 channels=2 bits=32 frames=11840 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+        "stats":  "codec=4 rate=32000 channels=2 bits=32 frames=11840 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
     },
     {
         "test":  "vorbis-32000-2-q8.ogg",
@@ -125,7 +125,7 @@
         "frames":  11840,
         "snr_db":  139.97876842638462,
         "peak_error":  4.4703483581542969E-08,
-        "stats":  "codec=4 rate=32000 channels=2 bits=32 frames=11840 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+        "stats":  "codec=4 rate=32000 channels=2 bits=32 frames=11840 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
     },
     {
         "test":  "vorbis-44100-1-q0.ogg",
@@ -141,7 +141,7 @@
         "frames":  16317,
         "snr_db":  138.96739287506992,
         "peak_error":  5.9604644775390625E-08,
-        "stats":  "codec=4 rate=44100 channels=1 bits=32 frames=16317 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+        "stats":  "codec=4 rate=44100 channels=1 bits=32 frames=16317 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=62500 endpoint_dry=0"
     },
     {
         "test":  "vorbis-44100-2-q0.ogg",
@@ -149,7 +149,7 @@
         "frames":  16317,
         "snr_db":  139.42377420473224,
         "peak_error":  5.9604644775390625E-08,
-        "stats":  "codec=4 rate=44100 channels=2 bits=32 frames=16317 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+        "stats":  "codec=4 rate=44100 channels=2 bits=32 frames=16317 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
     },
     {
         "test":  "vorbis-44100-2-q8.ogg",
@@ -157,7 +157,7 @@
         "frames":  16317,
         "snr_db":  138.9336682069379,
         "peak_error":  5.9604644775390625E-08,
-        "stats":  "codec=4 rate=44100 channels=2 bits=32 frames=16317 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+        "stats":  "codec=4 rate=44100 channels=2 bits=32 frames=16317 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
     },
     {
         "test":  "vorbis-48000-1-q0.ogg",
@@ -165,7 +165,7 @@
         "frames":  17760,
         "snr_db":  139.48736063869526,
         "peak_error":  4.4703483581542969E-08,
-        "stats":  "codec=4 rate=48000 channels=1 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+        "stats":  "codec=4 rate=48000 channels=1 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
     },
     {
         "test":  "vorbis-48000-1-q8.ogg",
@@ -173,7 +173,7 @@
         "frames":  17760,
         "snr_db":  139.43959377212812,
         "peak_error":  5.9604644775390625E-08,
-        "stats":  "codec=4 rate=48000 channels=1 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+        "stats":  "codec=4 rate=48000 channels=1 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=0 endpoint_dry=0"
     },
     {
         "test":  "vorbis-48000-2-q0.ogg",
@@ -181,7 +181,7 @@
         "frames":  17760,
         "snr_db":  139.6585946203723,
         "peak_error":  5.9604644775390625E-08,
-        "stats":  "codec=4 rate=48000 channels=2 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+        "stats":  "codec=4 rate=48000 channels=2 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
     },
     {
         "test":  "vorbis-48000-2-q8.ogg",
@@ -189,7 +189,7 @@
         "frames":  17760,
         "snr_db":  139.4205861624331,
         "peak_error":  5.21540641784668E-08,
-        "stats":  "codec=4 rate=48000 channels=2 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=62500 endpoint_dry=0"
+        "stats":  "codec=4 rate=48000 channels=2 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
     },
     {
         "test":  "vorbis-96000-1-q0.ogg",
@@ -197,7 +197,7 @@
         "frames":  35520,
         "snr_db":  139.58660361857173,
         "peak_error":  5.21540641784668E-08,
-        "stats":  "codec=4 rate=96000 channels=1 bits=32 frames=35520 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+        "stats":  "codec=4 rate=96000 channels=1 bits=32 frames=35520 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=0 endpoint_dry=0"
     },
     {
         "test":  "vorbis-96000-1-q8.ogg",
@@ -205,7 +205,7 @@
         "frames":  35520,
         "snr_db":  139.4246833000058,
         "peak_error":  5.9604644775390625E-08,
-        "stats":  "codec=4 rate=96000 channels=1 bits=32 frames=35520 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+        "stats":  "codec=4 rate=96000 channels=1 bits=32 frames=35520 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=0 endpoint_dry=0"
     },
     {
         "test":  "vorbis-96000-2-q0.ogg",
@@ -221,7 +221,7 @@
         "frames":  35520,
         "snr_db":  139.57522208809308,
         "peak_error":  5.9604644775390625E-08,
-        "stats":  "codec=4 rate=96000 channels=2 bits=32 frames=35520 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=15625 endpoint_dry=0"
+        "stats":  "codec=4 rate=96000 channels=2 bits=32 frames=35520 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
     },
     {
         "test":  "vorbis-192000-1-q0.ogg",
@@ -229,7 +229,7 @@
         "frames":  71040,
         "snr_db":  140.00148748134836,
         "peak_error":  5.9604644775390625E-08,
-        "stats":  "codec=4 rate=192000 channels=1 bits=32 frames=71040 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+        "stats":  "codec=4 rate=192000 channels=1 bits=32 frames=71040 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=0 endpoint_dry=0"
     },
     {
         "test":  "vorbis-192000-1-q8.ogg",
@@ -237,7 +237,7 @@
         "frames":  71040,
         "snr_db":  139.73020177400832,
         "peak_error":  5.9604644775390625E-08,
-        "stats":  "codec=4 rate=192000 channels=1 bits=32 frames=71040 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+        "stats":  "codec=4 rate=192000 channels=1 bits=32 frames=71040 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=0 endpoint_dry=0"
     },
     {
         "test":  "vorbis-192000-2-q0.ogg",
@@ -245,7 +245,7 @@
         "frames":  71040,
         "snr_db":  140.3620074298237,
         "peak_error":  5.9604644775390625E-08,
-        "stats":  "codec=4 rate=192000 channels=2 bits=32 frames=71040 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+        "stats":  "codec=4 rate=192000 channels=2 bits=32 frames=71040 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=0 endpoint_dry=0"
     },
     {
         "test":  "vorbis-192000-2-q8.ogg",
@@ -269,7 +269,7 @@
         "frames":  62400,
         "snr_db":  139.83822809859336,
         "peak_error":  1.1920928955078125E-07,
-        "stats":  "codec=4 rate=48000 channels=2 bits=32 frames=62400 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=31250 endpoint_dry=0"
+        "stats":  "codec=4 rate=48000 channels=2 bits=32 frames=62400 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=15625 endpoint_dry=0"
     },
     {
         "test":  "vorbis-silence.ogg",
@@ -277,7 +277,7 @@
         "frames":  62400,
         "snr_db":  null,
         "peak_error":  0,
-        "stats":  "codec=4 rate=48000 channels=2 bits=32 frames=62400 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+        "stats":  "codec=4 rate=48000 channels=2 bits=32 frames=62400 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=15625 endpoint_dry=0"
     },
     {
         "test":  "ogg-bad-crc.ogg",
@@ -285,7 +285,7 @@
         "frames":  0,
         "snr_db":  null,
         "peak_error":  0,
-        "stats":  "Unsupported, malformed, or inaccessible file. Supports WAV, native FLAC, MP3, Ogg Vorbis and Opus."
+        "stats":  "Unsupported, malformed, or inaccessible file. Supports WAV, AIFF/AIFC, FLAC, MP3, Vorbis and Opus."
     },
     {
         "test":  "ogg-version.ogg",
@@ -293,7 +293,7 @@
         "frames":  0,
         "snr_db":  null,
         "peak_error":  0,
-        "stats":  "Unsupported, malformed, or inaccessible file. Supports WAV, native FLAC, MP3, Ogg Vorbis and Opus."
+        "stats":  "Unsupported, malformed, or inaccessible file. Supports WAV, AIFF/AIFC, FLAC, MP3, Vorbis and Opus."
     },
     {
         "test":  "ogg-reserved.ogg",
@@ -301,7 +301,7 @@
         "frames":  0,
         "snr_db":  null,
         "peak_error":  0,
-        "stats":  "Unsupported, malformed, or inaccessible file. Supports WAV, native FLAC, MP3, Ogg Vorbis and Opus."
+        "stats":  "Unsupported, malformed, or inaccessible file. Supports WAV, AIFF/AIFC, FLAC, MP3, Vorbis and Opus."
     },
     {
         "test":  "ogg-first-sequence.ogg",
@@ -309,7 +309,7 @@
         "frames":  0,
         "snr_db":  null,
         "peak_error":  0,
-        "stats":  "Unsupported, malformed, or inaccessible file. Supports WAV, native FLAC, MP3, Ogg Vorbis and Opus."
+        "stats":  "Unsupported, malformed, or inaccessible file. Supports WAV, AIFF/AIFC, FLAC, MP3, Vorbis and Opus."
     },
     {
         "test":  "ogg-first-continued.ogg",
@@ -317,15 +317,15 @@
         "frames":  0,
         "snr_db":  null,
         "peak_error":  0,
-        "stats":  "Unsupported, malformed, or inaccessible file. Supports WAV, native FLAC, MP3, Ogg Vorbis and Opus."
+        "stats":  "Unsupported, malformed, or inaccessible file. Supports WAV, AIFF/AIFC, FLAC, MP3, Vorbis and Opus."
     },
     {
-        "test":  "vorbis-channel-limit.ogg",
+        "test":  "vorbis-channel-zero.ogg",
         "result":  "rejected",
         "frames":  0,
         "snr_db":  null,
         "peak_error":  0,
-        "stats":  "Unsupported, malformed, or inaccessible file. Supports WAV, native FLAC, MP3, Ogg Vorbis and Opus."
+        "stats":  "Unsupported, malformed, or inaccessible file. Supports WAV, AIFF/AIFC, FLAC, MP3, Vorbis and Opus."
     },
     {
         "test":  "vorbis-block-order.ogg",
@@ -333,7 +333,7 @@
         "frames":  0,
         "snr_db":  null,
         "peak_error":  0,
-        "stats":  "Unsupported, malformed, or inaccessible file. Supports WAV, native FLAC, MP3, Ogg Vorbis and Opus."
+        "stats":  "Unsupported, malformed, or inaccessible file. Supports WAV, AIFF/AIFC, FLAC, MP3, Vorbis and Opus."
     },
     {
         "test":  "vorbis-ident-version.ogg",
@@ -341,7 +341,7 @@
         "frames":  0,
         "snr_db":  null,
         "peak_error":  0,
-        "stats":  "Unsupported, malformed, or inaccessible file. Supports WAV, native FLAC, MP3, Ogg Vorbis and Opus."
+        "stats":  "Unsupported, malformed, or inaccessible file. Supports WAV, AIFF/AIFC, FLAC, MP3, Vorbis and Opus."
     },
     {
         "test":  "ogg-truncated.ogg",
@@ -349,7 +349,7 @@
         "frames":  0,
         "snr_db":  null,
         "peak_error":  0,
-        "stats":  "Unsupported, malformed, or inaccessible file. Supports WAV, native FLAC, MP3, Ogg Vorbis and Opus."
+        "stats":  "Unsupported, malformed, or inaccessible file. Supports WAV, AIFF/AIFC, FLAC, MP3, Vorbis and Opus."
     },
     {
         "test":  "ogg-chained.ogg",
@@ -357,7 +357,7 @@
         "frames":  0,
         "snr_db":  null,
         "peak_error":  0,
-        "stats":  "Unsupported, malformed, or inaccessible file. Supports WAV, native FLAC, MP3, Ogg Vorbis and Opus."
+        "stats":  "Unsupported, malformed, or inaccessible file. Supports WAV, AIFF/AIFC, FLAC, MP3, Vorbis and Opus."
     },
     {
         "test":  "ogg-large-comment.ogg",
@@ -365,7 +365,7 @@
         "frames":  17760,
         "snr_db":  139.6585946203723,
         "peak_error":  5.9604644775390625E-08,
-        "stats":  "codec=4 rate=48000 channels=2 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+        "stats":  "codec=4 rate=48000 channels=2 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=0 endpoint_dry=0"
     },
     {
         "test":  "vorbis-vector-r0-c1-plain-s0.ogg",
@@ -373,7 +373,7 @@
         "frames":  128,
         "snr_db":  70.79478903071038,
         "peak_error":  0.000030837953090667725,
-        "stats":  "codec=4 rate=48000 channels=1 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=0 endpoint_dry=0"
+        "stats":  "codec=4 rate=48000 channels=1 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
     },
     {
         "test":  "vorbis-vector-r0-c1-plain-s1.ogg",
@@ -381,7 +381,7 @@
         "frames":  128,
         "snr_db":  72.74076765898795,
         "peak_error":  0.00003695487976074219,
-        "stats":  "codec=4 rate=48000 channels=1 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+        "stats":  "codec=4 rate=48000 channels=1 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=0 endpoint_dry=0"
     },
     {
         "test":  "vorbis-vector-r0-c1-ordered-s0.ogg",
@@ -389,7 +389,7 @@
         "frames":  128,
         "snr_db":  70.79478903071038,
         "peak_error":  0.000030837953090667725,
-        "stats":  "codec=4 rate=48000 channels=1 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+        "stats":  "codec=4 rate=48000 channels=1 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
     },
     {
         "test":  "vorbis-vector-r0-c1-ordered-s1.ogg",
@@ -405,7 +405,7 @@
         "frames":  128,
         "snr_db":  70.79478903071038,
         "peak_error":  0.000030837953090667725,
-        "stats":  "codec=4 rate=48000 channels=1 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+        "stats":  "codec=4 rate=48000 channels=1 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
     },
     {
         "test":  "vorbis-vector-r0-c1-sparse-s1.ogg",
@@ -413,7 +413,7 @@
         "frames":  128,
         "snr_db":  72.74076765898795,
         "peak_error":  0.00003695487976074219,
-        "stats":  "codec=4 rate=48000 channels=1 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=0 endpoint_dry=0"
+        "stats":  "codec=4 rate=48000 channels=1 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
     },
     {
         "test":  "vorbis-vector-r0-c2-plain-s0.ogg",
@@ -421,7 +421,7 @@
         "frames":  128,
         "snr_db":  72.39152391634877,
         "peak_error":  0.00003452599048614502,
-        "stats":  "codec=4 rate=48000 channels=2 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=46875 endpoint_dry=0"
+        "stats":  "codec=4 rate=48000 channels=2 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=0 endpoint_dry=0"
     },
     {
         "test":  "vorbis-vector-r0-c2-plain-s1.ogg",
@@ -453,7 +453,7 @@
         "frames":  128,
         "snr_db":  72.39152391634877,
         "peak_error":  0.00003452599048614502,
-        "stats":  "codec=4 rate=48000 channels=2 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+        "stats":  "codec=4 rate=48000 channels=2 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=0 endpoint_dry=0"
     },
     {
         "test":  "vorbis-vector-r0-c2-sparse-s1.ogg",
@@ -461,7 +461,7 @@
         "frames":  128,
         "snr_db":  73.98218415168516,
         "peak_error":  0.000038951635360717773,
-        "stats":  "codec=4 rate=48000 channels=2 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+        "stats":  "codec=4 rate=48000 channels=2 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=0 endpoint_dry=0"
     },
     {
         "test":  "vorbis-vector-r1-c1-plain-s0.ogg",
@@ -469,7 +469,7 @@
         "frames":  128,
         "snr_db":  70.28702433595335,
         "peak_error":  0.000035002827644348145,
-        "stats":  "codec=4 rate=48000 channels=1 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+        "stats":  "codec=4 rate=48000 channels=1 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=0 endpoint_dry=0"
     },
     {
         "test":  "vorbis-vector-r1-c1-plain-s1.ogg",
@@ -485,7 +485,7 @@
         "frames":  128,
         "snr_db":  70.28702433595335,
         "peak_error":  0.000035002827644348145,
-        "stats":  "codec=4 rate=48000 channels=1 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=0 endpoint_dry=0"
+        "stats":  "codec=4 rate=48000 channels=1 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
     },
     {
         "test":  "vorbis-vector-r1-c1-ordered-s1.ogg",
@@ -493,7 +493,7 @@
         "frames":  128,
         "snr_db":  73.15168193300907,
         "peak_error":  0.00003403425216674805,
-        "stats":  "codec=4 rate=48000 channels=1 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=0 endpoint_dry=0"
+        "stats":  "codec=4 rate=48000 channels=1 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
     },
     {
         "test":  "vorbis-vector-r1-c1-sparse-s0.ogg",
@@ -501,7 +501,7 @@
         "frames":  128,
         "snr_db":  70.28702433595335,
         "peak_error":  0.000035002827644348145,
-        "stats":  "codec=4 rate=48000 channels=1 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+        "stats":  "codec=4 rate=48000 channels=1 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
     },
     {
         "test":  "vorbis-vector-r1-c1-sparse-s1.ogg",
@@ -525,7 +525,7 @@
         "frames":  128,
         "snr_db":  73.8441307128393,
         "peak_error":  0.00004953145980834961,
-        "stats":  "codec=4 rate=48000 channels=2 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+        "stats":  "codec=4 rate=48000 channels=2 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=0 endpoint_dry=0"
     },
     {
         "test":  "vorbis-vector-r1-c2-ordered-s0.ogg",
@@ -533,7 +533,7 @@
         "frames":  128,
         "snr_db":  73.27982872889068,
         "peak_error":  0.00003898143768310547,
-        "stats":  "codec=4 rate=48000 channels=2 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=0 endpoint_dry=0"
+        "stats":  "codec=4 rate=48000 channels=2 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
     },
     {
         "test":  "vorbis-vector-r1-c2-ordered-s1.ogg",
@@ -549,7 +549,7 @@
         "frames":  128,
         "snr_db":  73.27982872889068,
         "peak_error":  0.00003898143768310547,
-        "stats":  "codec=4 rate=48000 channels=2 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=0 endpoint_dry=0"
+        "stats":  "codec=4 rate=48000 channels=2 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=0 endpoint_dry=0"
     },
     {
         "test":  "vorbis-vector-r1-c2-sparse-s1.ogg",
@@ -557,7 +557,7 @@
         "frames":  128,
         "snr_db":  73.8441307128393,
         "peak_error":  0.00004953145980834961,
-        "stats":  "codec=4 rate=48000 channels=2 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+        "stats":  "codec=4 rate=48000 channels=2 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=0 endpoint_dry=0"
     },
     {
         "test":  "vorbis-vector-r2-c1-plain-s0.ogg",
@@ -573,7 +573,7 @@
         "frames":  128,
         "snr_db":  73.15168193300907,
         "peak_error":  0.00003403425216674805,
-        "stats":  "codec=4 rate=48000 channels=1 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+        "stats":  "codec=4 rate=48000 channels=1 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
     },
     {
         "test":  "vorbis-vector-r2-c1-ordered-s0.ogg",
@@ -581,7 +581,7 @@
         "frames":  128,
         "snr_db":  70.28702433595335,
         "peak_error":  0.000035002827644348145,
-        "stats":  "codec=4 rate=48000 channels=1 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=0 endpoint_dry=0"
+        "stats":  "codec=4 rate=48000 channels=1 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
     },
     {
         "test":  "vorbis-vector-r2-c1-ordered-s1.ogg",
@@ -589,7 +589,7 @@
         "frames":  128,
         "snr_db":  73.15168193300907,
         "peak_error":  0.00003403425216674805,
-        "stats":  "codec=4 rate=48000 channels=1 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+        "stats":  "codec=4 rate=48000 channels=1 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=0 endpoint_dry=0"
     },
     {
         "test":  "vorbis-vector-r2-c1-sparse-s0.ogg",
@@ -597,7 +597,7 @@
         "frames":  128,
         "snr_db":  70.28702433595335,
         "peak_error":  0.000035002827644348145,
-        "stats":  "codec=4 rate=48000 channels=1 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=0 endpoint_dry=0"
+        "stats":  "codec=4 rate=48000 channels=1 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
     },
     {
         "test":  "vorbis-vector-r2-c1-sparse-s1.ogg",
@@ -605,7 +605,7 @@
         "frames":  128,
         "snr_db":  73.15168193300907,
         "peak_error":  0.00003403425216674805,
-        "stats":  "codec=4 rate=48000 channels=1 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=0 endpoint_dry=0"
+        "stats":  "codec=4 rate=48000 channels=1 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
     },
     {
         "test":  "vorbis-vector-r2-c2-plain-s0.ogg",
@@ -613,7 +613,7 @@
         "frames":  128,
         "snr_db":  70.875346162815,
         "peak_error":  0.00003261864185333252,
-        "stats":  "codec=4 rate=48000 channels=2 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+        "stats":  "codec=4 rate=48000 channels=2 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=0 endpoint_dry=0"
     },
     {
         "test":  "vorbis-vector-r2-c2-plain-s1.ogg",
@@ -621,7 +621,7 @@
         "frames":  128,
         "snr_db":  73.00031487744413,
         "peak_error":  0.000039964914321899414,
-        "stats":  "codec=4 rate=48000 channels=2 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+        "stats":  "codec=4 rate=48000 channels=2 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=15625 endpoint_dry=0"
     },
     {
         "test":  "vorbis-vector-r2-c2-ordered-s0.ogg",
@@ -629,7 +629,7 @@
         "frames":  128,
         "snr_db":  70.875346162815,
         "peak_error":  0.00003261864185333252,
-        "stats":  "codec=4 rate=48000 channels=2 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=0 endpoint_dry=0"
+        "stats":  "codec=4 rate=48000 channels=2 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
     },
     {
         "test":  "vorbis-vector-r2-c2-ordered-s1.ogg",
@@ -637,7 +637,7 @@
         "frames":  128,
         "snr_db":  73.00031487744413,
         "peak_error":  0.000039964914321899414,
-        "stats":  "codec=4 rate=48000 channels=2 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=0 endpoint_dry=0"
+        "stats":  "codec=4 rate=48000 channels=2 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=46875 endpoint_dry=0"
     },
     {
         "test":  "vorbis-vector-r2-c2-sparse-s0.ogg",
@@ -645,7 +645,7 @@
         "frames":  128,
         "snr_db":  70.875346162815,
         "peak_error":  0.00003261864185333252,
-        "stats":  "codec=4 rate=48000 channels=2 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+        "stats":  "codec=4 rate=48000 channels=2 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=0 endpoint_dry=0"
     },
     {
         "test":  "vorbis-vector-r2-c2-sparse-s1.ogg",
@@ -653,11 +653,11 @@
         "frames":  128,
         "snr_db":  73.00031487744413,
         "peak_error":  0.000039964914321899414,
-        "stats":  "codec=4 rate=48000 channels=2 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+        "stats":  "codec=4 rate=48000 channels=2 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=0 endpoint_dry=0"
     },
     {
         "test":  "WASAPI Vorbis",
         "result":  "played",
-        "stats":  "Playing. Space: pause / resume. Q or Ctrl+C: stop. codec=4 rate=48000 channels=2 bits=32 frames=62400 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1344 cpu_us=15625 endpoint_dry=0"
+        "stats":  "Playing. Space: pause / resume. Q or Ctrl+C: stop. codec=4 rate=48000 channels=2 bits=32 frames=62400 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1375 cpu_us=46875 endpoint_dry=0"
     }
 ]

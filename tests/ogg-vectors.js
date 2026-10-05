@@ -15,7 +15,7 @@ mutate('ogg-version',b=>b[4]=1);
 mutate('ogg-reserved',b=>b[5]|=8);
 mutate('ogg-first-sequence',b=>b.writeUInt32LE(1,18));
 mutate('ogg-first-continued',b=>b[5]|=1);
-mutate('vorbis-channel-limit',b=>b[39]=3);
+mutate('vorbis-channel-zero',b=>b[39]=0);
 mutate('vorbis-block-order',b=>b[56]=0x67);
 mutate('vorbis-ident-version',b=>b[35]=1);
 emit('ogg-truncated',original.subarray(0,original.length-1),false);

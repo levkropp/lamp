@@ -14,6 +14,7 @@ EXTERN ogg_cancel_ptr:QWORD
 PUBLIC decoder_open, decoder_read, decoder_close, decoder_seek
 PUBLIC sample_rate, source_channels, source_bits, decode_error, total_frames, codec_kind
 PUBLIC decoder_seek_probes
+PUBLIC pcm_speaker_weights
 
 .data
 sample_rate dd 0

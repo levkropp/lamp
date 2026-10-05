@@ -8,7 +8,7 @@ LAMP's long-term goal is to support everything relevant that mpv supports. This 
 
 | Capability | Current source status | Remaining coverage | Milestone |
 | --- | --- | --- | --- |
-| WAV / native FLAC / MP3 / Ogg Vorbis | Partial; direct, frame-search or indexed seeking; WAV 1–8 channels, valid PCM precision and float64; native FLAC 1–8 channels/4–32-bit; speaker layouts downmix to stereo | Multichannel Vorbis, native surround output, broader containers and Ogg chaining | 2–3 |
+| WAV / native FLAC / MP3 / Ogg Vorbis | Partial; direct, frame-search or indexed seeking; WAV 1–8 channels, valid PCM precision and float64; native FLAC 1–8 channels/4–32-bit; [Vorbis 1–255 native channels](vorbis.md); documented stereo output policies | Native surround output, broader containers and Ogg chaining | 2–3 |
 | Opus | Development playback: Ogg families 0/1, SILK/hybrid/CELT, RFC 8251 updates, family 1 layouts with 1–8 speaker channels downmixed to stereo, header gain/pre-skip/end trimming; [all 120 official elementary-vector checks pass](opus.md) | Native surround output, other mapping families, Ogg chaining | 1–2 |
 | Other audio codecs | Planned | AAC/HE-AAC, ALAC, AC-3/E-AC-3, DTS, WavPack, APE, MPEG I/II and relevant legacy formats | 3 |
 | AIFF / AIFC | Partial; [1–32-bit PCM, byte-order/fixed-container variants, float32/64 and ordered CHAN layouts](aiff.md); direct seeking and declared-frame trimming | Compressed AIFC codecs, native surround output, newer/spatial layouts and exact fractional-rate output | 3 |
