@@ -1,18 +1,18 @@
-; Original single-instance MP3 state layout, shared by assembly modules.
-GI_PART EQU 0
-GI_BIG EQU 4
-GI_GAIN EQU 8
-GI_SFC EQU 12
-GI_BLOCK EQU 16
-GI_MIX EQU 20
-GI_LONG EQU 24
-GI_SHORT EQU 28
-GI_TABLE EQU 32
-GI_REGION EQU 36
-GI_SUBGAIN EQU 40
-GI_PRE EQU 44
-GI_SCALE EQU 48
-GI_COUNT EQU 52
-GI_SCFSI EQU 56
-GI_SFB EQU 64
-GI_SIZE EQU 80
+# Original single-instance MP3 state layout, shared by assembly modules.
+.equ GI_PART, 0
+.equ GI_BIG, 4
+.equ GI_GAIN, 8
+.equ GI_SFC, 12
+.equ GI_BLOCK, 16
+.equ GI_MIX, 20
+.equ GI_LONG, 24
+.equ GI_SHORT, 28
+.equ GI_TABLE, 32
+.equ GI_REGION, 36
+.equ GI_SUBGAIN, 40
+.equ GI_PRE, 44
+.equ GI_SCALE, 48
+.equ GI_COUNT, 52
+.equ GI_SCFSI, 56
+.equ GI_SFB, 64
+.equ GI_SIZE, 80

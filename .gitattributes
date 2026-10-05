@@ -1,6 +1,9 @@
 * text=auto
-*.asm text eol=crlf
-*.inc text eol=crlf
+*.s text eol=lf
+*.inc text eol=lf
+*.def text eol=lf
+*.sh text eol=lf
+*.py text eol=lf
 *.ps1 text eol=crlf
 *.md text eol=lf
 *.yml text eol=lf
