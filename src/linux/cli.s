@@ -20,7 +20,6 @@ usage:
     .ascii "Native FLAC: 4..32 bit, 1..8 channels, speaker-mask-aware downmix.\n"
     .asciz "Opus families 0/1; playback and float export output stereo.\n"
 open_error: .asciz "Unsupported, malformed, or inaccessible file. Supports WAV, AIFF/AIFC, FLAC, MP3, Vorbis and Opus.\n"
-audio_error: .asciz "Audio output unavailable. Try --check to verify decoding.\n"
 output_error: .asciz "Cannot create output file.\n"
 stats_a: .asciz "codec="
 stats_b: .asciz " rate="
@@ -46,18 +45,17 @@ timespec: .zero 16
 argc: .quad 0
 argv: .quad 0
 start_ms: .quad 0
-decoded_count: .quad 0
 operation: .long 0             # 0 play, 1 check, 2 decode
 exit_code: .long 0
-audio_status: .long 0
-cli_stop: .long 0
 
 .text
 FN _start
     mov rax, [rsp]
     mov [rip + argc], rax
-    lea rax, [rsp + 8]
-    mov [rip + argv], rax
+    lea rcx, [rsp + 8]
+    mov [rip + argv], rcx
+    lea rcx, [rcx + rax*8 + 8]
+    mov [rip + linux_envp], rcx
     and rsp, -16
     call cli_main
     mov edi, eax
@@ -111,7 +109,7 @@ LOCALFN cli_main
     jne .Lshow_help
     mov r12, [rbx + 8]
 .Lopen_input:
-    lea rax, [rip + cli_stop]
+    lea rax, [rip + engine_stop_requested]
     mov [rip + ogg_cancel_ptr], rax
     mov rcx, r12
     call decoder_open
@@ -149,10 +147,12 @@ LOCALFN cli_main
     mov dword ptr [rip + exit_code], 2
     jmp .Lreport_finish
 .Lplayback:
-    mov dword ptr [rip + exit_code], 3
-    lea rcx, [rip + audio_error]
-    call print_text
-    jmp .Lcleanup
+    mov ecx, 1                         # console: messages, Space/Q, Ctrl+C
+    call engine_start
+    mov [rip + exit_code], eax
+    cmp eax, 3
+    je .Lcleanup                       # the engine reported the audio failure
+    jmp .Lreport_finish
 .Lreport_finish:
     call report_stats
     jmp .Lcleanup
@@ -328,7 +328,7 @@ LOCALFN report_stats
     call print_number
     lea rcx, [rip + stats_f]
     call print_text
-    xor ecx, ecx
+    mov rcx, [rip + underruns]
     call print_number
     lea rcx, [rip + stats_g]
     call print_text
@@ -356,7 +356,7 @@ LOCALFN report_stats
     call print_number
     lea rcx, [rip + stats_k]
     call print_text
-    xor ecx, ecx
+    mov rcx, [rip + endpoint_dry]
     call print_number
     lea rcx, [rip + newline]
     call print_text

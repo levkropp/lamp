@@ -13,7 +13,7 @@ A small media player for Windows and Linux x86-64 and Apple Silicon macOS with h
 ## Why LAMP?
 
 - Handwritten x86-64 assembly runtime and decoders, SSE2 baseline. One GNU-syntax source tree builds a static, libc-free Linux executable with `as`/`ld` and Windows executables with LLVM, following [Rhun](https://rhun.app/)'s approach.
-- Windows uses event-driven WASAPI and a decode worker; macOS uses native ARM64 Core Audio and AppKit adapters with translated shared decoders.
+- Event-driven playback, a decode worker, and buffered PCM to absorb short scheduling stalls: WASAPI on Windows, the PulseAudio native protocol on Linux (PulseAudio or PipeWire), without libpulse. macOS uses native ARM64 Core Audio and AppKit adapters with translated shared decoders.
 - A compact mpv-inspired UI, with Rhun's assembly UI approach and minimalist visual style as references.
 - No codec DLL, C runtime, FFmpeg subprocess, or mpv engine in the player. Normal Windows system DLLs provide platform services; on Linux the player makes raw system calls. macOS uses libSystem, AppKit and AudioToolbox.
 - MIT project license, with preserved MIT/MIT-0/CC0/BSD notices for reference-derived algorithms and data.
@@ -43,14 +43,15 @@ build/macos/lamp-cli --decode 'Music/track.ogg' 'track.f32'
 
 The Mac app has Open, Finder file-open/drop handlers, pause/replay, stop, timeline seeking and volume controls. Cmd+O opens; Cmd+Q quits. The local bundle is ad-hoc signed. See [Mac build strategy, controls, verification and limits](docs/macos.md). The published v0.3.0 download remains Windows-only.
 
-On Linux x86-64, `./build.sh` produces a static `build/lamp-cli` with the same decoders, checks and export:
+On Linux x86-64, `./build.sh` produces a static `build/lamp-cli` with the same decoders, playback, checks and export. It plays through PulseAudio or PipeWire's pulse server by speaking their native protocol directly:
 
 ```sh
+./build/lamp-cli ~/Music/track.flac
 ./build/lamp-cli --check ~/Music/track.mp3
 ./build/lamp-cli --decode ~/Music/track.ogg track.f32
 ```
 
-Linux playback and the desktop window are not available yet; see the [roadmap](ROADMAP.md).
+The Linux desktop window is not available yet; see the [roadmap](ROADMAP.md).
 
 `--check` decodes without an audio device. `--decode` writes little-endian float32 PCM with two interleaved channels; mono is duplicated. Opus output is 48 kHz; AIFF/AIFC rates round to integer hertz; other formats use their source rate. The destination must be new. Failed exports can leave partial output.
 
@@ -94,7 +95,8 @@ LAMP follows [Rhun](https://rhun.app/)'s build approach: GNU assembler syntax (`
 ```sh
 ./build.sh                       # build/lamp-cli, static and libc-free
 python3 tests/run.py --quick     # smoke, table provenance, 35 Opus oracle suites, Ogg CRC
-python3 tests/run.py             # adds every FFmpeg-based PCM, seek, layout and container suite
+python3 tests/run.py             # adds every FFmpeg-based PCM, seek, layout and container suite,
+                                 # and bit-exact playback through a private PulseAudio null sink
 ```
 
 **Windows** needs [LLVM](https://llvm.org/) (`llvm-mc`, `lld-link`, `llvm-dlltool`, `llvm-rc`; for example `winget install LLVM.LLVM`) and Python. The same script also cross-builds the Windows binaries from Linux or macOS:

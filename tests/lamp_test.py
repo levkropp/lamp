@@ -363,6 +363,10 @@ def audio_environment():
         return dict(os.environ)
     if 'env' in _audio:
         return _audio['env']
+    if os.environ.get('LAMP_TEST_PULSE'):
+        # A parent runner already started the private server; reuse it.
+        _audio['env'] = dict(os.environ)
+        return _audio['env']
     daemon = shutil.which('pulseaudio')
     if not daemon:
         _audio['env'] = None
@@ -373,7 +377,7 @@ def audio_environment():
     runtime = Path(tempfile.mkdtemp(prefix='lamp-pulse-'))
     runtime.chmod(0o700)
     env = dict(os.environ, XDG_RUNTIME_DIR=str(runtime), PULSE_SERVER=f'unix:{runtime}/pulse/native',
-               HOME=str(runtime))
+               HOME=str(runtime), LAMP_TEST_PULSE='1')
     env.pop('PULSE_COOKIE', None)
     subprocess.run([daemon, '-n', '--daemonize=yes', '--exit-idle-time=-1', '--use-pid-file=yes',
                     '-L', 'module-native-protocol-unix',

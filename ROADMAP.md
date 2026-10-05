@@ -143,7 +143,7 @@ AIFF/AIFC now adds signed 1–32-bit PCM, AIFC byte-order/fixed-container varian
 - [ ] Optical/disc and specialist inputs where relevant and legally distributable; record platform/dependency limits explicitly.
 - [ ] Close high-value gaps in the versioned codec/profile/container/feature matrix, including relevant legacy media.
 - [ ] Compare scalar/SSE2 and optional newer x86 SIMD paths; dispatch safely and keep a baseline build.
-- [ ] Additional desktop platforms, preserving the x86 assembly architecture. One GNU-syntax source tree now builds Windows (LLVM) and a static, libc-free Linux `lamp-cli` with decode checks and export, following Rhun's approach. Linux audio output, the Linux desktop window and other platforms remain.
+- [ ] Additional desktop platforms, preserving the x86 assembly architecture. One GNU-syntax source tree now builds Windows (LLVM) and a static, libc-free Linux `lamp-cli` with decode checks and export, following Rhun's approach. Linux playback uses the PulseAudio native protocol (PulseAudio or PipeWire) without libpulse, and is checked bit for bit through a null sink. Direct ALSA output, the Linux desktop window and other platforms remain.
 
 **Gate:** users can evaluate exact implemented coverage against a published mpv reference version. This is a capability target, not a promise of identical internals, every mpv option, or universal bit-for-bit output.
 

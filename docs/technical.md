@@ -21,7 +21,7 @@ Windows 10/11 x64 with a working default audio output is the primary desktop tar
 .\bin\lamp-cli.exe --decode 'C:\Music\track.ogg' '.\track.f32'
 ```
 
-Linux x86-64 builds the same command line with `./build.sh`; paths are UTF-8 bytes from `argv`. `--check` and `--decode` behave as on Windows. Linux playback and the desktop window are not available yet. Linux maps input files read-only; truncating a file from another process while it is open raises `SIGBUS`, as with other memory-mapped readers.
+Linux x86-64 builds the same command line with `./build.sh`; paths are UTF-8 bytes from `argv`. Playback, `--check` and `--decode` behave as on Windows; see [Linux](#linux). The Linux desktop window is not available yet.
 
 `--check` decodes silently without an audio device. `--decode` exports little-endian float32 PCM with two interleaved channels; mono is duplicated at its original amplitude. Opus uses 48 kHz; AIFF/AIFC rates round to integer hertz; other formats use their source rate. The destination must be a new file. Float32 WAV NaN/infinity samples become silence. A failed export can leave partial output.
 
@@ -118,6 +118,18 @@ The recorded Vorbis benchmark used **140,625 microseconds median process CPU** a
 The [headless playback comparison](playback-benchmark.md) records the assembly WASAPI engine alongside mpv 0.41.0 and VLC 3.0.24, with identical ten-minute files and baseline/four-worker CPU-load conditions. It records process launch/control readiness, three open/reopen/seek runs, eight-second process CPU/working-set/private-byte windows during noise playback, pause and idle, and stationary paused-seek clocks. All 30 scenarios pass; LAMP's measured operations report zero queue underruns and zero empty-endpoint refills. The LAMP bridge includes a test C runtime and no GUI. CPU accounting is coarse, and readiness/position semantics differ across players. Wakeups, audible latency and shipping-GUI performance are unmeasured. The [report](../reports/playback-benchmark.json) records raw observations, versions, hardware and fixture/object/executable hashes; it does not establish a universal performance advantage.
 
 Eight seconds of Vorbis silence under four bounded CPU workers completed with zero queue underruns and zero empty endpoint refills. Buffering/scheduling reduce stutters but cannot guarantee uninterrupted audio through arbitrary system, driver or storage stalls.
+
+## Linux
+
+`build/lamp-cli` is a static executable without a C library or libpulse. It makes raw system calls for files, memory, threads (`clone`, joined with futexes), `eventfd`/`poll` waits, signals and terminal input.
+
+Playback speaks the PulseAudio native protocol (version 15) over the local Unix socket: `PULSE_SERVER` (`unix:` paths only), else `$XDG_RUNTIME_DIR/pulse/native`, else `/run/user/UID/pulse/native`. PulseAudio and PipeWire's `pipewire-pulse` both accept it. Authentication uses `$HOME/.config/pulse/cookie` when present; local servers otherwise accept same-user peer credentials. Remote (TCP) servers are not supported, and there is no direct ALSA output yet.
+
+The engine mirrors the Windows design. A decode thread fills a 262,144-frame float32 stereo ring and prebuffers 0.75 seconds. The stream is created at the source rate with a 200 ms server buffer, and the server resamples to the device. The render loop waits in `poll` on the server socket, a stop eventfd, a data eventfd (only while starved) and the terminal, and sends exactly the bytes the server requests. Space pauses with `CORK`, Q or Ctrl+C stops, and the end of the stream waits for `DRAIN`. `underruns` counts requests that arrived before PCM was ready. `endpoint_dry` counts server underflows during playback, excluding the expected one while draining and those reported while a pause or resume re-prebuffers.
+
+`tests/verify-playback.py` starts a private PulseAudio daemon with a float32 48 kHz null sink and records its monitor. For WAV, AIFF, FLAC, MP3, Vorbis, Opus, and 5.1 FLAC/Vorbis/Opus downmixes, the captured audio matches `--decode` output bit for bit from the recorder's first frame to the end of the file, with zero underruns and dry refills. Pause/resume plays to the end. On cork the server rewinds audio it rendered but had not played, and the null-sink monitor mirrors that boundary only approximately: the recorded run repeated or skipped up to 136 frames at a pause boundary. Q and Ctrl+C stop within about 1.5 seconds. 8, 44.1 and 96 kHz files play through server resampling, and a missing server exits with code 3. An idle null sink can take over a second to start a stream, so these checks do not measure latency.
+
+Linux maps input files read-only; truncating a file from another process while it is open raises `SIGBUS`, as with other memory-mapped readers.
 
 ## Build
 
@@ -222,7 +234,7 @@ python3 tests/verify-ogg-crc.py
 node tests/fuzz-vorbis.js
 ```
 
-Playback checks inside `verify-pcm.py`, `verify-mp3.py` and `verify-vorbis.py` need an audio device; pass `--skip-playback` without one. Windows-only checks remain PowerShell scripts:
+Playback checks inside `verify-pcm.py`, `verify-mp3.py` and `verify-vorbis.py` need an audio device: on Linux, a private PulseAudio null sink that the tests start when `pulseaudio` and `parec` are installed. Pass `--skip-playback` without one. `python3 tests/verify-playback.py` runs the Linux playback suite. Windows-only checks remain PowerShell scripts:
 
 ```powershell
 .\tests\verify-engine.ps1

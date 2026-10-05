@@ -2,7 +2,7 @@
 
 LAMP's long-term goal is to support everything relevant that mpv supports. This inventory makes gaps visible; it is not a claim of current mpv parity.
 
-**Current source:** LAMP 0.4.0-dev, Windows x86-64 and Apple Silicon macOS; published prerelease baseline 0.3.0. The feature inventory uses the [stable mpv manual](https://mpv.io/manual/stable/), reviewed on 2026-10-03. A [same-machine headless audio comparison](playback-benchmark.md) records mpv 0.41.0 and VLC 3.0.24, their build/executable identities and five audio fixtures. The complete comparator decoder/demuxer/output inventory remains unfinished. The manual URL can change; future coverage comparisons must retain exact reference versions and available capabilities.
+**Current source:** LAMP 0.4.0-dev, Windows and Linux x86-64 and Apple Silicon macOS; published prerelease baseline 0.3.0. The feature inventory uses the [stable mpv manual](https://mpv.io/manual/stable/), reviewed on 2026-10-03. A [same-machine headless audio comparison](playback-benchmark.md) records mpv 0.41.0 and VLC 3.0.24, their build/executable identities and five audio fixtures. The complete comparator decoder/demuxer/output inventory remains unfinished. The manual URL can change; future coverage comparisons must retain exact reference versions and available capabilities.
 
 **Partial** means implemented within the linked limits. **In development** means components exist without end-to-end support. **Planned** means unavailable today. Milestone numbers refer to the [roadmap](../ROADMAP.md).
 
@@ -13,7 +13,7 @@ LAMP's long-term goal is to support everything relevant that mpv supports. This 
 | Other audio codecs | Planned | AAC/HE-AAC, ALAC, AC-3/E-AC-3, DTS, WavPack, APE, MPEG I/II and relevant legacy formats | 3 |
 | AIFF / AIFC | Partial; [1–32-bit PCM, byte-order/fixed-container variants, float32/64 and ordered CHAN layouts](aiff.md); direct seeking and declared-frame trimming | Compressed AIFC codecs, native surround output, newer/spatial layouts and exact fractional-rate output | 3 |
 | Containers and media structure | Partial; RIFF/RF64/BW64 and FORM AIFF/AIFC audio framing, plus single-stream Ogg within documented limits | MP4/MOV, Matroska/WebM, TS/PS, AVI/ASF, WAVE64/RIFX; ADM rendering, timestamps, attachments, chapters, editions and tags | 3 |
-| Audio output | Windows WASAPI; Mac Core Audio float stereo queues | Output-device selection/recovery, native multichannel, explicit resampling policy, exclusive mode and useful passthrough | 2–3 |
+| Audio output | Partial; shared-mode WASAPI on Windows; PulseAudio native protocol on Linux (PulseAudio or PipeWire's pulse server), [bit-exact null-sink checks](technical.md#linux); Mac Core Audio float stereo queues | Device selection/recovery, multichannel, explicit resampling, exclusive mode, direct ALSA output and useful passthrough | 2–3 |
 | Seeking and playback state | WAV and AIFF/AIFC direct; native FLAC tables/frame search; MP3 frame/reservoir index; Vorbis packet/overlap index; Opus packet index with pre-roll; PCM/reference and paused seeking verified | Broader reopen/latency measurements, resume, A-B loops, repeat, gapless playlists and speed/pitch controls | 2, 6 |
 | Video decoding and A/V sync | Planned | H.264, HEVC, VP9, AV1 and relevant legacy codecs; frame stepping and accurate synchronization | 4 |
 | Hardware acceleration | Planned | Supported Windows GPU profiles, measured hardware decode, explicit software fallback | 4 |
@@ -25,7 +25,7 @@ LAMP's long-term goal is to support everything relevant that mpv supports. This 
 | Controls and configuration | Partial | Configurable bindings, profiles, per-file options, track/chapter selection and accessible UI | 2, 6 |
 | Commands, IPC and scripting | Planned | Documented commands/properties/events, automation and a use-case-based scripting/compatibility design | 6 |
 | Filters, screenshots and diagnostics | Planned | Audio/video filters, equalization, screenshots, playback stats and useful export controls | 4, 6 |
-| Desktop platform coverage | Windows x86-64; [macOS 12+ ARM64 source build](macos.md) with AppKit/Core Audio and translated shared decoders | Mac manual desktop/Retina tests, asynchronous seek, device recovery and signed/notarized distribution; other platforms remain separate roadmap work | 0a, 6 |
+| Desktop platform coverage | Windows x86-64; Linux x86-64 static command line with playback; [macOS 12+ ARM64 source build](macos.md) with AppKit/Core Audio and translated shared decoders | Mac manual desktop/Retina tests, asynchronous seek, device recovery and signed/notarized distribution; Linux desktop window | 0a, 6 |
 
 Existing codec support is documented in [technical details](technical.md); [Mac notes](macos.md) distinguish native ARM64 verification from the earlier Windows reports. Small committed fixtures exercise WAV, AIFF, FLAC, MP3, Vorbis and Opus decoding/export; broader results live in [reports](../reports/README.md). These checks establish the documented prototype coverage, not complete conformance or a performance advantage over mpv.
 
