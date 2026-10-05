@@ -12,10 +12,11 @@ The demuxer selects one audio track: the first enabled audio track with a suppor
 | `A_VORBIS` | Vorbis (three Xiph-laced headers in CodecPrivate) |
 | `A_FLAC` | FLAC (`fLaC` and metadata blocks in CodecPrivate) |
 | `A_ALAC` | Apple Lossless (`ALACSpecificConfig` in CodecPrivate); see [MP4 notes](mp4.md#apple-lossless) |
+| `A_AAC` | [AAC-LC](aac.md) (AudioSpecificConfig in CodecPrivate); the legacy `A_AAC/MPEG2/...` and `A_AAC/MPEG4/...` IDs are not recognised |
 | `A_MPEG/L1`, `A_MPEG/L2`, `A_MPEG/L3` | MPEG audio Layers I–III, one frame per packet |
 | `A_PCM/INT/LIT`, `A_PCM/INT/BIG`, `A_PCM/FLOAT/IEEE` | PCM: unsigned 8-bit, signed 16/24/32-bit in either byte order, float32/64; 1–8 channels; integral 8–192 kHz SamplingFrequency |
 
-AAC, AC-3, E-AC-3, DTS and other CodecIDs are not decoded yet; such tracks are skipped.
+AC-3, E-AC-3, DTS and other CodecIDs are not decoded yet; such tracks are skipped.
 
 ## Structure
 
@@ -34,7 +35,7 @@ Seeking finds the packet holding the target and restarts there with the codec's 
 `python3 tests/verify-matroska.py` muxes fixtures with FFmpeg:
 
 - 24 files: Opus stereo/mono CBR/5.1 and Vorbis stereo/mono/5.1 as both `.mka` and `.webm`; FLAC 16/24-bit and 5.1; MP3; MP2; PCM s16/s24/s32be/f32/f64/u8 and 5.1. Mono and stereo outputs are compared with FFmpeg's decode of the same file: exact for FLAC and PCM, and within the codec suites' tolerances for Opus, Vorbis and MPEG audio. Opus and FLAC must also equal LAMP's decode of the same stream remuxed to Ogg, 5.1 PCM its WAV remux, and 5.1 Vorbis a direct Ogg encode.
-- A test-only muxer rewrites seven of them with Xiph, EBML and fixed lacing, unknown-size Segment and Clusters, a second track with FlagDefault, and an unsupported AAC track and a VP9 video track before the audio; all 42 variants decode identically.
+- A test-only muxer rewrites seven of them with Xiph, EBML and fixed lacing, unknown-size Segment and Clusters, a second track with FlagDefault, and an unsupported AC-3 track and a VP9 video track before the audio; all 42 variants decode identically.
 - 90 exact seeks on six files (Vorbis, FLAC, PCM, MP3, MP2, 5.1 Vorbis WebM) and ten Opus seeks equal to Ogg Opus seeks.
 - Nine malformed files reject: a truncated file, a wrong DocType, no supported audio, a ContentEncodings track, Opus without CodecPrivate, a corrupt FLAC frame, Xiph and fixed lacing that do not fit, and DiscardPadding before the last packet. Cancelled open and read stop cleanly, and a WebM Opus file plays through the Linux null sink.
 

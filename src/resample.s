@@ -297,6 +297,33 @@ LOCALFN rs_kernel
     ret
 ENDFN rs_kernel
 
+# XMM0=x -> XMM0=sin(pi x), from the same Taylor terms. Clobbers RAX, RCX,
+# RDX, XMM1-XMM2. Shared with the AAC window, transform and TNS tables.
+FN sin_pi
+    cvtsd2si rax, xmm0                    # nearest integer
+    cvtsi2sd xmm1, rax
+    subsd xmm0, xmm1                      # |f| <= 1/2
+    movapd xmm2, xmm0
+    mulsd xmm2, xmm2
+    lea rdx, [rip + rs_sin_terms]
+    movsd xmm1, [rdx]
+    mov ecx, 1
+.Lsin_pi_term:
+    mulsd xmm1, xmm2
+    addsd xmm1, [rdx + rcx*8]
+    inc ecx
+    cmp ecx, 12
+    jb .Lsin_pi_term
+    mulsd xmm0, xmm1
+    test eax, 1
+    jz .Lsin_pi_return
+    xorpd xmm1, xmm1
+    subsd xmm1, xmm0
+    movapd xmm0, xmm1
+.Lsin_pi_return:
+    ret
+ENDFN sin_pi
+
 # XMM0=y -> XMM0=I0(y), the zeroth-order modified Bessel function.
 LOCALFN rs_bessel_i0
     mulsd xmm0, xmm0

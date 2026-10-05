@@ -17,6 +17,7 @@
 .equ TK_VORBIS, 4
 .equ TK_OPUS, 5
 .equ TK_ALAC, 6
+.equ TK_AAC, 7
 .equ TK_ENTRY, 24                   # pointer, raw start sample, bytes, samples
 .equ TK_POINTER, 0
 .equ TK_START, 8
@@ -87,9 +88,13 @@ FN track_close
     call mp3_close
 .Ltk_close_alac:
     cmp dword ptr [rip + track_codec], TK_ALAC
-    jne .Ltk_close_done
+    jne .Ltk_close_aac
     call alac_track_close
     call flac_ogg_close
+.Ltk_close_aac:
+    cmp dword ptr [rip + track_codec], TK_AAC
+    jne .Ltk_close_done
+    call aac_track_close
 .Ltk_close_done:
     mov dword ptr [rip + track_active], 0
     mov dword ptr [rip + track_codec], 0
@@ -207,6 +212,8 @@ LOCALFN track_samples
     je .Ltk_samples_mpa
     cmp eax, TK_ALAC
     je .Ltk_samples_alac
+    cmp eax, TK_AAC
+    je .Ltk_samples_aac
     call pcm_track_samples
     jmp .Ltk_samples_return
 .Ltk_samples_opus:
@@ -226,6 +233,9 @@ LOCALFN track_samples
     jmp .Ltk_samples_return
 .Ltk_samples_alac:
     call alac_track_samples
+    jmp .Ltk_samples_return
+.Ltk_samples_aac:
+    call aac_track_samples
 .Ltk_samples_return:
     add rsp, 40
     ret
@@ -249,6 +259,8 @@ LOCALFN track_decode
     je .Ltk_decode_mpa
     cmp eax, TK_ALAC
     je .Ltk_decode_alac
+    cmp eax, TK_AAC
+    je .Ltk_decode_aac
     call pcm_track_decode
     jmp .Ltk_decode_return
 .Ltk_decode_opus:
@@ -268,6 +280,12 @@ LOCALFN track_decode
     jmp .Ltk_decode_return
 .Ltk_decode_alac:
     call alac_track_decode
+    jmp .Ltk_decode_return
+.Ltk_decode_aac:
+    call aac_track_decode
+    test eax, eax
+    jnz .Ltk_decode_return
+    mov eax, -1
 .Ltk_decode_return:
     add rsp, 40
     ret
@@ -283,9 +301,14 @@ LOCALFN track_reset_codec
     je .Ltk_reset_vorbis
     cmp eax, TK_FLAC
     je .Ltk_reset_flac
+    cmp eax, TK_AAC
+    je .Ltk_reset_aac
     cmp eax, TK_MPA
     jne .Ltk_reset_return
     call mpa_track_reset
+    jmp .Ltk_reset_return
+.Ltk_reset_aac:
+    call aac_track_reset
     jmp .Ltk_reset_return
 .Ltk_reset_opus:
     call opus_track_reset
@@ -329,6 +352,8 @@ FN track_finish
     je .Ltk_open_mpa
     cmp eax, TK_ALAC
     je .Ltk_open_alac
+    cmp eax, TK_AAC
+    je .Ltk_open_aac
     mov ecx, [rip + track_pcm_channels]
     mov edx, [rip + track_pcm_bits]
     mov r8d, [rip + track_pcm_flags]
@@ -336,6 +361,9 @@ FN track_finish
     jmp .Ltk_opened
 .Ltk_open_alac:
     call alac_track_open
+    jmp .Ltk_opened
+.Ltk_open_aac:
+    call aac_track_open
     jmp .Ltk_opened
 .Ltk_open_opus:
     call opus_track_open
@@ -610,8 +638,9 @@ ENDFN track_read
 # RCX=presented frame, on a freshly finished track -> RAX=resume frame at or
 # before it. Restarts at the packet holding the target, moved back by the
 # codec's pre-roll: Opus 80 ms, MPEG audio two frames (Layer III also earlier
-# frames holding up to 2 KiB of reservoir data), Vorbis one primer packet whose
-# output is skipped. FLAC and PCM packets decode independently.
+# frames holding up to 2 KiB of reservoir data), Vorbis and AAC one primer
+# packet whose output is skipped. FLAC, ALAC and PCM packets decode
+# independently.
 FN track_seek
     push rbx
     push rsi
@@ -660,7 +689,9 @@ FN track_seek
     cmp eax, TK_MPA
     je .Ltk_seek_mpa
     cmp eax, TK_VORBIS
-    je .Ltk_seek_vorbis
+    je .Ltk_seek_primer
+    cmp eax, TK_AAC
+    je .Ltk_seek_primer
     jmp .Ltk_seek_restart
 .Ltk_seek_opus:
     # Back up until at least 80 ms precede the target.
@@ -694,7 +725,8 @@ FN track_seek
     add rax, [rip + track_packets]
     add esi, [rax + TK_BYTES]
     jmp .Ltk_seek_mpa_back
-.Ltk_seek_vorbis:
+.Ltk_seek_primer:
+    # One primer packet rebuilds the overlap; its output is skipped.
     test rbx, rbx
     jz .Ltk_seek_restart
     lea rcx, [rbx - 1]
