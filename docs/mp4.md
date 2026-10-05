@@ -1,6 +1,6 @@
 # MP4, M4A and MOV audio
 
-LAMP 0.4.0-dev plays the audio track of ISO base media files (`.mp4`, `.m4a`) and QuickTime movies (`.mov`), including fragmented files. The demuxer (`src/mp4.s`) follows ISO/IEC 14496-12 and the QuickTime File Format and feeds the same packet track layer as [Matroska](matroska.md). Apple Lossless (`src/alac.s`) is a new decoder; the other codecs reuse LAMP's decoders.
+LAMP 0.4.0-dev plays the audio track of ISO base media files (`.mp4`, `.m4a`) and QuickTime movies (`.mov`), including fragmented files. The demuxer (`src/mp4.s`) follows ISO/IEC 14496-12 and the QuickTime File Format and feeds the same packet track layer as [Matroska](matroska.md). Apple Lossless (`src/alac.s`) and [AAC-LC](aac.md) (`src/aac.s`) are new decoders; the other codecs reuse LAMP's decoders.
 
 ## Track selection
 
@@ -9,13 +9,14 @@ A file is recognised by a leading `ftyp`, `moov`, `mdat`, `wide`, `free` or `ski
 | Sample entry | Decoder |
 | --- | --- |
 | `alac` | Apple Lossless: 16/20/24/32-bit, 1–8 channels in ALAC channel order, 8–192 kHz, frames of up to 65,536 samples |
+| `mp4a` with `esds` object type 0x40 or 0x67 | [AAC-LC](aac.md), configuration from the DecoderSpecificInfo |
 | `mp4a` with `esds` object type 0x6B or 0x69, `.mp3` | MPEG audio Layers I–III (MPEG-1 and MPEG-2 rates) |
 | `Opus` with `dOps` | Opus families 0/1 |
 | `fLaC` with `dfLa` | FLAC |
 | `twos`, `sowt`, `in24`, `in32`, `fl32`, `fl64`, `raw `, `lpcm` | QuickTime PCM: 8/16/24/32-bit integer and float32/64 in either byte order (`enda` inside `wave`), version 0/1/2 sound descriptions |
 | `ipcm`, `fpcm` with `pcmC` | ISO/IEC 23003-5 integer and float PCM |
 
-AAC (`esds` object type 0x40) is not decoded yet; such tracks are skipped like other unsupported entries.
+HE-AAC and other AAC object types reject when the track is opened (see [AAC notes](aac.md)); other sample entries are skipped.
 
 ## Samples and timing
 

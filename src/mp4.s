@@ -223,7 +223,8 @@ LOCALFN mp4_descriptor_length
 ENDFN mp4_descriptor_length
 
 # esds payload (RCX, end RDX) -> EAX=track codec: 3 for MPEG-1/2 audio
-# object types; 0 otherwise (AAC and others are not decoded yet).
+# object types, 7 for MPEG-4 audio and MPEG-2 AAC LC (configuration from the
+# DecoderSpecificInfo); 0 otherwise.
 LOCALFN mp4_esds
     push rbx
     sub rsp, 32
@@ -271,11 +272,33 @@ LOCALFN mp4_esds
     je .Lmp4_esds_mpa
     cmp eax, 0x6b                         # MPEG-1 audio
     je .Lmp4_esds_mpa
+    cmp eax, 0x40                         # MPEG-4 audio
+    je .Lmp4_esds_aac
+    cmp eax, 0x67                         # MPEG-2 AAC LC
+    je .Lmp4_esds_aac
 .Lmp4_esds_none:
     xor eax, eax
     jmp .Lmp4_esds_return
 .Lmp4_esds_mpa:
     mov eax, 3
+    jmp .Lmp4_esds_return
+.Lmp4_esds_aac:
+    # DecoderSpecificInfo after the 13 fixed bytes: the AudioSpecificConfig.
+    lea rax, [rcx + 14]
+    cmp rax, rdx
+    ja .Lmp4_esds_none
+    cmp byte ptr [rcx + 13], 5
+    jne .Lmp4_esds_none
+    add rcx, 14
+    call mp4_descriptor_length
+    cmp rax, -1
+    je .Lmp4_esds_none
+    lea r8, [rcx + rax]
+    cmp r8, rdx
+    ja .Lmp4_esds_none
+    mov [rip + mp4_config], rcx
+    mov [rip + mp4_config_bytes], eax
+    mov eax, 7
 .Lmp4_esds_return:
     add rsp, 32
     pop rbx

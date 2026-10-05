@@ -1,0 +1,708 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "tone.m4a",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "peak_error": 1.1920928955078125e-07,
+      "snr_db": 138.7,
+      "tools": [
+        "short windows",
+        "start/stop windows",
+        "KBD windows",
+        "mid/side",
+        "intensity",
+        "noise substitution",
+        "TNS",
+        "escape values",
+        "window groups",
+        "skipped elements"
+      ],
+      "stats": "codec=9 rate=44100 channels=2 bits=0 frames=66150 underruns=0 decode_error=0 audio_error=0 elapsed_ms=4 cpu_us=3895 endpoint_dry=0"
+    },
+    {
+      "test": "noise.m4a",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "peak_error": 8.940696716308594e-08,
+      "snr_db": 138.2,
+      "tools": [
+        "short windows",
+        "start/stop windows",
+        "KBD windows",
+        "mid/side",
+        "intensity",
+        "noise substitution",
+        "escape values",
+        "window groups",
+        "skipped elements"
+      ],
+      "stats": "codec=9 rate=44100 channels=2 bits=0 frames=66150 underruns=0 decode_error=0 audio_error=0 elapsed_ms=4 cpu_us=4139 endpoint_dry=0"
+    },
+    {
+      "test": "noise.aac",
+      "result": "exact",
+      "comparator": "noise.m4a after priming"
+    },
+    {
+      "test": "noise.mka",
+      "result": "exact",
+      "comparator": "noise.m4a after priming"
+    },
+    {
+      "test": "noise.frag.m4a",
+      "result": "exact",
+      "comparator": "noise.m4a after priming"
+    },
+    {
+      "test": "noise-48k-low.m4a",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "peak_error": 5.960464477539063e-08,
+      "snr_db": 138.6,
+      "tools": [
+        "short windows",
+        "start/stop windows",
+        "KBD windows",
+        "mid/side",
+        "intensity",
+        "noise substitution",
+        "escape values",
+        "window groups",
+        "skipped elements"
+      ],
+      "stats": "codec=9 rate=48000 channels=2 bits=0 frames=72000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=4 cpu_us=3363 endpoint_dry=0"
+    },
+    {
+      "test": "noise-320k.m4a",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "peak_error": 7.450580596923828e-08,
+      "snr_db": 138.3,
+      "tools": [
+        "short windows",
+        "start/stop windows",
+        "KBD windows",
+        "mid/side",
+        "intensity",
+        "noise substitution",
+        "escape values",
+        "window groups",
+        "skipped elements"
+      ],
+      "stats": "codec=9 rate=48000 channels=2 bits=0 frames=72000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=4 cpu_us=5161 endpoint_dry=0"
+    },
+    {
+      "test": "transients.m4a",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "peak_error": 2.384185791015625e-07,
+      "snr_db": 140.0,
+      "tools": [
+        "short windows",
+        "start/stop windows",
+        "KBD windows",
+        "mid/side",
+        "intensity",
+        "noise substitution",
+        "escape values",
+        "window groups",
+        "skipped elements"
+      ],
+      "stats": "codec=9 rate=48000 channels=2 bits=0 frames=72000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=4 cpu_us=3684 endpoint_dry=0"
+    },
+    {
+      "test": "transients.aac",
+      "result": "exact",
+      "comparator": "transients.m4a after priming"
+    },
+    {
+      "test": "transients.mka",
+      "result": "exact",
+      "comparator": "transients.m4a after priming"
+    },
+    {
+      "test": "transients.frag.m4a",
+      "result": "exact",
+      "comparator": "transients.m4a after priming"
+    },
+    {
+      "test": "mono.m4a",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "peak_error": 8.940696716308594e-08,
+      "snr_db": 138.3,
+      "tools": [
+        "short windows",
+        "start/stop windows",
+        "KBD windows",
+        "noise substitution",
+        "escape values",
+        "window groups",
+        "skipped elements"
+      ],
+      "stats": "codec=9 rate=22050 channels=1 bits=0 frames=33075 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1942 endpoint_dry=0"
+    },
+    {
+      "test": "mono.aac",
+      "result": "exact",
+      "comparator": "mono.m4a after priming"
+    },
+    {
+      "test": "mono.mka",
+      "result": "exact",
+      "comparator": "mono.m4a after priming"
+    },
+    {
+      "test": "mono.frag.m4a",
+      "result": "exact",
+      "comparator": "mono.m4a after priming"
+    },
+    {
+      "test": "fast-coder.m4a",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "peak_error": 7.450580596923828e-08,
+      "snr_db": 138.4,
+      "tools": [
+        "short windows",
+        "start/stop windows",
+        "KBD windows",
+        "mid/side",
+        "intensity",
+        "escape values",
+        "window groups",
+        "skipped elements"
+      ],
+      "stats": "codec=9 rate=44100 channels=2 bits=0 frames=66150 underruns=0 decode_error=0 audio_error=0 elapsed_ms=4 cpu_us=3857 endpoint_dry=0"
+    },
+    {
+      "test": "no-ms-is.m4a",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "peak_error": 8.940696716308594e-08,
+      "snr_db": 138.1,
+      "tools": [
+        "short windows",
+        "start/stop windows",
+        "KBD windows",
+        "noise substitution",
+        "escape values",
+        "window groups",
+        "skipped elements"
+      ],
+      "stats": "codec=9 rate=44100 channels=2 bits=0 frames=66150 underruns=0 decode_error=0 audio_error=0 elapsed_ms=4 cpu_us=4001 endpoint_dry=0"
+    },
+    {
+      "test": "plain.m4a",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "peak_error": 8.940696716308594e-08,
+      "snr_db": 138.5,
+      "tools": [
+        "short windows",
+        "start/stop windows",
+        "KBD windows",
+        "mid/side",
+        "escape values",
+        "window groups",
+        "skipped elements"
+      ],
+      "stats": "codec=9 rate=44100 channels=2 bits=0 frames=66150 underruns=0 decode_error=0 audio_error=0 elapsed_ms=4 cpu_us=3894 endpoint_dry=0"
+    },
+    {
+      "test": "tone-no-pns.m4a",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "peak_error": 1.7881393432617188e-07,
+      "snr_db": 138.9,
+      "tools": [
+        "short windows",
+        "start/stop windows",
+        "KBD windows",
+        "mid/side",
+        "intensity",
+        "TNS",
+        "escape values",
+        "window groups",
+        "skipped elements"
+      ],
+      "stats": "codec=9 rate=48000 channels=2 bits=0 frames=72000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=3750 endpoint_dry=0"
+    },
+    {
+      "test": "noise-no-pns.m4a",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "peak_error": 5.960464477539063e-08,
+      "snr_db": 138.4,
+      "tools": [
+        "short windows",
+        "start/stop windows",
+        "KBD windows",
+        "mid/side",
+        "intensity",
+        "escape values",
+        "window groups",
+        "skipped elements"
+      ],
+      "stats": "codec=9 rate=44100 channels=2 bits=0 frames=66150 underruns=0 decode_error=0 audio_error=0 elapsed_ms=4 cpu_us=3803 endpoint_dry=0"
+    },
+    {
+      "test": "rate-8000.m4a",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "peak_error": 1.043081283569336e-07,
+      "snr_db": 139.5,
+      "tools": [
+        "short windows",
+        "start/stop windows",
+        "KBD windows",
+        "mid/side",
+        "TNS",
+        "escape values",
+        "window groups",
+        "skipped elements"
+      ],
+      "stats": "codec=9 rate=8000 channels=2 bits=0 frames=12000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=1472 endpoint_dry=0"
+    },
+    {
+      "test": "rate-8000.aac",
+      "result": "exact",
+      "comparator": "rate-8000.m4a after priming"
+    },
+    {
+      "test": "rate-8000.mka",
+      "result": "exact",
+      "comparator": "rate-8000.m4a after priming"
+    },
+    {
+      "test": "rate-8000.frag.m4a",
+      "result": "exact",
+      "comparator": "rate-8000.m4a after priming"
+    },
+    {
+      "test": "rate-11025.m4a",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "peak_error": 5.960464477539063e-08,
+      "snr_db": 138.5,
+      "tools": [
+        "short windows",
+        "start/stop windows",
+        "KBD windows",
+        "mid/side",
+        "noise substitution",
+        "escape values",
+        "window groups",
+        "skipped elements"
+      ],
+      "stats": "codec=9 rate=11025 channels=2 bits=0 frames=16538 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1654 endpoint_dry=0"
+    },
+    {
+      "test": "rate-12000.m4a",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "peak_error": 1.4901161193847656e-07,
+      "snr_db": 138.5,
+      "tools": [
+        "short windows",
+        "start/stop windows",
+        "KBD windows",
+        "mid/side",
+        "noise substitution",
+        "escape values",
+        "window groups",
+        "skipped elements"
+      ],
+      "stats": "codec=9 rate=12000 channels=2 bits=0 frames=18000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=1837 endpoint_dry=0"
+    },
+    {
+      "test": "rate-16000.m4a",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "peak_error": 1.1920928955078125e-07,
+      "snr_db": 139.1,
+      "tools": [
+        "short windows",
+        "start/stop windows",
+        "KBD windows",
+        "mid/side",
+        "noise substitution",
+        "TNS",
+        "escape values",
+        "window groups",
+        "skipped elements"
+      ],
+      "stats": "codec=9 rate=16000 channels=2 bits=0 frames=24000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2012 endpoint_dry=0"
+    },
+    {
+      "test": "rate-22050.m4a",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "peak_error": 1.1920928955078125e-07,
+      "snr_db": 138.7,
+      "tools": [
+        "short windows",
+        "start/stop windows",
+        "KBD windows",
+        "mid/side",
+        "intensity",
+        "noise substitution",
+        "TNS",
+        "escape values",
+        "window groups",
+        "skipped elements"
+      ],
+      "stats": "codec=9 rate=22050 channels=2 bits=0 frames=33075 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=2754 endpoint_dry=0"
+    },
+    {
+      "test": "rate-24000.m4a",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "peak_error": 1.1920928955078125e-07,
+      "snr_db": 138.4,
+      "tools": [
+        "short windows",
+        "start/stop windows",
+        "KBD windows",
+        "mid/side",
+        "intensity",
+        "noise substitution",
+        "TNS",
+        "escape values",
+        "window groups",
+        "skipped elements"
+      ],
+      "stats": "codec=9 rate=24000 channels=2 bits=0 frames=36000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=2736 endpoint_dry=0"
+    },
+    {
+      "test": "rate-32000.m4a",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "peak_error": 1.7881393432617188e-07,
+      "snr_db": 138.8,
+      "tools": [
+        "short windows",
+        "start/stop windows",
+        "KBD windows",
+        "mid/side",
+        "intensity",
+        "noise substitution",
+        "escape values",
+        "window groups",
+        "skipped elements"
+      ],
+      "stats": "codec=9 rate=32000 channels=2 bits=0 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2962 endpoint_dry=0"
+    },
+    {
+      "test": "rate-64000.m4a",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "peak_error": 1.1920928955078125e-07,
+      "snr_db": 139.3,
+      "tools": [
+        "short windows",
+        "start/stop windows",
+        "KBD windows",
+        "mid/side",
+        "intensity",
+        "noise substitution",
+        "TNS",
+        "escape values",
+        "window groups",
+        "skipped elements"
+      ],
+      "stats": "codec=9 rate=64000 channels=2 bits=0 frames=96000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=4 cpu_us=4252 endpoint_dry=0"
+    },
+    {
+      "test": "rate-88200.m4a",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "peak_error": 1.1920928955078125e-07,
+      "snr_db": 139.2,
+      "tools": [
+        "short windows",
+        "start/stop windows",
+        "KBD windows",
+        "mid/side",
+        "intensity",
+        "noise substitution",
+        "TNS",
+        "escape values",
+        "window groups",
+        "skipped elements"
+      ],
+      "stats": "codec=9 rate=88200 channels=2 bits=0 frames=132300 underruns=0 decode_error=0 audio_error=0 elapsed_ms=5 cpu_us=5151 endpoint_dry=0"
+    },
+    {
+      "test": "rate-96000.m4a",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "peak_error": 1.4901161193847656e-07,
+      "snr_db": 139.2,
+      "tools": [
+        "short windows",
+        "start/stop windows",
+        "KBD windows",
+        "mid/side",
+        "intensity",
+        "noise substitution",
+        "TNS",
+        "escape values",
+        "window groups",
+        "skipped elements"
+      ],
+      "stats": "codec=9 rate=96000 channels=2 bits=0 frames=144000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=6 cpu_us=5817 endpoint_dry=0"
+    },
+    {
+      "test": "rate-96000.aac",
+      "result": "exact",
+      "comparator": "rate-96000.m4a after priming"
+    },
+    {
+      "test": "rate-96000.mka",
+      "result": "exact",
+      "comparator": "rate-96000.m4a after priming"
+    },
+    {
+      "test": "rate-96000.frag.m4a",
+      "result": "exact",
+      "comparator": "rate-96000.m4a after priming"
+    },
+    {
+      "test": "layout-3.0.m4a",
+      "result": "matched",
+      "comparator": "FFmpeg channels mixed with LAMP weights (3.0)",
+      "peak_error": 4.470348358154297e-08,
+      "snr_db": 138.0,
+      "tools": [
+        "short windows",
+        "start/stop windows",
+        "KBD windows",
+        "noise substitution",
+        "escape values",
+        "window groups",
+        "skipped elements"
+      ],
+      "stats": "codec=9 rate=48000 channels=3 bits=0 frames=72000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=5 cpu_us=5311 endpoint_dry=0"
+    },
+    {
+      "test": "layout-4.0.m4a",
+      "result": "matched",
+      "comparator": "FFmpeg channels mixed with LAMP weights (4.0)",
+      "peak_error": 2.9802322387695312e-08,
+      "snr_db": 138.1,
+      "tools": [
+        "short windows",
+        "start/stop windows",
+        "KBD windows",
+        "noise substitution",
+        "escape values",
+        "window groups",
+        "skipped elements"
+      ],
+      "stats": "codec=9 rate=48000 channels=4 bits=0 frames=72000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=6 cpu_us=6787 endpoint_dry=0"
+    },
+    {
+      "test": "layout-5.0.m4a",
+      "result": "matched",
+      "comparator": "FFmpeg channels mixed with LAMP weights (5.0)",
+      "peak_error": 4.470348358154297e-08,
+      "snr_db": 138.2,
+      "tools": [
+        "short windows",
+        "start/stop windows",
+        "KBD windows",
+        "noise substitution",
+        "escape values",
+        "window groups",
+        "skipped elements"
+      ],
+      "stats": "codec=9 rate=48000 channels=5 bits=0 frames=72000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=7 cpu_us=7831 endpoint_dry=0"
+    },
+    {
+      "test": "layout-5.1.m4a",
+      "result": "matched",
+      "comparator": "FFmpeg channels mixed with LAMP weights (5.1)",
+      "peak_error": 3.725290298461914e-08,
+      "snr_db": 138.1,
+      "tools": [
+        "short windows",
+        "start/stop windows",
+        "KBD windows",
+        "noise substitution",
+        "escape values",
+        "window groups",
+        "skipped elements"
+      ],
+      "stats": "codec=9 rate=48000 channels=6 bits=0 frames=72000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=8 cpu_us=8291 endpoint_dry=0"
+    },
+    {
+      "test": "layout-5.1.aac",
+      "result": "exact",
+      "comparator": "layout-5.1.m4a after priming"
+    },
+    {
+      "test": "layout-5.1.mka",
+      "result": "exact",
+      "comparator": "layout-5.1.m4a after priming"
+    },
+    {
+      "test": "layout-5.1.frag.m4a",
+      "result": "exact",
+      "comparator": "layout-5.1.m4a after priming"
+    },
+    {
+      "test": "layout-7.1.m4a",
+      "result": "matched",
+      "comparator": "FFmpeg channels mixed with LAMP weights (7.1)",
+      "peak_error": 3.725290298461914e-08,
+      "snr_db": 138.1,
+      "tools": [
+        "short windows",
+        "start/stop windows",
+        "KBD windows",
+        "escape values",
+        "window groups",
+        "skipped elements"
+      ],
+      "stats": "codec=9 rate=48000 channels=8 bits=0 frames=72000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=10 cpu_us=10238 endpoint_dry=0"
+    },
+    {
+      "test": "48 random streams",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "minimum_snr_db": 138.0,
+      "tools": [
+        "short windows",
+        "start/stop windows",
+        "KBD windows",
+        "mid/side",
+        "intensity",
+        "noise substitution",
+        "TNS",
+        "pulses",
+        "escape values",
+        "window groups",
+        "skipped elements"
+      ]
+    },
+    {
+      "test": "correlated-noise.aac",
+      "result": "identical channels",
+      "note": "FFmpeg 6.1 draws independent noise for these bands"
+    },
+    {
+      "test": "tone-no-pns.m4a seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":4765,\"maximum_discarded\":1023,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0}"
+    },
+    {
+      "test": "noise-no-pns.m4a seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":6088,\"maximum_discarded\":1023,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0}"
+    },
+    {
+      "test": "plain.m4a seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":6088,\"maximum_discarded\":1023,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0}"
+    },
+    {
+      "test": "noise-no-pns.aac seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":7421,\"maximum_discarded\":1024,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0}"
+    },
+    {
+      "test": "bad-sbr-fill.aac",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "bad-coupling-element.aac",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "bad-gain-control.aac",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "bad-prediction.aac",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "bad-main-profile.aac",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "bad-reserved-book.aac",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":100}"
+    },
+    {
+      "test": "bad-intensity-single.aac",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":100}"
+    },
+    {
+      "test": "bad-escape-overflow.aac",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":100}"
+    },
+    {
+      "test": "bad-scalefactor-range.aac",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":100}"
+    },
+    {
+      "test": "bad-max-sfb.aac",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":100}"
+    },
+    {
+      "test": "bad-short-pulse.aac",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":100}"
+    },
+    {
+      "test": "bad-element-layout.aac",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":100}"
+    },
+    {
+      "test": "bad-packet-overrun.aac",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":100}"
+    },
+    {
+      "test": "bad-truncated-frame.aac",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":100}"
+    },
+    {
+      "test": "bad-he-aac-object.m4a",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "bad-object-escape.m4a",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "cancel-open noise.m4a",
+      "result": "{\"result\":\"cancelled\"}"
+    },
+    {
+      "test": "cancel-read noise.m4a",
+      "result": "{\"result\":\"cancelled\",\"frames_before_cancel\":36864}"
+    },
+    {
+      "test": "AAC playback",
+      "result": "played",
+      "stats": "Playing. Space: pause / resume. Q or Ctrl+C: stop. codec=9 rate=44100 channels=2 bits=0 frames=66150 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3600 cpu_us=5547 endpoint_dry=0"
+    }
+  ],
+  "rejections": 16,
+  "scope": "AAC-LC in MP4/M4A, ADTS and Matroska: FFmpeg-encoded fixtures at all twelve rates, mono to 7.1, against FFmpeg (multichannel via LAMP mix weights); cross-container exactness; random valid streams with every coding tool; ISO noise correlation; exact seeks without PNS; malformed and unsupported streams; cancellation."
+}

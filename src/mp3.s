@@ -7,6 +7,7 @@
 .globl mp3_index_count, mp3_index_stride, mp3_seek_headers
 .globl mp_layer, mp_kbps, mp_header, mp_frame_bytes, mp_crc_bytes, mp_bit_pos, mp_bit_limit, mp_bit_base
 .globl mp_samples, mp_channels, mp_version, mp_sr_index, mp_pcm, mp_frame_end
+.globl mp_pow43
 .globl mp_aa, mp_twid9, mp_mdct_win, mp_twid3, mp_synth_win, mp_dct9, mp_dct_sec
 
 RODATA

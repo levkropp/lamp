@@ -7,7 +7,7 @@
 .globl decoder_seek_probes, flac_ogg_index_count, flac_ogg_index_stride, flac_declared_frames
 .globl maximum_block, pcm_channel_mask, pcm_mask_seen, pcm_ignore_extra, pcm_mix, frame_samples, frame_used
 .globl flac_channel_ptrs
-.globl pcm_speaker_weights
+.globl pcm_speaker_weights, pcm_mix_coeff
 
 .data
 sample_rate: .long 0
@@ -224,10 +224,23 @@ LOCALFN decoder_open_format
     je .Lopen_mp4
     mov rcx, [rip + input_cursor]
     mov rdx, [rip + input_end]
+    call adts_probe                 # ADTS AAC; MPEG audio never uses layer 0
+    test eax, eax
+    jnz .Lopen_adts
+    mov rcx, [rip + input_cursor]
+    mov rdx, [rip + input_end]
     call mp3_open
     test eax, eax
     jz .Lopen_bad
     mov dword ptr [rip + codec_kind], 3
+    leave
+    ret
+.Lopen_adts:
+    mov rcx, [rip + input_cursor]
+    mov rdx, [rip + input_end]
+    call adts_open
+    test eax, eax
+    jz .Lopen_bad
     leave
     ret
 .Lopen_aiff:
@@ -1642,7 +1655,7 @@ ENDFN flac_parse_comments
 # Original stereo rendering policy. Canonical layouts match RFC 7845 gains,
 # reordered into FLAC/WAVE order. Unassigned channels have zero coefficients.
 # Normalize the larger row sum to 1 (<=4 speakers) or 2 (>=5 speakers).
-LOCALFN pcm_build_mix
+FN pcm_build_mix
     cmp dword ptr [rip + pcm_mask_seen], 0
     jne .Lmix_mask_ready
     mov eax, [rip + source_channels]

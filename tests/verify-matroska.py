@@ -78,7 +78,9 @@ def parse(path):
     number = None
     for ident, a, b in elements(data, segment[1], segment[2]):
         if ident == 0x1654AE6B:
-            for _, ta, tb in elements(data, a, b):
+            for entry, ta, tb in elements(data, a, b):
+                if entry != 0xAE:                      # TrackEntry; FFmpeg also writes CRC-32
+                    continue
                 fields = {i: data[pa:pb] for i, pa, pb in elements(data, ta, tb)}
                 if int.from_bytes(fields.get(0x83, b'\0'), 'big') == 2 and number is None:
                     number = int.from_bytes(fields[0xD7], 'big')
@@ -297,7 +299,7 @@ def main():
                                                                       element(0x86, b'A_OPUS') +
                                                                       element(0x63A2, b'OpusHead\x01\x02\x00\x00\x80\xbb\x00\x00\x00\x00\x00')])),
                  ('unsupported-first', dict(number=3, selected_default=0,
-                                            extra_tracks=[uint(0xD7, 1) + uint(0x83, 2) + element(0x86, b'A_AAC'),
+                                            extra_tracks=[uint(0xD7, 1) + uint(0x83, 2) + element(0x86, b'A_AC3'),
                                                           uint(0xD7, 2) + uint(0x83, 1) + element(0x86, b'V_VP9')]))]
         for label, options in cases:
             variant = work / f'{Path(name).stem}-{label}.mka'
@@ -342,7 +344,7 @@ def main():
         checks.append({'test': target.name, 'result': 'rejected', 'oracle': line})
     reject('truncated', good[:len(good) - 1000])
     reject('doctype', good.replace(b'matroska', b'matrosky', 1))
-    reject('no-audio', mux(dict(track, codec='A_AAC')))
+    reject('no-audio', mux(dict(track, codec='A_AC3')))
     encodings = element(0x6D80, element(0x6240, uint(0x5034, 1) + element(0x5035, uint(0x4254, 3))))
     reject('encoded', rebuild_with(track, encodings))
     opus = parse(work / 'opus-stereo.mka')

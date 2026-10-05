@@ -7,7 +7,7 @@
 # 16/20/24/32-bit, 1-8 channels in ALAC channel order, mixed to stereo with
 # the shared WAVE speaker weights.
 .include "lamp.inc"
-.globl alac_frame_length
+.globl alac_frame_length, alac_wave_index, alac_masks
 
 .equ AL_PB, 4
 .equ AL_MB, 5

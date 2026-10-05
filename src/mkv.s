@@ -72,6 +72,9 @@ mkv_codecs:
     .byte 6
     .ascii "A_ALAC"
     .byte 6, 0
+    .byte 5
+    .ascii "A_AAC"
+    .byte 7, 0
     .byte 0
 .p2align 3
 
@@ -922,7 +925,7 @@ FN mkv_open
     je .Lmkv_config_pcm
     cmp eax, 3
     je .Lmkv_finish
-    test rcx, rcx                        # Opus, FLAC and ALAC need CodecPrivate
+    test rcx, rcx                        # Opus, FLAC, ALAC and AAC need CodecPrivate
     jz .Lmkv_open_bad
     jmp .Lmkv_finish
 .Lmkv_config_vorbis:

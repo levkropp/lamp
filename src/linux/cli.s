@@ -10,8 +10,8 @@
 .data
 usage:
     .ascii "LAMP 0.4.0-dev - Lev's Assembly Media Player\n"
-    .ascii "Handwritten x86-64 assembly: PCM, FLAC, ALAC, MP1/MP2/MP3, Vorbis, Opus\n"
-    .ascii "in WAV, AIFF/AIFC, FLAC, MP3, Ogg, Matroska/WebM and MP4/MOV files.\n"
+    .ascii "Handwritten x86-64 assembly: PCM, FLAC, ALAC, MP1/MP2/MP3, AAC-LC, Vorbis, Opus\n"
+    .ascii "in WAV, AIFF/AIFC, FLAC, MP3, AAC (ADTS), Ogg, Matroska/WebM and MP4/MOV files.\n"
     .ascii "Usage: lamp-cli file.mp3\n"
     .ascii "       lamp-cli --check file.flac\n"
     .ascii "       lamp-cli --decode file.flac output.f32\n"
@@ -20,7 +20,7 @@ usage:
     .ascii "AIFF/AIFC: signed PCM 1..32 bits or float32/64, 1..8 channels.\n"
     .ascii "Native FLAC: 4..32 bit, 1..8 channels, speaker-mask-aware downmix.\n"
     .asciz "Opus families 0/1; playback and float export output stereo.\n"
-open_error: .asciz "Unsupported, malformed, or inaccessible file. Supports WAV, AIFF/AIFC, FLAC, MP1/MP2/MP3, Ogg (Vorbis, Opus, FLAC), Matroska/WebM and MP4/MOV audio.\n"
+open_error: .asciz "Unsupported, malformed, or inaccessible file. Supports WAV, AIFF/AIFC, FLAC, MP1/MP2/MP3, AAC-LC, Ogg (Vorbis, Opus, FLAC), Matroska/WebM and MP4/MOV audio.\n"
 output_error: .asciz "Cannot create output file.\n"
 stats_a: .asciz "codec="
 stats_b: .asciz " rate="
