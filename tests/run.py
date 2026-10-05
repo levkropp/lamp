@@ -56,6 +56,8 @@ def main():
     step(TESTS / 'verify-opus-multichannel.py')
     step(TESTS / 'verify-seek.py')
     step(TESTS / 'verify-containers.py')
+    step(TESTS / 'verify-resample.py')
+    step(TESTS / 'verify-ogg-chain.py')
     if not WINDOWS and not playback:
         step(TESTS / 'verify-playback.py')
     if '--skip-network' not in arguments:

@@ -92,10 +92,10 @@ FN engine_start
     mov [rip + terminal_changed], eax
     mov r13d, 0                        # exit code
     mov eax, [rip + engine_seek_seconds]
-    mul dword ptr [rip + sample_rate]
+    mul dword ptr [rip + output_rate]
     shl rdx, 32
     or rax, rdx
-    mov rcx, [rip + total_frames]
+    mov rcx, [rip + output_frames]
     test rcx, rcx
     jz .Leng_seek_ready
     cmp rax, rcx
@@ -141,7 +141,7 @@ FN engine_start
     test rax, rax
     jz .Leng_audio_error
     # Prebuffer three quarters of a second, or the whole stream if shorter.
-    mov eax, [rip + sample_rate]
+    mov eax, [rip + output_rate]
     imul eax, eax, 3
     shr eax, 2
     cmp eax, RING_FRAMES / 2
@@ -172,7 +172,7 @@ FN engine_start
     cmp qword ptr [rip + write_count], 0
     je .Leng_stopped
     mov dword ptr [rip + audio_status], 2
-    mov ecx, [rip + sample_rate]
+    mov ecx, [rip + output_rate]
     mov edx, BUFFER_MS
     call pulse_create_stream
     test eax, eax
@@ -661,7 +661,7 @@ LOCALFN producer
     call poll_wait
     jmp .Lprod_loop
 .Lprod_eof:
-    mov rax, [rip + total_frames]
+    mov rax, [rip + output_frames]
     test rax, rax
     jz .Lprod_exit
     cmp rax, [rip + decoded_count]

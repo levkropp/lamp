@@ -19,7 +19,8 @@ mutate('vorbis-channel-zero',b=>b[39]=0);
 mutate('vorbis-block-order',b=>b[56]=0x67);
 mutate('vorbis-ident-version',b=>b[35]=1);
 emit('ogg-truncated',original.subarray(0,original.length-1),false);
-emit('ogg-chained',Buffer.concat([original,original]),false);
+// Chained links are valid (verify-ogg-chain.py); a page of the same stream after its EOS is not.
+emit('ogg-after-eos',Buffer.concat([original,original.subarray(original.lastIndexOf('OggS'))]),false);
 // Large comment packet crosses multiple pages; final lace is exactly 255.
 const packets=repacket(original), vendor=Buffer.alloc(130050,65);
 const comment=Buffer.alloc(7+4+vendor.length+4+1);comment.write('\x03vorbis');comment.writeUInt32LE(vendor.length,7);vendor.copy(comment,11);comment[comment.length-1]=1;

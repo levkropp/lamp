@@ -1,6 +1,6 @@
 # Vorbis input, native PCM and stereo output
 
-LAMP 0.4.0-dev decodes one Ogg/Vorbis logical stream with **1–255 channels**, floor 1, residue types 0/1/2 and mapping type 0. Rates are 8–192 kHz and block sizes are 64–8192 samples. Ordered, unordered and sparse codebooks, lookup types 0/1/2, up to 256 coupling steps and 16 submaps are supported. All channels are decoded and checked, including channels excluded from stereo output. Chained/multiplexed Ogg, floor 0 and corruption recovery remain unsupported.
+LAMP 0.4.0-dev decodes one Ogg/Vorbis logical stream with **1–255 channels**, floor 1, residue types 0/1/2 and mapping type 0. Rates are 8–192 kHz and block sizes are 64–8192 samples. Ordered, unordered and sparse codebooks, lookup types 0/1/2, up to 256 coupling steps and 16 submaps are supported. All channels are decoded and checked, including channels excluded from stereo output. Floor 0 and corruption recovery remain unsupported. Chained and multiplexed files open each link's Vorbis stream separately; see [Ogg notes](ogg.md).
 
 ## Channel policy
 

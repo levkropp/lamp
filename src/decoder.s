@@ -4,7 +4,7 @@
 # The decoder is single-instance and only called by the producer thread.
 .include "lamp.inc"
 .globl sample_rate, source_channels, source_bits, decode_error, total_frames, codec_kind
-.globl decoder_seek_probes
+.globl decoder_seek_probes, flac_ogg_index_count, flac_ogg_index_stride
 .globl pcm_speaker_weights
 
 .data
@@ -74,6 +74,12 @@ scale24: .long 0x34000000
 scale32: .long 0x30000000
 float_scale: .float 0.0
 flac_extra: .quad 0
+flac_packet_mode: .long 0          # FLAC-in-Ogg: one frame per Ogg packet
+flac_packet_final: .long 0
+flac_ogg_index: .quad 0
+flac_ogg_index_count: .long 0
+flac_ogg_index_stride: .quad 1
+flac_declared_frames: .quad 0
 flac_channel_ptrs: .zero 8*8
 pcm_channel_mask: .long 0
 pcm_mask_seen: .long 0
@@ -116,10 +122,33 @@ lpc_coeff: .zero 32*8
 crc8_table: .zero 256
 crc16_table: .zero 256*2
 wav_table_bits: .zero 64*8   # at most 4096 ds64 entries, consumed once
+fo_audio_checkpoint: .zero 2*8
+fo_scan_checkpoint: .zero 2*8
 
 .text
 .include "aiff.inc"
+# RCX=native path -> EAX=1. Publishes output_rate/output_frames, the rate and
+# length of the PCM that decoder_read returns; for a chained Ogg stream these
+# differ from the current link's sample_rate/total_frames.
 FN decoder_open
+    sub rsp, 40
+    mov dword ptr [rip + output_rate], 0
+    mov qword ptr [rip + output_frames], 0
+    call decoder_open_format
+    test eax, eax
+    jz .Lopen_published
+    cmp dword ptr [rip + chain_active], 0
+    jne .Lopen_published
+    mov ecx, [rip + sample_rate]
+    mov [rip + output_rate], ecx
+    mov rcx, [rip + total_frames]
+    mov [rip + output_frames], rcx
+.Lopen_published:
+    add rsp, 40
+    ret
+ENDFN decoder_open
+
+LOCALFN decoder_open_format
     push rbp
     mov rbp, rsp
     sub rsp, 80
@@ -149,6 +178,7 @@ FN decoder_open
     mov dword ptr [rip + wav_valid_bits], 0
     mov dword ptr [rip + pcm_big_endian], 0
     mov dword ptr [rip + pcm_signed8], 0
+    mov dword ptr [rip + flac_packet_mode], 0
     call file_map               # read-only view; empty or unreadable files fail
     mov [rip + map_token], r8
     mov [rip + file_size], rdx
@@ -192,34 +222,12 @@ FN decoder_open
     leave
     ret
 .Lopen_ogg:
-    # Bounded codec signature probe; each codec validates its full Ogg stream.
-    mov rax, [rip + input_cursor]
-    lea r8, [rax + 27]
-    cmp r8, [rip + input_end]
-    ja .Lopen_bad
-    movzx ecx, byte ptr [rax + 26]
-    lea r8, [rax + rcx + 27]
-    lea r9, [r8 + 8]
-    cmp r9, [rip + input_end]
-    ja .Lopen_bad
-    mov r9, 0x646165487375704f
-    cmp [r8], r9
-    jne .Lopen_vorbis
+    # Chained links and multiplexed streams; each link's codec validates it.
     mov rcx, [rip + input_cursor]
     mov rdx, [rip + input_end]
-    call opus_open
+    call chain_open
     test eax, eax
     jz .Lopen_bad
-    mov dword ptr [rip + codec_kind], 5
-    leave
-    ret
-.Lopen_vorbis:
-    mov rcx, [rip + input_cursor]
-    mov rdx, [rip + input_end]
-    call vorbis_open
-    test eax, eax
-    jz .Lopen_bad
-    mov dword ptr [rip + codec_kind], 4
     leave
     ret
 .Lopen_bad:
@@ -559,42 +567,10 @@ FN decoder_open
     jnz .Lopen_bad
     cmp edx, 34
     jne .Lopen_bad
-    movzx ecx, word ptr [rax]
-    rol cx, 8
-    cmp ecx, 16
-    jb .Lopen_bad
-    mov [rip + minimum_block], ecx
-    movzx edx, word ptr [rax + 2]
-    rol dx, 8
-    cmp edx, ecx
-    jb .Lopen_bad
-    mov [rip + maximum_block], edx
-    mov rdx, [rax + 10]
-    bswap rdx
-    mov rcx, rdx
-    shr rcx, 44
-    mov [rip + sample_rate], ecx
-    cmp ecx, 8000
-    jb .Lopen_bad
-    cmp ecx, 192000
-    ja .Lopen_bad
-    mov rcx, rdx
-    shr rcx, 41
-    and ecx, 7
-    inc ecx
-    mov [rip + source_channels], ecx
-    mov rcx, rdx
-    shr rcx, 36
-    and ecx, 31
-    inc ecx
-    cmp ecx, 4
-    jb .Lopen_bad
-    cmp ecx, 32
-    ja .Lopen_bad
-    mov [rip + source_bits], ecx
-    mov rcx, 0xfffffffff
-    and rdx, rcx
-    mov [rip + total_frames], rdx
+    mov rcx, rax
+    call flac_streaminfo           # preserves R8-R11
+    test eax, eax
+    jz .Lopen_bad
     mov r11d, 1
     jmp .Lflac_meta_next
 .Lflac_have_streaminfo:
@@ -695,9 +671,22 @@ FN decoder_open
     dec r8d
     jmp .Lflac_seek_validate
 .Lflac_seek_valid:
-    call pcm_build_mix
+    call flac_prepare
     test eax, eax
     jz .Lopen_bad
+    mov dword ptr [rip + codec_kind], 2
+    mov eax, 1
+    leave
+    ret
+ENDFN decoder_open_format
+
+# Stereo mix, extra channel buffers and sample scale for an opened FLAC
+# stream -> EAX=1. Native FLAC and FLAC-in-Ogg share it.
+LOCALFN flac_prepare
+    sub rsp, 40
+    call pcm_build_mix
+    test eax, eax
+    jz .Lprepare_return
     lea rax, [rip + left_samples]
     mov [rip + flac_channel_ptrs], rax
     lea rax, [rip + right_samples]
@@ -711,7 +700,7 @@ FN decoder_open
     mov ecx, eax
     call mem_alloc
     test rax, rax
-    jz .Lopen_bad
+    jz .Lprepare_return
     mov [rip + flac_extra], rax
     mov ecx, 2
     mov edx, [rip + maximum_block]
@@ -724,16 +713,512 @@ FN decoder_open
     cmp ecx, [rip + source_channels]
     jb .Lflac_buffers_loop
 .Lflac_buffers_ready:
-    mov dword ptr [rip + codec_kind], 2
     # Compute exact reciprocal 2^(1-bits), no library calls.
     mov eax, 128
     sub eax, [rip + source_bits]
     shl eax, 23
     mov [rip + float_scale], eax
     mov eax, 1
-    leave
+.Lprepare_return:
+    add rsp, 40
     ret
-ENDFN decoder_open
+ENDFN flac_prepare
+
+# Next FLAC frame into the channel buffers -> EAX=1, or 0 at the end/error.
+LOCALFN flac_next_frame
+    cmp dword ptr [rip + flac_packet_mode], 0
+    je decode_frame
+    sub rsp, 40
+    call ogg_next
+    test rax, rax
+    jz .Lfo_frame_return
+    test edx, edx
+    jz .Lfo_frame_bad
+    mov [rip + input_cursor], rax
+    add rdx, rax
+    mov [rip + input_end], rdx
+    mov [rip + flac_bit_end], rdx
+    mov eax, [rip + ogg_eos]
+    mov [rip + flac_packet_final], eax
+    call decode_frame
+    jmp .Lfo_frame_return
+.Lfo_frame_bad:
+    mov dword ptr [rip + decode_error], 3
+    xor eax, eax
+.Lfo_frame_return:
+    add rsp, 40
+    ret
+ENDFN flac_next_frame
+
+FN flac_ogg_close
+    sub rsp, 40
+    mov dword ptr [rip + flac_packet_mode], 0
+    mov dword ptr [rip + flac_ogg_index_count], 0
+    mov rcx, [rip + flac_ogg_index]
+    test rcx, rcx
+    jz .Lfo_close_extra
+    call mem_free
+    mov qword ptr [rip + flac_ogg_index], 0
+.Lfo_close_extra:
+    mov rcx, [rip + flac_extra]
+    test rcx, rcx
+    jz .Lfo_close_done
+    call mem_free
+    mov qword ptr [rip + flac_extra], 0
+.Lfo_close_done:
+    add rsp, 40
+    ret
+ENDFN flac_ogg_close
+
+# RCX=mapped link start, RDX=end -> EAX=1. FLAC-in-Ogg mapping 1.0: a 0x7F
+# "FLAC" packet carrying STREAMINFO, one packet per further metadata block,
+# then one frame per packet. The whole stream is scanned for frame positions
+# and an index of packet checkpoints; frames are decoded and CRC-checked when
+# read. Granules count samples up to the page's last complete frame.
+FN flac_ogg_open
+    push rbx
+    push rsi
+    push rdi
+    push r12
+    push r13
+    push r14
+    push r15
+    sub rsp, 48
+    mov rsi, rcx
+    mov rdi, rdx
+    call flac_ogg_close
+    mov qword ptr [rip + flac_seek_table], 0
+    mov dword ptr [rip + flac_seek_count], 0
+    mov qword ptr [rip + flac_next_sample], 0
+    mov dword ptr [rip + flac_seek_probe], 0
+    mov dword ptr [rip + pcm_mask_seen], 0
+    mov dword ptr [rip + flac_comments_seen], 0
+    mov dword ptr [rip + pcm_mix], 0
+    mov dword ptr [rip + pcm_ignore_extra], 0
+    mov dword ptr [rip + frame_samples], 0
+    mov dword ptr [rip + frame_used], 0
+    mov qword ptr [rip + total_frames], 0
+    mov rcx, rsi
+    mov rdx, rdi
+    call ogg_open
+    test eax, eax
+    jz .Lfo_open_bad
+    call ogg_next
+    test rax, rax
+    jz .Lfo_open_bad
+    cmp edx, 51
+    jne .Lfo_open_bad
+    cmp dword ptr [rax], 0x414c467f      # 7f "FLA"
+    jne .Lfo_open_bad
+    cmp byte ptr [rax + 4], 0x43         # "C"
+    jne .Lfo_open_bad
+    cmp byte ptr [rax + 5], 1            # mapping major version
+    jne .Lfo_open_bad
+    movzx r13d, word ptr [rax + 7]
+    rol r13w, 8                          # declared header packets, 0 = unknown
+    cmp dword ptr [rax + 9], 0x43614c66  # "fLaC"
+    jne .Lfo_open_bad
+    movzx r14d, byte ptr [rax + 13]
+    mov ecx, r14d
+    and ecx, 0x7f
+    jnz .Lfo_open_bad                    # STREAMINFO
+    mov ecx, [rax + 13]
+    bswap ecx
+    and ecx, 0xffffff
+    cmp ecx, 34
+    jne .Lfo_open_bad
+    lea rcx, [rax + 17]
+    call flac_streaminfo
+    test eax, eax
+    jz .Lfo_open_bad
+    mov rax, [rip + total_frames]
+    mov [rip + flac_declared_frames], rax
+    mov qword ptr [rip + total_frames], 0
+    xor r12d, r12d                       # metadata packets after the first
+.Lfo_header:
+    test r14d, 0x80
+    jnz .Lfo_headers_done
+    call ogg_next
+    test rax, rax
+    jz .Lfo_open_bad
+    cmp edx, 4
+    jb .Lfo_open_bad
+    inc r12d
+    cmp r12d, 65535
+    ja .Lfo_open_bad
+    movzx r14d, byte ptr [rax]
+    mov ecx, [rax]
+    bswap ecx
+    and ecx, 0xffffff
+    add ecx, 4
+    cmp ecx, edx
+    jne .Lfo_open_bad
+    mov ecx, r14d
+    and ecx, 0x7f
+    jz .Lfo_open_bad                     # a second STREAMINFO
+    cmp ecx, 127
+    je .Lfo_open_bad
+    cmp ecx, 4
+    jne .Lfo_header
+    cmp dword ptr [rip + flac_comments_seen], 0
+    jne .Lfo_open_bad
+    mov dword ptr [rip + flac_comments_seen], 1
+    lea rcx, [rax + 4]
+    lea rdx, [rax + rdx]
+    call flac_parse_comments
+    test eax, eax
+    jz .Lfo_open_bad
+    jmp .Lfo_header
+.Lfo_headers_done:
+    test r13d, r13d
+    jz .Lfo_header_count_ok
+    cmp r13d, r12d
+    jne .Lfo_open_bad
+.Lfo_header_count_ok:
+    cmp dword ptr [rip + ogg_packet_page_end], 1
+    jne .Lfo_open_bad                    # audio begins on a fresh page
+    call flac_prepare
+    test eax, eax
+    jz .Lfo_open_bad
+    lea rcx, [rip + fo_audio_checkpoint]
+    call ogg_checkpoint
+    mov ecx, 2048*32
+    call mem_alloc
+    mov [rip + flac_ogg_index], rax      # allocation failure keeps sequential decoding
+    mov qword ptr [rip + flac_ogg_index_stride], 1
+    xor r12d, r12d                       # sample position of the next frame
+    xor r14d, r14d                       # audio packet ordinal
+.Lfo_scan:
+    lea rcx, [rip + fo_scan_checkpoint]
+    call ogg_checkpoint
+    call ogg_next
+    test rax, rax
+    jz .Lfo_scan_end
+    mov rcx, rax
+    call flac_frame_extent               # RAX=position, RDX=block size
+    test rdx, rdx
+    jz .Lfo_open_bad
+    cmp rax, r12
+    jne .Lfo_open_bad
+    mov r15, rdx
+    cmp qword ptr [rip + flac_ogg_index], 0
+    je .Lfo_scan_advance
+    mov rax, [rip + flac_ogg_index_stride]
+    dec rax
+    test r14, rax
+    jnz .Lfo_scan_advance
+    cmp dword ptr [rip + flac_ogg_index_count], 2048
+    jb .Lfo_scan_store
+    mov ebx, 1                           # keep every other point
+.Lfo_scan_compact:
+    mov r8, rbx
+    shl r8, 6
+    add r8, [rip + flac_ogg_index]
+    mov r9, rbx
+    shl r9, 5
+    add r9, [rip + flac_ogg_index]
+    movups xmm0, [r8]
+    movups xmm1, [r8 + 16]
+    movups [r9], xmm0
+    movups [r9 + 16], xmm1
+    inc ebx
+    cmp ebx, 1024
+    jb .Lfo_scan_compact
+    mov dword ptr [rip + flac_ogg_index_count], 1024
+    shl qword ptr [rip + flac_ogg_index_stride], 1
+    mov rax, [rip + flac_ogg_index_stride]
+    dec rax
+    test r14, rax
+    jnz .Lfo_scan_advance
+.Lfo_scan_store:
+    mov eax, [rip + flac_ogg_index_count]
+    shl rax, 5
+    add rax, [rip + flac_ogg_index]
+    movups xmm0, [rip + fo_scan_checkpoint]
+    movups [rax], xmm0
+    mov [rax + 16], r12
+    inc dword ptr [rip + flac_ogg_index_count]
+.Lfo_scan_advance:
+    add r12, r15
+    inc r14
+    cmp dword ptr [rip + ogg_packet_last], 1
+    jne .Lfo_scan
+    cmp [rip + ogg_granule], r12
+    jne .Lfo_open_bad
+    jmp .Lfo_scan
+.Lfo_scan_end:
+    cmp dword ptr [rip + decode_error], 0
+    jne .Lfo_open_bad
+    test r14, r14
+    jz .Lfo_open_bad
+    mov rax, [rip + flac_declared_frames]
+    test rax, rax
+    jz .Lfo_scan_total
+    cmp rax, r12
+    jne .Lfo_open_bad
+.Lfo_scan_total:
+    mov [rip + total_frames], r12
+    lea rcx, [rip + fo_audio_checkpoint]
+    call ogg_resume
+    test eax, eax
+    jz .Lfo_open_bad
+    mov dword ptr [rip + flac_packet_mode], 1
+    mov qword ptr [rip + flac_next_sample], 0
+    mov dword ptr [rip + codec_kind], 7
+    mov eax, 1
+    jmp .Lfo_open_return
+.Lfo_open_bad:
+    call flac_ogg_close
+    mov qword ptr [rip + total_frames], 0
+    cmp dword ptr [rip + decode_error], 0
+    jne .Lfo_open_failed
+    mov dword ptr [rip + decode_error], 50
+.Lfo_open_failed:
+    xor eax, eax
+.Lfo_open_return:
+    add rsp, 48
+    pop r15
+    pop r14
+    pop r13
+    pop r12
+    pop rdi
+    pop rsi
+    pop rbx
+    ret
+ENDFN flac_ogg_open
+
+# RCX=FLAC frame packet, EDX=length -> RAX=first sample, RDX=block size, or
+# RDX=0 when the header is malformed. Only the fields that place the frame;
+# decode_frame checks the rest, including both CRCs.
+LOCALFN flac_frame_extent
+    cmp edx, 6
+    jb .Lextent_bad
+    cmp byte ptr [rcx], 0xff
+    jne .Lextent_bad
+    movzx eax, byte ptr [rcx + 1]
+    and eax, 0xfe
+    cmp eax, 0xf8
+    jne .Lextent_bad
+    mov r10d, edx                        # length
+    movzx r11d, byte ptr [rcx + 1]
+    and r11d, 1                          # variable blocking
+    movzx eax, byte ptr [rcx + 4]        # UTF-8 style coded number
+    mov r8d, 1
+    cmp eax, 0x80
+    jb .Lextent_number
+    cmp eax, 0xc0
+    jb .Lextent_bad
+    mov r8d, 2
+    and eax, 0x1f
+    cmp byte ptr [rcx + 4], 0xe0
+    jb .Lextent_number
+    mov r8d, 3
+    movzx eax, byte ptr [rcx + 4]
+    and eax, 0x0f
+    cmp byte ptr [rcx + 4], 0xf0
+    jb .Lextent_number
+    mov r8d, 4
+    movzx eax, byte ptr [rcx + 4]
+    and eax, 0x07
+    cmp byte ptr [rcx + 4], 0xf8
+    jb .Lextent_number
+    mov r8d, 5
+    movzx eax, byte ptr [rcx + 4]
+    and eax, 0x03
+    cmp byte ptr [rcx + 4], 0xfc
+    jb .Lextent_number
+    mov r8d, 6
+    movzx eax, byte ptr [rcx + 4]
+    and eax, 0x01
+    cmp byte ptr [rcx + 4], 0xfe
+    jb .Lextent_number
+    cmp byte ptr [rcx + 4], 0xff
+    je .Lextent_bad
+    mov r8d, 7
+    xor eax, eax
+.Lextent_number:
+    lea r9d, [r8 + 6]
+    cmp r9d, r10d
+    ja .Lextent_bad
+    mov r9d, 1
+.Lextent_continuation:
+    cmp r9d, r8d
+    jae .Lextent_number_done
+    movzx edx, byte ptr [rcx + r9 + 4]
+    mov r10b, dl
+    and r10b, 0xc0
+    cmp r10b, 0x80
+    jne .Lextent_bad
+    shl rax, 6
+    and edx, 0x3f
+    or rax, rdx
+    inc r9d
+    jmp .Lextent_continuation
+.Lextent_number_done:
+    lea r9d, [r8 + 4]                    # offset after the number
+    movzx r10d, byte ptr [rcx + 2]
+    shr r10d, 4
+    jz .Lextent_bad
+    cmp r10d, 1
+    je .Lextent_192
+    cmp r10d, 6
+    jb .Lextent_576
+    je .Lextent_8bit
+    cmp r10d, 7
+    je .Lextent_16bit
+    lea ecx, [r10 - 8]
+    mov edx, 256
+    shl edx, cl
+    jmp .Lextent_place
+.Lextent_192:
+    mov edx, 192
+    jmp .Lextent_place
+.Lextent_576:
+    lea ecx, [r10 - 2]
+    mov edx, 576
+    shl edx, cl
+    jmp .Lextent_place
+.Lextent_8bit:
+    movzx edx, byte ptr [rcx + r9]
+    inc edx
+    jmp .Lextent_place
+.Lextent_16bit:
+    movzx edx, word ptr [rcx + r9]
+    rol dx, 8
+    inc edx
+.Lextent_place:
+    test r11d, r11d
+    jnz .Lextent_return                  # variable blocking codes the sample
+    mov ecx, [rip + maximum_block]
+    imul rax, rcx
+    ret
+.Lextent_bad:
+    xor edx, edx
+.Lextent_return:
+    ret
+ENDFN flac_frame_extent
+
+# RCX=frame on a freshly opened FLAC-in-Ogg stream -> RAX=resume frame at a
+# frame boundary at or before it. FLAC frames decode independently.
+FN flac_ogg_seek
+    push rbx
+    sub rsp, 32
+    xor eax, eax
+    cmp dword ptr [rip + flac_packet_mode], 0
+    je .Lfo_seek_return
+    cmp dword ptr [rip + flac_ogg_index_count], 0
+    je .Lfo_seek_return
+    test rcx, rcx
+    jz .Lfo_seek_return
+    mov rax, [rip + ogg_cancel_ptr]
+    test rax, rax
+    jz .Lfo_seek_not_cancelled
+    cmp dword ptr [rax], 0
+    mov eax, 0
+    jne .Lfo_seek_return
+.Lfo_seek_not_cancelled:
+    cmp rcx, [rip + total_frames]
+    cmova rcx, [rip + total_frames]
+    xor r8d, r8d
+    mov r9d, [rip + flac_ogg_index_count]
+.Lfo_seek_search:
+    mov edx, r9d
+    sub edx, r8d
+    cmp edx, 1
+    jbe .Lfo_seek_found
+    shr edx, 1
+    add edx, r8d
+    mov eax, edx
+    shl rax, 5
+    add rax, [rip + flac_ogg_index]
+    cmp [rax + 16], rcx
+    ja .Lfo_seek_upper
+    mov r8d, edx
+    jmp .Lfo_seek_search
+.Lfo_seek_upper:
+    mov r9d, edx
+    jmp .Lfo_seek_search
+.Lfo_seek_found:
+    mov eax, r8d
+    shl rax, 5
+    add rax, [rip + flac_ogg_index]
+    mov rbx, [rax + 16]
+    mov rcx, rax
+    call ogg_resume
+    test eax, eax
+    jz .Lfo_seek_bad
+    mov [rip + flac_next_sample], rbx
+    mov dword ptr [rip + frame_samples], 0
+    mov dword ptr [rip + frame_used], 0
+    inc dword ptr [rip + decoder_seek_probes]
+    mov rax, rbx
+    jmp .Lfo_seek_return
+.Lfo_seek_bad:
+    mov dword ptr [rip + decode_error], 51
+    xor eax, eax
+.Lfo_seek_return:
+    add rsp, 32
+    pop rbx
+    ret
+ENDFN flac_ogg_seek
+
+# RCX=stereo float output, EDX=frame capacity -> EAX=frames.
+FN flac_ogg_read
+    xor eax, eax
+    cmp dword ptr [rip + flac_packet_mode], 0
+    je .Lfo_read_return
+    cmp dword ptr [rip + decode_error], 0
+    jne .Lfo_read_return
+    jmp flac_read
+.Lfo_read_return:
+    ret
+ENDFN flac_ogg_read
+
+# RCX=34-byte STREAMINFO block -> EAX=1 when supported. Sets block limits,
+# rate, channels, depth and the declared frame count (0 = unknown).
+# Preserves R8-R11 for the metadata walk.
+LOCALFN flac_streaminfo
+    xor eax, eax
+    movzx edx, word ptr [rcx]
+    rol dx, 8
+    cmp edx, 16
+    jb .Lstreaminfo_return
+    mov [rip + minimum_block], edx
+    movzx edx, word ptr [rcx + 2]
+    rol dx, 8
+    cmp edx, [rip + minimum_block]
+    jb .Lstreaminfo_return
+    mov [rip + maximum_block], edx
+    mov rdx, [rcx + 10]
+    bswap rdx
+    mov rcx, rdx
+    shr rcx, 44
+    mov [rip + sample_rate], ecx
+    cmp ecx, 8000
+    jb .Lstreaminfo_return
+    cmp ecx, 192000
+    ja .Lstreaminfo_return
+    mov rcx, rdx
+    shr rcx, 41
+    and ecx, 7
+    inc ecx
+    mov [rip + source_channels], ecx
+    mov rcx, rdx
+    shr rcx, 36
+    and ecx, 31
+    inc ecx
+    cmp ecx, 4
+    jb .Lstreaminfo_return
+    cmp ecx, 32
+    ja .Lstreaminfo_return
+    mov [rip + source_bits], ecx
+    mov rcx, 0xfffffffff
+    and rdx, rcx
+    mov [rip + total_frames], rdx
+    mov eax, 1
+.Lstreaminfo_return:
+    ret
+ENDFN flac_streaminfo
 
 # RCX=comment payload, RDX=bounded end. Little-endian lengths, no framing bit.
 # Conflicting repeated masks are rejected; identical repeats are harmless.
@@ -951,9 +1436,11 @@ FN decoder_close
     push rbp
     mov rbp, rsp
     sub rsp, 32
+    call chain_close
     call mp3_close
     call opus_close
     call vorbis_close
+    call flac_ogg_close
     call ogg_close
     mov rcx, [rip + flac_extra]
     test rcx, rcx
@@ -994,16 +1481,14 @@ FN decoder_seek
     je .Lseek_return
     cmp dword ptr [rip + decode_error], 0
     jne .Lseek_return
+    cmp dword ptr [rip + chain_active], 0
+    jne .Lseek_chain
     cmp dword ptr [rip + codec_kind], 1
     je .Lseek_wav
     cmp dword ptr [rip + codec_kind], 6
     je .Lseek_wav
     cmp dword ptr [rip + codec_kind], 3
     je .Lseek_mp3
-    cmp dword ptr [rip + codec_kind], 4
-    je .Lseek_vorbis
-    cmp dword ptr [rip + codec_kind], 5
-    je .Lseek_opus
     cmp dword ptr [rip + codec_kind], 2
     jne .Lseek_return
     test rcx, rcx
@@ -1078,11 +1563,8 @@ FN decoder_seek
 .Lseek_mp3:
     call mp3_seek
     jmp .Lseek_return
-.Lseek_vorbis:
-    call vorbis_seek
-    jmp .Lseek_return
-.Lseek_opus:
-    call opus_seek
+.Lseek_chain:
+    call chain_seek
     jmp .Lseek_return
 .Lseek_wav:
     mov rdx, [rip + ogg_cancel_ptr]
@@ -1749,8 +2231,17 @@ LOCALFN decode_frame
     cmp dword ptr [rip + decode_error], 0
     jne .Lframe_bad
     mov rax, [rip + input_cursor]
+    cmp dword ptr [rip + flac_packet_mode], 0
+    je .Lframe_native_end
+    cmp rax, [rip + input_end]
+    jne .Lframe_bad             # an Ogg packet holds exactly one frame
+    cmp dword ptr [rip + flac_packet_final], 0
+    jne .Llast_block_valid
+    jmp .Lframe_minimum
+.Lframe_native_end:
     cmp rax, [rip + input_end]
     jae .Llast_block_valid
+.Lframe_minimum:
     mov eax, [rip + frame_samples]
     cmp eax, [rip + minimum_block]
     jb .Lframe_bad
@@ -2165,26 +2656,18 @@ FN decoder_read
     je .Lread_done
     cmp dword ptr [rip + decode_error], 0
     jne .Lread_done
+    cmp dword ptr [rip + chain_active], 0
+    je .Lread_single
+    mov rcx, rdi
+    mov edx, r12d
+    call chain_read
+    mov ebx, eax
+    jmp .Lread_done
+.Lread_single:
     cmp dword ptr [rip + codec_kind], 1
     jb .Lread_done
     cmp dword ptr [rip + codec_kind], 6
     ja .Lread_done
-    cmp dword ptr [rip + codec_kind], 5
-    jne .Lread_try_vorbis
-    mov rcx, rdi
-    mov edx, r12d
-    call opus_read
-    mov ebx, eax
-    jmp .Lread_done
-.Lread_try_vorbis:
-    cmp dword ptr [rip + codec_kind], 4
-    jne .Lread_try_mp3
-    mov rcx, rdi
-    mov edx, r12d
-    call vorbis_read
-    mov ebx, eax
-    jmp .Lread_done
-.Lread_try_mp3:
     cmp dword ptr [rip + codec_kind], 3
     jne .Lread_existing
     mov rcx, rdi
@@ -2208,59 +2691,11 @@ FN decoder_read
     cmp dword ptr [rip + codec_kind], 6
     je .Lread_wav
 .Lread_flac:
-    cmp ebx, r12d
-    jae .Lread_done
-    mov eax, [rip + frame_used]
-    cmp eax, [rip + frame_samples]
-    jb .Lflac_emit
-    call decode_frame
-    test eax, eax
-    jz .Lread_done
-.Lflac_emit:
-    mov ecx, [rip + frame_used]
-    cmp dword ptr [rip + pcm_mix], 0
-    jne .Lflac_emit_mix
-    lea rsi, [rip + left_samples]
-    cvtsi2ss xmm0, qword ptr [rsi + rcx*8]
-    mulss xmm0, [rip + float_scale]
-    movss dword ptr [rdi + rbx*8], xmm0
-    cmp dword ptr [rip + source_channels], 1
-    je .Lflac_mono
-    lea rsi, [rip + right_samples]
-    cvtsi2ss xmm0, qword ptr [rsi + rcx*8]
-    mulss xmm0, [rip + float_scale]
-.Lflac_mono:
-    movss dword ptr [rdi + rbx*8 + 4], xmm0
-    jmp .Lflac_emit_done
-.Lflac_emit_mix:
-    xor r9d, r9d
-    lea r10, [rip + flac_channel_ptrs]
-    lea r11, [rip + pcm_mix_coeff]
-    xorpd xmm0, xmm0
-    xorpd xmm1, xmm1
-.Lflac_emit_channel:
-    mov rax, [r10 + r9*8]
-    cvtsi2sd xmm2, qword ptr [rax + rcx*8]
-    movapd xmm3, xmm2
-    mulsd xmm2, qword ptr [r11]
-    mulsd xmm3, qword ptr [r11 + 8]
-    addsd xmm0, xmm2
-    addsd xmm1, xmm3
-    add r11, 16
-    inc r9d
-    cmp r9d, [rip + source_channels]
-    jb .Lflac_emit_channel
-    cvtss2sd xmm2, [rip + float_scale]
-    mulsd xmm0, xmm2
-    mulsd xmm1, xmm2
-    cvtsd2ss xmm0, xmm0
-    cvtsd2ss xmm1, xmm1
-    movss dword ptr [rdi + rbx*8], xmm0
-    movss dword ptr [rdi + rbx*8 + 4], xmm1
-.Lflac_emit_done:
-    inc dword ptr [rip + frame_used]
-    inc ebx
-    jmp .Lread_flac
+    mov rcx, rdi
+    mov edx, r12d
+    call flac_read
+    mov ebx, eax
+    jmp .Lread_done
 .Lread_wav:
     mov rsi, [rip + input_cursor]
 .Lwav_emit:
@@ -2317,6 +2752,81 @@ FN decoder_read
     pop rbp
     ret
 ENDFN decoder_read
+
+# RCX=stereo float output, EDX=frame capacity -> EAX=frames, for native FLAC
+# and FLAC-in-Ogg.
+LOCALFN flac_read
+    push rbx
+    push rsi
+    push rdi
+    push r12
+    sub rsp, 40
+    mov rdi, rcx
+    mov r12d, edx
+    xor ebx, ebx
+.Lflac_read_next:
+    cmp ebx, r12d
+    jae .Lflac_read_done
+    mov eax, [rip + frame_used]
+    cmp eax, [rip + frame_samples]
+    jb .Lflac_emit
+    call flac_next_frame
+    test eax, eax
+    jz .Lflac_read_done
+.Lflac_emit:
+    mov ecx, [rip + frame_used]
+    cmp dword ptr [rip + pcm_mix], 0
+    jne .Lflac_emit_mix
+    lea rsi, [rip + left_samples]
+    cvtsi2ss xmm0, qword ptr [rsi + rcx*8]
+    mulss xmm0, [rip + float_scale]
+    movss dword ptr [rdi + rbx*8], xmm0
+    cmp dword ptr [rip + source_channels], 1
+    je .Lflac_mono
+    lea rsi, [rip + right_samples]
+    cvtsi2ss xmm0, qword ptr [rsi + rcx*8]
+    mulss xmm0, [rip + float_scale]
+.Lflac_mono:
+    movss dword ptr [rdi + rbx*8 + 4], xmm0
+    jmp .Lflac_emit_done
+.Lflac_emit_mix:
+    xor r9d, r9d
+    lea r10, [rip + flac_channel_ptrs]
+    lea r11, [rip + pcm_mix_coeff]
+    xorpd xmm0, xmm0
+    xorpd xmm1, xmm1
+.Lflac_emit_channel:
+    mov rax, [r10 + r9*8]
+    cvtsi2sd xmm2, qword ptr [rax + rcx*8]
+    movapd xmm3, xmm2
+    mulsd xmm2, qword ptr [r11]
+    mulsd xmm3, qword ptr [r11 + 8]
+    addsd xmm0, xmm2
+    addsd xmm1, xmm3
+    add r11, 16
+    inc r9d
+    cmp r9d, [rip + source_channels]
+    jb .Lflac_emit_channel
+    cvtss2sd xmm2, [rip + float_scale]
+    mulsd xmm0, xmm2
+    mulsd xmm1, xmm2
+    cvtsd2ss xmm0, xmm0
+    cvtsd2ss xmm1, xmm1
+    movss dword ptr [rdi + rbx*8], xmm0
+    movss dword ptr [rdi + rbx*8 + 4], xmm1
+.Lflac_emit_done:
+    inc dword ptr [rip + frame_used]
+    inc ebx
+    jmp .Lflac_read_next
+.Lflac_read_done:
+    mov eax, ebx
+    add rsp, 40
+    pop r12
+    pop rdi
+    pop rsi
+    pop rbx
+    ret
+ENDFN flac_read
 
 LOCALFN wav_sample
     sub rsp, 40

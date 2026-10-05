@@ -1,10 +1,14 @@
 # Original Ogg version-0 demuxer in x86-64 assembly. MIT, see LICENSE.
-# Single logical stream, sequential mapped input. CRC and structure validated
+# One logical stream, sequential mapped input. CRC and structure validated
 # once at open. Packet assembly uses one bounded 4 MiB allocation.
+# With ogg_select_active set, the range is one link of a physical stream and
+# only pages with serial ogg_select are decoded; other multiplexed streams'
+# pages are bounds-checked and skipped. Otherwise the range must hold exactly
+# one logical stream ending at its EOS page.
 .include "lamp.inc"
 .globl ogg_granule, ogg_total_granule, ogg_eos, ogg_packet_length
 .globl ogg_packet_page, ogg_packet_last, ogg_packet_page_end
-.globl ogg_cancel_ptr
+.globl ogg_cancel_ptr, ogg_select, ogg_select_active
 
 .equ OGG_PACKET_CAP, 0x400000
 .data
@@ -33,6 +37,8 @@ ogg_continued: .long 0
 ogg_seen_eos: .long 0
 ogg_crc_ready: .long 0
 ogg_resume_segment: .long 0
+ogg_select: .long 0
+ogg_select_active: .long 0
 .bss
 ogg_crc_table: .zero (8*256)*4
 .text
@@ -210,6 +216,32 @@ LOCALFN ogg_crc_bytes
     ret
 ENDFN ogg_crc_bytes
 
+# RCX=page header -> RAX=next page, or zero when the page leaves the range.
+LOCALFN ogg_page_end
+    lea rax, [rcx + 27]
+    cmp rax, [rip + ogg_end]
+    ja .Logg_page_end_bad
+    movzx r8d, byte ptr [rcx + 26]
+    add rax, r8
+    cmp rax, [rip + ogg_end]
+    ja .Logg_page_end_bad
+    xor edx, edx
+.Logg_page_end_lace:
+    test r8d, r8d
+    jz .Logg_page_end_body
+    movzx r9d, byte ptr [rcx + r8 + 26]
+    add rax, r9
+    dec r8d
+    jmp .Logg_page_end_lace
+.Logg_page_end_body:
+    cmp rax, [rip + ogg_end]
+    ja .Logg_page_end_bad
+    ret
+.Logg_page_end_bad:
+    xor eax, eax
+    ret
+ENDFN ogg_page_end
+
 # RCX=page. RAX=next page or zero. Sequence/continuation state is updated.
 LOCALFN ogg_validate_page
     push rbx
@@ -227,6 +259,17 @@ LOCALFN ogg_validate_page
     movzx ebx, byte ptr [rsi + 5]
     test ebx, 0xf8
     jnz .Logg_page_bad
+    cmp dword ptr [rip + ogg_select_active], 0
+    je .Logg_page_selected
+    mov eax, [rsi + 14]
+    cmp eax, [rip + ogg_select]
+    je .Logg_page_selected
+    mov rcx, rsi                # another multiplexed stream: bounds only
+    call ogg_page_end
+    test rax, rax
+    jz .Logg_page_bad
+    jmp .Logg_page_return
+.Logg_page_selected:
     cmp dword ptr [rip + ogg_seen_eos], 0
     jne .Logg_page_bad
     mov eax, [rsi + 18]
@@ -285,8 +328,10 @@ LOCALFN ogg_validate_page
     cmp dword ptr [rip + ogg_continued], 0
     jne .Logg_page_bad
     mov dword ptr [rip + ogg_seen_eos], 1
+    cmp dword ptr [rip + ogg_select_active], 0
+    jne .Logg_check_granule     # later pages belong to other streams
     cmp rdi, [rip + ogg_end]
-    jne .Logg_page_bad          # Chained/multiplexed streams need a new decoder.
+    jne .Logg_page_bad          # chained links are opened separately
 .Logg_check_granule:
     mov rax, [rsi + 6]
     cmp r10d, -1
@@ -415,8 +460,20 @@ FN ogg_next
     cmp eax, [rip + ogg_segments]
     jb .Logg_next_copy
     mov rsi, [rip + ogg_cursor]
+.Logg_next_page:
     cmp rsi, [rip + ogg_end]
     jae .Logg_next_eof
+    cmp dword ptr [rip + ogg_select_active], 0
+    je .Logg_next_load
+    mov eax, [rsi + 14]
+    cmp eax, [rip + ogg_select]
+    je .Logg_next_load
+    mov rcx, rsi                # skip other multiplexed streams' validated pages
+    call ogg_page_end
+    mov rsi, rax
+    mov [rip + ogg_cursor], rsi
+    jmp .Logg_next_page
+.Logg_next_load:
     mov [rip + ogg_packet_page], rsi
     movzx eax, byte ptr [rsi + 5]
     mov [rip + ogg_page_flags], eax

@@ -3,8 +3,8 @@
 
 usage: python3 tests/verify-playback.py
 The sink records float32 at 48 kHz, so 48 kHz playback is compared bit for bit
-with lamp-cli --decode. Covers every format, 5.1 downmixes, pause/resume
-continuity, Q, Ctrl+C, resampled rates and a missing server.
+with lamp-cli --decode. Covers every format, 5.1 downmixes, a chained Ogg file with a resampled
+link, pause/resume continuity, Q, Ctrl+C, resampled rates and a missing server.
 Windows uses tests/verify-engine.ps1 for WASAPI. Writes <out>/playback-verification.json.
 """
 import array
@@ -117,9 +117,19 @@ def main():
                                 ('5.1', 'opus', ['-c:a', 'libopus', '-mapping_family', '1', '-b:a', '256k'])):
         cases.append((f'surround-{layout}.{ext}', ['-f', 'lavfi', '-i', f'anoisesrc=r=48000:d=1.6:seed=99:a=0.2',
                                                    '-af', f'aformat=channel_layouts={layout}'] + coding))
+    # A chained Ogg file: Vorbis, then FLAC at 44.1 kHz (resampled), then Opus.
+    cases.append(('chain.ogg', None))
     for name, args in cases:
         path = work / name
-        if args[0] == '-filter_complex':
+        if args is None:
+            links = []
+            for link, source, coding in (('link-vorbis.ogg', 'anoisesrc=r=48000:d=0.6:seed=21:a=0.25', ['-c:a', 'libvorbis']),
+                                         ('link-flac.oga', 'anoisesrc=r=44100:d=0.5:seed=22:a=0.25', ['-c:a', 'flac']),
+                                         ('link-opus.opus', 'anoisesrc=r=48000:d=0.5:seed=23:a=0.25', ['-c:a', 'libopus'])):
+                ffmpeg('-f', 'lavfi', '-i', source, '-ac', '2', *coding, work / link)
+                links.append((work / link).read_bytes())
+            path.write_bytes(b''.join(links))
+        elif args[0] == '-filter_complex':
             ffmpeg(*args[:2], *args[2:], path)
         else:
             ffmpeg(*args, path)
@@ -223,7 +233,7 @@ def main():
 
     write_report('playback', {'result': 'passed', 'platform': 'linux-x86_64', 'output': 'PulseAudio native protocol',
                               'sink': 'private null sink, float32le 48 kHz stereo',
-                              'scope': 'Bit-exact 48 kHz playback for WAV/AIFF/FLAC/MP3/Vorbis/Opus and 5.1 downmixes; pause/resume continuity; Q and Ctrl+C; resampled rates; missing server. Measures delivered PCM, not audible latency or real-device behaviour.',
+                              'scope': 'Bit-exact 48 kHz playback for WAV/AIFF/FLAC/MP3/Vorbis/Opus, 5.1 downmixes and a chained Ogg file with a resampled link; pause/resume continuity; Q and Ctrl+C; resampled rates; missing server. Measures delivered PCM, not audible latency or real-device behaviour.',
                               'checks': checks})
     print(f'Passed {len(checks)} playback checks.')
 

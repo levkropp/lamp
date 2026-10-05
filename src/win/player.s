@@ -171,12 +171,12 @@ FN engine_play
     call decoder_open
     test eax, eax
     jz bad_input
-    mov eax, [rip + sample_rate]
+    mov eax, [rip + output_rate]
     mul qword ptr [rip + engine_seek_frames]
-    cmp qword ptr [rip + total_frames], 0
+    cmp qword ptr [rip + output_frames], 0
     je .Lengine_seek_limit_ready
-    cmp rax, [rip + total_frames]
-    cmova rax, [rip + total_frames]
+    cmp rax, [rip + output_frames]
+    cmova rax, [rip + output_frames]
 .Lengine_seek_limit_ready:
     mov [rip + engine_seek_frames], rax
     mov [rip + engine_position], rax
@@ -297,7 +297,7 @@ FN start
 .Loffline_finished:
     cmp dword ptr [rip + decode_error], 0
     jne .Ldecoding_failed
-    mov rax, [rip + total_frames]
+    mov rax, [rip + output_frames]
     test rax, rax
     jz .Lreport_finish
     cmp rax, [rip + decoded_count]
@@ -384,7 +384,7 @@ start_playback:
     call qword ptr [rax + 24]
     test eax, eax
     js .Lbad_audio
-    mov eax, [rip + sample_rate]
+    mov eax, [rip + output_rate]
     mov dword ptr [rip + wavefmt + 4], eax
     shl eax, 3
     mov dword ptr [rip + wavefmt + 8], eax
@@ -430,7 +430,7 @@ start_playback:
     mov [rip + producer_thread], rax
     test rax, rax
     jz .Lbad_audio
-    mov eax, [rip + sample_rate]
+    mov eax, [rip + output_rate]
     mov ecx, 3
     mul ecx
     shr eax, 2
@@ -768,7 +768,7 @@ LOCALFN producer
     je .Lproducer_loop
     jmp .Lproducer_exit
 .Lproducer_eof:
-    mov rax, [rip + total_frames]
+    mov rax, [rip + output_frames]
     test rax, rax
     jz .Lproducer_exit
     cmp rax, [rip + decoded_count]
@@ -1060,7 +1060,7 @@ LOCALFN report_stats
     call print_number
     lea rcx, [rip + stats_b]
     call print_text
-    mov ecx, [rip + sample_rate]
+    mov ecx, [rip + output_rate]
     call print_number
     lea rcx, [rip + stats_c]
     call print_text

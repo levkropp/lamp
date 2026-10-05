@@ -137,7 +137,7 @@ LOCALFN cli_main
 .Loffline_finished:
     cmp dword ptr [rip + decode_error], 0
     jne .Ldecoding_failed
-    mov rax, [rip + total_frames]
+    mov rax, [rip + output_frames]
     test rax, rax
     jz .Lreport_finish
     cmp rax, [rip + decoded_count]
@@ -312,7 +312,7 @@ LOCALFN report_stats
     call print_number
     lea rcx, [rip + stats_b]
     call print_text
-    mov ecx, [rip + sample_rate]
+    mov ecx, [rip + output_rate]
     call print_number
     lea rcx, [rip + stats_c]
     call print_text

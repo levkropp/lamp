@@ -4,7 +4,7 @@
 
 A small media player for Windows and Linux x86-64 and Apple Silicon macOS with handwritten assembly decoders and a native assembly UI. Audio comes first. The long-term goal is to support the relevant formats and playback features people use in **mpv**, with a small runtime and low CPU use.
 
-**Current source: 0.4.0-dev, an early audio prototype.** WAV, AIFF/AIFC, native FLAC, MP3, Ogg/Vorbis and Ogg/Opus play in source builds. Opus supports family 0 mono/stereo and family 1 layouts with 1–8 speaker channels, downmixed to stereo. Its elementary decoders include RFC 8251 updates and pass all 120 official vector checks across five output rates and mono/stereo. Video, subtitles and network streaming are future work. The published v0.3.0 prerelease contains WAV, native FLAC, MP3 and Ogg/Vorbis.
+**Current source: 0.4.0-dev, an early audio prototype.** WAV, AIFF/AIFC, native FLAC, MP3, Ogg/Vorbis, Ogg/Opus and FLAC in Ogg play in source builds, including chained and multiplexed Ogg files. Opus supports family 0 mono/stereo and family 1 layouts with 1–8 speaker channels, downmixed to stereo. Its elementary decoders include RFC 8251 updates and pass all 120 official vector checks across five output rates and mono/stereo. Video, subtitles and network streaming are future work. The published v0.3.0 prerelease contains WAV, native FLAC, MP3 and Ogg/Vorbis.
 
 [Website](https://levkropp.github.io/lamp/) · [Download v0.3.0](https://github.com/levkropp/lamp/releases/tag/v0.3.0) · [Roadmap](ROADMAP.md) · [Compatibility matrix](docs/compatibility.md) · [Technical details and limits](docs/technical.md) · [Apple Silicon build](docs/macos.md)
 
@@ -53,7 +53,7 @@ On Linux x86-64, `./build.sh` produces a static `build/lamp-cli` with the same d
 
 The Linux desktop window is not available yet; see the [roadmap](ROADMAP.md).
 
-`--check` decodes without an audio device. `--decode` writes little-endian float32 PCM with two interleaved channels; mono is duplicated. Opus output is 48 kHz; AIFF/AIFC rates round to integer hertz; other formats use their source rate. The destination must be new. Failed exports can leave partial output.
+`--check` decodes without an audio device. `--decode` writes little-endian float32 PCM with two interleaved channels; mono is duplicated. Opus output is 48 kHz; AIFF/AIFC rates round to integer hertz; chained Ogg files use their first link's rate; other formats use their source rate. The destination must be new. Failed exports can leave partial output.
 
 | Format | Current support |
 | --- | --- |
@@ -61,10 +61,12 @@ The Linux desktop window is not available yet; see the [roadmap](ROADMAP.md).
 | WAV | Little-endian RIFF/RF64/BW64 audio framing, PCM 8/16/24/32-bit or float32/64; 1–8 channels, extensible valid bits/layouts, 8–192 kHz |
 | Native FLAC | 1–8 channels, 4–32-bit, 8–192 kHz; CRC checks; speaker-mask-aware stereo downmix |
 | MP3 | MPEG-1/2/2.5 Layer III, mono/stereo, CBR/VBR, encoder trimming when tagged |
-| Ogg/Vorbis | Single logical stream, 1–255 channels, floor 1, mapping 0; stereo output, CRC and granule checks |
-| Ogg/Opus | Development source: one logical Ogg stream; family 0 mono/stereo or family 1 with 1–8 speaker channels downmixed to stereo; 48 kHz output, header gain/pre-skip/end trimming |
+| Ogg/Vorbis | 1–255 channels, floor 1, mapping 0; stereo output, CRC and granule checks |
+| Ogg/Opus | Development source: family 0 mono/stereo or family 1 with 1–8 speaker channels downmixed to stereo; 48 kHz output, header gain/pre-skip/end trimming |
+| FLAC in Ogg | FLAC-in-Ogg 1.0 mapping with the native FLAC limits; exact seeks |
+| Ogg files | Chained links and multiplexed streams: each link plays its first Vorbis, Opus or FLAC stream (video and other streams are skipped); links at another rate are resampled to the first link's rate |
 
-See [precise coverage, limitations, and verification](docs/technical.md) before relying on a particular stream variant. Native surround output, chained Ogg streams and FLAC-in-Ogg remain unfinished. [WAV](docs/wav.md), [FLAC](docs/flac.md) and [Vorbis](docs/vorbis.md) speaker layouts downmix to stereo; WAV also accepts left-aligned valid bits and float64 samples. WAV and AIFF/AIFC seek directly; native FLAC uses seek tables or searches validated frames; MP3, Vorbis and Opus use sparse indexes.
+See [precise coverage, limitations, and verification](docs/technical.md) before relying on a particular stream variant. Native surround output remains unfinished. [Ogg links, multiplexed streams, FLAC-in-Ogg and the resampler](docs/ogg.md) have their own notes. [WAV](docs/wav.md), [FLAC](docs/flac.md) and [Vorbis](docs/vorbis.md) speaker layouts downmix to stereo; WAV also accepts left-aligned valid bits and float64 samples. WAV and AIFF/AIFC seek directly; native FLAC uses seek tables or searches validated frames; MP3, Vorbis and Opus use sparse indexes.
 
 RF64/BW64 audio framing adds checked 64-bit lengths and direct seeks beyond 4 GiB. Its suite checks 538 files, 16 sparse large-file fixtures, 8,950 exact seeks and 312 malformed-input rejections. BW64 uses the existing WAVE speaker policy; ADM scene/object rendering remains unfinished. See [container rules and comparator limits](docs/wav.md#rf64bw64-framing-and-large-files).
 
@@ -134,7 +136,7 @@ The UI image comes from the actual assembly renderer with synthetic state. Open-
 
 ## Roadmap and contribution
 
-Latest Opus work adds family 1 multistream decoding and the RFC stereo downmix. The new integration suite checks 86 generated streams, 1,032 reset-reference seeks, repeated/silent/unmapped channels, gain/trim bounds, malformed packets and cancellation. Another 112 modern-libopus family 1 files pass independent float PCM comparisons, with peak error below 0.000002. The original family 0 suite retains 393 reference streams and 51 modern-libopus fixtures. All 120 official elementary-decoder vector checks pass, including reference PCM/history and final-range validation for 200,750 packets. Playback, pause/resume, stop/reopen and indexed/paused seeking pass for Opus and the existing formats. Ogg chaining and native surround routing remain unfinished. See [the decoder-stage notes](docs/opus.md); `python3 tests/verify-opus-components.py` runs 35 suites without FFmpeg or an audio device, and `python3 tests/verify-opus-conformance.py` runs official vectors.
+Latest Opus work adds family 1 multistream decoding and the RFC stereo downmix. The new integration suite checks 86 generated streams, 1,032 reset-reference seeks, repeated/silent/unmapped channels, gain/trim bounds, malformed packets and cancellation. Another 112 modern-libopus family 1 files pass independent float PCM comparisons, with peak error below 0.000002. The original family 0 suite retains 393 reference streams and 51 modern-libopus fixtures. All 120 official elementary-decoder vector checks pass, including reference PCM/history and final-range validation for 200,750 packets. Playback, pause/resume, stop/reopen and indexed/paused seeking pass for Opus and the existing formats. Native surround routing remains unfinished. See [the decoder-stage notes](docs/opus.md); `python3 tests/verify-opus-components.py` runs 35 suites without FFmpeg or an audio device, and `python3 tests/verify-opus-conformance.py` runs official vectors.
 
 [ROADMAP.md](ROADMAP.md) covers Opus, reliable audio playback, broader codecs and containers, video, subtitles, streaming, and eventual support for everything relevant that mpv supports. The [compatibility matrix](docs/compatibility.md) tracks the current gaps. Goals have acceptance gates, not promised release dates. Hardware decode should be used when it lowers system cost; handwritten assembly alone does not guarantee a faster codec.
 
