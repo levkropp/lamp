@@ -209,6 +209,19 @@ LOCALFN decoder_open_format
     je .Lopen_ogg
     cmp dword ptr [rax], 0xa3df451a # EBML: Matroska/WebM
     je .Lopen_matroska
+    mov ecx, [rax + 4]              # ISO base media / QuickTime top-level box
+    cmp ecx, 0x70797466             # ftyp
+    je .Lopen_mp4
+    cmp ecx, 0x766f6f6d             # moov
+    je .Lopen_mp4
+    cmp ecx, 0x7461646d             # mdat
+    je .Lopen_mp4
+    cmp ecx, 0x65646977             # wide
+    je .Lopen_mp4
+    cmp ecx, 0x65657266             # free
+    je .Lopen_mp4
+    cmp ecx, 0x70696b73             # skip
+    je .Lopen_mp4
     mov rcx, [rip + input_cursor]
     mov rdx, [rip + input_end]
     call mp3_open
@@ -224,6 +237,14 @@ LOCALFN decoder_open_format
     test eax, eax
     jz .Lopen_bad
     mov dword ptr [rip + codec_kind], 6
+    leave
+    ret
+.Lopen_mp4:
+    mov rcx, [rip + input_cursor]
+    mov rdx, [rip + input_end]
+    call mp4_open
+    test eax, eax
+    jz .Lopen_bad
     leave
     ret
 .Lopen_matroska:

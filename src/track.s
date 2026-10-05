@@ -9,12 +9,14 @@
 .globl track_active, track_codec, track_count, track_final_packet
 .globl track_start_trim, track_end_trim, track_end_trim_ns, track_config, track_config_bytes
 .globl track_pcm_channels, track_pcm_bits, track_pcm_flags
+.globl track_unit_scale, track_start_units, track_end_units, track_edit
 
 .equ TK_PCM, 1
 .equ TK_FLAC, 2
 .equ TK_MPA, 3
 .equ TK_VORBIS, 4
 .equ TK_OPUS, 5
+.equ TK_ALAC, 6
 .equ TK_ENTRY, 24                   # pointer, raw start sample, bytes, samples
 .equ TK_POINTER, 0
 .equ TK_START, 8
@@ -42,6 +44,11 @@ track_end_trim: .quad 0              # raw samples after the presented end
 track_end_trim_ns: .quad 0           # or nanoseconds, rounded at the codec rate
 track_raw_total: .quad 0
 track_final_packet: .long 0
+track_unit_scale: .long 0            # MP4 media timescale, 0 when unused
+track_edit: .long 0                  # 1 when an edit places the start
+track_start_units: .quad 0           # first presented media unit (edit)
+track_end_units: .quad 0             # presentation end in media units, 0 = none
+track_end_frames: .quad 0
 track_next: .quad 0                  # next packet to decode
 track_raw: .quad 0                   # raw sample position of buffer[0]
 track_used: .long 0
@@ -76,8 +83,13 @@ FN track_close
     call flac_ogg_close
 .Ltk_close_mpa:
     cmp dword ptr [rip + track_codec], TK_MPA
-    jne .Ltk_close_done
+    jne .Ltk_close_alac
     call mp3_close
+.Ltk_close_alac:
+    cmp dword ptr [rip + track_codec], TK_ALAC
+    jne .Ltk_close_done
+    call alac_track_close
+    call flac_ogg_close
 .Ltk_close_done:
     mov dword ptr [rip + track_active], 0
     mov dword ptr [rip + track_codec], 0
@@ -88,6 +100,11 @@ FN track_close
     mov qword ptr [rip + track_start_trim], 0
     mov qword ptr [rip + track_end_trim], 0
     mov qword ptr [rip + track_end_trim_ns], 0
+    mov dword ptr [rip + track_unit_scale], 0
+    mov qword ptr [rip + track_start_units], 0
+    mov dword ptr [rip + track_edit], 0
+    mov qword ptr [rip + track_end_units], 0
+    mov qword ptr [rip + track_end_frames], 0
     add rsp, 40
     ret
 ENDFN track_close
@@ -152,6 +169,28 @@ FN track_add
     ret
 ENDFN track_add
 
+# RCX=data, EDX=bytes, R8D=limit -> EAX=1. Extends the previous packet when
+# the data follows it directly and the total stays within the limit (PCM).
+FN track_append
+    mov rax, [rip + track_count]
+    test rax, rax
+    jz track_add
+    dec rax
+    imul rax, rax, TK_ENTRY
+    add rax, [rip + track_packets]
+    mov r9d, [rax + TK_BYTES]
+    mov r10, [rax + TK_POINTER]
+    add r10, r9
+    cmp r10, rcx
+    jne track_add
+    add r9d, edx
+    cmp r9d, r8d
+    ja track_add
+    mov [rax + TK_BYTES], r9d
+    mov eax, 1
+    ret
+ENDFN track_append
+
 # RCX=packet entry -> EAX=samples or -1 (codec duration scan).
 LOCALFN track_samples
     sub rsp, 40
@@ -166,6 +205,8 @@ LOCALFN track_samples
     je .Ltk_samples_flac
     cmp eax, TK_MPA
     je .Ltk_samples_mpa
+    cmp eax, TK_ALAC
+    je .Ltk_samples_alac
     call pcm_track_samples
     jmp .Ltk_samples_return
 .Ltk_samples_opus:
@@ -182,6 +223,9 @@ LOCALFN track_samples
     jmp .Ltk_samples_return
 .Ltk_samples_mpa:
     call mpa_track_samples
+    jmp .Ltk_samples_return
+.Ltk_samples_alac:
+    call alac_track_samples
 .Ltk_samples_return:
     add rsp, 40
     ret
@@ -203,6 +247,8 @@ LOCALFN track_decode
     je .Ltk_decode_flac
     cmp eax, TK_MPA
     je .Ltk_decode_mpa
+    cmp eax, TK_ALAC
+    je .Ltk_decode_alac
     call pcm_track_decode
     jmp .Ltk_decode_return
 .Ltk_decode_opus:
@@ -219,6 +265,9 @@ LOCALFN track_decode
     jmp .Ltk_decode_return
 .Ltk_decode_mpa:
     call mpa_track_decode
+    jmp .Ltk_decode_return
+.Ltk_decode_alac:
+    call alac_track_decode
 .Ltk_decode_return:
     add rsp, 40
     ret
@@ -278,17 +327,25 @@ FN track_finish
     je .Ltk_open_flac
     cmp eax, TK_MPA
     je .Ltk_open_mpa
+    cmp eax, TK_ALAC
+    je .Ltk_open_alac
     mov ecx, [rip + track_pcm_channels]
     mov edx, [rip + track_pcm_bits]
     mov r8d, [rip + track_pcm_flags]
     call pcm_track_open
     jmp .Ltk_opened
+.Ltk_open_alac:
+    call alac_track_open
+    jmp .Ltk_opened
 .Ltk_open_opus:
     call opus_track_open
     test eax, eax
     jz .Ltk_finish_bad
+    cmp dword ptr [rip + track_edit], 0
+    jne .Ltk_open_opus_edit               # an MP4 edit already places the start
     mov eax, [rip + op_preskip]          # OpusHead pre-skip trims the start
     mov [rip + track_start_trim], rax
+.Ltk_open_opus_edit:
     mov eax, 1
     jmp .Ltk_opened
 .Ltk_open_vorbis:
@@ -305,6 +362,33 @@ FN track_finish
 .Ltk_opened:
     test eax, eax
     jz .Ltk_finish_bad
+    # MP4 timing: media units -> samples at the codec rate, rounded.
+    mov ecx, [rip + track_unit_scale]
+    test ecx, ecx
+    jz .Ltk_units_ready
+    mov r8d, [rip + sample_rate]
+    mov r9, rcx
+    shr r9, 1
+    cmp dword ptr [rip + track_edit], 0
+    je .Ltk_units_end
+    mov rax, [rip + track_start_units]
+    mul r8
+    add rax, r9
+    adc rdx, 0
+    cmp rdx, rcx
+    jae .Ltk_finish_bad
+    div rcx
+    mov [rip + track_start_trim], rax
+.Ltk_units_end:
+    mov rax, [rip + track_end_units]
+    mul r8
+    add rax, r9
+    adc rdx, 0
+    cmp rdx, rcx
+    jae .Ltk_finish_bad
+    div rcx
+    mov [rip + track_end_frames], rax
+.Ltk_units_ready:
     mov rax, [rip + track_end_trim_ns]
     test rax, rax
     jz .Ltk_trim_ready
@@ -345,6 +429,17 @@ FN track_finish
     jmp .Ltk_scan
 .Ltk_scan_done:
     mov [rip + track_raw_total], rdi
+    # A presentation end trims whatever decodes after it.
+    mov rax, [rip + track_end_frames]
+    test rax, rax
+    jz .Ltk_scan_total
+    cmp rax, [rip + track_start_trim]
+    jbe .Ltk_finish_bad                  # nothing presented
+    mov rcx, rdi
+    sub rcx, rax
+    jbe .Ltk_scan_total
+    mov [rip + track_end_trim], rcx
+.Ltk_scan_total:
     mov rax, rdi
     sub rax, [rip + track_start_trim]
     jc .Ltk_finish_bad
