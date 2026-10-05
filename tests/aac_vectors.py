@@ -368,8 +368,9 @@ def _extras(r, bits):
             bits.put(r.randrange(256), 8)
 
 
-def frame(r, rate_index, channels, state):
-    """One raw data block; state holds each channel's previous window sequence."""
+def frame(r, rate_index, channels, state, tail=None):
+    """One raw data block; state holds each channel's previous window sequence.
+    tail(bits) may add elements after the channel element, before END."""
     bits = Bits()
     _extras(r, bits)
     if channels == 1:
@@ -405,6 +406,8 @@ def frame(r, rate_index, channels, state):
                 state[channel] = info['sequence']
                 _write_channel(r, bits, info, _channel(r, info), False, info['sequence'] == 2)
     _extras(r, bits)
+    if tail:
+        tail(bits)
     bits.put(7, 3)
     return bits.data()
 
@@ -544,23 +547,19 @@ def malformed():
     def stream(bad, channels=1, profile_frame=None):
         return (profile_frame or adts(bad, 4, channels)) + adts(good, 4, channels)
 
-    def fill_sbr(bits):
-        bits.put(6, 3)
-        bits.put(2, 4)
-        bits.put(13, 4)                              # EXT_SBR_DATA
-        bits.put(0, 12)
-
     def coupling(bits):
         bits.put(2, 3)
     main = bytearray(adts(good, 4, 1))
     main[2] &= 0x3f                                  # profile 0: AAC Main
+    ssr = bytearray(main)
+    ssr[2] |= 0x80                                   # profile 2: AAC SSR
     truncated = adts(good, 4, 1)
     cases = {
-        'sbr-fill': (stream(_mono(before=fill_sbr)), 101),
         'coupling-element': (stream(_mono(before=coupling)), 101),
         'gain-control': (stream(_mono(gain_control=1)), 101),
         'prediction': (stream(_mono(predictor=1)), 101),
         'main-profile': (bytes(main) + bytes(main), 101),
+        'ssr-profile': (bytes(ssr) + bytes(ssr), 101),
         'reserved-book': (stream(_mono(book=12)), 100),
         'intensity-single': (stream(_mono(book=14)), 100),
         'escape-overflow': (stream(_mono(book=11, escape_ones=9)), 100),

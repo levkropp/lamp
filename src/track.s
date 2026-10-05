@@ -363,6 +363,9 @@ FN track_finish
     call alac_track_open
     jmp .Ltk_opened
 .Ltk_open_aac:
+    mov rax, [rip + track_packets]       # the first packet is probed for SBR
+    mov r8, [rax + TK_POINTER]
+    mov r9d, [rax + TK_BYTES]
     call aac_track_open
     jmp .Ltk_opened
 .Ltk_open_opus:
@@ -639,8 +642,8 @@ ENDFN track_read
 # before it. Restarts at the packet holding the target, moved back by the
 # codec's pre-roll: Opus 80 ms, MPEG audio two frames (Layer III also earlier
 # frames holding up to 2 KiB of reservoir data), Vorbis and AAC one primer
-# packet whose output is skipped. FLAC, ALAC and PCM packets decode
-# independently.
+# packet whose output is skipped, HE-AAC two. FLAC, ALAC and PCM packets
+# decode independently.
 FN track_seek
     push rbx
     push rsi
@@ -726,12 +729,21 @@ FN track_seek
     add esi, [rax + TK_BYTES]
     jmp .Ltk_seek_mpa_back
 .Ltk_seek_primer:
-    # One primer packet rebuilds the overlap; its output is skipped.
-    test rbx, rbx
+    # Primer packets rebuild the overlap; their output is skipped. HE-AAC
+    # needs two: SBR filters the previous frame's core output as well.
+    mov esi, 1
+    cmp dword ptr [rip + track_codec], TK_AAC
+    jne .Ltk_seek_primer_count
+    add esi, [rip + sbr_active]
+.Ltk_seek_primer_count:
+    cmp rsi, rbx
+    cmova esi, ebx
+    test esi, esi
     jz .Ltk_seek_restart
-    lea rcx, [rbx - 1]
+    mov rcx, rbx
+    sub rcx, rsi
     call track_restart                   # resets the codec
-    mov dword ptr [rip + track_primer], 1
+    mov [rip + track_primer], esi
     imul rax, rbx, TK_ENTRY
     add rax, [rip + track_packets]
     mov rax, [rax + TK_START]

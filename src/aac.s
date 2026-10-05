@@ -6,11 +6,13 @@
 # packet. Object type 2 (LC), channel configurations 1-7, SCE/CPE/LFE with
 # section data, scalefactors, pulses, TNS, perceptual noise substitution,
 # mid/side and intensity stereo, sine/KBD windows and a DCT-IV based IMDCT;
-# the output mixes to stereo with the shared WAVE speaker weights. SBR/PS
-# (HE-AAC), coupling channels, gain control, prediction and 960-sample
-# frames reject.
+# the output mixes to stereo with the shared WAVE speaker weights. HE-AAC
+# spectral band replication (aac_sbr.inc), signalled explicitly, by the
+# backward-compatible extension or only in the stream, doubles the rate.
+# Parametric stereo (HE-AAC v2), coupling channels, gain control, prediction
+# and 960-sample frames reject.
 .include "lamp.inc"
-.globl aac_channels, aac_rate_index, aac_random, aac_features
+.globl aac_channels, aac_rate_index, aac_random, aac_features, sbr_active
 
 # aac_features bits, set as decoding meets each tool (for test coverage).
 .equ AF_SHORT, 1                    # eight short windows
@@ -31,14 +33,14 @@
 
 # Working memory, one allocation per open track.
 .equ AM_OVERLAP, 0                  # 8 x 1024 floats: second window halves
-.equ AM_PCM, 32768                  # 8 x 1024 floats: decoded channels
-.equ AM_COEF, 65536                 # 2 x 1024 floats: element spectra
-.equ AM_QUANT, 73728                # 2 x 1024 int32: quantized values
-.equ AM_BUF, 81920                  # 2048 doubles: IMDCT output, KBD scratch
-.equ AM_FFT, 98304                  # 512 complex doubles
-.equ AM_TIME, 106496                # 2048 doubles: eight short windows
-.equ AM_PROBE, 122880               # 1024 stereo floats: first-packet probe
-.equ AM_SIZE, 131072
+.equ AM_PCM, 32768                  # 8 x 2048 floats: decoded channels (SBR doubles them)
+.equ AM_COEF, 98304                 # 2 x 1024 floats: element spectra
+.equ AM_QUANT, 106496               # 2 x 1024 int32: quantized values
+.equ AM_BUF, 114688                 # 2048 doubles: IMDCT output, KBD scratch
+.equ AM_FFT, 131072                 # 512 complex doubles
+.equ AM_TIME, 139264                # 2048 doubles: eight short windows
+.equ AM_PROBE, 155648               # 2048 stereo floats: first-packet probe
+.equ AM_SIZE, 172032
 
 # Channel stream state, one per channel of the current element.
 .equ IC_SEQ, 0                      # window sequence 0-3
@@ -78,6 +80,7 @@ aac_layouts:
     .byte 0, 1, 1, 3, 255, 255
     .byte 0, 1, 1, 1, 3, 255
 aac_config_channels: .byte 0, 1, 2, 3, 4, 5, 6, 8
+aac_config_elements: .byte 0, 1, 1, 2, 3, 3, 4, 5
 # Two-dimensional books 5-11: values per dimension and the signed offset.
 aac_pair_mod: .byte 9, 9, 8, 8, 13, 13, 17
 aac_pair_offset: .byte 4, 4, 0, 0, 0, 0, 0
@@ -103,7 +106,6 @@ aac_channels: .long 0
 aac_next: .long 0                   # next output channel in the frame
 aac_element: .long 0                # channel elements in the frame
 aac_random: .long 0x1f2e3d4c        # noise generator state
-aac_probed: .long 0
 aac_common: .long 0                 # current pair shares ics_info
 aac_ms_present: .long 0
 aac_long_start: .long 0
@@ -234,6 +236,8 @@ ENDFN aac_inside
 
 FN aac_track_close
     sub rsp, 40
+    call sbr_close
+    mov dword ptr [rip + sbr_active], 0
     mov rcx, [rip + aac_memory]
     test rcx, rcx
     jz .Laac_close_done
@@ -244,9 +248,11 @@ FN aac_track_close
     ret
 ENDFN aac_track_close
 
-# Clears the overlap and window-shape history (stream start and seeks).
+# Clears the overlap, window-shape history and SBR state (stream start and
+# seeks; SBR resumes with the next SBR header).
 FN aac_track_reset
     push rdi
+    sub rsp, 32
     mov rdi, [rip + aac_memory]
     test rdi, rdi
     jz .Laac_reset_shapes
@@ -256,34 +262,36 @@ FN aac_track_reset
     rep stosd
 .Laac_reset_shapes:
     mov qword ptr [rip + aac_prev_shape], 0
+    call sbr_reset_all
+    add rsp, 32
     pop rdi
     ret
 ENDFN aac_track_reset
 
-# RCX=AudioSpecificConfig, EDX=bytes -> EAX=1. Sets the format globals and
-# the stereo mix.
+# RCX=AudioSpecificConfig, EDX=bytes, R8=first packet, R9D=its bytes -> EAX=1.
+# Sets the format globals and the stereo mix. The first packet is decoded once
+# so that unsupported tools reject when opening and SBR signalled only inside
+# the stream (implicit HE-AAC) doubles the rate before the track is timed.
 FN aac_track_open
     push rbx
     push rsi
+    push rdi
+    push r12
     sub rsp, 40
     mov rsi, rcx
     mov ebx, edx
+    mov rdi, r8
+    mov r12d, r9d
     call aac_track_close
+    mov dword ptr [rip + sbr_mode], -1
+    mov dword ptr [rip + sbr_found], 0
     cmp ebx, 2
     jb .Laac_open_bad
     mov [rip + aac_ptr], rsi
     mov [rip + aac_bytes], rbx
     mov qword ptr [rip + aac_pos], 0
-    mov ecx, 5
-    call aac_get                          # audioObjectType
-    cmp eax, 31
-    jne .Laac_open_object
-    mov ecx, 6
-    call aac_get
-    add eax, 32
-.Laac_open_object:
-    cmp eax, 2
-    jne .Laac_open_unsupported            # Main, SSR, LTP, HE-AAC, ...
+    call .Laac_open_object_type
+    mov [rsp + 32], eax
     mov ecx, 4
     call aac_get                          # samplingFrequencyIndex
     cmp eax, 11
@@ -296,11 +304,27 @@ FN aac_track_open
     cmp eax, 7
     ja .Laac_open_unsupported
     mov [rip + aac_config], eax
+    mov eax, [rsp + 32]
+    cmp eax, 2
+    je .Laac_open_specific
+    cmp eax, 5                            # explicit SBR (HE-AAC)
+    jne .Laac_open_unsupported            # Main, SSR, LTP, PS, ...
+    mov ecx, 4
+    call aac_get                          # extensionSamplingFrequencyIndex
+    cmp eax, [rip + aac_rate_index]       # a higher rate: SBR doubles it
+    jae .Laac_open_unsupported            # downsampled SBR, explicit rates
+    call .Laac_open_object_type
+    cmp eax, 2
+    jne .Laac_open_unsupported
+    mov dword ptr [rip + sbr_mode], 1
+.Laac_open_specific:
     mov ecx, 3                            # GASpecificConfig
     call aac_get
     test eax, eax                         # 960 frames, core coder, extension
     jnz .Laac_open_unsupported
-    # Backward-compatible extension: SBR present means HE-AAC.
+    cmp dword ptr [rip + sbr_mode], 1
+    je .Laac_open_format
+    # Backward-compatible extension: SBR present, absent or (equal rate) implicit.
     mov rax, [rip + aac_bytes]
     shl rax, 3
     sub rax, [rip + aac_pos]
@@ -310,12 +334,32 @@ FN aac_track_open
     call aac_get
     cmp eax, 0x2b7
     jne .Laac_open_format
-    mov ecx, 5
-    call aac_get
+    call .Laac_open_object_type
     cmp eax, 5
     jne .Laac_open_format
     mov ecx, 1
+    call aac_get                          # sbrPresentFlag
+    mov [rip + sbr_mode], eax
+    test eax, eax
+    jz .Laac_open_format
+    mov ecx, 4
     call aac_get
+    cmp eax, [rip + aac_rate_index]
+    ja .Laac_open_unsupported             # downsampled SBR, explicit rates
+    jb .Laac_open_ps
+    mov dword ptr [rip + sbr_mode], -1    # equal rates: decided by the stream
+.Laac_open_ps:
+    mov rax, [rip + aac_bytes]
+    shl rax, 3
+    sub rax, [rip + aac_pos]
+    cmp rax, 11
+    jbe .Laac_open_format
+    mov ecx, 11
+    call aac_get
+    cmp eax, 0x548
+    jne .Laac_open_format
+    mov ecx, 1
+    call aac_get                          # psPresentFlag
     test eax, eax
     jnz .Laac_open_unsupported
 .Laac_open_format:
@@ -363,56 +407,112 @@ FN aac_track_open
     call pcm_build_mix
     test eax, eax
     jz .Laac_open_bad
-    call aac_track_reset
-    mov dword ptr [rip + aac_random], 0x1f2e3d4c
-    mov dword ptr [rip + aac_probed], 0
     mov dword ptr [rip + aac_features], 0
+    cmp dword ptr [rip + sbr_mode], 1
+    jne .Laac_open_probe
+    call .Laac_open_sbr
+    test eax, eax
+    jz .Laac_open_failed
+.Laac_open_probe:
+    call .Laac_open_decode_first
+    test eax, eax
+    jz .Laac_open_failed
+    cmp dword ptr [rip + sbr_active], 0
+    jne .Laac_open_ready
+    cmp dword ptr [rip + sbr_found], 0
+    je .Laac_open_ready
+    call .Laac_open_sbr                   # implicit SBR: decode again with it
+    test eax, eax
+    jz .Laac_open_failed
+    call .Laac_open_decode_first
+    test eax, eax
+    jz .Laac_open_failed
+.Laac_open_ready:
     mov eax, 1
     jmp .Laac_open_return
 .Laac_open_unsupported:
     mov dword ptr [rip + decode_error], AAC_UNSUPPORTED
 .Laac_open_bad:
+    cmp dword ptr [rip + decode_error], 0
+    jne .Laac_open_failed
+    mov dword ptr [rip + decode_error], AAC_MALFORMED
+.Laac_open_failed:
     call aac_track_close
     xor eax, eax
 .Laac_open_return:
     add rsp, 40
+    pop r12
+    pop rdi
     pop rsi
     pop rbx
     ret
+# Local subroutines (the caller's frame is 8 bytes deeper).
+.Laac_open_object_type:                   # audioObjectType with its escape
+    mov ecx, 5
+    call aac_get
+    cmp eax, 31
+    jne .Laac_open_object_done
+    mov ecx, 6
+    call aac_get
+    add eax, 32
+.Laac_open_object_done:
+    ret
+.Laac_open_sbr:                           # SBR output at twice the core rate
+    sub rsp, 40
+    xor eax, eax
+    mov dword ptr [rip + decode_error], AAC_UNSUPPORTED
+    cmp dword ptr [rip + aac_rate_index], 3
+    jb .Laac_open_sbr_done                # a core above 48 kHz
+    mov dword ptr [rip + decode_error], 0
+    mov eax, [rip + aac_config]
+    lea rcx, [rip + aac_config_elements]
+    movzx ecx, byte ptr [rcx + rax]
+    call sbr_open
+    test eax, eax
+    jz .Laac_open_sbr_done
+    mov dword ptr [rip + sbr_active], 1
+    shl dword ptr [rip + sample_rate], 1
+    mov eax, 1
+.Laac_open_sbr_done:
+    add rsp, 40
+    ret
+.Laac_open_decode_first:                  # -> EAX=1 when the first packet decodes
+    sub rsp, 40
+    xor eax, eax
+    test r12d, r12d
+    jz .Laac_open_first_done
+    call aac_track_reset
+    mov dword ptr [rip + aac_random], 0x1f2e3d4c
+    mov rcx, rdi
+    mov edx, r12d
+    mov r8, [rip + aac_memory]
+    add r8, AM_PROBE
+    mov r9d, 2*AAC_FRAME
+    call aac_track_decode
+    mov [rsp + 32], eax
+    call aac_track_reset
+    mov dword ptr [rip + aac_random], 0x1f2e3d4c
+    mov eax, [rsp + 32]
+.Laac_open_first_done:
+    add rsp, 40
+    ret
 ENDFN aac_track_open
 
-# RCX=packet, EDX=bytes -> EAX=1024, or -1. The first packet is decoded once
-# so that HE-AAC signalled only inside the stream rejects when opening.
+# RCX=packet, EDX=bytes -> EAX=1024 frames, 2048 with SBR, or -1.
 FN aac_track_samples
-    push rbx
-    sub rsp, 32
     mov eax, -1
     test edx, edx
     jz .Laac_samples_return
-    cmp dword ptr [rip + aac_probed], 0
-    jne .Laac_samples_frame
-    mov dword ptr [rip + aac_probed], 1
-    mov ebx, [rip + aac_random]
-    mov r8, [rip + aac_memory]
-    add r8, AM_PROBE
-    mov r9d, AAC_FRAME
-    call aac_track_decode
-    mov [rip + aac_random], ebx
-    mov ebx, eax
-    call aac_track_reset
-    mov eax, -1
-    test ebx, ebx
-    jz .Laac_samples_return
-.Laac_samples_frame:
     mov eax, AAC_FRAME
+    cmp dword ptr [rip + sbr_active], 0
+    je .Laac_samples_return
+    add eax, eax
 .Laac_samples_return:
-    add rsp, 32
-    pop rbx
     ret
 ENDFN aac_track_samples
 
 # RCX=packet, EDX=bytes, R8=stereo float output, R9D=capacity -> EAX=1024
-# frames, or 0 with decode_error set.
+# frames (2048 with SBR), or 0 with decode_error set.
 FN aac_track_decode
     push rbx
     push rsi
@@ -423,7 +523,13 @@ FN aac_track_decode
     push r15
     sub rsp, 48
     mov [rsp + 32], r8
-    cmp r9d, AAC_FRAME
+    mov eax, AAC_FRAME
+    cmp dword ptr [rip + sbr_active], 0
+    je .Laac_decode_capacity
+    add eax, eax
+.Laac_decode_capacity:
+    mov [rsp + 40], eax                   # frames
+    cmp r9d, eax
     jb .Laac_decode_bad
     mov [rip + aac_ptr], rcx
     mov edx, edx
@@ -494,9 +600,35 @@ FN aac_track_decode
     mov eax, [rip + aac_next]
     cmp eax, [rip + aac_channels]
     jne .Laac_decode_bad
+    cmp dword ptr [rip + sbr_active], 0
+    je .Laac_decode_emit
+    # SBR per channel element, in layout order.
+    mov eax, [rip + aac_config]
+    dec eax
+    imul eax, eax, 6
+    lea rsi, [rip + aac_layouts]
+    add rsi, rax
+    xor edi, edi                          # element
+    xor r12d, r12d                        # first channel
+.Laac_decode_sbr:
+    cmp edi, [rip + aac_element]
+    jae .Laac_decode_emit
+    movzx ebx, byte ptr [rsi + rdi]
+    mov ecx, edi
+    mov edx, ebx
+    mov r8d, r12d
+    call sbr_apply
+    inc r12d
+    cmp ebx, 1
+    jne .Laac_decode_sbr_next
+    inc r12d
+.Laac_decode_sbr_next:
+    inc edi
+    jmp .Laac_decode_sbr
+.Laac_decode_emit:
     mov rcx, [rsp + 32]
     call aac_emit
-    mov eax, AAC_FRAME
+    mov eax, [rsp + 40]
     jmp .Laac_decode_return
 .Laac_decode_unsupported:
     mov dword ptr [rip + decode_error], AAC_UNSUPPORTED
@@ -711,10 +843,12 @@ LOCALFN aac_program_config
     ret
 ENDFN aac_program_config
 
-# Fill element: skipped, except that SBR data (HE-AAC) is unsupported.
+# Fill element: SBR data for the previous channel element when SBR is on,
+# otherwise skipped (implicit SBR is noted while the first packet is probed).
 LOCALFN aac_fill
     push rbx
-    sub rsp, 32
+    push rsi
+    sub rsp, 40
     mov ecx, 4
     call aac_get
     mov ebx, eax
@@ -738,10 +872,39 @@ LOCALFN aac_fill
     mov eax, 1
     jmp .Laac_fill_return
 .Laac_fill_sbr:
-    mov dword ptr [rip + decode_error], AAC_UNSUPPORTED
-    xor eax, eax
+    mov esi, eax
+    cmp dword ptr [rip + aac_element], 0
+    je .Laac_fill_skip                    # before the first channel element
+    cmp dword ptr [rip + sbr_active], 0
+    jne .Laac_fill_decode
+    cmp dword ptr [rip + sbr_mode], -1
+    jne .Laac_fill_skip
+    mov dword ptr [rip + sbr_found], 1
+.Laac_fill_skip:
+    shl rbx, 3
+    add [rip + aac_pos], rbx
+    jmp .Laac_fill_done
+.Laac_fill_decode:
+    add qword ptr [rip + aac_pos], 4      # extension_type
+    mov eax, [rip + aac_element]
+    dec eax
+    lea rcx, [rip + sbr_elements]
+    mov rcx, [rcx + rax*8]
+    mov edx, [rip + aac_config]
+    dec edx
+    imul edx, edx, 6
+    add edx, eax
+    lea rax, [rip + aac_layouts]
+    movzx edx, byte ptr [rax + rdx]       # element type
+    xor r8d, r8d
+    cmp esi, 14                           # EXT_SBR_DATA_CRC
+    sete r8b
+    mov r9d, ebx
+    call sbr_extension
+    jmp .Laac_fill_return
 .Laac_fill_return:
-    add rsp, 32
+    add rsp, 40
+    pop rsi
     pop rbx
     ret
 ENDFN aac_fill
@@ -2113,7 +2276,7 @@ LOCALFN aac_filterbank
     mov eax, r12d
     shl eax, 12
     lea r14, [r15 + rax + AM_OVERLAP]     # overlap (floats)
-    lea rdi, [r15 + rax + AM_PCM]         # output (floats)
+    lea rdi, [r15 + rax*2 + AM_PCM]       # output (floats)
     lea rcx, [rip + aac_prev_shape]
     movzx eax, byte ptr [rcx + r12]
     mov [rsp + 32], eax                   # previous shape
@@ -2472,6 +2635,11 @@ LOCALFN aac_emit
     mov rsi, [rip + aac_memory]
     add rsi, AM_PCM
     mov ebx, [rip + aac_channels]
+    mov r11d, AAC_FRAME
+    cmp dword ptr [rip + sbr_active], 0
+    je .Laac_emit_count
+    add r11d, r11d
+.Laac_emit_count:
     cmp dword ptr [rip + pcm_mix], 0
     jne .Laac_emit_mix
     xor ecx, ecx
@@ -2482,16 +2650,16 @@ LOCALFN aac_emit
     movss [rdi + rcx*8], xmm0
     movss [rdi + rcx*8 + 4], xmm0
     inc ecx
-    cmp ecx, AAC_FRAME
+    cmp ecx, r11d
     jb .Laac_emit_mono
     jmp .Laac_emit_done
 .Laac_emit_stereo:
     movss xmm0, [rsi + rcx*4]
-    movss xmm1, [rsi + rcx*4 + 4096]
+    movss xmm1, [rsi + rcx*4 + 8192]
     movss [rdi + rcx*8], xmm0
     movss [rdi + rcx*8 + 4], xmm1
     inc ecx
-    cmp ecx, AAC_FRAME
+    cmp ecx, r11d
     jb .Laac_emit_stereo
     jmp .Laac_emit_done
 .Laac_emit_mix:
@@ -2508,7 +2676,7 @@ LOCALFN aac_emit
     movzx eax, byte ptr [r8 + rdx]
     shl eax, 4
     mov r10d, edx
-    shl r10d, 12
+    shl r10d, 13
     add r10, rsi
     cvtss2sd xmm2, [r10 + rcx*4]
     movsd xmm3, xmm2
@@ -2524,7 +2692,7 @@ LOCALFN aac_emit
     movss [rdi + rcx*8], xmm0
     movss [rdi + rcx*8 + 4], xmm1
     inc ecx
-    cmp ecx, AAC_FRAME
+    cmp ecx, r11d
     jb .Laac_emit_frame
 .Laac_emit_done:
     add rsp, 32
@@ -3006,3 +3174,5 @@ FN adts_open
     pop rbx
     ret
 ENDFN adts_open
+
+.include "aac_sbr.inc"
