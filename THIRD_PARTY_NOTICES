@@ -106,6 +106,19 @@ and runs the reference Huffman decoder in a test-only harness to recover the
 ISO/IEC 14496-3 codewords; it writes them, with the band tables, as
 src/aac_tables.inc. The AAC decoder in src/aac.s is handwritten x86-64
 assembly; no PacketVideo code is included in or linked into either player.
+From the same files (get_sbr_startfreq.cpp, sbr_code_book_envlevel.cpp),
+tests/generate-sbr-tables.py takes the HE-AAC SBR Huffman trees and
+start-frequency offsets for src/sbr_tables.inc.
+
+HE-AAC SBR QMF window and noise table data:
+JAADec (DV8FromTheWorld/JAADec commit 28b460de7300aaaa80f5617f9ea3d47ce7462622,
+FilterbankTable.java and NoiseTable.java).
+Released by its authors under a public domain dedication (LICENSE in that
+repository). tests/generate-sbr-tables.py fetches the pinned files, checks
+their hashes and writes the ISO/IEC 14496-3 window and noise table values as
+single-precision bit patterns in src/sbr_tables.inc. The spectral band
+replication decoder in src/aac_sbr.inc is handwritten x86-64 assembly; no
+JAADec code is included in or linked into either player.
 
 Apple Lossless (ALAC) algorithm reference:
 Apple Lossless Audio Codec, Copyright (c) 2011 Apple Inc.

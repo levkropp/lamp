@@ -42,6 +42,7 @@ def main():
     reference = opus_reference()
     step(TESTS / 'generate-mp3-tables.js', '--check')
     step(TESTS / 'generate-aac-tables.py', '--check')
+    step(TESTS / 'generate-sbr-tables.py', '--check')
     for generator in ('celt-tables', 'celt-spectral-tables', 'celt-transform-tables', 'silk-stereo-tables',
                       'silk-resampler-tables', 'silk-lpc-tables', 'silk-nlsf-tables', 'silk-indices-tables',
                       'silk-parameters-tables'):
@@ -63,6 +64,7 @@ def main():
     step(TESTS / 'verify-matroska.py', *playback)
     step(TESTS / 'verify-mp4.py', *playback)
     step(TESTS / 'verify-aac.py', *playback)
+    step(TESTS / 'verify-heaac.py', *playback)
     if not WINDOWS and not playback:
         step(TESTS / 'verify-playback.py')
     if '--skip-network' not in arguments:

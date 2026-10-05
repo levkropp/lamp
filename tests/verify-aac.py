@@ -256,7 +256,7 @@ def main():
         checks.append({'test': path.name, 'result': 'rejected', 'oracle': line})
     good = (work / 'noise.m4a').read_bytes()
     config = audio_specific_config(good)
-    for name, first in (('he-aac-object', 0x28), ('object-escape', 0xf8)):
+    for name, first in (('ltp-object', 0x20), ('object-escape', 0xf8)):
         data = bytearray(good)
         data[config] = first | (data[config] & 7)
         path = work / f'bad-{name}.m4a'

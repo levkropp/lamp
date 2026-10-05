@@ -1,0 +1,26 @@
+{
+  "reference": "SBR tables for tests/generate-sbr-tables.py; test-only extraction, no code linked",
+  "sources": [
+    {
+      "name": "PacketVideo AAC decoder (Apache License 2.0), Android Open Source Project",
+      "directory": "pv-aacdec",
+      "url": "https://raw.githubusercontent.com/aosp-mirror/platform_frameworks_base/{commit}/media/libstagefright/codecs/aacdec/{file}",
+      "commit": "df331873c8576e0ae34ae1ee3cc258beed373535",
+      "files": {
+        "sbr_code_book_envlevel.cpp": "ad98042ff5d2bc226a5ecabd485aa61379915f8bb98c1ed9ab1e98617e9657c8",
+        "get_sbr_startfreq.cpp": "34de20f4080216bae66741a14ac4ab6991ce0fe5bdf7a1110532791070466cbc"
+      }
+    },
+    {
+      "name": "JAADec (public domain dedication)",
+      "directory": "jaadec",
+      "url": "https://raw.githubusercontent.com/DV8FromTheWorld/JAADec/{commit}/{file}",
+      "commit": "28b460de7300aaaa80f5617f9ea3d47ce7462622",
+      "files": {
+        "LICENSE": "51207f04c0e2f3a0b598585e9ccaa55c5a6ba7d0546c59dc014a0ac10a4ce7c5",
+        "src/main/java/net/sourceforge/jaad/aac/sbr/FilterbankTable.java": "c9fdb47390a3b17a9597e5e7dd7e36b871494238aea5be92da6ca6356a1744a0",
+        "src/main/java/net/sourceforge/jaad/aac/sbr/NoiseTable.java": "36678eb2554a5bd2c8debba22e63265d04640c4b79ca238150a117b482f56949"
+      }
+    }
+  ]
+}

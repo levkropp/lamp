@@ -16,3 +16,4 @@ manifest.json
 publish-state.json
 __pycache__/
 tests/reference/pv-aacdec/
+tests/reference/jaadec/
