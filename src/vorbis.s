@@ -32,6 +32,10 @@ vorbis_index_count: .long 0
 vorbis_index_stride: .quad 16
 vorbis_seek_preroll: .long 0
 vb_origin_known: .long 0
+vb_track_mode: .long 0              # container packets; no Ogg granule trimming
+vb_header_list: .quad 0             # track mode: three (pointer, bytes) headers
+vb_header_index: .long 0
+vb_scan_previous: .long 0
 vb_origin: .quad 0
 vb_initial_skip: .long 0
 vb_trim_start: .long 0
@@ -406,141 +410,14 @@ ENDFN vorbis_close
 
 FN vorbis_open
     push rbx
-    push rsi
-    push rdi
     sub rsp, 32
     call ogg_open
     test eax, eax
     jz .Lvb_open_bad
-    call vorbis_close
-    mov dword ptr [rip + vb_bad], 0
-    mov dword ptr [rip + vb_allocated], 0
-    mov dword ptr [rip + vb_committed], 0
-    mov dword ptr [rip + vb_first], 1
-    mov dword ptr [rip + vb_previous], 0
-    mov dword ptr [rip + vb_available], 0
-    mov dword ptr [rip + vb_used], 0
-    mov qword ptr [rip + vb_emitted], 0
-    mov dword ptr [rip + vb_initial_skip], 0
-    mov dword ptr [rip + vb_trim_start], 0
-    call ogg_next
-    test rax, rax
-    jz .Lvb_open_bad
-    cmp edx, 30
-    jne .Lvb_open_bad
-    cmp dword ptr [rax], 0x726f7601
-    jne .Lvb_open_bad
-    cmp word ptr [rax + 4], 0x6962
-    jne .Lvb_open_bad
-    cmp byte ptr [rax + 6], 0x73
-    jne .Lvb_open_bad
-    cmp dword ptr [rax + 7], 0
-    jne .Lvb_open_bad
-    movzx ecx, byte ptr [rax + 11]
-    cmp ecx, 1
-    jb .Lvb_open_bad
-    mov [rip + source_channels], ecx
-    mov ecx, [rax + 12]
-    cmp ecx, 8000
-    jb .Lvb_open_bad
-    cmp ecx, 192000
-    ja .Lvb_open_bad
-    mov [rip + sample_rate], ecx
-    movzx ecx, byte ptr [rax + 28]
-    mov edx, ecx
-    and ecx, 15
-    shr edx, 4
-    cmp ecx, 6
-    jb .Lvb_open_bad
-    cmp edx, 13
-    ja .Lvb_open_bad
-    cmp edx, ecx
-    jb .Lvb_open_bad
-    mov ebx, 1
-    shl ebx, cl
-    mov [rip + vb_short], ebx
-    mov ecx, edx
-    mov ebx, 1
-    shl ebx, cl
-    mov [rip + vb_long], ebx
-    cmp byte ptr [rax + 29], 1
-    jne .Lvb_open_bad
-    mov dword ptr [rip + source_bits], 32
-    mov rax, [rip + ogg_total_granule]
-    mov [rip + total_frames], rax
-    call ogg_next
-    test rax, rax
-    jz .Lvb_open_bad
-    cmp edx, 16
-    jb .Lvb_open_bad
-    cmp dword ptr [rax], 0x726f7603
-    jne .Lvb_open_bad
-    cmp word ptr [rax + 4], 0x6962
-    jne .Lvb_open_bad
-    cmp byte ptr [rax + 6], 0x73
-    jne .Lvb_open_bad
-    # Validate bounded vendor and comment strings without allocating them.
-    mov rsi, rax
-    lea rdi, [rax + rdx]
-    add rsi, 7
-    mov eax, [rsi]
-    add rsi, 4
-    add rsi, rax
-    lea rax, [rsi + 4]
-    cmp rax, rdi
-    ja .Lvb_open_bad
-    mov ebx, [rsi]
-    add rsi, 4
-.Lvb_comment:
-    test ebx, ebx
-    jz .Lvb_comment_end
-    lea rax, [rsi + 4]
-    cmp rax, rdi
-    ja .Lvb_open_bad
-    mov eax, [rsi]
-    add rsi, 4
-    add rsi, rax
-    cmp rsi, rdi
-    ja .Lvb_open_bad
-    dec ebx
-    jmp .Lvb_comment
-.Lvb_comment_end:
-    cmp rsi, rdi
-    jae .Lvb_open_bad
-    test byte ptr [rsi], 1
-    jz .Lvb_open_bad
-    mov ecx, VB_ARENA        # reserve address space; commit setup pages as needed
-    call mem_reserve
-    test rax, rax
-    jz .Lvb_open_bad
-    mov [rip + vb_arena], rax
-    call ogg_next
-    test rax, rax
-    jz .Lvb_open_bad
-    cmp edx, 8
-    jb .Lvb_open_bad
-    cmp dword ptr [rax], 0x726f7605
-    jne .Lvb_open_bad
-    cmp word ptr [rax + 4], 0x6962
-    jne .Lvb_open_bad
-    cmp byte ptr [rax + 6], 0x73
-    jne .Lvb_open_bad
-    lea rcx, [rax + rdx]
-    mov [rip + vb_end], rcx
-    add rax, 7
-    mov [rip + vb_ptr], rax
-    mov qword ptr [rip + vb_acc], 0
-    mov dword ptr [rip + vb_count], 0
-    call vb_setup
+    mov qword ptr [rip + vb_header_list], 0
+    call vb_open_headers
     test eax, eax
     jz .Lvb_open_bad
-    call vb_workspace
-    test eax, eax
-    jz .Lvb_open_bad
-    call vb_build_mix
-    mov ecx, [rip + vb_short]
-    mov edx, [rip + vb_long]
-    call vb_transform_init
     cmp dword ptr [rip + ogg_packet_page_end], 1
     jne .Lvb_open_bad
     call vb_build_index
@@ -553,11 +430,178 @@ FN vorbis_open
     xor eax, eax
 .Lvb_open_done:
     add rsp, 32
+    pop rbx
+    ret
+ENDFN vorbis_open
+
+# The next header packet: from Ogg, or from vb_header_list in track mode.
+# RAX=packet, EDX=bytes; RAX=0 when none.
+LOCALFN vb_next_header
+    mov rcx, [rip + vb_header_list]
+    test rcx, rcx
+    jz ogg_next
+    mov eax, [rip + vb_header_index]
+    cmp eax, 3
+    jae .Lvb_next_header_none
+    inc dword ptr [rip + vb_header_index]
+    shl eax, 4
+    mov edx, [rcx + rax + 8]
+    mov rax, [rcx + rax]
+    ret
+.Lvb_next_header_none:
+    xor eax, eax
+    xor edx, edx
+    ret
+ENDFN vb_next_header
+
+# Identification, comment and setup headers -> EAX=1 with tables and buffers
+# ready for packet decoding.
+LOCALFN vb_open_headers
+    push rbx
+    push rsi
+    push rdi
+    sub rsp, 32
+    call vorbis_close
+    mov dword ptr [rip + vb_bad], 0
+    mov dword ptr [rip + vb_allocated], 0
+    mov dword ptr [rip + vb_committed], 0
+    mov dword ptr [rip + vb_first], 1
+    mov dword ptr [rip + vb_track_mode], 0
+    mov dword ptr [rip + vb_previous], 0
+    mov dword ptr [rip + vb_available], 0
+    mov dword ptr [rip + vb_used], 0
+    mov qword ptr [rip + vb_emitted], 0
+    mov dword ptr [rip + vb_initial_skip], 0
+    mov dword ptr [rip + vb_trim_start], 0
+    call vb_next_header
+    test rax, rax
+    jz .Lvb_headers_bad
+    cmp edx, 30
+    jne .Lvb_headers_bad
+    cmp dword ptr [rax], 0x726f7601
+    jne .Lvb_headers_bad
+    cmp word ptr [rax + 4], 0x6962
+    jne .Lvb_headers_bad
+    cmp byte ptr [rax + 6], 0x73
+    jne .Lvb_headers_bad
+    cmp dword ptr [rax + 7], 0
+    jne .Lvb_headers_bad
+    movzx ecx, byte ptr [rax + 11]
+    cmp ecx, 1
+    jb .Lvb_headers_bad
+    mov [rip + source_channels], ecx
+    mov ecx, [rax + 12]
+    cmp ecx, 8000
+    jb .Lvb_headers_bad
+    cmp ecx, 192000
+    ja .Lvb_headers_bad
+    mov [rip + sample_rate], ecx
+    movzx ecx, byte ptr [rax + 28]
+    mov edx, ecx
+    and ecx, 15
+    shr edx, 4
+    cmp ecx, 6
+    jb .Lvb_headers_bad
+    cmp edx, 13
+    ja .Lvb_headers_bad
+    cmp edx, ecx
+    jb .Lvb_headers_bad
+    mov ebx, 1
+    shl ebx, cl
+    mov [rip + vb_short], ebx
+    mov ecx, edx
+    mov ebx, 1
+    shl ebx, cl
+    mov [rip + vb_long], ebx
+    cmp byte ptr [rax + 29], 1
+    jne .Lvb_headers_bad
+    mov dword ptr [rip + source_bits], 32
+    mov rax, [rip + ogg_total_granule]
+    mov [rip + total_frames], rax
+    call vb_next_header
+    test rax, rax
+    jz .Lvb_headers_bad
+    cmp edx, 16
+    jb .Lvb_headers_bad
+    cmp dword ptr [rax], 0x726f7603
+    jne .Lvb_headers_bad
+    cmp word ptr [rax + 4], 0x6962
+    jne .Lvb_headers_bad
+    cmp byte ptr [rax + 6], 0x73
+    jne .Lvb_headers_bad
+    # Validate bounded vendor and comment strings without allocating them.
+    mov rsi, rax
+    lea rdi, [rax + rdx]
+    add rsi, 7
+    mov eax, [rsi]
+    add rsi, 4
+    add rsi, rax
+    lea rax, [rsi + 4]
+    cmp rax, rdi
+    ja .Lvb_headers_bad
+    mov ebx, [rsi]
+    add rsi, 4
+.Lvb_comment:
+    test ebx, ebx
+    jz .Lvb_comment_end
+    lea rax, [rsi + 4]
+    cmp rax, rdi
+    ja .Lvb_headers_bad
+    mov eax, [rsi]
+    add rsi, 4
+    add rsi, rax
+    cmp rsi, rdi
+    ja .Lvb_headers_bad
+    dec ebx
+    jmp .Lvb_comment
+.Lvb_comment_end:
+    cmp rsi, rdi
+    jae .Lvb_headers_bad
+    test byte ptr [rsi], 1
+    jz .Lvb_headers_bad
+    mov ecx, VB_ARENA        # reserve address space; commit setup pages as needed
+    call mem_reserve
+    test rax, rax
+    jz .Lvb_headers_bad
+    mov [rip + vb_arena], rax
+    call vb_next_header
+    test rax, rax
+    jz .Lvb_headers_bad
+    cmp edx, 8
+    jb .Lvb_headers_bad
+    cmp dword ptr [rax], 0x726f7605
+    jne .Lvb_headers_bad
+    cmp word ptr [rax + 4], 0x6962
+    jne .Lvb_headers_bad
+    cmp byte ptr [rax + 6], 0x73
+    jne .Lvb_headers_bad
+    lea rcx, [rax + rdx]
+    mov [rip + vb_end], rcx
+    add rax, 7
+    mov [rip + vb_ptr], rax
+    mov qword ptr [rip + vb_acc], 0
+    mov dword ptr [rip + vb_count], 0
+    call vb_setup
+    test eax, eax
+    jz .Lvb_headers_bad
+    call vb_workspace
+    test eax, eax
+    jz .Lvb_headers_bad
+    call vb_build_mix
+    mov ecx, [rip + vb_short]
+    mov edx, [rip + vb_long]
+    call vb_transform_init
+    mov eax, 1
+    jmp .Lvb_headers_done
+.Lvb_headers_bad:
+    xor eax, eax
+.Lvb_headers_done:
+    add rsp, 32
     pop rdi
     pop rsi
     pop rbx
     ret
-ENDFN vorbis_open
+ENDFN vb_open_headers
 
 # Packet-mode/window scan only. Points capture a packet boundary and the raw
 # sample position after that packet. Decode it once to prime exact overlap.

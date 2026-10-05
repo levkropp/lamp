@@ -194,77 +194,72 @@
     {
       "test": "chain-junk-between.ogg",
       "result": "rejected",
-      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":1}"
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":40}"
     },
     {
       "test": "chain-truncated-link.ogg",
       "result": "rejected",
-      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":1}"
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":40}"
     },
     {
       "test": "chain-second-link-crc.ogg",
       "result": "rejected",
-      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":1}"
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":23}"
     },
     {
       "test": "chain-unsupported-link.ogg",
       "result": "rejected",
-      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":1}"
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":40}"
     },
     {
       "test": "chain-unsupported-only.ogg",
       "result": "rejected",
-      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":1}"
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":40}"
     },
     {
       "test": "chain-missing-bos.ogg",
       "result": "rejected",
-      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":1}"
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":40}"
     },
     {
       "test": "chain-after-eos.ogg",
       "result": "rejected",
-      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":1}"
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":23}"
     },
     {
       "test": "flac-ogg-mapping-version.ogg",
       "result": "rejected",
-      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":1}"
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":50}"
     },
     {
       "test": "flac-ogg-header-count.ogg",
       "result": "rejected",
-      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":1}"
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":50}"
     },
     {
       "test": "flac-ogg-no-fLaC.ogg",
       "result": "rejected",
-      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":1}"
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":50}"
     },
     {
       "test": "flac-ogg-streaminfo-type.ogg",
       "result": "rejected",
-      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":1}"
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":50}"
     },
     {
       "test": "flac-ogg-second-streaminfo.ogg",
       "result": "rejected",
-      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":1}"
-    },
-    {
-      "test": "flac-ogg-granule.ogg",
-      "result": "rejected",
-      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":1}"
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":50}"
     },
     {
       "test": "flac-ogg-two-frames.ogg",
       "result": "rejected",
-      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":1}"
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":50}"
     },
     {
       "test": "flac-ogg-missing-frame.ogg",
       "result": "rejected",
-      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":1}"
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":50}"
     },
     {
       "test": "flac-ogg-frame-crc.ogg",
@@ -274,7 +269,11 @@
     {
       "test": "flac-ogg-empty-packet.ogg",
       "result": "rejected",
-      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":1}"
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":50}"
+    },
+    {
+      "test": "flac-ogg-rounded-granules.ogg",
+      "result": "exact"
     },
     {
       "test": "cancel-open rate-change-chain.ogg",
@@ -287,6 +286,6 @@
       "oracle": "{\"result\":\"cancelled\",\"frames_before_cancel\":114688}"
     }
   ],
-  "rejections": 17,
+  "rejections": 16,
   "scope": "Chained Ogg links of Vorbis, Opus and FLAC, including rate changes resampled to the first link, same-serial chains and 48 links; multiplexed links with Opus, Vorbis, FLAC, Speex and Theora streams; exact continuous and seek PCM against the links' own decodes; Opus-link seeks equal standalone seeks; FLAC-in-Ogg exact against FFmpeg or native FLAC; malformed chains/mappings and cancellation."
 }

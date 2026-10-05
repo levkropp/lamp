@@ -4,7 +4,9 @@
 # The decoder is single-instance and only called by the producer thread.
 .include "lamp.inc"
 .globl sample_rate, source_channels, source_bits, decode_error, total_frames, codec_kind
-.globl decoder_seek_probes, flac_ogg_index_count, flac_ogg_index_stride
+.globl decoder_seek_probes, flac_ogg_index_count, flac_ogg_index_stride, flac_declared_frames
+.globl maximum_block, pcm_channel_mask, pcm_mask_seen, pcm_ignore_extra, pcm_mix, frame_samples, frame_used
+.globl flac_channel_ptrs
 .globl pcm_speaker_weights
 
 .data
@@ -80,6 +82,7 @@ flac_ogg_index: .quad 0
 flac_ogg_index_count: .long 0
 flac_ogg_index_stride: .quad 1
 flac_declared_frames: .quad 0
+flac_scan_position: .quad 0
 flac_channel_ptrs: .zero 8*8
 pcm_channel_mask: .long 0
 pcm_mask_seen: .long 0
@@ -204,6 +207,8 @@ LOCALFN decoder_open_format
     je .Lopen_flac
     cmp dword ptr [rax], 0x5367674f # OggS
     je .Lopen_ogg
+    cmp dword ptr [rax], 0xa3df451a # EBML: Matroska/WebM
+    je .Lopen_matroska
     mov rcx, [rip + input_cursor]
     mov rdx, [rip + input_end]
     call mp3_open
@@ -221,6 +226,14 @@ LOCALFN decoder_open_format
     mov dword ptr [rip + codec_kind], 6
     leave
     ret
+.Lopen_matroska:
+    mov rcx, [rip + input_cursor]
+    mov rdx, [rip + input_end]
+    call mkv_open
+    test eax, eax
+    jz .Lopen_bad
+    leave
+    ret
 .Lopen_ogg:
     # Chained links and multiplexed streams; each link's codec validates it.
     mov rcx, [rip + input_cursor]
@@ -231,7 +244,10 @@ LOCALFN decoder_open_format
     leave
     ret
 .Lopen_bad:
+    cmp dword ptr [rip + decode_error], 0
+    jne .Lopen_failed                   # keep the format's own reason
     mov dword ptr [rip + decode_error], 1
+.Lopen_failed:
     xor eax, eax
     leave
     ret
@@ -682,7 +698,7 @@ ENDFN decoder_open_format
 
 # Stereo mix, extra channel buffers and sample scale for an opened FLAC
 # stream -> EAX=1. Native FLAC and FLAC-in-Ogg share it.
-LOCALFN flac_prepare
+FN flac_prepare
     sub rsp, 40
     call pcm_build_mix
     test eax, eax
@@ -774,7 +790,8 @@ ENDFN flac_ogg_close
 # "FLAC" packet carrying STREAMINFO, one packet per further metadata block,
 # then one frame per packet. The whole stream is scanned for frame positions
 # and an index of packet checkpoints; frames are decoded and CRC-checked when
-# read. Granules count samples up to the page's last complete frame.
+# read. Frame headers carry exact sample positions, so page granules are not
+# used: remuxers often round them from millisecond timestamps.
 FN flac_ogg_open
     push rbx
     push rsi
@@ -941,10 +958,6 @@ FN flac_ogg_open
 .Lfo_scan_advance:
     add r12, r15
     inc r14
-    cmp dword ptr [rip + ogg_packet_last], 1
-    jne .Lfo_scan
-    cmp [rip + ogg_granule], r12
-    jne .Lfo_open_bad
     jmp .Lfo_scan
 .Lfo_scan_end:
     cmp dword ptr [rip + decode_error], 0
@@ -1173,6 +1186,271 @@ FN flac_ogg_read
 .Lfo_read_return:
     ret
 ENDFN flac_ogg_read
+
+# Track mode for container PCM: ECX=channels (1-8), EDX=bits (8/16/24/32,
+# or 32/64 float), R8D=flags (1 big-endian, 2 float, 4 signed 8-bit) -> EAX=1.
+FN pcm_track_open
+    sub rsp, 40
+    xor eax, eax
+    cmp ecx, 1
+    jb .Lpcm_track_return
+    cmp ecx, 8
+    ja .Lpcm_track_return
+    mov [rip + source_channels], ecx
+    mov dword ptr [rip + wav_format], 1
+    test r8d, 2
+    jz .Lpcm_track_integer
+    mov dword ptr [rip + wav_format], 3
+    cmp edx, 32
+    je .Lpcm_track_bits
+    cmp edx, 64
+    je .Lpcm_track_bits
+    jmp .Lpcm_track_return
+.Lpcm_track_integer:
+    cmp edx, 8
+    je .Lpcm_track_bits
+    cmp edx, 16
+    je .Lpcm_track_bits
+    cmp edx, 24
+    je .Lpcm_track_bits
+    cmp edx, 32
+    jne .Lpcm_track_return
+.Lpcm_track_bits:
+    mov [rip + wav_container_bits], edx
+    mov [rip + source_bits], edx
+    mov eax, r8d
+    and eax, 1
+    mov [rip + pcm_big_endian], eax
+    mov eax, r8d
+    shr eax, 2
+    and eax, 1
+    mov [rip + pcm_signed8], eax
+    mov eax, edx
+    shr eax, 3
+    imul eax, ecx
+    mov [rip + wav_align], eax
+    mov dword ptr [rip + pcm_mask_seen], 0
+    mov dword ptr [rip + pcm_ignore_extra], 0
+    mov dword ptr [rip + pcm_mix], 0
+    call pcm_build_mix
+    test eax, eax
+    jz .Lpcm_track_return
+    mov eax, 128
+    sub eax, [rip + wav_container_bits]
+    shl eax, 23
+    mov [rip + float_scale], eax
+    mov eax, 1
+.Lpcm_track_return:
+    add rsp, 40
+    ret
+ENDFN pcm_track_open
+
+# RCX=packet, EDX=bytes -> EAX=frames, or -1 for a partial frame.
+FN pcm_track_samples
+    mov eax, edx
+    xor edx, edx
+    div dword ptr [rip + wav_align]
+    test edx, edx
+    jz .Lpcm_samples_return
+    mov eax, -1
+.Lpcm_samples_return:
+    ret
+ENDFN pcm_track_samples
+
+# RCX=packet, EDX=bytes, R8=stereo float output, R9D=capacity -> EAX=frames.
+FN pcm_track_decode
+    push rbx
+    sub rsp, 32
+    mov [rip + input_cursor], rcx
+    mov eax, edx
+    xor edx, edx
+    div dword ptr [rip + wav_align]
+    mov ebx, eax
+    mov eax, -1
+    cmp ebx, r9d
+    ja .Lpcm_decode_return
+    imul eax, ebx, 1
+    imul eax, [rip + wav_align]
+    add rax, rcx
+    mov [rip + wav_end], rax
+    mov rcx, r8
+    mov edx, ebx
+    call wav_emit
+.Lpcm_decode_return:
+    add rsp, 32
+    pop rbx
+    ret
+ENDFN pcm_track_decode
+
+# Track mode for FLAC frames in Matroska/MP4: RCX=metadata blocks, optionally
+# after "fLaC", EDX=bytes -> EAX=1. STREAMINFO must come first; a
+# VORBIS_COMMENT channel mask is honored as in native FLAC.
+FN flac_track_open
+    push rbx
+    push rsi
+    push rdi
+    push r12
+    sub rsp, 40
+    mov rsi, rcx
+    lea rdi, [rcx + rdx]
+    call flac_ogg_close
+    mov qword ptr [rip + flac_seek_table], 0
+    mov dword ptr [rip + flac_seek_count], 0
+    mov qword ptr [rip + flac_next_sample], 0
+    mov dword ptr [rip + flac_seek_probe], 0
+    mov dword ptr [rip + pcm_mask_seen], 0
+    mov dword ptr [rip + flac_comments_seen], 0
+    mov dword ptr [rip + pcm_mix], 0
+    mov dword ptr [rip + pcm_ignore_extra], 0
+    mov dword ptr [rip + frame_samples], 0
+    mov dword ptr [rip + frame_used], 0
+    lea rax, [rsi + 4]
+    cmp rax, rdi
+    ja .Lflac_track_bad
+    cmp dword ptr [rsi], 0x43614c66      # "fLaC"
+    jne .Lflac_track_blocks
+    add rsi, 4
+.Lflac_track_blocks:
+    xor ebx, ebx                         # STREAMINFO seen
+.Lflac_track_block:
+    lea rax, [rsi + 4]
+    cmp rax, rdi
+    ja .Lflac_track_bad
+    mov r12d, [rsi]
+    bswap r12d                           # flags/type and 24-bit length
+    mov edx, r12d
+    and edx, 0xffffff
+    lea rcx, [rax + rdx]
+    cmp rcx, rdi
+    ja .Lflac_track_bad
+    mov ecx, r12d
+    shr ecx, 24
+    and ecx, 0x7f
+    test ebx, ebx
+    jnz .Lflac_track_later
+    test ecx, ecx
+    jnz .Lflac_track_bad
+    cmp edx, 34
+    jne .Lflac_track_bad
+    mov rcx, rax
+    call flac_streaminfo
+    test eax, eax
+    jz .Lflac_track_bad
+    mov ebx, 1
+    jmp .Lflac_track_next
+.Lflac_track_later:
+    test ecx, ecx
+    jz .Lflac_track_bad
+    cmp ecx, 127
+    je .Lflac_track_bad
+    cmp ecx, 4
+    jne .Lflac_track_next
+    cmp dword ptr [rip + flac_comments_seen], 0
+    jne .Lflac_track_bad
+    mov dword ptr [rip + flac_comments_seen], 1
+    lea rcx, [rsi + 4]
+    lea rdx, [rcx + rdx]
+    call flac_parse_comments
+    test eax, eax
+    jz .Lflac_track_bad
+.Lflac_track_next:
+    mov eax, r12d
+    and eax, 0xffffff
+    lea rsi, [rsi + rax + 4]
+    test r12d, 0x80000000
+    jnz .Lflac_track_metadata_done
+    cmp rsi, rdi
+    jb .Lflac_track_block
+.Lflac_track_metadata_done:
+    test ebx, ebx
+    jz .Lflac_track_bad
+    mov rax, [rip + total_frames]
+    mov [rip + flac_declared_frames], rax
+    mov qword ptr [rip + total_frames], 0
+    call flac_prepare
+    test eax, eax
+    jz .Lflac_track_bad
+    mov dword ptr [rip + flac_packet_mode], 1
+    mov qword ptr [rip + flac_scan_position], 0
+    mov eax, 1
+    jmp .Lflac_track_return
+.Lflac_track_bad:
+    call flac_ogg_close
+    xor eax, eax
+.Lflac_track_return:
+    add rsp, 40
+    pop r12
+    pop rdi
+    pop rsi
+    pop rbx
+    ret
+ENDFN flac_track_open
+
+# RCX=frame, EDX=bytes -> EAX=block size, or -1 when the header is malformed
+# or the frame does not start where the previous scanned frame ended.
+FN flac_track_samples
+    sub rsp, 40
+    call flac_frame_extent
+    test rdx, rdx
+    jz .Lflac_track_samples_bad
+    cmp rax, [rip + flac_scan_position]
+    jne .Lflac_track_samples_bad
+    add [rip + flac_scan_position], rdx
+    mov eax, edx
+    jmp .Lflac_track_samples_return
+.Lflac_track_samples_bad:
+    mov eax, -1
+.Lflac_track_samples_return:
+    add rsp, 40
+    ret
+ENDFN flac_track_samples
+
+# RCX=sample position of the next frame to decode.
+FN flac_track_reset
+    mov [rip + flac_next_sample], rcx
+    mov dword ptr [rip + frame_samples], 0
+    mov dword ptr [rip + frame_used], 0
+    ret
+ENDFN flac_track_reset
+
+# RCX=frame, EDX=bytes, R8=stereo float output, R9D=capacity -> EAX=frames,
+# or -1 on error. track_final_packet relaxes the minimum block size.
+FN flac_track_decode
+    push rbx
+    push rsi
+    sub rsp, 40
+    mov rsi, r8
+    mov ebx, r9d
+    mov [rip + input_cursor], rcx
+    add rdx, rcx
+    mov [rip + input_end], rdx
+    mov [rip + flac_bit_end], rdx
+    mov eax, [rip + track_final_packet]
+    mov [rip + flac_packet_final], eax
+    cmp rcx, rdx
+    jae .Lflac_track_decode_bad
+    call decode_frame
+    test eax, eax
+    jz .Lflac_track_decode_bad
+    mov edx, [rip + frame_samples]
+    cmp edx, ebx
+    ja .Lflac_track_decode_bad
+    mov dword ptr [rip + frame_used], 0
+    mov rcx, rsi
+    call flac_read
+    jmp .Lflac_track_decode_return
+.Lflac_track_decode_bad:
+    cmp dword ptr [rip + decode_error], 0
+    jne .Lflac_track_decode_failed
+    mov dword ptr [rip + decode_error], 3
+.Lflac_track_decode_failed:
+    mov eax, -1
+.Lflac_track_decode_return:
+    add rsp, 40
+    pop rsi
+    pop rbx
+    ret
+ENDFN flac_track_decode
 
 # RCX=34-byte STREAMINFO block -> EAX=1 when supported. Sets block limits,
 # rate, channels, depth and the declared frame count (0 = unknown).
@@ -1437,6 +1715,7 @@ FN decoder_close
     mov rbp, rsp
     sub rsp, 32
     call chain_close
+    call track_close
     call mp3_close
     call opus_close
     call vorbis_close
@@ -1483,6 +1762,8 @@ FN decoder_seek
     jne .Lseek_return
     cmp dword ptr [rip + chain_active], 0
     jne .Lseek_chain
+    cmp dword ptr [rip + track_active], 0
+    jne .Lseek_track
     cmp dword ptr [rip + codec_kind], 1
     je .Lseek_wav
     cmp dword ptr [rip + codec_kind], 6
@@ -1565,6 +1846,9 @@ FN decoder_seek
     jmp .Lseek_return
 .Lseek_chain:
     call chain_seek
+    jmp .Lseek_return
+.Lseek_track:
+    call track_seek
     jmp .Lseek_return
 .Lseek_wav:
     mov rdx, [rip + ogg_cancel_ptr]
@@ -2657,10 +2941,18 @@ FN decoder_read
     cmp dword ptr [rip + decode_error], 0
     jne .Lread_done
     cmp dword ptr [rip + chain_active], 0
-    je .Lread_single
+    je .Lread_track
     mov rcx, rdi
     mov edx, r12d
     call chain_read
+    mov ebx, eax
+    jmp .Lread_done
+.Lread_track:
+    cmp dword ptr [rip + track_active], 0
+    je .Lread_single
+    mov rcx, rdi
+    mov edx, r12d
+    call track_read
     mov ebx, eax
     jmp .Lread_done
 .Lread_single:
@@ -2697,51 +2989,10 @@ FN decoder_read
     mov ebx, eax
     jmp .Lread_done
 .Lread_wav:
-    mov rsi, [rip + input_cursor]
-.Lwav_emit:
-    cmp ebx, r12d
-    jae .Lwav_read_done
-    cmp rsi, [rip + wav_end]
-    jae .Lwav_read_done
-    cmp dword ptr [rip + pcm_mix], 0
-    jne .Lwav_emit_mix
-    call wav_sample
-    movss dword ptr [rdi + rbx*8], xmm0
-    cmp dword ptr [rip + source_channels], 1
-    je .Lwav_mono
-    call wav_sample
-.Lwav_mono:
-    movss dword ptr [rdi + rbx*8 + 4], xmm0
-    jmp .Lwav_emit_done
-.Lwav_emit_mix:
-    xor r9d, r9d
-    lea r10, [rip + pcm_mix_coeff]
-    xorpd xmm4, xmm4
-    xorpd xmm5, xmm5
-.Lwav_mix_channel:
-    call wav_sample_double
-    movapd xmm1, xmm0
-    mulsd xmm0, qword ptr [r10]
-    mulsd xmm1, qword ptr [r10 + 8]
-    addsd xmm4, xmm0
-    addsd xmm5, xmm1
-    add r10, 16
-    inc r9d
-    cmp r9d, [rip + source_channels]
-    jb .Lwav_mix_channel
-    minsd xmm4, [rip + wav_float_max]
-    maxsd xmm4, [rip + wav_float_min]
-    minsd xmm5, [rip + wav_float_max]
-    maxsd xmm5, [rip + wav_float_min]
-    cvtsd2ss xmm0, xmm4
-    cvtsd2ss xmm1, xmm5
-    movss dword ptr [rdi + rbx*8], xmm0
-    movss dword ptr [rdi + rbx*8 + 4], xmm1
-.Lwav_emit_done:
-    inc ebx
-    jmp .Lwav_emit
-.Lwav_read_done:
-    mov [rip + input_cursor], rsi
+    mov rcx, rdi
+    mov edx, r12d
+    call wav_emit
+    mov ebx, eax
 .Lread_done:
     mov eax, ebx
     add rsp, 48
@@ -2752,6 +3003,13 @@ FN decoder_read
     pop rbp
     ret
 ENDFN decoder_read
+
+# RCX=stereo float output, EDX=frames -> EAX=frames from the int64 channel
+# buffers (flac_channel_ptrs) of a decoded frame; frame_samples and
+# frame_used describe it. Shared with ALAC.
+FN flac_emit
+    jmp flac_read
+ENDFN flac_emit
 
 # RCX=stereo float output, EDX=frame capacity -> EAX=frames, for native FLAC
 # and FLAC-in-Ogg.
@@ -2827,6 +3085,71 @@ LOCALFN flac_read
     pop rbx
     ret
 ENDFN flac_read
+
+# RCX=stereo float output, EDX=frame capacity -> EAX=frames of interleaved
+# PCM from input_cursor up to wav_end (WAV, AIFF/AIFC and track PCM).
+LOCALFN wav_emit
+    push rbx
+    push rsi
+    push rdi
+    push r12
+    sub rsp, 40
+    mov rdi, rcx
+    mov r12d, edx
+    xor ebx, ebx
+    mov rsi, [rip + input_cursor]
+.Lwav_emit:
+    cmp ebx, r12d
+    jae .Lwav_read_done
+    cmp rsi, [rip + wav_end]
+    jae .Lwav_read_done
+    cmp dword ptr [rip + pcm_mix], 0
+    jne .Lwav_emit_mix
+    call wav_sample
+    movss dword ptr [rdi + rbx*8], xmm0
+    cmp dword ptr [rip + source_channels], 1
+    je .Lwav_mono
+    call wav_sample
+.Lwav_mono:
+    movss dword ptr [rdi + rbx*8 + 4], xmm0
+    jmp .Lwav_emit_done
+.Lwav_emit_mix:
+    xor r9d, r9d
+    lea r10, [rip + pcm_mix_coeff]
+    xorpd xmm4, xmm4
+    xorpd xmm5, xmm5
+.Lwav_mix_channel:
+    call wav_sample_double
+    movapd xmm1, xmm0
+    mulsd xmm0, qword ptr [r10]
+    mulsd xmm1, qword ptr [r10 + 8]
+    addsd xmm4, xmm0
+    addsd xmm5, xmm1
+    add r10, 16
+    inc r9d
+    cmp r9d, [rip + source_channels]
+    jb .Lwav_mix_channel
+    minsd xmm4, [rip + wav_float_max]
+    maxsd xmm4, [rip + wav_float_min]
+    minsd xmm5, [rip + wav_float_max]
+    maxsd xmm5, [rip + wav_float_min]
+    cvtsd2ss xmm0, xmm4
+    cvtsd2ss xmm1, xmm5
+    movss dword ptr [rdi + rbx*8], xmm0
+    movss dword ptr [rdi + rbx*8 + 4], xmm1
+.Lwav_emit_done:
+    inc ebx
+    jmp .Lwav_emit
+.Lwav_read_done:
+    mov [rip + input_cursor], rsi
+    mov eax, ebx
+    add rsp, 40
+    pop r12
+    pop rdi
+    pop rsi
+    pop rbx
+    ret
+ENDFN wav_emit
 
 LOCALFN wav_sample
     sub rsp, 40
