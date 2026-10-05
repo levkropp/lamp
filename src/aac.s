@@ -8,9 +8,9 @@
 # mid/side and intensity stereo, sine/KBD windows and a DCT-IV based IMDCT;
 # the output mixes to stereo with the shared WAVE speaker weights. HE-AAC
 # spectral band replication (aac_sbr.inc), signalled explicitly, by the
-# backward-compatible extension or only in the stream, doubles the rate.
-# Parametric stereo (HE-AAC v2), coupling channels, gain control, prediction
-# and 960-sample frames reject.
+# backward-compatible extension or only in the stream, doubles the rate, and
+# parametric stereo (HE-AAC v2) makes mono SBR streams stereo. Coupling
+# channels, gain control, prediction and 960-sample frames reject.
 .include "lamp.inc"
 .globl aac_channels, aac_rate_index, aac_random, aac_features, sbr_active
 
@@ -116,6 +116,7 @@ aac_tns_long: .long 0
 aac_tns_short: .long 0
 aac_tables_ready: .long 0
 aac_features: .long 0
+aac_ps_flag: .long -1                # parametric stereo signalled: -1 unknown, 0 absent, 1 present
 aac_prev_shape: .zero 8
 adts_config: .short 0
 
@@ -285,6 +286,7 @@ FN aac_track_open
     call aac_track_close
     mov dword ptr [rip + sbr_mode], -1
     mov dword ptr [rip + sbr_found], 0
+    mov dword ptr [rip + aac_ps_flag], -1
     cmp ebx, 2
     jb .Laac_open_bad
     mov [rip + aac_ptr], rsi
@@ -307,8 +309,14 @@ FN aac_track_open
     mov eax, [rsp + 32]
     cmp eax, 2
     je .Laac_open_specific
+    cmp eax, 29                           # explicit SBR and parametric stereo (HE-AAC v2)
+    jne .Laac_open_sbr_object
+    mov dword ptr [rip + aac_ps_flag], 1
+    jmp .Laac_open_explicit
+.Laac_open_sbr_object:
     cmp eax, 5                            # explicit SBR (HE-AAC)
-    jne .Laac_open_unsupported            # Main, SSR, LTP, PS, ...
+    jne .Laac_open_unsupported            # Main, SSR, LTP, ...
+.Laac_open_explicit:
     mov ecx, 4
     call aac_get                          # extensionSamplingFrequencyIndex
     cmp eax, [rip + aac_rate_index]       # a higher rate: SBR doubles it
@@ -360,8 +368,7 @@ FN aac_track_open
     jne .Laac_open_format
     mov ecx, 1
     call aac_get                          # psPresentFlag
-    test eax, eax
-    jnz .Laac_open_unsupported
+    mov [rip + aac_ps_flag], eax
 .Laac_open_format:
     call aac_inside
     test eax, eax
@@ -467,11 +474,21 @@ FN aac_track_open
     mov eax, [rip + aac_config]
     lea rcx, [rip + aac_config_elements]
     movzx ecx, byte ptr [rcx + rax]
+    xor edx, edx                          # mono: parametric stereo unless signalled absent
+    cmp eax, 1
+    jne .Laac_open_sbr_state
+    cmp dword ptr [rip + aac_ps_flag], 0
+    setne dl
+.Laac_open_sbr_state:
     call sbr_open
     test eax, eax
     jz .Laac_open_sbr_done
     mov dword ptr [rip + sbr_active], 1
     shl dword ptr [rip + sample_rate], 1
+    cmp qword ptr [rip + sbr_ps], 0
+    je .Laac_open_sbr_ready
+    mov dword ptr [rip + source_channels], 2
+.Laac_open_sbr_ready:
     mov eax, 1
 .Laac_open_sbr_done:
     add rsp, 40
@@ -2639,6 +2656,9 @@ LOCALFN aac_emit
     cmp dword ptr [rip + sbr_active], 0
     je .Laac_emit_count
     add r11d, r11d
+    cmp qword ptr [rip + sbr_ps], 0       # parametric stereo: channel 1 holds the right
+    je .Laac_emit_count
+    mov ebx, 2
 .Laac_emit_count:
     cmp dword ptr [rip + pcm_mix], 0
     jne .Laac_emit_mix

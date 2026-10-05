@@ -107,7 +107,9 @@ MP4/M4A/MOV audio tracks use the same track layer: Apple Lossless (a new assembl
 
 AAC-LC now decodes in MP4, Matroska and ADTS with a new assembly decoder: all twelve rates, mono to 7.1, every spectral codebook with escapes, pulses, TNS, M/S, intensity and noise substitution, all window sequences and shapes. 26 FFmpeg-encoded files match FFmpeg's float decoder at 138 dB or better (multichannel through LAMP's speaker weights); ADTS, Matroska and fragmented MP4 copies are exact; 48 random valid streams with every coding tool match FFmpeg; 60 seeks without noise substitution are exact; 16 malformed or unsupported streams reject. See [AAC notes](docs/aac.md).
 
-HE-AAC spectral band replication now runs on that core (signalled explicitly, by the backward-compatible extension or only in the stream), doubling the rate in MP4, Matroska and ADTS. With no HE-AAC encoder available, a Python SBR model writes its data into FFmpeg-encoded cores: 13 streams from mono to 7.1 at core rates 11.025–48 kHz match FFmpeg at 125 dB or better with every SBR tool covered, MP4/Matroska/fragmented copies with all three signalling forms are exact, corrupted SBR data falls back as in FFmpeg, and seeks match continuous decoding up to the SBR noise phase. Parametric stereo (HE-AAC v2) is the next AAC step.
+HE-AAC spectral band replication now runs on that core (signalled explicitly, by the backward-compatible extension or only in the stream), doubling the rate in MP4, Matroska and ADTS. With no HE-AAC encoder available, a Python SBR model writes its data into FFmpeg-encoded cores: 13 streams from mono to 7.1 at core rates 11.025–48 kHz match FFmpeg at 125 dB or better with every SBR tool covered, MP4/Matroska/fragmented copies with all three signalling forms are exact, corrupted SBR data falls back as in FFmpeg, and seeks match continuous decoding up to the SBR noise phase.
+
+HE-AAC v2 parametric stereo now turns mono SBR streams into stereo (object type 29, the backward-compatible PS flag or implicit), with 10/20/34-band IID and ICC in every mode, IPD/OPD, hybrid filter banks, decorrelation and both mixing procedures. A Python PS model writes its data into the same generated streams: 12 streams at core rates 11.025–24 kHz match FFmpeg's stereo decode at 128 dB or better with every PS tool covered, MP4 copies with all three signalling forms are exact, corrupted PS data falls back as in FFmpeg, and seeks match continuous decoding up to the SBR noise phase.
 
 MPEG audio Layers I and II now share the Layer III framing, index and synthesis: MPEG-1 and MPEG-2 lower rates, every allocation table and quantizer, all stereo modes and CRC checks. 96 random valid streams and 34 FFmpeg/libtwolame encoder files match FFmpeg's float decoders at 108.7 dB SNR or better, three files pass exact seek checks and seven malformed streams reject. See [Layer I/II notes](docs/mp2.md).
 
@@ -117,7 +119,7 @@ AIFF/AIFC now adds signed 1–32-bit PCM, AIFC byte-order/fixed-container varian
 
 | Area | Planned coverage, in approximate priority order |
 | --- | --- |
-| Mainstream lossy audio | AAC-LC, HE-AAC SBR and MPEG Layers I/II (implemented); HE-AAC v2 (PS), AC-3/E-AC-3; then DTS families, WMA variants and other relevant legacy formats |
+| Mainstream lossy audio | AAC-LC, HE-AAC v1/v2 and MPEG Layers I/II (implemented); AC-3/E-AC-3; then DTS families, WMA variants and other relevant legacy formats |
 | Lossless and PCM | ALAC (implemented in MP4/Matroska), WavPack, APE, AIFF/AIFC, RF64, FLAC-in-Ogg, broader PCM/float and FLAC depths/layouts |
 | Other audio | Musepack, Speex, AMR and telephony ADPCM; further formats from the compatibility inventory as demand and feasibility justify |
 | Common containers | MP4/M4A/MOV and Matroska/WebM (audio tracks implemented), MPEG TS/PS, AVI, ASF; broader Ogg stream mappings |
