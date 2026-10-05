@@ -1,9 +1,10 @@
 /* Test-only reference comparison for SILK shell and excitation decoding. */
+#include "lamp-test.h"
 #include <stdio.h>
 #include <string.h>
 #include "main.h"
-void op_silk_shell(int *,ec_dec *,unsigned);
-int op_silk_pulses(ec_dec *,int *,unsigned,unsigned,unsigned);
+LAMP_ABI void op_silk_shell(int *,ec_dec *,unsigned);
+LAMP_ABI int op_silk_pulses(ec_dec *,int *,unsigned,unsigned,unsigned);
 static unsigned seed=0x12948231;
 static unsigned next(void){seed^=seed<<13;seed^=seed>>17;seed^=seed<<5;return seed;}
 int main(void){

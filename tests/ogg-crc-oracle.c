@@ -1,12 +1,11 @@
 /* Independent bit-at-a-time Ogg CRC oracle; mapped end has a guard page. */
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+#include "lamp-test.h"
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
 unsigned decode_error;
-int ogg_open(const unsigned char *,const unsigned char *);
-void ogg_close(void);
+LAMP_ABI int ogg_open(const unsigned char *,const unsigned char *);
+LAMP_ABI void ogg_close(void);
 static uint32_t crc(const unsigned char *data,unsigned bytes){uint32_t value=0;for(unsigned i=0;i<bytes;i++){value^=(uint32_t)(i>=22&&i<26?0:data[i])<<24;for(unsigned j=0;j<8;j++)value=(value<<1)^((value&0x80000000)?0x04c11db7:0);}return value;}
 static void u32(unsigned char *p,uint32_t value){for(unsigned j=0;j<4;j++)p[j]=(unsigned char)(value>>(8*j));}
 static unsigned page(unsigned char *p,unsigned length,unsigned sequence,unsigned flags,unsigned *random){

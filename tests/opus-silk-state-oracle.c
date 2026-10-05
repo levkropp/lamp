@@ -1,4 +1,5 @@
 /* Test-only complete SILK parameter stage and atomic failure checks. */
+#include "lamp-test.h"
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
@@ -8,8 +9,8 @@ typedef struct {int8_t gain;unsigned char padding[3];int16_t prev[16];int first,
 typedef struct {SideInfoIndices *ind;ParamState *state;silk_decoder_control *out;int fs,subfr,cond;unsigned ind_cap,state_cap,out_cap;} Parameters;
 typedef struct {int lag,signal;} Previous;
 typedef struct {ec_dec *ec;Previous *state;SideInfoIndices *out;int fs,subfr,vad,lbrr,cond;unsigned out_cap,state_cap;} Indices;
-int op_silk_decode_parameters(Parameters *);
-int op_silk_indices(Indices *);
+LAMP_ABI int op_silk_decode_parameters(Parameters *);
+LAMP_ABI int op_silk_indices(Indices *);
 typedef char state_size[(sizeof(ParamState)==48)?1:-1];
 typedef char control_size[(sizeof(silk_decoder_control)==140)?1:-1];
 typedef char request_size[(sizeof(Parameters)==48)?1:-1];

@@ -1,5 +1,6 @@
 /* Test-only full RFC6716 SILK API oracle. Runtime remains MASM-only. */
 #define SILK_FRAME_ORACLE_EMBEDDED
+#include "lamp-test.h"
 #include "opus-silk-frame-oracle.c"
 #include "API.h"
 #include "resampler_private.h"
@@ -12,8 +13,8 @@ typedef struct {
 typedef struct {silk_decoder_state channel[2];stereo_dec_state stereo;int api_ch,int_ch,prev_mid;} NativeDecoder;
 typedef struct {DecoderState *state;unsigned cap;} DecoderInit;
 typedef struct {DecoderState *state;ec_dec *ec;int16_t *pcm;void *work;silk_DecControlStruct *ctrl;unsigned mode,new_packet,state_cap,ec_cap,pcm_cap,work_cap,ctrl_cap;} Decoder;
-int op_silk_decoder_init(DecoderInit *);
-int op_silk_decode(Decoder *);
+LAMP_ABI int op_silk_decoder_init(DecoderInit *);
+LAMP_ABI int op_silk_decode(Decoder *);
 typedef char decoder_sizes[(sizeof(DecoderState)==8536&&sizeof(DecoderInit)==16&&sizeof(Decoder)==72&&sizeof(silk_DecControlStruct)==24&&offsetof(DecoderState,rs)==7832&&offsetof(DecoderState,meta)==8456&&offsetof(DecoderState,tag)==8532)?1:-1];
 typedef struct {uint64_t before;DecoderState value;uint64_t after;} DecoderGuard;
 typedef struct {uint64_t before;unsigned char value[8568];uint64_t after;} DecoderWork;

@@ -1,4 +1,5 @@
 /* Test-only normative CELT float prediction-kernel comparisons. */
+#include "lamp-test.h"
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
@@ -7,10 +8,10 @@
 typedef struct {const float *x;float *ac;const float *window;float *scratch;int n,lag,overlap;unsigned x_cap,ac_cap,window_cap,scratch_cap;} Autocorr;
 typedef struct {float *out;const float *ac;int order;unsigned out_cap,ac_cap;} Lpc;
 typedef struct {const float *x,*coef;float *out,*mem;int n,order;unsigned x_cap,coef_cap,out_cap,mem_cap;} Filter;
-int op_celt_autocorr(Autocorr *);
-int op_celt_lpc(Lpc *);
-int op_celt_fir(Filter *);
-int op_celt_iir(Filter *);
+LAMP_ABI int op_celt_autocorr(Autocorr *);
+LAMP_ABI int op_celt_lpc(Lpc *);
+LAMP_ABI int op_celt_fir(Filter *);
+LAMP_ABI int op_celt_iir(Filter *);
 static uint32_t rng=0xa872493c;
 static uint32_t next(void){rng^=rng<<13;rng^=rng>>17;rng^=rng<<5;return rng;}
 static unsigned ac_checks,lpc_checks,fir_checks,iir_checks,invalid_checks;

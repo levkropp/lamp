@@ -1,5 +1,6 @@
 /* Extract integer probability/selector data from the verified RFC archive. */
 'use strict';
+const {rows}=require('./asm-data');
 const fs=require('fs'),path=require('path');
 const root=path.resolve(__dirname,'..'),ref=path.resolve(process.argv[2]||path.join(__dirname,'reference','opus-rfc6716'));
 const entries=[
@@ -28,7 +29,7 @@ const entries=[
   ['tables_NLSF_CB_'+tag+'.c','silk_NLSF_PRED_'+tag+'_Q8','si_pred_'+label,pred]
  ])
 ];
-let output='; Normative RFC6716 SILK data, copyright2006-2012 IETF Trust/Skype.\n; Generated integer data only; BSD conditions in THIRD_PARTY_NOTICES.\n';
+let output='# Normative RFC6716 SILK data, copyright2006-2012 IETF Trust/Skype.\n# Generated integer data only; BSD conditions in THIRD_PARTY_NOTICES.\n';
 for(const [file,symbol,label,count]of entries){
  const source=fs.readFileSync(path.join(ref,'silk',file),'utf8');
  const at=source.search(new RegExp('\\b'+symbol+'\\s*\\['));
@@ -37,9 +38,9 @@ for(const [file,symbol,label,count]of entries){
  const body=source.slice(begin,end).replace(/\/\*[\s\S]*?\*\//g,'').replace(/\/\/[^\n]*/g,'');
  const values=body.match(/-?\b\d+\b/g).map(Number);
  if(values.length!==count||values.some(n=>n<0||n>255))throw Error('Bad '+symbol+' count='+values.length);
- for(let i=0;i<count;i+=16)output+=(i===0?label+' ':'    ')+'db '+values.slice(i,i+16).join(',')+'\n';
+ output+=rows(label,'db',values);
 }
-output+='align 8\nsi_ltp_ptr dq si_ltp_gain0,si_ltp_gain1,si_ltp_gain2\n';
+output+='.p2align 3\nsi_ltp_ptr: .quad si_ltp_gain0, si_ltp_gain1, si_ltp_gain2\n';
 const destination=path.join(root,'src','opus_silk_indices_tables.inc');
 if(process.argv.includes('--check')){
  if(fs.readFileSync(destination,'utf8').replace(/\r\n/g,'\n')!==output)throw Error('SILK side-information tables differ from normative source');

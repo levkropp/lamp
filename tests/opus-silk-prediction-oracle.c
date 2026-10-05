@@ -1,11 +1,12 @@
 /* Test-only normative fixed-point division and analysis/rewhitening. */
+#include "lamp-test.h"
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
 #include "main.h"
 typedef struct {int16_t *out;const int16_t *in,*coef;int n,order;unsigned out_cap,in_cap,coef_cap;} Analysis;
-int op_silk_div32(int,int,int);
-int op_silk_analysis_filter(Analysis *);
+LAMP_ABI int op_silk_div32(int,int,int);
+LAMP_ABI int op_silk_analysis_filter(Analysis *);
 static uint32_t rng=0x54c18eb2;
 static uint32_t next(void){rng^=rng<<13;rng^=rng>>17;rng^=rng<<5;return rng;}
 static unsigned division_checks,filter_checks,guards;

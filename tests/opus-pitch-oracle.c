@@ -1,11 +1,12 @@
 /* Test-only normative standard-mode PLC pitch analysis comparisons. */
+#include "lamp-test.h"
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
 #include <math.h>
 #include "pitch.h"
 typedef struct {const float *left,*right;void *work;int channels;unsigned input_cap,work_cap;} Pitch;
-int op_celt_pitch(Pitch *);
+LAMP_ABI int op_celt_pitch(Pitch *);
 static uint32_t rng=0x3249128f;
 static uint32_t next(void){rng^=rng<<13;rng^=rng>>17;rng^=rng<<5;return rng;}
 static unsigned checks,guards;

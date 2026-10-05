@@ -1,4 +1,5 @@
 // Bounded deterministic mutations. This checks process survival, not conformance.
+const {cli}=require('./platform');
 const fs=require('fs'),path=require('path'),cp=require('child_process');
 const root=path.resolve(__dirname,'..'),dir=path.join(__dirname,'generated');
 const source=fs.readFileSync(path.join(dir,'mp3-transient-vbr.mp3'));
@@ -10,7 +11,7 @@ for(let i=0;i<256;i++) {
   if(i%4===0) bytes=bytes.subarray(0,random(bytes.length));
   else for(let j=0;j<1+i%7;j++) bytes[random(bytes.length)]^=1<<random(8);
   fs.writeFileSync(file,bytes);
-  const r=cp.spawnSync(path.join(root,'bin','lamp-cli.exe'),['--check',file],{timeout:2000,windowsHide:true,encoding:'utf8'});
+  const r=cp.spawnSync(cli(),['--check',file],{timeout:2000,windowsHide:true,encoding:'utf8'});
   if(r.error || ![0,2].includes(r.status)) throw new Error(`Mutation ${i} crashed or timed out: ${r.error||r.status}`);
   if(r.status===0) accepted++;else rejected++;
 }

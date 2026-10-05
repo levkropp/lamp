@@ -1,4 +1,5 @@
 /* Test-only comparison with the hash-verified RFC6716 BSD decoder. */
+#include "lamp-test.h"
 #include <stdio.h>
 #include <stdint.h>
 #include <stddef.h>
@@ -12,20 +13,20 @@ typedef struct {
  ec_dec *ec;float *x,*y,*low,*out;int *remaining;uint32_t *seed;float *scratch;
  int n,budget,band,lm,spread,blocks,intensity,tf,level,fill;float gain;unsigned mask;
 } Band;
-int op_celt_band(Band *);
+LAMP_ABI int op_celt_band(Band *);
 typedef struct {
  ec_dec *ec;float *x,*y;unsigned char *masks;int *pulses,*tf;float *norm,*scratch;uint32_t *seed;
  int start,end,lm,short_blocks,spread,dual,intensity,total,balance,coded,remaining_out,balance_out;
  unsigned x_cap,y_cap,norm_cap,scratch_cap,mask_cap;
 } Bands;
-int op_celt_bands(Bands *);
+LAMP_ABI int op_celt_bands(Bands *);
 #include "celt-bands-reference.inc"
 typedef struct {
  ec_dec *ec;float *old;int *tf,*offsets,*caps,*bits,*fine,*priority;
  int start,end,channels,lm,silence,transient,intra,spread,pitch;float gain;
  int tapset,trim,anti,balance,intensity,dual,coded,budget;
 } Controls;
-int op_celt_controls(Controls *);
+LAMP_ABI int op_celt_controls(Controls *);
 #include "celt-controls-reference.inc"
 static uint32_t random_state=0x125a8743;
 static uint32_t next(void){random_state^=random_state<<13;random_state^=random_state>>17;random_state^=random_state<<5;return random_state;}

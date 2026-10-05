@@ -2,8 +2,9 @@
    decoder; corrected libopus1.5.2 framing supplies packed stream boundaries.
    Channel assignment and RFC7845 downmix formulae are independent of ASM. */
 #define OPUS_OGG_ORACLE_EMBEDDED
+#include "lamp-test.h"
 #include "opus-ogg-oracle.c"
-uint64_t opus_seek(uint64_t);
+LAMP_ABI uint64_t opus_seek(uint64_t);
 extern uint64_t opus_seek_raw,opus_seek_headers,opus_index_stride;
 extern unsigned opus_index_count;
 extern unsigned *ogg_cancel_ptr;

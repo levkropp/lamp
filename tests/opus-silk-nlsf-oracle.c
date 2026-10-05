@@ -1,5 +1,6 @@
 /* Test-only normative NLSF reconstruction and stability comparisons.
    Include unchanged NLSF_decode.c to inspect its static residual dequantizer. */
+#include "lamp-test.h"
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
@@ -8,10 +9,10 @@ typedef struct {const opus_int8 *ind;opus_int16 *out;void *work;int fs;unsigned 
 typedef struct {opus_int16 *out;int fs;unsigned cap;} Stabilize;
 typedef struct {int lag,signal;} Previous;
 typedef struct {ec_dec *ec;Previous *state;SideInfoIndices *out;int fs,subfr,vad,lbrr,cond;unsigned out_cap,state_cap;} Indices;
-int op_silk_nlsf_decode(Nlsf *);
-int op_silk_nlsf_stabilize(Stabilize *);
-int op_silk_sqrt_approx(int);
-int op_silk_indices(Indices *);
+LAMP_ABI int op_silk_nlsf_decode(Nlsf *);
+LAMP_ABI int op_silk_nlsf_stabilize(Stabilize *);
+LAMP_ABI int op_silk_sqrt_approx(int);
+LAMP_ABI int op_silk_indices(Indices *);
 static uint32_t rng=0x5c9182ab;
 static uint32_t next(void){rng^=rng<<13;rng^=rng>>17;rng^=rng<<5;return rng;}
 static unsigned sqrt_checks,decode_checks,stability_checks,connected_checks,guards,invalid_vector_checks;

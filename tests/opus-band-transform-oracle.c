@@ -1,11 +1,12 @@
 /* Test-only comparison with normative BSD CELT Haar/Hadamard transforms. */
+#include "lamp-test.h"
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
 #include "bands.c"
 typedef struct{float *x;int n0,stride,hadamard,inverse;} Reorder;
-int op_celt_haar(float *,int,int);
-int op_celt_reorder(Reorder *);
+LAMP_ABI int op_celt_haar(float *,int,int);
+LAMP_ABI int op_celt_reorder(Reorder *);
 static uint32_t seed=0x62758193;
 static uint32_t next(void){seed^=seed<<13;seed^=seed>>17;seed^=seed<<5;return seed;}
 int main(void){

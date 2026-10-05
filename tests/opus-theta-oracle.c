@@ -1,4 +1,5 @@
 /* Development-only comparison with normative BSD RFC6716 split decoding. */
+#include "lamp-test.h"
 #include <stdio.h>
 #include <stdint.h>
 #include <stddef.h>
@@ -10,10 +11,10 @@ typedef struct {
  int n,budget,band,lm,stereo,blocks,original_blocks,intensity,fill;
  int angle,mid,side,delta,cost,invert,output_fill,qn;
 } Theta;
-int op_celt_theta(Theta *);
-int op_celt_bitexact_cos(int);
-int op_celt_log2tan(int,int);
-unsigned op_celt_isqrt(unsigned);
+LAMP_ABI int op_celt_theta(Theta *);
+LAMP_ABI int op_celt_bitexact_cos(int);
+LAMP_ABI int op_celt_log2tan(int,int);
+LAMP_ABI unsigned op_celt_isqrt(unsigned);
 #include "celt-theta-reference.inc"
 static uint32_t seed=0x70bdfa12;
 static uint32_t next(void){seed^=seed<<13;seed^=seed>>17;seed^=seed<<5;return seed;}

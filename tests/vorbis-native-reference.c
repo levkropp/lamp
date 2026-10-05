@@ -1,4 +1,5 @@
 /* Test-only BSD Xiph float reference; never linked into the player. */
+#include "lamp-test.h"
 #include <vorbis/vorbisfile.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -7,8 +8,8 @@
 #include "mdct.h"
 // Original spectrum-level oracle: independent spec residue/floor construction
 // supplies these planes; the unmodified Xiph inverse MDCT supplies the transform.
-static int spectra_reference(const wchar_t *input,const wchar_t *output){
- FILE *in=_wfopen(input,L"rb"),*out=_wfopen(output,L"wb");unsigned header[3];
+static int spectra_reference(const lamp_char *input,const lamp_char *output){
+ FILE *in=lamp_fopen(input,LT("rb")),*out=lamp_fopen(output,LT("wb"));unsigned header[3];
  if(!in||!out||fread(header,sizeof(header),1,in)!=1)return 2;
  unsigned C=header[0],N=header[1],F=header[2],H=N/2;
  if(!C||C>255||N<64||N>8192||(N&(N-1))||F<2||F>5)return 2;
@@ -25,10 +26,10 @@ static int spectra_reference(const wchar_t *input,const wchar_t *output){
  }
  int extra=fgetc(in);mdct_clear(&lookup);fclose(in);fclose(out);free(s);free(t);free(previous);free(pcm);free(window);return extra==EOF?0:2;
 }
-int wmain(int argc,wchar_t **argv){
- if(argc==4&&!wcscmp(argv[1],L"--spectra"))return spectra_reference(argv[2],argv[3]);
+int lamp_main(int argc,lamp_char **argv){
+ if(argc==4&&!lamp_strcmp(argv[1],LT("--spectra")))return spectra_reference(argv[2],argv[3]);
  if(argc!=3)return 2;
- FILE *in=_wfopen(argv[1],L"rb"),*out=_wfopen(argv[2],L"wb");if(!in||!out)return 2;
+ FILE *in=lamp_fopen(argv[1],LT("rb")),*out=lamp_fopen(argv[2],LT("wb"));if(!in||!out)return 2;
  OggVorbis_File v;int error=ov_open(in,&v,NULL,0);if(error){fprintf(stderr,"Xiph open error %d\n",error);return 1;}
  unsigned channels=ov_info(&v,-1)->channels;float *buffer=malloc(channels*257*sizeof(float));if(!buffer)return 2;
  long n;int stream;float **pcm;

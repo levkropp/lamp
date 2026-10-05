@@ -1,5 +1,6 @@
 // Original bounded survival test. Page CRCs are repaired to exercise the decoder.
 'use strict';
+const {cli}=require('./platform');
 const fs=require('fs'),path=require('path'),cp=require('child_process');
 const root=path.resolve(__dirname,'..'),dir=path.join(__dirname,'generated');
 const original=fs.readFileSync(path.join(dir,'vorbis-transient.ogg'));
@@ -22,7 +23,7 @@ for(let i=0;i<512;i++){
  const page=pages[i%2===0?1:2+next(pages.length-2)];
  for(let j=0;j<1+i%8;j++)b[page.body+next(page.end-page.body)]^=1<<next(8);
  repair(b);fs.writeFileSync(target,b);
- const r=cp.spawnSync(path.join(root,'bin','lamp-cli.exe'),['--check',target],{timeout:2000,windowsHide:true,encoding:'utf8'});
+ const r=cp.spawnSync(cli(),['--check',target],{timeout:2000,windowsHide:true,encoding:'utf8'});
  if(r.error||![0,2].includes(r.status))throw Error('Mutation '+i+' crashed or timed out: '+(r.error||r.status));
  if(r.status===0)accepted++;else rejected++;
 }

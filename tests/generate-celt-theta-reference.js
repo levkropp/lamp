@@ -21,6 +21,6 @@ ${text.slice(start,end)}
  return 1;
 }
 `;
-fs.mkdirSync(path.join(root,'bin'),{recursive:true});
-fs.writeFileSync(path.join(root,'bin','celt-theta-reference.inc'),output);
+fs.mkdirSync(path.join(root,'tests','generated','include'),{recursive:true});
+fs.writeFileSync(path.join(root,'tests','generated','include','celt-theta-reference.inc'),output);
 console.log('Extracted normative CELT split-angle decisions for test comparison.');

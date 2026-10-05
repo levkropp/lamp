@@ -55,7 +55,7 @@ Progress clocks also differ. LAMP subtracts WASAPI padding from submitted frames
 
 ## Reproduce
 
-Install Visual Studio x64 build tools, Node.js and FFmpeg. Supply existing mpv and VLC Windows executables; the player does not need either program. The recorded VLC comparator is the portable VideoLAN build, kept outside the package in ignored `bin/reference-tools` and verified against VideoLAN's SHA-256 file.
+Install LLVM and Python (to build the players), Visual C++ (for the test-only benchmark bridges), Node.js and FFmpeg. Supply existing mpv and VLC Windows executables; the player does not need either program. The recorded VLC comparator is the portable VideoLAN build, kept outside the package in ignored `bin/reference-tools` and verified against VideoLAN's SHA-256 file.
 
 ```powershell
 .\build.ps1 -OutputDirectory .\bin\verify-build

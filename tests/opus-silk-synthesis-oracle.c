@@ -1,4 +1,5 @@
 /* Test-only complete inverse-NSQ core, connected parameters/pulses and history. */
+#include "lamp-test.h"
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
@@ -10,10 +11,10 @@ typedef struct {int8_t gain;unsigned char padding[3];int16_t prev[16];int first,
 typedef struct {SideInfoIndices *ind;ParamState *state;silk_decoder_control *out;int fs,subfr,cond;unsigned ind_cap,state_cap,out_cap;} Parameters;
 typedef struct {int lag,signal;} Previous;
 typedef struct {ec_dec *ec;Previous *state;SideInfoIndices *out;int fs,subfr,vad,lbrr,cond;unsigned out_cap,state_cap;} Indices;
-int op_silk_synthesis(Synthesis *);
-int op_silk_decode_parameters(Parameters *);
-int op_silk_indices(Indices *);
-int op_silk_pulses(ec_dec *,int *,unsigned,unsigned,unsigned);
+LAMP_ABI int op_silk_synthesis(Synthesis *);
+LAMP_ABI int op_silk_decode_parameters(Parameters *);
+LAMP_ABI int op_silk_indices(Indices *);
+LAMP_ABI int op_silk_pulses(ec_dec *,int *,unsigned,unsigned,unsigned);
 typedef char core_size[(sizeof(Core)==2320)?1:-1];
 typedef char request_size[(sizeof(Synthesis)==80)?1:-1];
 static uint32_t rng=0xcb4621af;

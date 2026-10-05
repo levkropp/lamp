@@ -1,6 +1,7 @@
 'use strict';
+const platform=require('./platform');
 const fs=require('fs'),path=require('path'),cp=require('child_process'),assert=require('assert');
-const root=path.resolve(__dirname,'..'),bin=process.argv[2]?path.resolve(process.argv[2]):path.join(root,'bin'),exe=path.join(bin,'lamp-cli.exe');
+const root=path.resolve(__dirname,'..'),bin=process.argv[2]?path.resolve(process.argv[2]):platform.out,exe=platform.exe(bin,'lamp-cli');
 const tempRoot=path.resolve(require('os').tmpdir());
 const temp=fs.mkdtempSync(path.join(tempRoot,'lamp-smoke-')),report=[];
 assert(path.dirname(temp)===tempRoot&&path.basename(temp).startsWith('lamp-smoke-'),'Unsafe temporary path');

@@ -1,4 +1,5 @@
 /* Test-only comparisons against unchanged normative RFC6716 SILK sources. */
+#include "lamp-test.h"
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
@@ -10,12 +11,12 @@ typedef struct {const opus_int16 *nlsf;opus_int16 *out;int order;unsigned in_cap
 typedef struct {const opus_int8 *ind;opus_int16 *out;void *work;int fs;unsigned ind_cap,out_cap,work_cap;} Nlsf;
 typedef struct {int lag,signal;} Previous;
 typedef struct {ec_dec *ec;Previous *state;SideInfoIndices *out;int fs,subfr,vad,lbrr,cond;unsigned out_cap,state_cap;} Indices;
-int op_silk_inverse32(int,int);
-int op_silk_bwexpand(Expand *);
-int op_silk_lpc_inverse(Inverse *);
-int op_silk_nlsf2a(Convert *);
-int op_silk_nlsf_decode(Nlsf *);
-int op_silk_indices(Indices *);
+LAMP_ABI int op_silk_inverse32(int,int);
+LAMP_ABI int op_silk_bwexpand(Expand *);
+LAMP_ABI int op_silk_lpc_inverse(Inverse *);
+LAMP_ABI int op_silk_nlsf2a(Convert *);
+LAMP_ABI int op_silk_nlsf_decode(Nlsf *);
+LAMP_ABI int op_silk_indices(Indices *);
 static uint32_t rng=0x219fcb4a;
 static uint32_t next(void){rng^=rng<<13;rng^=rng>>17;rng^=rng<<5;return rng;}
 static unsigned reciprocal_checks,expand_checks,gain_checks,convert_checks,connected_checks,skipped_invalid,guards;

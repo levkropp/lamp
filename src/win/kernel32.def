@@ -1,4 +1,4 @@
-LIBRARY kernel32.dll
+LIBRARY KERNEL32.dll
 EXPORTS
     CloseHandle
     CreateEventW

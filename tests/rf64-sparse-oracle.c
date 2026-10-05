@@ -1,15 +1,13 @@
 /* Original test-only NTFS sparse fixtures and 64-bit seek/output oracle. */
-#include <windows.h>
-#include <winioctl.h>
+#include "lamp-test.h"
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <psapi.h>
-int decoder_open(const wchar_t *);
-void decoder_close(void);
-uint64_t decoder_seek(uint64_t);
-unsigned decoder_read(float *,unsigned);
+LAMP_ABI int decoder_open(const lamp_char *);
+LAMP_ABI void decoder_close(void);
+LAMP_ABI uint64_t decoder_seek(uint64_t);
+LAMP_ABI unsigned decoder_read(float *,unsigned);
 extern uint64_t total_frames;
 extern unsigned sample_rate,source_channels,source_bits,codec_kind,decode_error;
 extern unsigned *ogg_cancel_ptr;
@@ -17,7 +15,7 @@ static uint64_t points[24],frames;
 static unsigned count,B,C,F;
 static void u32(unsigned char *p,uint32_t v){memcpy(p,&v,4);}
 static void u64(unsigned char *p,uint64_t v){memcpy(p,&v,8);}
-static int put(HANDLE h,uint64_t at,const void *p,DWORD n){LARGE_INTEGER pos;DWORD done;pos.QuadPart=at;return SetFilePointerEx(h,pos,NULL,FILE_BEGIN)&&WriteFile(h,p,n,&done,NULL)&&done==n;}
+#define put lamp_sparse_put
 static int marked(uint64_t frame){for(unsigned i=0;i<count;i++){uint64_t lo=points[i]>8?points[i]-8:0,hi=points[i]+512;if(frame>=lo&&frame<hi)return 1;}return 0;}
 static double sample(uint64_t frame,unsigned ch){
  if(!marked(frame))return B==8?-1.0:0.0;
@@ -29,9 +27,9 @@ static double sample(uint64_t frame,unsigned ch){
  return (double)(int32_t)v/2147483648.0;
 }
 static SIZE_T committed(void){PROCESS_MEMORY_COUNTERS_EX p={0};p.cb=sizeof(p);return GetProcessMemoryInfo(GetCurrentProcess(),(PROCESS_MEMORY_COUNTERS *)&p,sizeof(p))?p.PrivateUsage:0;}
-int wmain(int argc,wchar_t **argv){
+int lamp_main(int argc,lamp_char **argv){
  if(argc!=7)return 2;
- unsigned kind=_wtoi(argv[2]),mode=_wtoi(argv[6]);B=_wtoi(argv[3]);C=_wtoi(argv[4]);F=_wtoi(argv[5]);
+ unsigned kind=lamp_atoi(argv[2]),mode=lamp_atoi(argv[6]);B=lamp_atoi(argv[3]);C=lamp_atoi(argv[4]);F=lamp_atoi(argv[5]);
  unsigned align=C*(B/8);frames=mode?8193:((1ULL<<33)/align+2053);
  if(!mode&&C==1)frames=(1ULL<<32)+2053;
  uint64_t reference=mode?0:((1ULL<<32)/align/48000)*48000;
@@ -46,9 +44,8 @@ int wmain(int argc,wchar_t **argv){
  memcpy(fmt,"\1\0",2);if(F)fmt[0]=3;fmt[2]=(unsigned char)C;u32(fmt+4,48000);u32(fmt+8,48000*align);fmt[12]=(unsigned char)align;fmt[14]=(unsigned char)B;
  data=fmt_at+24+8;uint64_t end=data+frames*align;if(mode==2)end+=8+large1+1+8+large2;
  if(end&1)end++;u64(header+20,end-8);
- HANDLE h=CreateFileW(argv[1],GENERIC_READ|GENERIC_WRITE,0,NULL,CREATE_ALWAYS,FILE_ATTRIBUTE_NORMAL,NULL);if(h==INVALID_HANDLE_VALUE)return 2;
- DWORD returned;LARGE_INTEGER size;size.QuadPart=end;
- if(!DeviceIoControl(h,FSCTL_SET_SPARSE,NULL,0,NULL,0,&returned,NULL)||!SetFilePointerEx(h,size,NULL,FILE_BEGIN)||!SetEndOfFile(h)||!put(h,0,header,at))return 2;
+ lamp_file h;
+ if(!lamp_sparse_create(argv[1],end,&h)||!put(h,0,header,at))return 2;
  unsigned char chunk[32]={0};memcpy(chunk,"fmt ",4);u32(chunk+4,16);memcpy(chunk+8,fmt,16);memcpy(chunk+24,"data",4);u32(chunk+28,UINT32_MAX);
  if(!put(h,fmt_at,chunk,32))return 2;
  if(mode){unsigned char c[8];memcpy(c,"JUNK",4);u32(c+4,UINT32_MAX);uint64_t p=mode==1?at:data+frames*align;if(!put(h,p,c,8))return 2;p+=8+large1+1;if(mode==2)memcpy(c,"TAIL",4);if(!put(h,p,c,8))return 2;}
@@ -62,7 +59,7 @@ int wmain(int argc,wchar_t **argv){
   }
   if(!put(h,data+lo*align,raw,(DWORD)((hi-lo)*align)))return 2;
  }
- if(!FlushFileBuffers(h))return 2;CloseHandle(h);DWORD high=0;uint64_t allocated=GetCompressedFileSizeW(argv[1],&high);allocated|=(uint64_t)high<<32;if(!allocated||allocated>1024*1024)return 2;
+ uint64_t allocated;if(!lamp_sparse_close(h,argv[1],&allocated))return 2;if(!allocated||allocated>1024*1024)return 2;
  SYSTEM_INFO info;GetSystemInfo(&info);SIZE_T page=info.dwPageSize;DWORD old;unsigned char *guard=VirtualAlloc(NULL,6*page,MEM_RESERVE|MEM_COMMIT,PAGE_READWRITE);
  if(!guard||!VirtualProtect(guard+5*page,page,PAGE_NOACCESS,&old))return 2;
  unsigned checks=0;const unsigned caps[]={0,1,17,257};
@@ -81,7 +78,7 @@ int wmain(int argc,wchar_t **argv){
  if(!decoder_open(argv[1]))return 1;ogg_cancel_ptr=&cancel;if(decoder_read((float *)(guard+5*page),1)||!decode_error)return 1;ogg_cancel_ptr=NULL;if(decoder_read((float *)(guard+5*page),1)||!decode_error)return 1;decoder_close();
  for(unsigned i=0;i<8;i++){if(!decoder_open(argv[1]))return 1;decoder_close();}SIZE_T before=committed();if(!before)return 2;
  for(unsigned i=0;i<64;i++){if(!decoder_open(argv[1]))return 1;decoder_close();}SIZE_T after=committed();if(after>before+page)return 1;
- wchar_t reference_path[32768];if(swprintf(reference_path,32768,L"%ls.channels.f32",argv[1])<0)return 2;FILE *f=_wfopen(reference_path,L"wb");if(!f)return 2;
+ lamp_char reference_path[32768];if(lamp_snprintf(reference_path,32768,LT("%s.channels.f32"),argv[1])<0)return 2;FILE *f=lamp_fopen(reference_path,LT("wb"));if(!f)return 2;
  for(unsigned n=0;n<257;n++)for(unsigned c=0;c<C;c++){float v=(float)sample(reference+n,c);if(fwrite(&v,4,1,f)!=1)return 2;}fclose(f);VirtualFree(guard,0,MEM_RELEASE);
  printf("{\"result\":\"passed\",\"frames\":%llu,\"logical_bytes\":%llu,\"allocated_bytes\":%llu,\"data_offset\":%llu,\"seek_checks\":%u,\"cancel_checks\":3,\"reopen_checks\":64,\"reference_frame\":%llu,\"reference_seconds\":%llu,\"private_bytes_before\":%llu,\"private_bytes_after\":%llu}\n",frames,end,allocated,data,checks,reference,reference/48000,(uint64_t)before,(uint64_t)after);return 0;
 }

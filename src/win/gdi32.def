@@ -1,4 +1,4 @@
-LIBRARY gdi32.dll
+LIBRARY GDI32.dll
 EXPORTS
     BitBlt
     CreateCompatibleDC

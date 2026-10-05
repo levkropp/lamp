@@ -1,12 +1,13 @@
 /* Test-only comparison with the normative CELT signed-pulse enumeration. */
+#include "lamp-test.h"
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
 #define SMALL_FOOTPRINT
 #include "cwrs.c"
-unsigned op_cwrs_urow(unsigned,unsigned,unsigned *);
-void op_cwrs_decode(unsigned,unsigned,unsigned,int *,unsigned *);
-int op_decode_pulses(int *,unsigned,unsigned,ec_dec *);
+LAMP_ABI unsigned op_cwrs_urow(unsigned,unsigned,unsigned *);
+LAMP_ABI void op_cwrs_decode(unsigned,unsigned,unsigned,int *,unsigned *);
+LAMP_ABI int op_decode_pulses(int *,unsigned,unsigned,ec_dec *);
 static unsigned seed=0x14257492;
 static unsigned next(void){seed^=seed<<13;seed^=seed>>17;seed^=seed<<5;return seed;}
 static unsigned checks;

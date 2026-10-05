@@ -1,18 +1,19 @@
 /* Test-only RFC6716 oracle. The assembly player does not compile or call C. */
+#include "lamp-test.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "entdec.h"
-void op_ec_init(ec_dec *,unsigned char *,unsigned);
-unsigned op_ec_decode(ec_dec *,unsigned);
-unsigned op_ec_bin(ec_dec *,unsigned);
-void op_ec_update(ec_dec *,unsigned,unsigned,unsigned);
-int op_ec_logp(ec_dec *,unsigned);
-int op_ec_icdf(ec_dec *,const unsigned char *,unsigned);
-unsigned op_ec_bits(ec_dec *,unsigned);
-unsigned op_ec_uint(ec_dec *,unsigned);
-unsigned op_ec_tell(ec_dec *);
-unsigned op_ec_frac(ec_dec *);
+LAMP_ABI void op_ec_init(ec_dec *,unsigned char *,unsigned);
+LAMP_ABI unsigned op_ec_decode(ec_dec *,unsigned);
+LAMP_ABI unsigned op_ec_bin(ec_dec *,unsigned);
+LAMP_ABI void op_ec_update(ec_dec *,unsigned,unsigned,unsigned);
+LAMP_ABI int op_ec_logp(ec_dec *,unsigned);
+LAMP_ABI int op_ec_icdf(ec_dec *,const unsigned char *,unsigned);
+LAMP_ABI unsigned op_ec_bits(ec_dec *,unsigned);
+LAMP_ABI unsigned op_ec_uint(ec_dec *,unsigned);
+LAMP_ABI unsigned op_ec_tell(ec_dec *);
+LAMP_ABI unsigned op_ec_frac(ec_dec *);
 static unsigned random_state=0x642f9a32;
 static unsigned next(void){random_state^=random_state<<13;random_state^=random_state>>17;random_state^=random_state<<5;return random_state;}
 int main(void){

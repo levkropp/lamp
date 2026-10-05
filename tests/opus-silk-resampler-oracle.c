@@ -1,5 +1,6 @@
 /* Test-only normative decoder resampling, with reusable verified core harness. */
 #define main silk_synthesis_oracle_main
+#include "lamp-test.h"
 #include "opus-silk-synthesis-oracle.c"
 #undef main
 #include "resampler_private.h"
@@ -8,10 +9,10 @@ typedef struct {int32_t *state;int16_t *out;const int16_t *in;unsigned n,state_c
 typedef struct {int32_t *state,*out;const int16_t *in,*coef;unsigned n,state_cap,out_cap,in_cap,coef_cap;} Ar2;
 typedef struct {silk_resampler_state_struct *state;int in,out;unsigned cap;} ResampleInit;
 typedef struct {silk_resampler_state_struct *state;int16_t *out;const int16_t *in;void *work;unsigned n,in_cap,out_cap,state_cap,work_cap;} Resample;
-int op_silk_up2(Up2 *);
-int op_silk_ar2(Ar2 *);
-int op_silk_resampler_init(ResampleInit *);
-int op_silk_resampler(Resample *);
+LAMP_ABI int op_silk_up2(Up2 *);
+LAMP_ABI int op_silk_ar2(Ar2 *);
+LAMP_ABI int op_silk_resampler_init(ResampleInit *);
+LAMP_ABI int op_silk_resampler(Resample *);
 typedef char resampler_size[(sizeof(silk_resampler_state_struct)==304&&offsetof(silk_resampler_state_struct,resampler_function)==264&&offsetof(silk_resampler_state_struct,Coefs)==296)?1:-1];
 static uint32_t sr_rng=0xf941cb36;
 static uint32_t sr_next(void){sr_rng^=sr_rng<<13;sr_rng^=sr_rng>>17;sr_rng^=sr_rng<<5;return sr_rng;}

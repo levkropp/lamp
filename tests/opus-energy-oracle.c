@@ -1,16 +1,17 @@
 /* Test-only comparisons with RFC6716's floating-point energy reconstruction. */
+#include "lamp-test.h"
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
 #include "quant_bands.c"
-int op_laplace_decode(ec_dec *,unsigned,int);
+LAMP_ABI int op_laplace_decode(ec_dec *,unsigned,int);
 typedef struct Energy {
  ec_dec *ec;float *old;int *fine,*priority;
  int start,end,channels,lm,intra,bits_left,bands;
 } Energy;
-void op_celt_coarse(Energy *);
-void op_celt_fine(Energy *);
-void op_celt_final(Energy *);
+LAMP_ABI void op_celt_coarse(Energy *);
+LAMP_ABI void op_celt_fine(Energy *);
+LAMP_ABI void op_celt_final(Energy *);
 static unsigned seed=0x84789451;
 static unsigned next(void){seed^=seed<<13;seed^=seed>>17;seed^=seed<<5;return seed;}
 static int compare(unsigned vector,const char *stage,float *a,float *b,ec_dec *c,ec_dec *d){

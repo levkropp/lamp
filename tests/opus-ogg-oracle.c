@@ -1,15 +1,17 @@
 /* Ogg/Opus bridge oracle. Encoder and native decoder are test-only. */
 #define OPUS_STREAM_OGG_EMBEDDED
 #define OPUS_STREAM_ORACLE_EMBEDDED
+#include "lamp-test.h"
 #include "opus-stream-oracle.c"
 uint64_t total_frames;
 unsigned sample_rate,source_channels,source_bits,decode_error;
-int opus_open(const unsigned char *,const unsigned char *);
-int opus_headers(const unsigned char *,const unsigned char *);
-const unsigned char *ogg_next(void);
+LAMP_ABI int opus_open(const unsigned char *,const unsigned char *);
+LAMP_ABI int opus_headers(const unsigned char *,const unsigned char *);
+LAMP_ABI const unsigned char *ogg_next(void);
 extern unsigned op_preskip;
-int opus_read(float *,unsigned);
-void opus_close(void),ogg_close(void);
+LAMP_ABI int opus_read(float *,unsigned);
+LAMP_ABI void opus_close(void);
+LAMP_ABI void ogg_close(void);
 static unsigned og_cases,og_rejects,og_checks,og_late,og_cancel;
 static unsigned long long og_samples;
 static float og_max;
