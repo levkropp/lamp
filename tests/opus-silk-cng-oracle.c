@@ -1,14 +1,15 @@
 /* Test-only normative CNG state/PCM, using the verified core harness. */
 #define main silk_synthesis_oracle_main
+#include "lamp-test.h"
 #include "opus-silk-synthesis-oracle.c"
 #undef main
 #include "resampler_private.h"
 typedef struct {silk_CNG_struct *state;const Core *core;const ParamState *param;const silk_decoder_control *ctrl;int16_t *pcm;void *work;int fs,subfr,n;unsigned state_cap,core_cap,param_cap,ctrl_cap,pcm_cap,work_cap;} Cng;
 typedef struct {silk_resampler_state_struct *state;int in,out;unsigned cap;} ResampleInit;
 typedef struct {silk_resampler_state_struct *state;int16_t *out;const int16_t *in;void *work;unsigned n,in_cap,out_cap,state_cap,work_cap;} Resample;
-int op_silk_cng(Cng *);
-int op_silk_resampler_init(ResampleInit *);
-int op_silk_resampler(Resample *);
+LAMP_ABI int op_silk_cng(Cng *);
+LAMP_ABI int op_silk_resampler_init(ResampleInit *);
+LAMP_ABI int op_silk_resampler(Resample *);
 typedef char cng_size[(sizeof(silk_CNG_struct)==1388&&sizeof(Cng)==88)?1:-1];
 typedef struct {uint64_t before;silk_CNG_struct value;uint64_t after;} CngGuard;
 typedef struct {uint64_t before;unsigned char value[1376];uint64_t after;} CngWork;

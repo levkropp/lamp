@@ -19,5 +19,6 @@ ${body}
  r->remaining_out=remaining_bits;r->balance_out=balance;
 }
 `;
-fs.writeFileSync(path.join(root,'bin','celt-bands-reference.inc'),output);
+fs.mkdirSync(path.join(root,'tests','generated','include'),{recursive:true});
+fs.writeFileSync(path.join(root,'tests','generated','include','celt-bands-reference.inc'),output);
 console.log('Extracted normative full-band loop for test comparison.');

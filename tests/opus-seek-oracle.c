@@ -1,5 +1,6 @@
 /* Test-only independent Ogg packet reader and RFC8251 native seek reference.
    Runtime decoder objects are assembly. Reference C remains test-only. */
+#include "lamp-test.h"
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
@@ -9,10 +10,10 @@
 #include "celt.c"
 #undef MAX_PULSES
 #include "opus_decoder.c"
-int decoder_open(const wchar_t *);
-void decoder_close(void);
-uint64_t decoder_seek(uint64_t);
-unsigned decoder_read(float *,unsigned);
+LAMP_ABI int decoder_open(const lamp_char *);
+LAMP_ABI void decoder_close(void);
+LAMP_ABI uint64_t decoder_seek(uint64_t);
+LAMP_ABI unsigned decoder_read(float *,unsigned);
 extern unsigned decode_error,codec_kind,opus_index_count;
 extern uint64_t total_frames,opus_index_stride,opus_seek_headers,opus_seek_raw;
 extern unsigned *ogg_cancel_ptr;
@@ -25,8 +26,8 @@ static uint64_t raw_end,frames;
 static float factor;
 static struct {uint64_t before;float pcm[4096];uint64_t after;} out;
 static uint64_t u64(const unsigned char *p){uint64_t v=0;for(unsigned j=0;j<8;j++)v|=(uint64_t)p[j]<<(8*j);return v;}
-static int parse(const wchar_t *path){
- FILE *file=_wfopen(path,L"rb");if(!file||fseek(file,0,SEEK_END))return 0;
+static int parse(const lamp_char *path){
+ FILE *file=lamp_fopen(path,LT("rb"));if(!file||fseek(file,0,SEEK_END))return 0;
  long bytes=ftell(file);if(bytes<27||bytes>64*1024*1024)return 0;rewind(file);
  unsigned char *data=malloc(bytes),*partial=malloc(4*1024*1024);packets=calloc(131072,sizeof(*packets));
  if(!data||!partial||!packets||fread(data,1,bytes,file)!=(size_t)bytes)return 0;fclose(file);
@@ -74,10 +75,10 @@ static int write_page(FILE *file,const unsigned char *data,unsigned bytes,uint64
  uint32_t crc=0;for(unsigned i=0;i<length;i++){crc^=(uint32_t)page[i]<<24;for(unsigned j=0;j<8;j++)crc=(crc<<1)^((crc&0x80000000)?0x04c11db7:0);}for(unsigned j=0;j<4;j++)page[22+j]=(unsigned char)(crc>>(8*j));
  return fwrite(page,1,length,file)==length;
 }
-static int generate(const wchar_t *directory){
+static int generate(const lamp_char *directory){
  const int bands[]={OPUS_BANDWIDTH_NARROWBAND,OPUS_BANDWIDTH_WIDEBAND,OPUS_BANDWIDTH_SUPERWIDEBAND,OPUS_BANDWIDTH_FULLBAND};unsigned random=0x94751;
  for(unsigned config=0;config<34;config++)for(unsigned channels=1;channels<=2;channels++){
-  wchar_t path[1024];_snwprintf(path,1024,L"%s/seek-opus-native-%02u-%u.opus",directory,config,channels);FILE *file=_wfopen(path,L"wb");if(!file)return 0;
+  lamp_char path[1024];lamp_snprintf(path,1024,LT("%s/seek-opus-native-%02u-%u.opus"),directory,config,channels);FILE *file=lamp_fopen(path,LT("wb"));if(!file)return 0;
   unsigned char head[19]={0},tags[16]={0},packet[2048];memcpy(head,"OpusHead",8);head[8]=1;head[9]=(unsigned char)channels;head[10]=56;head[11]=1;head[12]=128;head[13]=187;memcpy(tags,"OpusTags",8);
   if(!write_page(file,head,19,0,2,0)||!write_page(file,tags,16,0,0,1))return 0;
   OpusEncoder *enc=opus_encoder_create(48000,channels,OPUS_APPLICATION_AUDIO,NULL);if(!enc)return 0;unsigned sequence=2;uint64_t raw=0;float input[5760];
@@ -93,8 +94,8 @@ static int generate(const wchar_t *directory){
   }opus_encoder_destroy(enc);fclose(file);
  }return 1;
 }
-int wmain(int argc,wchar_t **argv){
- if(argc==3&&!wcscmp(argv[1],L"--generate"))return generate(argv[2])?0:1;
+int lamp_main(int argc,lamp_char **argv){
+ if(argc==3&&!lamp_strcmp(argv[1],LT("--generate")))return generate(argv[2])?0:1;
  if(argc!=2||!parse(argv[1]))return 2;
  OpusDecoder *state=opus_decoder_create(48000,channels,NULL);if(!state)return 2;
  float *continuous=malloc((size_t)(frames?frames:1)*8),packet[11520];if(!continuous)return 2;

@@ -1,4 +1,5 @@
 /* Test-only normative RFC6716 anti-collapse and denormalization comparison. */
+#include "lamp-test.h"
 #include <stdio.h>
 #include <stdint.h>
 #include <stddef.h>
@@ -15,9 +16,9 @@ typedef struct {
  float *x,*freq,*energy,*gains;int channels,lm,start,end,downsample;
  unsigned x_cap,freq_cap,energy_cap,gain_cap;
 } Denorm;
-int op_celt_anti_collapse(Anti *);
-int op_celt_denormalize(Denorm *);
-float op_celt_exp2(float);
+LAMP_ABI int op_celt_anti_collapse(Anti *);
+LAMP_ABI int op_celt_denormalize(Denorm *);
+LAMP_ABI float op_celt_exp2(float);
 static uint32_t rng=0x243ac132;
 static uint32_t next(void){rng^=rng<<13;rng^=rng>>17;rng^=rng<<5;return rng;}
 static unsigned exp_checks,anti_checks,denorm_checks,guards,coefficients,max_ulp;

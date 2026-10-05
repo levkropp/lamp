@@ -1,4 +1,5 @@
 /* Test-only complete normative SILK side-information/pulse comparisons. */
+#include "lamp-test.h"
 #include <stdio.h>
 #include <stdint.h>
 #include <stddef.h>
@@ -7,9 +8,9 @@
 typedef struct {int lag,signal;} Previous;
 typedef struct {ec_dec *ec;Previous *state;SideInfoIndices *out;int fs,subfr,vad,lbrr,cond;unsigned out_cap,state_cap;} Indices;
 typedef struct {opus_int16 *ec_ix;unsigned char *pred;int fs,index;unsigned ec_cap,pred_cap;} Unpack;
-int op_silk_indices(Indices *);
-int op_silk_nlsf_unpack(Unpack *);
-int op_silk_pulses(ec_dec *,int *,unsigned,unsigned,unsigned);
+LAMP_ABI int op_silk_indices(Indices *);
+LAMP_ABI int op_silk_nlsf_unpack(Unpack *);
+LAMP_ABI int op_silk_pulses(ec_dec *,int *,unsigned,unsigned,unsigned);
 typedef char layout_check[(sizeof(SideInfoIndices)==36&&offsetof(SideInfoIndices,lagIndex)==26&&offsetof(SideInfoIndices,Seed)==34&&sizeof(Indices)==56)?1:-1];
 static uint32_t rng=0x42f818ac;
 static uint32_t next(void){rng^=rng<<13;rng^=rng>>17;rng^=rng<<5;return rng;}

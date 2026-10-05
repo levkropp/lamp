@@ -1,4 +1,5 @@
 /* Development-only comparison with BSD normative RFC6716 allocation. */
+#include "lamp-test.h"
 #include <stdio.h>
 #include <stdint.h>
 #include <stddef.h>
@@ -12,10 +13,10 @@ typedef struct {
  int start,end,channels,lm,trim,total;
  int intensity,dual,balance,coded;
 } Allocation;
-int op_celt_allocate(Allocation *);
-int op_celt_init_caps(int *,int,int);
-int op_celt_bits2pulses(int,int,int);
-int op_celt_pulses2bits(int,int,int);
+LAMP_ABI int op_celt_allocate(Allocation *);
+LAMP_ABI int op_celt_init_caps(int *,int,int);
+LAMP_ABI int op_celt_bits2pulses(int,int,int);
+LAMP_ABI int op_celt_pulses2bits(int,int,int);
 static uint32_t seed=0x58269314;
 static uint32_t next(void){seed^=seed<<13;seed^=seed>>17;seed^=seed<<5;return seed;}
 static unsigned checks,cache_checks,invalid_checks;

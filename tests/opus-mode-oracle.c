@@ -1,6 +1,7 @@
 /* Full normative mode decoder is included unchanged for private history. */
 #define main embedded_celt_oracle_main
 #define Frame CeltFrame
+#include "lamp-test.h"
 #include "opus-decoder-oracle.c"
 #undef Frame
 #undef main
@@ -33,8 +34,8 @@ typedef struct {
 } ModeState;
 typedef struct {ModeState *state;int fs,channels;unsigned cap;} ModeInit;
 typedef struct {ModeState *state;const unsigned char *data;float *pcm;void *work;unsigned len,config,stream,count,fec,state_cap,work_cap,pcm_cap;} ModeFrame;
-int op_opus_decoder_init(ModeInit *);
-int op_opus_decode_frame(ModeFrame *);
+LAMP_ABI int op_opus_decoder_init(ModeInit *);
+LAMP_ABI int op_opus_decode_frame(ModeFrame *);
 typedef char mode_sizes[(sizeof(ModeState)==26880&&sizeof(ModeFrame)==64&&sizeof(ModeInit)==24&&offsetof(ModeState,silk)==72&&offsetof(ModeState,celt)==8608)?1:-1];
 static struct {uint64_t before;ModeState value;uint64_t after;} mode_state_guard;
 #define ms mode_state_guard.value

@@ -37,7 +37,7 @@ ${prefix}
  return codedBands;
 }
 `;
-fs.mkdirSync(path.join(root,'bin'),{recursive:true});
+fs.mkdirSync(path.join(root,'tests','generated','include'),{recursive:true});
 const packetSource = fs.readFileSync(path.join(ref,'src','opus_decoder.c'),'utf8');
 const durationStart = packetSource.indexOf('int opus_packet_get_samples_per_frame(');
 const durationEnd = packetSource.indexOf('int opus_packet_get_nb_channels(',durationStart);
@@ -45,5 +45,5 @@ const parserStart = packetSource.indexOf('static int parse_size(');
 const parserEnd = packetSource.indexOf('int opus_decode_native(',parserStart);
 if(durationStart<0||durationEnd<durationStart||parserStart<0||parserEnd<parserStart)throw Error('Missing normative packet helpers');
 const packetHelpers = packetSource.slice(durationStart,durationEnd)+'\n'+packetSource.slice(parserStart,parserEnd);
-fs.writeFileSync(path.join(root,'bin','celt-controls-reference.inc'),output+'\n'+packetHelpers);
+fs.writeFileSync(path.join(root,'tests','generated','include','celt-controls-reference.inc'),output+'\n'+packetHelpers);
 console.log('Extracted normative CELT frame controls for test comparison.');

@@ -1,18 +1,18 @@
 # LAMP 0.4.0-dev technical details
 
-An assembly audio player for Windows x86-64 and Apple Silicon macOS, with shared handwritten assembly WAV, AIFF/AIFC, FLAC, MP3, Ogg/Vorbis and development Ogg/Opus decoders, plus a native assembly UI. The current Windows console build is **197,632 bytes (193 KiB)**; the graphical build is **205,312 bytes (200.5 KiB)**. Both include LAMP's icon and version resources. The published v0.3.0 archive retains its earlier four-format build and manifest.
+An audio player for Windows and Linux x86-64 and Apple Silicon macOS with handwritten assembly WAV, AIFF/AIFC, FLAC, MP3, Ogg/Vorbis and development Ogg/Opus decoders, plus native assembly interfaces on Windows and macOS. The current Windows console build is **198,656 bytes (194 KiB)**; the graphical build is **206,848 bytes (202 KiB)**. Both include LAMP's icon and version resources. The static Linux `lamp-cli` release build (`./build.sh release`) is **171,136 bytes**. The published v0.3.0 archive retains its earlier four-format build and manifest.
 
 The dark canvas, compact playback controls and automatic hiding are inspired by mpv. The custom pixel buffer and Win32 presentation follow Rhun's documented assembly UI model. The Windows canvas uses Rhun as a design reference. The Mac build vendors its MIT translator/helper macros and adapts native helpers with attribution; no Rhun branding, fonts or icons are included.
 
 **Opus remains a development feature.** Source builds play Ogg mapping family 0 mono/stereo and family 1 with 1–8 speaker channels downmixed to stereo, including SILK/hybrid/CELT, RFC 8251 updates, gain, pre-skip and end trimming. The original 51 modern-libopus family 0 files pass at tolerance 0.00004, with maximum error 0.00002277. Another 112 modern family 1 files pass with peak error 0.000001967. All 120 official elementary-decoder vector/rate/channel checks pass. [Opus stage documentation](opus.md) records interfaces, bounds and results; native surround output and Ogg chaining remain unfinished.
 
-Windows runtime application and decoder code is MASM x64 assembly, linked without the CRT. The Mac build translates shared decoders into ARM64 and links native assembly libSystem, Core Audio and AppKit adapters. No C/C++/Rust codec, external codec library, FFmpeg process, or media-player engine is linked or invoked. Reference C source is used only for algorithms, permitted coefficient/probability data, and test oracles.
+Shared decoders and Windows/Linux runtime code use x86-64 assembly in GNU assembler syntax. The Mac build translates shared decoders into ARM64 and links native assembly libSystem, Core Audio and AppKit adapters. No C/C++/Rust codec, codec DLL, Windows/Linux CRT, FFmpeg process, or media-player engine is linked or invoked; the Linux build is a static executable that makes raw system calls. Reference C source is used only for algorithms, permitted coefficient/probability data, and test oracles.
 
 Platform services, UI and benchmark descriptions below refer to Windows unless stated otherwise. [Apple Silicon notes](macos.md) describe the Mac build, calling conventions, playback ownership, verification and remaining platform work. Windows reports are retained with their original scope.
 
 ## Run
 
-Windows 10/11 x64 with a working default audio output are the intended targets. Double-click `bin\lamp.exe`, drop a supported file onto it, or run:
+Windows 10/11 x64 with a working default audio output is the primary desktop target. Double-click `bin\lamp.exe`, drop a supported file onto it, or run:
 
 ```powershell
 .\bin\lamp.exe 'C:\Music\track.ogg'
@@ -20,6 +20,8 @@ Windows 10/11 x64 with a working default audio output are the intended targets. 
 .\bin\lamp-cli.exe --check 'C:\Music\track.ogg'
 .\bin\lamp-cli.exe --decode 'C:\Music\track.ogg' '.\track.f32'
 ```
+
+Linux x86-64 builds the same command line with `./build.sh`; paths are UTF-8 bytes from `argv`. `--check` and `--decode` behave as on Windows. Linux playback and the desktop window are not available yet. Linux maps input files read-only; truncating a file from another process while it is open raises `SIGBUS`, as with other memory-mapped readers.
 
 `--check` decodes silently without an audio device. `--decode` exports little-endian float32 PCM with two interleaved channels; mono is duplicated at its original amplitude. Opus uses 48 kHz; AIFF/AIFC rates round to integer hertz; other formats use their source rate. The destination must be a new file. Float32 WAV NaN/infinity samples become silence. A failed export can leave partial output.
 
@@ -119,15 +121,19 @@ Eight seconds of Vorbis silence under four bounded CPU workers completed with ze
 
 ## Build
 
-Install Visual Studio 2022 Build Tools with x64 tools and a Windows SDK:
+One GNU-syntax assembly tree (`.intel_syntax noprefix`) builds both platforms, following Rhun's approach. All functions use the Microsoft x64 calling convention, including the Linux system-call layer, so the decoders are identical on both platforms. Shared decoders call `mem_alloc`, `mem_reserve`, `mem_commit`, `mem_free`, `file_map` and `file_unmap`, which `src/win/platform.s` implements with VirtualAlloc and file mappings, and `src/linux/platform.s` with `mmap`/`mprotect`/`munmap` system calls. Vorbis table setup sets the x87 control word to the Windows default (53-bit precision) while it runs, so both platforms compute identical tables.
 
-```powershell
-.\build.ps1
+```sh
+./build.sh            # Linux: GNU as + ld, static, no C library -> build/lamp-cli
+./build.sh release    # stripped
+python3 tools/build-windows.py   # Windows binaries from any host -> bin/
 ```
 
-Runtime builds use `ml64.exe`, `link.exe`, Windows import libraries, custom entry points, and `/NODEFAULTLIB`. The console imports KERNEL32, ole32, SHELL32 and AVRT; the UI adds USER32, GDI32 and COMDLG32. Opus assembly objects are linked into both players; reference C remains confined to test executables. Decoders are single-instance and called only by the producer during playback.
+On Windows, `.\build.ps1` runs the same Python script. It needs LLVM's `llvm-mc`, `lld-link`, `llvm-dlltool` and `llvm-rc` (set `LLVM_BIN` if they are not on `PATH`). Import libraries come from `src/win/*.def`; no Windows SDK, MSVC or CRT is linked. The console imports KERNEL32, ole32, SHELL32 and AVRT; the UI adds USER32, GDI32 and COMDLG32. Opus assembly objects are linked into both players; reference C remains confined to test executables. Decoders are single-instance and called only by the producer during playback.
 
-Generated tables and the application ICO are included. A normal build requires no reference C compiler. The Windows SDK resource compiler embeds the icon and version information. Preserve `THIRD_PARTY_NOTICES` with distributions.
+The 0.4.0-dev sources were translated mechanically from the earlier ml64 sources. The translation was checked against a JWasm build of the original MASM: all 45 modules matched in instruction sequence, data bytes, relocation targets and symbols. GNU as ELF objects matched the llvm-mc COFF objects in the same way. The original build under Wine, the new Windows build and the new Linux build decoded every fixture to identical PCM, and the UI preview rendered an identical bitmap.
+
+Generated tables and the application ICO are included. A normal build requires no reference C compiler. `llvm-rc` embeds the icon and version information. Preserve `THIRD_PARTY_NOTICES` with distributions.
 
 ## Verification
 
@@ -200,44 +206,37 @@ The UI preview uses the actual assembly renderer with synthetic playback state. 
 
 FFmpeg and Node.js are needed only for test fixture generation/comparison. Opus oracle tests also compile the bundled BSD reference into test executables; neither player calls them or links their objects.
 
+```sh
+python3 tests/run.py                         # every portable suite below, in order
+python3 tests/verify-pcm.py                  # WAV/FLAC exact PCM, FLAC branch vectors, rejection
+python3 tests/verify-mp3.py
+python3 tests/verify-vorbis.py
+python3 tests/verify-opus-components.py      # 35 Opus stage suites; or name stages: range packet ...
+python3 tests/verify-opus.py                 # 51 modern libopus files
+python3 tests/verify-opus-multichannel.py    # 112 family 1 files
+python3 tests/verify-opus-conformance.py     # 120 official vector checks; first run downloads ~75 MB
+python3 tests/verify-seek.py                 # 4425 exact WAV/FLAC/MP3/Vorbis + 6768 Opus reference seeks
+python3 tests/verify-opus-seek.py            # Opus seek suite alone
+python3 tests/verify-containers.py           # aiff rf64 wav-layouts flac-layouts vorbis-multichannel
+python3 tests/verify-ogg-crc.py
+node tests/fuzz-vorbis.js
+```
+
+Playback checks inside `verify-pcm.py`, `verify-mp3.py` and `verify-vorbis.py` need an audio device; pass `--skip-playback` without one. Windows-only checks remain PowerShell scripts:
+
 ```powershell
-.\tests\verify.ps1
-.\tests\verify-mp3.ps1
-.\tests\verify-vorbis.ps1
-.\tests\verify-vorbis-multichannel.ps1 -OutputDirectory .\bin\verify-build
 .\tests\verify-engine.ps1
 .\tests\stress.ps1 -Codec vorbis
 .\tests\benchmark.ps1 -Codec vorbis
-node .\tests\fuzz-vorbis.js
-.\tests\verify-opus-range.ps1
-.\tests\verify-opus-packet.ps1
-.\tests\verify-opus-multistream.ps1
-.\tests\verify-opus-multichannel.ps1 -OutputDirectory .\bin\verify-build
-.\tests\verify-opus-cwrs.ps1
-.\tests\verify-opus-energy.ps1
-.\tests\verify-opus-silk-pulses.ps1
-.\tests\verify-opus-allocation.ps1
-.\tests\verify-opus-vq.ps1
-.\tests\verify-opus-band-transform.ps1
-.\tests\verify-opus-controls.ps1
-.\tests\verify-opus-theta.ps1
-.\tests\verify-opus-components.ps1
-.\tests\verify-opus.ps1 -OutputDirectory .\bin\verify-build #51 modern libopus files
-.\tests\verify-opus-conformance.ps1 #120 official vector checks; first run downloads ~75 MB
-.\tests\verify-seek.ps1 -OutputDirectory .\bin\verify-build #4425 exact WAV/FLAC/MP3/Vorbis +6768 Opus reference seeks
-.\tests\verify-flac-layouts.ps1 -OutputDirectory .\bin\verify-build #404 depth/layout files +6060 exact seeks
-.\tests\verify-wav-layouts.ps1 -OutputDirectory .\bin\verify-build #965 precision/layout files +14475 exact seeks
-.\tests\verify-rf64.ps1 -OutputDirectory .\bin\verify-build #538 container files +16 sparse inputs +8950 exact seeks
-.\tests\verify-aiff.ps1 -OutputDirectory .\bin\verify-build #AIFF/AIFC precision, layouts and sparse large files
-.\tests\verify-opus-seek.ps1 -OutputDirectory .\bin\verify-build #Opus seek suite alone
-.\tests\verify-ogg-crc.ps1 -OutputDirectory .\bin\verify-build
 .\tests\benchmark-seek.ps1 -OutputDirectory .\bin\verify-build #creates ten-minute fixtures
 # Repeat timings without re-encoding; an optional -OggObject selects a comparison module:
 .\tests\benchmark-seek.ps1 -OutputDirectory .\bin\verify-build -ReuseFixtures
 .\tests\render-ui.ps1
 ```
 
-The RFC reference archive is checked against its normative SHA-1 before extraction. `tests\generate-opus-tables.js` extracts probability data only. Fixtures stay in `tests\generated`; extracted reference source stays in `tests\reference\opus-rfc6716`. The stress test bounds worker count/duration and cleans up workers in `finally`.
+Reports go to `bin/` on Windows and `build/` on Linux, or to `LAMP_OUT`. Oracle counts are deterministic, except that `opus-decoder` synthesizes its CELT test signals with the C library's `sin()`. glibc and the Microsoft runtime round differently, so its frame-category counts differ slightly between platforms. Every comparison still reports zero error.
+
+The RFC reference archive is checked against its normative SHA-1 before extraction. `tests/generate-opus-tables.js` extracts probability data only; the other `tests/generate-*.js` scripts regenerate or `--check` committed tables against their references. Fixtures stay in `tests/generated`; extracted reference source stays in `tests/reference/opus-rfc6716`. The stress test bounds worker count/duration and cleans up workers in `finally`.
 
 ## Remaining implementation
 

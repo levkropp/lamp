@@ -1,4 +1,5 @@
 /* Test-only normative CELT FFT/MDCT comparison, no reference runtime linkage. */
+#include "lamp-test.h"
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
@@ -10,9 +11,9 @@
 #include "celt-synthesis-reference.inc"
 typedef struct {float *in,*out,*scratch;int lm,stride;unsigned in_cap,out_cap,scratch_cap;} Mdct;
 typedef struct {float *freq,*out,*overlap,*scratch;int channels,lm,short_blocks;unsigned freq_cap,out_cap,overlap_cap,scratch_cap;} Synthesis;
-int op_celt_ifft(const kiss_fft_cpx *,kiss_fft_cpx *,int);
-int op_celt_imdct(Mdct *);
-int op_celt_synthesis(Synthesis *);
+LAMP_ABI int op_celt_ifft(const kiss_fft_cpx *,kiss_fft_cpx *,int);
+LAMP_ABI int op_celt_imdct(Mdct *);
+LAMP_ABI int op_celt_synthesis(Synthesis *);
 static uint32_t rng=0x5a171354;
 static uint32_t next(void){rng^=rng<<13;rng^=rng>>17;rng^=rng<<5;return rng;}
 static unsigned fft_checks,mdct_checks,synthesis_checks,guards,coefficient_checks;

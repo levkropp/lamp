@@ -14,3 +14,4 @@ manifest.json
 *.log
 *.tmp
 publish-state.json
+__pycache__/

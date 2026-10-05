@@ -2,7 +2,7 @@
 
 **Goal:** an assembly-first media player that eventually handles everything relevant people use mpv for: common audio/video codecs and containers, subtitles, local and network playback, reliable seeking, hardware acceleration, and configurable controls.
 
-The current deliverable is an audio prototype for Windows x86-64 and Apple Silicon macOS. This document describes intended work, not implemented support. No milestone has a promised date. Additions must earn their CPU, memory, dependency, maintenance, and testing cost.
+The current deliverable is an audio prototype for Windows and Linux x86-64 and Apple Silicon macOS, sharing assembly decoders. This document describes intended work, not implemented support. No milestone has a promised date. Additions must earn their CPU, memory, dependency, maintenance, and testing cost.
 
 ## How we define coverage
 
@@ -143,7 +143,7 @@ AIFF/AIFC now adds signed 1–32-bit PCM, AIFC byte-order/fixed-container varian
 - [ ] Optical/disc and specialist inputs where relevant and legally distributable; record platform/dependency limits explicitly.
 - [ ] Close high-value gaps in the versioned codec/profile/container/feature matrix, including relevant legacy media.
 - [ ] Compare scalar/SSE2 and optional newer x86 SIMD paths; dispatch safely and keep a baseline build.
-- [ ] Consider additional desktop platforms after the Windows backend is stable, while preserving the x86 assembly architecture.
+- [ ] Additional desktop platforms, preserving the x86 assembly architecture. One GNU-syntax source tree now builds Windows (LLVM) and a static, libc-free Linux `lamp-cli` with decode checks and export, following Rhun's approach. Linux audio output, the Linux desktop window and other platforms remain.
 
 **Gate:** users can evaluate exact implemented coverage against a published mpv reference version. This is a capability target, not a promise of identical internals, every mpv option, or universal bit-for-bit output.
 

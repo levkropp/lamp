@@ -3,11 +3,11 @@ const fs=require('fs'),path=require('path');
 const ref=path.resolve(process.argv[2]),check=process.argv[3]==='--check';
 const out=check?null:path.resolve(process.argv[3]);
 const tables=fs.readFileSync(path.join(ref,'silk','tables_other.c'),'utf8');
-let generated='; RFC6716 SILK LBRR flag data, IETF Trust/Skype2006-2012.\n; Verified against tables_other.c; BSD conditions in THIRD_PARTY_NOTICES.\n';
+let generated='# RFC6716 SILK LBRR flag data, IETF Trust/Skype2006-2012.\n# Verified against tables_other.c; BSD conditions in THIRD_PARTY_NOTICES.\n';
 for(const [symbol,label,size]of[['silk_LBRR_flags_2_iCDF','ph_lbrr2',3],['silk_LBRR_flags_3_iCDF','ph_lbrr3',7]]){
  const at=tables.search(new RegExp('\\b'+symbol+'\\s*\\['));if(at<0)throw Error('Missing '+symbol);
  const begin=tables.indexOf('{',at),end=tables.indexOf('};',begin),values=tables.slice(begin,end).match(/\d+/g).map(Number);
- if(values.length!==size||values.some(n=>n<0||n>255))throw Error('Invalid '+symbol);generated+=label+' db '+values.join(',')+'\n';
+ if(values.length!==size||values.some(n=>n<0||n>255))throw Error('Invalid '+symbol);generated+=label+': .byte '+values.join(', ')+'\n';
 }
 const assembly=fs.readFileSync(path.join(__dirname,'..','src','opus_silk_packet_tables.inc'),'utf8').replace(/\r\n/g,'\n');
 if(assembly!==generated)throw Error('SILK LBRR data differs from normative reference');

@@ -1,4 +1,5 @@
 'use strict';
+const {rows}=require('./asm-data');
 const fs=require('fs'),path=require('path');
 const root=path.resolve(__dirname,'..'),ref=path.resolve(process.argv[2]||path.join(__dirname,'reference','opus-rfc6716'));
 const entries=[
@@ -9,7 +10,7 @@ const entries=[
  ['pitch_est_tables.c','silk_CB_lags_stage2','sp_contour_nb',44,'db',-128,127],
  ['pitch_est_tables.c','silk_CB_lags_stage3','sp_contour',136,'db',-128,127]
 ];
-let output='; Normative RFC6716 SILK reconstruction data, IETF Trust/Skype2006-2012.\n; Integer data only, BSD conditions in THIRD_PARTY_NOTICES.\n';
+let output='# Normative RFC6716 SILK reconstruction data, IETF Trust/Skype2006-2012.\n# Integer data only, BSD conditions in THIRD_PARTY_NOTICES.\n';
 for(const [file,symbol,label,count,type,min,max]of entries){
  const source=fs.readFileSync(path.join(ref,'silk',file),'utf8');
  const at=source.search(new RegExp('\\b'+symbol+'\\s*\\['));
@@ -18,9 +19,9 @@ for(const [file,symbol,label,count,type,min,max]of entries){
  const body=source.slice(begin,end).replace(/\/\*[\s\S]*?\*\//g,'').replace(/\/\/[^\n]*/g,'');
  const values=body.match(/-?\b\d+\b/g).map(Number);
  if(values.length!==count||values.some(n=>n<min||n>max))throw Error('Bad '+symbol+' count='+values.length);
- for(let i=0;i<count;i+=16)output+=(i===0?label+' ':'    ')+type+' '+values.slice(i,i+16).join(',')+'\n';
+ output+=rows(label,type,values);
 }
-output+='align 8\nsp_ltp_ptr dq sp_ltp0,sp_ltp1,sp_ltp2\n';
+output+='.p2align 3\nsp_ltp_ptr: .quad sp_ltp0, sp_ltp1, sp_ltp2\n';
 const destination=path.join(root,'src','opus_silk_parameters_tables.inc');
 if(process.argv.includes('--check')){
  if(fs.readFileSync(destination,'utf8').replace(/\r\n/g,'\n')!==output)throw Error('SILK reconstruction tables differ from normative source');
@@ -37,5 +38,5 @@ static void reference_pitch_ltp(silk_decoder_state *psDec,silk_decoder_control *
 ${source.slice(begin,end)}
 }
 `;
-fs.mkdirSync(path.join(root,'bin'),{recursive:true});
-fs.writeFileSync(path.join(root,'bin','silk-pitch-ltp-reference.inc'),oracle);
+fs.mkdirSync(path.join(root,'tests','generated','include'),{recursive:true});
+fs.writeFileSync(path.join(root,'tests','generated','include','silk-pitch-ltp-reference.inc'),oracle);

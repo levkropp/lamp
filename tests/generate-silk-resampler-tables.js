@@ -1,7 +1,8 @@
 'use strict';
+const {rows}=require('./asm-data');
 const fs=require('fs'),path=require('path');
 const root=path.resolve(__dirname,'..'),ref=path.resolve(process.argv[2]||path.join(__dirname,'reference','opus-rfc6716'));
-let output='; Normative RFC6716 SILK decoder resampling data, IETF Trust/Skype2006-2012.\n; Generated data only; BSD conditions in THIRD_PARTY_NOTICES.\n';
+let output='# Normative RFC6716 SILK decoder resampling data, IETF Trust/Skype2006-2012.\n# Generated data only; BSD conditions in THIRD_PARTY_NOTICES.\n';
 for(const [file,symbol,label,count,type]of[
  ['resampler_rom.c','silk_resampler_up2_hq_0','sr_up0',3,'dw'],
  ['resampler_rom.c','silk_resampler_up2_hq_1','sr_up1',3,'dw'],
@@ -20,7 +21,7 @@ for(const [file,symbol,label,count,type]of[
   const m=term.match(/^(-?\d+)(?:\s*-\s*(\d+))?$/);return Number(m[1])-Number(m[2]||0);
  });
  if(values.length!==count||values.some(n=>n<(type==='db'?0:-32768)||n>(type==='db'?255:32767)))throw Error('Invalid '+symbol);
- for(let i=0;i<count;i+=16)output+=(i===0?label+' ':'    ')+type+' '+values.slice(i,i+16).join(',')+'\n';
+ output+=rows(label,type,values);
 }
 const destination=path.join(root,'src','opus_silk_resampler_tables.inc');
 if(process.argv.includes('--check')){

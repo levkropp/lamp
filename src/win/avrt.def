@@ -1,4 +1,4 @@
-LIBRARY avrt.dll
+LIBRARY AVRT.dll
 EXPORTS
     AvRevertMmThreadCharacteristics
     AvSetMmThreadCharacteristicsW

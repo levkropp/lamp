@@ -1,13 +1,14 @@
 /* Test-only direct/indexed seek PCM checks. Runtime objects remain assembly. */
+#include "lamp-test.h"
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 #include <wchar.h>
-int decoder_open(const wchar_t *);
-void decoder_close(void);
-uint64_t decoder_seek(uint64_t);
-unsigned decoder_read(float *,unsigned);
+LAMP_ABI int decoder_open(const lamp_char *);
+LAMP_ABI void decoder_close(void);
+LAMP_ABI uint64_t decoder_seek(uint64_t);
+LAMP_ABI unsigned decoder_read(float *,unsigned);
 extern unsigned decode_error,codec_kind;
 extern unsigned decoder_seek_probes;
 extern unsigned *ogg_cancel_ptr;
@@ -17,17 +18,17 @@ extern unsigned vorbis_index_count,vorbis_seek_preroll;
 extern uint64_t vorbis_index_stride;
 extern uint64_t total_frames;
 static struct {uint64_t before;float values[4096];uint64_t after;} pcm;
-int wmain(int argc,wchar_t **argv){
+int lamp_main(int argc,lamp_char **argv){
  if(argc!=4&&argc!=5)return 2;
- unsigned bound=argc==5?(unsigned)_wtoi(argv[4]):UINT32_MAX;
- int invalid=_wtoi(argv[3]);
+ unsigned bound=argc==5?(unsigned)lamp_atoi(argv[4]):UINT32_MAX;
+ int invalid=lamp_atoi(argv[3]);
  if(invalid==5){
   if(!decoder_open(argv[1])||total_frames!=65537ULL*576||mp3_index_count>2048||mp3_index_stride!=64)return 1;
   unsigned points=mp3_index_count;uint64_t target=total_frames/2,base=decoder_seek(target),headers=mp3_seek_headers;
   if(base>target||target-base>3456||headers>=mp3_index_stride||decode_error)return 1;
   while(base<target){unsigned count=target-base>2048?2048:(unsigned)(target-base),n=decoder_read(pcm.values,count);if(n!=count||decode_error)return 1;base+=n;}
   if(decoder_read(pcm.values,2048)!=2048||decode_error)return 1;
-  float expected[4096];FILE *reference=_wfopen(argv[2],L"rb");if(!reference||fread(expected,sizeof(expected),1,reference)!=1)return 2;fclose(reference);
+  float expected[4096];FILE *reference=lamp_fopen(argv[2],LT("rb"));if(!reference||fread(expected,sizeof(expected),1,reference)!=1)return 2;fclose(reference);
   if(memcmp(expected,pcm.values,sizeof(expected)))return 1;
   decoder_close();if(mp3_index_count)return 1;
   printf("{\"result\":\"passed\",\"index_points\":%u,\"stride\":64,\"skimmed_headers\":%llu,\"allocation_bytes\":1114112}\n",points,headers);return 0;
@@ -42,7 +43,7 @@ int wmain(int argc,wchar_t **argv){
    if(!decode_error)return 1;}
   decoder_close();if(mp3_index_count||vorbis_index_count)return 1;if(invalid==6)ogg_cancel_ptr=NULL;puts("{\"result\":\"rejected\"}");return 0;
  }
- FILE *file=_wfopen(argv[2],L"rb");if(!file)return 2;
+ FILE *file=lamp_fopen(argv[2],LT("rb"));if(!file)return 2;
  if(fseek(file,0,SEEK_END))return 2;long bytes=ftell(file);if(bytes<=0||bytes%8)return 2;
  rewind(file);unsigned char *expected=(unsigned char *)malloc(bytes);if(!expected||fread(expected,1,bytes,file)!=(size_t)bytes)return 2;fclose(file);
  uint64_t frames=(uint64_t)bytes/8;unsigned checks=0,advanced=0,most_probes=0,most_points=0,most_preroll=0;uint64_t discarded=0,most_discarded=0,most_headers=0,most_stride=0;

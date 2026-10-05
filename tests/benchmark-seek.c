@@ -1,17 +1,15 @@
 /* Test-only operation timings for the actual assembly decoder objects.
    QPC wall time, process CPU and harness memory; no WASAPI/UI or cold-cache
    claim. Correctness belongs to the independent seek verification suites. */
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#include <psapi.h>
+#include "lamp-test.h"
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <wchar.h>
-int decoder_open(const wchar_t *);
-void decoder_close(void);
-uint64_t decoder_seek(uint64_t);
-unsigned decoder_read(float *,unsigned);
+LAMP_ABI int decoder_open(const lamp_char *);
+LAMP_ABI void decoder_close(void);
+LAMP_ABI uint64_t decoder_seek(uint64_t);
+LAMP_ABI unsigned decoder_read(float *,unsigned);
 extern unsigned decode_error,codec_kind,sample_rate;
 extern uint64_t total_frames;
 static float pcm[4096];
@@ -20,9 +18,9 @@ static uint64_t tick(void){LARGE_INTEGER value;QueryPerformanceCounter(&value);r
 static uint64_t cpu(void){FILETIME c,e,k,u;if(!GetProcessTimes(GetCurrentProcess(),&c,&e,&k,&u))return 0;return (((uint64_t)k.dwHighDateTime<<32)|k.dwLowDateTime)+(((uint64_t)u.dwHighDateTime<<32)|u.dwLowDateTime);}
 static double us(uint64_t ticks){return ticks*1000000.0/frequency.QuadPart;}
 static int read_frames(uint64_t count){while(count){unsigned cap=count>2048?2048:(unsigned)count,n=decoder_read(pcm,cap);if(n!=cap||decode_error)return 0;count-=n;}return 1;}
-static int opened(const wchar_t *path,uint64_t expected){return decoder_open(path)&&!decode_error&&total_frames==expected&&sample_rate==48000;}
-int wmain(int argc,wchar_t **argv){
- if(argc!=4)return 2;uint64_t expected=_wcstoui64(argv[2],NULL,10);unsigned runs=_wtoi(argv[3]);if(!expected||runs<3||runs>20||!QueryPerformanceFrequency(&frequency))return 2;
+static int opened(const lamp_char *path,uint64_t expected){return decoder_open(path)&&!decode_error&&total_frames==expected&&sample_rate==48000;}
+int lamp_main(int argc,lamp_char **argv){
+ if(argc!=4)return 2;uint64_t expected=lamp_strtou64(argv[2],NULL,10);unsigned runs=lamp_atoi(argv[3]);if(!expected||runs<3||runs>20||!QueryPerformanceFrequency(&frequency))return 2;
  PROCESS_MEMORY_COUNTERS_EX initial={0},final={0};initial.cb=final.cb=sizeof(initial);GetProcessMemoryInfo(GetCurrentProcess(),(PROCESS_MEMORY_COUNTERS *)&initial,sizeof(initial));
  uint64_t begin=tick(),first_cpu=cpu();
  if(!opened(argv[1],expected)){fprintf(stderr,"First open failed: %u\n",decode_error);return 1;}unsigned kind=codec_kind;

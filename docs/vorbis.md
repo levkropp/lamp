@@ -34,11 +34,11 @@ Packets are capped at 4 MiB, codebooks at 65,536 entries and 256 dimensions. Ogg
 
 Run:
 
-```powershell
-.\build.ps1 -OutputDirectory .\bin\verify-build
-.\tests\verify-vorbis-multichannel.ps1 -OutputDirectory .\bin\verify-build
-.\tests\verify-engine.ps1 -OutputDirectory .\bin\verify-build
+```sh
+python3 tests/verify-containers.py vorbis-multichannel
 ```
+
+On Windows, `.\tests\verify-engine.ps1 -OutputDirectory .\bin\verify-build` adds the WASAPI 5.1/7.1 lifecycle checks.
 
 The multichannel suite checks every channel count 1–255, native PCM before mixing, byte-exact independently calculated stereo routing, native/stereo seeks, guarded output, mixed-reader cursor continuity, cancellation, closed/sticky state and repeated allocation release. It includes all residue types, absent floors and channels, coupled channels, submaps, classword dimensions, 8192-sample blocks, maximum classification storage, 256 coupling steps, 16 submaps, continued packets and a Unicode path. A nonzero 65,537-packet three-channel stream exercises two index compactions. Another 128 independently encoded files cover 1–8 channels, eight rates and two quality settings. Malformed mapping/floor/residue indices, coupling pairs, truncated floor data and a combined-arena overflow exercise rejection and cleanup.
 

@@ -21,8 +21,9 @@ $vs=& $vswhere -latest -products * -requires Microsoft.VisualStudio.Component.VC
 $msvc=(Get-ChildItem -LiteralPath (Join-Path $vs 'VC\Tools\MSVC') -Directory | Sort-Object Name -Descending | Select-Object -First 1).FullName
 $sdkRoot=Join-Path ${env:ProgramFiles(x86)} 'Windows Kits\10'
 $version=(Get-ChildItem -LiteralPath (Join-Path $sdkRoot 'Lib') -Directory | Sort-Object Name -Descending | Select-Object -First 1).Name
-$objects=@('player','decoder','mp3','mp3_synthesis','ogg','vorbis','vorbis_transform') | ForEach-Object {Join-Path $out "$_.obj"}
-$objects+=@(Get-ChildItem -LiteralPath $out -Filter 'opus*.obj' | ForEach-Object {$_.FullName})
+# Engine objects come from build.ps1 (tools/build-windows.py), in $out\obj.
+$objects=@('player','platform','decoder','mp3','mp3_synthesis','ogg','vorbis','vorbis_transform') | ForEach-Object {Join-Path $out "obj\$_.obj"}
+$objects+=@(Get-ChildItem -LiteralPath (Join-Path $out 'obj') -Filter 'opus*.obj' | ForEach-Object {$_.FullName})
 & (Join-Path $msvc 'bin\Hostx64\x64\cl.exe') /nologo /W4 /O2 /MD "/I$msvc\include" "/I$sdkRoot\Include\$version\ucrt" "/I$sdkRoot\Include\$version\um" "/I$sdkRoot\Include\$version\shared" "/Fo$out\benchmark-playback.obj" "/Fe$out\benchmark-playback.exe" (Join-Path $PSScriptRoot 'benchmark-playback.c') @objects /link /OPT:REF "/libpath:$msvc\lib\x64" "/libpath:$sdkRoot\Lib\$version\ucrt\x64" "/libpath:$sdkRoot\Lib\$version\um\x64" kernel32.lib shell32.lib ole32.lib avrt.lib psapi.lib
 if($LASTEXITCODE){throw 'Playback benchmark bridge compilation failed'}
 $metadata=[pscustomobject]@{

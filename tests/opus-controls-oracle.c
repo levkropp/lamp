@@ -1,4 +1,5 @@
 /* Development-only comparison with the normative BSD RFC6716 frame prefix. */
+#include "lamp-test.h"
 #include <stdio.h>
 #include <stdint.h>
 #include <stddef.h>
@@ -14,8 +15,8 @@ typedef struct {
  int silence,transient,intra,spread,pitch; float gain;
  int tapset,trim,anti,balance,intensity,dual,coded,budget;
 } Controls;
-int op_celt_tf_decode(Controls *);
-int op_celt_controls(Controls *);
+LAMP_ABI int op_celt_tf_decode(Controls *);
+LAMP_ABI int op_celt_controls(Controls *);
 #include "celt-controls-reference.inc"
 static uint32_t seed=0x91f07326;
 static uint32_t next(void){seed^=seed<<13;seed^=seed>>17;seed^=seed<<5;return seed;}

@@ -1,5 +1,6 @@
 'use strict';
 // Original RF64/BW64 framing, numeric PCM and malformed-header fixtures.
+const {exe}=require('./platform');
 const fs=require('fs'),path=require('path'),cp=require('child_process');
 const [cli,oracle,dir]=process.argv.slice(2).map(x=>path.resolve(x));fs.mkdirSync(dir,{recursive:true});
 function run(exe,args){const r=cp.spawnSync(exe,args,{encoding:'utf8',maxBuffer:4*1024*1024,timeout:60000});if(r.error||r.status)throw Error(`${path.basename(exe)} ${args.join(' ')}: ${r.status} ${r.stderr||r.error} ${r.stdout}`);return r.stdout;}
@@ -32,7 +33,7 @@ function container(kind,m,opt={}){
 const results=[],malformed=[],sparse=[];let guarded=0,seeks=0,cancels=0,reopens=0;
 function verify(name,kind,m,opt={}){
  const file=path.join(dir,name+'.wav'),wanted=file+'.expected.f32',out=file+'.ours.f32',data=container(kind,m,opt);fs.writeFileSync(file,data);fs.writeFileSync(wanted,m.expected);remove(out);run(cli,['--decode',file,out]);if(!fs.readFileSync(out).equals(m.expected))throw Error('PCM mismatch '+name);
- const seek=JSON.parse(run(path.join(oracle,'seek-oracle.exe'),[file,wanted,'0','0'])),guard=JSON.parse(run(path.join(oracle,'pcm-bounds-oracle.exe'),[file,wanted]));run(path.join(oracle,'seek-oracle.exe'),[file,wanted,'3']);
+ const seek=JSON.parse(run(exe(oracle,'seek-oracle'),[file,wanted,'0','0'])),guard=JSON.parse(run(exe(oracle,'pcm-bounds-oracle'),[file,wanted]));run(exe(oracle,'seek-oracle'),[file,wanted,'3']);
  let reference='original container';const ref=file+'.reference.f64',args=[];
  const rawReference=(!m.float&&Math.ceil(m.valid/8)*8!==m.bits)||opt.count===0xffffffffffffffffn||opt.dsData===0xffffffffffffffffn||opt.table?.length||opt.extraDs;
  if(rawReference){const raw=file+'.reference.raw';fs.writeFileSync(raw,m.raw);args.push('-f',m.float?(m.bits===32?'f32le':'f64le'):({8:'u8',16:'s16le',24:'s24le',32:'s32le'})[m.bits],'-ar','48000','-ac',String(m.C),'-i',raw);reference='raw physical PCM; FFmpeg valid-precision, ds64-table, padding or ignored-field limitation';}
@@ -87,7 +88,7 @@ let fuzz=0x839f1073;for(let i=0;i<256;i++){
  else reject(`seeded-size-${i}`,kind,b=>{b.writeBigUInt64LE(value,i%3===0?20:28);return b;});
 }
 for(const kind of [1,2])for(const [bits,C,float,mode] of [[8,1,0,0],[16,2,0,0],[24,2,0,0],[32,1,0,0],[32,2,1,0],[64,2,1,0],[16,2,0,1],[16,2,0,2]]){
- const file=path.join(dir,`sparse-${kind}-${bits}-${C}-${float}-${mode}.wav`),r=JSON.parse(run(path.join(oracle,'rf64-sparse-oracle.exe'),[file,String(kind),String(bits),String(C),String(float),String(mode)]));
+ const file=path.join(dir,`sparse-${kind}-${bits}-${C}-${float}-${mode}.wav`),r=JSON.parse(run(exe(oracle,'rf64-sparse-oracle'),[file,String(kind),String(bits),String(C),String(float),String(mode)]));
  try{
   // LAMP has already checked the original nonzero BW64 dummy above. FFmpeg
   // n8.0.1 reads it as a signed RF64 count and rejects UINT64_MAX. Normalize

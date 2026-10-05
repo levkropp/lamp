@@ -1,5 +1,6 @@
 'use strict';
 // Original AIFF/AIFC constructor, ordered-speaker numeric and framing tests.
+const {exe}=require('./platform');
 const fs=require('fs'),path=require('path'),cp=require('child_process');
 const [cli,oracle,dir]=process.argv.slice(2).map(x=>path.resolve(x));fs.mkdirSync(dir,{recursive:true});
 const selection=process.env.LAMP_AIFF_CASE?new RegExp(process.env.LAMP_AIFF_CASE):null;
@@ -49,7 +50,7 @@ const results=[],malformed=[];let seeks=0,guarded=0,cancels=0,reopens=0;
 function verify(name,m,independent=true){
  if(selection&&!selection.test(name))return;
  const file=path.join(dir,name+'.aiff'),out=file+'.ours.f32',want=file+'.expected.f32';fs.writeFileSync(file,m.data);fs.writeFileSync(want,m.expected);remove(out);run(cli,['--decode',file,out]);if(!fs.readFileSync(out).equals(m.expected))throw Error('Stereo PCM mismatch '+name);
- let seek={};if(m.N)seek=JSON.parse(run(path.join(oracle,'seek-oracle.exe'),[file,want,'0','0']));const guard=JSON.parse(run(path.join(oracle,'pcm-bounds-oracle.exe'),[file,want]));run(path.join(oracle,'seek-oracle.exe'),[file,want,'3']);seeks+=(seek.checks??0)+guard.empty_seeks;guarded+=guard.guarded_reads;cancels+=guard.cancel_checks+1;reopens+=guard.reopen_checks;
+ let seek={};if(m.N)seek=JSON.parse(run(exe(oracle,'seek-oracle'),[file,want,'0','0']));const guard=JSON.parse(run(exe(oracle,'pcm-bounds-oracle'),[file,want]));run(exe(oracle,'seek-oracle'),[file,want,'3']);seeks+=(seek.checks??0)+guard.empty_seeks;guarded+=guard.guarded_reads;cancels+=guard.cancel_checks+1;reopens+=guard.reopen_checks;
  let reference=m.N?(independent?'original AIFF/AIFC container':'numeric stereo oracle; dirty unused-bit discard policy'):'not applicable; empty stream';if(independent&&m.N){const ref=file+'.reference.f64',args=[],limits=[];
   // FFmpeg n8.0.1 consumes odd COMM padding in both get_aiff_header and
   // aiff_read_header. Compare its raw PCM reader for this framing variant.
@@ -104,7 +105,7 @@ const sparse=[];
 for(const [kind,bits,C,float,mode] of [[1,8,1,0,0],[1,16,2,0,0],[1,24,2,0,0],[1,32,1,0,0],[2,8,1,0,0],[2,16,2,0,0],[2,24,2,0,0],[2,32,1,0,0],[2,32,2,1,0],[2,64,2,1,0],[3,16,2,0,0],[3,24,2,0,0],[3,32,1,0,0],[1,16,2,0,1],[2,64,2,1,1],[3,32,2,0,1],[1,24,2,0,2],[2,64,2,1,2],[3,16,2,0,2]]){
  const name=`sparse-${kind}-${bits}-${C}-${float}-${mode}`;if(selection&&!selection.test(name))continue;const file=path.join(dir,name+'.aiff');
  try{
-  const r=JSON.parse(run(path.join(oracle,'aiff-sparse-oracle.exe'),[file,String(kind),String(bits),String(C),String(float),String(mode)]));let header='original AIFF/AIFC',input,duration=null;
+  const r=JSON.parse(run(exe(oracle,'aiff-sparse-oracle'),[file,String(kind),String(bits),String(C),String(float),String(mode)]));let header='original AIFF/AIFC',input,duration=null;
   if(r.frames>0x7fffffff||kind===3&&bits!==16){header='raw physical PCM at known 64-bit offset; FFmpeg signed frame count or sowt width limitation';input=['-skip_initial_bytes',String(r.data_offset+r.reference_frame*C*bits/8),'-f',float?`f${bits}be`:bits===8?'s8':`s${bits}${kind===3?'le':'be'}`,'-ar','48000','-ac',String(C),'-i',file];}
   else{const probe=JSON.parse(run('ffprobe',['-v','error','-show_entries','stream=duration_ts,sample_rate,channels','-of','json',file])).streams[0];duration=probe.duration_ts;if(duration!==r.frames||probe.channels!==C||Number(probe.sample_rate)!==48000)throw Error('Large-file framing mismatch '+name);input=['-ss',String(r.reference_seconds),'-i',file];}
   const ref=file+'.reference.f32';ff([...input,'-af','atrim=end_sample=257','-c:a','pcm_f32le','-f','f32le',ref]);if(!fs.readFileSync(ref).equals(fs.readFileSync(file+'.channels.f32')))throw Error('Large-file PCM mismatch '+name);

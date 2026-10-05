@@ -7,6 +7,20 @@ on:
 permissions:
   contents: read
 jobs:
+  linux-x64:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v6
+      - name: Tools
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq binutils gcc ffmpeg
+      - name: Build static assembly lamp-cli
+        run: ./build.sh
+      - name: Verify every portable suite
+        run: python3 tests/run.py --skip-playback
+      - name: Cross-build Windows binaries with LLVM
+        run: python3 tools/build-windows.py
+      - name: Check Windows architecture, resources and runtime dependencies
+        run: node tests/verify-runtime.js
   windows-x64:
     runs-on: windows-2022
     defaults:
@@ -14,27 +28,14 @@ jobs:
         shell: pwsh
     steps:
       - uses: actions/checkout@v6
-      - name: Build assembly players
-        run: ./build.ps1
+      - name: Build assembly players with LLVM
+        run: ./build.ps1 -Tests
       - name: Check architecture, resources and runtime dependencies
         run: node tests/verify-runtime.js
       - name: Check advertised audio formats including Opus
         run: node tests/smoke.js
-      - name: Verify Opus decoder stages against normative reference
-        run: ./tests/verify-opus-components.ps1
-      - name: Verify official Opus vectors at all rates and channel layouts
-        run: ./tests/verify-opus-conformance.ps1
-      - name: Verify direct and indexed seek PCM
-        run: ./tests/verify-seek.ps1
-      - name: Verify native FLAC depths and speaker layouts
-        shell: pwsh
-        run: ./tests/verify-flac-layouts.ps1
-      - name: Verify WAV precision and speaker layouts
-        run: ./tests/verify-wav-layouts.ps1
-      - name: Verify RF64/BW64 framing and sparse large files
-        run: ./tests/verify-rf64.ps1
-      - name: Verify AIFF/AIFC precision, layouts and large files
-        run: ./tests/verify-aiff.ps1
+      - name: Verify table provenance, Opus stages and Ogg CRC with Visual C++ oracles
+        run: python tests/run.py --quick
       - name: Check static site
         run: node tests/verify-site.js
       - name: Render actual assembly UI

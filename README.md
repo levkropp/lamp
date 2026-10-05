@@ -2,7 +2,7 @@
 
 # LAMP — Lev's Assembly Media Player
 
-A small Windows x86-64 and Apple Silicon macOS media player with assembly decoders and native assembly interfaces. Audio comes first. The long-term goal is to support the relevant formats and playback features people use in **mpv**, with a small runtime and low CPU use.
+A small media player for Windows and Linux x86-64 and Apple Silicon macOS with handwritten assembly decoders and a native assembly UI. Audio comes first. The long-term goal is to support the relevant formats and playback features people use in **mpv**, with a small runtime and low CPU use.
 
 **Current source: 0.4.0-dev, an early audio prototype.** WAV, AIFF/AIFC, native FLAC, MP3, Ogg/Vorbis and Ogg/Opus play in source builds. Opus supports family 0 mono/stereo and family 1 layouts with 1–8 speaker channels, downmixed to stereo. Its elementary decoders include RFC 8251 updates and pass all 120 official vector checks across five output rates and mono/stereo. Video, subtitles and network streaming are future work. The published v0.3.0 prerelease contains WAV, native FLAC, MP3 and Ogg/Vorbis.
 
@@ -12,17 +12,17 @@ A small Windows x86-64 and Apple Silicon macOS media player with assembly decode
 
 ## Why LAMP?
 
-- Shared MASM x86-64 decoder sources; Windows runs them directly, and macOS builds translate them into native ARM64 assembly using Rhun’s approach.
-- Windows uses event-driven WASAPI and a decode worker. macOS uses Core Audio queues with three bounded PCM buffers and an AppKit interface written in ARM64 assembly.
+- Handwritten x86-64 assembly runtime and decoders, SSE2 baseline. One GNU-syntax source tree builds a static, libc-free Linux executable with `as`/`ld` and Windows executables with LLVM, following [Rhun](https://rhun.app/)'s approach.
+- Windows uses event-driven WASAPI and a decode worker; macOS uses native ARM64 Core Audio and AppKit adapters with translated shared decoders.
 - A compact mpv-inspired UI, with Rhun's assembly UI approach and minimalist visual style as references.
-- No external codec library, FFmpeg subprocess, or mpv engine in the player. Windows system DLLs and macOS libSystem/AppKit/AudioToolbox provide platform services; no C, Objective-C or Swift runtime source is compiled into the Mac player.
+- No codec DLL, C runtime, FFmpeg subprocess, or mpv engine in the player. Normal Windows system DLLs provide platform services; on Linux the player makes raw system calls. macOS uses libSystem, AppKit and AudioToolbox.
 - MIT project license, with preserved MIT/MIT-0/CC0/BSD notices for reference-derived algorithms and data.
 
 LAMP aims to reduce stutters. It cannot guarantee uninterrupted playback during arbitrary system or driver stalls. [Same-machine headless playback measurements](docs/playback-benchmark.md) compare its assembly engine with mpv and VLC; shipping-GUI, wakeup and audible-latency measurements remain pending.
 
 ## Run
 
-Windows 10/11 x64 and a working default audio output are the intended targets. Build from source for Opus and AIFF/AIFC support, or download the earlier [v0.3.0 Windows prerelease](https://github.com/levkropp/lamp/releases/tag/v0.3.0). Open `bin\lamp.exe` and drop a supported audio file onto the window.
+Windows 10/11 x64 with a working default audio output is the primary desktop target. Build from source for Opus and AIFF/AIFC support, or download the earlier [v0.3.0 Windows prerelease](https://github.com/levkropp/lamp/releases/tag/v0.3.0). Open `bin\lamp.exe` and drop a supported audio file onto the window.
 
 ```powershell
 .\bin\lamp.exe 'C:\Music\track.ogg'
@@ -42,6 +42,15 @@ build/macos/lamp-cli --decode 'Music/track.ogg' 'track.f32'
 ```
 
 The Mac app has Open, Finder file-open/drop handlers, pause/replay, stop, timeline seeking and volume controls. Cmd+O opens; Cmd+Q quits. The local bundle is ad-hoc signed. See [Mac build strategy, controls, verification and limits](docs/macos.md). The published v0.3.0 download remains Windows-only.
+
+On Linux x86-64, `./build.sh` produces a static `build/lamp-cli` with the same decoders, checks and export:
+
+```sh
+./build/lamp-cli --check ~/Music/track.mp3
+./build/lamp-cli --decode ~/Music/track.ogg track.f32
+```
+
+Linux playback and the desktop window are not available yet; see the [roadmap](ROADMAP.md).
 
 `--check` decodes without an audio device. `--decode` writes little-endian float32 PCM with two interleaved channels; mono is duplicated. Opus output is 48 kHz; AIFF/AIFC rates round to integer hertz; other formats use their source rate. The destination must be new. Failed exports can leave partial output.
 
@@ -78,17 +87,29 @@ On Windows, the controls hide after 2.5 seconds of inactivity during playback an
 
 ## Build and verify
 
-For Windows, install **Visual Studio 2022 Build Tools**, its x64 C++ tools, and a **Windows SDK**. Build scripts locate `ml64`, `link`, and `rc` automatically:
+LAMP follows [Rhun](https://rhun.app/)'s build approach: GNU assembler syntax (`.intel_syntax noprefix`) shared by every platform, no external codec library. The code uses the Microsoft x64 calling convention on Windows and Linux; the Mac translation uses native ABI bridges. `src/` holds the shared decoders, `src/win/` the WASAPI engine, GDI UI and Win32 services, and `src/linux/` raw-syscall services and the Linux command line.
+
+**Linux** needs GNU binutils (`as`, `ld`):
+
+```sh
+./build.sh                       # build/lamp-cli, static and libc-free
+python3 tests/run.py --quick     # smoke, table provenance, 35 Opus oracle suites, Ogg CRC
+python3 tests/run.py             # adds every FFmpeg-based PCM, seek, layout and container suite
+```
+
+**Windows** needs [LLVM](https://llvm.org/) (`llvm-mc`, `lld-link`, `llvm-dlltool`, `llvm-rc`; for example `winget install LLVM.LLVM`) and Python. The same script also cross-builds the Windows binaries from Linux or macOS:
 
 ```powershell
-.\build.ps1
+.\build.ps1                      # or: python tools/build-windows.py
 node .\tests\verify-runtime.js
 node .\tests\smoke.js
+python .\tests\run.py --quick
+.\tests\verify-engine.ps1         # WASAPI lifecycle (Windows only)
 .\tests\render-ui.ps1
 .\package.ps1
 ```
 
-For Apple Silicon, `./build.sh --release` builds the ARM64 app and CLI. Python is used only during the build. `tools/arm64.py` is the pinned MIT Rhun translator; `tools/masm.py` normalizes the authoritative MASM sources, and `tools/arm64_lamp.py` adds the instructions used by LAMP. No translated code is interpreted at runtime.
+For Apple Silicon, `./build.sh --release` builds the ARM64 app and CLI. Python is used only during the build. `tools/arm64.py` is the pinned MIT Rhun translator; `tools/arm64_lamp.py` adds the instructions used by LAMP. No translated code is interpreted at runtime.
 
 ```sh
 python3 tests/verify-macos.py --layouts --opus --audio --ui
@@ -97,11 +118,13 @@ python3 tools/package-mac.py
 
 Mac verification additionally needs Python 3.12+, Node.js and FFmpeg with libmp3lame/libopus. It builds the bundled, hash-verified Xiph/Opus references into test artifacts only. Audio/UI checks need a desktop session and working output device. Generated reports, translation artifacts and binaries live under `build/macos`. The package contains the app, CLI, notices and a SHA-256 manifest. [Mac verification scope](docs/macos.md#verification) is separate from the Windows results below.
 
-The prebuilt ICO and decoder tables are included. A normal build needs no codec library or reference C compiler. Both Windows players use custom assembly entry points and `/NODEFAULTLIB`. The development build measures **205,312 bytes for `lamp.exe`** and **197,632 bytes for `lamp-cli.exe`**, including icon resources; release manifests record exact sizes and hashes.
+The prebuilt ICO and decoder tables are included. A normal build needs no codec library or reference C compiler; import libraries come from `src/win/*.def`. Both Windows players use custom assembly entry points and no default libraries. The development build measures **206,848 bytes for `lamp.exe`** and **198,656 bytes for `lamp-cli.exe`**, including icon resources; release manifests record exact sizes and hashes.
 
-To build while the player is open, use `./build.ps1 -OutputDirectory ./bin/verify-build`. Pass that directory to `node ./tests/verify-runtime.js ./bin/verify-build` and `node ./tests/smoke.js ./bin/verify-build` to check the new binaries, or `./package.ps1 -BinaryDirectory ./bin/verify-build` to package them. Packaging rejects a binary version that differs from `VERSION`.
+To build while the player is open, use `./build.ps1 -OutputDirectory ./bin/verify-build`. Pass that directory to `node ./tests/verify-runtime.js ./bin/verify-build` and `node ./tests/smoke.js ./bin/verify-build` to check the new binaries, or `./package.ps1 -BinaryDirectory ./bin/verify-build` to package them. Packaging rejects a binary version that differs from `VERSION`. Test runners honour `LAMP_OUT` for a different output directory.
 
-The codec suites record 43 WAV/FLAC, 103 MP3, and 83 Vorbis checks, plus 4,425 exact WAV/FLAC/MP3/Vorbis seek checks and 6,768 Opus seeks against an independently positioned RFC 8251 reference decoder. Separate depth/layout suites check 965 WAV files with 14,475 exact seeks and 404 FLAC files with 6,060 exact seeks, guarded reads, cancellation and allocation release. Ogg seeking includes continued packets, cropped starts, granule origins and bounded index compaction. Engine lifecycle, malformed-input, stress and codec reference tests add separate coverage. These checks do not establish complete format conformance. [Test instructions](docs/technical.md#verification) and [recorded reports](reports/README.md) describe what was checked. Full fixture suites need FFmpeg and Node.js; seek and Opus oracle tests additionally use the C compiler for test executables only.
+Test oracles compile reference C (the RFC 6716/8251 Opus decoder, stb_vorbis, libvorbis) only into test executables, with GCC or Clang on Linux and Visual C++ on Windows. On Linux, prototypes for assembly functions carry `__attribute__((ms_abi))` through `tests/lamp-test.h`.
+
+The codec suites record 43 WAV/FLAC, 103 MP3, and 83 Vorbis checks, plus 4,425 exact WAV/FLAC/MP3/Vorbis seek checks and 6,768 Opus seeks against an independently positioned RFC 8251 reference decoder. Separate depth/layout suites check 965 WAV files with 14,475 exact seeks and 404 FLAC files with 6,060 exact seeks, guarded reads, cancellation and allocation release. Ogg seeking includes continued packets, cropped starts, granule origins and bounded index compaction. Engine lifecycle, malformed-input, stress and codec reference tests add separate coverage. These checks do not establish complete format conformance. [Test instructions](docs/technical.md#verification) and [recorded reports](reports/README.md) describe what was checked. Full fixture suites need FFmpeg, Node.js and Python; seek and Opus oracle tests additionally use a C compiler for test executables only.
 
 The Ogg CRC pass uses eight-byte table updates while retaining complete validation. On this machine, median reopen time for the recorded ten-minute fixtures fell from 32.7 to 12.5 ms for Vorbis and from 13.8 to 5.3 ms for Opus. These are warm-filesystem decoder timings, excluding WASAPI, the UI and audible latency. [Decoder measurements and scope](docs/technical.md#playback-and-cpu-design) include silence and noise targets. A separate [headless playback comparison](docs/playback-benchmark.md) records mpv 0.41.0 and VLC 3.0.24, startup/seek observations and CPU/RAM during playback, pause and idle across all five formats, with and without four CPU load workers. Its timing clocks differ between players; it does not establish audible latency or a universal performance advantage.
 
@@ -109,7 +132,7 @@ The UI image comes from the actual assembly renderer with synthetic state. Open-
 
 ## Roadmap and contribution
 
-Latest Opus work adds family 1 multistream decoding and the RFC stereo downmix. The new integration suite checks 86 generated streams, 1,032 reset-reference seeks, repeated/silent/unmapped channels, gain/trim bounds, malformed packets and cancellation. Another 112 modern-libopus family 1 files pass independent float PCM comparisons, with peak error below 0.000002. The original family 0 suite retains 393 reference streams and 51 modern-libopus fixtures. All 120 official elementary-decoder vector checks pass, including reference PCM/history and final-range validation for 200,750 packets. Playback, pause/resume, stop/reopen and indexed/paused seeking pass for Opus and the existing formats. Ogg chaining and native surround routing remain unfinished. See [the decoder-stage notes](docs/opus.md); `./tests/verify-opus-components.ps1` runs 35 suites without FFmpeg or an audio device, and `./tests/verify-opus-conformance.ps1` runs official vectors.
+Latest Opus work adds family 1 multistream decoding and the RFC stereo downmix. The new integration suite checks 86 generated streams, 1,032 reset-reference seeks, repeated/silent/unmapped channels, gain/trim bounds, malformed packets and cancellation. Another 112 modern-libopus family 1 files pass independent float PCM comparisons, with peak error below 0.000002. The original family 0 suite retains 393 reference streams and 51 modern-libopus fixtures. All 120 official elementary-decoder vector checks pass, including reference PCM/history and final-range validation for 200,750 packets. Playback, pause/resume, stop/reopen and indexed/paused seeking pass for Opus and the existing formats. Ogg chaining and native surround routing remain unfinished. See [the decoder-stage notes](docs/opus.md); `python3 tests/verify-opus-components.py` runs 35 suites without FFmpeg or an audio device, and `python3 tests/verify-opus-conformance.py` runs official vectors.
 
 [ROADMAP.md](ROADMAP.md) covers Opus, reliable audio playback, broader codecs and containers, video, subtitles, streaming, and eventual support for everything relevant that mpv supports. The [compatibility matrix](docs/compatibility.md) tracks the current gaps. Goals have acceptance gates, not promised release dates. Hardware decode should be used when it lowers system cost; handwritten assembly alone does not guarantee a faster codec.
 

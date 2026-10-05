@@ -1,14 +1,15 @@
 /* Test-only unchanged normative PLC/energy/recovery, connected to core/CNG. */
 #define SILK_CNG_ORACLE_EMBEDDED
+#include "lamp-test.h"
 #include "opus-silk-cng-oracle.c"
 #include <stddef.h>
 #include "PLC.h"
 typedef struct {silk_PLC_struct *state;Core *core;const ParamState *param;silk_decoder_control *ctrl;const SideInfoIndices *ind;int16_t *pcm;void *work;int fs,subfr,lost;unsigned state_cap,core_cap,param_cap,ctrl_cap,ind_cap,pcm_cap,work_cap;} Plc;
 typedef struct {silk_PLC_struct *state;int16_t *pcm;int n,loss;unsigned state_cap,pcm_cap;} Glue;
 typedef struct {int32_t *energy;int *shift;const int16_t *in;unsigned n,in_cap;} Energy;
-int op_silk_plc(Plc *);
-int op_silk_plc_glue(Glue *);
-int op_silk_sum_sqr(Energy *);
+LAMP_ABI int op_silk_plc(Plc *);
+LAMP_ABI int op_silk_plc_glue(Glue *);
+LAMP_ABI int op_silk_sum_sqr(Energy *);
 typedef char plc_sizes[(sizeof(Plc)==96&&sizeof(Glue)==32&&sizeof(Energy)==32&&sizeof(silk_PLC_struct)==92&&offsetof(silk_PLC_struct,prevLPC_Q12)==14&&offsetof(silk_PLC_struct,last_frame_lost)==48&&offsetof(silk_PLC_struct,prevGain_Q16)==72&&offsetof(silk_PLC_struct,subfr_length)==88)?1:-1];
 typedef struct {uint64_t before;silk_PLC_struct value;uint64_t after;} PlcGuard;
 typedef struct {uint64_t before;unsigned char value[3552];uint64_t after;} PlcWork;

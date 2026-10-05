@@ -1,14 +1,15 @@
 /* Test-only unchanged init/set_fs/decode_frame reference, all frame history. */
 #define main silk_synthesis_oracle_main
+#include "lamp-test.h"
 #include "opus-silk-synthesis-oracle.c"
 #undef main
 #include <stddef.h>
 typedef struct {Core core;ParamState param;Previous previous;SideInfoIndices ind;silk_PLC_struct plc;silk_CNG_struct cng;int fs,subfr,error;uint32_t tag;} FrameState;
 typedef struct {FrameState *state;int fs,subfr;unsigned cap;} FrameInit;
 typedef struct {FrameState *state;ec_dec *ec;int16_t *pcm;void *work;unsigned mode,vad,lbrr,cond,state_cap,ec_cap,pcm_cap,work_cap;} Frame;
-int op_silk_frame_init(FrameInit *);
-int op_silk_frame_config(FrameInit *);
-int op_silk_decode_frame(Frame *);
+LAMP_ABI int op_silk_frame_init(FrameInit *);
+LAMP_ABI int op_silk_frame_config(FrameInit *);
+LAMP_ABI int op_silk_decode_frame(Frame *);
 typedef char frame_sizes[(sizeof(FrameState)==3908&&sizeof(FrameInit)==24&&sizeof(Frame)==64&&offsetof(FrameState,plc)==2412&&offsetof(FrameState,cng)==2504&&offsetof(FrameState,tag)==3904)?1:-1];
 typedef struct {uint64_t before;FrameState value;uint64_t after;} FrameGuard;
 typedef struct {uint64_t before;unsigned char value[5360];uint64_t after;} FrameWork;

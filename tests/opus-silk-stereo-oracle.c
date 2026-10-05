@@ -1,4 +1,5 @@
 /* Test-only normative stereo entropy and stateful mid/side reconstruction. */
+#include "lamp-test.h"
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
@@ -7,8 +8,8 @@
 #include "entenc.h"
 typedef struct {ec_dec *ec;int32_t *out;unsigned kind,out_cap,ec_cap;} StereoIndices;
 typedef struct {stereo_dec_state *state;int16_t *mid,*side;const int32_t *pred;int fs,n;unsigned state_cap,mid_cap,side_cap,pred_cap;} Stereo;
-int op_silk_stereo_indices(StereoIndices *);
-int op_silk_stereo(Stereo *);
+LAMP_ABI int op_silk_stereo_indices(StereoIndices *);
+LAMP_ABI int op_silk_stereo(Stereo *);
 typedef char sizes[(sizeof(StereoIndices)==32&&sizeof(Stereo)==56&&sizeof(stereo_dec_state)==12)?1:-1];
 typedef struct {uint64_t before;stereo_dec_state state;uint64_t after;} StateGuard;
 static uint32_t seed=0xb616f83d;

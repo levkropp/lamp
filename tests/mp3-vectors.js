@@ -117,8 +117,8 @@ for(const name of files) console.log(name);
 // Exercise every legal pair codebook, including maximum linbits escapes.
 const tables=fs.readFileSync(path.join(__dirname,'../src/mp3_tables.inc'),'utf8');
 function table(name) {
-  const section=tables.split(`${name} LABEL `)[1].split(`${name}_count`)[0];
-  return [...section.matchAll(/^\s*d[bwd]\s+(.+)$/gm)].flatMap(m=>m[1].trim().split(',').map(Number));
+  const section=tables.split(`\n${name}:\n`)[1].split(`.equ ${name}_count`)[0];
+  return [...section.matchAll(/^\s*\.(?:byte|short|long)\s+(.+)$/gm)].flatMap(m=>m[1].trim().split(',').map(Number));
 }
 const huff=table('mp_huff_tabs'), index=table('mp_huff_index'), lin=table('mp_huff_linbits');
 const digits=(x,n)=>Array.from({length:n},(_,i)=>(x>>>(n-1-i))&1);

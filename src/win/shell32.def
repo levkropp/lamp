@@ -1,4 +1,4 @@
-LIBRARY shell32.dll
+LIBRARY SHELL32.dll
 EXPORTS
     CommandLineToArgvW
     DragAcceptFiles

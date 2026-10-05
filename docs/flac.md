@@ -40,7 +40,7 @@ Comment blocks retain FLAC's 24-bit size bound; vendor/field lengths are checked
 
 ## Verification
 
-Run `build.ps1 -OutputDirectory bin/verify-build`, then `tests/verify-flac-layouts.ps1 -OutputDirectory bin/verify-build`. Node.js, FFmpeg and the MSVC C compiler are test prerequisites; the C harnesses link only into isolated test executables.
+Run `python3 tests/verify-containers.py flac-layouts`. Node.js, FFmpeg, Python and a C compiler are test prerequisites; the C harnesses link only into isolated test executables.
 
 The [recorded report](../reports/flac-layout-verification.json) checks 404 files and 6,060 byte-exact stereo seeks. Synthetic files cover every depth/channel combination, extreme signed values, 33-bit decorrelation, fixed/LPC predictors including 32 taps and large cancelling products, both Rice methods, escape widths, partitions and wasted bits. Layout cases cover each speaker bit, the RFC mask examples, case/padding, duplicate masks and unassigned tracks. Maximum blocks contain 65,535 samples in all eight channels. Seventy-two modern FFmpeg files span 16/24/32-bit depths, every channel count and compression levels 0/5/12; the harness rejects an encoder that silently reduces depth. Its 32-bit encoding uses FFmpeg's experimental option only in fixture generation.
 

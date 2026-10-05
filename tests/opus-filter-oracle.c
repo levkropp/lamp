@@ -1,4 +1,5 @@
 /* Test-only normative CELT postfilter/deemphasis comparison. */
+#include "lamp-test.h"
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
@@ -10,8 +11,8 @@ typedef struct {
  int tap0,tap1,overlap;unsigned buffer_cap,out_cap;
 } Comb;
 typedef struct {float *x,*pcm,*mem;int n,channels,downsample;unsigned x_cap,pcm_cap,mem_cap;} Deemphasis;
-int op_celt_comb_filter(Comb *);
-int op_celt_deemphasis(Deemphasis *);
+LAMP_ABI int op_celt_comb_filter(Comb *);
+LAMP_ABI int op_celt_deemphasis(Deemphasis *);
 static uint32_t rng=0xb3274825;
 static uint32_t next(void){rng^=rng<<13;rng^=rng>>17;rng^=rng<<5;return rng;}
 static unsigned comb_checks,deemphasis_checks,guards,coefficients;

@@ -1,15 +1,14 @@
 /* Test-only command bridge to the assembly WASAPI engine and Win32 counters.
  * This executable uses the C runtime; it is never linked into either player. */
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#include <psapi.h>
+#include "lamp-test.h"
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-extern int engine_play(const wchar_t *);
-extern void engine_stop(void), engine_pause(void);
+LAMP_ABI int engine_play(const wchar_t *);
+LAMP_ABI void engine_stop(void);
+LAMP_ABI void engine_pause(void);
 extern volatile uint32_t engine_stop_requested, pause_requested, engine_ready;
 extern volatile uint32_t sample_rate, exit_code, decode_error, engine_seek_seconds;
 extern volatile uint64_t engine_position, underruns, endpoint_dry;

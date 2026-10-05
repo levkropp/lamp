@@ -1,22 +1,21 @@
 /* Original test-only harness: guarded output, sticky cancellation and close. */
-#include <windows.h>
-#include <psapi.h>
+#include "lamp-test.h"
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-int decoder_open(const wchar_t *);
-void decoder_close(void);
-unsigned decoder_read(float *,unsigned);
-uint64_t decoder_seek(uint64_t);
+LAMP_ABI int decoder_open(const lamp_char *);
+LAMP_ABI void decoder_close(void);
+LAMP_ABI unsigned decoder_read(float *,unsigned);
+LAMP_ABI uint64_t decoder_seek(uint64_t);
 extern uint64_t total_frames;
 extern unsigned decode_error,source_channels,source_bits;
 extern unsigned *ogg_cancel_ptr;
 static SIZE_T committed(void){PROCESS_MEMORY_COUNTERS_EX p={0};p.cb=sizeof(p);return GetProcessMemoryInfo(GetCurrentProcess(),(PROCESS_MEMORY_COUNTERS *)&p,sizeof(p))?p.PrivateUsage:0;}
 static int failed(unsigned line){fprintf(stderr,"PCM bounds assertion at line %u\n",line);return 1;}
-int wmain(int argc,wchar_t **argv){
+int lamp_main(int argc,lamp_char **argv){
  if(argc!=3)return 2;
- FILE *f=_wfopen(argv[2],L"rb");if(!f||fseek(f,0,SEEK_END))return 2;
+ FILE *f=lamp_fopen(argv[2],LT("rb"));if(!f||fseek(f,0,SEEK_END))return 2;
  long bytes=ftell(f);if(bytes<0||bytes%8)return 2;rewind(f);
  unsigned char *expected=malloc(bytes?bytes:1);if(!expected||fread(expected,1,bytes,f)!=(size_t)bytes)return 2;fclose(f);
  SYSTEM_INFO info;GetSystemInfo(&info);SIZE_T page=info.dwPageSize;

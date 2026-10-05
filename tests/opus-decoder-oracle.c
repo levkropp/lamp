@@ -1,5 +1,6 @@
 /* Development-only comparison with the complete normative BSD CELT decoder.
    celt.c is included unchanged to inspect its internal state after every frame. */
+#include "lamp-test.h"
 #include <stdio.h>
 #include <stdint.h>
 #include <stddef.h>
@@ -20,8 +21,8 @@ typedef struct {
 } Frame;
 typedef char state_layout_check[(sizeof(LampState)==18272&&offsetof(LampState,old)==17600)?1:-1];
 typedef char frame_layout_check[(sizeof(Frame)==72&&offsetof(Frame,len)==40)?1:-1];
-int op_celt_decoder_init(LampState *,unsigned,int,int);
-int op_celt_decode_frame(Frame *);
+LAMP_ABI int op_celt_decoder_init(LampState *,unsigned,int,int);
+LAMP_ABI int op_celt_decode_frame(Frame *);
 static uint32_t random_state=0x017c3b49;
 static uint32_t random_next(void){random_state^=random_state<<13;random_state^=random_state>>17;random_state^=random_state<<5;return random_state;}
 static unsigned frame_checks,real_checks,invalid_checks,silent_checks,transient_checks,postfilter_checks,anti_checks,primed_checks,rejected_checks,loss_checks,pitch_loss_checks,noise_loss_checks;

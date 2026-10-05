@@ -1,13 +1,14 @@
 /* Test-only normative CELT PVQ reconstruction and spreading comparison. */
+#include "lamp-test.h"
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
 #include <math.h>
 #include "vq.c"
 typedef struct{float *x;ec_dec *ec;int n,k,spread,blocks;float gain;unsigned mask;} Unquant;
-int op_celt_unquant(Unquant *);
-int op_celt_spread(float *,int,int,int,int,int);
-int op_celt_renormalize(float *,int,float);
+LAMP_ABI int op_celt_unquant(Unquant *);
+LAMP_ABI int op_celt_spread(float *,int,int,int,int,int);
+LAMP_ABI int op_celt_renormalize(float *,int,float);
 static uint32_t seed=0x75424819;
 static uint32_t next(void){seed^=seed<<13;seed^=seed>>17;seed^=seed<<5;return seed;}
 static unsigned vectors,rotations,guards,renorms;

@@ -7,12 +7,12 @@ const match=/static const opus_val16 eMeans\[25\]\s*=\s*\{([\s\S]*?)\};/.exec(so
 if(!match)throw Error('Missing floating mean energy table');
 const means=match[1].match(/\d+\.\d+f/g).slice(0,21).map(x=>x.slice(0,-1));
 if(means.length!==21)throw Error('Wrong mean energy count');
-let output='; Normative RFC6716 mean energies (BSD); see THIRD_PARTY_NOTICES.\n; Copyright (c) 2007-2012 IETF Trust, CSIRO, Xiph.Org Foundation.\n';
-output+='os_means real4 '+means.join(',')+'\n';
-output+='; Original degree-18 Taylor polynomial for 2^fraction, 0<=fraction<1.\n';
+let output='# Normative RFC6716 mean energies (BSD); see THIRD_PARTY_NOTICES.\n# Copyright (c) 2007-2012 IETF Trust, CSIRO, Xiph.Org Foundation.\n';
+output+='os_means: .float '+means.join(', ')+'\n';
+output+='# Original degree-18 Taylor polynomial for 2^fraction, 0<=fraction<1.\n';
 let coefficients=[1],factor=1;
 for(let i=1;i<=18;i++){factor*=Math.LN2/i;coefficients.push(factor);}
-output+='os_exp_coeff real8 '+coefficients.map(x=>x.toExponential(17)).join(',')+'\n';
+output+='os_exp_coeff: .double '+coefficients.map(x=>x.toExponential(17)).join(', ')+'\n';
 const target=path.join(root,'src','opus_spectral_tables.inc');
 if(check){if(fs.readFileSync(target,'utf8').replace(/\r\n/g,'\n')!==output)throw Error('Spectral tables differ');}
 else fs.writeFileSync(target,output);

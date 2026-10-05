@@ -1,9 +1,10 @@
 /* Test-only packet flags/LBRR skipping against the unchanged dec_API block. */
 #define SILK_FRAME_ORACLE_EMBEDDED
+#include "lamp-test.h"
 #include "opus-silk-frame-oracle.c"
 typedef struct {int vad[2][3],lbrr[2][3],flag[2],frames,channels;} PacketMeta;
 typedef struct {FrameState *state;PacketMeta *meta;ec_dec *ec;void *work;unsigned frames,channels,mode,state_cap,meta_cap,ec_cap,work_cap;} Header;
-int op_silk_packet_header(Header *);
+LAMP_ABI int op_silk_packet_header(Header *);
 void lamp_silk_packet_reference(silk_decoder_state *,int,int,ec_dec *);
 typedef char header_sizes[(sizeof(PacketMeta)==64&&sizeof(Header)==64)?1:-1];
 typedef struct {uint64_t before;FrameState states[2];uint64_t after;} PairGuard;

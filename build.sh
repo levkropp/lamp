@@ -28,5 +28,12 @@ for s in $(ls src/*.s src/linux/*.s | LC_ALL=C sort); do
 done
 LDFLAGS="-static -nostdlib --no-dynamic-linker -z noexecstack"
 [ "$mode" = release ] && LDFLAGS="$LDFLAGS -s"
-ld $LDFLAGS -o "$out/lamp-cli" $objs
+relink=
+[ -f "$out/lamp-cli" ] || relink=1
+for o in $objs; do [ "$o" -nt "$out/lamp-cli" ] && relink=1; done
+if [ -n "$relink" ]; then
+    # Link beside the target and rename, so a running test never sees a partial binary.
+    ld $LDFLAGS -o "$out/lamp-cli.tmp" $objs
+    mv -f "$out/lamp-cli.tmp" "$out/lamp-cli"
+fi
 echo "$out/lamp-cli"

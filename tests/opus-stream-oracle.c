@@ -1,12 +1,13 @@
 /* Full normal packet API oracle; C reference remains test-only. */
 #define OPUS_MODE_ORACLE_EMBEDDED
 #define OPUS_MODE_CELT_OBSERVER
+#include "lamp-test.h"
 #include "opus-mode-oracle.c"
 #include "reference/opus-1.5.2-packet.h"
 typedef struct {ModeState *state;const unsigned char *data;float *pcm;void *work;unsigned len,count,fec,state_cap,work_cap,pcm_cap;} Packet;
 typedef char packet_size[(sizeof(Packet)==56)?1:-1];
-int op_opus_decode_packet(Packet *);
-int op_opus_decode_packet_ex(Packet *,unsigned);
+LAMP_ABI int op_opus_decode_packet(Packet *);
+LAMP_ABI int op_opus_decode_packet_ex(Packet *,unsigned);
 extern unsigned op_packet_bytes;
 #ifndef OPUS_STREAM_OGG_EMBEDDED
 uint64_t ogg_total_granule,ogg_granule,ogg_packet_page,total_frames;

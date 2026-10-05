@@ -1,4 +1,5 @@
 /* Test-only normative gain/pitch/LTP parameter reconstruction. */
+#include "lamp-test.h"
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
@@ -8,10 +9,10 @@ typedef struct {const opus_int8 *ind;opus_int32 *out;opus_int8 *prev;int subfr,c
 typedef struct {const SideInfoIndices *ind;int *pitch;opus_int16 *ltp;int *scale;int fs,subfr;unsigned pitch_cap,ltp_cap,scale_cap;} PitchLtp;
 typedef struct {int lag,signal;} Previous;
 typedef struct {ec_dec *ec;Previous *state;SideInfoIndices *out;int fs,subfr,vad,lbrr,cond;unsigned out_cap,state_cap;} Indices;
-int op_silk_log2lin(int);
-int op_silk_gains(Gains *);
-int op_silk_pitch_ltp(PitchLtp *);
-int op_silk_indices(Indices *);
+LAMP_ABI int op_silk_log2lin(int);
+LAMP_ABI int op_silk_gains(Gains *);
+LAMP_ABI int op_silk_pitch_ltp(PitchLtp *);
+LAMP_ABI int op_silk_indices(Indices *);
 static uint32_t rng=0x91a587bc;
 static uint32_t next(void){rng^=rng<<13;rng^=rng>>17;rng^=rng<<5;return rng;}
 static unsigned log_checks,gain_checks,pitch_checks,connected_checks,guards;
