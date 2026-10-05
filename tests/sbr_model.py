@@ -335,6 +335,7 @@ class Element:
         self.header = None
         self.tables = None
         self.coupling = False
+        self.ps = None                            # ps_model.PS: mono input renders a stereo pair
         # Gains and levels persist per element (FFmpeg): a limiter table that
         # ends below kx + M leaves the top subbands with earlier values.
         self.gain = [[0.0] * 48 for _ in range(7)]
@@ -724,6 +725,11 @@ class Element:
                 x_high = self._hf_gen(c, x_low, alpha0, alpha1)
                 self._adjust(c, x_high)
             X = self._x_gen(c, x_low)
+            if self.ps is not None:
+                R = [list(row) for row in X]
+                if self.ps.start:
+                    self.ps.apply(X, R, self.kx[1] + self.m[1])
+                return [c.synthesis(X), self.ch[1].synthesis(R)]
             out.append(c.synthesis(X))
         return out
 

@@ -19,7 +19,7 @@
         "window groups",
         "skipped elements"
       ],
-      "stats": "codec=9 rate=44100 channels=2 bits=0 frames=66150 underruns=0 decode_error=0 audio_error=0 elapsed_ms=10 cpu_us=11173 endpoint_dry=0"
+      "stats": "codec=9 rate=44100 channels=2 bits=0 frames=66150 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=3553 endpoint_dry=0"
     },
     {
       "test": "noise.m4a",
@@ -38,7 +38,7 @@
         "window groups",
         "skipped elements"
       ],
-      "stats": "codec=9 rate=44100 channels=2 bits=0 frames=66150 underruns=0 decode_error=0 audio_error=0 elapsed_ms=6 cpu_us=6458 endpoint_dry=0"
+      "stats": "codec=9 rate=44100 channels=2 bits=0 frames=66150 underruns=0 decode_error=0 audio_error=0 elapsed_ms=4 cpu_us=4674 endpoint_dry=0"
     },
     {
       "test": "noise.aac",
@@ -72,7 +72,7 @@
         "window groups",
         "skipped elements"
       ],
-      "stats": "codec=9 rate=48000 channels=2 bits=0 frames=72000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=2921 endpoint_dry=0"
+      "stats": "codec=9 rate=48000 channels=2 bits=0 frames=72000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=3269 endpoint_dry=0"
     },
     {
       "test": "noise-320k.m4a",
@@ -91,7 +91,7 @@
         "window groups",
         "skipped elements"
       ],
-      "stats": "codec=9 rate=48000 channels=2 bits=0 frames=72000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=6 cpu_us=5606 endpoint_dry=0"
+      "stats": "codec=9 rate=48000 channels=2 bits=0 frames=72000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=5 cpu_us=5359 endpoint_dry=0"
     },
     {
       "test": "transients.m4a",
@@ -110,7 +110,7 @@
         "window groups",
         "skipped elements"
       ],
-      "stats": "codec=9 rate=48000 channels=2 bits=0 frames=72000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=3561 endpoint_dry=0"
+      "stats": "codec=9 rate=48000 channels=2 bits=0 frames=72000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=4 cpu_us=4178 endpoint_dry=0"
     },
     {
       "test": "transients.aac",
@@ -142,7 +142,7 @@
         "window groups",
         "skipped elements"
       ],
-      "stats": "codec=9 rate=22050 channels=1 bits=0 frames=33075 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1626 endpoint_dry=0"
+      "stats": "codec=9 rate=22050 channels=1 bits=0 frames=33075 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=1682 endpoint_dry=0"
     },
     {
       "test": "mono.aac",
@@ -175,7 +175,7 @@
         "window groups",
         "skipped elements"
       ],
-      "stats": "codec=9 rate=44100 channels=2 bits=0 frames=66150 underruns=0 decode_error=0 audio_error=0 elapsed_ms=5 cpu_us=4857 endpoint_dry=0"
+      "stats": "codec=9 rate=44100 channels=2 bits=0 frames=66150 underruns=0 decode_error=0 audio_error=0 elapsed_ms=4 cpu_us=3912 endpoint_dry=0"
     },
     {
       "test": "no-ms-is.m4a",
@@ -192,7 +192,7 @@
         "window groups",
         "skipped elements"
       ],
-      "stats": "codec=9 rate=44100 channels=2 bits=0 frames=66150 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=3728 endpoint_dry=0"
+      "stats": "codec=9 rate=44100 channels=2 bits=0 frames=66150 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=3701 endpoint_dry=0"
     },
     {
       "test": "plain.m4a",
@@ -209,7 +209,7 @@
         "window groups",
         "skipped elements"
       ],
-      "stats": "codec=9 rate=44100 channels=2 bits=0 frames=66150 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=3518 endpoint_dry=0"
+      "stats": "codec=9 rate=44100 channels=2 bits=0 frames=66150 underruns=0 decode_error=0 audio_error=0 elapsed_ms=4 cpu_us=3934 endpoint_dry=0"
     },
     {
       "test": "tone-no-pns.m4a",
@@ -228,7 +228,7 @@
         "window groups",
         "skipped elements"
       ],
-      "stats": "codec=9 rate=48000 channels=2 bits=0 frames=72000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=4 cpu_us=3774 endpoint_dry=0"
+      "stats": "codec=9 rate=48000 channels=2 bits=0 frames=72000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=3446 endpoint_dry=0"
     },
     {
       "test": "noise-no-pns.m4a",
@@ -246,7 +246,7 @@
         "window groups",
         "skipped elements"
       ],
-      "stats": "codec=9 rate=44100 channels=2 bits=0 frames=66150 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=3400 endpoint_dry=0"
+      "stats": "codec=9 rate=44100 channels=2 bits=0 frames=66150 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=3731 endpoint_dry=0"
     },
     {
       "test": "rate-8000.m4a",
@@ -264,7 +264,7 @@
         "window groups",
         "skipped elements"
       ],
-      "stats": "codec=9 rate=8000 channels=2 bits=0 frames=12000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1384 endpoint_dry=0"
+      "stats": "codec=9 rate=8000 channels=2 bits=0 frames=12000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1543 endpoint_dry=0"
     },
     {
       "test": "rate-8000.aac",
@@ -297,7 +297,7 @@
         "window groups",
         "skipped elements"
       ],
-      "stats": "codec=9 rate=11025 channels=2 bits=0 frames=16538 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=1856 endpoint_dry=0"
+      "stats": "codec=9 rate=11025 channels=2 bits=0 frames=16538 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1788 endpoint_dry=0"
     },
     {
       "test": "rate-12000.m4a",
@@ -315,7 +315,7 @@
         "window groups",
         "skipped elements"
       ],
-      "stats": "codec=9 rate=12000 channels=2 bits=0 frames=18000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=1907 endpoint_dry=0"
+      "stats": "codec=9 rate=12000 channels=2 bits=0 frames=18000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=1713 endpoint_dry=0"
     },
     {
       "test": "rate-16000.m4a",
@@ -334,7 +334,7 @@
         "window groups",
         "skipped elements"
       ],
-      "stats": "codec=9 rate=16000 channels=2 bits=0 frames=24000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=1850 endpoint_dry=0"
+      "stats": "codec=9 rate=16000 channels=2 bits=0 frames=24000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2593 endpoint_dry=0"
     },
     {
       "test": "rate-22050.m4a",
@@ -354,7 +354,7 @@
         "window groups",
         "skipped elements"
       ],
-      "stats": "codec=9 rate=22050 channels=2 bits=0 frames=33075 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2395 endpoint_dry=0"
+      "stats": "codec=9 rate=22050 channels=2 bits=0 frames=33075 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2340 endpoint_dry=0"
     },
     {
       "test": "rate-24000.m4a",
@@ -374,7 +374,7 @@
         "window groups",
         "skipped elements"
       ],
-      "stats": "codec=9 rate=24000 channels=2 bits=0 frames=36000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2747 endpoint_dry=0"
+      "stats": "codec=9 rate=24000 channels=2 bits=0 frames=36000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2611 endpoint_dry=0"
     },
     {
       "test": "rate-32000.m4a",
@@ -393,7 +393,7 @@
         "window groups",
         "skipped elements"
       ],
-      "stats": "codec=9 rate=32000 channels=2 bits=0 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=2770 endpoint_dry=0"
+      "stats": "codec=9 rate=32000 channels=2 bits=0 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=2636 endpoint_dry=0"
     },
     {
       "test": "rate-64000.m4a",
@@ -413,7 +413,7 @@
         "window groups",
         "skipped elements"
       ],
-      "stats": "codec=9 rate=64000 channels=2 bits=0 frames=96000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=4 cpu_us=4585 endpoint_dry=0"
+      "stats": "codec=9 rate=64000 channels=2 bits=0 frames=96000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=5 cpu_us=4414 endpoint_dry=0"
     },
     {
       "test": "rate-88200.m4a",
@@ -433,7 +433,7 @@
         "window groups",
         "skipped elements"
       ],
-      "stats": "codec=9 rate=88200 channels=2 bits=0 frames=132300 underruns=0 decode_error=0 audio_error=0 elapsed_ms=5 cpu_us=5400 endpoint_dry=0"
+      "stats": "codec=9 rate=88200 channels=2 bits=0 frames=132300 underruns=0 decode_error=0 audio_error=0 elapsed_ms=5 cpu_us=5683 endpoint_dry=0"
     },
     {
       "test": "rate-96000.m4a",
@@ -453,7 +453,7 @@
         "window groups",
         "skipped elements"
       ],
-      "stats": "codec=9 rate=96000 channels=2 bits=0 frames=144000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=8 cpu_us=8674 endpoint_dry=0"
+      "stats": "codec=9 rate=96000 channels=2 bits=0 frames=144000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=5 cpu_us=5283 endpoint_dry=0"
     },
     {
       "test": "rate-96000.aac",
@@ -485,7 +485,7 @@
         "window groups",
         "skipped elements"
       ],
-      "stats": "codec=9 rate=48000 channels=3 bits=0 frames=72000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=5 cpu_us=5640 endpoint_dry=0"
+      "stats": "codec=9 rate=48000 channels=3 bits=0 frames=72000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=6 cpu_us=5829 endpoint_dry=0"
     },
     {
       "test": "layout-4.0.m4a",
@@ -502,7 +502,7 @@
         "window groups",
         "skipped elements"
       ],
-      "stats": "codec=9 rate=48000 channels=4 bits=0 frames=72000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=7 cpu_us=7595 endpoint_dry=0"
+      "stats": "codec=9 rate=48000 channels=4 bits=0 frames=72000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=7 cpu_us=6493 endpoint_dry=0"
     },
     {
       "test": "layout-5.0.m4a",
@@ -519,7 +519,7 @@
         "window groups",
         "skipped elements"
       ],
-      "stats": "codec=9 rate=48000 channels=5 bits=0 frames=72000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=7 cpu_us=7085 endpoint_dry=0"
+      "stats": "codec=9 rate=48000 channels=5 bits=0 frames=72000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=8 cpu_us=7874 endpoint_dry=0"
     },
     {
       "test": "layout-5.1.m4a",
@@ -536,7 +536,7 @@
         "window groups",
         "skipped elements"
       ],
-      "stats": "codec=9 rate=48000 channels=6 bits=0 frames=72000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=8 cpu_us=8288 endpoint_dry=0"
+      "stats": "codec=9 rate=48000 channels=6 bits=0 frames=72000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=9 cpu_us=9866 endpoint_dry=0"
     },
     {
       "test": "layout-5.1.aac",
@@ -567,7 +567,7 @@
         "window groups",
         "skipped elements"
       ],
-      "stats": "codec=9 rate=48000 channels=8 bits=0 frames=72000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=12 cpu_us=11896 endpoint_dry=0"
+      "stats": "codec=9 rate=48000 channels=8 bits=0 frames=72000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=10 cpu_us=9889 endpoint_dry=0"
     },
     {
       "test": "48 random streams",
@@ -700,7 +700,7 @@
     {
       "test": "AAC playback",
       "result": "played",
-      "stats": "Playing. Space: pause / resume. Q or Ctrl+C: stop. codec=9 rate=44100 channels=2 bits=0 frames=66150 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3600 cpu_us=6543 endpoint_dry=0"
+      "stats": "Playing. Space: pause / resume. Q or Ctrl+C: stop. codec=9 rate=44100 channels=2 bits=0 frames=66150 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3600 cpu_us=5417 endpoint_dry=0"
     }
   ],
   "rejections": 16,

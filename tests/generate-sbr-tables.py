@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Generate src/sbr_tables.inc for the HE-AAC spectral band replication decoder.
+"""Generate src/sbr_tables.inc for the HE-AAC spectral band replication and
+parametric stereo decoder.
 
 usage: python3 tests/generate-sbr-tables.py [--check]
 
@@ -10,9 +11,18 @@ tests/reference/sbr-reference-hashes.json:
   the start-frequency offsets of ISO/IEC 14496-3 table 4.82.
 - JAADec (public domain dedication): the 640 QMF window coefficients of
   ISO/IEC 14496-3 table 4.A.89 and the 512-entry noise table V of table 4.A.88,
-  written here as exact single-precision bit patterns.
+  written here as exact single-precision bit patterns; for parametric stereo
+  the ten IID/ICC/IPD/OPD Huffman trees, the hybrid filter prototypes, the
+  all-pass coefficients and constants and the stereo band groupings, from
+  which the band maps are derived. The fractional delays come from its
+  precomputed phase tables.
+Parametric stereo also uses the IID and ICC quantization grids of ISO/IEC
+14496-3 subpart 8 (cross-checked against JAADec's scale and angle tables), and
+derives the hybrid filters, mixing matrices, phase smoothing and fractional
+delay rotations from them as single-precision values.
 No reference code is linked into either player.
 """
+import math
 import hashlib
 import json
 from pathlib import Path
@@ -24,10 +34,19 @@ import urllib.request
 ROOT = Path(__file__).resolve().parent.parent
 TESTS = ROOT / 'tests'
 TARGET = ROOT / 'src' / 'sbr_tables.inc'
-# Tree order used by src/aac_sbr.inc.
+# Tree order used by src/aac_sbr.inc: ten SBR trees, then ten PS trees.
 TREES = ['bookSbrEnvLevel10T', 'bookSbrEnvLevel10F', 'bookSbrEnvBalance10T', 'bookSbrEnvBalance10F',
          'bookSbrEnvLevel11T', 'bookSbrEnvLevel11F', 'bookSbrEnvBalance11T', 'bookSbrEnvBalance11F',
          'bookSbrNoiseLevel11T', 'bookSbrNoiseBalance11T']
+PS_TREES = ['f_huff_iid_def', 't_huff_iid_def', 'f_huff_iid_fine', 't_huff_iid_fine', 'f_huff_icc', 't_huff_icc',
+            'f_huff_ipd', 't_huff_ipd', 'f_huff_opd', 't_huff_opd']
+JAAD_PS = 'src/main/java/net/sourceforge/jaad/aac/ps/'
+# ISO/IEC 14496-3 subpart 8: IID quantization grids in dB (default and fine)
+# and the dequantized ICC values.
+IID_DB = [-25, -18, -14, -10, -7, -4, -2, 0, 2, 4, 7, 10, 14, 18, 25]
+IID_FINE_DB = [-50, -45, -40, -35, -30, -25, -22, -19, -16, -13, -10, -8, -6, -4, -2, 0,
+               2, 4, 6, 8, 10, 13, 16, 19, 22, 25, 30, 35, 40, 45, 50]
+ICC = [1, 0.937, 0.84118, 0.60092, 0.36764, 0, -0.589, -1]
 
 
 def fetch():
@@ -72,8 +91,18 @@ def generate():
             raise SystemExit(f'{name}: {len(pairs)} values')
         offsets.append(len(nodes) // 2)
         nodes += pairs
-    lines.append('# Per tree (ten): first node in sbr_huff_nodes. A node holds the next node')
-    lines.append('# for bit 0 and bit 1; negative entries are leaves, value = entry + 64.')
+    ps_books = paths[JAAD_PS + 'HuffmanTables.java'].read_text()
+    for name in PS_TREES:
+        body = re.search(r'\b' + name + r'\s*=\s*\{(.*?)\};', ps_books, re.S).group(1)
+        pairs = [int(v) for v in re.findall(r'-?\d+', re.sub(r'/\*.*?\*/', '', body, flags=re.S))]
+        if len(pairs) % 2 or len(pairs) > 254:
+            raise SystemExit(f'{name}: {len(pairs)} values')
+        offsets.append(len(nodes) // 2)
+        nodes += [v if v >= 0 else v + 31 - 64 for v in pairs]   # JAADec leaves hold value - 31
+    lines.append('# Per tree (ten SBR, then ten parametric stereo: IID default and fine, ICC,')
+    lines.append('# IPD, OPD, each frequency then time direction): first node in')
+    lines.append('# sbr_huff_nodes. A node holds the next node for bit 0 and bit 1; negative')
+    lines.append('# entries are leaves, value = entry + 64.')
     lines.append('sbr_huff_trees:')
     lines.append('    .short ' + ', '.join(map(str, offsets)))
     lines.append('sbr_huff_nodes:')
@@ -101,7 +130,174 @@ def generate():
     lines.append('sbr_noise_table:')
     for i in range(0, 1024, 8):
         lines.append('    .long ' + ', '.join(bits(v) for v in noise[i:i + 8]))
+    lines += ps_lines(paths)
     return '\n'.join(lines) + '\n'
+
+
+def f32(x):
+    return struct.unpack('<f', struct.pack('<f', x))[0]
+
+
+def java_ints(text, name):
+    """Integers of a Java array; entries may be a|b or a-b (IPD flag masks and
+    offset band borders)."""
+    body = re.search(r'\b' + name + r'\s*=\s*\{(.*?)\};', text, re.S).group(1)
+    body = re.sub(r'/\*.*?\*/', '', body, flags=re.S).replace('NEGATE_IPD_MASK', '0x1000')
+    values = []
+    for entry in body.replace('{', ' ').replace('}', ' ').replace('(', ' ').replace(')', ' ').split(','):
+        entry = entry.strip()
+        if not entry:
+            continue
+        if '|' in entry:
+            a, b = entry.split('|')
+            values.append(int(a, 0) | int(b, 0))
+        elif '-' in entry[1:]:
+            a, b = entry.split('-')
+            values.append(int(a, 0) - int(b, 0))
+        else:
+            values.append(int(entry, 0))
+    return values
+
+
+def java_floats(text, name):
+    return floats(text, name + ' =')
+
+
+def ps_lines(paths):
+    """Parametric stereo tables, as FFmpeg's decoder structures them."""
+    tables = paths[JAAD_PS + 'PSTables.java'].read_text()
+    decoder = paths[JAAD_PS + 'PS.java'].read_text()
+    constants = paths[JAAD_PS + 'PSConstants.java'].read_text()
+    lines = ['', '# Parametric stereo. Hybrid filter prototypes, all-pass coefficients and',
+             '# constants from JAADec; derived tables in single precision.']
+
+    def table(label, values, comment=None):
+        if comment:
+            lines.append('# ' + comment)
+        lines.append('.p2align 2')
+        lines.append(label + ':')
+        for i in range(0, len(values), 8):
+            lines.append('    .long ' + ', '.join(bits(v) for v in values[i:i + 8]))
+
+    # IID and ICC: the ISO grids checked against JAADec's scale factors and angles.
+    iid = [f32(10.0 ** (db / 20.0)) for db in IID_DB + IID_FINE_DB]
+    scale = java_floats(tables, 'sf_iid_normal') + java_floats(tables, 'sf_iid_fine')
+    for c, sf in zip(iid, scale):
+        if abs(math.sqrt(2.0 / (1.0 + c * c)) - sf) > 2e-7:
+            raise SystemExit('IID grid disagrees with JAADec')
+    cos_alphas = java_floats(tables, 'cos_alphas')
+    for icc, value in zip(ICC, cos_alphas):
+        if abs(math.cos(0.5 * math.acos(icc)) - value) > 2e-7:
+            raise SystemExit('ICC values disagree with JAADec')
+    # Mixing matrices for ICC modes 0-2 (procedure A) and 3-5 (procedure B).
+    ha, hb = [], []
+    for c in iid:
+        c1 = f32(f32(math.sqrt(2.0)) / f32(math.sqrt(f32(1.0 + f32(c * c)))))
+        c2 = f32(c * c1)
+        for icc in ICC:
+            alpha = f32(0.5 * f32(math.acos(icc)))
+            beta = f32(f32(alpha * f32(c1 - c2)) * f32(math.sqrt(0.5)))
+            ha += [f32(c2 * f32(math.cos(f32(beta + alpha)))), f32(c1 * f32(math.cos(f32(beta - alpha)))),
+                   f32(c2 * f32(math.sin(f32(beta + alpha)))), f32(c1 * f32(math.sin(f32(beta - alpha))))]
+            rho = f32(max(icc, 0.05))
+            alpha = f32(0.5 * f32(math.atan2(f32(2.0 * c * rho), f32(c * c - 1.0))))
+            mu = f32(c + f32(1.0 / c))
+            mu = f32(math.sqrt(f32(1 + f32(f32(4 * rho * rho - 4) / f32(mu * mu)))))
+            gamma = f32(math.atan(f32(math.sqrt(f32(f32(1.0 - mu) / f32(1.0 + mu))))))
+            if alpha < 0:
+                alpha = f32(alpha + math.pi / 2)
+            ac, as_, gc, gs = (f32(math.cos(alpha)), f32(math.sin(alpha)), f32(math.cos(gamma)),
+                               f32(math.sin(gamma)))
+            root2 = math.sqrt(2.0)
+            hb += [f32(root2 * ac * gc), f32(root2 * as_ * gc), f32(-root2 * as_ * gs), f32(root2 * ac * gs)]
+    table('ps_ha', ha, 'Mixing matrices h11, h12, h21, h22 by IID index (15 default then 31 fine) and ICC index.')
+    table('ps_hb', hb)
+    # IPD/OPD smoothing over the last three phase indices.
+    pd_re, pd_im = [], []
+    for p0 in range(8):
+        for p1 in range(8):
+            for p2 in range(8):
+                re_ = sum(w * math.cos(k * math.pi / 4) for w, k in ((0.25, p0), (0.5, p1), (1.0, p2)))
+                im_ = sum(w * math.sin(k * math.pi / 4) for w, k in ((0.25, p0), (0.5, p1), (1.0, p2)))
+                re_, im_ = f32(re_), f32(im_)
+                magnitude = f32(1.0 / math.hypot(im_, re_))
+                pd_re.append(f32(re_ * magnitude))
+                pd_im.append(f32(im_ * magnitude))
+    table('ps_pd_re', pd_re, 'Smoothed IPD/OPD phase by previous two and current index.')
+    table('ps_pd_im', pd_im)
+    # Hybrid analysis filters: complex modulations of the prototypes.
+    for label, proto, bands in (('ps_f20', 'p8_13_20', 8), ('ps_f34_12', 'p12_13_34', 12),
+                                ('ps_f34_8', 'p8_13_34', 8), ('ps_f34_4', 'p4_13_34', 4)):
+        prototype = [f32(v) for v in java_floats(tables, proto)]
+        values = []
+        for q in range(bands):
+            for n in range(7):
+                theta = 2 * math.pi * (q + 0.5) * (n - 6) / bands
+                values += [f32(prototype[n] * math.cos(theta)), f32(prototype[n] * -math.sin(theta))]
+        table(label, values, f'{bands} complex filters x 7 taps (the other six mirror them).' if label == 'ps_f20'
+              else None)
+    table('ps_g1', java_floats(tables, 'p2_13_20'), 'Real two-band filter, 7 taps.')
+    # Fractional delays of the all-pass links and the phase rotation, from
+    # JAADec's phase tables for QMF band 0, centre 0.5.
+    phi = java_floats(tables, 'Phi_Fract_Qmf')
+    links = java_floats(tables, 'Q_Fract_allpass_Qmf')
+    delay_phi = round(2 * math.acos(phi[0]) / math.pi, 3)
+    delays = [round(2 * math.acos(links[2 * m]) / math.pi, 3) for m in range(3)]
+    if delay_phi != 0.39 or delays != [0.43, 0.75, 0.347]:
+        raise SystemExit('fractional delays unexpected')
+    # Centre frequencies of FFmpeg's band order: hybrid bands of QMF band p
+    # from an N-band complex filter q lie at 2(q + 1/2)/N modulo 2 in
+    # [p - 1/2, p + 3/2); QMF bands at p + 1/2.
+    def centre(p, q, n):
+        f = (2 * q + 1) / n
+        while f < p - 0.5:
+            f += 2
+        while f >= p + 1.5:
+            f -= 2
+        return f
+    f20 = [centre(0, q, 8) for q in (6, 7, 0, 1, 2, 3)] + [1.25, 1.75, 2.25, 2.75] + [p + 0.5 for p in range(3, 23)]
+    f34 = ([centre(0, q, 12) for q in range(12)] + [centre(1, q, 8) for q in range(8)] +
+           [centre(p, q, 4) for p in (2, 3, 4) for q in range(4)] + [p + 0.5 for p in range(5, 23)])
+    phi_fract, q_fract = [], []
+    for centres in (f20[:30], f34[:50]):
+        for f in centres:                                     # delays as single-precision constants
+            theta = -math.pi * f32(delay_phi) * f
+            phi_fract += [f32(math.cos(theta)), f32(math.sin(theta))]
+            for d in delays:
+                theta = -math.pi * f32(d) * f
+                q_fract += [f32(math.cos(theta)), f32(math.sin(theta))]
+        phi_fract += [0.0] * (2 * (50 - len(centres)))       # 20 bands use 30 all-pass bands
+        q_fract += [0.0] * (6 * (50 - len(centres)))
+    table('ps_phi_fract', phi_fract, 'Decorrelator phase rotation and link rotations: 20 then 34 bands, 50 each.')
+    table('ps_q_fract', q_fract)
+    filter_a = java_floats(tables, 'filter_a')
+    for a, d in zip(filter_a, java_ints(tables, 'delay_length_d')):
+        if abs(a - math.exp(-d / 7)) > 1e-7:
+            raise SystemExit('all-pass coefficients unexpected')
+    decay = float(re.search(r'DECAY_SLOPE\s*=\s*([\d.]+)f', constants).group(1))
+    peak = float(re.search(r'alpha_decay\s*=\s*([\d.]+)f', decoder).group(1))
+    smooth = float(re.search(r'alpha_smooth\s*=\s*([\d.]+)f', decoder).group(1))
+    impact = float(re.search(r'float gamma\s*=\s*([\d.]+)f', decoder).group(1))
+    table('ps_constants', [*filter_a, decay, peak, smooth, impact],
+          'All-pass coefficients a(m), decay slope, peak decay, smoothing, transient impact.')
+    # Hybrid/QMF band -> stereo parameter band (FFmpeg order: JAADec groups).
+    lines.append('ps_k_to_i_20:')
+    groups, borders = java_ints(tables, 'map_group2bk20'), java_ints(tables, 'group_border20')
+    k_to_i = [g & 0xfff for g in groups[:10]]
+    for g in range(10, 22):
+        k_to_i += [groups[g] & 0xfff] * (borders[g + 1] - borders[g])
+    lines.append('    .byte ' + ', '.join(map(str, k_to_i)))
+    if len(k_to_i) != 71:
+        raise SystemExit('k_to_i_20 size')
+    lines.append('ps_k_to_i_34:')
+    groups, borders = java_ints(tables, 'map_group2bk34'), java_ints(tables, 'group_border34')
+    k_to_i = [g & 0xfff for g in groups[:32]]
+    for g in range(32, 50):
+        k_to_i += [groups[g] & 0xfff] * (borders[g + 1] - borders[g])
+    lines.append('    .byte ' + ', '.join(map(str, k_to_i)))
+    if len(k_to_i) != 91:
+        raise SystemExit('k_to_i_34 size')
+    return lines
 
 
 def main():

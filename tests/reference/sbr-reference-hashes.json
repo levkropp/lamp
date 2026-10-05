@@ -1,5 +1,5 @@
 {
-  "reference": "SBR tables for tests/generate-sbr-tables.py; test-only extraction, no code linked",
+  "reference": "SBR and parametric stereo tables for tests/generate-sbr-tables.py; test-only extraction, no code linked",
   "sources": [
     {
       "name": "PacketVideo AAC decoder (Apache License 2.0), Android Open Source Project",
@@ -19,7 +19,11 @@
       "files": {
         "LICENSE": "51207f04c0e2f3a0b598585e9ccaa55c5a6ba7d0546c59dc014a0ac10a4ce7c5",
         "src/main/java/net/sourceforge/jaad/aac/sbr/FilterbankTable.java": "c9fdb47390a3b17a9597e5e7dd7e36b871494238aea5be92da6ca6356a1744a0",
-        "src/main/java/net/sourceforge/jaad/aac/sbr/NoiseTable.java": "36678eb2554a5bd2c8debba22e63265d04640c4b79ca238150a117b482f56949"
+        "src/main/java/net/sourceforge/jaad/aac/sbr/NoiseTable.java": "36678eb2554a5bd2c8debba22e63265d04640c4b79ca238150a117b482f56949",
+        "src/main/java/net/sourceforge/jaad/aac/ps/PSTables.java": "787cc0e3ef57f8bcb76822bc8769a64179f49a46adcff175cf8c334c68f46eca",
+        "src/main/java/net/sourceforge/jaad/aac/ps/HuffmanTables.java": "3a2c6e8dcb6c0397a015bac23f850879454217af803d0a6fcf1791d9a731c9e7",
+        "src/main/java/net/sourceforge/jaad/aac/ps/PS.java": "29d20261edf23eef27c4892f947f06e5a74f03dd66aa5953d9712ce0a09fa032",
+        "src/main/java/net/sourceforge/jaad/aac/ps/PSConstants.java": "9c6357f71954ba2985b488267a3d175a7030b05402a8b403843a0f8aee2cb68c"
       }
     }
   ]

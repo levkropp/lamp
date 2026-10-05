@@ -89,20 +89,62 @@
 
 # Shared scratch.
 .equ SB_X_LOW, 0                    # 32 bands x 40 slots complex
-.equ SB_X_HIGH, 20480               # 64 bands x 40 slots complex
-.equ SB_X, 61440                    # 32 slots x (64 real, 64 imaginary): synthesis input
-.equ SB_ALPHA0, 94208               # 64 complex
-.equ SB_ALPHA1, 95232               # 64 complex
-.equ SB_E_ORIG, 96256               # 5 x 48 doubles
-.equ SB_Q_MAPPED, 98176
-.equ SB_E_CURR, 100096
-.equ SB_S_MAPPED, 107776            # 5 x 48 bytes
-.equ SB_G_FILT, 108032              # 48 doubles
-.equ SB_Q_FILT, 108416              # 48 doubles
-.equ SB_U, 108800                   # 64 doubles: windowed analysis input
-.equ SB_SIZE, 109312
+.equ SB_X_HIGH, SB_X_LOW + 20480    # 64 bands x 40 slots complex
+.equ SB_X, SB_X_HIGH + 40960        # 38 slots x (64 real, 64 imaginary): synthesis input
+.equ SB_ALPHA0, SB_X + 38*1024      # 64 complex
+.equ SB_ALPHA1, SB_ALPHA0 + 1024    # 64 complex
+.equ SB_E_ORIG, SB_ALPHA1 + 1024    # 5 x 48 doubles
+.equ SB_Q_MAPPED, SB_E_ORIG + 1920
+.equ SB_E_CURR, SB_Q_MAPPED + 1920
+.equ SB_S_MAPPED, SB_E_CURR + 1920  # 5 x 48 bytes
+.equ SB_G_FILT, SB_S_MAPPED + 256   # 48 doubles
+.equ SB_Q_FILT, SB_G_FILT + 384     # 48 doubles
+.equ SB_U, SB_Q_FILT + 384          # 64 doubles: windowed analysis input
+.equ SB_SIZE, SB_U + 512
 
 .equ SBR_ELEMENTS, 5
+
+# Parametric stereo state (mono HE-AAC v2 streams), parameters as FFmpeg's
+# decoder keeps them: rows of 34 signed bytes per envelope.
+.equ PS_START, 0
+.equ PS_ENABLE_IID, 4
+.equ PS_IID_QUANT, 8
+.equ PS_NR_IID, 12
+.equ PS_NR_IPDOPD, 16
+.equ PS_ENABLE_ICC, 20
+.equ PS_ICC_MODE, 24
+.equ PS_NR_ICC, 28
+.equ PS_ENABLE_EXT, 32
+.equ PS_FRAME_CLASS, 36
+.equ PS_NUM_ENV_OLD, 40
+.equ PS_NUM_ENV, 44
+.equ PS_ENABLE_IPDOPD, 48
+.equ PS_IS34, 52
+.equ PS_IS34_OLD, 56
+.equ PS_BORDER, 64                  # 6 dwords
+.equ PS_IID, 96                     # 5 x 34 bytes each
+.equ PS_ICC, PS_IID + 176
+.equ PS_IPD, PS_ICC + 176
+.equ PS_OPD, PS_IPD + 176
+.equ PS_IID_MAP, PS_OPD + 176       # parameters mapped to the current stereo bands
+.equ PS_ICC_MAP, PS_IID_MAP + 176
+.equ PS_IPD_MAP, PS_ICC_MAP + 176
+.equ PS_OPD_MAP, PS_IPD_MAP + 176
+.equ PS_IPD_HIST, PS_OPD_MAP + 176  # 34 bytes each
+.equ PS_OPD_HIST, PS_IPD_HIST + 40
+.equ PS_PEAK, PS_OPD_HIST + 40      # 34 doubles each: transient detection
+.equ PS_SMOOTH, PS_PEAK + 272
+.equ PS_DIFF, PS_SMOOTH + 272
+.equ PS_H, PS_DIFF + 272            # H11, H12, H21, H22 x real/imaginary x 6 envelopes x 34
+.equ PS_IN_BUF, PS_H + 13056        # 5 x 44 complex: hybrid filter input
+.equ PS_DELAY, PS_IN_BUF + 3520     # 91 x 46 complex
+.equ PS_AP_DELAY, PS_DELAY + 66976  # 50 x 3 x 37 complex
+.equ PS_LBUF, PS_AP_DELAY + 88800   # 91 x 32 complex: hybrid bands, left (mono)
+.equ PS_RBUF, PS_LBUF + 46592       # right (decorrelated)
+.equ PS_POWER, PS_RBUF + 46592      # 34 x 32 doubles
+.equ PS_GAIN, PS_POWER + 8704       # 34 x 32 doubles: transient gains
+.equ PS_XR, PS_GAIN + 8704          # 32 slots x (64 real, 64 imaginary): right synthesis input
+.equ PS_SIZE, PS_XR + 32768
 
 RODATA
 .include "sbr_tables.inc"
@@ -133,6 +175,48 @@ sbr_scale_in: .double 32768.0
 sbr_scale_out: .double 3.0517578125e-05      # 1/32768
 sbr_bw_new: .double 0.6, 0.75, 0.25, 0.90625, 0.09375
 sbr_env_limit: .double 1.0e20
+ps_nr_iidicc: .byte 10, 20, 34, 10, 20, 34
+ps_nr_ipdopd: .byte 5, 11, 17, 5, 11, 17
+ps_num_env_tab: .byte 0, 1, 2, 4, 1, 2, 3, 4
+ps_env_shift: .byte 0, 0, 1, 1, 2                 # log2 of 1, 2 and 4 envelopes
+.p2align 2
+# Per band layout (20, 34): parameter bands, IPD/OPD bands, hybrid and QMF
+# bands, decay cutoff, all-pass bands, first one-slot delay band.
+ps_nr_par: .long 20, 34
+ps_nr_ipdopd_bands: .long 11, 17
+ps_nr_bands: .long 71, 91
+ps_decay_cutoff: .long 10, 32
+ps_nr_allpass: .long 30, 50
+ps_short_delay: .long 42, 62
+# Parameter index maps between 10, 20 and 34 stereo bands (FFmpeg's
+# map_idx_*): op (0 copy a, 1 (a+b)/2, 2 (2a+b)/3, 3 (a+2b)/3, 4 (a+b+c+d)/4)
+# and sources, per destination band.
+ps_map_10_20:
+    .byte 0,0,0,0,0, 0,0,0,0,0, 0,1,0,0,0, 0,1,0,0,0, 0,2,0,0,0, 0,2,0,0,0, 0,3,0,0,0, 0,3,0,0,0
+    .byte 0,4,0,0,0, 0,4,0,0,0, 0,5,0,0,0, 0,5,0,0,0, 0,6,0,0,0, 0,6,0,0,0, 0,7,0,0,0, 0,7,0,0,0
+    .byte 0,8,0,0,0, 0,8,0,0,0, 0,9,0,0,0, 0,9,0,0,0
+ps_map_34_20:
+    .byte 2,0,1,0,0, 3,1,2,0,0, 2,3,4,0,0, 3,4,5,0,0, 1,6,7,0,0, 1,8,9,0,0, 0,10,0,0,0, 0,11,0,0,0
+    .byte 1,12,13,0,0, 1,14,15,0,0, 0,16,0,0,0, 0,17,0,0,0, 0,18,0,0,0, 0,19,0,0,0, 1,20,21,0,0
+    .byte 1,22,23,0,0, 1,24,25,0,0, 1,26,27,0,0, 4,28,29,30,31, 1,32,33,0,0
+ps_map_10_34:
+    .byte 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,1,0,0,0, 0,1,0,0,0, 0,1,0,0,0, 0,2,0,0,0, 0,2,0,0,0
+    .byte 0,2,0,0,0, 0,2,0,0,0, 0,3,0,0,0, 0,3,0,0,0, 0,4,0,0,0, 0,4,0,0,0, 0,4,0,0,0, 0,4,0,0,0
+    .byte 0,5,0,0,0, 0,5,0,0,0, 0,6,0,0,0, 0,6,0,0,0, 0,7,0,0,0, 0,7,0,0,0, 0,7,0,0,0, 0,7,0,0,0
+    .byte 0,8,0,0,0, 0,8,0,0,0, 0,8,0,0,0, 0,8,0,0,0, 0,9,0,0,0, 0,9,0,0,0, 0,9,0,0,0, 0,9,0,0,0
+    .byte 0,9,0,0,0, 0,9,0,0,0
+ps_map_20_34:
+    .byte 0,0,0,0,0, 1,0,1,0,0, 0,1,0,0,0, 0,2,0,0,0, 1,2,3,0,0, 0,3,0,0,0, 0,4,0,0,0, 0,4,0,0,0
+    .byte 0,5,0,0,0, 0,5,0,0,0, 0,6,0,0,0, 0,7,0,0,0, 0,8,0,0,0, 0,8,0,0,0, 0,9,0,0,0, 0,9,0,0,0
+    .byte 0,10,0,0,0, 0,11,0,0,0, 0,12,0,0,0, 0,13,0,0,0, 0,14,0,0,0, 0,14,0,0,0, 0,15,0,0,0
+    .byte 0,15,0,0,0, 0,16,0,0,0, 0,16,0,0,0, 0,17,0,0,0, 0,17,0,0,0, 0,18,0,0,0, 0,18,0,0,0
+    .byte 0,18,0,0,0, 0,18,0,0,0, 0,19,0,0,0, 0,19,0,0,0
+.p2align 3
+ps_third: .double 0.3333333432674408         # 0.33333333 in single precision
+ps_quarter: .double 0.25
+# Hybrid rows per split QMF band (20 and 34 bands).
+ps_hybrid_groups20: .byte 0, 6, 8, 10
+ps_hybrid_groups34: .byte 0, 12, 20, 24, 28, 32
 
 .data
 sbr_active: .long 0                 # SBR decoding: output at twice the core rate
@@ -148,6 +232,7 @@ sbr_syn_cos: .zero 128*64*8         # [n][k]: cos(pi/128 (k+1/2)(2n-255)) / 64
 sbr_syn_sin: .zero 128*64*8
 sbr_elements: .zero 8*SBR_ELEMENTS  # element state pointers
 sbr_scratch: .quad 0
+sbr_ps: .quad 0                     # parametric stereo state: mono streams with SBR
 
 .text
 # One-time QMF tables.
@@ -240,12 +325,15 @@ LOCALFN sbr_init_tables
     ret
 ENDFN sbr_init_tables
 
-# Allocates element states and scratch for ECX elements -> EAX=1.
+# Allocates element states and scratch for ECX elements, with EDX=1 also
+# parametric stereo state (mono streams) -> EAX=1.
 LOCALFN sbr_open
     push rbx
     push rsi
-    sub rsp, 40
+    push rdi
+    sub rsp, 32
     mov esi, ecx
+    mov edi, edx
     call sbr_close
     call sbr_init_tables
     mov ecx, SB_SIZE
@@ -253,6 +341,14 @@ LOCALFN sbr_open
     test rax, rax
     jz .Lsbr_open_bad
     mov [rip + sbr_scratch], rax
+    test edi, edi
+    jz .Lsbr_open_elements
+    mov ecx, PS_SIZE
+    call mem_alloc
+    test rax, rax
+    jz .Lsbr_open_bad
+    mov [rip + sbr_ps], rax
+.Lsbr_open_elements:
     xor ebx, ebx
 .Lsbr_open_element:
     cmp ebx, esi
@@ -274,7 +370,8 @@ LOCALFN sbr_open
     call sbr_close
     xor eax, eax
 .Lsbr_open_return:
-    add rsp, 40
+    add rsp, 32
+    pop rdi
     pop rsi
     pop rbx
     ret
@@ -297,8 +394,14 @@ LOCALFN sbr_close
     jb .Lsbr_close_element
     mov rcx, [rip + sbr_scratch]
     test rcx, rcx
-    jz .Lsbr_close_done
+    jz .Lsbr_close_ps
     mov qword ptr [rip + sbr_scratch], 0
+    call mem_free
+.Lsbr_close_ps:
+    mov rcx, [rip + sbr_ps]
+    test rcx, rcx
+    jz .Lsbr_close_done
+    mov qword ptr [rip + sbr_ps], 0
     call mem_free
 .Lsbr_close_done:
     add rsp, 32
@@ -332,10 +435,18 @@ LOCALFN sbr_turnoff
     ret
 ENDFN sbr_turnoff
 
-# Resets every element's state (stream start and seeks).
+# Resets every element's state and parametric stereo (stream start and seeks).
 LOCALFN sbr_reset_all
     push rbx
-    sub rsp, 32
+    push rdi
+    sub rsp, 40
+    mov rdi, [rip + sbr_ps]
+    test rdi, rdi
+    jz .Lsbr_reset_elements
+    xor eax, eax
+    mov ecx, PS_SIZE/8
+    rep stosq
+.Lsbr_reset_elements:
     xor ebx, ebx
 .Lsbr_reset_element:
     lea rax, [rip + sbr_elements]
@@ -347,7 +458,8 @@ LOCALFN sbr_reset_all
     inc ebx
     cmp ebx, SBR_ELEMENTS
     jb .Lsbr_reset_element
-    add rsp, 32
+    add rsp, 40
+    pop rdi
     pop rbx
     ret
 ENDFN sbr_reset_all
@@ -2075,8 +2187,8 @@ ENDFN sbr_pair
 # SBR extension payload of a fill element (ISO sbr_extension_data, FFmpeg
 # ff_decode_sbr_extension) for element RCX of type EDX (0 SCE, 1 CPE, 3 LFE);
 # R8D=1 with a CRC, R9D=payload bytes counting the extension type nibble,
-# which the reader has passed. -> EAX=1, 0 for parametric stereo in a mono
-# stream (unsupported; elsewhere it is skipped, as FFmpeg does).
+# which the reader has passed. -> EAX=1. Parametric stereo data goes to the PS
+# state of mono streams.
 # The reader ends after the payload whatever the SBR data used.
 LOCALFN sbr_extension
     push rbx
@@ -2150,10 +2262,15 @@ LOCALFN sbr_extension
     sub edi, 2
     mov ecx, 2
     call aac_get                          # bs_extension_id
-    cmp eax, 2                            # EXTENSION_ID_PS: applies to mono streams
+    cmp eax, 2                            # EXTENSION_ID_PS, for mono streams
     jne .Lsbr_ext_skip
-    cmp dword ptr [rip + aac_config], 1
-    je .Lsbr_ext_unsupported
+    mov rcx, [rip + sbr_ps]
+    test rcx, rcx
+    jz .Lsbr_ext_skip                     # elsewhere skipped, as FFmpeg applies it
+    mov edx, edi
+    call ps_read
+    sub edi, eax
+    jmp .Lsbr_ext_payload
 .Lsbr_ext_skip:
     add [rip + aac_pos], rdi              # other extensions and fill bits
     jmp .Lsbr_ext_end
@@ -2176,9 +2293,6 @@ LOCALFN sbr_extension
     mov [rip + aac_pos], rax
     mov eax, 1
     jmp .Lsbr_ext_return
-.Lsbr_ext_unsupported:
-    mov dword ptr [rip + decode_error], AAC_UNSUPPORTED
-    xor eax, eax
 .Lsbr_ext_return:
     add rsp, 32
     pop r13
@@ -2506,8 +2620,8 @@ LOCALFN sbr_analysis
     ret
 ENDFN sbr_analysis
 
-# Synthesis QMF bank (ISO 4.6.18.4.2) of channel RCX from the scratch X ->
-# 2048 floats at RDX. The memory V runs downwards through a 5248-double
+# Synthesis QMF bank (ISO 4.6.18.4.2) of channel RCX from the 32 slots of X at
+# R8 -> 2048 floats at RDX. The memory V runs downwards through a 5248-double
 # buffer; the newest 1152 values move back to its end after each frame.
 LOCALFN sbr_synthesis
     push rbx
@@ -2520,8 +2634,7 @@ LOCALFN sbr_synthesis
     sub rsp, 32
     mov rbx, rcx
     mov r12, rdx
-    mov r13, [rip + sbr_scratch]
-    add r13, SB_X
+    mov r13, r8
     lea r14, [rbx + SC_V + (4096 - 128)*8]
     xor r15d, r15d
 .Lsbr_syn_slot:
@@ -3830,7 +3943,7 @@ LOCALFN sbr_x_gen
     mov r14, [rip + sbr_scratch]
     lea rdi, [r14 + SB_X]
     xor eax, eax
-    mov ecx, 32*128
+    mov ecx, 38*128
     rep stosq
     mov r12d, [rsi + SC_T_ENV_OLD]
     add r12d, r12d
@@ -3905,7 +4018,7 @@ LOCALFN sbr_x_gen
     lea r8, [r14 + r8 + SB_X_LOW + 32]
     mov edx, r12d
 .Lsbr_x_new_low_slot:
-    cmp edx, 32
+    cmp edx, 38                           # parametric stereo reads ahead to slot 37
     jae .Lsbr_x_new_low_next
     mov eax, edx
     shl eax, 4
@@ -4048,12 +4161,45 @@ LOCALFN sbr_apply
     mov rcx, rbx
     mov rdx, r14
     call sbr_x_gen
+    mov rcx, [rip + sbr_ps]
+    test rcx, rcx
+    jnz .Lsbr_apply_stereo
     mov rcx, r14
     mov rdx, [rsp + 32]
+    mov r8, [rip + sbr_scratch]
+    add r8, SB_X
     call sbr_synthesis
     inc esi
     cmp esi, edi
     jb .Lsbr_apply_channel
+    jmp .Lsbr_apply_return
+.Lsbr_apply_stereo:
+    # Mono stream: parametric stereo (or a copy) gives the right channel.
+    cmp dword ptr [rcx + PS_START], 0
+    je .Lsbr_apply_copy
+    mov edx, [rbx + SE_KX1]
+    add edx, [rbx + SE_M1]
+    call ps_apply
+    jmp .Lsbr_apply_pair
+.Lsbr_apply_copy:
+    mov rsi, [rip + sbr_scratch]
+    add rsi, SB_X
+    lea rdi, [rcx + PS_XR]
+    mov ecx, 32*128
+    rep movsq
+.Lsbr_apply_pair:
+    mov rcx, r14
+    mov rdx, [rsp + 32]
+    mov r8, [rip + sbr_scratch]
+    add r8, SB_X
+    call sbr_synthesis
+    lea rcx, [rbx + SE_CH + SC_SIZE]      # the right channel's synthesis memory
+    mov rdx, [rsp + 32]
+    add rdx, 8192                         # output channel 1
+    mov r8, [rip + sbr_ps]
+    add r8, PS_XR
+    call sbr_synthesis
+.Lsbr_apply_return:
     add rsp, 40
     pop r14
     pop r13
@@ -4063,3 +4209,1810 @@ LOCALFN sbr_apply
     pop rbx
     ret
 ENDFN sbr_apply
+
+# One envelope of IID, ICC, IPD or OPD parameters (FFmpeg read_*_data) for PS
+# state RCX: EDX=parameter array offset, R8D=envelope | dt << 8 | kind << 16
+# (0 IID, 1 ICC, 2 IPD/OPD), R9D=bands | tree << 8 -> EAX=1, 0 out of range.
+LOCALFN ps_par
+    push rbx
+    push rsi
+    push rdi
+    push r12
+    push r13
+    push r14
+    push r15
+    sub rsp, 48
+    mov rbx, rcx
+    lea rsi, [rcx + rdx]                  # parameter rows
+    movzx edi, r8b                        # envelope
+    mov r12d, r8d
+    shr r12d, 8
+    and r12d, 255                         # dt
+    mov r13d, r8d
+    shr r13d, 16                          # kind
+    movzx r14d, r9b                       # bands
+    mov r15d, r9d
+    shr r15d, 8                           # tree
+    imul eax, edi, 34
+    lea rdi, [rsi + rax]                  # this envelope's row
+    test r12d, r12d
+    jz .Lps_par_frequency
+    movzx eax, r8b                        # previous envelope: e - 1, or the last one of the previous frame
+    dec eax
+    jns .Lps_par_previous
+    mov eax, [rbx + PS_NUM_ENV_OLD]
+    dec eax
+    jns .Lps_par_previous
+    xor eax, eax
+.Lps_par_previous:
+    imul eax, eax, 34
+    add rsi, rax                          # previous row
+    xor r12d, r12d                        # band
+.Lps_par_time:
+    cmp r12d, r14d
+    jae .Lps_par_good
+    mov ecx, r15d
+    call sbr_tree
+    movsx edx, byte ptr [rsi + r12]
+    add eax, edx
+    call .Lps_par_store
+    test eax, eax
+    jz .Lps_par_bad
+    inc r12d
+    jmp .Lps_par_time
+.Lps_par_frequency:
+    xor r12d, r12d
+    mov dword ptr [rsp + 32], 0           # running value
+.Lps_par_frequency_band:
+    cmp r12d, r14d
+    jae .Lps_par_good
+    mov ecx, r15d
+    call sbr_tree
+    add eax, [rsp + 32]
+    cmp r13d, 2
+    jne .Lps_par_frequency_store
+    and eax, 7
+.Lps_par_frequency_store:
+    mov [rsp + 32], eax
+    call .Lps_par_store
+    test eax, eax
+    jz .Lps_par_bad
+    inc r12d
+    jmp .Lps_par_frequency_band
+.Lps_par_good:
+    mov eax, 1
+    jmp .Lps_par_return
+.Lps_par_bad:
+    xor eax, eax
+.Lps_par_return:
+    add rsp, 48
+    pop r15
+    pop r14
+    pop r13
+    pop r12
+    pop rdi
+    pop rsi
+    pop rbx
+    ret
+# EAX=value for band R12 of row RDI: masked (IPD/OPD), stored as a signed
+# byte and range checked as FFmpeg checks the stored byte -> EAX=1, 0 bad.
+.Lps_par_store:
+    cmp r13d, 2
+    jne .Lps_par_store_byte
+    and eax, 7
+.Lps_par_store_byte:
+    mov [rdi + r12], al
+    movsx eax, al
+    cmp r13d, 1
+    je .Lps_par_store_icc
+    ja .Lps_par_store_good
+    mov edx, eax                          # IID: |value| <= 7 + 8 iid_quant
+    neg edx
+    cmovs edx, eax
+    mov ecx, [rbx + PS_IID_QUANT]
+    shl ecx, 3
+    add ecx, 7
+    cmp edx, ecx
+    ja .Lps_par_store_bad
+    jmp .Lps_par_store_good
+.Lps_par_store_icc:
+    cmp eax, 7                            # ICC: 0-7
+    ja .Lps_par_store_bad
+.Lps_par_store_good:
+    mov eax, 1
+    ret
+.Lps_par_store_bad:
+    xor eax, eax
+    ret
+ENDFN ps_par
+
+# Zeroes the parameter rows at RCX (5 x 34 bytes).
+LOCALFN ps_clear_rows
+    push rdi
+    mov rdi, rcx
+    xor eax, eax
+    mov ecx, 176/8
+    rep stosq
+    pop rdi
+    ret
+ENDFN ps_clear_rows
+
+# ps_data (ISO/IEC 14496-3 8.4, FFmpeg ff_ps_read_data) into PS state RCX with
+# EDX bits available -> EAX=bits used. An error stops PS until the next PS
+# header and uses every available bit. Locals: 32 header, 36 bits left in
+# the extension.
+LOCALFN ps_read
+    push rbx
+    push rsi
+    push rdi
+    push r12
+    push r13
+    push r14
+    push r15
+    sub rsp, 48
+    mov rbx, rcx
+    mov r12d, edx                         # bits available
+    mov r13, [rip + aac_pos]
+    mov ecx, 1
+    call aac_get
+    mov [rsp + 32], eax                   # enable_ps_header
+    test eax, eax
+    jz .Lps_read_frame
+    mov ecx, 1
+    call aac_get
+    mov [rbx + PS_ENABLE_IID], eax
+    test eax, eax
+    jz .Lps_read_icc_flag
+    mov ecx, 3
+    call aac_get                          # iid_mode
+    cmp eax, 5
+    ja .Lps_read_bad
+    lea rcx, [rip + ps_nr_iidicc]
+    movzx edx, byte ptr [rcx + rax]
+    mov [rbx + PS_NR_IID], edx
+    lea rcx, [rip + ps_nr_ipdopd]
+    movzx edx, byte ptr [rcx + rax]
+    mov [rbx + PS_NR_IPDOPD], edx
+    xor edx, edx
+    cmp eax, 2
+    seta dl
+    mov [rbx + PS_IID_QUANT], edx
+.Lps_read_icc_flag:
+    mov ecx, 1
+    call aac_get
+    mov [rbx + PS_ENABLE_ICC], eax
+    test eax, eax
+    jz .Lps_read_ext_flag
+    mov ecx, 3
+    call aac_get                          # icc_mode
+    cmp eax, 5
+    ja .Lps_read_bad
+    mov [rbx + PS_ICC_MODE], eax
+    lea rcx, [rip + ps_nr_iidicc]
+    movzx edx, byte ptr [rcx + rax]
+    mov [rbx + PS_NR_ICC], edx
+.Lps_read_ext_flag:
+    mov ecx, 1
+    call aac_get
+    mov [rbx + PS_ENABLE_EXT], eax
+.Lps_read_frame:
+    mov ecx, 1
+    call aac_get
+    mov [rbx + PS_FRAME_CLASS], eax
+    mov esi, eax
+    mov eax, [rbx + PS_NUM_ENV]
+    mov [rbx + PS_NUM_ENV_OLD], eax
+    mov ecx, 2
+    call aac_get
+    lea eax, [rax + rsi*4]
+    lea rcx, [rip + ps_num_env_tab]
+    movzx edi, byte ptr [rcx + rax]       # envelopes
+    mov [rbx + PS_NUM_ENV], edi
+    mov dword ptr [rbx + PS_BORDER], -1
+    mov r14d, 1
+    test esi, esi
+    jz .Lps_read_fixed_borders
+.Lps_read_border:
+    cmp r14d, edi
+    ja .Lps_read_iid
+    mov ecx, 5
+    call aac_get
+    mov [rbx + PS_BORDER + r14*4], eax
+    cmp eax, [rbx + PS_BORDER + r14*4 - 4]
+    jl .Lps_read_bad
+    inc r14d
+    jmp .Lps_read_border
+.Lps_read_fixed_borders:
+    lea rcx, [rip + ps_env_shift]
+    movzx ecx, byte ptr [rcx + rdi]
+.Lps_read_fixed_border:
+    cmp r14d, edi
+    ja .Lps_read_iid
+    mov eax, r14d
+    shl eax, 5
+    shr eax, cl
+    dec eax
+    mov [rbx + PS_BORDER + r14*4], eax
+    inc r14d
+    jmp .Lps_read_fixed_border
+.Lps_read_iid:
+    cmp dword ptr [rbx + PS_ENABLE_IID], 0
+    jne .Lps_read_iid_data
+    lea rcx, [rbx + PS_IID]
+    call ps_clear_rows
+    jmp .Lps_read_icc
+.Lps_read_iid_data:
+    xor r14d, r14d
+.Lps_read_iid_env:
+    cmp r14d, [rbx + PS_NUM_ENV]
+    jae .Lps_read_icc
+    mov ecx, 1
+    call aac_get                          # dt
+    mov r8d, eax
+    shl r8d, 8
+    or r8d, r14d                          # kind 0
+    mov r9d, [rbx + PS_IID_QUANT]
+    lea r9d, [rax + r9*2 + 10]            # tree: IID default or fine, frequency or time
+    shl r9d, 8
+    or r9d, [rbx + PS_NR_IID]
+    mov rcx, rbx
+    mov edx, PS_IID
+    call ps_par
+    test eax, eax
+    jz .Lps_read_bad
+    inc r14d
+    jmp .Lps_read_iid_env
+.Lps_read_icc:
+    cmp dword ptr [rbx + PS_ENABLE_ICC], 0
+    jne .Lps_read_icc_data
+    lea rcx, [rbx + PS_ICC]
+    call ps_clear_rows
+    jmp .Lps_read_extension
+.Lps_read_icc_data:
+    xor r14d, r14d
+.Lps_read_icc_env:
+    cmp r14d, [rbx + PS_NUM_ENV]
+    jae .Lps_read_extension
+    mov ecx, 1
+    call aac_get
+    mov r8d, eax
+    shl r8d, 8
+    or r8d, r14d
+    or r8d, 1 << 16                       # kind 1
+    lea r9d, [rax + 14]
+    shl r9d, 8
+    or r9d, [rbx + PS_NR_ICC]
+    mov rcx, rbx
+    mov edx, PS_ICC
+    call ps_par
+    test eax, eax
+    jz .Lps_read_bad
+    inc r14d
+    jmp .Lps_read_icc_env
+.Lps_read_extension:
+    cmp dword ptr [rbx + PS_ENABLE_EXT], 0
+    je .Lps_read_fixup
+    mov ecx, 4
+    call aac_get
+    mov r15d, eax
+    cmp eax, 15
+    jne .Lps_read_ext_bits
+    mov ecx, 8
+    call aac_get
+    add r15d, eax
+.Lps_read_ext_bits:
+    shl r15d, 3                           # bits in the extension
+.Lps_read_ext_next:
+    cmp r15d, 7
+    jle .Lps_read_ext_end
+    mov ecx, 2
+    call aac_get                          # ps_extension_id
+    sub r15d, 2
+    test eax, eax
+    jnz .Lps_read_ext_next                # other ids carry no data here
+    mov rsi, [rip + aac_pos]
+    mov ecx, 1
+    call aac_get
+    mov [rbx + PS_ENABLE_IPDOPD], eax
+    test eax, eax
+    jz .Lps_read_ext_reserved
+    xor r14d, r14d
+.Lps_read_ipdopd_env:
+    cmp r14d, [rbx + PS_NUM_ENV]
+    jae .Lps_read_ext_reserved
+    mov ecx, 1
+    call aac_get
+    mov r8d, eax
+    shl r8d, 8
+    or r8d, r14d
+    or r8d, 2 << 16
+    lea r9d, [rax + 16]                   # IPD trees
+    shl r9d, 8
+    or r9d, [rbx + PS_NR_IPDOPD]
+    mov rcx, rbx
+    mov edx, PS_IPD
+    call ps_par
+    mov ecx, 1
+    call aac_get
+    mov r8d, eax
+    shl r8d, 8
+    or r8d, r14d
+    or r8d, 2 << 16
+    lea r9d, [rax + 18]                   # OPD trees
+    shl r9d, 8
+    or r9d, [rbx + PS_NR_IPDOPD]
+    mov rcx, rbx
+    mov edx, PS_OPD
+    call ps_par
+    inc r14d
+    jmp .Lps_read_ipdopd_env
+.Lps_read_ext_reserved:
+    mov ecx, 1
+    call aac_get                          # reserved_ps
+    mov rax, [rip + aac_pos]
+    sub rax, rsi
+    sub r15d, eax
+    jmp .Lps_read_ext_next
+.Lps_read_ext_end:
+    test r15d, r15d
+    js .Lps_read_bad
+    add [rip + aac_pos], r15
+.Lps_read_fixup:
+    # Without an envelope ending at the last slot, repeat the last one there.
+    mov edi, [rbx + PS_NUM_ENV]
+    test edi, edi
+    jz .Lps_read_fake
+    cmp dword ptr [rbx + PS_BORDER + rdi*4], 31
+    jge .Lps_read_layout
+.Lps_read_fake:
+    lea esi, [rdi - 1]
+    test edi, edi
+    jnz .Lps_read_fake_source
+    mov esi, [rbx + PS_NUM_ENV_OLD]
+    dec esi
+.Lps_read_fake_source:
+    test esi, esi
+    js .Lps_read_fake_check
+    cmp esi, edi
+    je .Lps_read_fake_check
+    cmp dword ptr [rbx + PS_ENABLE_IID], 0
+    je .Lps_read_fake_icc
+    mov edx, PS_IID
+    call .Lps_read_copy_row
+.Lps_read_fake_icc:
+    cmp dword ptr [rbx + PS_ENABLE_ICC], 0
+    je .Lps_read_fake_ipd
+    mov edx, PS_ICC
+    call .Lps_read_copy_row
+.Lps_read_fake_ipd:
+    cmp dword ptr [rbx + PS_ENABLE_IPDOPD], 0
+    je .Lps_read_fake_check
+    mov edx, PS_IPD
+    call .Lps_read_copy_row
+    mov edx, PS_OPD
+    call .Lps_read_copy_row
+.Lps_read_fake_check:
+    imul eax, edi, 34
+    cmp dword ptr [rbx + PS_ENABLE_IID], 0
+    je .Lps_read_fake_check_icc
+    mov r8d, [rbx + PS_IID_QUANT]
+    shl r8d, 3
+    add r8d, 7
+    xor ecx, ecx
+.Lps_read_fake_iid:
+    cmp ecx, [rbx + PS_NR_IID]
+    jae .Lps_read_fake_check_icc
+    lea edx, [rax + rcx]
+    movsx edx, byte ptr [rbx + PS_IID + rdx]
+    mov r9d, edx
+    neg r9d
+    cmovs r9d, edx
+    cmp r9d, r8d
+    ja .Lps_read_bad
+    inc ecx
+    jmp .Lps_read_fake_iid
+.Lps_read_fake_check_icc:
+    cmp dword ptr [rbx + PS_ENABLE_ICC], 0
+    je .Lps_read_fake_done
+    xor ecx, ecx
+.Lps_read_fake_icc_band:
+    cmp ecx, [rbx + PS_NR_IID]            # FFmpeg checks as many ICC bands as IID bands
+    jae .Lps_read_fake_done
+    lea edx, [rax + rcx]
+    movsx edx, byte ptr [rbx + PS_ICC + rdx]
+    cmp edx, 7
+    ja .Lps_read_bad
+    inc ecx
+    jmp .Lps_read_fake_icc_band
+.Lps_read_fake_done:
+    inc edi
+    mov [rbx + PS_NUM_ENV], edi
+    mov dword ptr [rbx + PS_BORDER + rdi*4], 31
+.Lps_read_layout:
+    mov eax, [rbx + PS_IS34]
+    mov [rbx + PS_IS34_OLD], eax
+    mov eax, [rbx + PS_ENABLE_IID]
+    or eax, [rbx + PS_ENABLE_ICC]
+    jz .Lps_read_phases
+    xor eax, eax
+    cmp dword ptr [rbx + PS_ENABLE_IID], 0
+    je .Lps_read_layout_icc
+    cmp dword ptr [rbx + PS_NR_IID], 34
+    sete al
+.Lps_read_layout_icc:
+    cmp dword ptr [rbx + PS_ENABLE_ICC], 0
+    je .Lps_read_layout_store
+    cmp dword ptr [rbx + PS_NR_ICC], 34
+    jne .Lps_read_layout_store
+    mov eax, 1
+.Lps_read_layout_store:
+    mov [rbx + PS_IS34], eax
+.Lps_read_phases:
+    cmp dword ptr [rbx + PS_ENABLE_IPDOPD], 0
+    jne .Lps_read_started
+    lea rcx, [rbx + PS_IPD]
+    call ps_clear_rows
+    lea rcx, [rbx + PS_OPD]
+    call ps_clear_rows
+.Lps_read_started:
+    cmp dword ptr [rsp + 32], 0
+    je .Lps_read_used
+    mov dword ptr [rbx + PS_START], 1
+.Lps_read_used:
+    mov rax, [rip + aac_pos]
+    sub rax, r13
+    cmp rax, r12
+    jbe .Lps_read_return
+.Lps_read_bad:
+    mov dword ptr [rbx + PS_START], 0
+    mov eax, r12d
+    add rax, r13
+    mov [rip + aac_pos], rax
+    lea rcx, [rbx + PS_IID]
+    call ps_clear_rows
+    lea rcx, [rbx + PS_ICC]
+    call ps_clear_rows
+    lea rcx, [rbx + PS_IPD]
+    call ps_clear_rows
+    lea rcx, [rbx + PS_OPD]
+    call ps_clear_rows
+    mov eax, r12d
+.Lps_read_return:
+    add rsp, 48
+    pop r15
+    pop r14
+    pop r13
+    pop r12
+    pop rdi
+    pop rsi
+    pop rbx
+    ret
+# Copies row ESI to row EDI of the parameters at offset EDX.
+.Lps_read_copy_row:
+    imul eax, esi, 34
+    lea r8, [rbx + rdx]
+    add r8, rax
+    imul eax, edi, 34
+    lea r9, [rbx + rdx]
+    add r9, rax
+    xor ecx, ecx
+.Lps_read_copy_byte:
+    movzx eax, byte ptr [r8 + rcx]
+    mov [r9 + rcx], al
+    inc ecx
+    cmp ecx, 34
+    jb .Lps_read_copy_byte
+    ret
+ENDFN ps_read
+
+# 13-tap complex hybrid filter: RCX=13 complex doubles, RDX=filter (7 complex
+# floats; taps 7-12 mirror 5-0) -> XMM0, XMM1 = output. Clobbers RAX, R8, R9,
+# XMM2-5.
+LOCALFN ps_cfilter
+    cvtss2sd xmm4, [rdx + 48]
+    movsd xmm0, [rcx + 96]
+    mulsd xmm0, xmm4
+    movsd xmm1, [rcx + 104]
+    mulsd xmm1, xmm4
+    xor eax, eax
+.Lps_cfilter_tap:
+    mov r8d, 12
+    sub r8d, eax
+    shl r8d, 4
+    mov r9d, eax
+    shl r9d, 4
+    movsd xmm2, [rcx + r9]                # x[j].re
+    movsd xmm3, [rcx + r8]                # x[12 - j].re
+    movapd xmm4, xmm2
+    addsd xmm2, xmm3                      # A.re
+    subsd xmm4, xmm3                      # D.re
+    cvtss2sd xmm5, [rdx + rax*8]          # f.re
+    mulsd xmm2, xmm5
+    addsd xmm0, xmm2
+    cvtss2sd xmm3, [rdx + rax*8 + 4]      # f.im
+    mulsd xmm4, xmm3
+    addsd xmm1, xmm4                      # im += f.im D.re
+    movsd xmm2, [rcx + r9 + 8]            # x[j].im
+    movsd xmm4, [rcx + r8 + 8]
+    movapd xmm3, xmm2
+    addsd xmm2, xmm4                      # A.im
+    subsd xmm3, xmm4                      # D.im
+    mulsd xmm2, xmm5
+    addsd xmm1, xmm2                      # im += f.re A.im
+    cvtss2sd xmm4, [rdx + rax*8 + 4]
+    mulsd xmm3, xmm4
+    subsd xmm0, xmm3                      # re -= f.im D.im
+    inc eax
+    cmp eax, 6
+    jb .Lps_cfilter_tap
+    ret
+ENDFN ps_cfilter
+
+# Hybrid analysis (FFmpeg hybrid_analysis) of the mono QMF matrix X (scratch,
+# 38 slots) into the PS state's hybrid bands. Locals: 32.. 8 complex outputs.
+LOCALFN ps_hybrid_analysis
+    push rbx
+    push rsi
+    push rdi
+    push r12
+    push r13
+    push r14
+    push r15
+    sub rsp, 176
+    mov rbx, rcx
+    mov r15, [rip + sbr_scratch]
+    add r15, SB_X
+    # Filter input: QMF bands 0-4, 6 slots of history then 38 new slots.
+    xor esi, esi                          # band
+.Lps_ha_input_band:
+    imul edi, esi, 44*16
+    lea rdi, [rbx + rdi + PS_IN_BUF + 6*16]
+    xor ecx, ecx                          # slot
+.Lps_ha_input_slot:
+    mov eax, ecx
+    shl eax, 10
+    add rax, r15
+    movsd xmm0, [rax + rsi*8]
+    movsd xmm1, [rax + rsi*8 + 512]
+    movsd [rdi], xmm0
+    movsd [rdi + 8], xmm1
+    add rdi, 16
+    inc ecx
+    cmp ecx, 38
+    jb .Lps_ha_input_slot
+    inc esi
+    cmp esi, 5
+    jb .Lps_ha_input_band
+    lea rsi, [rbx + PS_LBUF]
+    cmp dword ptr [rbx + PS_IS34], 0
+    je .Lps_ha_20
+    # 34 bands: 12, 8, 4, 4 and 4 complex filters on QMF bands 0-4.
+    xor edi, edi                          # band
+    xor r14d, r14d                        # first output row
+.Lps_ha_34_band:
+    lea r12, [rip + ps_f34_4]
+    mov r13d, 4
+    cmp edi, 1
+    ja .Lps_ha_34_filters
+    lea r12, [rip + ps_f34_8]
+    mov r13d, 8
+    je .Lps_ha_34_filters
+    lea r12, [rip + ps_f34_12]
+    mov r13d, 12
+.Lps_ha_34_filters:
+    mov dword ptr [rsp + 160], 0          # filter q
+.Lps_ha_34_filter:
+    mov eax, [rsp + 160]
+    cmp eax, r13d
+    jae .Lps_ha_34_next
+    mov dword ptr [rsp + 164], 0          # slot
+.Lps_ha_34_slot:
+    mov eax, [rsp + 164]
+    cmp eax, 32
+    jae .Lps_ha_34_filter_next
+    imul ecx, edi, 44*16
+    shl eax, 4
+    add ecx, eax
+    lea rcx, [rbx + rcx + PS_IN_BUF]
+    imul edx, [rsp + 160], 56
+    add rdx, r12
+    call ps_cfilter
+    mov eax, r14d
+    add eax, [rsp + 160]
+    shl eax, 9
+    mov ecx, [rsp + 164]
+    shl ecx, 4
+    add eax, ecx
+    movsd [rsi + rax], xmm0
+    movsd [rsi + rax + 8], xmm1
+    inc dword ptr [rsp + 164]
+    jmp .Lps_ha_34_slot
+.Lps_ha_34_filter_next:
+    inc dword ptr [rsp + 160]
+    jmp .Lps_ha_34_filter
+.Lps_ha_34_next:
+    add r14d, r13d
+    inc edi
+    cmp edi, 5
+    jb .Lps_ha_34_band
+    mov r12d, 5                           # QMF bands 5-63 -> rows 32-90
+    mov r13d, 27
+    jmp .Lps_ha_interleave
+.Lps_ha_20:
+    # 20 bands: QMF band 0 into 6 through 8 complex filters, bands 1 and 2
+    # into 2 each through a real filter.
+    xor edi, edi                          # slot
+.Lps_ha_20_slot:
+    imul ecx, edi, 16
+    lea r12, [rbx + rcx + PS_IN_BUF]
+    xor r13d, r13d
+.Lps_ha_20_filter:
+    mov rcx, r12
+    imul edx, r13d, 56
+    lea rax, [rip + ps_f20]
+    add rdx, rax
+    call ps_cfilter
+    mov eax, r13d
+    shl eax, 4
+    movsd [rsp + 32 + rax], xmm0
+    movsd [rsp + 40 + rax], xmm1
+    inc r13d
+    cmp r13d, 8
+    jb .Lps_ha_20_filter
+    mov eax, edi
+    shl eax, 4
+    lea rcx, [rsi + rax]                  # row 0 at this slot
+    movups xmm0, [rsp + 32 + 6*16]
+    movups [rcx], xmm0
+    movups xmm0, [rsp + 32 + 7*16]
+    movups [rcx + 512], xmm0
+    movups xmm0, [rsp + 32]
+    movups [rcx + 2*512], xmm0
+    movups xmm0, [rsp + 32 + 16]
+    movups [rcx + 3*512], xmm0
+    movupd xmm0, [rsp + 32 + 2*16]
+    movupd xmm1, [rsp + 32 + 5*16]
+    addpd xmm0, xmm1
+    movupd [rcx + 4*512], xmm0
+    movupd xmm0, [rsp + 32 + 3*16]
+    movupd xmm1, [rsp + 32 + 4*16]
+    addpd xmm0, xmm1
+    movupd [rcx + 5*512], xmm0
+    # Real 2-band filters: band 1 to rows 6/7 (reversed), band 2 to rows 8/9.
+    mov r13d, 1
+.Lps_ha_20_real:
+    imul ecx, r13d, 44*16
+    lea rcx, [rbx + rcx + PS_IN_BUF]
+    imul eax, edi, 16
+    add rcx, rax                          # x[0] for this slot
+    lea rdx, [rip + ps_g1]
+    cvtss2sd xmm4, [rdx + 24]
+    movsd xmm0, [rcx + 96]
+    mulsd xmm0, xmm4                      # in-phase re
+    movsd xmm1, [rcx + 104]
+    mulsd xmm1, xmm4                      # in-phase im
+    xorpd xmm2, xmm2                      # out-of-phase re
+    xorpd xmm3, xmm3
+    mov eax, 1
+.Lps_ha_20_real_tap:
+    cvtss2sd xmm4, [rdx + rax*4]
+    mov r8d, 12
+    sub r8d, eax
+    shl r8d, 4
+    mov r9d, eax
+    shl r9d, 4
+    movsd xmm5, [rcx + r9]
+    addsd xmm5, [rcx + r8]
+    mulsd xmm5, xmm4
+    addsd xmm2, xmm5
+    movsd xmm5, [rcx + r9 + 8]
+    addsd xmm5, [rcx + r8 + 8]
+    mulsd xmm5, xmm4
+    addsd xmm3, xmm5
+    add eax, 2
+    cmp eax, 7
+    jb .Lps_ha_20_real_tap
+    movapd xmm4, xmm0
+    movapd xmm5, xmm1
+    addsd xmm0, xmm2                      # in + out
+    addsd xmm1, xmm3
+    subsd xmm4, xmm2                      # in - out
+    subsd xmm5, xmm3
+    lea eax, [r13*2 + 4]                  # rows 6 or 8
+    shl eax, 9
+    mov ecx, edi
+    shl ecx, 4
+    add eax, ecx
+    lea rcx, [rsi + rax]
+    cmp r13d, 1
+    jne .Lps_ha_20_real_store
+    movapd xmm2, xmm0                     # band 1: reversed
+    movapd xmm3, xmm1
+    movapd xmm0, xmm4
+    movapd xmm1, xmm5
+    movapd xmm4, xmm2
+    movapd xmm5, xmm3
+.Lps_ha_20_real_store:
+    movsd [rcx], xmm0
+    movsd [rcx + 8], xmm1
+    movsd [rcx + 512], xmm4
+    movsd [rcx + 520], xmm5
+    inc r13d
+    cmp r13d, 3
+    jb .Lps_ha_20_real
+    inc edi
+    cmp edi, 32
+    jb .Lps_ha_20_slot
+    mov r12d, 3                           # QMF bands 3-63 -> rows 10-70
+    mov r13d, 7
+.Lps_ha_interleave:
+    mov eax, r12d
+    add eax, r13d
+    shl eax, 9
+    lea rdi, [rsi + rax]                  # output row
+    xor ecx, ecx
+.Lps_ha_interleave_slot:
+    mov eax, ecx
+    shl eax, 10
+    add rax, r15
+    movsd xmm0, [rax + r12*8]
+    movsd xmm1, [rax + r12*8 + 512]
+    mov eax, ecx
+    shl eax, 4
+    movsd [rdi + rax], xmm0
+    movsd [rdi + rax + 8], xmm1
+    inc ecx
+    cmp ecx, 32
+    jb .Lps_ha_interleave_slot
+    inc r12d
+    cmp r12d, 64
+    jb .Lps_ha_interleave
+    # History: the last 6 of the first 38 entries of each band.
+    xor esi, esi
+.Lps_ha_history:
+    imul eax, esi, 44*16
+    lea rdi, [rbx + rax + PS_IN_BUF]
+    xor ecx, ecx
+.Lps_ha_history_value:
+    movups xmm0, [rdi + rcx + 32*16]
+    movups [rdi + rcx], xmm0
+    add ecx, 16
+    cmp ecx, 6*16
+    jb .Lps_ha_history_value
+    inc esi
+    cmp esi, 5
+    jb .Lps_ha_history
+    add rsp, 176
+    pop r15
+    pop r14
+    pop r13
+    pop r12
+    pop rdi
+    pop rsi
+    pop rbx
+    ret
+ENDFN ps_hybrid_analysis
+
+# Hybrid synthesis: RCX=hybrid bands (91 x 32 complex), RDX=QMF matrix (split
+# slots), R8D=34-band layout -> slots 0-31 of the QMF matrix: the hybrid
+# bands of each split QMF band add up, the other QMF bands copy.
+LOCALFN ps_hybrid_synthesis
+    push rbx
+    push rsi
+    push rdi
+    push r12
+    push r13
+    push r14
+    mov rbx, rcx
+    mov r14, rdx
+    mov r12d, 3                           # split QMF bands
+    mov r13d, 7                           # hybrid row of QMF band k: k + 7
+    lea r11, [rip + ps_hybrid_groups20]
+    test r8d, r8d
+    jz .Lps_hs_slots
+    mov r12d, 5
+    mov r13d, 27
+    lea r11, [rip + ps_hybrid_groups34]
+.Lps_hs_slots:
+    xor esi, esi                          # slot
+.Lps_hs_slot:
+    mov eax, esi
+    shl eax, 10
+    lea rdi, [r14 + rax]
+    mov r10d, esi
+    shl r10d, 4                           # slot offset within a row
+    xor ecx, ecx                          # QMF band
+.Lps_hs_group:
+    cmp ecx, r12d
+    jae .Lps_hs_plain
+    movzx eax, byte ptr [r11 + rcx]       # first row
+    movzx r8d, byte ptr [r11 + rcx + 1]   # end row
+    xorpd xmm0, xmm0
+    xorpd xmm1, xmm1
+.Lps_hs_sum:
+    mov edx, eax
+    shl edx, 9
+    add edx, r10d
+    addsd xmm0, [rbx + rdx]
+    addsd xmm1, [rbx + rdx + 8]
+    inc eax
+    cmp eax, r8d
+    jb .Lps_hs_sum
+    movsd [rdi + rcx*8], xmm0
+    movsd [rdi + rcx*8 + 512], xmm1
+    inc ecx
+    jmp .Lps_hs_group
+.Lps_hs_plain:
+    lea edx, [rcx + r13]
+    shl edx, 9
+    add edx, r10d
+    movsd xmm0, [rbx + rdx]
+    movsd xmm1, [rbx + rdx + 8]
+    movsd [rdi + rcx*8], xmm0
+    movsd [rdi + rcx*8 + 512], xmm1
+    inc ecx
+    cmp ecx, 64
+    jb .Lps_hs_plain
+    inc esi
+    cmp esi, 32
+    jb .Lps_hs_slot
+    pop r14
+    pop r13
+    pop r12
+    pop rdi
+    pop rsi
+    pop rbx
+    ret
+ENDFN ps_hybrid_synthesis
+
+# Decorrelated signal (FFmpeg decorrelation): transient-reduced all-pass
+# chains below the all-pass limit, delays of 14 or 1 slots above, from the
+# hybrid bands of PS state RCX into its right-channel bands. Locals: 32
+# phase rotation (complex), 48 link rotations (3 complex), 96 link gains,
+# 120 decay slope gain, 128 band, 132 gain row, 136 layout.
+LOCALFN ps_decorrelation
+    push rbx
+    push rsi
+    push rdi
+    push r12
+    push r13
+    push r14
+    push r15
+    sub rsp, 224
+    movdqu [rsp + 144], xmm6
+    movdqu [rsp + 160], xmm7
+    movdqu [rsp + 176], xmm8
+    movdqu [rsp + 192], xmm9
+    mov rbx, rcx
+    mov r12d, [rbx + PS_IS34]
+    mov [rsp + 136], r12d
+    cmp r12d, [rbx + PS_IS34_OLD]
+    je .Lps_dc_power
+    lea rdi, [rbx + PS_PEAK]              # a new band layout restarts the history
+    xor eax, eax
+    mov ecx, 3*272/8
+    rep stosq
+    lea rdi, [rbx + PS_DELAY]
+    mov ecx, (66976 + 88800)/8
+    rep stosq
+.Lps_dc_power:
+    lea rdi, [rbx + PS_POWER]
+    xor eax, eax
+    mov ecx, 34*32
+    rep stosq
+    lea r13, [rip + ps_k_to_i_20]
+    test r12d, r12d
+    jz .Lps_dc_map
+    lea r13, [rip + ps_k_to_i_34]
+.Lps_dc_map:
+    lea rax, [rip + ps_nr_bands]
+    mov r14d, [rax + r12*4]               # hybrid bands
+    xor esi, esi                          # band k
+.Lps_dc_power_band:
+    movzx eax, byte ptr [r13 + rsi]
+    shl eax, 8
+    lea rdi, [rbx + rax + PS_POWER]
+    mov eax, esi
+    shl eax, 9
+    lea rdx, [rbx + rax + PS_LBUF]
+    xor ecx, ecx
+.Lps_dc_power_slot:
+    movsd xmm0, [rdx]
+    mulsd xmm0, xmm0
+    movsd xmm1, [rdx + 8]
+    mulsd xmm1, xmm1
+    addsd xmm0, xmm1
+    addsd xmm0, [rdi + rcx*8]
+    movsd [rdi + rcx*8], xmm0
+    add rdx, 16
+    inc ecx
+    cmp ecx, 32
+    jb .Lps_dc_power_slot
+    inc esi
+    cmp esi, r14d
+    jb .Lps_dc_power_band
+    # Transient detection per parameter band.
+    lea rax, [rip + ps_nr_par]
+    mov r15d, [rax + r12*4]
+    lea rax, [rip + ps_constants]
+    cvtss2sd xmm6, [rax + 16]             # peak decay
+    cvtss2sd xmm7, [rax + 20]             # smoothing
+    cvtss2sd xmm8, [rax + 24]             # transient impact
+    xor esi, esi
+.Lps_dc_transient_band:
+    mov eax, esi
+    shl eax, 8
+    lea rdi, [rbx + rax + PS_POWER]
+    lea rdx, [rbx + rax + PS_GAIN]
+    xor ecx, ecx
+.Lps_dc_transient_slot:
+    movsd xmm0, [rbx + rsi*8 + PS_PEAK]
+    mulsd xmm0, xmm6                      # decayed peak
+    movsd xmm1, [rdi + rcx*8]             # power
+    maxsd xmm0, xmm1
+    movsd [rbx + rsi*8 + PS_PEAK], xmm0
+    movsd xmm2, xmm1                      # smooth += a (power - smooth)
+    subsd xmm2, [rbx + rsi*8 + PS_SMOOTH]
+    mulsd xmm2, xmm7
+    addsd xmm2, [rbx + rsi*8 + PS_SMOOTH]
+    movsd [rbx + rsi*8 + PS_SMOOTH], xmm2
+    subsd xmm0, xmm1                      # diff += a (peak - power - diff)
+    subsd xmm0, [rbx + rsi*8 + PS_DIFF]
+    mulsd xmm0, xmm7
+    addsd xmm0, [rbx + rsi*8 + PS_DIFF]
+    movsd [rbx + rsi*8 + PS_DIFF], xmm0
+    mulsd xmm0, xmm8                      # denominator
+    movsd xmm3, [rip + sbr_one]
+    ucomisd xmm0, xmm2
+    jbe .Lps_dc_gain
+    movsd xmm3, xmm2
+    divsd xmm3, xmm0
+.Lps_dc_gain:
+    movsd [rdx + rcx*8], xmm3
+    inc ecx
+    cmp ecx, 32
+    jb .Lps_dc_transient_slot
+    inc esi
+    cmp esi, r15d
+    jb .Lps_dc_transient_band
+    # Bands: shift the delay line, then filter.
+    xor esi, esi
+.Lps_dc_band:
+    mov [rsp + 128], esi
+    imul eax, esi, 46*16
+    lea rdi, [rbx + rax + PS_DELAY]
+    xor ecx, ecx
+.Lps_dc_shift:
+    movups xmm0, [rdi + rcx + 32*16]
+    movups [rdi + rcx], xmm0
+    add ecx, 16
+    cmp ecx, 14*16
+    jb .Lps_dc_shift
+    mov eax, esi
+    shl eax, 9
+    lea rdx, [rbx + rax + PS_LBUF]
+    xor ecx, ecx
+.Lps_dc_fill:
+    movups xmm0, [rdx + rcx]
+    movups [rdi + rcx + 14*16], xmm0
+    add ecx, 16
+    cmp ecx, 32*16
+    jb .Lps_dc_fill
+    movzx eax, byte ptr [r13 + rsi]
+    shl eax, 8
+    lea r14, [rbx + rax + PS_GAIN]        # transient gains of this band
+    mov eax, esi
+    shl eax, 9
+    lea r15, [rbx + rax + PS_RBUF]        # output
+    lea rax, [rip + ps_nr_allpass]
+    cmp esi, [rax + r12*4]
+    jb .Lps_dc_allpass
+    xor eax, eax                          # delay 14
+    lea rcx, [rip + ps_short_delay]
+    cmp esi, [rcx + r12*4]
+    jb .Lps_dc_delayed
+    mov eax, 13*16                        # delay 1
+.Lps_dc_delayed:
+    add rax, rdi
+    xor ecx, ecx
+.Lps_dc_delayed_slot:
+    movsd xmm2, [r14 + rcx*8]
+    movsd xmm0, [rax]
+    mulsd xmm0, xmm2
+    movsd xmm1, [rax + 8]
+    mulsd xmm1, xmm2
+    movsd [r15], xmm0
+    movsd [r15 + 8], xmm1
+    add rax, 16
+    add r15, 16
+    inc ecx
+    cmp ecx, 32
+    jb .Lps_dc_delayed_slot
+    jmp .Lps_dc_band_next
+.Lps_dc_allpass:
+    # Decay slope: 1 - 0.05 (k - cutoff), clipped to [0, 1].
+    lea rax, [rip + ps_decay_cutoff]
+    mov ecx, esi
+    sub ecx, [rax + r12*4]
+    cvtsi2sd xmm0, ecx
+    lea rax, [rip + ps_constants]
+    cvtss2sd xmm1, [rax + 12]
+    mulsd xmm0, xmm1
+    movsd xmm1, [rip + sbr_one]
+    subsd xmm1, xmm0
+    xorpd xmm0, xmm0
+    maxsd xmm1, xmm0
+    minsd xmm1, [rip + sbr_one]
+    xor ecx, ecx
+.Lps_dc_link_gain:
+    cvtss2sd xmm0, [rax + rcx*4]
+    mulsd xmm0, xmm1
+    movsd [rsp + 96 + rcx*8], xmm0
+    inc ecx
+    cmp ecx, 3
+    jb .Lps_dc_link_gain
+    imul eax, r12d, 50
+    add eax, esi                          # rotation index
+    lea rcx, [rip + ps_phi_fract]
+    cvtss2sd xmm0, [rcx + rax*8]
+    movsd [rsp + 32], xmm0
+    cvtss2sd xmm0, [rcx + rax*8 + 4]
+    movsd [rsp + 40], xmm0
+    imul eax, eax, 24
+    lea rcx, [rip + ps_q_fract]
+    add rcx, rax
+    xor edx, edx
+.Lps_dc_link_rotation:
+    mov r9d, edx
+    shl r9d, 4
+    cvtss2sd xmm0, [rcx + rdx*8]
+    movsd [rsp + 48 + r9], xmm0
+    cvtss2sd xmm0, [rcx + rdx*8 + 4]
+    movsd [rsp + 56 + r9], xmm0
+    inc edx
+    cmp edx, 3
+    jb .Lps_dc_link_rotation
+    # All-pass history: keep the last 5 of 37 entries of each link.
+    imul eax, esi, 3*37*16
+    lea r8, [rbx + rax + PS_AP_DELAY]
+    xor ecx, ecx
+.Lps_dc_ap_shift:
+    movups xmm0, [r8 + rcx + 32*16]
+    movups [r8 + rcx], xmm0
+    movups xmm0, [r8 + rcx + 37*16 + 32*16]
+    movups [r8 + rcx + 37*16], xmm0
+    movups xmm0, [r8 + rcx + 74*16 + 32*16]
+    movups [r8 + rcx + 74*16], xmm0
+    add ecx, 16
+    cmp ecx, 5*16
+    jb .Lps_dc_ap_shift
+    xor ecx, ecx                          # slot n
+.Lps_dc_ap_slot:
+    mov eax, ecx
+    shl eax, 4
+    movsd xmm0, [rdi + rax + 12*16]       # delayed input
+    movsd xmm1, [rdi + rax + 12*16 + 8]
+    movsd xmm6, xmm0                      # x = input * phi
+    mulsd xmm6, [rsp + 32]
+    movsd xmm2, xmm1
+    mulsd xmm2, [rsp + 40]
+    subsd xmm6, xmm2
+    movsd xmm7, xmm0
+    mulsd xmm7, [rsp + 40]
+    movsd xmm2, xmm1
+    mulsd xmm2, [rsp + 32]
+    addsd xmm7, xmm2
+    xor edx, edx                          # link m
+.Lps_dc_ap_link:
+    movsd xmm8, xmm6                      # all-pass input
+    movsd xmm9, xmm7
+    imul r9d, edx, 37*16
+    lea r9, [r8 + r9]                     # link history
+    mov r10d, ecx
+    add r10d, 2
+    sub r10d, edx
+    shl r10d, 4
+    movsd xmm0, [r9 + r10]                # delayed link value
+    movsd xmm1, [r9 + r10 + 8]
+    mov r10d, edx
+    shl r10d, 4
+    movsd xmm2, xmm0                      # link * Q
+    mulsd xmm2, [rsp + 48 + r10]
+    movsd xmm3, xmm1
+    mulsd xmm3, [rsp + 56 + r10]
+    subsd xmm2, xmm3
+    movsd xmm3, xmm0
+    mulsd xmm3, [rsp + 56 + r10]
+    movsd xmm4, xmm1
+    mulsd xmm4, [rsp + 48 + r10]
+    addsd xmm3, xmm4
+    movsd xmm5, [rsp + 96 + rdx*8]        # link gain
+    movsd xmm4, xmm6
+    mulsd xmm4, xmm5
+    subsd xmm2, xmm4                      # - g x
+    movsd xmm4, xmm7
+    mulsd xmm4, xmm5
+    subsd xmm3, xmm4
+    movsd xmm6, xmm2
+    movsd xmm7, xmm3
+    mulsd xmm2, xmm5                      # history: input + g x
+    addsd xmm2, xmm8
+    mulsd xmm3, xmm5
+    addsd xmm3, xmm9
+    lea r10d, [rcx + 5]
+    shl r10d, 4
+    movsd [r9 + r10], xmm2
+    movsd [r9 + r10 + 8], xmm3
+    inc edx
+    cmp edx, 3
+    jb .Lps_dc_ap_link
+    movsd xmm2, [r14 + rcx*8]
+    mulsd xmm6, xmm2
+    mulsd xmm7, xmm2
+    mov eax, ecx
+    shl eax, 4
+    movsd [r15 + rax], xmm6
+    movsd [r15 + rax + 8], xmm7
+    inc ecx
+    cmp ecx, 32
+    jb .Lps_dc_ap_slot
+.Lps_dc_band_next:
+    mov esi, [rsp + 128]
+    inc esi
+    lea rax, [rip + ps_nr_bands]
+    cmp esi, [rax + r12*4]
+    jb .Lps_dc_band
+    movdqu xmm6, [rsp + 144]
+    movdqu xmm7, [rsp + 160]
+    movdqu xmm8, [rsp + 176]
+    movdqu xmm9, [rsp + 192]
+    add rsp, 224
+    pop r15
+    pop r14
+    pop r13
+    pop r12
+    pop rdi
+    pop rsi
+    pop rbx
+    ret
+ENDFN ps_decorrelation
+
+# Maps one parameter row: RCX=source (34 signed bytes), RDX=destination,
+# R8=op table, R9D=destination bands. Integer division truncates as in C.
+LOCALFN ps_map_idx
+    push rbx
+    push rsi
+    push rdi
+    mov rsi, rcx
+    mov rdi, rdx
+    xor r10d, r10d                        # destination band
+.Lps_mi_band:
+    cmp r10d, r9d
+    jae .Lps_mi_done
+    lea r11, [r10 + r10*4]
+    add r11, r8
+    movzx ecx, byte ptr [r11 + 1]
+    movsx eax, byte ptr [rsi + rcx]       # a
+    movzx ecx, byte ptr [r11 + 2]
+    movsx ebx, byte ptr [rsi + rcx]       # b
+    movzx ecx, byte ptr [r11]             # op
+    test ecx, ecx
+    jz .Lps_mi_store
+    mov edx, 2
+    cmp ecx, 1
+    je .Lps_mi_sum
+    mov edx, 3
+    cmp ecx, 2
+    jne .Lps_mi_op3
+    add eax, eax                          # 2a + b
+    jmp .Lps_mi_sum
+.Lps_mi_op3:
+    cmp ecx, 3
+    jne .Lps_mi_op4
+    add ebx, ebx                          # a + 2b
+    jmp .Lps_mi_sum
+.Lps_mi_op4:
+    movzx ecx, byte ptr [r11 + 3]
+    movsx ecx, byte ptr [rsi + rcx]
+    add ebx, ecx
+    movzx ecx, byte ptr [r11 + 4]
+    movsx ecx, byte ptr [rsi + rcx]
+    add ebx, ecx
+    mov edx, 4
+.Lps_mi_sum:
+    add eax, ebx
+    mov ecx, edx
+    cdq
+    idiv ecx
+.Lps_mi_store:
+    mov [rdi + r10], al
+    inc r10d
+    jmp .Lps_mi_band
+.Lps_mi_done:
+    pop rdi
+    pop rsi
+    pop rbx
+    ret
+ENDFN ps_map_idx
+
+# Maps a row of 34 doubles in place: RCX=row, RDX=op table, R8D=bands,
+# R9D=1 to walk the bands downwards (20 to 34), 0 upwards (34 to 20).
+LOCALFN ps_map_val
+    push rbx
+    push rsi
+    mov rsi, rcx
+    xor r10d, r10d                        # step
+.Lps_mv_band:
+    cmp r10d, r8d
+    jae .Lps_mv_done
+    mov eax, r10d                         # destination band
+    test r9d, r9d
+    jz .Lps_mv_entry
+    mov eax, r8d
+    sub eax, r10d
+    dec eax
+.Lps_mv_entry:
+    lea r11, [rax + rax*4]
+    add r11, rdx
+    movzx ecx, byte ptr [r11 + 1]
+    movsd xmm0, [rsi + rcx*8]             # a
+    movzx ecx, byte ptr [r11 + 2]
+    movsd xmm1, [rsi + rcx*8]             # b
+    movzx ecx, byte ptr [r11]
+    test ecx, ecx
+    jz .Lps_mv_store
+    cmp ecx, 1
+    jne .Lps_mv_op2
+    addsd xmm0, xmm1
+    mulsd xmm0, [rip + sbr_half]
+    jmp .Lps_mv_store
+.Lps_mv_op2:
+    cmp ecx, 2
+    jne .Lps_mv_op3
+    addsd xmm0, xmm0
+    addsd xmm0, xmm1
+    mulsd xmm0, [rip + ps_third]
+    jmp .Lps_mv_store
+.Lps_mv_op3:
+    cmp ecx, 3
+    jne .Lps_mv_op4
+    addsd xmm1, xmm1
+    addsd xmm0, xmm1
+    mulsd xmm0, [rip + ps_third]
+    jmp .Lps_mv_store
+.Lps_mv_op4:
+    addsd xmm0, xmm1
+    movzx ecx, byte ptr [r11 + 3]
+    addsd xmm0, [rsi + rcx*8]
+    movzx ecx, byte ptr [r11 + 4]
+    addsd xmm0, [rsi + rcx*8]
+    mulsd xmm0, [rip + ps_quarter]
+.Lps_mv_store:
+    movsd [rsi + rax*8], xmm0
+    inc r10d
+    jmp .Lps_mv_band
+.Lps_mv_done:
+    pop rsi
+    pop rbx
+    ret
+ENDFN ps_map_val
+
+# Parameters at offset EDX of PS state RCX mapped to the current band layout
+# into offset R8D: R9D=parameter bands | full << 8 (IID/ICC full, IPD/OPD
+# only their bands). Without a map the rows copy.
+LOCALFN ps_remap
+    push rbx
+    push rsi
+    push rdi
+    push r12
+    push r13
+    push r14
+    sub rsp, 40
+    mov rbx, rcx
+    lea rsi, [rcx + rdx]
+    lea rdi, [rcx + r8]
+    movzx eax, r9b                        # bands
+    shr r9d, 8                            # full
+    mov r14d, -1                          # band to clear
+    cmp dword ptr [rbx + PS_IS34], 0
+    je .Lps_rm_20
+    lea r12, [rip + ps_map_20_34]
+    mov r13d, 34
+    cmp eax, 20
+    je .Lps_rm_size
+    cmp eax, 11
+    je .Lps_rm_size
+    lea r12, [rip + ps_map_10_34]
+    cmp eax, 10
+    je .Lps_rm_10_34
+    cmp eax, 5
+    jne .Lps_rm_copy
+.Lps_rm_10_34:
+    test r9d, r9d
+    jnz .Lps_rm_rows
+    mov r13d, 16
+    mov r14d, 16
+    jmp .Lps_rm_rows
+.Lps_rm_size:
+    test r9d, r9d
+    jnz .Lps_rm_rows
+    mov r13d, 17
+    jmp .Lps_rm_rows
+.Lps_rm_20:
+    lea r12, [rip + ps_map_34_20]
+    mov r13d, 20
+    cmp eax, 34
+    je .Lps_rm_20_size
+    cmp eax, 17
+    je .Lps_rm_20_size
+    lea r12, [rip + ps_map_10_20]
+    cmp eax, 10
+    je .Lps_rm_10_20
+    cmp eax, 5
+    jne .Lps_rm_copy
+.Lps_rm_10_20:
+    test r9d, r9d
+    jnz .Lps_rm_rows
+    mov r13d, 10
+    mov r14d, 10
+    jmp .Lps_rm_rows
+.Lps_rm_20_size:
+    test r9d, r9d
+    jnz .Lps_rm_rows
+    mov r13d, 11
+.Lps_rm_rows:
+    xor eax, eax
+    mov [rsp + 32], eax                   # envelope
+.Lps_rm_row:
+    mov eax, [rsp + 32]
+    cmp eax, [rbx + PS_NUM_ENV]
+    jae .Lps_rm_done
+    imul eax, eax, 34
+    lea rcx, [rsi + rax]
+    lea rdx, [rdi + rax]
+    mov [rsp + 36], eax
+    mov r8, r12
+    mov r9d, r13d
+    call ps_map_idx
+    test r14d, r14d
+    js .Lps_rm_next
+    mov eax, [rsp + 36]
+    add eax, r14d
+    mov byte ptr [rdi + rax], 0
+.Lps_rm_next:
+    inc dword ptr [rsp + 32]
+    jmp .Lps_rm_row
+.Lps_rm_copy:
+    xor ecx, ecx
+.Lps_rm_copy_byte:
+    movzx eax, byte ptr [rsi + rcx]
+    mov [rdi + rcx], al
+    inc ecx
+    cmp ecx, 170
+    jb .Lps_rm_copy_byte
+.Lps_rm_done:
+    add rsp, 40
+    pop r14
+    pop r13
+    pop r12
+    pop rdi
+    pop rsi
+    pop rbx
+    ret
+ENDFN ps_remap
+
+# Stereo mixing (FFmpeg stereo_processing): per envelope the IID/ICC mixing
+# matrices (with IPD/OPD phases), interpolated slot by slot from the
+# previous envelope's, applied to the mono and decorrelated hybrid bands of
+# PS state RCX. Locals: 32.. 8 doubles h (real h11 h12 h21 h22, then
+# imaginary), 96.. 8 doubles steps, 160 envelope, 164 band, 168 layout,
+# 172 phases on, 176 first slot, 180 end slot, 184 parameter bands, 188
+# IPD/OPD bands, 192 hybrid bands.
+LOCALFN ps_stereo
+    push rbx
+    push rsi
+    push rdi
+    push r12
+    push r13
+    push r14
+    push r15
+    sub rsp, 240
+    movdqu [rsp + 208], xmm6
+    movdqu [rsp + 224], xmm7
+    mov rbx, rcx
+    mov r12d, [rbx + PS_IS34]
+    mov [rsp + 168], r12d
+    mov eax, [rbx + PS_ENABLE_IPDOPD]
+    mov [rsp + 172], eax
+    lea rax, [rip + ps_nr_par]
+    mov eax, [rax + r12*4]
+    mov [rsp + 184], eax
+    lea rax, [rip + ps_nr_ipdopd_bands]
+    mov eax, [rax + r12*4]
+    mov [rsp + 188], eax
+    lea rax, [rip + ps_nr_bands]
+    mov eax, [rax + r12*4]
+    mov [rsp + 192], eax
+    # The previous frame's last matrices start this frame.
+    mov eax, [rbx + PS_NUM_ENV_OLD]
+    test eax, eax
+    jz .Lps_st_map
+    imul eax, eax, 272
+    xor ecx, ecx                          # matrix part 0-7
+.Lps_st_copy_part:
+    imul edx, ecx, 6*272
+    lea rsi, [rbx + rdx + PS_H]
+    xor r8d, r8d
+.Lps_st_copy_value:
+    lea r9d, [rax + r8]
+    movsd xmm0, [rsi + r9]
+    movsd [rsi + r8], xmm0
+    add r8d, 8
+    cmp r8d, 272
+    jb .Lps_st_copy_value
+    inc ecx
+    cmp ecx, 8
+    jb .Lps_st_copy_part
+.Lps_st_map:
+    mov rcx, rbx
+    mov edx, PS_IID
+    mov r8d, PS_IID_MAP
+    mov r9d, [rbx + PS_NR_IID]
+    or r9d, 1 << 8
+    call ps_remap
+    mov rcx, rbx
+    mov edx, PS_ICC
+    mov r8d, PS_ICC_MAP
+    mov r9d, [rbx + PS_NR_ICC]
+    or r9d, 1 << 8
+    call ps_remap
+    cmp dword ptr [rsp + 172], 0
+    je .Lps_st_layout
+    mov rcx, rbx
+    mov edx, PS_IPD
+    mov r8d, PS_IPD_MAP
+    mov r9d, [rbx + PS_NR_IPDOPD]
+    call ps_remap
+    mov rcx, rbx
+    mov edx, PS_OPD
+    mov r8d, PS_OPD_MAP
+    mov r9d, [rbx + PS_NR_IPDOPD]
+    call ps_remap
+.Lps_st_layout:
+    # A layout change remaps the starting matrices and restarts the phases.
+    mov eax, [rbx + PS_IS34_OLD]
+    cmp eax, r12d
+    je .Lps_st_envelopes
+    xor esi, esi
+.Lps_st_layout_part:
+    imul ecx, esi, 6*272
+    lea rcx, [rbx + rcx + PS_H]
+    lea rdx, [rip + ps_map_20_34]
+    mov r8d, 34
+    mov r9d, 1
+    test r12d, r12d
+    jnz .Lps_st_layout_map
+    lea rdx, [rip + ps_map_34_20]
+    mov r8d, 20
+    xor r9d, r9d
+.Lps_st_layout_map:
+    call ps_map_val
+    inc esi
+    cmp esi, 8
+    jb .Lps_st_layout_part
+    lea rdi, [rbx + PS_IPD_HIST]
+    xor eax, eax
+    mov ecx, 80/8
+    rep stosq
+.Lps_st_envelopes:
+    lea r13, [rip + ps_k_to_i_20]
+    test r12d, r12d
+    jz .Lps_st_lut
+    lea r13, [rip + ps_k_to_i_34]
+.Lps_st_lut:
+    lea r14, [rip + ps_ha]
+    cmp dword ptr [rbx + PS_ICC_MODE], 3
+    jb .Lps_st_env_start
+    lea r14, [rip + ps_hb]
+.Lps_st_env_start:
+    mov dword ptr [rsp + 160], 0
+.Lps_st_env:
+    mov r15d, [rsp + 160]                 # envelope e
+    cmp r15d, [rbx + PS_NUM_ENV]
+    jae .Lps_st_done
+    # Matrices for envelope e + 1, per parameter band.
+    xor esi, esi                          # b
+.Lps_st_mix:
+    cmp esi, [rsp + 184]
+    jae .Lps_st_interpolate
+    imul eax, r15d, 34
+    add eax, esi
+    movsx ecx, byte ptr [rbx + rax + PS_IID_MAP]
+    add ecx, 7
+    mov edx, [rbx + PS_IID_QUANT]
+    imul edx, edx, 23
+    add ecx, edx                          # IID index
+    movzx edx, byte ptr [rbx + rax + PS_ICC_MAP]
+    lea ecx, [rdx + rcx*8]
+    shl ecx, 4
+    add rcx, r14                          # h11 h12 h21 h22 (floats)
+    cvtss2sd xmm0, [rcx]
+    cvtss2sd xmm1, [rcx + 4]
+    cvtss2sd xmm2, [rcx + 8]
+    cvtss2sd xmm3, [rcx + 12]
+    cmp dword ptr [rsp + 172], 0
+    je .Lps_st_mix_store
+    cmp esi, [rsp + 188]
+    jae .Lps_st_mix_store
+    movzx ecx, byte ptr [rbx + rsi + PS_OPD_HIST]
+    shl ecx, 3
+    movzx edx, byte ptr [rbx + rax + PS_OPD_MAP]
+    add ecx, edx                          # OPD smoothing index
+    movzx edx, byte ptr [rbx + rsi + PS_IPD_HIST]
+    shl edx, 3
+    movzx r8d, byte ptr [rbx + rax + PS_IPD_MAP]
+    add edx, r8d                          # IPD smoothing index
+    mov r8d, ecx
+    and r8d, 63
+    mov [rbx + rsi + PS_OPD_HIST], r8b
+    mov r8d, edx
+    and r8d, 63
+    mov [rbx + rsi + PS_IPD_HIST], r8b
+    lea r8, [rip + ps_pd_re]
+    lea r9, [rip + ps_pd_im]
+    cvtss2sd xmm4, [r8 + rcx*4]           # OPD re
+    cvtss2sd xmm5, [r9 + rcx*4]           # OPD im
+    cvtss2sd xmm6, [r8 + rdx*4]           # IPD re (xmm6/xmm7 saved below)
+    movsd [rsp + 96], xmm6
+    cvtss2sd xmm6, [r9 + rdx*4]           # IPD im
+    movsd [rsp + 104], xmm6
+    # adjusted IPD = OPD conj(IPD)
+    movsd xmm6, xmm4
+    mulsd xmm6, [rsp + 96]
+    movsd [rsp + 112], xmm5
+    mulsd xmm5, [rsp + 104]
+    addsd xmm6, xmm5                      # adj re
+    movsd xmm5, [rsp + 112]
+    movsd [rsp + 120], xmm6
+    movsd xmm6, xmm5
+    mulsd xmm6, [rsp + 96]
+    movsd [rsp + 128], xmm4
+    mulsd xmm4, [rsp + 104]
+    subsd xmm6, xmm4                      # adj im
+    movsd xmm4, [rsp + 128]               # OPD re
+    lea r8d, [r15 + 1]
+    imul r8d, r8d, 272
+    lea r8, [rbx + r8 + PS_H]
+    lea r8, [r8 + rsi*8]                  # H[*][part][e + 1][b] at r8 + part block
+    movsd xmm7, xmm0
+    mulsd xmm7, xmm5
+    movsd [r8 + (0*2 + 1)*6*272], xmm7    # H11 imaginary
+    mulsd xmm0, xmm4
+    movsd xmm7, xmm1
+    mulsd xmm7, xmm6
+    movsd [r8 + (1*2 + 1)*6*272], xmm7    # H12 imaginary
+    mulsd xmm1, [rsp + 120]
+    movsd xmm7, xmm2
+    mulsd xmm7, xmm5
+    movsd [r8 + (2*2 + 1)*6*272], xmm7    # H21 imaginary
+    mulsd xmm2, xmm4
+    movsd xmm7, xmm3
+    mulsd xmm7, xmm6
+    movsd [r8 + (3*2 + 1)*6*272], xmm7    # H22 imaginary
+    mulsd xmm3, [rsp + 120]
+.Lps_st_mix_store:
+    lea r8d, [r15 + 1]
+    imul r8d, r8d, 272
+    lea r8, [rbx + r8 + PS_H]
+    lea r8, [r8 + rsi*8]
+    movsd [r8], xmm0
+    movsd [r8 + 2*6*272], xmm1
+    movsd [r8 + 4*6*272], xmm2
+    movsd [r8 + 6*6*272], xmm3
+    inc esi
+    jmp .Lps_st_mix
+.Lps_st_interpolate:
+    mov eax, [rbx + PS_BORDER + r15*4]
+    mov [rsp + 176], eax
+    mov eax, [rbx + PS_BORDER + r15*4 + 4]
+    mov [rsp + 180], eax
+    sub eax, [rsp + 176]
+    jle .Lps_st_env_next                  # no slots in this envelope
+    cvtsi2sd xmm7, eax
+    movsd xmm6, [rip + sbr_one]
+    divsd xmm6, xmm7                      # 1 / width
+    xor esi, esi                          # k
+.Lps_st_band:
+    cmp esi, [rsp + 192]
+    jae .Lps_st_env_next
+    movzx edi, byte ptr [r13 + rsi]       # b
+    imul eax, r15d, 272
+    lea r8, [rbx + rax + PS_H]
+    lea r8, [r8 + rdi*8]                  # H[0][0][e][b]
+    xor ecx, ecx                          # matrix j (part 0 real, 1 imaginary)
+.Lps_st_band_h:
+    imul edx, ecx, 2*6*272
+    movsd xmm0, [r8 + rdx]                # real part, envelope e
+    movsd xmm1, [r8 + rdx + 272]          # envelope e + 1
+    subsd xmm1, xmm0
+    mulsd xmm1, xmm6
+    movsd [rsp + 32 + rcx*8], xmm0
+    movsd [rsp + 96 + rcx*8], xmm1
+    movsd xmm0, [r8 + rdx + 6*272]        # imaginary part
+    movsd xmm1, [r8 + rdx + 6*272 + 272]
+    cmp dword ptr [rsp + 168], 0
+    je .Lps_st_negate_20
+    cmp esi, 9
+    jb .Lps_st_band_imag
+    cmp esi, 13
+    ja .Lps_st_band_imag
+    jmp .Lps_st_negate
+.Lps_st_negate_20:
+    cmp esi, 1
+    ja .Lps_st_band_imag
+.Lps_st_negate:
+    xorpd xmm2, xmm2
+    subsd xmm2, xmm0
+    movsd xmm0, xmm2
+.Lps_st_band_imag:
+    subsd xmm1, xmm0
+    mulsd xmm1, xmm6
+    movsd [rsp + 64 + rcx*8], xmm0
+    movsd [rsp + 128 + rcx*8], xmm1
+    inc ecx
+    cmp ecx, 4
+    jb .Lps_st_band_h
+    # Slots first + 1 .. end.
+    mov eax, esi
+    shl eax, 9
+    lea r9, [rbx + rax + PS_LBUF]
+    lea r10, [rbx + rax + PS_RBUF]
+    mov ecx, [rsp + 176]
+    inc ecx
+.Lps_st_slot:
+    cmp ecx, [rsp + 180]
+    jg .Lps_st_band_next
+    xor edx, edx
+.Lps_st_step:
+    movsd xmm0, [rsp + 32 + rdx*8]
+    addsd xmm0, [rsp + 96 + rdx*8]
+    movsd [rsp + 32 + rdx*8], xmm0
+    inc edx
+    cmp edx, 8
+    jb .Lps_st_step
+    mov eax, ecx
+    shl eax, 4
+    movsd xmm2, [r9 + rax]                # l re
+    movsd xmm3, [r9 + rax + 8]            # l im
+    movsd xmm4, [r10 + rax]               # r re
+    movsd xmm5, [r10 + rax + 8]           # r im
+    # l' = h11 l + h21 r (+ i(h11i l + h21i r)), r' = h12 l + h22 r (+ ...)
+    movsd xmm0, [rsp + 32]
+    mulsd xmm0, xmm2
+    movsd xmm1, [rsp + 48]
+    mulsd xmm1, xmm4
+    addsd xmm0, xmm1
+    movsd xmm1, [rsp + 32]
+    mulsd xmm1, xmm3
+    movsd xmm7, [rsp + 48]
+    mulsd xmm7, xmm5
+    addsd xmm1, xmm7
+    cmp dword ptr [rsp + 172], 0
+    je .Lps_st_left
+    movsd xmm7, [rsp + 64]
+    mulsd xmm7, xmm3
+    subsd xmm0, xmm7
+    movsd xmm7, [rsp + 80]
+    mulsd xmm7, xmm5
+    subsd xmm0, xmm7
+    movsd xmm7, [rsp + 64]
+    mulsd xmm7, xmm2
+    addsd xmm1, xmm7
+    movsd xmm7, [rsp + 80]
+    mulsd xmm7, xmm4
+    addsd xmm1, xmm7
+.Lps_st_left:
+    movsd [r9 + rax], xmm0
+    movsd [r9 + rax + 8], xmm1
+    movsd xmm0, [rsp + 40]
+    mulsd xmm0, xmm2
+    movsd xmm1, [rsp + 56]
+    mulsd xmm1, xmm4
+    addsd xmm0, xmm1
+    movsd xmm1, [rsp + 40]
+    mulsd xmm1, xmm3
+    movsd xmm7, [rsp + 56]
+    mulsd xmm7, xmm5
+    addsd xmm1, xmm7
+    cmp dword ptr [rsp + 172], 0
+    je .Lps_st_right
+    movsd xmm7, [rsp + 72]
+    mulsd xmm7, xmm3
+    subsd xmm0, xmm7
+    movsd xmm7, [rsp + 88]
+    mulsd xmm7, xmm5
+    subsd xmm0, xmm7
+    movsd xmm7, [rsp + 72]
+    mulsd xmm7, xmm2
+    addsd xmm1, xmm7
+    movsd xmm7, [rsp + 88]
+    mulsd xmm7, xmm4
+    addsd xmm1, xmm7
+.Lps_st_right:
+    movsd [r10 + rax], xmm0
+    movsd [r10 + rax + 8], xmm1
+    inc ecx
+    jmp .Lps_st_slot
+.Lps_st_band_next:
+    inc esi
+    jmp .Lps_st_band
+.Lps_st_env_next:
+    inc dword ptr [rsp + 160]
+    jmp .Lps_st_env
+.Lps_st_done:
+    movdqu xmm6, [rsp + 208]
+    movdqu xmm7, [rsp + 224]
+    add rsp, 240
+    pop r15
+    pop r14
+    pop r13
+    pop r12
+    pop rdi
+    pop rsi
+    pop rbx
+    ret
+ENDFN ps_stereo
+
+# Parametric stereo for one frame (FFmpeg ff_ps_apply): PS state RCX, EDX =
+# top QMF band kx' + M. The scratch X becomes the left channel, PS_XR the
+# right.
+LOCALFN ps_apply
+    push rbx
+    push rsi
+    push rdi
+    sub rsp, 32
+    mov rbx, rcx
+    mov esi, [rbx + PS_IS34]
+    lea rax, [rip + ps_nr_bands]
+    mov eax, [rax + rsi*4]
+    lea edx, [rdx + rax - 64]             # first hybrid band above the SBR range
+    mov ecx, eax
+    sub ecx, edx
+    jle .Lps_apply_allpass
+    imul eax, edx, 46*16
+    lea rdi, [rbx + rax + PS_DELAY]
+    imul ecx, ecx, 46*16/8
+    xor eax, eax
+    rep stosq
+.Lps_apply_allpass:
+    lea rax, [rip + ps_nr_allpass]
+    mov ecx, [rax + rsi*4]
+    sub ecx, edx
+    jle .Lps_apply_filter
+    imul eax, edx, 3*37*16
+    lea rdi, [rbx + rax + PS_AP_DELAY]
+    imul ecx, ecx, 3*37*16/8
+    xor eax, eax
+    rep stosq
+.Lps_apply_filter:
+    mov rcx, rbx
+    call ps_hybrid_analysis
+    mov rcx, rbx
+    call ps_decorrelation
+    mov rcx, rbx
+    call ps_stereo
+    lea rcx, [rbx + PS_LBUF]
+    mov rdx, [rip + sbr_scratch]
+    add rdx, SB_X
+    mov r8d, esi
+    call ps_hybrid_synthesis
+    lea rcx, [rbx + PS_RBUF]
+    lea rdx, [rbx + PS_XR]
+    mov r8d, esi
+    call ps_hybrid_synthesis
+    add rsp, 32
+    pop rdi
+    pop rsi
+    pop rbx
+    ret
+ENDFN ps_apply

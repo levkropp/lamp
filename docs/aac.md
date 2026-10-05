@@ -1,6 +1,6 @@
 # AAC-LC and HE-AAC
 
-LAMP 0.4.0-dev decodes MPEG-4 AAC Low Complexity in MP4/M4A/MOV, Matroska and raw ADTS (`.aac`) files with a handwritten decoder (`src/aac.s`) following ISO/IEC 14496-3 subpart 4 and ISO/IEC 13818-7, and HE-AAC's spectral band replication on top of it (`src/aac_sbr.inc`, [below](#he-aac-spectral-band-replication)). Packets pass through the shared [track layer](matroska.md#track-layer), so MP4 edit lists, sample durations and seeking work as for the other codecs.
+LAMP 0.4.0-dev decodes MPEG-4 AAC Low Complexity in MP4/M4A/MOV, Matroska and raw ADTS (`.aac`) files with a handwritten decoder (`src/aac.s`) following ISO/IEC 14496-3 subpart 4 and ISO/IEC 13818-7, and HE-AAC's spectral band replication and parametric stereo on top of it (`src/aac_sbr.inc`, [below](#he-aac-spectral-band-replication)). Packets pass through the shared [track layer](matroska.md#track-layer), so MP4 edit lists, sample durations and seeking work as for the other codecs.
 
 ## Coverage
 
@@ -11,7 +11,7 @@ LAMP 0.4.0-dev decodes MPEG-4 AAC Low Complexity in MP4/M4A/MOV, Matroska and ra
 - All four window sequences, grouped short windows, sine and Kaiser-Bessel-derived window shapes (alpha 4 and 6), and a 2048/256-point IMDCT computed as a DCT-IV through a 512/64-point complex FFT in double precision.
 - Multichannel output mixes to stereo with the shared WAVE speaker weights, as for FLAC, WAV and ALAC.
 
-Unsupported streams reject with `decode_error` 101: parametric stereo (HE-AAC v2), other object types (Main, SSR, LTP and later), explicit or sub-8 kHz rates, channel configuration 0 (layouts given by a program config element), 960-sample frames, coupling channel elements, gain control and prediction. Malformed streams reject with 100. Dynamic range control data is ignored.
+Unsupported streams reject with `decode_error` 101: other object types (Main, SSR, LTP and later), explicit or sub-8 kHz rates, channel configuration 0 (layouts given by a program config element), 960-sample frames, coupling channel elements, gain control and prediction. Malformed streams reject with 100. Dynamic range control data is ignored.
 
 ## Containers and timing
 
@@ -30,9 +30,20 @@ SBR (ISO/IEC 14496-3 4.6.18) rebuilds the upper half of the spectrum from the AA
 - Signal path, in double precision: the 32-band complex analysis and 64-band synthesis QMF banks (direct matrix products with the ISO window, input at ±32768 scale), HF generation with covariance-method inverse filtering and chirp factors, envelope estimation per subband or per band, gains with limiter and boost, gain smoothing, noise floors and sinusoids.
 - Errors behave as in FFmpeg: invalid SBR data (bad time grids, scalefactors out of range, frequency tables that fail, payloads that read past their fill element) turns SBR off for that element until its next header, and the core continues upsampled. Gains, noise and sinusoid levels persist per element across frames, as FFmpeg's do; this is visible only when a dropped last patch leaves the limiter table ending below the top SBR subband.
 
-Not supported: parametric stereo (HE-AAC v2; object type 29, PS signalled by the backward-compatible extension, or PS data in a mono stream; PS data in other streams is skipped as FFmpeg does), downsampled SBR (an extension rate not above the core rate) and SBR on cores above 48 kHz.
+Not supported: downsampled SBR (an extension rate not above the core rate) and SBR on cores above 48 kHz.
 
 A seek resets SBR, which resumes with the element's next SBR header, and decodes two primer packets instead of one, because SBR also filters the previous frame's core output. With a header in every frame, output after a seek matches continuous decoding except for the phase of the SBR noise generator. Decoding runs about 80 times faster than real time for stereo at 48 kHz output on the test machine.
+
+## HE-AAC v2: parametric stereo
+
+Parametric stereo (ISO/IEC 14496-3 subpart 8) turns a mono SBR stream into stereo from per-band level differences, correlations and phases, structured as FFmpeg's decoder.
+
+- Signalling: object type 29, the backward-compatible extension's `psPresentFlag`, or only in the stream. As in FFmpeg, every mono stream with SBR plays as stereo unless the extension signals PS absent; both channels carry the mono signal until the first PS header. `psPresentFlag` 0 plays mono and skips PS data, as do streams with more than one channel.
+- Bitstream: PS headers, inter-channel intensity differences with default and fine quantization and coherences in all six band modes (10, 20 or 34 parameter bands), both frame classes with every envelope count, time and frequency delta coding, and the IPD/OPD extension. A frame without new parameters, or a variable frame whose last envelope ends early, repeats the last envelope to the frame's end.
+- Signal path, in double precision with FFmpeg's single-precision tables: hybrid analysis of the low QMF bands (20 bands: 8 and two 2-band splits of QMF bands 0–2; 34 bands: 12, 8, 4, 4 and 4 of bands 0–4), decorrelation with transient attenuation, fractional delays and a three-link all-pass chain, the two mixing procedures (ICC modes 0–2 and 3–5), IPD/OPD phase smoothing, interpolation across envelope borders, parameter remapping between 10-, 20- and 34-band layouts as the layout switches, and hybrid synthesis back to QMF bands for each channel's synthesis bank.
+- Errors behave as in FFmpeg: invalid PS data (a mode out of range, data that reads past its extension) stops PS until the next PS header, and both channels carry the mono signal meanwhile.
+
+A seek also resets parametric stereo, which resumes with the next PS header. With a header in every frame, output after a seek matches continuous decoding except for the phase of the SBR noise generator. Parametric stereo streams decode about 80 times faster than real time at 48 kHz output on the test machine.
 
 ## Precision
 
@@ -54,10 +65,18 @@ Spectra, TNS and long-window overlap use single precision; noise scaling, the IM
 - The model's own rendering of one stream matches FFmpeg at 134 dB, so the streams carry what the writer intended.
 - 13 streams, mono to 7.1 (single-element encodes combined element by element) at core rates from 11.025 to 48 kHz, match FFmpeg's decode at 125 dB or better (multichannel through LAMP's speaker weights). The writer's coverage set proves every frame class, coupling mode, delta direction, envelope resolution, master table shape, patch count, limiter and smoothing setting, sinusoids, transients, header resets, extended data and a limiter table ending below the top subband were used.
 - The stereo stream in MP4 with implicit, explicit (object type 5) and backward-compatible signalling, in Matroska and in fragmented MP4 equals the ADTS decode exactly; `sbrPresentFlag` 0 and SBR first seen after the first frame play the core as FFmpeg does; CRC-protected payloads match FFmpeg; SBR data before the first channel element is skipped (FFmpeg 6.1 does not skip its payload and loses the frame).
-- 12 streams with corrupted SBR payloads match FFmpeg, which turns SBR off for the same errors, and 60 more heavily corrupted streams decode or reject cleanly. FFmpeg references use its C code path (`-cpuflags 0`): its x86 gain filter writes one subband past an odd number of SBR subbands from uninitialized memory, which corrupted streams can read back.
-- 14 seeks into two streams with a header in every frame return the requested positions and match continuous decoding at 55 dB or better.
-- Parametric stereo (object type 29, the backward-compatible PS flag, PS data in a mono stream) and downsampled SBR reject as unsupported.
+- 12 streams with corrupted SBR payloads match FFmpeg, which turns SBR off for the same errors, and 60 more heavily corrupted streams decode without errors. FFmpeg references use its C code path (`-cpuflags 0`): its x86 gain filter writes one subband past an odd number of SBR subbands from uninitialized memory, which corrupted streams can read back.
+- 14 seeks into mono and stereo streams with a header in every frame return the requested positions and match continuous decoding at 55 dB or better.
+- Downsampled SBR rejects as unsupported.
 
-`src/sbr_tables.inc` holds the SBR Huffman trees and start-frequency offsets (from the same PacketVideo files) and the ISO QMF window and noise table (from JAADec, public domain), generated by `python3 tests/generate-sbr-tables.py`, which fetches pinned files, checks their hashes and verifies its output with `--check`.
+For parametric stereo, `tests/ps_model.py` draws PS data (written as SBR extended data) and renders it, also structured as FFmpeg's decoder:
+
+- The model's rendering of one stream matches FFmpeg at 129.8 dB.
+- 12 mono streams at core rates from 11.025 to 24 kHz match FFmpeg's stereo decode at 128 dB or better, and their channels differ. The writer's coverage set proves every IID and ICC mode (and frames without them), both frame classes with every envelope count, IPD/OPD, an appended last envelope, 20- and 34-band layouts and switches between them were used.
+- The first PS stream in MP4 with implicit, object type 29 and backward-compatible signalling equals the ADTS decode exactly; `psPresentFlag` 0 plays mono as FFmpeg does. Stereo and multichannel SBR streams above carry PS data that is skipped.
+- 6 streams with corrupted PS data match FFmpeg, and 20 more heavily corrupted PS streams decode without errors.
+- 7 seeks into a PS stream with headers in every frame match continuous decoding at 74 dB or better.
+
+`src/sbr_tables.inc` holds the SBR Huffman trees and start-frequency offsets (from the same PacketVideo files), the ISO QMF window and noise table, and the parametric stereo Huffman trees, filter prototypes, all-pass constants and band groupings with the tables derived from them (from JAADec, public domain), generated by `python3 tests/generate-sbr-tables.py`, which fetches pinned files, checks their hashes and verifies its output with `--check`.
 
 The codebooks, scalefactor band tables and TNS limits in `src/aac_tables.inc` are generated by `python3 tests/generate-aac-tables.py`, which fetches the PacketVideo AAC decoder (Apache License 2.0) at a pinned Android Open Source Project commit, checks file hashes, and runs its Huffman lookup decoder over every input to recover each codeword. `--check` verifies the committed include.

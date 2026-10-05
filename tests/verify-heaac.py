@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""HE-AAC spectral band replication against FFmpeg's float decoder.
+"""HE-AAC v1 and v2 (spectral band replication and parametric stereo) against
+FFmpeg's float decoder.
 
 usage: python3 tests/verify-heaac.py [--skip-playback]
 - tests/sbr_vectors.py inserts SBR data drawn by tests/sbr_model.py after the
@@ -22,8 +23,13 @@ usage: python3 tests/verify-heaac.py [--skip-playback]
 - Seeks into steady streams (headers in every frame, nothing a decoder cannot
   recover after a jump) must return the requested positions and match
   continuous decoding apart from the noise generator's phase.
-- Parametric stereo (object type 29, PS data in a mono stream) and
-  downsampled SBR reject as unsupported; one file plays.
+- Parametric stereo: tests/ps_model.py writes ps_data into the SBR data of
+  mono streams; its own rendering, 12 streams covering every IID and ICC
+  mode, IPD/OPD, 20/34-band switches and all envelope classes, corrupted PS
+  data, the same stream with explicit (object type 29) and backward-
+  compatible PS signalling in MP4, and seeks match FFmpeg or continuous
+  decoding; PS data signalled absent is ignored, as FFmpeg does.
+- Downsampled SBR rejects as unsupported; one file plays.
 Writes <out>/heaac-verification.json.
 """
 import array
@@ -53,6 +59,27 @@ COVERAGE = {'FIXFIX', 'FIXVAR', 'VARFIX', 'VARVAR', 'coupled pair', 'independent
             'limiter bands', 'one limiter band', 'interpolated envelopes', 'band envelopes', 'smoothing',
             'no smoothing', 'sinusoids', 'transient envelope', 'header reset', 'extended data',
             'limiter table below kx + M'}
+PS_COVERAGE = {f'PS IID mode {m}' for m in [None, 0, 1, 2, 3, 4, 5]} | \
+    {f'PS ICC mode {m}' for m in [None, 0, 1, 2, 3, 4, 5]} | \
+    {f'PS class {c} with {n} envelopes' for c, counts in ((0, (0, 1, 2, 4)), (1, (1, 2, 3, 4))) for n in counts} | \
+    {'PS IPD/OPD', 'PS band layout switch', 'PS appended last envelope', 'PS 20 bands', 'PS 34 bands'}
+
+
+def flips(seed, count):
+    """A mutate hook for sbr_vectors.stream: flips count random bits in about
+    40% of the SBR payloads."""
+    r = random.Random(seed)
+
+    def mutate(f, index, payload):
+        if r.random() > 0.4:
+            return None
+        value = payload.value
+        for _ in range(count):
+            value ^= 1 << r.randrange(payload.count)
+        out = vectors.Bits()
+        out.put(value, payload.count)
+        return out
+    return mutate
 
 
 def floats(path):
@@ -137,6 +164,32 @@ def against_ffmpeg(path, config, checks, label=None, minimum=SNR):
     return ours, level
 
 
+def ps_model_check(fixtures, work, checks):
+    """The SBR and PS models render a parametric stereo stream from LAMP's
+    core PCM; FFmpeg must agree."""
+    rate, frames = 24000, 12
+    blocks = fixtures.core(sbr_vectors.SCE, rate, 3)[:frames]
+    core = work / 'ps-model-core.aac'
+    core.write_bytes(b''.join(vectors.adts(b, vectors.RATES.index(rate), 1) for b in blocks))
+    decode_f32(core, Path(str(core) + '.f32'))
+    pcm = floats(Path(str(core) + '.f32'))
+    render = lambda f, i: [[pcm[2 * (1024 * f + n)] for n in range(1024)]]
+    data, _, out = sbr_vectors.stream([blocks], 1, vectors.RATES.index(rate), 31, frames, ps=True, render=render)
+    path = work / 'ps-model.aac'
+    path.write_bytes(data)
+    rendered = array.array('f')
+    for left, right in zip(out[0][0], out[0][1]):
+        rendered.extend((left, right))
+    rendered_path = work / 'ps-model.rendered.f32'
+    rendered_path.write_bytes(rendered.tobytes())
+    level, _ = snr(rendered_path, reference(path, 2))
+    if level < SNR:
+        raise Failure(f'PS model rendering: {level:.1f} dB against FFmpeg')
+    checks.append({'test': 'PS model rendering', 'result': 'matched', 'comparator': 'FFmpeg',
+                   'snr_db': round(level, 1)})
+    print(f'PS model rendering: {level:.1f} dB against FFmpeg', flush=True)
+
+
 def model_check(fixtures, work, checks):
     """The Python model renders one stream from LAMP's core PCM; FFmpeg must
     agree, so the writer's structured data is what the streams carry."""
@@ -216,6 +269,35 @@ def containers(work, adts, checks):
         raise Failure('sbr-absent.m4a: expected the 24 kHz core rate')
 
 
+def ps_containers(work, adts, checks):
+    """A PS stream in MP4: implicit, object type 29 and the backward-compatible
+    PS flag equal the ADTS decode; the PS flag 0 ignores the PS data."""
+    pcm = Path(str(adts) + '.f32').read_bytes()
+    m4a = work / 'ps-implicit.m4a'
+    ffmpeg('-i', adts, '-c', 'copy', '-bsf:a', 'aac_adtstoasc', m4a)
+    base = m4a.read_bytes()
+    variants = {
+        'ps-implicit.m4a': None,
+        'ps-object.m4a': sbr_vectors.config_bits([(29, 5), (6, 4), (1, 4), (3, 4), (2, 5), (0, 3)]),
+        'ps-sync-extension.m4a': sbr_vectors.config_bits([(2, 5), (6, 4), (1, 4), (0, 3), (0x2b7, 11), (5, 5),
+                                                          (1, 1), (3, 4), (0x548, 11), (1, 1)]),
+    }
+    for name, config in variants.items():
+        path = work / name
+        if config:
+            path.write_bytes(sbr_vectors.replace_config(base, config))
+        ours = Path(str(path) + '.f32')
+        decode_f32(path, ours)
+        if ours.read_bytes() != pcm:
+            raise Failure(f'{name}: differs from the ADTS decode')
+        checks.append({'test': name, 'result': 'exact', 'comparator': adts.name})
+    path = work / 'ps-absent.m4a'
+    path.write_bytes(sbr_vectors.replace_config(base, sbr_vectors.config_bits(
+        [(2, 5), (6, 4), (1, 4), (0, 3), (0x2b7, 11), (5, 5), (1, 1), (3, 4), (0x548, 11), (0, 1)])))
+    against_ffmpeg(path, 1, checks, 'ps-absent.m4a (PS data ignored)')
+    print('PS in MP4 with implicit, explicit and backward-compatible signalling: exact', flush=True)
+
+
 def main():
     library = build_lamp()
     build_oracles(out_dir(), {'chain-oracle': 'chain-oracle.c', 'aac-oracle': 'aac-oracle.c'}, library)
@@ -226,6 +308,7 @@ def main():
     used = set()
 
     model_check(fixtures, work, checks)
+    ps_model_check(fixtures, work, checks)
 
     # Layouts and rates.
     cases = [('mono-24k', 1, 24000), ('mono-22k', 1, 22050), ('mono-16k', 1, 16000), ('mono-11k', 1, 11025),
@@ -234,7 +317,10 @@ def main():
              ('7.1-22k', 7, 22050)]
     worst = math.inf
     for k, (name, config, rate) in enumerate(cases):
-        extension = (lambda f: bytes([0x40 | f % 64, 0x5a]) if f % 5 == 2 else None) if k % 3 == 0 else None
+        # Extended data: id 1, and in streams of more than one channel also PS data (id 2),
+        # which only a mono stream applies.
+        extension = (lambda f, c=config: bytes([(0x80 if c > 1 and f % 10 == 7 else 0x40) | f % 64, 0x5a])
+                     if f % 5 == 2 else None) if k % 3 == 0 else None
         path, tools = fixtures.stream(f'{name}.aac', config, rate, 100 + 10 * k, extension=extension)
         used |= tools
         _, level = against_ffmpeg(path, config, checks)
@@ -245,6 +331,25 @@ def main():
     checks.append({'test': 'SBR coverage', 'result': 'complete', 'tools': sorted(used)})
 
     containers(work, work / 'stereo-24k.aac', checks)
+
+    # Parametric stereo.
+    ps_used = set()
+    for k, rate in enumerate((24000, 24000, 24000, 24000, 22050, 22050, 16000, 16000, 12000, 11025, 24000, 22050)):
+        path, tools = fixtures.stream(f'ps-{k}-{rate // 1000}k.aac', 1, rate, 300 + 7 * k, frames=30, ps=True)
+        ps_used |= tools
+        ours, _ = against_ffmpeg(path, 2, checks)
+        pcm = floats(ours)
+        if all(pcm[i] == pcm[i + 1] for i in range(0, len(pcm), 2)):
+            raise Failure(f'{path.name}: parametric stereo gave identical channels')
+    missing = PS_COVERAGE - ps_used
+    if missing:
+        raise Failure(f'PS streams did not use: {sorted(missing)}')
+    checks.append({'test': 'PS coverage', 'result': 'complete', 'tools': sorted(t for t in ps_used if t.startswith('PS'))})
+    for seed in range(6):
+        path, _ = fixtures.stream(f'ps-corrupt-{seed}.aac', 1, 24000, 800 + seed, frames=20, ps=True,
+                                  mutate=flips(900 + seed, 1 + seed % 3))
+        against_ffmpeg(path, 2, checks)
+    ps_containers(work, work / 'ps-0-24k.aac', checks)
 
     # Signalling and payload variants.
     path, _ = fixtures.stream('crc.aac', 2, 24000, 7, crc=True)
@@ -287,43 +392,34 @@ def main():
                    'note': 'FFmpeg 6.1 switches ADTS output to the SBR rate mid-stream'})
 
     # Corrupted payloads: FFmpeg turns SBR off for each error the same way.
-    def flips(seed, count):
-        r = random.Random(seed)
-
-        def mutate(f, index, payload):
-            if r.random() > 0.4:
-                return None
-            value = payload.value
-            for _ in range(count):
-                value ^= 1 << r.randrange(payload.count)
-            out = vectors.Bits()
-            out.put(value, payload.count)
-            return out
-        return mutate
     for seed in range(12):                                   # mono could name parametric stereo
         config = 2 if seed % 2 else 6 if seed % 4 == 0 else 3
         path, _ = fixtures.stream(f'corrupt-{seed}.aac', config, 24000, 500 + seed, frames=24,
                                   mutate=flips(seed, 1 + seed % 4))
         against_ffmpeg(path, config, checks)
-    clean = rejected = 0
+    clean = 0
     for seed in range(60):
         config = (1, 2, 3, 6)[seed % 4]
         path, _ = fixtures.stream('fuzz.aac', config, (24000, 22050, 16000, 44100, 48000)[seed % 5], 900 + seed,
                                   frames=10, mutate=flips(1000 + seed, (1, 4, 16, 64)[seed % 4]))
         line = json.loads(run([oracle, path]).strip().splitlines()[-1])
-        if line['decode_error'] == 0 and line['result'] == 'decoded':
-            clean += 1
-        elif line['decode_error'] == 101 and config == 1:
-            rejected += 1                                   # flipped bits named parametric stereo
-        else:
+        if line['decode_error'] or line['result'] != 'decoded':
             raise Failure(f'fuzz seed {seed}: {line}')
-    checks.append({'test': '60 heavily corrupted streams', 'result': 'handled', 'decoded': clean,
-                   'parametric_stereo_rejected': rejected})
-    print(f'60 corrupted streams: {clean} decoded, {rejected} rejected as parametric stereo', flush=True)
+        clean += 1
+    for seed in range(20):
+        path, _ = fixtures.stream('fuzz.aac', 1, (24000, 22050, 16000)[seed % 3], 1900 + seed, frames=10, ps=True,
+                                  mutate=flips(2000 + seed, (1, 4, 16, 64)[seed % 4]))
+        line = json.loads(run([oracle, path]).strip().splitlines()[-1])
+        if line['decode_error'] or line['result'] != 'decoded':
+            raise Failure(f'PS fuzz seed {seed}: {line}')
+        clean += 1
+    checks.append({'test': '80 heavily corrupted streams (20 with PS)', 'result': 'decoded', 'decoded': clean})
+    print(f'80 heavily corrupted streams decoded', flush=True)
 
     # Seeks into steady streams.
-    for name, config in (('steady-mono.aac', 1), ('steady-stereo.aac', 2)):
-        path, _ = fixtures.stream(name, config, 24000, 77 + config, frames=40, steady=True)
+    for name, config, ps in (('steady-mono.aac', 1, False), ('steady-stereo.aac', 2, False),
+                             ('steady-ps.aac', 1, True)):
+        path, _ = fixtures.stream(name, config, 24000, 77 + config + ps, frames=40, steady=True, ps=ps)
         whole = Path(str(path) + '.f32')
         decode_f32(path, whole)
         pcm = floats(whole)
@@ -345,13 +441,12 @@ def main():
                        'minimum_snr_db': None if math.isinf(lowest) else round(lowest, 1)})
         print(f'{name}: 7 seeks, at least {lowest:.1f} dB against continuous decoding', flush=True)
 
-    # Unsupported: parametric stereo and downsampled SBR.
+    # Unsupported: downsampled SBR.
     base = (work / 'implicit.m4a').read_bytes()
     unsupported = {
-        'ps-object.m4a': sbr_vectors.config_bits([(29, 5), (6, 4), (1, 4), (3, 4), (2, 5), (0, 3)]),
-        'ps-sync-extension.m4a': sbr_vectors.config_bits([(2, 5), (6, 4), (2, 4), (0, 3), (0x2b7, 11), (5, 5),
-                                                          (1, 1), (3, 4), (0x548, 11), (1, 1)]),
         'downsampled-sbr.m4a': sbr_vectors.config_bits([(5, 5), (6, 4), (2, 4), (6, 4), (2, 5), (0, 3)]),
+        'downsampled-sbr-sync.m4a': sbr_vectors.config_bits([(2, 5), (6, 4), (2, 4), (0, 3), (0x2b7, 11), (5, 5),
+                                                             (1, 1), (8, 4)]),
     }
     for name, config in unsupported.items():
         path = work / name
@@ -360,24 +455,15 @@ def main():
         if json.loads(line).get('decode_error') != 101:
             raise Failure(f'{name}: expected decode_error 101, got {line}')
         checks.append({'test': name, 'result': 'rejected', 'oracle': line})
-    cores = [fixtures.core(sbr_vectors.SCE, 24000, 9)]
-    data, _ = sbr_vectors.stream(cores, 1, vectors.RATES.index(24000), 9, 8,
-                                 extension=lambda f: bytes([0x80, 0, 0]))        # EXTENSION_ID_PS
-    path = work / 'ps-data.aac'
-    path.write_bytes(data)
-    line = run([chain, 'reject', path]).strip().splitlines()[-1]
-    if json.loads(line).get('decode_error') != 101:
-        raise Failure(f'ps-data.aac: expected decode_error 101, got {line}')
-    checks.append({'test': path.name, 'result': 'rejected', 'oracle': line})
-    print('Parametric stereo and downsampled SBR reject as unsupported', flush=True)
+    print('Downsampled SBR rejects as unsupported', flush=True)
 
     if playback_requested(sys.argv[1:]):
         checks.append({'test': 'HE-AAC playback', 'result': 'played', 'stats': play(work / 'stereo-24k.aac')})
     write_report('heaac', {'result': 'passed', 'checks': checks, 'minimum_snr_db': round(worst, 1),
-                           'scope': 'HE-AAC SBR in ADTS, MP4 (implicit, explicit and backward-compatible '
-                                    'signalling) and Matroska: generated SBR data on FFmpeg-encoded cores, mono to '
-                                    '7.1 at core rates 11.025-48 kHz, against FFmpeg; CRC, extended data, '
-                                    'corrupted payloads; seeks; parametric stereo rejects.'})
+                           'scope': 'HE-AAC v1 and v2 in ADTS, MP4 (implicit, explicit and backward-compatible '
+                                    'signalling) and Matroska: generated SBR and parametric stereo data on '
+                                    'FFmpeg-encoded cores, mono to 7.1 at core rates 11.025-48 kHz, against FFmpeg; '
+                                    'CRC, extended data, corrupted payloads; seeks; downsampled SBR rejects.'})
     print(f'Passed {len(checks)} HE-AAC checks.')
 
 

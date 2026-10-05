@@ -10,6 +10,7 @@ import random
 import struct
 
 import aac_vectors as vectors
+import ps_model
 import sbr_model as model
 
 SCE, CPE, LFE = 0, 1, 3
@@ -73,20 +74,51 @@ def fill(payload, crc=False):
     return bits
 
 
+def ps_extension(r, ps, header):
+    """bs_extended_data bytes carrying one ps_data payload."""
+    bits = vectors.Bits()
+    bits.put(2, 2)                                       # EXTENSION_ID_PS
+    ps.write(r, bits, header)
+    bits.put(0, -bits.count % 8)
+    return bits.value.to_bytes(bits.count // 8, 'big')
+
+
 def stream(cores, config, rate_index, seed, frames, steady=False, header_rate=0.15, crc=False, mutate=None,
-           extension=None):
+           extension=None, ps=False, render=None):
     """-> (ADTS HE-AAC bytes, SBR tools used). cores: per element of
     LAYOUTS[config] the raw blocks of an FFmpeg encode of that element alone.
     steady elements send a header in every frame and keep the steady model
     rules (seek fixtures). mutate(f, index, payload) may return replacement
-    payload bits. extension(f) may return bytes for bs_extended_data."""
+    payload bits. extension(f) may return bytes for bs_extended_data. ps adds
+    parametric stereo data to a mono stream. render(f, index) may return the
+    element's core PCM channels for frame f: the model then renders each frame
+    and the result gains a third item, per element the output channels."""
     rate = vectors.RATES[rate_index]
     r = random.Random(seed)
     layout = LAYOUTS[config]
     elements = {i: model.Element(2 * rate, 2 if kind == CPE else 1, steady)
                 for i, kind in enumerate(layout) if kind != LFE}
     headers = {i: header(r, 2 * rate) for i in elements}
+    if ps:
+        assert config == 1
+        stereo = ps_model.PS()
+        elements[0].ps = stereo
+        ps_head = ps_model.header(r)
+
+        def extension(f):
+            nonlocal ps_head
+            send = ps_head if steady or f == 0 or r.random() < 0.2 else None
+            if send and not steady and r.random() < 0.4:
+                ps_head = send = ps_model.header(r)
+            for _ in range(100):                             # leave room for the SBR data
+                trial = copy.deepcopy(stereo)
+                data = ps_extension(r, trial, send)
+                if len(data) <= 160:
+                    break
+            stereo.__dict__.update(trial.__dict__)
+            return data
     out = bytearray()
+    rendered = {}
     for f in range(frames):
         bits = vectors.Bits()
         tags = {}
@@ -101,13 +133,19 @@ def stream(cores, config, rate_index, seed, frames, steady=False, header_rate=0.
             send = headers[i] if steady or f == 0 or r.random() < header_rate else None
             if send and not steady and r.random() < 0.3:
                 headers[i] = send = header(r, 2 * rate)
+            data = extension(f) if extension else None
             for _ in range(100):                         # redraw payloads too large for a fill element
-                trial = copy.deepcopy(elements[i])
+                shared = {id(elements[i].ps): elements[i].ps} if elements[i].ps else {}
+                trial = copy.deepcopy(elements[i], shared)
                 payload = vectors.Bits()
-                trial.write_payload(r, payload, send, extension(f) if extension else None)
+                trial.write_payload(r, payload, send, data)
                 if (4 + payload.count + (10 if crc else 0) + 7) // 8 <= 269:
                     break
+            assert trial.start or not data, 'extended data needs SBR data'
             elements[i] = trial
+            if render:
+                for channel, samples in enumerate(trial.apply(render(f, i))):
+                    rendered.setdefault(i, {}).setdefault(channel, []).extend(samples)
             if mutate:
                 payload = mutate(f, i, payload) or payload
             fil_bits = fill(payload, crc)
@@ -115,6 +153,10 @@ def stream(cores, config, rate_index, seed, frames, steady=False, header_rate=0.
         bits.put(7, 3)
         out += vectors.adts(bits.data(), rate_index, config)
     used = set().union(*(e.used for e in elements.values()))
+    if ps:
+        used |= {'PS ' + tool for tool in stereo.used}
+    if render:
+        return bytes(out), used, rendered
     return bytes(out), used
 
 
