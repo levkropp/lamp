@@ -1,0 +1,366 @@
+# LAMP Linux command-line player, decode check and float32 export. MIT license.
+# Static executable: raw system calls, no C library. Output and exit codes
+# match the Windows lamp-cli: 0 success, 2 decode/input error, 3 audio error,
+# 4 output error.
+.include "lamp.inc"
+.include "linux.inc"
+
+.equ CHUNK_FRAMES, 2048
+
+.data
+usage:
+    .ascii "LAMP 0.4.0-dev - Lev's Assembly Media Player\n"
+    .ascii "Handwritten x86-64 assembly WAV / AIFF / FLAC / MP3 / Vorbis / Opus\n"
+    .ascii "Usage: lamp-cli file.mp3\n"
+    .ascii "       lamp-cli --check file.flac\n"
+    .ascii "       lamp-cli --decode file.flac output.f32\n"
+    .ascii "Playback: Space pauses/resumes; Q or Ctrl+C stops.\n"
+    .ascii "RIFF/RF64/BW64 WAV: 1..8 channels, PCM 8/16/24/32 or float32/64.\n"
+    .ascii "AIFF/AIFC: signed PCM 1..32 bits or float32/64, 1..8 channels.\n"
+    .ascii "Native FLAC: 4..32 bit, 1..8 channels, speaker-mask-aware downmix.\n"
+    .asciz "Opus families 0/1; playback and float export output stereo.\n"
+open_error: .asciz "Unsupported, malformed, or inaccessible file. Supports WAV, AIFF/AIFC, FLAC, MP3, Vorbis and Opus.\n"
+audio_error: .asciz "Audio output unavailable. Try --check to verify decoding.\n"
+output_error: .asciz "Cannot create output file.\n"
+stats_a: .asciz "codec="
+stats_b: .asciz " rate="
+stats_c: .asciz " channels="
+stats_d: .asciz " bits="
+stats_e: .asciz " frames="
+stats_f: .asciz " underruns="
+stats_g: .asciz " decode_error="
+stats_h: .asciz " audio_error="
+stats_i: .asciz " elapsed_ms="
+stats_j: .asciz " cpu_us="
+stats_k: .asciz " endpoint_dry="
+newline: .asciz "\n"
+check_arg: .asciz "--check"
+decode_arg: .asciz "--decode"
+output_fd: .quad -1
+
+.bss
+.p2align 4
+offline_pcm: .zero CHUNK_FRAMES*8
+number_buffer: .zero 32
+timespec: .zero 16
+argc: .quad 0
+argv: .quad 0
+start_ms: .quad 0
+decoded_count: .quad 0
+operation: .long 0             # 0 play, 1 check, 2 decode
+exit_code: .long 0
+audio_status: .long 0
+cli_stop: .long 0
+
+.text
+FN _start
+    mov rax, [rsp]
+    mov [rip + argc], rax
+    lea rax, [rsp + 8]
+    mov [rip + argv], rax
+    and rsp, -16
+    call cli_main
+    mov edi, eax
+    mov eax, SYS_exit_group
+    syscall
+ENDFN _start
+
+LOCALFN cli_main
+    push rbx
+    push rsi
+    push rdi
+    push r12
+    sub rsp, 40
+    mov ecx, CLOCK_MONOTONIC
+    call clock_ms
+    mov [rip + start_ms], rax
+    mov rbx, [rip + argv]
+    cmp qword ptr [rip + argc], 2
+    jb .Lshow_help
+    mov rcx, [rbx + 8]
+    lea rdx, [rip + check_arg]
+    call equal_text
+    test eax, eax
+    jz .Ltry_decode
+    cmp qword ptr [rip + argc], 3
+    jne .Lshow_help
+    mov dword ptr [rip + operation], 1
+    mov r12, [rbx + 16]
+    jmp .Lopen_input
+.Ltry_decode:
+    mov rcx, [rbx + 8]
+    lea rdx, [rip + decode_arg]
+    call equal_text
+    test eax, eax
+    jz .Lplay_args
+    cmp qword ptr [rip + argc], 4
+    jne .Lshow_help
+    mov dword ptr [rip + operation], 2
+    mov rdi, [rbx + 24]        # create new: never truncate existing output
+    mov esi, O_WRONLY | O_CREAT | O_EXCL | O_CLOEXEC
+    mov edx, 0644
+    mov eax, SYS_open
+    syscall
+    test eax, eax
+    js .Lbad_output
+    mov [rip + output_fd], rax
+    mov r12, [rbx + 16]
+    jmp .Lopen_input
+.Lplay_args:
+    cmp qword ptr [rip + argc], 2
+    jne .Lshow_help
+    mov r12, [rbx + 8]
+.Lopen_input:
+    lea rax, [rip + cli_stop]
+    mov [rip + ogg_cancel_ptr], rax
+    mov rcx, r12
+    call decoder_open
+    test eax, eax
+    jz .Lbad_input
+    cmp dword ptr [rip + operation], 0
+    je .Lplayback
+.Loffline_loop:
+    lea rcx, [rip + offline_pcm]
+    mov edx, CHUNK_FRAMES
+    call decoder_read
+    test eax, eax
+    jz .Loffline_finished
+    add [rip + decoded_count], rax
+    cmp dword ptr [rip + operation], 2
+    jne .Loffline_loop
+    mov r8d, eax
+    shl r8d, 3
+    mov rcx, [rip + output_fd]
+    lea rdx, [rip + offline_pcm]
+    call write_all
+    test eax, eax
+    jz .Lbad_output
+    jmp .Loffline_loop
+.Loffline_finished:
+    cmp dword ptr [rip + decode_error], 0
+    jne .Ldecoding_failed
+    mov rax, [rip + total_frames]
+    test rax, rax
+    jz .Lreport_finish
+    cmp rax, [rip + decoded_count]
+    jne .Ldecoding_failed
+    jmp .Lreport_finish
+.Ldecoding_failed:
+    mov dword ptr [rip + exit_code], 2
+    jmp .Lreport_finish
+.Lplayback:
+    mov dword ptr [rip + exit_code], 3
+    lea rcx, [rip + audio_error]
+    call print_text
+    jmp .Lcleanup
+.Lreport_finish:
+    call report_stats
+    jmp .Lcleanup
+.Lbad_input:
+    mov dword ptr [rip + exit_code], 2
+    lea rcx, [rip + open_error]
+    call print_text
+    jmp .Lcleanup
+.Lbad_output:
+    mov dword ptr [rip + exit_code], 4
+    lea rcx, [rip + output_error]
+    call print_text
+    jmp .Lcleanup
+.Lshow_help:
+    lea rcx, [rip + usage]
+    call print_text
+.Lcleanup:
+    call decoder_close
+    mov rdi, [rip + output_fd]
+    test rdi, rdi
+    js .Lcleanup_done
+    mov eax, SYS_close
+    syscall
+    mov qword ptr [rip + output_fd], -1
+.Lcleanup_done:
+    mov eax, [rip + exit_code]
+    add rsp, 40
+    pop r12
+    pop rdi
+    pop rsi
+    pop rbx
+    ret
+ENDFN cli_main
+
+# RCX, RDX = NUL-terminated strings -> EAX=1 when equal.
+LOCALFN equal_text
+.Lequal_loop:
+    movzx eax, byte ptr [rcx]
+    cmp al, [rdx]
+    jne .Lequal_no
+    inc rcx
+    inc rdx
+    test eax, eax
+    jnz .Lequal_loop
+    mov eax, 1
+    ret
+.Lequal_no:
+    xor eax, eax
+    ret
+ENDFN equal_text
+
+# RCX=fd, RDX=buffer, R8=bytes -> EAX=1 when every byte was written.
+FN write_all
+    push rdi
+    push rsi
+    push rbx
+    mov rbx, r8
+    mov rsi, rdx
+    mov rdi, rcx
+.Lwrite_more:
+    test rbx, rbx
+    jz .Lwrite_done
+    mov rdx, rbx
+    mov eax, SYS_write
+    syscall
+    cmp rax, -EINTR
+    je .Lwrite_more
+    test rax, rax
+    jle .Lwrite_failed
+    add rsi, rax
+    sub rbx, rax
+    jmp .Lwrite_more
+.Lwrite_done:
+    mov eax, 1
+    jmp .Lwrite_return
+.Lwrite_failed:
+    xor eax, eax
+.Lwrite_return:
+    pop rbx
+    pop rsi
+    pop rdi
+    ret
+ENDFN write_all
+
+# RCX=NUL-terminated text, written to standard output.
+FN print_text
+    sub rsp, 40
+    mov rdx, rcx
+    xor r8d, r8d
+.Ltext_length:
+    cmp byte ptr [rdx + r8], 0
+    je .Ltext_write
+    inc r8
+    jmp .Ltext_length
+.Ltext_write:
+    mov ecx, 1
+    call write_all
+    add rsp, 40
+    ret
+ENDFN print_text
+
+# RCX=unsigned value, written in decimal.
+FN print_number
+    sub rsp, 40
+    mov rax, rcx
+    lea r9, [rip + number_buffer + 31]
+    mov byte ptr [r9], 0
+    mov r8d, 10
+.Lnumber_digit:
+    xor edx, edx
+    div r8
+    add dl, '0'
+    dec r9
+    mov [r9], dl
+    test rax, rax
+    jnz .Lnumber_digit
+    mov rcx, r9
+    call print_text
+    add rsp, 40
+    ret
+ENDFN print_number
+
+# ECX=clock id -> RAX=milliseconds (CLOCK_PROCESS_CPUTIME_ID callers divide
+# the nanosecond form from clock_ns instead).
+LOCALFN clock_ms
+    sub rsp, 40
+    call clock_ns
+    xor edx, edx
+    mov ecx, 1000000
+    div rcx
+    add rsp, 40
+    ret
+ENDFN clock_ms
+
+# ECX=clock id -> RAX=nanoseconds.
+FN clock_ns
+    push rdi
+    push rsi
+    mov edi, ecx
+    lea rsi, [rip + timespec]
+    mov eax, SYS_clock_gettime
+    syscall
+    mov rax, [rip + timespec]
+    imul rax, rax, 1000000000
+    add rax, [rip + timespec + 8]
+    pop rsi
+    pop rdi
+    ret
+ENDFN clock_ns
+
+LOCALFN report_stats
+    push rbx
+    sub rsp, 32
+    lea rcx, [rip + stats_a]
+    call print_text
+    mov ecx, [rip + codec_kind]
+    call print_number
+    lea rcx, [rip + stats_b]
+    call print_text
+    mov ecx, [rip + sample_rate]
+    call print_number
+    lea rcx, [rip + stats_c]
+    call print_text
+    mov ecx, [rip + source_channels]
+    call print_number
+    lea rcx, [rip + stats_d]
+    call print_text
+    mov ecx, [rip + source_bits]
+    call print_number
+    lea rcx, [rip + stats_e]
+    call print_text
+    mov rcx, [rip + decoded_count]
+    call print_number
+    lea rcx, [rip + stats_f]
+    call print_text
+    xor ecx, ecx
+    call print_number
+    lea rcx, [rip + stats_g]
+    call print_text
+    mov ecx, [rip + decode_error]
+    call print_number
+    lea rcx, [rip + stats_h]
+    call print_text
+    mov ecx, [rip + audio_status]
+    call print_number
+    lea rcx, [rip + stats_i]
+    call print_text
+    mov ecx, CLOCK_MONOTONIC
+    call clock_ms
+    sub rax, [rip + start_ms]
+    mov rcx, rax
+    call print_number
+    lea rcx, [rip + stats_j]
+    call print_text
+    mov ecx, CLOCK_PROCESS_CPUTIME_ID
+    call clock_ns
+    xor edx, edx
+    mov ecx, 1000
+    div rcx
+    mov rcx, rax
+    call print_number
+    lea rcx, [rip + stats_k]
+    call print_text
+    xor ecx, ecx
+    call print_number
+    lea rcx, [rip + newline]
+    call print_text
+    add rsp, 32
+    pop rbx
+    ret
+ENDFN report_stats

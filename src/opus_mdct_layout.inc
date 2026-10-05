@@ -1,21 +1,21 @@
-; IMDCT request, 48 bytes; scalar float capacities.
-OM_IN EQU 0
-OM_OUT EQU 8
-OM_SCRATCH EQU 16
-OM_LM EQU 24
-OM_STRIDE EQU 28
-OM_IN_CAP EQU 32
-OM_OUT_CAP EQU 36
-OM_SCRATCH_CAP EQU 40
-; Complete inverse-transform/overlap request, 64 bytes; planar float buffers.
-OY_FREQ EQU 0
-OY_OUT EQU 8
-OY_OVERLAP EQU 16
-OY_SCRATCH EQU 24
-OY_CHANNELS EQU 32
-OY_LM EQU 36
-OY_SHORT EQU 40
-OY_FREQ_CAP EQU 44
-OY_OUT_CAP EQU 48
-OY_OVERLAP_CAP EQU 52
-OY_SCRATCH_CAP EQU 56
+# IMDCT request, 48 bytes; scalar float capacities.
+.equ OM_IN, 0
+.equ OM_OUT, 8
+.equ OM_SCRATCH, 16
+.equ OM_LM, 24
+.equ OM_STRIDE, 28
+.equ OM_IN_CAP, 32
+.equ OM_OUT_CAP, 36
+.equ OM_SCRATCH_CAP, 40
+# Complete inverse-transform/overlap request, 64 bytes; planar float buffers.
+.equ OY_FREQ, 0
+.equ OY_OUT, 8
+.equ OY_OVERLAP, 16
+.equ OY_SCRATCH, 24
+.equ OY_CHANNELS, 32
+.equ OY_LM, 36
+.equ OY_SHORT, 40
+.equ OY_FREQ_CAP, 44
+.equ OY_OUT_CAP, 48
+.equ OY_OVERLAP_CAP, 52
+.equ OY_SCRATCH_CAP, 56

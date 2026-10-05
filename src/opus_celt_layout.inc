@@ -1,18 +1,18 @@
-; Internal CELT allocation request, 88 bytes; pointers refer to 21-entry arrays.
-; ec_dec matches the existing 64-byte normative range decoder layout.
-OC_EC EQU 0
-OC_OFFSETS EQU 8
-OC_CAPS EQU 16
-OC_BITS EQU 24
-OC_FINE EQU 32
-OC_PRIORITY EQU 40
-OC_START EQU 48
-OC_END EQU 52
-OC_CHANNELS EQU 56
-OC_LM EQU 60
-OC_TRIM EQU 64
-OC_TOTAL EQU 68
-OC_INTENSITY EQU 72
-OC_DUAL EQU 76
-OC_BALANCE EQU 80
-OC_CODED EQU 84
+# Internal CELT allocation request, 88 bytes; pointers refer to 21-entry arrays.
+# ec_dec matches the existing 64-byte normative range decoder layout.
+.equ OC_EC, 0
+.equ OC_OFFSETS, 8
+.equ OC_CAPS, 16
+.equ OC_BITS, 24
+.equ OC_FINE, 32
+.equ OC_PRIORITY, 40
+.equ OC_START, 48
+.equ OC_END, 52
+.equ OC_CHANNELS, 56
+.equ OC_LM, 60
+.equ OC_TRIM, 64
+.equ OC_TOTAL, 68
+.equ OC_INTENSITY, 72
+.equ OC_DUAL, 76
+.equ OC_BALANCE, 80
+.equ OC_CODED, 84
