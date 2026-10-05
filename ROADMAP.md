@@ -101,13 +101,15 @@ Ogg chaining: files are read as sequences of links, each playing its first Vorbi
 
 Current container progress: RIFF/RF64/BW64 audio framing now uses checked 64-bit lengths, occurrence-aware `ds64` tables and validation of chunks after audio. The suite passes 538 files, 16 sparse inputs up to 17,179,877,476 logical bytes, 8,950 exact seeks and 312 malformed-input rejections. It covers large data/metadata, more than `2^32` frames, bounded table state, cancellation and guarded output. RF64/BW64 WASAPI lifecycle checks pass. ADM rendering, segmented WAV data, RIFX/WAVE64, compressed WAV and the broader containers/codecs below remain unfinished.
 
+MPEG audio Layers I and II now share the Layer III framing, index and synthesis: MPEG-1 and MPEG-2 lower rates, every allocation table and quantizer, all stereo modes and CRC checks. 96 random valid streams and 34 FFmpeg/libtwolame encoder files match FFmpeg's float decoders at 108.7 dB SNR or better, three files pass exact seek checks and seven malformed streams reject. See [Layer I/II notes](docs/mp2.md).
+
 FLAC in Ogg (mapping 1.0) now uses the native FLAC decoder with frame-position and granule checks at open and exact indexed seeks; eight files from 8 to 192 kHz, 16/24-bit and 1–8 channels match FFmpeg or native FLAC exactly. Chained and multiplexed Ogg files are supported as described above.
 
 AIFF/AIFC now adds signed 1–32-bit PCM, AIFC byte-order/fixed-container variants, float32/64 and ordered Core Audio channel layouts with stereo output. Its suite passes 1,977 files, 19 sparse inputs up to 4,294,901,832 logical bytes, 30,443 exact seeks and 303 malformed-input rejections. Sparse fixtures allocate at most 393,216 bytes. Six WASAPI lifecycle scenarios pass. Declared frames, sound offsets, block padding, empty streams and cancellation are checked; [coverage and comparator limits](docs/aiff.md) distinguish original-container and raw-PCM references. Compressed AIFC codecs, native surround, newer/spatial layouts and exact fractional-rate output remain unfinished.
 
 | Area | Planned coverage, in approximate priority order |
 | --- | --- |
-| Mainstream lossy audio | AAC LC/HE-AAC, AC-3/E-AC-3, MPEG Layers I/II; then DTS families, WMA variants and other relevant legacy formats |
+| Mainstream lossy audio | AAC LC/HE-AAC, AC-3/E-AC-3, MPEG Layers I/II (implemented); then DTS families, WMA variants and other relevant legacy formats |
 | Lossless and PCM | ALAC, WavPack, APE, AIFF/AIFC, RF64, FLAC-in-Ogg, broader PCM/float and FLAC depths/layouts |
 | Other audio | Musepack, Speex, AMR and telephony ADPCM; further formats from the compatibility inventory as demand and feasibility justify |
 | Common containers | MP4/M4A/MOV, Matroska/WebM, MPEG TS/PS, AVI, ASF; broader Ogg stream mappings |

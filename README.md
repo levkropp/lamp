@@ -4,7 +4,7 @@
 
 A small media player for Windows and Linux x86-64 and Apple Silicon macOS with handwritten assembly decoders and a native assembly UI. Audio comes first. The long-term goal is to support the relevant formats and playback features people use in **mpv**, with a small runtime and low CPU use.
 
-**Current source: 0.4.0-dev, an early audio prototype.** WAV, AIFF/AIFC, native FLAC, MP3, Ogg/Vorbis, Ogg/Opus and FLAC in Ogg play in source builds, including chained and multiplexed Ogg files. Opus supports family 0 mono/stereo and family 1 layouts with 1–8 speaker channels, downmixed to stereo. Its elementary decoders include RFC 8251 updates and pass all 120 official vector checks across five output rates and mono/stereo. Video, subtitles and network streaming are future work. The published v0.3.0 prerelease contains WAV, native FLAC, MP3 and Ogg/Vorbis.
+**Current source: 0.4.0-dev, an early audio prototype.** WAV, AIFF/AIFC, native FLAC, MP3, MP2/MP1, Ogg/Vorbis, Ogg/Opus and FLAC in Ogg play in source builds, including chained and multiplexed Ogg files. Opus supports family 0 mono/stereo and family 1 layouts with 1–8 speaker channels, downmixed to stereo. Its elementary decoders include RFC 8251 updates and pass all 120 official vector checks across five output rates and mono/stereo. Video, subtitles and network streaming are future work. The published v0.3.0 prerelease contains WAV, native FLAC, MP3 and Ogg/Vorbis.
 
 [Website](https://levkropp.github.io/lamp/) · [Download v0.3.0](https://github.com/levkropp/lamp/releases/tag/v0.3.0) · [Roadmap](ROADMAP.md) · [Compatibility matrix](docs/compatibility.md) · [Technical details and limits](docs/technical.md) · [Apple Silicon build](docs/macos.md)
 
@@ -61,6 +61,7 @@ The Linux desktop window is not available yet; see the [roadmap](ROADMAP.md).
 | WAV | Little-endian RIFF/RF64/BW64 audio framing, PCM 8/16/24/32-bit or float32/64; 1–8 channels, extensible valid bits/layouts, 8–192 kHz |
 | Native FLAC | 1–8 channels, 4–32-bit, 8–192 kHz; CRC checks; speaker-mask-aware stereo downmix |
 | MP3 | MPEG-1/2/2.5 Layer III, mono/stereo, CBR/VBR, encoder trimming when tagged |
+| MP2 / MP1 | MPEG-1 and MPEG-2 (16–24 kHz) Layers II and I: all allocation tables, stereo/joint/dual/mono, CRC checks; exact seeks |
 | Ogg/Vorbis | 1–255 channels, floor 1, mapping 0; stereo output, CRC and granule checks |
 | Ogg/Opus | Development source: family 0 mono/stereo or family 1 with 1–8 speaker channels downmixed to stereo; 48 kHz output, header gain/pre-skip/end trimming |
 | FLAC in Ogg | FLAC-in-Ogg 1.0 mapping with the native FLAC limits; exact seeks |

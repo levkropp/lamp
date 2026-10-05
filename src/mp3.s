@@ -5,12 +5,17 @@
 .include "mp3_layout.inc"
 .globl mp_grbuf, mp_overlap, mp_qmf, mp_syn
 .globl mp3_index_count, mp3_index_stride, mp3_seek_headers
+.globl mp_layer, mp_kbps, mp_header, mp_frame_bytes, mp_crc_bytes, mp_bit_pos, mp_bit_limit, mp_bit_base
+.globl mp_samples, mp_channels, mp_version, mp_sr_index, mp_pcm, mp_frame_end
 .globl mp_aa, mp_twid9, mp_mdct_win, mp_twid3, mp_synth_win, mp_dct9, mp_dct_sec
 
 RODATA
 .include "mp3_tables.inc"
 bitrate1: .long 0, 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320
 bitrate2: .long 0, 8, 16, 24, 32, 40, 48, 56, 64, 80, 96, 112, 128, 144, 160
+bitrate1_l1: .long 0, 32, 64, 96, 128, 160, 192, 224, 256, 288, 320, 352, 384, 416, 448
+bitrate1_l2: .long 0, 32, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 384
+bitrate2_l1: .long 0, 32, 48, 56, 64, 80, 96, 112, 128, 144, 160, 176, 192, 224, 256
 mp_rates: .long 44100, 48000, 32000
 sqrt_two: .long 0x3fb504f3
 one_float: .long 0x3f800000
@@ -24,6 +29,9 @@ mp_cursor: .quad 0
 mp_end: .quad 0
 mp_frame_end: .quad 0
 mp_header: .long 0
+mp_layer: .long 3                   # 1, 2 or 3
+mp_initial_layer: .long 3
+mp_kbps: .long 0
 mp_version: .long 0
 mp_initial_version: .long 0
 mp_rate: .long 0
@@ -83,7 +91,9 @@ mp_syn: .zero 2112*4
 mp_pcm: .zero 1152*8
 
 .text
-# RCX=file bytes, RDX=end. Layer III only; known-bitrate MPEG-1/2/2.5.
+# RCX=file bytes, RDX=end. Layer III MPEG-1/2/2.5 and Layers I/II MPEG-1/2,
+# known bitrate; every frame keeps the first frame's layer, version, rate and
+# channel count.
 FN mp3_open
     push rbp
     mov rbp, rsp
@@ -186,7 +196,11 @@ FN mp3_open
     mov dword ptr [rip + source_bits], 0
     mov eax, [rip + mp_version]
     mov [rip + mp_initial_version], eax
+    mov eax, [rip + mp_layer]
+    mov [rip + mp_initial_layer], eax
     mov qword ptr [rip + total_frames], 0
+    cmp eax, 3
+    jne .Lmp_open_ok                   # Xing/Info and LAME tags are Layer III frames
     # Detect a Xing/Info metadata frame before resetting synthesis/reservoir.
     mov eax, [rip + mp_crc_bytes]
     add eax, [rip + mp_side_bytes]
@@ -429,6 +443,19 @@ LOCALFN mp_skip_frame
     mov eax, [rip + mp_channels]
     cmp eax, [rip + mp_initial_channels]
     jne .Lmp_skip_bad
+    mov eax, [rip + mp_layer]
+    cmp eax, [rip + mp_initial_layer]
+    jne .Lmp_skip_bad
+    cmp eax, 3
+    je .Lmp_skip_layer3
+    call mp_l12_scale_info             # allocation, CRC and scalefactors
+    test eax, eax
+    jz .Lmp_skip_bad
+    mov rax, [rip + mp_frame_end]
+    mov [rip + mp_cursor], rax
+    mov eax, 1
+    jmp .Lmp_skip_return
+.Lmp_skip_layer3:
     call mp_sideinfo
     test eax, eax
     jz .Lmp_skip_bad
@@ -577,13 +604,20 @@ LOCALFN mp_parse_header
     mov eax, ebx
     shr eax, 17
     and eax, 3
-    cmp eax, 1
-    jne .Lheader_bad
+    jz .Lheader_bad
+    mov edx, 4
+    sub edx, eax
+    mov [rip + mp_layer], edx          # bits 01/10/11 are Layers III/II/I
     mov eax, ebx
     shr eax, 19
     and eax, 3
     cmp eax, 1
     je .Lheader_bad
+    test eax, eax
+    jnz .Lheader_version_ok
+    cmp edx, 3
+    jne .Lheader_bad                   # MPEG 2.5 defines Layer III only
+.Lheader_version_ok:
     mov [rip + mp_version], eax
     mov edx, ebx
     shr edx, 10
@@ -617,6 +651,8 @@ LOCALFN mp_parse_header
     jz .Lheader_bad          # free format intentionally unsupported
     cmp edx, 15
     je .Lheader_bad
+    cmp dword ptr [rip + mp_layer], 3
+    jne .Lheader_layer12
     lea r9, [rip + bitrate2]
     mov eax, 72000
     mov dword ptr [rip + mp_samples], 576
@@ -626,13 +662,57 @@ LOCALFN mp_parse_header
     mov eax, 144000
     mov dword ptr [rip + mp_samples], 1152
 .Lheader_bitrate:
-    imul eax, [r9 + rdx*4]
+    mov r10d, [r9 + rdx*4]
+    mov [rip + mp_kbps], r10d
+    imul eax, r10d
     xor edx, edx
     div r8d
     mov edx, ebx
     shr edx, 9
     and edx, 1
     add eax, edx
+    jmp .Lheader_frame_bytes
+.Lheader_layer12:
+    # Layer II: 1152 samples, 144000*kbps/rate bytes. Layer I: 384 samples in
+    # four-byte slots, 4*(12000*kbps/rate + padding) bytes.
+    lea r9, [rip + bitrate2]
+    cmp dword ptr [rip + mp_version], 3
+    jne .Lheader_layer12_table
+    lea r9, [rip + bitrate1_l2]
+.Lheader_layer12_table:
+    cmp dword ptr [rip + mp_layer], 1
+    je .Lheader_layer1
+    mov r10d, [r9 + rdx*4]
+    mov [rip + mp_kbps], r10d
+    mov dword ptr [rip + mp_samples], 1152
+    mov eax, 144000
+    imul eax, r10d
+    xor edx, edx
+    div r8d
+    mov edx, ebx
+    shr edx, 9
+    and edx, 1
+    add eax, edx
+    jmp .Lheader_frame_bytes
+.Lheader_layer1:
+    lea r9, [rip + bitrate2_l1]
+    cmp dword ptr [rip + mp_version], 3
+    jne .Lheader_layer1_rate
+    lea r9, [rip + bitrate1_l1]
+.Lheader_layer1_rate:
+    mov r10d, [r9 + rdx*4]
+    mov [rip + mp_kbps], r10d
+    mov dword ptr [rip + mp_samples], 384
+    mov eax, 12000
+    imul eax, r10d
+    xor edx, edx
+    div r8d
+    mov edx, ebx
+    shr edx, 9
+    and edx, 1
+    add eax, edx
+    shl eax, 2
+.Lheader_frame_bytes:
     mov [rip + mp_frame_bytes], eax
     lea rax, [rcx + rax]
     cmp rax, [rip + mp_end]
@@ -665,6 +745,9 @@ LOCALFN mp_parse_header
     xor eax, 1
     shl eax, 1
     mov [rip + mp_crc_bytes], eax
+    xor edx, edx                       # Layers I/II: allocation follows directly
+    cmp dword ptr [rip + mp_layer], 3
+    jne .Lheader_side_ready
     mov edx, 17
     cmp dword ptr [rip + mp_version], 3
     jne .Lheader_lsf_side
@@ -684,6 +767,8 @@ LOCALFN mp_parse_header
     jae .Lheader_bad
     cmp dword ptr [rip + mp_crc_bytes], 0
     je .Lheader_crc_valid
+    cmp dword ptr [rip + mp_layer], 3
+    jne .Lheader_crc_valid             # Layers I/II check it with the allocation
     # Layer III CRC: the final 16 header bits and complete side information.
     # MSB first, initial FFFF, polynomial x^16+x^15+x^2+1.
     mov eax, 0xffff
@@ -769,7 +854,7 @@ LOCALFN mp_peek
     ret
 ENDFN mp_peek
 
-LOCALFN mp_bits
+FN mp_bits
     sub rsp, 40
     mov [rsp + 32], ecx
     call mp_peek
@@ -1822,6 +1907,16 @@ LOCALFN mp_decode_frame
     mov eax, [rip + mp_channels]
     cmp eax, [rip + mp_initial_channels]
     jne .Lmp_frame_bad
+    mov eax, [rip + mp_layer]
+    cmp eax, [rip + mp_initial_layer]
+    jne .Lmp_frame_bad
+    cmp eax, 3
+    je .Lmp_frame_layer3
+    call mp_l12_frame
+    test eax, eax
+    jz .Lmp_frame_bad
+    jmp .Lmp_frame_decoded
+.Lmp_frame_layer3:
     call mp_sideinfo
     test eax, eax
     jz .Lmp_frame_bad
@@ -1886,6 +1981,7 @@ LOCALFN mp_decode_frame
     lea rcx, [rip + mp_pcm]
     add rcx, rax
     mov edx, [rip + mp_channels]
+    mov r8d, 18
     call mp_synthesis
     mov eax, [rip + mp_channels]
     add [rip + mp_granule], eax
@@ -1895,6 +1991,7 @@ LOCALFN mp_decode_frame
     call mp_save_reservoir
     test eax, eax
     jz .Lmp_frame_bad
+.Lmp_frame_decoded:
     mov rax, [rip + mp_frame_end]
     mov [rip + mp_cursor], rax
     mov eax, [rip + mp_samples]

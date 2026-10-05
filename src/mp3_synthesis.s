@@ -38,6 +38,8 @@ dct_c8: .rept 4
 pair_a: .long 29, 213, 459, 2037, 5153, 6574, 37489, 75038
 pair_b: .long 104, 1567, 9727, 64019, -9975, -45, 146, -5
 
+.data
+synth_slots: .long 18              # time slots per synthesis call: 18 (Layer III) or 12
 .bss
 dct9_temp: .zero 9*4
 .p2align 4
@@ -536,7 +538,7 @@ LOCALFN mp_dct32_eval
     movq qword ptr [rdx + 216], xmm3
 .Ldct32_next_time:
     add ebx, 4
-    cmp ebx, 18
+    cmp ebx, [rip + synth_slots]
     jb .Ldct32_time
     movaps xmm6, [rsp]
     movaps xmm7, [rsp + 16]
@@ -731,7 +733,8 @@ LOCALFN mp_synth_two
     ret
 ENDFN mp_synth_two
 
-# RCX=576 stereo PCM destination, EDX=source channels.
+# RCX=stereo PCM destination, EDX=source channels, R8D=time slots (18 or 12);
+# writes 32 frames per slot.
 FN mp_synthesis
     push rbp
     mov rbp, rsp
@@ -742,6 +745,7 @@ FN mp_synthesis
     sub rsp, 48
     mov r12, rcx
     mov [rsp + 32], edx
+    mov [rip + synth_slots], r8d
     lea rcx, [rip + mp_grbuf]
     call mp_dct32_eval
     cmp dword ptr [rsp + 32], 1
@@ -770,9 +774,12 @@ FN mp_synthesis
     add r8, rax
     call mp_synth_two
     add ebx, 2
-    cmp ebx, 18
+    cmp ebx, [rip + synth_slots]
     jb .Lsynthesis_times
-    lea rsi, [rip + mp_syn + (18*64*4)]
+    mov eax, ebx
+    shl eax, 8
+    lea rsi, [rip + mp_syn]
+    add rsi, rax
     lea rdi, [rip + mp_qmf]
     mov ecx, 960
     rep movsd

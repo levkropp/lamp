@@ -1,4 +1,5 @@
-MP3 codebook and coefficient data, and algorithm reference:
+MP3 codebook and coefficient data, Layer I/II allocation-table layout and
+dequantization constants, and algorithm reference:
 dr_mp3, Copyright 2023 David Reid
 https://github.com/mackron/dr_libs/blob/master/dr_mp3.h
 Selected license: MIT No Attribution (MIT-0).
@@ -24,7 +25,7 @@ and related and neighboring rights to this software to the public domain
 worldwide. This software is distributed without any warranty.
 https://creativecommons.org/publicdomain/zero/1.0/
 
-The runtime MP3 source is handwritten x86-64 assembly; macOS builds translate it to ARM64. The reference C header
+The runtime MPEG audio code (Layers I, II and III) is handwritten x86-64 assembly; macOS builds translate it to ARM64. The reference C header
 is used to extract tables for the assembly include. No reference C source
 is linked into either player. FFmpeg is a separately
 installed test oracle and is not distributed with this project.
