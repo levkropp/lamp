@@ -59,6 +59,7 @@ def main():
     step(TESTS / 'verify-containers.py')
     step(TESTS / 'verify-resample.py')
     step(TESTS / 'verify-ogg-chain.py')
+    step(TESTS / 'verify-matroska.py', *playback)
     if not WINDOWS and not playback:
         step(TESTS / 'verify-playback.py')
     if '--skip-network' not in arguments:

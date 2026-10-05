@@ -480,6 +480,160 @@ FN opus_read
     ret
 ENDFN opus_read
 
+# Track mode for Matroska/MP4 packets. The container supplies OpusHead and
+# whole packets; the track layer applies pre-skip, end trimming and seeking.
+# RCX=OpusHead, EDX=bytes -> EAX=1.
+FN opus_track_open
+    push rbx
+    push rsi
+    sub rsp, 40
+    mov rbx, rcx
+    mov esi, edx
+    call opus_close
+    mov rcx, rbx
+    mov edx, esi
+    call opus_head_parse
+    test eax, eax
+    jz .Lob_track_bad
+    lea rax, [rip + ob_state]
+    mov [rip + ob_states], rax
+    cmp dword ptr [rip + op_streams], 1
+    je .Lob_track_states
+    mov ecx, [rip + op_streams]
+    imul ecx, MO_SIZE
+    call mem_alloc
+    mov [rip + ob_states], rax
+    test rax, rax
+    jz .Lob_track_bad
+.Lob_track_states:
+    call ob_reset_states
+    test eax, eax
+    jz .Lob_track_bad
+    call ob_make_mix
+    cvtsi2sd xmm0, dword ptr [rip + op_gain]
+    mulsd xmm0, qword ptr [rip + ob_db_exp]
+    cvtsd2ss xmm0, xmm0
+    call op_celt_exp2
+    movss dword ptr [rip + ob_gain], xmm0
+    mov dword ptr [rip + ob_active], 1
+    mov eax, 1
+    jmp .Lob_track_return
+.Lob_track_bad:
+    call opus_close
+    mov dword ptr [rip + decode_error], 26
+    xor eax, eax
+.Lob_track_return:
+    add rsp, 40
+    pop rsi
+    pop rbx
+    ret
+ENDFN opus_track_open
+
+# RCX=packet, EDX=bytes -> EAX=48 kHz samples, or 0 when malformed.
+FN opus_track_samples
+    sub rsp, 40
+    call op_opus_multistream_parse
+    test eax, eax
+    jz .Lob_track_samples_done
+    mov eax, [rip + op_packet_samples]
+.Lob_track_samples_done:
+    add rsp, 40
+    ret
+ENDFN opus_track_samples
+
+# Clears decoder history before decoding from a seek point.
+FN opus_track_reset
+    sub rsp, 40
+    call ob_reset_states
+    add rsp, 40
+    ret
+ENDFN opus_track_reset
+
+# RCX=packet, EDX=bytes, R8=stereo float output, R9D=capacity -> EAX=frames,
+# 0 on error. Header gain is applied; mono is duplicated.
+FN opus_track_decode
+    push rbx
+    push rsi
+    push rdi
+    push r12
+    push r13
+    sub rsp, 96
+    mov rdi, r8
+    mov r12d, r9d
+    cmp dword ptr [rip + ob_active], 1
+    jne .Lob_track_decode_bad
+    cmp dword ptr [rip + op_mapping], 1
+    jne .Lob_track_family0
+    call ob_decode_multi
+    jmp .Lob_track_decoded
+.Lob_track_family0:
+    mov [rsp + 32 + PK_DATA], rcx
+    mov [rsp + 32 + PK_LEN], edx
+    mov rax, [rip + ob_states]
+    mov [rsp + 32 + PK_STATE], rax
+    lea rax, [rip + ob_work]
+    mov [rsp + 32 + PK_WORK], rax
+    lea rax, [rip + ob_pcm]
+    mov [rsp + 32 + PK_PCM], rax
+    mov dword ptr [rsp + 32 + PK_COUNT], 0
+    mov dword ptr [rsp + 32 + PK_FEC], 0
+    mov dword ptr [rsp + 32 + PK_STATE_CAP], MO_SIZE
+    mov dword ptr [rsp + 32 + PK_WORK_CAP], MW_SIZE
+    mov dword ptr [rsp + 32 + PK_PCM_CAP], 11520
+    lea rcx, [rsp + 32]
+    call op_opus_decode_packet
+.Lob_track_decoded:
+    test eax, eax
+    jle .Lob_track_decode_bad
+    cmp eax, r12d
+    ja .Lob_track_decode_bad
+    mov r13d, eax
+    lea rsi, [rip + ob_pcm]
+    cmp dword ptr [rip + op_mapping], 1
+    jne .Lob_track_family0_emit
+    lea rsi, [rip + ob_mix]
+    jmp .Lob_track_stereo
+.Lob_track_family0_emit:
+    cmp dword ptr [rip + source_channels], 1
+    je .Lob_track_mono
+.Lob_track_stereo:
+    movss xmm1, dword ptr [rip + ob_gain]
+    shufps xmm1, xmm1, 0
+    xor ebx, ebx
+.Lob_track_stereo_frame:
+    movq xmm0, qword ptr [rsi + rbx*8]
+    mulps xmm0, xmm1
+    movq qword ptr [rdi + rbx*8], xmm0
+    inc ebx
+    cmp ebx, r13d
+    jb .Lob_track_stereo_frame
+    jmp .Lob_track_decode_done
+.Lob_track_mono:
+    xor ebx, ebx
+.Lob_track_mono_frame:
+    movss xmm0, dword ptr [rsi + rbx*4]
+    mulss xmm0, dword ptr [rip + ob_gain]
+    unpcklps xmm0, xmm0
+    movq qword ptr [rdi + rbx*8], xmm0
+    inc ebx
+    cmp ebx, r13d
+    jb .Lob_track_mono_frame
+.Lob_track_decode_done:
+    mov eax, r13d
+    jmp .Lob_track_decode_return
+.Lob_track_decode_bad:
+    mov dword ptr [rip + decode_error], 27
+    xor eax, eax
+.Lob_track_decode_return:
+    add rsp, 96
+    pop r13
+    pop r12
+    pop rdi
+    pop rsi
+    pop rbx
+    ret
+ENDFN opus_track_decode
+
 # Reset every separately owned mono/stereo history; share only scratch space.
 LOCALFN ob_reset_states
     push rbx

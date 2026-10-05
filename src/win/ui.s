@@ -28,11 +28,15 @@ ui_codec_mp3: .short 'M', 'P', '3', 0
 ui_codec_vorbis: .short 'V', 'O', 'R', 'B', 'I', 'S', 0
 ui_codec_opus: .short 'O', 'P', 'U', 'S', 0
 ui_codec_aiff: .short 'A', 'I', 'F', 'F', '/', 'A', 'I', 'F', 'C', 0
+ui_codec_ogg_flac: .short 'F', 'L', 'A', 'C', '/', 'O', 'G', 'G', 0
+ui_codec_matroska: .short 'M', 'A', 'T', 'R', 'O', 'S', 'K', 'A', 0
 ui_codec_names: .quad 0, ui_codec_wav, ui_codec_flac, ui_codec_mp3, ui_codec_vorbis, ui_codec_opus, ui_codec_aiff
+    .quad ui_codec_ogg_flac, ui_codec_matroska
 ui_font_name: .short 'C', 'o', 'n', 's', 'o', 'l', 'a', 's', 0
 ui_filter: .short 'A', 'u', 'd', 'i', 'o', ' ', 'f', 'i', 'l', 'e', 's', 0
     .short '*', '.', 'w', 'a', 'v', ';', '*', '.', 'a', 'i', 'f', ';', '*', '.', 'a', 'i', 'f', 'f', ';', '*', '.', 'a', 'i', 'f', 'c', ';'
-    .short '*', '.', 'f', 'l', 'a', 'c', ';', '*', '.', 'm', 'p', '3', ';', '*', '.', 'o', 'g', 'g', ';', '*', '.', 'o', 'p', 'u', 's', ';', '*', '.', 'o', 'g', 'a', 0
+    .short '*', '.', 'f', 'l', 'a', 'c', ';', '*', '.', 'm', 'p', '3', ';', '*', '.', 'o', 'g', 'g', ';', '*', '.', 'o', 'p', 'u', 's', ';', '*', '.', 'o', 'g', 'a', ';'
+    .short '*', '.', 'm', 'p', '2', ';', '*', '.', 'm', 'p', '1', ';', '*', '.', 'm', 'p', 'a', ';', '*', '.', 'm', 'k', 'a', ';', '*', '.', 'm', 'k', 'v', ';', '*', '.', 'w', 'e', 'b', 'm', 0
     .short 'A', 'l', 'l', ' ', 'f', 'i', 'l', 'e', 's', 0, '*', '.', '*', 0, 0
 ui_instance: .quad 0
 ui_hwnd: .quad 0

@@ -1,0 +1,328 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "opus-stereo.mka",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "peak_error": 2.8908252716064453e-06,
+      "snr_db": 116.9,
+      "stats": "codec=8 rate=48000 channels=2 bits=32 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=6 cpu_us=5824 endpoint_dry=0"
+    },
+    {
+      "test": "opus-stereo.webm",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "peak_error": 2.8908252716064453e-06,
+      "snr_db": 116.9,
+      "stats": "codec=8 rate=48000 channels=2 bits=32 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=5 cpu_us=5757 endpoint_dry=0"
+    },
+    {
+      "test": "opus-stereo Matroska vs Ogg",
+      "result": "exact"
+    },
+    {
+      "test": "opus-mono-cbr.mka",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "peak_error": 3.993511199951172e-06,
+      "snr_db": 116.8,
+      "stats": "codec=8 rate=48000 channels=1 bits=32 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=4 cpu_us=4199 endpoint_dry=0"
+    },
+    {
+      "test": "opus-mono-cbr.webm",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "peak_error": 3.993511199951172e-06,
+      "snr_db": 116.8,
+      "stats": "codec=8 rate=48000 channels=1 bits=32 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=4 cpu_us=4050 endpoint_dry=0"
+    },
+    {
+      "test": "opus-mono-cbr Matroska vs Ogg",
+      "result": "exact"
+    },
+    {
+      "test": "opus-5.1.mka",
+      "result": "matched",
+      "comparator": "multichannel: LAMP Ogg/native decode below",
+      "peak_error": null,
+      "snr_db": null,
+      "stats": "codec=8 rate=48000 channels=6 bits=32 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=12 cpu_us=12360 endpoint_dry=0"
+    },
+    {
+      "test": "opus-5.1.webm",
+      "result": "matched",
+      "comparator": "multichannel: LAMP Ogg/native decode below",
+      "peak_error": null,
+      "snr_db": null,
+      "stats": "codec=8 rate=48000 channels=6 bits=32 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=11 cpu_us=11851 endpoint_dry=0"
+    },
+    {
+      "test": "opus-5.1 Matroska vs Ogg",
+      "result": "exact"
+    },
+    {
+      "test": "vorbis-stereo.mka",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "peak_error": 5.960464477539063e-08,
+      "snr_db": 138.2,
+      "stats": "codec=8 rate=44100 channels=2 bits=32 frames=52992 underruns=0 decode_error=0 audio_error=0 elapsed_ms=6 cpu_us=6603 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-stereo.webm",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "peak_error": 5.960464477539063e-08,
+      "snr_db": 138.2,
+      "stats": "codec=8 rate=44100 channels=2 bits=32 frames=52992 underruns=0 decode_error=0 audio_error=0 elapsed_ms=8 cpu_us=7814 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-mono.mka",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "peak_error": 8.940696716308594e-08,
+      "snr_db": 138.5,
+      "stats": "codec=8 rate=22050 channels=1 bits=32 frames=26624 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=2542 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-mono.webm",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "peak_error": 8.940696716308594e-08,
+      "snr_db": 138.5,
+      "stats": "codec=8 rate=22050 channels=1 bits=32 frames=26624 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2369 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-5.1.mka",
+      "result": "matched",
+      "comparator": "multichannel: LAMP Ogg/native decode below",
+      "peak_error": null,
+      "snr_db": null,
+      "stats": "codec=8 rate=48000 channels=6 bits=32 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=23 cpu_us=23172 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-5.1.webm",
+      "result": "matched",
+      "comparator": "multichannel: LAMP Ogg/native decode below",
+      "peak_error": null,
+      "snr_db": null,
+      "stats": "codec=8 rate=48000 channels=6 bits=32 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=17 cpu_us=17324 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-5.1 Matroska vs .ogg",
+      "result": "exact"
+    },
+    {
+      "test": "flac-16.mka",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "peak_error": 0.0,
+      "snr_db": null,
+      "stats": "codec=8 rate=44100 channels=2 bits=24 frames=52920 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2288 endpoint_dry=0"
+    },
+    {
+      "test": "flac-16 Matroska vs Ogg",
+      "result": "exact"
+    },
+    {
+      "test": "flac-24-96k.mka",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "peak_error": 0.0,
+      "snr_db": null,
+      "stats": "codec=8 rate=96000 channels=2 bits=24 frames=115200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=5 cpu_us=4497 endpoint_dry=0"
+    },
+    {
+      "test": "flac-24-96k Matroska vs Ogg",
+      "result": "exact"
+    },
+    {
+      "test": "flac-5.1.mka",
+      "result": "matched",
+      "comparator": "multichannel: LAMP Ogg/native decode below",
+      "peak_error": null,
+      "snr_db": null,
+      "stats": "codec=8 rate=48000 channels=6 bits=24 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=4 cpu_us=4141 endpoint_dry=0"
+    },
+    {
+      "test": "flac-5.1 Matroska vs Ogg",
+      "result": "exact"
+    },
+    {
+      "test": "mp3.mka",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "peak_error": 1.1622905731201172e-06,
+      "snr_db": 120.6,
+      "stats": "codec=8 rate=44100 channels=2 bits=0 frames=67255 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=2623 endpoint_dry=0"
+    },
+    {
+      "test": "mp2.mka",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "peak_error": 8.344650268554688e-07,
+      "snr_db": 120.4,
+      "stats": "codec=8 rate=48000 channels=2 bits=0 frames=72576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1984 endpoint_dry=0"
+    },
+    {
+      "test": "pcm-s16.mka",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "peak_error": 0.0,
+      "snr_db": null,
+      "stats": "codec=8 rate=44100 channels=2 bits=16 frames=66150 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1206 endpoint_dry=0"
+    },
+    {
+      "test": "pcm-s24.mka",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "peak_error": 0.0,
+      "snr_db": null,
+      "stats": "codec=8 rate=48000 channels=2 bits=24 frames=72000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1390 endpoint_dry=0"
+    },
+    {
+      "test": "pcm-s32be.mka",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "peak_error": 0.0,
+      "snr_db": null,
+      "stats": "codec=8 rate=48000 channels=2 bits=32 frames=72000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1312 endpoint_dry=0"
+    },
+    {
+      "test": "pcm-f32.mka",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "peak_error": 0.0,
+      "snr_db": null,
+      "stats": "codec=8 rate=48000 channels=1 bits=32 frames=72000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=955 endpoint_dry=0"
+    },
+    {
+      "test": "pcm-f64.mka",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "peak_error": 0.0,
+      "snr_db": null,
+      "stats": "codec=8 rate=32000 channels=2 bits=64 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1043 endpoint_dry=0"
+    },
+    {
+      "test": "pcm-u8.mka",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "peak_error": 0.0,
+      "snr_db": null,
+      "stats": "codec=8 rate=8000 channels=1 bits=8 frames=12000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=386 endpoint_dry=0"
+    },
+    {
+      "test": "pcm-s16-5.1.mka",
+      "result": "matched",
+      "comparator": "multichannel: LAMP Ogg/native decode below",
+      "peak_error": null,
+      "snr_db": null,
+      "stats": "codec=8 rate=48000 channels=6 bits=16 frames=72000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=2915 endpoint_dry=0"
+    },
+    {
+      "test": "pcm-s16-5.1 Matroska vs .wav",
+      "result": "exact"
+    },
+    {
+      "test": "remuxed variants",
+      "result": "identical",
+      "files": 42
+    },
+    {
+      "test": "vorbis-stereo.mka seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":3901,\"maximum_discarded\":832,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0}"
+    },
+    {
+      "test": "flac-16.mka seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":8,\"discarded_frames\":30009,\"maximum_discarded\":4607,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0}"
+    },
+    {
+      "test": "pcm-s24.mka seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":4765,\"maximum_discarded\":1023,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0}"
+    },
+    {
+      "test": "mp3.mka seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":7,\"discarded_frames\":69172,\"maximum_discarded\":8063,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0}"
+    },
+    {
+      "test": "mp2.mka seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":34365,\"maximum_discarded\":3456,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0}"
+    },
+    {
+      "test": "vorbis-5.1.webm seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":4157,\"maximum_discarded\":832,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0}"
+    },
+    {
+      "test": "opus-stereo seeks equal Ogg Opus seeks",
+      "result": "exact",
+      "targets": 5
+    },
+    {
+      "test": "opus-5.1 seeks equal Ogg Opus seeks",
+      "result": "exact",
+      "targets": 5
+    },
+    {
+      "test": "bad-truncated.mka",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":70}"
+    },
+    {
+      "test": "bad-doctype.mka",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":70}"
+    },
+    {
+      "test": "bad-no-audio.mka",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":70}"
+    },
+    {
+      "test": "bad-encoded.mka",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":70}"
+    },
+    {
+      "test": "bad-opus-no-private.mka",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":70}"
+    },
+    {
+      "test": "bad-frame-crc.mka",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"read\",\"decode_error\":3}"
+    },
+    {
+      "test": "bad-xiph-size.mka",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":70}"
+    },
+    {
+      "test": "bad-fixed-size.mka",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":70}"
+    },
+    {
+      "test": "bad-discard-not-last.mka",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":70}"
+    },
+    {
+      "test": "cancel-open vorbis-stereo.mka",
+      "result": "{\"result\":\"cancelled\"}"
+    },
+    {
+      "test": "cancel-read vorbis-stereo.mka",
+      "result": "{\"result\":\"cancelled\",\"frames_before_cancel\":29376}"
+    },
+    {
+      "test": "WebM Opus playback",
+      "result": "played",
+      "stats": "Playing. Space: pause / resume. Q or Ctrl+C: stop. codec=8 rate=48000 channels=2 bits=32 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3280 cpu_us=6988 endpoint_dry=0"
+    }
+  ],
+  "rejections": 9,
+  "scope": "Matroska/WebM audio tracks: Opus, Vorbis, FLAC, MPEG Layer II/III and PCM (integer/float, both byte orders) against FFmpeg and LAMP Ogg/native decodes; Xiph/EBML/fixed lacing, unknown-size Segment/Cluster, default-flag and unsupported-track selection; exact seeks and Opus seeks equal to Ogg; malformed files and cancellation."
+}

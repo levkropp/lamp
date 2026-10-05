@@ -362,6 +362,85 @@ FN op_opus_multistream_parse
     ret
 ENDFN op_opus_multistream_parse
 
+# RCX=OpusHead packet, EDX=bytes -> EAX=1. RFC 7845 families 0 and 1: sets
+# channels, mapping, streams, map, pre-skip and gain; output is 48 kHz.
+FN opus_head_parse
+    mov rax, rcx
+    cmp edx, 19
+    jb .Lopus_head_bad
+    mov r8, 0x646165487375704f # OpusHead
+    cmp [rax], r8
+    jne .Lopus_head_bad
+    cmp byte ptr [rax + 8], 15
+    ja .Lopus_head_bad
+    movzx ecx, byte ptr [rax + 9]
+    cmp ecx, 1
+    jb .Lopus_head_bad
+    cmp ecx, 8
+    ja .Lopus_head_bad
+    mov [rip + source_channels], ecx
+    movzx r8d, byte ptr [rax + 18]
+    mov [rip + op_mapping], r8d
+    test r8d, r8d
+    jnz .Lopus_head_family1
+    cmp ecx, 2
+    ja .Lopus_head_bad
+    mov dword ptr [rip + op_streams], 1
+    dec ecx
+    mov [rip + op_coupled], ecx
+    mov byte ptr [rip + op_channel_map], 0
+    mov byte ptr [rip + op_channel_map + 1], 1
+    mov r8d, 19
+    jmp .Lopus_head_length
+.Lopus_head_family1:
+    cmp r8d, 1
+    jne .Lopus_head_bad
+    lea r8d, [rcx + 21]
+    cmp edx, r8d
+    jb .Lopus_head_bad
+    movzx ecx, byte ptr [rax + 19]
+    test ecx, ecx
+    jz .Lopus_head_bad
+    mov [rip + op_streams], ecx
+    movzx r9d, byte ptr [rax + 20]
+    cmp r9d, ecx
+    ja .Lopus_head_bad
+    mov [rip + op_coupled], r9d
+    add r9d, ecx
+    cmp r9d, 255
+    ja .Lopus_head_bad
+    xor ecx, ecx
+    lea r11, [rip + op_channel_map]
+.Lopus_head_map:
+    movzx r10d, byte ptr [rax + rcx + 21]
+    cmp r10d, 255
+    je .Lopus_head_map_valid
+    cmp r10d, r9d
+    jae .Lopus_head_bad
+.Lopus_head_map_valid:
+    mov [r11 + rcx], r10b
+    inc ecx
+    cmp ecx, [rip + source_channels]
+    jb .Lopus_head_map
+.Lopus_head_length:
+    cmp byte ptr [rax + 8], 1
+    ja .Lopus_head_extended
+    cmp edx, r8d
+    jne .Lopus_head_bad
+.Lopus_head_extended:
+    movzx ecx, word ptr [rax + 10]
+    mov [rip + op_preskip], ecx
+    movsx ecx, word ptr [rax + 16]
+    mov [rip + op_gain], ecx         # signed Q8 dB; applied after synthesis
+    mov dword ptr [rip + sample_rate], 48000
+    mov dword ptr [rip + source_bits], 32
+    mov eax, 1
+    ret
+.Lopus_head_bad:
+    xor eax, eax
+    ret
+ENDFN opus_head_parse
+
 # RCX=mapped beginning, RDX=end. PCM reconstruction is a separate stage.
 FN opus_headers
     push rbx
@@ -381,75 +460,17 @@ FN opus_headers
     jne .Lopus_header_bad
     cmp qword ptr [rip + ogg_granule], 0
     jne .Lopus_header_bad
-    cmp edx, 19
-    jb .Lopus_header_bad
-    mov r8, 0x646165487375704f # OpusHead
-    cmp [rax], r8
-    jne .Lopus_header_bad
-    cmp byte ptr [rax + 8], 15
-    ja .Lopus_header_bad
-    movzx ecx, byte ptr [rax + 9]
-    cmp ecx, 1
-    jb .Lopus_header_bad
-    cmp ecx, 8
-    ja .Lopus_header_bad
-    mov [rip + source_channels], ecx
-    movzx r8d, byte ptr [rax + 18]
-    mov [rip + op_mapping], r8d
-    test r8d, r8d
-    jnz .Lopus_header_family1
-    cmp ecx, 2
-    ja .Lopus_header_bad
-    mov dword ptr [rip + op_streams], 1
-    dec ecx
-    mov [rip + op_coupled], ecx
-    mov byte ptr [rip + op_channel_map], 0
-    mov byte ptr [rip + op_channel_map + 1], 1
-    mov r8d, 19
-    jmp .Lopus_header_length
-.Lopus_header_family1:
-    cmp r8d, 1
-    jne .Lopus_header_bad
-    lea r8d, [rcx + 21]
-    cmp edx, r8d
-    jb .Lopus_header_bad
-    movzx ecx, byte ptr [rax + 19]
-    test ecx, ecx
+    mov rcx, rax
+    call opus_head_parse
+    test eax, eax
     jz .Lopus_header_bad
-    mov [rip + op_streams], ecx
-    movzx r9d, byte ptr [rax + 20]
-    cmp r9d, ecx
-    ja .Lopus_header_bad
-    mov [rip + op_coupled], r9d
-    add r9d, ecx
-    cmp r9d, 255
-    ja .Lopus_header_bad
-    xor ecx, ecx
-    lea rdi, [rip + op_channel_map]
-.Lopus_header_map:
-    movzx r10d, byte ptr [rax + rcx + 21]
-    cmp r10d, 255
-    je .Lopus_header_map_valid
-    cmp r10d, r9d
-    jae .Lopus_header_bad
-.Lopus_header_map_valid:
-    mov [rdi + rcx], r10b
-    inc ecx
-    cmp ecx, [rip + source_channels]
-    jb .Lopus_header_map
-.Lopus_header_length:
-    cmp byte ptr [rax + 8], 1
-    ja .Lopus_header_extended
-    cmp edx, r8d
-    jne .Lopus_header_bad
-.Lopus_header_extended:
-    movzx ecx, word ptr [rax + 10]
-    mov [rip + op_preskip], ecx
-    movsx ecx, word ptr [rax + 16]
-    mov [rip + op_gain], ecx         # signed Q8 dB; applied after synthesis
-    mov dword ptr [rip + sample_rate], 48000
-    mov dword ptr [rip + source_bits], 32
     mov qword ptr [rip + total_frames], 0 #audio-page anchoring establishes duration
+    jmp .Lopus_header_comment_packet
+.Lopus_header_bad:
+    mov dword ptr [rip + decode_error], 25
+    xor eax, eax
+    jmp .Lopus_header_done
+.Lopus_header_comment_packet:
     call ogg_next
     test rax, rax
     jz .Lopus_header_bad
@@ -487,10 +508,6 @@ FN opus_headers
     jmp .Lopus_header_comment
 .Lopus_header_ok:
     mov eax, 1
-    jmp .Lopus_header_done
-.Lopus_header_bad:
-    mov dword ptr [rip + decode_error], 25
-    xor eax, eax
 .Lopus_header_done:
     add rsp, 32
     pop rdi

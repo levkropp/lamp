@@ -30,6 +30,8 @@ mp_end: .quad 0
 mp_frame_end: .quad 0
 mp_header: .long 0
 mp_layer: .long 3                   # 1, 2 or 3
+mp_track_tolerant: .long 0          # track mode: missing reservoir reads as zeros
+mp_main_incomplete: .long 0         # this frame's main data lacked reservoir bytes
 mp_initial_layer: .long 3
 mp_kbps: .long 0
 mp_version: .long 0
@@ -1068,7 +1070,25 @@ LOCALFN mp_sideinfo
     jne .Lside_bad
     mov eax, [rip + mp_main_begin]
     cmp eax, [rip + mp_reserv_size]
-    ja .Lside_bad
+    jbe .Lside_reservoir_ready
+    # After a track-mode seek the reservoir starts empty: earlier main data is
+    # read as zeros until a frame finds all of its data. Those pre-roll frames
+    # are discarded.
+    cmp dword ptr [rip + mp_track_tolerant], 0
+    je .Lside_bad
+    mov dword ptr [rip + mp_main_incomplete], 1
+    lea rdi, [rip + mp_main]
+    mov ecx, eax
+    sub ecx, [rip + mp_reserv_size]
+    xor eax, eax
+    rep stosb
+    lea rsi, [rip + mp_reserv]
+    mov ecx, [rip + mp_reserv_size]
+    rep movsb
+    jmp .Lside_frame_data
+.Lside_reservoir_ready:
+    mov dword ptr [rip + mp_track_tolerant], 0
+    mov dword ptr [rip + mp_main_incomplete], 0
     mov ecx, eax
     mov eax, [rip + mp_reserv_size]
     sub eax, ecx
@@ -1076,6 +1096,7 @@ LOCALFN mp_sideinfo
     add rsi, rax
     lea rdi, [rip + mp_main]
     rep movsb
+.Lside_frame_data:
     mov rsi, [rip + mp_bit_base]
     mov eax, [rip + mp_side_bytes]
     add rsi, rax
@@ -1920,6 +1941,27 @@ LOCALFN mp_decode_frame
     call mp_sideinfo
     test eax, eax
     jz .Lmp_frame_bad
+    cmp dword ptr [rip + mp_main_incomplete], 0
+    je .Lmp_frame_complete
+    # Pre-roll frame without its reservoir: emit silence, keep the reservoir.
+    lea rdx, [rip + mp_info]
+    xor eax, eax
+    xor ecx, ecx
+.Lmp_frame_parts:
+    add eax, [rdx + GI_PART]
+    add rdx, GI_SIZE
+    inc ecx
+    cmp ecx, [rip + mp_gr_count]
+    jb .Lmp_frame_parts
+    cmp eax, [rip + mp_bit_limit]
+    ja .Lmp_frame_bad
+    mov [rip + mp_bit_pos], eax
+    lea rdi, [rip + mp_pcm]
+    mov ecx, [rip + mp_samples]
+    xor eax, eax
+    rep stosq
+    jmp .Lmp_frame_reservoir
+.Lmp_frame_complete:
     mov dword ptr [rip + mp_granule], 0
 .Lgranule_loop:
     lea rdi, [rip + mp_grbuf]
@@ -1988,6 +2030,7 @@ LOCALFN mp_decode_frame
     mov eax, [rip + mp_granule]
     cmp eax, [rip + mp_gr_count]
     jb .Lgranule_loop
+.Lmp_frame_reservoir:
     call mp_save_reservoir
     test eax, eax
     jz .Lmp_frame_bad
@@ -2048,6 +2091,136 @@ LOCALFN mp_save_reservoir
     pop rsi
     ret
 ENDFN mp_save_reservoir
+
+# Track mode for MPEG audio frames supplied by a container, one per packet.
+# RCX=first frame, EDX=bytes -> EAX=1. Fixes layer, version, rate and channels.
+FN mpa_track_open
+    push rbx
+    push rsi
+    push rdi
+    sub rsp, 32
+    mov rbx, rcx
+    mov esi, edx
+    call mp3_close
+    call mpa_track_reset
+    mov dword ptr [rip + mp_trim_start], 0
+    mov dword ptr [rip + mp_trim_end], 0
+    mov qword ptr [rip + mp_emitted], 0
+    lea rax, [rbx + rsi]
+    mov [rip + mp_end], rax
+    mov rcx, rbx
+    call mp_parse_header
+    test eax, eax
+    jz .Lmpa_open_return
+    mov eax, [rip + mp_rate]
+    mov [rip + sample_rate], eax
+    mov eax, [rip + mp_channels]
+    mov [rip + source_channels], eax
+    mov [rip + mp_initial_channels], eax
+    mov eax, [rip + mp_version]
+    mov [rip + mp_initial_version], eax
+    mov eax, [rip + mp_layer]
+    mov [rip + mp_initial_layer], eax
+    mov dword ptr [rip + source_bits], 0
+    mov dword ptr [rip + mp_track_tolerant], 0
+    mov eax, 1
+.Lmpa_open_return:
+    add rsp, 32
+    pop rdi
+    pop rsi
+    pop rbx
+    ret
+ENDFN mpa_track_open
+
+# RCX=frame, EDX=bytes -> EAX=samples, or -1 when the header is invalid or
+# changes layer, version, rate or channel count.
+FN mpa_track_samples
+    sub rsp, 40
+    lea rax, [rcx + rdx]
+    mov [rip + mp_end], rax
+    call mp_parse_header
+    test eax, eax
+    jz .Lmpa_samples_bad
+    mov eax, [rip + mp_version]
+    cmp eax, [rip + mp_initial_version]
+    jne .Lmpa_samples_bad
+    mov eax, [rip + mp_layer]
+    cmp eax, [rip + mp_initial_layer]
+    jne .Lmpa_samples_bad
+    mov eax, [rip + mp_rate]
+    cmp eax, [rip + sample_rate]
+    jne .Lmpa_samples_bad
+    mov eax, [rip + mp_channels]
+    cmp eax, [rip + mp_initial_channels]
+    jne .Lmpa_samples_bad
+    mov eax, [rip + mp_samples]
+    jmp .Lmpa_samples_return
+.Lmpa_samples_bad:
+    mov eax, -1
+.Lmpa_samples_return:
+    add rsp, 40
+    ret
+ENDFN mpa_track_samples
+
+# Clears synthesis history and the reservoir before decoding from a seek
+# point; pre-roll frames may then lack reservoir data.
+FN mpa_track_reset
+    push rdi
+    lea rdi, [rip + mp_ist]
+    xor eax, eax
+    mov ecx, 80
+    rep stosb
+    lea rdi, [rip + mp_overlap]
+    mov ecx, 576
+    rep stosd
+    lea rdi, [rip + mp_qmf]
+    mov ecx, 960
+    rep stosd
+    mov dword ptr [rip + mp_reserv_size], 0
+    mov dword ptr [rip + mp_frame_ready], 0
+    mov dword ptr [rip + mp_frame_used], 0
+    mov dword ptr [rip + mp_track_tolerant], 1
+    pop rdi
+    ret
+ENDFN mpa_track_reset
+
+# RCX=frame, EDX=bytes, R8=stereo float output, R9D=capacity -> EAX=frames,
+# or -1 on error.
+FN mpa_track_decode
+    push rsi
+    push rdi
+    push rbx
+    sub rsp, 32
+    mov rdi, r8
+    mov ebx, r9d
+    mov [rip + mp_cursor], rcx
+    lea rax, [rcx + rdx]
+    mov [rip + mp_end], rax
+    call mp_decode_frame
+    test eax, eax
+    jz .Lmpa_decode_bad
+    mov ecx, [rip + mp_samples]
+    cmp ecx, ebx
+    ja .Lmpa_decode_bad
+    mov eax, ecx
+    lea rsi, [rip + mp_pcm]
+    rep movsq
+    mov dword ptr [rip + mp_frame_used], 0
+    mov dword ptr [rip + mp_frame_ready], 0
+    jmp .Lmpa_decode_return
+.Lmpa_decode_bad:
+    cmp dword ptr [rip + decode_error], 0
+    jne .Lmpa_decode_failed
+    mov dword ptr [rip + decode_error], 15
+.Lmpa_decode_failed:
+    mov eax, -1
+.Lmpa_decode_return:
+    add rsp, 32
+    pop rbx
+    pop rdi
+    pop rsi
+    ret
+ENDFN mpa_track_decode
 
 FN mp3_read
     push rbp

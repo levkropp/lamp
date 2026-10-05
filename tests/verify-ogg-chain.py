@@ -318,7 +318,6 @@ def main():
     flac_variant('flac-ogg-no-fLaC.ogg', set_byte(0, 9, ord('x')))
     flac_variant('flac-ogg-streaminfo-type.ogg', set_byte(0, 13, 1))
     flac_variant('flac-ogg-second-streaminfo.ogg', set_byte(1, 0, 0))
-    flac_variant('flac-ogg-granule.ogg', lambda c: c[-1].__setitem__(1, c[-1][1] + 1))
     flac_variant('flac-ogg-two-frames.ogg', lambda c: (c[2].__setitem__(0, c[2][0] + c[3][0]),
                                                        c[2].__setitem__(1, c[3][1]), c.pop(3)))
     flac_variant('flac-ogg-missing-frame.ogg', lambda c: c.pop(4))
@@ -331,6 +330,16 @@ def main():
     rebuilt.write_bytes(build(serial, items))
     if pcm(rebuilt) != pcm(flac_a):
         raise Failure('Rebuilt FLAC-in-Ogg fixture differs')
+    # Frame headers, not granules, place FLAC samples: rounded granules from a
+    # remux must not change the output.
+    shifted = [list(item) for item in items]
+    for item in shifted[2:]:
+        item[1] = max(0, item[1] - 20)
+    rounded = work / 'flac-ogg-rounded-granules.ogg'
+    rounded.write_bytes(build(serial, [tuple(item) for item in shifted]))
+    if pcm(rounded) != pcm(flac_a):
+        raise Failure('FLAC-in-Ogg with rounded granules decodes differently')
+    checks.append({'test': rounded.name, 'result': 'exact'})
 
     for mode in ('cancel-open', 'cancel-read'):
         line = run([chain, mode, work / 'rate-change-chain.ogg']).strip().splitlines()[-1]

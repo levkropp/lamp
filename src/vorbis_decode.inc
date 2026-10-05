@@ -644,6 +644,22 @@ LOCALFN vb_packet_header
     ret
 ENDFN vb_packet_header
 
+# RCX=packet, EDX=bytes: decode one packet supplied by a container (track
+# mode). Same frame layout as vb_frame, which takes the next Ogg packet.
+LOCALFN vb_frame_packet
+    push rbp
+    push rbx
+    push rsi
+    push rdi
+    push r12
+    push r13
+    push r14
+    push r15
+    sub rsp, 56
+    mov rax, rcx
+    jmp .Lvb_frame_have_packet
+ENDFN vb_frame_packet
+
 LOCALFN vb_frame
     push rbp
     push rbx
@@ -657,6 +673,7 @@ LOCALFN vb_frame
     call ogg_next
     test rax, rax
     jz .Lvb_frame_eof
+.Lvb_frame_have_packet:
     call vb_packet_header
     test eax, eax
     jz .Lvb_frame_bad
@@ -883,6 +900,9 @@ LOCALFN vb_frame
     mov [rip + vb_frame_skip], eax
     sub r14d, eax
     # End granule trims encoder padding. No unsigned wrap on malformed totals.
+    # In track mode the container layer trims instead.
+    cmp dword ptr [rip + vb_track_mode], 0
+    jne .Lvb_frame_output_count
     mov rax, [rip + total_frames]
     sub rax, [rip + vb_emitted]
     jc .Lvb_frame_bad
@@ -1142,3 +1162,113 @@ FN vorbis_read_native
     pop rbx
     ret
 ENDFN vorbis_read_native
+
+# Track mode for Matroska/MP4: RCX=array of three (pointer, bytes) pairs for
+# the identification, comment and setup headers -> EAX=1.
+FN vorbis_track_open
+    push rbx
+    sub rsp, 32
+    mov rbx, rcx
+    call vorbis_close
+    mov [rip + vb_header_list], rbx
+    mov dword ptr [rip + vb_header_index], 0
+    call vb_open_headers
+    mov qword ptr [rip + vb_header_list], 0
+    test eax, eax
+    jz .Lvb_track_open_bad
+    mov dword ptr [rip + vb_track_mode], 1
+    call vorbis_track_reset
+    mov eax, 1
+    jmp .Lvb_track_open_return
+.Lvb_track_open_bad:
+    call vorbis_close
+    mov dword ptr [rip + decode_error], 23
+    xor eax, eax
+.Lvb_track_open_return:
+    add rsp, 32
+    pop rbx
+    ret
+ENDFN vorbis_track_open
+
+# Before the first packet or after a seek: the next packet only primes overlap.
+FN vorbis_track_reset
+    mov dword ptr [rip + vb_first], 1
+    mov dword ptr [rip + vb_previous], 0
+    mov dword ptr [rip + vb_available], 0
+    mov dword ptr [rip + vb_used], 0
+    mov dword ptr [rip + vb_trim_start], 0
+    mov qword ptr [rip + vb_emitted], 0
+    mov dword ptr [rip + vb_scan_previous], 0
+    ret
+ENDFN vorbis_track_reset
+
+# RCX=packet, EDX=bytes -> EAX=PCM frames it will emit after the preceding
+# packets scanned since the last reset, or -1 when malformed. Scanning keeps
+# its own overlap state, separate from decoding.
+FN vorbis_track_samples
+    sub rsp, 40
+    mov rax, rcx
+    call vb_packet_header
+    test eax, eax
+    jz .Lvb_track_samples_bad
+    mov ecx, [rip + vb_scan_previous]
+    test ecx, ecx
+    jnz .Lvb_track_samples_following
+    mov eax, [rip + vb_n]
+    shr eax, 1
+    mov edx, [rip + vb_right]
+    sub edx, eax                     # first packet: its unwindowed prefix only
+    mov eax, edx
+    jmp .Lvb_track_samples_next
+.Lvb_track_samples_following:
+    mov eax, [rip + vb_left_end]
+    sub eax, [rip + vb_left]
+    cmp eax, ecx
+    jne .Lvb_track_samples_bad
+    mov eax, [rip + vb_right]
+    sub eax, [rip + vb_left]
+.Lvb_track_samples_next:
+    mov ecx, [rip + vb_right_end]
+    sub ecx, [rip + vb_right]
+    mov [rip + vb_scan_previous], ecx
+    jmp .Lvb_track_samples_return
+.Lvb_track_samples_bad:
+    mov eax, -1
+.Lvb_track_samples_return:
+    add rsp, 40
+    ret
+ENDFN vorbis_track_samples
+
+# RCX=packet, EDX=bytes, R8=stereo float output, R9D=capacity -> EAX=frames,
+# or -1 on error.
+FN vorbis_track_decode
+    push rsi
+    push rdi
+    push rbx
+    sub rsp, 32
+    mov rdi, r8
+    mov ebx, r9d
+    call vb_frame_packet
+    test eax, eax
+    jz .Lvb_track_decode_bad
+    mov ecx, [rip + vb_available]
+    cmp ecx, ebx
+    ja .Lvb_track_decode_bad
+    lea rsi, [rip + vb_pcm]
+    mov eax, ecx
+    rep movsq
+    mov [rip + vb_used], eax
+    jmp .Lvb_track_decode_return
+.Lvb_track_decode_bad:
+    cmp dword ptr [rip + decode_error], 0
+    jne .Lvb_track_decode_failed
+    mov dword ptr [rip + decode_error], 24
+.Lvb_track_decode_failed:
+    mov eax, -1
+.Lvb_track_decode_return:
+    add rsp, 32
+    pop rbx
+    pop rdi
+    pop rsi
+    ret
+ENDFN vorbis_track_decode
