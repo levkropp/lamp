@@ -26,8 +26,8 @@ FN preview_start
     lea rax, [rip + preview_track]
     mov [rip + ui_filename], rax
     mov qword ptr [rip + ui_thread], 1
-    mov dword ptr [rip + sample_rate], 48000
-    mov qword ptr [rip + total_frames], 5760000
+    mov dword ptr [rip + output_rate], 48000
+    mov qword ptr [rip + output_frames], 5760000
     mov qword ptr [rip + engine_position], 1776000
     mov dword ptr [rip + codec_kind], PREVIEW_CODEC
     call ui_draw

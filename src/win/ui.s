@@ -320,10 +320,10 @@ LOCALFN ui_seek
     xor eax, eax
 .Lui_seek_nonnegative:
     mov [rsp + 32], eax
-    mov ecx, [rip + sample_rate]
+    mov ecx, [rip + output_rate]
     test ecx, ecx
     jz .Lui_seek_done
-    mov rax, [rip + total_frames]
+    mov rax, [rip + output_frames]
     xor edx, edx
     div rcx
     test eax, eax
@@ -461,7 +461,7 @@ LOCALFN ui_window_proc
 .Lui_seek_forward:
     mov rax, [rip + engine_position]
     xor edx, edx
-    mov ecx, [rip + sample_rate]
+    mov ecx, [rip + output_rate]
     test ecx, ecx
     jz .Lui_handled
     div rcx
@@ -471,7 +471,7 @@ LOCALFN ui_window_proc
 .Lui_seek_backward:
     mov rax, [rip + engine_position]
     xor edx, edx
-    mov ecx, [rip + sample_rate]
+    mov ecx, [rip + output_rate]
     test ecx, ecx
     jz .Lui_handled
     div rcx
@@ -553,10 +553,10 @@ LOCALFN ui_window_proc
     sub ecx, 64
     cmp eax, ecx
     ja .Lui_handled
-    mov rdx, [rip + total_frames]
+    mov rdx, [rip + output_frames]
     mul rdx
     div rcx
-    mov ecx, [rip + sample_rate]
+    mov ecx, [rip + output_rate]
     test ecx, ecx
     jz .Lui_handled
     xor edx, edx
@@ -620,7 +620,7 @@ LOCALFN ui_window_proc
     mov dword ptr [rip + ui_state], 3
     jmp .Lui_done_repaint
 .Lui_done_position:
-    mov rax, [rip + total_frames]
+    mov rax, [rip + output_frames]
     mov [rip + engine_position], rax
 .Lui_done_repaint:
     call ui_invalidate

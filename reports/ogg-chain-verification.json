@@ -1,0 +1,292 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "vorbis-chain.ogg",
+      "result": "passed",
+      "links": 3,
+      "rates": [
+        48000,
+        48000,
+        48000
+      ],
+      "oracle": "{\"result\":\"passed\",\"links\":3,\"frames\":134400,\"rate\":48000,\"seeks\":20,\"opus_seeks_left_to_dump\":0,\"maximum_discarded\":14776}",
+      "opus_seek_dumps": 0
+    },
+    {
+      "test": "same-serial-chain.ogg",
+      "result": "passed",
+      "links": 2,
+      "rates": [
+        48000,
+        48000
+      ],
+      "oracle": "{\"result\":\"passed\",\"links\":2,\"frames\":105600,\"rate\":48000,\"seeks\":15,\"opus_seeks_left_to_dump\":0,\"maximum_discarded\":14776}",
+      "opus_seek_dumps": 0
+    },
+    {
+      "test": "mixed-codec-chain.ogg",
+      "result": "passed",
+      "links": 5,
+      "rates": [
+        48000,
+        48000,
+        48000,
+        48000,
+        48000
+      ],
+      "oracle": "{\"result\":\"passed\",\"links\":5,\"frames\":194400,\"rate\":48000,\"seeks\":22,\"opus_seeks_left_to_dump\":8,\"maximum_discarded\":14776}",
+      "opus_seek_dumps": 6
+    },
+    {
+      "test": "opus-first-chain.ogg",
+      "result": "passed",
+      "links": 3,
+      "rates": [
+        48000,
+        48000,
+        96000
+      ],
+      "oracle": "{\"result\":\"passed\",\"links\":3,\"frames\":115200,\"rate\":48000,\"seeks\":16,\"opus_seeks_left_to_dump\":4,\"maximum_discarded\":14776}",
+      "opus_seek_dumps": 3
+    },
+    {
+      "test": "rate-change-chain.ogg",
+      "result": "passed",
+      "links": 6,
+      "rates": [
+        44100,
+        48000,
+        96000,
+        48000,
+        22050,
+        32000
+      ],
+      "oracle": "{\"result\":\"passed\",\"links\":6,\"frames\":216090,\"rate\":44100,\"seeks\":31,\"opus_seeks_left_to_dump\":4,\"maximum_discarded\":19293}",
+      "opus_seek_dumps": 0
+    },
+    {
+      "test": "many-links.ogg",
+      "result": "passed",
+      "links": 48,
+      "rates": [
+        48000,
+        48000,
+        48000,
+        48000,
+        48000,
+        48000,
+        48000,
+        48000,
+        48000,
+        48000,
+        48000,
+        48000,
+        48000,
+        48000,
+        48000,
+        48000,
+        48000,
+        48000,
+        48000,
+        48000,
+        48000,
+        48000,
+        48000,
+        48000,
+        48000,
+        48000,
+        48000,
+        48000,
+        48000,
+        48000,
+        48000,
+        48000,
+        48000,
+        48000,
+        48000,
+        48000,
+        48000,
+        48000,
+        48000,
+        48000,
+        48000,
+        48000,
+        48000,
+        48000,
+        48000,
+        48000,
+        48000,
+        48000
+      ],
+      "oracle": "{\"result\":\"passed\",\"links\":48,\"frames\":159840,\"rate\":48000,\"seeks\":245,\"opus_seeks_left_to_dump\":0,\"maximum_discarded\":4319}",
+      "opus_seek_dumps": 0
+    },
+    {
+      "test": "mux-chain.ogg",
+      "result": "passed",
+      "links": 4,
+      "rates": [
+        48000,
+        48000,
+        48000,
+        48000
+      ],
+      "oracle": "{\"result\":\"passed\",\"links\":4,\"frames\":182400,\"rate\":48000,\"seeks\":21,\"opus_seeks_left_to_dump\":4,\"maximum_discarded\":14776}",
+      "opus_seek_dumps": 3
+    },
+    {
+      "test": "flac-16-44100-2.oga",
+      "result": "exact",
+      "comparator": "FFmpeg lossless decode",
+      "frames": 35280,
+      "oracle": "{\"result\":\"passed\",\"links\":1,\"frames\":35280,\"rate\":44100,\"seeks\":10,\"opus_seeks_left_to_dump\":0,\"maximum_discarded\":3829}"
+    },
+    {
+      "test": "flac-24-96000-2.oga",
+      "result": "exact",
+      "comparator": "FFmpeg lossless decode",
+      "frames": 38400,
+      "oracle": "{\"result\":\"passed\",\"links\":1,\"frames\":38400,\"rate\":96000,\"seeks\":10,\"opus_seeks_left_to_dump\":0,\"maximum_discarded\":5632}"
+    },
+    {
+      "test": "flac-16-8000-1.oga",
+      "result": "exact",
+      "comparator": "FFmpeg lossless decode",
+      "frames": 8000,
+      "oracle": "{\"result\":\"passed\",\"links\":1,\"frames\":8000,\"rate\":8000,\"seeks\":10,\"opus_seeks_left_to_dump\":0,\"maximum_discarded\":557}"
+    },
+    {
+      "test": "flac-16-192000-2.oga",
+      "result": "exact",
+      "comparator": "FFmpeg lossless decode",
+      "frames": 57600,
+      "oracle": "{\"result\":\"passed\",\"links\":1,\"frames\":57600,\"rate\":192000,\"seeks\":10,\"opus_seeks_left_to_dump\":0,\"maximum_discarded\":1152}"
+    },
+    {
+      "test": "flac-16-48000-2-small.oga",
+      "result": "exact",
+      "comparator": "FFmpeg lossless decode",
+      "frames": 14400,
+      "oracle": "{\"result\":\"passed\",\"links\":1,\"frames\":14400,\"rate\":48000,\"seeks\":10,\"opus_seeks_left_to_dump\":0,\"maximum_discarded\":64}"
+    },
+    {
+      "test": "flac-24-48000-5.1.oga",
+      "result": "exact",
+      "comparator": "native FLAC with identical frames",
+      "frames": 19200,
+      "oracle": "{\"result\":\"passed\",\"links\":1,\"frames\":19200,\"rate\":48000,\"seeks\":10,\"opus_seeks_left_to_dump\":0,\"maximum_discarded\":2976}"
+    },
+    {
+      "test": "flac-16-48000-7.1.oga",
+      "result": "exact",
+      "comparator": "native FLAC with identical frames",
+      "frames": 19200,
+      "oracle": "{\"result\":\"passed\",\"links\":1,\"frames\":19200,\"rate\":48000,\"seeks\":10,\"opus_seeks_left_to_dump\":0,\"maximum_discarded\":2976}"
+    },
+    {
+      "test": "flac-16-48000-3.oga",
+      "result": "exact",
+      "comparator": "native FLAC with identical frames",
+      "frames": 19200,
+      "oracle": "{\"result\":\"passed\",\"links\":1,\"frames\":19200,\"rate\":48000,\"seeks\":10,\"opus_seeks_left_to_dump\":0,\"maximum_discarded\":2976}"
+    },
+    {
+      "test": "chain-junk-between.ogg",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":1}"
+    },
+    {
+      "test": "chain-truncated-link.ogg",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":1}"
+    },
+    {
+      "test": "chain-second-link-crc.ogg",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":1}"
+    },
+    {
+      "test": "chain-unsupported-link.ogg",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":1}"
+    },
+    {
+      "test": "chain-unsupported-only.ogg",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":1}"
+    },
+    {
+      "test": "chain-missing-bos.ogg",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":1}"
+    },
+    {
+      "test": "chain-after-eos.ogg",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":1}"
+    },
+    {
+      "test": "flac-ogg-mapping-version.ogg",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":1}"
+    },
+    {
+      "test": "flac-ogg-header-count.ogg",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":1}"
+    },
+    {
+      "test": "flac-ogg-no-fLaC.ogg",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":1}"
+    },
+    {
+      "test": "flac-ogg-streaminfo-type.ogg",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":1}"
+    },
+    {
+      "test": "flac-ogg-second-streaminfo.ogg",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":1}"
+    },
+    {
+      "test": "flac-ogg-granule.ogg",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":1}"
+    },
+    {
+      "test": "flac-ogg-two-frames.ogg",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":1}"
+    },
+    {
+      "test": "flac-ogg-missing-frame.ogg",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":1}"
+    },
+    {
+      "test": "flac-ogg-frame-crc.ogg",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"read\",\"decode_error\":3}"
+    },
+    {
+      "test": "flac-ogg-empty-packet.ogg",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":1}"
+    },
+    {
+      "test": "cancel-open rate-change-chain.ogg",
+      "result": "cancelled",
+      "oracle": "{\"result\":\"cancelled\"}"
+    },
+    {
+      "test": "cancel-read rate-change-chain.ogg",
+      "result": "cancelled",
+      "oracle": "{\"result\":\"cancelled\",\"frames_before_cancel\":114688}"
+    }
+  ],
+  "rejections": 17,
+  "scope": "Chained Ogg links of Vorbis, Opus and FLAC, including rate changes resampled to the first link, same-serial chains and 48 links; multiplexed links with Opus, Vorbis, FLAC, Speex and Theora streams; exact continuous and seek PCM against the links' own decodes; Opus-link seeks equal standalone seeks; FLAC-in-Ogg exact against FFmpeg or native FLAC; malformed chains/mappings and cancellation."
+}

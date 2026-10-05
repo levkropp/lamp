@@ -48,7 +48,7 @@ FN probe_start
     jne .Lprobe_bad
     call engine_pause
     mov rax, [rip + engine_position]
-    mov edx, [rip + sample_rate]
+    mov edx, [rip + output_rate]
     add rax, rdx
     mov [rip + probe_expected], rax
     call probe_wait_position
@@ -60,7 +60,7 @@ FN probe_start
     jz .Lprobe_bad
     mov dword ptr [rip + engine_seek_seconds], 7
     mov dword ptr [rip + probe_start_paused], 1
-    mov eax, [rip + sample_rate]
+    mov eax, [rip + output_rate]
     imul rax, 7
     mov [rip + probe_expected], rax
     call probe_launch
@@ -78,7 +78,7 @@ FN probe_start
     cmp rax, [rip + probe_pause_position]
     jne .Lprobe_bad
     call engine_pause
-    mov eax, [rip + sample_rate]
+    mov eax, [rip + output_rate]
     imul rax, 8
     mov [rip + probe_expected], rax
     call probe_wait_position
@@ -90,7 +90,7 @@ FN probe_start
     jz .Lprobe_bad
     mov dword ptr [rip + engine_seek_seconds], 5
     mov dword ptr [rip + probe_start_paused], 0
-    mov eax, [rip + sample_rate]
+    mov eax, [rip + output_rate]
     imul rax, 6
     mov [rip + probe_expected], rax
     call probe_launch
@@ -166,7 +166,7 @@ LOCALFN probe_wait_position
     mov rax, [rip + probe_expected]
     test rax, rax
     jnz .Lprobe_position_target
-    mov eax, [rip + sample_rate]
+    mov eax, [rip + output_rate]
     test eax, eax
     jz .Lprobe_position_timeout
 .Lprobe_position_target:
