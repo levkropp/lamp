@@ -1,0 +1,1004 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "random-l1-v1-r0-stereo-d0.3.mp1",
+      "result": "matched",
+      "snr_db": 116.6,
+      "relative_peak_error": 1.935736329122355e-06,
+      "stats": "codec=3 rate=44100 channels=2 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=488 endpoint_dry=0"
+    },
+    {
+      "test": "random-l1-v1-r0-stereo-d1.0.mp1",
+      "result": "matched",
+      "snr_db": 111.1,
+      "relative_peak_error": 6.387330768055865e-06,
+      "stats": "codec=3 rate=44100 channels=2 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=585 endpoint_dry=0"
+    },
+    {
+      "test": "random-l1-v1-r0-joint-d0.3.mp1",
+      "result": "matched",
+      "snr_db": 110.5,
+      "relative_peak_error": 7.316943380161771e-06,
+      "stats": "codec=3 rate=44100 channels=2 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=485 endpoint_dry=0"
+    },
+    {
+      "test": "random-l1-v1-r0-joint-d1.0.mp1",
+      "result": "matched",
+      "snr_db": 116.5,
+      "relative_peak_error": 2.6815996253817456e-06,
+      "stats": "codec=3 rate=44100 channels=2 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=595 endpoint_dry=0"
+    },
+    {
+      "test": "random-l1-v1-r0-dual-d0.3.mp1",
+      "result": "matched",
+      "snr_db": 110.0,
+      "relative_peak_error": 8.312203635780643e-06,
+      "stats": "codec=3 rate=44100 channels=2 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=492 endpoint_dry=0"
+    },
+    {
+      "test": "random-l1-v1-r0-dual-d1.0.mp1",
+      "result": "matched",
+      "snr_db": 114.3,
+      "relative_peak_error": 3.1655098442280655e-06,
+      "stats": "codec=3 rate=44100 channels=2 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=608 endpoint_dry=0"
+    },
+    {
+      "test": "random-l1-v1-r0-mono-d0.3.mp1",
+      "result": "matched",
+      "snr_db": 112.5,
+      "relative_peak_error": 5.0632171318632744e-06,
+      "stats": "codec=3 rate=44100 channels=1 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=492 endpoint_dry=0"
+    },
+    {
+      "test": "random-l1-v1-r0-mono-d1.0.mp1",
+      "result": "matched",
+      "snr_db": 114.6,
+      "relative_peak_error": 3.1252130219987216e-06,
+      "stats": "codec=3 rate=44100 channels=1 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=500 endpoint_dry=0"
+    },
+    {
+      "test": "random-l1-v1-r1-stereo-d0.3.mp1",
+      "result": "matched",
+      "snr_db": 111.5,
+      "relative_peak_error": 3.9296165686974185e-06,
+      "stats": "codec=3 rate=48000 channels=2 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=526 endpoint_dry=0"
+    },
+    {
+      "test": "random-l1-v1-r1-stereo-d1.0.mp1",
+      "result": "matched",
+      "snr_db": 117.6,
+      "relative_peak_error": 1.8279850634160277e-06,
+      "stats": "codec=3 rate=48000 channels=2 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=654 endpoint_dry=0"
+    },
+    {
+      "test": "random-l1-v1-r1-joint-d0.3.mp1",
+      "result": "matched",
+      "snr_db": 112.9,
+      "relative_peak_error": 4.738617839948444e-06,
+      "stats": "codec=3 rate=48000 channels=2 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=520 endpoint_dry=0"
+    },
+    {
+      "test": "random-l1-v1-r1-joint-d1.0.mp1",
+      "result": "matched",
+      "snr_db": 115.9,
+      "relative_peak_error": 3.267124492201543e-06,
+      "stats": "codec=3 rate=48000 channels=2 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=457 endpoint_dry=0"
+    },
+    {
+      "test": "random-l1-v1-r1-dual-d0.3.mp1",
+      "result": "matched",
+      "snr_db": 113.5,
+      "relative_peak_error": 5.115097445537355e-06,
+      "stats": "codec=3 rate=48000 channels=2 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=439 endpoint_dry=0"
+    },
+    {
+      "test": "random-l1-v1-r1-dual-d1.0.mp1",
+      "result": "matched",
+      "snr_db": 119.7,
+      "relative_peak_error": 1.8044631591779107e-06,
+      "stats": "codec=3 rate=48000 channels=2 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=524 endpoint_dry=0"
+    },
+    {
+      "test": "random-l1-v1-r1-mono-d0.3.mp1",
+      "result": "matched",
+      "snr_db": 115.6,
+      "relative_peak_error": 3.1781051178966173e-06,
+      "stats": "codec=3 rate=48000 channels=1 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=418 endpoint_dry=0"
+    },
+    {
+      "test": "random-l1-v1-r1-mono-d1.0.mp1",
+      "result": "matched",
+      "snr_db": 114.4,
+      "relative_peak_error": 3.803921522469044e-06,
+      "stats": "codec=3 rate=48000 channels=1 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=473 endpoint_dry=0"
+    },
+    {
+      "test": "random-l1-v1-r2-stereo-d0.3.mp1",
+      "result": "matched",
+      "snr_db": 115.7,
+      "relative_peak_error": 5.14309736224037e-06,
+      "stats": "codec=3 rate=32000 channels=2 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=615 endpoint_dry=0"
+    },
+    {
+      "test": "random-l1-v1-r2-stereo-d1.0.mp1",
+      "result": "matched",
+      "snr_db": 116.2,
+      "relative_peak_error": 3.2428133664741403e-06,
+      "stats": "codec=3 rate=32000 channels=2 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=626 endpoint_dry=0"
+    },
+    {
+      "test": "random-l1-v1-r2-joint-d0.3.mp1",
+      "result": "matched",
+      "snr_db": 113.5,
+      "relative_peak_error": 3.8020903785800295e-06,
+      "stats": "codec=3 rate=32000 channels=2 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=528 endpoint_dry=0"
+    },
+    {
+      "test": "random-l1-v1-r2-joint-d1.0.mp1",
+      "result": "matched",
+      "snr_db": 115.8,
+      "relative_peak_error": 2.9506167145947624e-06,
+      "stats": "codec=3 rate=32000 channels=2 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=542 endpoint_dry=0"
+    },
+    {
+      "test": "random-l1-v1-r2-dual-d0.3.mp1",
+      "result": "matched",
+      "snr_db": 118.0,
+      "relative_peak_error": 2.537765075329766e-06,
+      "stats": "codec=3 rate=32000 channels=2 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=446 endpoint_dry=0"
+    },
+    {
+      "test": "random-l1-v1-r2-dual-d1.0.mp1",
+      "result": "matched",
+      "snr_db": 114.6,
+      "relative_peak_error": 3.449354625749522e-06,
+      "stats": "codec=3 rate=32000 channels=2 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=649 endpoint_dry=0"
+    },
+    {
+      "test": "random-l1-v1-r2-mono-d0.3.mp1",
+      "result": "matched",
+      "snr_db": 121.1,
+      "relative_peak_error": 1.2290061175008504e-06,
+      "stats": "codec=3 rate=32000 channels=1 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=540 endpoint_dry=0"
+    },
+    {
+      "test": "random-l1-v1-r2-mono-d1.0.mp1",
+      "result": "matched",
+      "snr_db": 114.8,
+      "relative_peak_error": 3.917178656425131e-06,
+      "stats": "codec=3 rate=32000 channels=1 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=427 endpoint_dry=0"
+    },
+    {
+      "test": "random-l1-v2-r0-stereo-d0.3.mp1",
+      "result": "matched",
+      "snr_db": 116.2,
+      "relative_peak_error": 2.6950135146359796e-06,
+      "stats": "codec=3 rate=22050 channels=2 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=460 endpoint_dry=0"
+    },
+    {
+      "test": "random-l1-v2-r0-stereo-d1.0.mp1",
+      "result": "matched",
+      "snr_db": 113.1,
+      "relative_peak_error": 5.621894572521845e-06,
+      "stats": "codec=3 rate=22050 channels=2 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=434 endpoint_dry=0"
+    },
+    {
+      "test": "random-l1-v2-r0-joint-d0.3.mp1",
+      "result": "matched",
+      "snr_db": 113.1,
+      "relative_peak_error": 6.653404405901679e-06,
+      "stats": "codec=3 rate=22050 channels=2 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=441 endpoint_dry=0"
+    },
+    {
+      "test": "random-l1-v2-r0-joint-d1.0.mp1",
+      "result": "matched",
+      "snr_db": 113.4,
+      "relative_peak_error": 3.996377706583265e-06,
+      "stats": "codec=3 rate=22050 channels=2 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=468 endpoint_dry=0"
+    },
+    {
+      "test": "random-l1-v2-r0-dual-d0.3.mp1",
+      "result": "matched",
+      "snr_db": 113.0,
+      "relative_peak_error": 5.322025340707964e-06,
+      "stats": "codec=3 rate=22050 channels=2 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=461 endpoint_dry=0"
+    },
+    {
+      "test": "random-l1-v2-r0-dual-d1.0.mp1",
+      "result": "matched",
+      "snr_db": 116.7,
+      "relative_peak_error": 2.799672341795584e-06,
+      "stats": "codec=3 rate=22050 channels=2 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=445 endpoint_dry=0"
+    },
+    {
+      "test": "random-l1-v2-r0-mono-d0.3.mp1",
+      "result": "matched",
+      "snr_db": 118.9,
+      "relative_peak_error": 1.5584964383346932e-06,
+      "stats": "codec=3 rate=22050 channels=1 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=476 endpoint_dry=0"
+    },
+    {
+      "test": "random-l1-v2-r0-mono-d1.0.mp1",
+      "result": "matched",
+      "snr_db": 116.2,
+      "relative_peak_error": 3.0657979410186783e-06,
+      "stats": "codec=3 rate=22050 channels=1 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=488 endpoint_dry=0"
+    },
+    {
+      "test": "random-l1-v2-r1-stereo-d0.3.mp1",
+      "result": "matched",
+      "snr_db": 108.7,
+      "relative_peak_error": 9.970356764973125e-06,
+      "stats": "codec=3 rate=24000 channels=2 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=555 endpoint_dry=0"
+    },
+    {
+      "test": "random-l1-v2-r1-stereo-d1.0.mp1",
+      "result": "matched",
+      "snr_db": 116.0,
+      "relative_peak_error": 2.7843547919596023e-06,
+      "stats": "codec=3 rate=24000 channels=2 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=690 endpoint_dry=0"
+    },
+    {
+      "test": "random-l1-v2-r1-joint-d0.3.mp1",
+      "result": "matched",
+      "snr_db": 113.4,
+      "relative_peak_error": 3.6756309950188e-06,
+      "stats": "codec=3 rate=24000 channels=2 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=456 endpoint_dry=0"
+    },
+    {
+      "test": "random-l1-v2-r1-joint-d1.0.mp1",
+      "result": "matched",
+      "snr_db": 115.0,
+      "relative_peak_error": 3.1514137022001996e-06,
+      "stats": "codec=3 rate=24000 channels=2 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=523 endpoint_dry=0"
+    },
+    {
+      "test": "random-l1-v2-r1-dual-d0.3.mp1",
+      "result": "matched",
+      "snr_db": 111.5,
+      "relative_peak_error": 7.446513060135103e-06,
+      "stats": "codec=3 rate=24000 channels=2 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=522 endpoint_dry=0"
+    },
+    {
+      "test": "random-l1-v2-r1-dual-d1.0.mp1",
+      "result": "matched",
+      "snr_db": 116.1,
+      "relative_peak_error": 3.040140217247423e-06,
+      "stats": "codec=3 rate=24000 channels=2 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=456 endpoint_dry=0"
+    },
+    {
+      "test": "random-l1-v2-r1-mono-d0.3.mp1",
+      "result": "matched",
+      "snr_db": 112.8,
+      "relative_peak_error": 4.043291082185614e-06,
+      "stats": "codec=3 rate=24000 channels=1 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=525 endpoint_dry=0"
+    },
+    {
+      "test": "random-l1-v2-r1-mono-d1.0.mp1",
+      "result": "matched",
+      "snr_db": 112.7,
+      "relative_peak_error": 4.403045267850432e-06,
+      "stats": "codec=3 rate=24000 channels=1 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=532 endpoint_dry=0"
+    },
+    {
+      "test": "random-l1-v2-r2-stereo-d0.3.mp1",
+      "result": "matched",
+      "snr_db": 117.8,
+      "relative_peak_error": 2.9064106700148516e-06,
+      "stats": "codec=3 rate=16000 channels=2 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=539 endpoint_dry=0"
+    },
+    {
+      "test": "random-l1-v2-r2-stereo-d1.0.mp1",
+      "result": "matched",
+      "snr_db": 119.0,
+      "relative_peak_error": 2.2917421463031626e-06,
+      "stats": "codec=3 rate=16000 channels=2 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=718 endpoint_dry=0"
+    },
+    {
+      "test": "random-l1-v2-r2-joint-d0.3.mp1",
+      "result": "matched",
+      "snr_db": 116.1,
+      "relative_peak_error": 4.009028178733625e-06,
+      "stats": "codec=3 rate=16000 channels=2 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=613 endpoint_dry=0"
+    },
+    {
+      "test": "random-l1-v2-r2-joint-d1.0.mp1",
+      "result": "matched",
+      "snr_db": 112.5,
+      "relative_peak_error": 4.376253840054421e-06,
+      "stats": "codec=3 rate=16000 channels=2 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=447 endpoint_dry=0"
+    },
+    {
+      "test": "random-l1-v2-r2-dual-d0.3.mp1",
+      "result": "matched",
+      "snr_db": 118.8,
+      "relative_peak_error": 1.7767046481702828e-06,
+      "stats": "codec=3 rate=16000 channels=2 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=455 endpoint_dry=0"
+    },
+    {
+      "test": "random-l1-v2-r2-dual-d1.0.mp1",
+      "result": "matched",
+      "snr_db": 113.8,
+      "relative_peak_error": 4.0133819445662366e-06,
+      "stats": "codec=3 rate=16000 channels=2 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=648 endpoint_dry=0"
+    },
+    {
+      "test": "random-l1-v2-r2-mono-d0.3.mp1",
+      "result": "matched",
+      "snr_db": 113.1,
+      "relative_peak_error": 3.3313686517879485e-06,
+      "stats": "codec=3 rate=16000 channels=1 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=585 endpoint_dry=0"
+    },
+    {
+      "test": "random-l1-v2-r2-mono-d1.0.mp1",
+      "result": "matched",
+      "snr_db": 115.6,
+      "relative_peak_error": 4.122829185263917e-06,
+      "stats": "codec=3 rate=16000 channels=1 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=516 endpoint_dry=0"
+    },
+    {
+      "test": "random-l2-v1-r0-stereo-d0.3.mp2",
+      "result": "matched",
+      "snr_db": 116.4,
+      "relative_peak_error": 4.004539406582975e-06,
+      "stats": "codec=3 rate=44100 channels=2 bits=0 frames=18432 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=781 endpoint_dry=0"
+    },
+    {
+      "test": "random-l2-v1-r0-stereo-d1.0.mp2",
+      "result": "matched",
+      "snr_db": 113.6,
+      "relative_peak_error": 4.655663894467454e-06,
+      "stats": "codec=3 rate=44100 channels=2 bits=0 frames=18432 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=765 endpoint_dry=0"
+    },
+    {
+      "test": "random-l2-v1-r0-joint-d0.3.mp2",
+      "result": "matched",
+      "snr_db": 113.0,
+      "relative_peak_error": 4.580042917127892e-06,
+      "stats": "codec=3 rate=44100 channels=2 bits=0 frames=18432 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=753 endpoint_dry=0"
+    },
+    {
+      "test": "random-l2-v1-r0-joint-d1.0.mp2",
+      "result": "matched",
+      "snr_db": 116.7,
+      "relative_peak_error": 2.8514984043721497e-06,
+      "stats": "codec=3 rate=44100 channels=2 bits=0 frames=18432 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=810 endpoint_dry=0"
+    },
+    {
+      "test": "random-l2-v1-r0-dual-d0.3.mp2",
+      "result": "matched",
+      "snr_db": 115.0,
+      "relative_peak_error": 4.366101293550011e-06,
+      "stats": "codec=3 rate=44100 channels=2 bits=0 frames=18432 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=795 endpoint_dry=0"
+    },
+    {
+      "test": "random-l2-v1-r0-dual-d1.0.mp2",
+      "result": "matched",
+      "snr_db": 114.2,
+      "relative_peak_error": 4.036617862821913e-06,
+      "stats": "codec=3 rate=44100 channels=2 bits=0 frames=18432 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1002 endpoint_dry=0"
+    },
+    {
+      "test": "random-l2-v1-r0-mono-d0.3.mp2",
+      "result": "matched",
+      "snr_db": 116.0,
+      "relative_peak_error": 2.2417940343530967e-06,
+      "stats": "codec=3 rate=44100 channels=1 bits=0 frames=18432 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=729 endpoint_dry=0"
+    },
+    {
+      "test": "random-l2-v1-r0-mono-d1.0.mp2",
+      "result": "matched",
+      "snr_db": 113.6,
+      "relative_peak_error": 3.2402664258788685e-06,
+      "stats": "codec=3 rate=44100 channels=1 bits=0 frames=18432 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=857 endpoint_dry=0"
+    },
+    {
+      "test": "random-l2-v1-r1-stereo-d0.3.mp2",
+      "result": "matched",
+      "snr_db": 118.1,
+      "relative_peak_error": 2.6391081524264275e-06,
+      "stats": "codec=3 rate=48000 channels=2 bits=0 frames=18432 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=652 endpoint_dry=0"
+    },
+    {
+      "test": "random-l2-v1-r1-stereo-d1.0.mp2",
+      "result": "matched",
+      "snr_db": 113.8,
+      "relative_peak_error": 7.817821536937271e-06,
+      "stats": "codec=3 rate=48000 channels=2 bits=0 frames=18432 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=898 endpoint_dry=0"
+    },
+    {
+      "test": "random-l2-v1-r1-joint-d0.3.mp2",
+      "result": "matched",
+      "snr_db": 113.8,
+      "relative_peak_error": 4.272927988417034e-06,
+      "stats": "codec=3 rate=48000 channels=2 bits=0 frames=18432 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=868 endpoint_dry=0"
+    },
+    {
+      "test": "random-l2-v1-r1-joint-d1.0.mp2",
+      "result": "matched",
+      "snr_db": 117.3,
+      "relative_peak_error": 4.368931339730649e-06,
+      "stats": "codec=3 rate=48000 channels=2 bits=0 frames=18432 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=725 endpoint_dry=0"
+    },
+    {
+      "test": "random-l2-v1-r1-dual-d0.3.mp2",
+      "result": "matched",
+      "snr_db": 114.5,
+      "relative_peak_error": 4.037296854976413e-06,
+      "stats": "codec=3 rate=48000 channels=2 bits=0 frames=18432 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1059 endpoint_dry=0"
+    },
+    {
+      "test": "random-l2-v1-r1-dual-d1.0.mp2",
+      "result": "matched",
+      "snr_db": 112.7,
+      "relative_peak_error": 5.215789931114819e-06,
+      "stats": "codec=3 rate=48000 channels=2 bits=0 frames=18432 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=730 endpoint_dry=0"
+    },
+    {
+      "test": "random-l2-v1-r1-mono-d0.3.mp2",
+      "result": "matched",
+      "snr_db": 117.4,
+      "relative_peak_error": 3.948015157495007e-06,
+      "stats": "codec=3 rate=48000 channels=1 bits=0 frames=18432 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=854 endpoint_dry=0"
+    },
+    {
+      "test": "random-l2-v1-r1-mono-d1.0.mp2",
+      "result": "matched",
+      "snr_db": 111.4,
+      "relative_peak_error": 6.454266550332403e-06,
+      "stats": "codec=3 rate=48000 channels=1 bits=0 frames=18432 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=818 endpoint_dry=0"
+    },
+    {
+      "test": "random-l2-v1-r2-stereo-d0.3.mp2",
+      "result": "matched",
+      "snr_db": 118.9,
+      "relative_peak_error": 1.9299649829671977e-06,
+      "stats": "codec=3 rate=32000 channels=2 bits=0 frames=18432 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=944 endpoint_dry=0"
+    },
+    {
+      "test": "random-l2-v1-r2-stereo-d1.0.mp2",
+      "result": "matched",
+      "snr_db": 113.4,
+      "relative_peak_error": 4.723828874121388e-06,
+      "stats": "codec=3 rate=32000 channels=2 bits=0 frames=18432 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=830 endpoint_dry=0"
+    },
+    {
+      "test": "random-l2-v1-r2-joint-d0.3.mp2",
+      "result": "matched",
+      "snr_db": 116.4,
+      "relative_peak_error": 3.007215564159484e-06,
+      "stats": "codec=3 rate=32000 channels=2 bits=0 frames=18432 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=730 endpoint_dry=0"
+    },
+    {
+      "test": "random-l2-v1-r2-joint-d1.0.mp2",
+      "result": "matched",
+      "snr_db": 114.0,
+      "relative_peak_error": 6.044936704784103e-06,
+      "stats": "codec=3 rate=32000 channels=2 bits=0 frames=18432 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=739 endpoint_dry=0"
+    },
+    {
+      "test": "random-l2-v1-r2-dual-d0.3.mp2",
+      "result": "matched",
+      "snr_db": 115.4,
+      "relative_peak_error": 3.020872445790444e-06,
+      "stats": "codec=3 rate=32000 channels=2 bits=0 frames=18432 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=996 endpoint_dry=0"
+    },
+    {
+      "test": "random-l2-v1-r2-dual-d1.0.mp2",
+      "result": "matched",
+      "snr_db": 114.4,
+      "relative_peak_error": 4.665735144818824e-06,
+      "stats": "codec=3 rate=32000 channels=2 bits=0 frames=18432 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=734 endpoint_dry=0"
+    },
+    {
+      "test": "random-l2-v1-r2-mono-d0.3.mp2",
+      "result": "matched",
+      "snr_db": 113.0,
+      "relative_peak_error": 6.746215944568313e-06,
+      "stats": "codec=3 rate=32000 channels=1 bits=0 frames=18432 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=707 endpoint_dry=0"
+    },
+    {
+      "test": "random-l2-v1-r2-mono-d1.0.mp2",
+      "result": "matched",
+      "snr_db": 116.2,
+      "relative_peak_error": 3.589951240835726e-06,
+      "stats": "codec=3 rate=32000 channels=1 bits=0 frames=18432 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=938 endpoint_dry=0"
+    },
+    {
+      "test": "random-l2-v2-r0-stereo-d0.3.mp2",
+      "result": "matched",
+      "snr_db": 114.3,
+      "relative_peak_error": 6.716588153911866e-06,
+      "stats": "codec=3 rate=22050 channels=2 bits=0 frames=18432 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=652 endpoint_dry=0"
+    },
+    {
+      "test": "random-l2-v2-r0-stereo-d1.0.mp2",
+      "result": "matched",
+      "snr_db": 112.7,
+      "relative_peak_error": 4.589795208648297e-06,
+      "stats": "codec=3 rate=22050 channels=2 bits=0 frames=18432 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=692 endpoint_dry=0"
+    },
+    {
+      "test": "random-l2-v2-r0-joint-d0.3.mp2",
+      "result": "matched",
+      "snr_db": 115.4,
+      "relative_peak_error": 3.823662441316479e-06,
+      "stats": "codec=3 rate=22050 channels=2 bits=0 frames=18432 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=771 endpoint_dry=0"
+    },
+    {
+      "test": "random-l2-v2-r0-joint-d1.0.mp2",
+      "result": "matched",
+      "snr_db": 112.3,
+      "relative_peak_error": 5.32231201233816e-06,
+      "stats": "codec=3 rate=22050 channels=2 bits=0 frames=18432 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=953 endpoint_dry=0"
+    },
+    {
+      "test": "random-l2-v2-r0-dual-d0.3.mp2",
+      "result": "matched",
+      "snr_db": 114.1,
+      "relative_peak_error": 3.508959179658635e-06,
+      "stats": "codec=3 rate=22050 channels=2 bits=0 frames=18432 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=584 endpoint_dry=0"
+    },
+    {
+      "test": "random-l2-v2-r0-dual-d1.0.mp2",
+      "result": "matched",
+      "snr_db": 113.9,
+      "relative_peak_error": 4.792954674725594e-06,
+      "stats": "codec=3 rate=22050 channels=2 bits=0 frames=18432 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=842 endpoint_dry=0"
+    },
+    {
+      "test": "random-l2-v2-r0-mono-d0.3.mp2",
+      "result": "matched",
+      "snr_db": 116.1,
+      "relative_peak_error": 3.0777159357338953e-06,
+      "stats": "codec=3 rate=22050 channels=1 bits=0 frames=18432 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=881 endpoint_dry=0"
+    },
+    {
+      "test": "random-l2-v2-r0-mono-d1.0.mp2",
+      "result": "matched",
+      "snr_db": 114.9,
+      "relative_peak_error": 2.094605889173483e-06,
+      "stats": "codec=3 rate=22050 channels=1 bits=0 frames=18432 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=721 endpoint_dry=0"
+    },
+    {
+      "test": "random-l2-v2-r1-stereo-d0.3.mp2",
+      "result": "matched",
+      "snr_db": 112.5,
+      "relative_peak_error": 6.720734385257963e-06,
+      "stats": "codec=3 rate=24000 channels=2 bits=0 frames=18432 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=731 endpoint_dry=0"
+    },
+    {
+      "test": "random-l2-v2-r1-stereo-d1.0.mp2",
+      "result": "matched",
+      "snr_db": 115.0,
+      "relative_peak_error": 2.6386097466222016e-06,
+      "stats": "codec=3 rate=24000 channels=2 bits=0 frames=18432 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=661 endpoint_dry=0"
+    },
+    {
+      "test": "random-l2-v2-r1-joint-d0.3.mp2",
+      "result": "matched",
+      "snr_db": 114.9,
+      "relative_peak_error": 5.930544121478777e-06,
+      "stats": "codec=3 rate=24000 channels=2 bits=0 frames=18432 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=2148 endpoint_dry=0"
+    },
+    {
+      "test": "random-l2-v2-r1-joint-d1.0.mp2",
+      "result": "matched",
+      "snr_db": 114.5,
+      "relative_peak_error": 4.260748206371927e-06,
+      "stats": "codec=3 rate=24000 channels=2 bits=0 frames=18432 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=796 endpoint_dry=0"
+    },
+    {
+      "test": "random-l2-v2-r1-dual-d0.3.mp2",
+      "result": "matched",
+      "snr_db": 113.5,
+      "relative_peak_error": 6.771300201531655e-06,
+      "stats": "codec=3 rate=24000 channels=2 bits=0 frames=18432 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=748 endpoint_dry=0"
+    },
+    {
+      "test": "random-l2-v2-r1-dual-d1.0.mp2",
+      "result": "matched",
+      "snr_db": 114.4,
+      "relative_peak_error": 4.8042906683205074e-06,
+      "stats": "codec=3 rate=24000 channels=2 bits=0 frames=18432 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=756 endpoint_dry=0"
+    },
+    {
+      "test": "random-l2-v2-r1-mono-d0.3.mp2",
+      "result": "matched",
+      "snr_db": 115.2,
+      "relative_peak_error": 6.803828164722518e-06,
+      "stats": "codec=3 rate=24000 channels=1 bits=0 frames=18432 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=856 endpoint_dry=0"
+    },
+    {
+      "test": "random-l2-v2-r1-mono-d1.0.mp2",
+      "result": "matched",
+      "snr_db": 113.7,
+      "relative_peak_error": 3.541834524711152e-06,
+      "stats": "codec=3 rate=24000 channels=1 bits=0 frames=18432 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=746 endpoint_dry=0"
+    },
+    {
+      "test": "random-l2-v2-r2-stereo-d0.3.mp2",
+      "result": "matched",
+      "snr_db": 112.7,
+      "relative_peak_error": 6.997230115214369e-06,
+      "stats": "codec=3 rate=16000 channels=2 bits=0 frames=18432 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1336 endpoint_dry=0"
+    },
+    {
+      "test": "random-l2-v2-r2-stereo-d1.0.mp2",
+      "result": "matched",
+      "snr_db": 112.9,
+      "relative_peak_error": 4.349391585154868e-06,
+      "stats": "codec=3 rate=16000 channels=2 bits=0 frames=18432 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=887 endpoint_dry=0"
+    },
+    {
+      "test": "random-l2-v2-r2-joint-d0.3.mp2",
+      "result": "matched",
+      "snr_db": 114.5,
+      "relative_peak_error": 2.6438623950290137e-06,
+      "stats": "codec=3 rate=16000 channels=2 bits=0 frames=18432 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=766 endpoint_dry=0"
+    },
+    {
+      "test": "random-l2-v2-r2-joint-d1.0.mp2",
+      "result": "matched",
+      "snr_db": 114.2,
+      "relative_peak_error": 2.6893911969652058e-06,
+      "stats": "codec=3 rate=16000 channels=2 bits=0 frames=18432 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1108 endpoint_dry=0"
+    },
+    {
+      "test": "random-l2-v2-r2-dual-d0.3.mp2",
+      "result": "matched",
+      "snr_db": 115.6,
+      "relative_peak_error": 4.0672120796957004e-06,
+      "stats": "codec=3 rate=16000 channels=2 bits=0 frames=18432 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=775 endpoint_dry=0"
+    },
+    {
+      "test": "random-l2-v2-r2-dual-d1.0.mp2",
+      "result": "matched",
+      "snr_db": 113.3,
+      "relative_peak_error": 5.235412320262767e-06,
+      "stats": "codec=3 rate=16000 channels=2 bits=0 frames=18432 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=877 endpoint_dry=0"
+    },
+    {
+      "test": "random-l2-v2-r2-mono-d0.3.mp2",
+      "result": "matched",
+      "snr_db": 113.0,
+      "relative_peak_error": 8.38386804453753e-06,
+      "stats": "codec=3 rate=16000 channels=1 bits=0 frames=18432 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=726 endpoint_dry=0"
+    },
+    {
+      "test": "random-l2-v2-r2-mono-d1.0.mp2",
+      "result": "matched",
+      "snr_db": 116.1,
+      "relative_peak_error": 2.476922308442053e-06,
+      "stats": "codec=3 rate=16000 channels=1 bits=0 frames=18432 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=762 endpoint_dry=0"
+    },
+    {
+      "test": "ffmpeg-32000-64-stereo.mp2",
+      "result": "matched",
+      "snr_db": 121.5,
+      "relative_peak_error": 1.8746350065265825e-06,
+      "stats": "codec=3 rate=32000 channels=2 bits=0 frames=39168 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1001 endpoint_dry=0",
+      "joint_stereo_frames": 0
+    },
+    {
+      "test": "ffmpeg-32000-128-stereo.mp2",
+      "result": "matched",
+      "snr_db": 120.1,
+      "relative_peak_error": 2.0448007071505076e-06,
+      "stats": "codec=3 rate=32000 channels=2 bits=0 frames=39168 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1244 endpoint_dry=0",
+      "joint_stereo_frames": 0
+    },
+    {
+      "test": "ffmpeg-32000-192-stereo.mp2",
+      "result": "matched",
+      "snr_db": 119.6,
+      "relative_peak_error": 2.3481948875541196e-06,
+      "stats": "codec=3 rate=32000 channels=2 bits=0 frames=39168 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1927 endpoint_dry=0",
+      "joint_stereo_frames": 0
+    },
+    {
+      "test": "ffmpeg-32000-384-stereo.mp2",
+      "result": "matched",
+      "snr_db": 119.7,
+      "relative_peak_error": 2.3797938250745935e-06,
+      "stats": "codec=3 rate=32000 channels=2 bits=0 frames=39168 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=1721 endpoint_dry=0",
+      "joint_stereo_frames": 0
+    },
+    {
+      "test": "ffmpeg-32000-64-mono.mp2",
+      "result": "matched",
+      "snr_db": 119.0,
+      "relative_peak_error": 2.225321116255903e-06,
+      "stats": "codec=3 rate=32000 channels=1 bits=0 frames=39168 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=1692 endpoint_dry=0",
+      "joint_stereo_frames": 0
+    },
+    {
+      "test": "ffmpeg-44100-64-stereo.mp2",
+      "result": "matched",
+      "snr_db": 121.1,
+      "relative_peak_error": 2.0152118706142855e-06,
+      "stats": "codec=3 rate=44100 channels=2 bits=0 frames=52992 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1298 endpoint_dry=0",
+      "joint_stereo_frames": 0
+    },
+    {
+      "test": "ffmpeg-44100-128-stereo.mp2",
+      "result": "matched",
+      "snr_db": 120.4,
+      "relative_peak_error": 1.8309212076620662e-06,
+      "stats": "codec=3 rate=44100 channels=2 bits=0 frames=52992 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1429 endpoint_dry=0",
+      "joint_stereo_frames": 0
+    },
+    {
+      "test": "ffmpeg-44100-192-stereo.mp2",
+      "result": "matched",
+      "snr_db": 119.9,
+      "relative_peak_error": 1.9844454910031975e-06,
+      "stats": "codec=3 rate=44100 channels=2 bits=0 frames=52992 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2220 endpoint_dry=0",
+      "joint_stereo_frames": 0
+    },
+    {
+      "test": "ffmpeg-44100-384-stereo.mp2",
+      "result": "matched",
+      "snr_db": 119.9,
+      "relative_peak_error": 2.0686026965565964e-06,
+      "stats": "codec=3 rate=44100 channels=2 bits=0 frames=52992 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=1802 endpoint_dry=0",
+      "joint_stereo_frames": 0
+    },
+    {
+      "test": "ffmpeg-44100-64-mono.mp2",
+      "result": "matched",
+      "snr_db": 119.2,
+      "relative_peak_error": 1.8178717884113583e-06,
+      "stats": "codec=3 rate=44100 channels=1 bits=0 frames=52992 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1218 endpoint_dry=0",
+      "joint_stereo_frames": 0
+    },
+    {
+      "test": "ffmpeg-48000-64-stereo.mp2",
+      "result": "matched",
+      "snr_db": 121.2,
+      "relative_peak_error": 1.9146529521816294e-06,
+      "stats": "codec=3 rate=48000 channels=2 bits=0 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1399 endpoint_dry=0",
+      "joint_stereo_frames": 0
+    },
+    {
+      "test": "ffmpeg-48000-128-stereo.mp2",
+      "result": "matched",
+      "snr_db": 120.4,
+      "relative_peak_error": 2.1466853808282784e-06,
+      "stats": "codec=3 rate=48000 channels=2 bits=0 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1487 endpoint_dry=0",
+      "joint_stereo_frames": 0
+    },
+    {
+      "test": "ffmpeg-48000-192-stereo.mp2",
+      "result": "matched",
+      "snr_db": 120.3,
+      "relative_peak_error": 1.958779729560714e-06,
+      "stats": "codec=3 rate=48000 channels=2 bits=0 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1588 endpoint_dry=0",
+      "joint_stereo_frames": 0
+    },
+    {
+      "test": "ffmpeg-48000-384-stereo.mp2",
+      "result": "matched",
+      "snr_db": 119.9,
+      "relative_peak_error": 2.231460136601064e-06,
+      "stats": "codec=3 rate=48000 channels=2 bits=0 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=2170 endpoint_dry=0",
+      "joint_stereo_frames": 0
+    },
+    {
+      "test": "ffmpeg-48000-64-mono.mp2",
+      "result": "matched",
+      "snr_db": 119.4,
+      "relative_peak_error": 1.7849710381583785e-06,
+      "stats": "codec=3 rate=48000 channels=1 bits=0 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1269 endpoint_dry=0",
+      "joint_stereo_frames": 0
+    },
+    {
+      "test": "ffmpeg-16000-64-stereo.mp2",
+      "result": "matched",
+      "snr_db": 119.1,
+      "relative_peak_error": 2.3890058260145627e-06,
+      "stats": "codec=3 rate=16000 channels=2 bits=0 frames=19584 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=821 endpoint_dry=0",
+      "joint_stereo_frames": 0
+    },
+    {
+      "test": "twolame-16000-32-mono-crc.mp2",
+      "result": "matched",
+      "snr_db": 120.1,
+      "relative_peak_error": 1.73584268404923e-06,
+      "stats": "codec=3 rate=16000 channels=1 bits=0 frames=19584 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=690 endpoint_dry=0",
+      "joint_stereo_frames": 0
+    },
+    {
+      "test": "ffmpeg-22050-64-stereo.mp2",
+      "result": "matched",
+      "snr_db": 120.8,
+      "relative_peak_error": 1.901024875571723e-06,
+      "stats": "codec=3 rate=22050 channels=2 bits=0 frames=26496 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=826 endpoint_dry=0",
+      "joint_stereo_frames": 0
+    },
+    {
+      "test": "twolame-22050-32-mono-crc.mp2",
+      "result": "matched",
+      "snr_db": 121.7,
+      "relative_peak_error": 1.4033685693665308e-06,
+      "stats": "codec=3 rate=22050 channels=1 bits=0 frames=26496 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=723 endpoint_dry=0",
+      "joint_stereo_frames": 0
+    },
+    {
+      "test": "ffmpeg-24000-64-stereo.mp2",
+      "result": "matched",
+      "snr_db": 120.8,
+      "relative_peak_error": 2.1324370942049153e-06,
+      "stats": "codec=3 rate=24000 channels=2 bits=0 frames=28800 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=898 endpoint_dry=0",
+      "joint_stereo_frames": 0
+    },
+    {
+      "test": "twolame-24000-32-mono-crc.mp2",
+      "result": "matched",
+      "snr_db": 121.1,
+      "relative_peak_error": 1.517540299863434e-06,
+      "stats": "codec=3 rate=24000 channels=1 bits=0 frames=28800 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=965 endpoint_dry=0",
+      "joint_stereo_frames": 0
+    },
+    {
+      "test": "twolame-32000-96-stereo.mp2",
+      "result": "matched",
+      "snr_db": 122.4,
+      "relative_peak_error": 1.7013256550417173e-06,
+      "stats": "codec=3 rate=32000 channels=2 bits=0 frames=39168 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=977 endpoint_dry=0",
+      "joint_stereo_frames": 0
+    },
+    {
+      "test": "twolame-44100-160-stereo.mp2",
+      "result": "matched",
+      "snr_db": 121.4,
+      "relative_peak_error": 1.7006701490722419e-06,
+      "stats": "codec=3 rate=44100 channels=2 bits=0 frames=52992 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=1378 endpoint_dry=0",
+      "joint_stereo_frames": 0
+    },
+    {
+      "test": "twolame-48000-256-stereo.mp2",
+      "result": "matched",
+      "snr_db": 120.6,
+      "relative_peak_error": 1.773169994587576e-06,
+      "stats": "codec=3 rate=48000 channels=2 bits=0 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1717 endpoint_dry=0",
+      "joint_stereo_frames": 0
+    },
+    {
+      "test": "twolame-32000-96-joint_stereo.mp2",
+      "result": "matched",
+      "snr_db": 122.3,
+      "relative_peak_error": 1.7866936087524667e-06,
+      "stats": "codec=3 rate=32000 channels=2 bits=0 frames=38016 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1234 endpoint_dry=0",
+      "joint_stereo_frames": 1
+    },
+    {
+      "test": "twolame-44100-160-joint_stereo.mp2",
+      "result": "matched",
+      "snr_db": 121.4,
+      "relative_peak_error": 1.7006701490722419e-06,
+      "stats": "codec=3 rate=44100 channels=2 bits=0 frames=51840 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1394 endpoint_dry=0",
+      "joint_stereo_frames": 0
+    },
+    {
+      "test": "twolame-48000-256-joint_stereo.mp2",
+      "result": "matched",
+      "snr_db": 120.6,
+      "relative_peak_error": 1.773169994587576e-06,
+      "stats": "codec=3 rate=48000 channels=2 bits=0 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=1480 endpoint_dry=0",
+      "joint_stereo_frames": 0
+    },
+    {
+      "test": "twolame-32000-96-dual_channel.mp2",
+      "result": "matched",
+      "snr_db": 122.4,
+      "relative_peak_error": 1.7013256550417173e-06,
+      "stats": "codec=3 rate=32000 channels=2 bits=0 frames=39168 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1205 endpoint_dry=0",
+      "joint_stereo_frames": 0
+    },
+    {
+      "test": "twolame-44100-160-dual_channel.mp2",
+      "result": "matched",
+      "snr_db": 121.4,
+      "relative_peak_error": 1.7006701490722419e-06,
+      "stats": "codec=3 rate=44100 channels=2 bits=0 frames=52992 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1435 endpoint_dry=0",
+      "joint_stereo_frames": 0
+    },
+    {
+      "test": "twolame-48000-256-dual_channel.mp2",
+      "result": "matched",
+      "snr_db": 120.6,
+      "relative_peak_error": 1.773169994587576e-06,
+      "stats": "codec=3 rate=48000 channels=2 bits=0 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=1871 endpoint_dry=0",
+      "joint_stereo_frames": 0
+    },
+    {
+      "test": "twolame-48000-64-correlated-joint.mp2",
+      "result": "matched",
+      "snr_db": 115.6,
+      "relative_peak_error": 2.1938733162479355e-06,
+      "stats": "codec=3 rate=48000 channels=2 bits=0 frames=48384 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1095 endpoint_dry=0",
+      "joint_stereo_frames": 42
+    },
+    {
+      "test": "twolame-48000-112-correlated-joint.mp2",
+      "result": "matched",
+      "snr_db": 112.6,
+      "relative_peak_error": 4.107803908575419e-06,
+      "stats": "codec=3 rate=48000 channels=2 bits=0 frames=48384 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=1181 endpoint_dry=0",
+      "joint_stereo_frames": 42
+    },
+    {
+      "test": "twolame-44100-96-correlated-joint.mp2",
+      "result": "matched",
+      "snr_db": 115.4,
+      "relative_peak_error": 2.127935564692477e-06,
+      "stats": "codec=3 rate=44100 channels=2 bits=0 frames=44928 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=1082 endpoint_dry=0",
+      "joint_stereo_frames": 0
+    },
+    {
+      "test": "twolame-32000-96-correlated-joint.mp2",
+      "result": "matched",
+      "snr_db": 114.7,
+      "relative_peak_error": 3.0841314783391167e-06,
+      "stats": "codec=3 rate=32000 channels=2 bits=0 frames=32256 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=929 endpoint_dry=0",
+      "joint_stereo_frames": 0
+    },
+    {
+      "test": "seek-layer1.mp1 seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":10365,\"maximum_discarded\":1151,\"maximum_probes\":0,\"index_points\":4,\"maximum_skimmed_headers\":26,\"maximum_stride\":0,\"maximum_preroll\":0}"
+    },
+    {
+      "test": "seek-layer2.mp2 seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":30333,\"maximum_discarded\":3455,\"maximum_probes\":0,\"index_points\":2,\"maximum_skimmed_headers\":28,\"maximum_stride\":0,\"maximum_preroll\":0}"
+    },
+    {
+      "test": "seek-layer2-lsf.mp2 seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":30333,\"maximum_discarded\":3455,\"maximum_probes\":0,\"index_points\":2,\"maximum_skimmed_headers\":28,\"maximum_stride\":0,\"maximum_preroll\":0}"
+    },
+    {
+      "test": "bad-crc.mp2",
+      "result": "rejected",
+      "stats": "Unsupported, malformed, or inaccessible file. Supports WAV, AIFF/AIFC, FLAC, MP3, Vorbis and Opus."
+    },
+    {
+      "test": "layer-change.mp2",
+      "result": "rejected",
+      "stats": "Unsupported, malformed, or inaccessible file. Supports WAV, AIFF/AIFC, FLAC, MP3, Vorbis and Opus."
+    },
+    {
+      "test": "truncated.mp2",
+      "result": "rejected",
+      "stats": "Unsupported, malformed, or inaccessible file. Supports WAV, AIFF/AIFC, FLAC, MP3, Vorbis and Opus."
+    },
+    {
+      "test": "mpeg25-layer2.mp2",
+      "result": "rejected",
+      "stats": "Unsupported, malformed, or inaccessible file. Supports WAV, AIFF/AIFC, FLAC, MP3, Vorbis and Opus."
+    },
+    {
+      "test": "bad-bitrate.mp2",
+      "result": "rejected",
+      "stats": "Unsupported, malformed, or inaccessible file. Supports WAV, AIFF/AIFC, FLAC, MP3, Vorbis and Opus."
+    },
+    {
+      "test": "free-format.mp2",
+      "result": "rejected",
+      "stats": "Unsupported, malformed, or inaccessible file. Supports WAV, AIFF/AIFC, FLAC, MP3, Vorbis and Opus."
+    },
+    {
+      "test": "bad-rate.mp2",
+      "result": "rejected",
+      "stats": "Unsupported, malformed, or inaccessible file. Supports WAV, AIFF/AIFC, FLAC, MP3, Vorbis and Opus."
+    },
+    {
+      "test": "Layer II playback",
+      "result": "played",
+      "stats": "Playing. Space: pause / resume. Q or Ctrl+C: stop. codec=3 rate=48000 channels=2 bits=0 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3280 cpu_us=2921 endpoint_dry=0"
+    }
+  ],
+  "minimum_snr_db": 105.0,
+  "maximum_relative_peak_error": 2e-05,
+  "scope": "MPEG audio Layer I/II: random valid streams for every allocation table, quantizer, scalefactor pattern, stereo mode/bound, MPEG-1 and MPEG-2 rates and CRC; FFmpeg mp2 and libtwolame encoder files; comparisons with FFmpeg mp1float/mp2float; exact seeks; malformed frames."
+}

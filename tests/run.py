@@ -51,6 +51,7 @@ def main():
         return
     step(TESTS / 'verify-pcm.py', *playback)
     step(TESTS / 'verify-mp3.py', *playback)
+    step(TESTS / 'verify-mp2.py', *playback)
     step(TESTS / 'verify-vorbis.py', *playback)
     step(TESTS / 'verify-opus.py')
     step(TESTS / 'verify-opus-multichannel.py')
