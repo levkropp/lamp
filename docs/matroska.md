@@ -1,6 +1,6 @@
 # Matroska and WebM audio
 
-LAMP 0.4.0-dev plays the audio track of Matroska (`.mka`, `.mkv`) and WebM (`.webm`) files: audio-only files, and the audio of video files while video remains future work. The demuxer (`src/mkv.s`) follows RFC 9559 (Matroska) and RFC 8794 (EBML). It feeds a container-neutral packet track layer (`src/track.s`) that the MP4 demuxer will share.
+LAMP 0.4.0-dev plays the audio track of Matroska (`.mka`, `.mkv`) and WebM (`.webm`) files: audio-only files, and the audio of video files while video remains future work. The demuxer (`src/mkv.s`) follows RFC 9559 (Matroska) and RFC 8794 (EBML). It feeds a container-neutral packet track layer (`src/track.s`) that the [MP4 demuxer](mp4.md) shares.
 
 ## Track selection
 
@@ -11,10 +11,11 @@ The demuxer selects one audio track: the first enabled audio track with a suppor
 | `A_OPUS` | Opus families 0/1 (OpusHead in CodecPrivate); pre-skip from OpusHead |
 | `A_VORBIS` | Vorbis (three Xiph-laced headers in CodecPrivate) |
 | `A_FLAC` | FLAC (`fLaC` and metadata blocks in CodecPrivate) |
+| `A_ALAC` | Apple Lossless (`ALACSpecificConfig` in CodecPrivate); see [MP4 notes](mp4.md#apple-lossless) |
 | `A_MPEG/L1`, `A_MPEG/L2`, `A_MPEG/L3` | MPEG audio Layers I–III, one frame per packet |
 | `A_PCM/INT/LIT`, `A_PCM/INT/BIG`, `A_PCM/FLOAT/IEEE` | PCM: unsigned 8-bit, signed 16/24/32-bit in either byte order, float32/64; 1–8 channels; integral 8–192 kHz SamplingFrequency |
 
-AAC, AC-3, E-AC-3, DTS, ALAC and other CodecIDs are not decoded yet; such tracks are skipped.
+AAC, AC-3, E-AC-3, DTS and other CodecIDs are not decoded yet; such tracks are skipped.
 
 ## Structure
 
@@ -24,9 +25,9 @@ DiscardPadding on the final packet trims the end, converted from nanoseconds to 
 
 ## Track layer
 
-A demuxer lists packets as pointers into the mapped file and names the codec, its private data and start/end trimming. `track_finish` opens the codec and asks it for every packet's duration: Opus TOC, Vorbis block sizes and overlap, FLAC frame headers (positions must be consecutive), MPEG audio headers (layer, version, rate and channels must not change), and PCM sizes, which must be whole frames. Each decoded packet must produce exactly its scanned duration. A track may hold 16,777,216 packets; the table reserves 384 MiB of address space and commits 192 KiB per 8,192 packets, so memory follows the file. Packets of up to 65,536 decoded frames are supported.
+A demuxer lists packets as pointers into the mapped file and names the codec, its private data and start/end trimming. `track_finish` opens the codec and asks it for every packet's duration: Opus TOC, Vorbis block sizes and overlap, FLAC frame headers (positions must be consecutive), ALAC frame headers, MPEG audio headers (layer, version, rate and channels must not change), and PCM sizes, which must be whole frames. Each decoded packet must produce exactly its scanned duration. A track may hold 16,777,216 packets; the table reserves 384 MiB of address space and commits 192 KiB per 8,192 packets, so memory follows the file. Packets of up to 65,536 decoded frames are supported.
 
-Seeking finds the packet holding the target and restarts there with the codec's pre-roll: FLAC and PCM packets decode independently, Vorbis decodes one primer packet whose output is skipped, MPEG audio decodes two frames before the target and Layer III also earlier frames holding up to 2 KiB of bit-reservoir data, and Opus starts at least 80 ms before the target. Layer III frames whose reservoir lies before the restart point emit silence and are discarded; once a frame finds all of its main data, later frames are exact. Vorbis, FLAC, PCM and MPEG audio seeks therefore equal continuous decoding; Opus seeks equal LAMP's Ogg Opus seeks.
+Seeking finds the packet holding the target and restarts there with the codec's pre-roll: FLAC, ALAC and PCM packets decode independently, Vorbis decodes one primer packet whose output is skipped, MPEG audio decodes two frames before the target and Layer III also earlier frames holding up to 2 KiB of bit-reservoir data, and Opus starts at least 80 ms before the target. Layer III frames whose reservoir lies before the restart point emit silence and are discarded; once a frame finds all of its main data, later frames are exact. Vorbis, FLAC, PCM and MPEG audio seeks therefore equal continuous decoding; Opus seeks equal LAMP's Ogg Opus seeks.
 
 ## Verification
 

@@ -90,6 +90,15 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+Apple Lossless (ALAC) algorithm reference:
+Apple Lossless Audio Codec, Copyright (c) 2011 Apple Inc.
+https://github.com/macosforge/alac
+Licensed under the Apache License, Version 2.0.
+The decoder in src/alac.s is handwritten x86-64 assembly following the
+documented bitstream and the reference algorithms (adaptive Golomb-Rice
+residuals, adaptive FIR prediction and stereo matrixing). No Apple source
+code is included in or linked into either player.
+
 Opus algorithm and probability table reference:
 Normative source archive embedded in RFC6716; not linked into either player.
 https://www.rfc-editor.org/rfc/rfc6716.html

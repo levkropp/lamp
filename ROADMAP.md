@@ -103,6 +103,8 @@ Current container progress: RIFF/RF64/BW64 audio framing now uses checked 64-bit
 
 Matroska/WebM audio tracks now play through a new container-neutral packet track layer: Opus, Vorbis, FLAC, MPEG Layers I–III and PCM, with Xiph/EBML/fixed lacing, unknown-size elements, default-track selection and final DiscardPadding. 24 FFmpeg-muxed files match FFmpeg (exact for FLAC/PCM) and LAMP's Ogg/native decodes; 42 re-muxed lacing/size/track variants decode identically; 90 seeks are exact and Opus seeks equal Ogg Opus seeks; nine malformed files reject. See [Matroska notes](docs/matroska.md).
 
+MP4/M4A/MOV audio tracks use the same track layer: Apple Lossless (a new assembly decoder), MPEG audio, Opus, FLAC and QuickTime/ISO PCM, from progressive sample tables or `moof`/`trun` fragments, with edit lists and sample durations bounding the presentation. 38 FFmpeg-muxed files, 18 of them fragmented, match FFmpeg (exact for ALAC/FLAC/PCM); fragmented files equal their progressive versions and ALAC, FLAC and Opus equal their Matroska, native FLAC and Ogg remuxes; 120 seeks are exact and Opus seeks equal Ogg Opus seeks; ten malformed files reject. AAC is next. See [MP4 notes](docs/mp4.md).
+
 MPEG audio Layers I and II now share the Layer III framing, index and synthesis: MPEG-1 and MPEG-2 lower rates, every allocation table and quantizer, all stereo modes and CRC checks. 96 random valid streams and 34 FFmpeg/libtwolame encoder files match FFmpeg's float decoders at 108.7 dB SNR or better, three files pass exact seek checks and seven malformed streams reject. See [Layer I/II notes](docs/mp2.md).
 
 FLAC in Ogg (mapping 1.0) now uses the native FLAC decoder with frame-position checks at open and exact indexed seeks; eight files from 8 to 192 kHz, 16/24-bit and 1–8 channels match FFmpeg or native FLAC exactly. Chained and multiplexed Ogg files are supported as described above.
@@ -112,9 +114,9 @@ AIFF/AIFC now adds signed 1–32-bit PCM, AIFC byte-order/fixed-container varian
 | Area | Planned coverage, in approximate priority order |
 | --- | --- |
 | Mainstream lossy audio | AAC LC/HE-AAC, AC-3/E-AC-3, MPEG Layers I/II (implemented); then DTS families, WMA variants and other relevant legacy formats |
-| Lossless and PCM | ALAC, WavPack, APE, AIFF/AIFC, RF64, FLAC-in-Ogg, broader PCM/float and FLAC depths/layouts |
+| Lossless and PCM | ALAC (implemented in MP4/Matroska), WavPack, APE, AIFF/AIFC, RF64, FLAC-in-Ogg, broader PCM/float and FLAC depths/layouts |
 | Other audio | Musepack, Speex, AMR and telephony ADPCM; further formats from the compatibility inventory as demand and feasibility justify |
-| Common containers | MP4/M4A/MOV, Matroska/WebM (audio tracks implemented), MPEG TS/PS, AVI, ASF; broader Ogg stream mappings |
+| Common containers | MP4/M4A/MOV and Matroska/WebM (audio tracks implemented), MPEG TS/PS, AVI, ASF; broader Ogg stream mappings |
 | Media structure | Track selection, timestamps, edit lists, duration/seeking, attachments, chapters, tags and large-file indexing |
 
 **Gate per format:** versioned feature/profile coverage, PCM comparisons, seek/trim cases, parser bounds and fuzzing, and a provenance review. Raw support for one sample file is insufficient. Prefer handwritten assembly; any permissive assembly implementation must retain its original notices.
