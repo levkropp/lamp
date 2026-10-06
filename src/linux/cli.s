@@ -14,22 +14,25 @@ usage:
     .ascii "Handwritten x86-64 assembly: PCM, G.711, IMA/MS/Flash ADPCM, FLAC, ALAC, WavPack, MP1/MP2/MP3, AAC-LC/HE-AAC, AC-3,\n"
     .ascii "Vorbis, Opus "
     .ascii "in WAV/W64, AIFF/AIFC, CAF, AU, FLAC, WavPack, MP3, AAC (ADTS), AC-3, Ogg, Matroska/WebM, MP4/MOV, AVI, FLV and MPEG-TS/PS files.\n"
-    .ascii "Usage: lamp-cli [--start TIME] [--repeat] [--resume] file.mp3 [more files...]\n"
+    .ascii "Usage: lamp-cli [--start TIME] [--repeat] [--resume] [--device NAME] file.mp3 [more files...]\n"
     .ascii "       lamp-cli --check [--start TIME] file.flac [more files...]\n"
     .ascii "       lamp-cli --decode [--start TIME] file.flac [more files...] output.f32\n"
     .ascii "       lamp-cli --tags file.mp3\n"
     .ascii "       lamp-cli --chapters file.m4b\n"
     .ascii "       lamp-cli --cover file.mp3 cover-image\n"
+    .ascii "       lamp-cli --list-devices\n"
     .ascii "Several files play one after another without a gap, at the first file's rate;\n"
     .ascii "M3U/M3U8 and PLS playlists add their entries. --start begins the first file at TIME\n"
     .ascii "(seconds, M:S or H:M:S, with an optional fraction); --repeat plays the list again and again;\n"
-    .ascii "--resume starts where Q stopped the same list and keeps where it stops.\n"
+    .ascii "--resume starts where Q stopped the same list and keeps where it stops; --device plays\n"
+    .ascii "on an output from --list-devices (by name, description or number).\n"
     .ascii "Playback: Space pauses/resumes; N/P next/previous file; arrows seek 5 s or 60 s;\n"
     .ascii "R toggles repeat; Q or Ctrl+C stops.\n"
     .ascii "RIFF/RIFX/RF64/BW64/W64 WAV: 1..8 channels, PCM 8/16/24/32 or float32/64.\n"
     .ascii "AIFF/AIFC: signed PCM 1..32 bits or float32/64, 1..8 channels.\n"
     .ascii "Native FLAC: 4..32 bit, 1..8 channels, speaker-mask-aware downmix.\n"
     .asciz "Opus families 0/1; playback and float export output stereo.\n"
+audio_unavailable: .asciz "Audio output unavailable. Start PulseAudio or PipeWire (pipewire-pulse).\n"
 open_error: .asciz "Unsupported, malformed, or inaccessible file. Supports WAV/W64, AIFF/AIFC, CAF, AU, FLAC, WavPack, MP1/MP2/MP3, AAC (LC, HE), AC-3, Ogg (Vorbis, Opus, FLAC), Matroska/WebM, MP4/MOV, AVI, FLV and MPEG-TS/PS audio.\n"
 output_error: .asciz "Cannot create output file.\n"
 stats_a: .asciz "codec="
@@ -52,16 +55,23 @@ cover_arg: .asciz "--cover"
 repeat_arg: .asciz "--repeat"
 start_arg: .asciz "--start"
 resume_arg: .asciz "--resume"
+device_arg: .asciz "--device"
+list_devices_arg: .asciz "--list-devices"
+unknown_device: .asciz "Unknown audio device: "
+tab_text: .asciz "\t"
 resume_xdg: .asciz "XDG_STATE_HOME"
 resume_home: .asciz "HOME"
 resume_xdg_tail: .asciz "/lamp/resume"
 resume_home_tail: .asciz "/.local/state/lamp/resume"
 resuming_text: .asciz "Resuming at "
 .p2align 3
-cli_modes: .quad check_arg, 1, decode_arg, 2, tags_arg, 3, chapters_arg, 4, cover_arg, 5, 0, 0
+cli_modes: .quad check_arg, 1, decode_arg, 2, tags_arg, 3, chapters_arg, 4, cover_arg, 5, list_devices_arg, 6
+    .quad 0, 0
+cli_device: .quad 0                    # --device's argument
 cli_start_ms: .quad 0
 cli_repeat: .long 0
 cli_resume: .long 0
+device_found: .long 0
 cli_count: .long 0
 .p2align 3
 cli_paths: .quad 0                     # the expanded list
@@ -83,6 +93,7 @@ resume_temp: .zero RESUME_PATH
 resume_key: .zero RESUME_PATH
 resume_heard: .zero RESUME_PATH
 resume_found: .zero RESUME_PATH
+device_name: .zero 260                 # the sink --device names
 timespec: .zero 16
 argc: .quad 0
 argv: .quad 0
@@ -161,6 +172,18 @@ LOCALFN cli_main
     jmp .Lcli_option
 .Lcli_start_name:
     mov rcx, rsi
+    lea rdx, [rip + device_arg]
+    call equal_text
+    test eax, eax
+    jz .Lcli_start_time
+    cmp r12, [rip + argc]
+    jae .Lshow_help
+    mov rax, [rbx + r12*8]
+    mov [rip + cli_device], rax
+    inc r12
+    jmp .Lcli_option
+.Lcli_start_time:
+    mov rcx, rsi
     lea rdx, [rip + start_arg]
     call equal_text
     test eax, eax
@@ -180,10 +203,20 @@ LOCALFN cli_main
     mov eax, [rip + operation]
     mov ecx, [rip + cli_repeat]
     or ecx, [rip + cli_resume]
+    or rcx, [rip + cli_device]
     jz .Lcli_repeat_checked
     test eax, eax
-    jnz .Lshow_help                    # --repeat and --resume play
+    jnz .Lshow_help                    # --repeat, --resume and --device play
 .Lcli_repeat_checked:
+    cmp eax, 6
+    jne .Lcli_not_list
+    test rsi, rsi
+    jnz .Lshow_help
+    cmp qword ptr [rip + cli_start_ms], 0
+    jne .Lshow_help
+    call list_devices
+    jmp .Lcleanup
+.Lcli_not_list:
     cmp eax, 3
     jb .Lcli_queue_mode
     cmp qword ptr [rip + cli_start_ms], 0
@@ -278,6 +311,12 @@ LOCALFN cli_main
     call print_chapters
     jmp .Lcleanup
 .Lplayback:
+    cmp qword ptr [rip + cli_device], 0
+    je .Lplayback_device
+    call find_device
+    test eax, eax
+    jz .Lcleanup                       # exit code 3, reported
+.Lplayback_device:
     mov rax, [rip + cli_start_ms]
     mov [rip + engine_seek_ms], rax
     cmp dword ptr [rip + cli_resume], 0
@@ -380,6 +419,12 @@ LOCALFN navigate
     mov edx, [rip + engine_heard_index]
     mov r8, [rip + engine_heard_ms]
     mov r9d, [rip + engine_seek_delta]
+    cmp ecx, 5
+    jne .Lnavigate_list
+    mov ecx, 3                         # reopen: a seek by 0
+    xor r9d, r9d
+    jmp .Lnavigate_go
+.Lnavigate_list:
     cmp ecx, 4
     jne .Lnavigate_go
     mov dword ptr [rip + engine_heard_index], -1   # the list again: its tags
@@ -637,6 +682,154 @@ LOCALFN print_clock
     add rsp, 40
     ret
 ENDFN print_clock
+
+# --list-devices: "number<TAB>name<TAB>description" per sink; exit code 3
+# without a server.
+LOCALFN list_devices
+    sub rsp, 40
+    call pulse_connect
+    test eax, eax
+    jz .Llist_devices_failed
+    lea rcx, [rip + print_device]
+    call pulse_sinks
+    test eax, eax
+    jnz .Llist_devices_close
+.Llist_devices_failed:
+    mov dword ptr [rip + exit_code], 3
+    lea rcx, [rip + audio_unavailable]
+    call print_text
+.Llist_devices_close:
+    call pulse_close
+    add rsp, 40
+    ret
+ENDFN list_devices
+
+# pulse_sinks callback: ECX=index, RDX=name, R8=description.
+LOCALFN print_device
+    push rbx
+    push rsi
+    sub rsp, 40
+    mov rbx, rdx
+    mov rsi, r8
+    call print_number
+    lea rcx, [rip + tab_text]
+    call print_text
+    mov rcx, rbx
+    call print_text
+    lea rcx, [rip + tab_text]
+    call print_text
+    mov rcx, rsi
+    call print_text
+    lea rcx, [rip + newline]
+    call print_text
+    add rsp, 40
+    pop rsi
+    pop rbx
+    ret
+ENDFN print_device
+
+# --device: finds the sink named, described or numbered by cli_device and
+# makes it pulse_device -> EAX=1; else reports it, exit code 3, EAX=0.
+LOCALFN find_device
+    sub rsp, 40
+    mov dword ptr [rip + device_found], 0
+    call pulse_connect
+    test eax, eax
+    jz .Lfind_device_unavailable
+    lea rcx, [rip + match_device]
+    call pulse_sinks
+    call pulse_close
+    cmp dword ptr [rip + device_found], 0
+    je .Lfind_device_unknown
+    lea rax, [rip + device_name]
+    mov [rip + pulse_device], rax
+    mov eax, 1
+    jmp .Lfind_device_return
+.Lfind_device_unavailable:
+    call pulse_close
+    lea rcx, [rip + audio_unavailable]
+    call print_text
+    jmp .Lfind_device_failed
+.Lfind_device_unknown:
+    lea rcx, [rip + unknown_device]
+    call print_text
+    mov rcx, [rip + cli_device]
+    call print_text
+    lea rcx, [rip + newline]
+    call print_text
+.Lfind_device_failed:
+    mov dword ptr [rip + exit_code], 3
+    xor eax, eax
+.Lfind_device_return:
+    add rsp, 40
+    ret
+ENDFN find_device
+
+# pulse_sinks callback: ECX=index, RDX=name, R8=description. The first sink
+# whose name, description or number equals cli_device becomes device_name.
+LOCALFN match_device
+    push rbx
+    push rsi
+    push rdi
+    sub rsp, 32
+    cmp dword ptr [rip + device_found], 0
+    jne .Lmatch_device_return
+    mov ebx, ecx
+    mov rsi, rdx
+    mov rdi, r8
+    mov rcx, [rip + cli_device]
+    call equal_text                    # the name
+    test eax, eax
+    jnz .Lmatch_device_found
+    mov rcx, [rip + cli_device]
+    mov rdx, rdi
+    call equal_text                    # the description
+    test eax, eax
+    jnz .Lmatch_device_found
+    mov rcx, [rip + cli_device]        # the number
+    xor eax, eax
+    xor edx, edx
+.Lmatch_device_digit:
+    movzx r8d, byte ptr [rcx]
+    test r8d, r8d
+    jz .Lmatch_device_number
+    sub r8d, '0'
+    cmp r8d, 9
+    ja .Lmatch_device_return
+    cmp eax, 100000000
+    jae .Lmatch_device_return
+    imul eax, eax, 10
+    add eax, r8d
+    inc rcx
+    inc edx
+    jmp .Lmatch_device_digit
+.Lmatch_device_number:
+    test edx, edx
+    jz .Lmatch_device_return
+    cmp eax, ebx
+    jne .Lmatch_device_return
+.Lmatch_device_found:
+    lea rdi, [rip + device_name]
+    mov ecx, 255
+.Lmatch_device_copy:
+    movzx eax, byte ptr [rsi]
+    mov [rdi], al
+    test eax, eax
+    jz .Lmatch_device_copied
+    inc rsi
+    inc rdi
+    dec ecx
+    jnz .Lmatch_device_copy
+    jmp .Lmatch_device_return          # too long to be a sink name
+.Lmatch_device_copied:
+    mov dword ptr [rip + device_found], 1
+.Lmatch_device_return:
+    add rsp, 32
+    pop rdi
+    pop rsi
+    pop rbx
+    ret
+ENDFN match_device
 
 # RCX=unsigned value, written in decimal.
 FN print_number

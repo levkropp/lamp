@@ -1,0 +1,140 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "--list-devices",
+      "result": "listed",
+      "devices": [
+        [
+          "0",
+          "{0.0.0.00000000}.{BF9C86C4-5FF7-45A3-8647-619FC93CD542}",
+          "Null Output"
+        ],
+        [
+          "1",
+          "{0.0.0.00000000}.{E9882C1B-293F-4816-8026-9119F10712E2}",
+          "Second test sink"
+        ],
+        [
+          "2",
+          "{0.0.0.00000000}.{EEAB6E68-D768-40D8-9B77-B20C402CA04A}",
+          "Third"
+        ],
+        [
+          "3",
+          "{0.0.0.00000000}.{FD47D9CC-4218-4135-9CE2-0C195C87405B}",
+          "PulseAudio Output"
+        ]
+      ]
+    },
+    {
+      "test": "--device by name",
+      "result": "played on that sink only",
+      "runs": [
+        [
+          "tone",
+          137,
+          143863
+        ]
+      ]
+    },
+    {
+      "test": "--device by description",
+      "result": "played on that sink only",
+      "runs": [
+        [
+          "tone",
+          264,
+          936
+        ],
+        [
+          "tone",
+          19200,
+          54720
+        ],
+        [
+          "tone",
+          73920,
+          70080
+        ]
+      ]
+    },
+    {
+      "test": "--device by number",
+      "result": "played on that sink only",
+      "runs": [
+        [
+          "tone",
+          264,
+          936
+        ],
+        [
+          "tone",
+          17280,
+          55680
+        ],
+        [
+          "tone",
+          72960,
+          71040
+        ]
+      ]
+    },
+    {
+      "test": "unknown device and --decode",
+      "result": "exit 3; usage"
+    },
+    {
+      "test": "killed stream reopens",
+      "result": "continued to the end",
+      "runs": [
+        [
+          "long",
+          240,
+          215280
+        ],
+        [
+          "long",
+          215256,
+          120744
+        ]
+      ]
+    },
+    {
+      "test": "removed sink",
+      "result": "continued on the default sink",
+      "runs": [
+        [
+          [
+            "long",
+            172,
+            191348
+          ],
+          [
+            "long",
+            191147,
+            77893
+          ],
+          [
+            "long",
+            269148,
+            66852
+          ]
+        ],
+        [
+          [
+            "long",
+            191147,
+            77893
+          ],
+          [
+            "long",
+            269148,
+            66852
+          ]
+        ]
+      ]
+    }
+  ],
+  "scope": "--list-devices; --device by name, description and number; unknown devices; a killed stream reopening; a removed sink."
+}

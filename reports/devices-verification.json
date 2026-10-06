@@ -1,0 +1,105 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "--list-devices",
+      "result": "listed",
+      "devices": [
+        [
+          "0",
+          "lamp_test",
+          "Null Output"
+        ],
+        [
+          "1",
+          "lamp_second",
+          "Second test sink"
+        ],
+        [
+          "2",
+          "lamp_third",
+          "Third"
+        ]
+      ]
+    },
+    {
+      "test": "--device by name",
+      "result": "played on that sink only",
+      "runs": [
+        [
+          "tone",
+          480,
+          143520
+        ]
+      ]
+    },
+    {
+      "test": "--device by description",
+      "result": "played on that sink only",
+      "runs": [
+        [
+          "tone",
+          480,
+          143520
+        ]
+      ]
+    },
+    {
+      "test": "--device by number",
+      "result": "played on that sink only",
+      "runs": [
+        [
+          "tone",
+          480,
+          143520
+        ]
+      ]
+    },
+    {
+      "test": "unknown device and --decode",
+      "result": "exit 3; usage"
+    },
+    {
+      "test": "killed stream reopens",
+      "result": "continued to the end",
+      "runs": [
+        [
+          "long",
+          480,
+          103109
+        ],
+        [
+          "long",
+          112968,
+          223032
+        ]
+      ]
+    },
+    {
+      "test": "removed sink",
+      "result": "continued on the default sink",
+      "runs": [
+        [
+          [
+            "long",
+            480,
+            123713
+          ],
+          [
+            "long",
+            124597,
+            211403
+          ]
+        ],
+        [
+          [
+            "long",
+            124323,
+            211677
+          ]
+        ]
+      ]
+    }
+  ],
+  "scope": "--list-devices; --device by name, description and number; unknown devices; a killed stream reopening; a removed sink."
+}
