@@ -9,6 +9,7 @@
 # packs, audio stream ids 0xC0-0xDF and private stream 1 AC-3 substreams.
 .include "lamp.inc"
 .globl mts_probe, mts_open, mps_probe, mps_open, mts_close
+.globl mts_begin, mts_append, mts_buffer, mts_bytes   # AVI gathers its audio here
 
 .equ MTS_MALFORMED, 100
 .equ MTS_UNSUPPORTED, 101
@@ -48,7 +49,7 @@ FN mts_close
 ENDFN mts_close
 
 # RCX=input bytes: reserves the elementary stream buffer -> EAX=1.
-LOCALFN mts_begin
+FN mts_begin
     sub rsp, 40
     mov [rip + mts_capacity], rcx
     mov qword ptr [rip + mts_bytes], 0
@@ -64,7 +65,7 @@ LOCALFN mts_begin
 ENDFN mts_begin
 
 # RCX=data, RDX=bytes: appended to the buffer -> EAX=1.
-LOCALFN mts_append
+FN mts_append
     push rsi
     push rdi
     push rbx
