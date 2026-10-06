@@ -2,9 +2,9 @@
 # Plays a list of files one after another without a gap: queue_read reads the
 # current file and, at its end, opens the next one in the same call. The
 # first file that opens sets the session rate (queue_rate), which output
-# uses; later files at another rate pass through the windowed-sinc resampler
-# (src/resample.s), as chained Ogg links do, while output_rate stays each
-# file's own. A file that does not open, or fails or ends early
+# uses, unless queue_target names one; files at another rate pass through
+# the windowed-sinc resampler (src/resample.s), as chained Ogg links do,
+# while output_rate stays each file's own. A file that does not open, or fails or ends early
 # while decoding, is skipped (queue_failures counts it) unless it is the
 # last; a decode error in the last file stays in decode_error, and skipped
 # files leave decode_error 6 at the end. A chained Ogg file whose own links
@@ -15,7 +15,7 @@
 .include "lamp.inc"
 .globl queue_begin, queue_read, queue_seek, queue_announce, queue_skipped
 .globl queue_count, queue_failures, queue_rate, queue_index, queue_repeat, queue_goto, queue_heard
-.globl queue_navigate, parse_time, queue_start, queue_open, queue_paths, queue_output
+.globl queue_navigate, parse_time, queue_start, queue_open, queue_paths, queue_output, queue_target, queue_frames
 
 .equ QUEUE_SKIPPED, 6               # decode_error after skipped files
 .equ CH_SIZE, 64                    # src/ogg_chain.s link entries
@@ -32,6 +32,7 @@ queue_count: .long 0
 queue_index: .long 0                # current file, -1 before the first
 queue_next: .long 0                 # next path to try
 queue_rate: .long 0
+queue_target: .long 0               # the session rate to resample every file to, 0 for the first file's
 queue_resampling: .long 0
 queue_failures: .long 0
 queue_playing: .long 0              # a file is open
@@ -62,8 +63,9 @@ FN queue_open
     mov [rip + queue_paths], rcx
     mov [rip + queue_count], edx
     mov [rip + queue_next], r8d
-    xor eax, eax
+    mov eax, [rip + queue_target]
     mov [rip + queue_rate], eax
+    xor eax, eax
     mov [rip + queue_failures], eax
     mov [rip + queue_resampling], eax
     mov [rip + queue_playing], eax
@@ -75,6 +77,8 @@ FN queue_open
     call queue_advance
     test eax, eax
     jz .Lqueue_begin_none
+    cmp dword ptr [rip + queue_target], 0
+    jne .Lqueue_begin_return
     mov ecx, [rip + output_rate]
     mov [rip + queue_rate], ecx
     jmp .Lqueue_begin_return
@@ -150,6 +154,8 @@ LOCALFN queue_advance
     mov dword ptr [rip + queue_resampling], 1
 .Lqueue_advance_later:
     mov dword ptr [rip + queue_playing], 1
+    cmp dword ptr [rip + queue_mark_count], 1
+    jbe .Lqueue_advance_done              # the first file of a run (resampled to queue_target)
     mov rax, [rip + queue_announce]
     test rax, rax
     jz .Lqueue_advance_done
@@ -292,17 +298,33 @@ FN queue_read
     ret
 ENDFN queue_read
 
-# RCX=frame of the current file -> RAX=resume frame (decoder_seek's). Files
-# read through the resampler do not seek: RAX=their current frame.
+# RCX=frame of the current file at the session rate -> RAX=resume frame
+# (decoder_seek's), at or before it. A resampled file seeks its decoder a
+# filter half-width before the target's input span and restarts the filter
+# there, so its output from the resume frame on equals a continuous read's.
 FN queue_seek
     sub rsp, 40
     cmp dword ptr [rip + queue_resampling], 0
-    jne .Lqueue_seek_none
+    jne .Lqueue_seek_resampled
     call decoder_seek
     mov [rip + queue_file_frames], rax
     jmp .Lqueue_seek_return
-.Lqueue_seek_none:
-    mov rax, [rip + queue_file_frames]
+.Lqueue_seek_resampled:
+    mov rax, rcx
+    mov ecx, [rip + output_rate]
+    mul rcx
+    mov ecx, [rip + queue_rate]
+    div rcx
+    mov ecx, [rip + resample_half]
+    inc rcx
+    xor edx, edx
+    sub rax, rcx
+    cmovb rax, rdx
+    mov rcx, rax
+    call decoder_seek
+    mov [rip + queue_file_frames], rax
+    mov rcx, rax
+    call resample_reset
 .Lqueue_seek_return:
     mov [rip + queue_output], rax         # before any later file starts
     add rsp, 40
@@ -509,6 +531,26 @@ FN parse_time
     ret
 ENDFN parse_time
 
+# -> RAX=the current file's frames at the session rate (as the resampler
+# yields them: ceil(N*session/own)), 0 when unknown. Leaf; keeps R8.
+FN queue_frames
+    mov rax, [rip + output_frames]
+    mov ecx, [rip + output_rate]
+    test ecx, ecx
+    jz .Lqueue_frames_done
+    cmp ecx, [rip + queue_rate]
+    je .Lqueue_frames_done
+    mov r9d, [rip + queue_rate]
+    mul r9
+    dec rcx
+    add rax, rcx
+    adc rdx, 0
+    inc rcx
+    div rcx
+.Lqueue_frames_done:
+    ret
+ENDFN queue_frames
+
 # RCX=milliseconds: the first file (just opened by queue_begin) continues
 # from there, exactly: a seek, then the frames before it read and dropped.
 # A start past its known end is its end.
@@ -529,7 +571,10 @@ FN queue_start
 .Lqueue_start_far:
     mov rax, -1
 .Lqueue_start_frames:
-    mov rcx, [rip + output_frames]
+    mov r8, rax
+    call queue_frames                  # the file's length at the session rate
+    mov rcx, rax
+    mov rax, r8
     test rcx, rcx
     jz .Lqueue_start_seek
     cmp rax, rcx

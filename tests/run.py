@@ -84,6 +84,7 @@ def main():
     step(TESTS / 'verify-cover.py')
     step(TESTS / 'verify-queue.py')
     step(TESTS / 'verify-navigation.py', *playback)
+    step(TESTS / 'verify-rate.py', *playback)
     if not WINDOWS and not playback:
         step(TESTS / 'verify-devices.py')
     if not WINDOWS and not playback:

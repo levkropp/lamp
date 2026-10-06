@@ -32,6 +32,19 @@ In the Windows player (`lamp.exe`) the context menu chooses the output:
 - **Choosing one:** playback continues on it from the file heard, at the heard position. The choice holds for the files played after it, until another is chosen.
 - **Enumeration:** the menu lists endpoints with its own enumerator, so it never touches the stream playing.
 
+## Rates and channels
+
+LAMP never reconfigures an output. Its stream is float32 stereo at the session rate:
+
+- **Session rate:** by default, the first file's rate. Later files at another rate pass through LAMP's windowed-sinc resampler (see [queue notes](queue.md)).
+- **Output conversion:** when the session rate differs from the output's, the sound server converts it with its own resampler. That is PulseAudio's configured method (PipeWire's on PipeWire), or the Windows audio engine's sample-rate converter at default quality.
+- **`--rate HZ`:** makes HZ the session rate. Every file, the first included, passes through LAMP's resampler: at least 90 dB stopband attenuation, checked against `tests/resample-oracle.c` sample for sample.
+- **`--rate device`:** uses the output's own rate, so the server or engine passes the stream through unresampled. That is the PulseAudio sink's sample rate (the default sink, or `--device`'s, asked by name), or the WASAPI endpoint's shared-mode mix rate. When the rate cannot be read, the first file's rate stays.
+- **Where `--rate` applies:** `--check` and `--decode` take `--rate HZ` but not `device`; the tag, chapter, cover and device listings take neither.
+- **Channels:** every file is mixed to stereo with the shared [speaker weights](flac.md#stereo-policy); native surround output remains open.
+
+Seeking in a resampled file is exact. The decoder seeks a filter half-width before the target's input span, and the resampler restarts there, so the output from the target on equals continuous decoding.
+
 ## Losing the output
 
 LAMP reopens the output when it fails during console playback:
@@ -46,6 +59,13 @@ LAMP reopens the output when it fails during console playback:
 Removing a PulseAudio sink normally moves its streams to another sink, and playback simply continues there. The Windows player (`lamp.exe`) reopens a lost endpoint the same way, in the file heard at the heard position, and falls back to the default output when the chosen one is gone ([player check](../reports/player-verification.json)).
 
 ## Verification
+
+`python3 tests/verify-rate.py` ([report](../reports/rate-verification.json)) checks `--rate`:
+
+- `--decode --rate 48000` of 44.1 kHz FLAC, WAV, MP3, Vorbis and AAC equals the resampler oracle applied to each file's own decode. `--rate` at a file's own rate changes nothing, and a 44.1/48/96 kHz list resamples each file but the 48 kHz one.
+- `--start` in resampled files reads exactly from the start, and `--check` counts the resampled frames. Eight malformed or misplaced `--rate` arguments print the usage.
+- `--rate device` on the private 48 kHz sink plays a 44.1 kHz file bit for bit as `--decode --rate 48000` gives it, reporting `rate=48000`. Right seeks 5 s within it, and on a 44.1 kHz sink chosen with `--device` it reports `rate=44100`.
+- `--wine` runs the same with `lamp-cli.exe` ([report](../reports/rate-wine-verification.json)). Its decodes are exact, and its playback is compared by order.
 
 `python3 tests/verify-devices.py` ([report](../reports/devices-verification.json)) loads two null sinks into a private PulseAudio server beside the default `lamp_test` sink, then checks:
 

@@ -13,6 +13,7 @@
 .equ PA_COMMAND_AUTH, 8
 .equ PA_COMMAND_SET_CLIENT_NAME, 9
 .equ PA_COMMAND_DRAIN_PLAYBACK_STREAM, 12
+.equ PA_COMMAND_GET_SINK_INFO, 21
 .equ PA_COMMAND_GET_SINK_INFO_LIST, 22
 .equ PA_COMMAND_CORK_PLAYBACK_STREAM, 41
 .equ PA_COMMAND_FLUSH_PLAYBACK_STREAM, 42
@@ -28,7 +29,7 @@
 .equ PA_DATA_CAP, 65536               # largest audio packet this client sends
 .equ PA_REPLY_CAP, PA_RECEIVE_CAP
 
-.globl pulse_requested, pulse_underflows, pulse_started, pulse_device, pulse_sinks
+.globl pulse_requested, pulse_underflows, pulse_started, pulse_device, pulse_sinks, pulse_sink_rate
 
 .data
 .p2align 3
@@ -47,6 +48,7 @@ pa_application_value: .asciz "LAMP"
 pa_media_key: .asciz "media.name"
 pa_media_value: .asciz "LAMP playback"
 pa_empty: .byte 0
+pa_default_sink: .asciz "@DEFAULT_SINK@"
 
 .bss
 .p2align 4
@@ -880,6 +882,64 @@ ENDFN pa_handle_packet
 # RCX=callback, called with ECX=sink index, RDX=its name, R8=its description
 # (NUL-terminated, valid during the call) for each sink -> EAX=1 when the
 # server listed them. Needs pulse_connect.
+# On a connection: RCX=sink name, or 0 for the default sink -> EAX=its sample
+# rate, 0 when it cannot be read.
+FN pulse_sink_rate
+    push rsi
+    push rdi
+    sub rsp, 40
+    test rcx, rcx
+    jnz .Lpa_rate_named
+    lea rcx, [rip + pa_default_sink]
+.Lpa_rate_named:
+    mov rsi, rcx
+    lea rdi, [rip + pa_command]
+    mov eax, PA_COMMAND_GET_SINK_INFO
+    call pa_begin
+    mov eax, -1                        # by name
+    call pa_u32
+    mov byte ptr [rdi], 't'
+    inc rdi
+    mov ecx, 256                       # names are short; a longer one fails
+.Lpa_rate_name:
+    movzx eax, byte ptr [rsi]
+    mov [rdi], al
+    inc rdi
+    inc rsi
+    test eax, eax
+    jz .Lpa_rate_send
+    dec ecx
+    jnz .Lpa_rate_name
+    jmp .Lpa_rate_fail
+.Lpa_rate_send:
+    call pa_send_command
+    test eax, eax
+    jz .Lpa_rate_fail
+    mov rsi, [rip + pa_reply]
+    mov rdx, [rip + pa_reply_end]
+    call pa_read_u32                   # index
+    jc .Lpa_rate_fail
+    call pa_skip                       # name
+    jc .Lpa_rate_fail
+    call pa_skip                       # description
+    jc .Lpa_rate_fail
+    lea rax, [rsi + 7]                 # sample spec: 'a', format, channels, rate
+    cmp rax, rdx
+    ja .Lpa_rate_fail
+    cmp byte ptr [rsi], 'a'
+    jne .Lpa_rate_fail
+    mov eax, [rsi + 3]
+    bswap eax
+    jmp .Lpa_rate_return
+.Lpa_rate_fail:
+    xor eax, eax
+.Lpa_rate_return:
+    add rsp, 40
+    pop rdi
+    pop rsi
+    ret
+ENDFN pulse_sink_rate
+
 FN pulse_sinks
     push rbx
     push rsi

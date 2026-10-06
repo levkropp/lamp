@@ -118,7 +118,10 @@ FN engine_start
 .Leng_seek_far:
     mov rax, -1
 .Leng_seek_frames:
-    mov rcx, [rip + output_frames]
+    mov r8, rax
+    call queue_frames                  # the file's length at the session rate
+    mov rcx, rax
+    mov rax, r8
     test rcx, rcx
     jz .Leng_seek_ready
     cmp rax, rcx

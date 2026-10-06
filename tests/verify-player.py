@@ -94,6 +94,9 @@ def main():
     run([sys.executable, ROOT / 'tools/build-windows.py', '--tests'], capture=False)
     display = Display()
     wine = dict(env, **_nav.WINE_ENV, DISPLAY=display.name)
+    # A Wine server left by an earlier suite may still be shutting down; start afresh.
+    subprocess.run(['wineserver', '-k'], env=wine, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    subprocess.run(['wineserver', '-w'], env=wine, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=120)
     checks = []
     scenarios = [list_checks, list_playback, keys, folder_playback, killed_stream, output_menu, dpi]
     only = sys.argv[sys.argv.index('--only') + 1].split(',') if '--only' in sys.argv else None

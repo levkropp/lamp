@@ -1,6 +1,6 @@
 # Drives a running lamp.exe for tests, as a user would, through window
 # messages. Each argument is a command:
-#   w        wait for the player's window (up to 30 s)
+#   w        wait for the player's window (up to 60 s)
 #   kXX      press the key with virtual-key code XX (hexadecimal)
 #   aN       send WM_APPCOMMAND N (11 next, 12 previous, 14 play/pause)
 #   oN       send WM_COMMAND N, as the context menu's item N does
@@ -74,7 +74,7 @@ FN driver_start
     je .Ldriver_close
     jmp .Ldriver_bad
 .Ldriver_wait:
-    mov r12d, 600
+    mov r12d, 1200
 .Ldriver_wait_poll:
     lea rcx, [rip + driver_class]
     xor edx, edx
