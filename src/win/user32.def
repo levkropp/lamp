@@ -25,3 +25,8 @@ EXPORTS
     FindWindowW
     GetWindowTextW
     GetClientRect
+    AppendMenuW
+    ClientToScreen
+    CreatePopupMenu
+    DestroyMenu
+    TrackPopupMenu

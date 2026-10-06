@@ -33,6 +33,7 @@ Linux x86-64 builds the same command line with `./build.sh`; paths are UTF-8 byt
 | N, next button or media key | Next file (the first after the last with repeat) |
 | P, previous button or media key | The file again after 3 s of it, else the previous file |
 | R | Repeat the list on/off |
+| Right click, Shift+F10 or menu key | Context menu: open files, repeat, output device |
 | Left/Right | Seek backward/forward five seconds in the file heard |
 | Home | Seek to its start |
 | Timeline click | Seek to that position |

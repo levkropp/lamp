@@ -25,6 +25,13 @@ On Linux the list comes from the sound server's sink list; LAMP's own PulseAudio
 
 An output that matches none of them prints `Unknown audio device` and exits with code 3 before playing.
 
+In the Windows player (`lamp.exe`) the context menu chooses the output:
+
+- **Opening it:** right-click the window, or press Shift+F10 or the menu key.
+- **Output submenu:** it lists `Default output` and each active render endpoint by friendly name, the one playing checked.
+- **Choosing one:** playback continues on it from the file heard, at the heard position. The choice holds for the files played after it, until another is chosen.
+- **Enumeration:** the menu lists endpoints with its own enumerator, so it never touches the stream playing.
+
 ## Losing the output
 
 LAMP reopens the output when it fails during console playback:
@@ -36,7 +43,7 @@ LAMP reopens the output when it fails during console playback:
 - **When the chosen output is gone:** a `--device` output that can no longer be activated is replaced by the default output from then on.
 - **When nothing can be reopened:** when no output opens at all, playback ends with the usual audio error (exit code 3).
 
-Removing a PulseAudio sink normally moves its streams to another sink, and playback simply continues there. The Windows player (`lamp.exe`) reopens a lost endpoint the same way, in the file heard at the heard position ([player check](../reports/player-verification.json)). It plays on the default endpoint; choosing another one there remains open.
+Removing a PulseAudio sink normally moves its streams to another sink, and playback simply continues there. The Windows player (`lamp.exe`) reopens a lost endpoint the same way, in the file heard at the heard position, and falls back to the default output when the chosen one is gone ([player check](../reports/player-verification.json)).
 
 ## Verification
 
@@ -53,3 +60,9 @@ Removing a PulseAudio sink normally moves its streams to another sink, and playb
 - The listing, the selection and the unknown device behave as on Linux.
 - A killed stream reports an invalidated endpoint and reopens.
 - After a removed sink, the chosen endpoint fails to initialize and the default endpoint takes over.
+
+`python3 tests/verify-player.py` ([report](../reports/player-verification.json)) checks the Windows player's Output menu:
+
+- It sends the menu's command for a second null sink's endpoint during playback.
+- The stream moves to that sink, which records the file from the heard position.
+- The `Default output` command brings it back.

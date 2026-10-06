@@ -324,6 +324,10 @@ LOCALFN ui_window_proc
     je .Lui_wm_opened
     cmp edx, 0x319
     je .Lui_wm_command
+    cmp edx, 0x7b
+    je .Lui_wm_context
+    cmp edx, 0x111
+    je .Lui_wm_menu
     cmp edx, 0x10
     je .Lui_wm_close
     cmp edx, 2
@@ -396,6 +400,14 @@ LOCALFN ui_window_proc
 .Lui_wm_opened:
     call ui_invalidate
     call ui_schedule
+    jmp .Lui_handled
+.Lui_wm_context:
+    mov rcx, r9                           # WM_CONTEXTMENU: its screen point
+    call ui_menu
+    jmp .Lui_handled
+.Lui_wm_menu:
+    movzx ecx, r8w                        # WM_COMMAND: a menu item
+    call ui_menu_command
     jmp .Lui_handled
 .Lui_wm_command:
     # WM_APPCOMMAND from media keys and remotes.
@@ -689,3 +701,4 @@ ENDFN ui_window_proc
 .include "ui_draw.inc"
 .include "ui_cover.inc"
 .include "ui_queue.inc"
+.include "ui_menu.inc"
