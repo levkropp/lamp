@@ -67,10 +67,12 @@ LOCALFN ui_make_buffer
     cmp qword ptr [rip + ui_font], 0
     jne .Lui_buffer_font
     # System font, no embedded font asset or font licensing dependency.
-    mov ecx, -17
+    mov ecx, [rip + px_font]
+    neg ecx
     call ui_make_font
     mov [rip + ui_font], rax
-    mov ecx, -30
+    mov ecx, [rip + px_big_font]
+    neg ecx
     call ui_make_font
     mov [rip + ui_big_font], rax
 .Lui_buffer_font:
@@ -185,12 +187,13 @@ ENDFN ui_text
 LOCALFN ui_center_text
     sub rsp, 56
     mov [rsp + 40], rcx
-    mov dword ptr [rip + ui_text_rect], 32
+    mov eax, [rip + px_side]
+    mov [rip + ui_text_rect], eax
     mov [rip + ui_text_rect + 4], edx
     mov eax, [rip + ui_width]
-    sub eax, 32
+    sub eax, [rip + px_side]
     mov [rip + ui_text_rect + 8], eax
-    add edx, 42
+    add edx, [rip + px_title_h]
     mov [rip + ui_text_rect + 12], edx
     mov rcx, [rip + ui_dc]
     mov edx, 0x0ede8e2
@@ -390,7 +393,7 @@ LOCALFN ui_right_text
     mov dword ptr [rip + ui_text_rect], 0
     mov [rip + ui_text_rect + 4], r8d
     mov [rip + ui_text_rect + 8], edx
-    add r8d, 24
+    add r8d, [rip + px_text_h]
     mov [rip + ui_text_rect + 12], r8d
     mov eax, r9d
     bswap eax
@@ -408,16 +411,17 @@ LOCALFN ui_right_text
     ret
 ENDFN ui_right_text
 
-# RCX=wide text, R8D=y: muted, from x=32 to the right margin, ellipsized.
+# RCX=wide text, R8D=y: muted, between the side margins, ellipsized.
 LOCALFN ui_hint_text
     sub rsp, 56
     mov [rsp + 40], rcx
-    mov dword ptr [rip + ui_text_rect], 32
+    mov eax, [rip + px_side]
+    mov [rip + ui_text_rect], eax
     mov [rip + ui_text_rect + 4], r8d
     mov eax, [rip + ui_width]
-    sub eax, 32
+    sub eax, [rip + px_side]
     mov [rip + ui_text_rect + 8], eax
-    add r8d, 24
+    add r8d, [rip + px_text_h]
     mov [rip + ui_text_rect + 12], r8d
     mov eax, [rip + ui_muted_color]
     bswap eax
@@ -436,39 +440,56 @@ LOCALFN ui_hint_text
 ENDFN ui_hint_text
 
 # ECX=x, EDX=top, R8D=0 for next (a triangle, then a bar) or 1 for previous
-# (a bar, then a triangle): a 13 by 15 pixel button.
+# (a bar, then a triangle): a 13 by 15 pixel button at 96 DPI, its rows
+# drawn from those of that size.
 LOCALFN ui_skip_icon
     push rbx
     push rsi
     push rdi
     push r12
+    push r13
+    push r14
     sub rsp, 40
     mov esi, ecx
     mov edi, edx
     mov r12d, r8d
-    mov ecx, esi                          # the bar
+    mov ecx, 15
+    call ui_px
+    mov r13d, eax                         # rows
+    mov ecx, 13
+    call ui_px
+    mov r14d, eax                         # width
+    mov ecx, 3
+    call ui_px
+    mov r8d, eax                          # the bar
+    mov ecx, esi
     test r12d, r12d
     jnz .Lui_skip_bar
-    add ecx, 10
+    add ecx, r14d
+    sub ecx, eax
 .Lui_skip_bar:
     mov edx, edi
-    mov r8d, 3
-    mov r9d, 15
+    mov r9d, r13d
     mov eax, [rip + ui_text_color]
     call ui_rect
     xor ebx, ebx
 .Lui_skip_row:
-    mov eax, ebx                          # width: 1 at the ends, 8 in the middle
-    sub eax, 7
+    mov eax, ebx                          # its row at 96 DPI
+    imul eax, eax, 15
+    xor edx, edx
+    div r13d
+    sub eax, 7                            # width there: 1 at the ends, 8 in the middle
     jns .Lui_skip_width
     neg eax
 .Lui_skip_width:
-    mov r8d, 8
-    sub r8d, eax
+    mov ecx, 8
+    sub ecx, eax
+    call ui_px
+    mov r8d, eax
     mov ecx, esi
     test r12d, r12d
     jz .Lui_skip_place
-    add ecx, 13                           # previous: the triangle ends at the right
+    add ecx, r14d                         # previous: the triangle ends at the right
     sub ecx, r8d
 .Lui_skip_place:
     lea edx, [rdi + rbx]
@@ -476,9 +497,11 @@ LOCALFN ui_skip_icon
     mov eax, [rip + ui_text_color]
     call ui_rect
     inc ebx
-    cmp ebx, 15
+    cmp ebx, r13d
     jb .Lui_skip_row
     add rsp, 40
+    pop r14
+    pop r13
     pop r12
     pop rdi
     pop rsi
@@ -497,10 +520,10 @@ FN ui_draw
     cmp qword ptr [rip + ui_pixels], 0
     je .Lui_draw_done
     call ui_heard_update                  # the file being heard
-    xor r12d, r12d                        # transport offset: 10 with a list
+    xor r12d, r12d                        # play/pause moves right with a list
     cmp dword ptr [rip + ui_count], 2
     jb .Lui_draw_single
-    mov r12d, 10
+    mov r12d, [rip + px_list_shift]
 .Lui_draw_single:
     mov rdi, [rip + ui_pixels]
     mov eax, [rip + ui_background]
@@ -511,25 +534,25 @@ FN ui_draw
     xor ecx, ecx
     xor edx, edx
     mov r8d, [rip + ui_width]
-    mov r9d, 52
+    mov r9d, [rip + px_header]
     mov eax, [rip + ui_surface]
     call ui_rect
     xor ecx, ecx
     mov edx, [rip + ui_height]
-    sub edx, 30
+    sub edx, [rip + px_strip]
     mov r8d, [rip + ui_width]
-    mov r9d, 30
+    mov r9d, [rip + px_strip]
     mov eax, [rip + ui_surface]
     call ui_rect
     lea rcx, [rip + ui_brand]
-    mov edx, 24
-    mov r8d, 17
+    mov edx, [rip + px_margin]
+    mov r8d, [rip + px_brand_y]
     mov r9d, [rip + ui_text_color]
     call ui_text
     lea rcx, [rip + ui_assembly]
     mov edx, [rip + ui_width]
-    sub edx, 210
-    mov r8d, 17
+    sub edx, [rip + px_assembly]
+    mov r8d, [rip + px_brand_y]
     mov r9d, [rip + ui_muted_color]
     call ui_text
     mov rcx, [rip + ui_dc]
@@ -590,9 +613,9 @@ FN ui_draw
     je .Lui_status_ready
     lea rcx, [rip + ui_paused]
 .Lui_status_ready:
-    mov edx, 24
+    mov edx, [rip + px_margin]
     mov r8d, [rip + ui_height]
-    sub r8d, 23
+    sub r8d, [rip + px_status_y]
     mov r9d, [rip + ui_accent]
     call ui_text
     # The list's state at the right: repeat, and the file heard among them.
@@ -634,9 +657,9 @@ FN ui_draw
     cmp word ptr [rcx], 0
     je .Lui_status_codec
     mov edx, [rip + ui_width]
-    sub edx, 24
+    sub edx, [rip + px_margin]
     mov r8d, [rip + ui_height]
-    sub r8d, 23
+    sub r8d, [rip + px_status_y]
     mov r9d, [rip + ui_muted_color]
     call ui_right_text
 .Lui_status_codec:
@@ -647,9 +670,9 @@ FN ui_draw
     ja .Lui_draw_hints
     lea rcx, [rip + ui_codec_names]
     mov rcx, [rcx + rax*8]
-    mov edx, 134
+    mov edx, [rip + px_codec]
     mov r8d, [rip + ui_height]
-    sub r8d, 23
+    sub r8d, [rip + px_status_y]
     mov r9d, [rip + ui_muted_color]
     call ui_text
 .Lui_draw_hints:
@@ -664,15 +687,16 @@ FN ui_draw
     lea rcx, [rip + ui_hint_list]
 .Lui_draw_hint:
     mov r8d, [rip + ui_height]
-    sub r8d, 164
+    sub r8d, [rip + px_hint_y]
     call ui_hint_text
     # Timeline and current position.
-    mov ecx, 32
+    mov ecx, [rip + px_side]
     mov edx, [rip + ui_height]
-    sub edx, 106
+    sub edx, [rip + px_timeline_y]
     mov r8d, [rip + ui_width]
-    sub r8d, 64
-    mov r9d, 4
+    sub r8d, ecx
+    sub r8d, ecx
+    mov r9d, [rip + px_timeline_h]
     mov eax, [rip + ui_line]
     call ui_rect
     mov rax, [rip + engine_position]      # within the file heard
@@ -688,14 +712,15 @@ FN ui_draw
     mov rax, [rip + ui_shown_frames]
 .Lui_draw_progress:
     mov ecx, [rip + ui_width]
-    sub ecx, 64
+    sub ecx, [rip + px_side]
+    sub ecx, [rip + px_side]
     mul rcx
     div qword ptr [rip + ui_shown_frames]
     mov r8d, eax
-    mov ecx, 32
+    mov ecx, [rip + px_side]
     mov edx, [rip + ui_height]
-    sub edx, 106
-    mov r9d, 4
+    sub edx, [rip + px_timeline_y]
+    mov r9d, [rip + px_timeline_h]
     mov eax, [rip + ui_accent]
     call ui_rect
 .Lui_draw_time:
@@ -726,21 +751,22 @@ FN ui_draw
     call ui_format_time
     mov word ptr [rcx], 0
     lea rcx, [rip + ui_time_text]
-    lea edx, [r12*2 + 96]
+    mov edx, [rip + px_time_x]
+    lea edx, [rdx + r12*2]
     mov r8d, [rip + ui_height]
-    sub r8d, 71
+    sub r8d, [rip + px_time_y]
     mov r9d, [rip + ui_text_color]
     call ui_text
     test r12d, r12d
     jz .Lui_draw_pause
-    mov ecx, 24                           # previous and next around play/pause
+    mov ecx, [rip + px_margin]            # previous and next around play/pause
     mov edx, [rip + ui_height]
-    sub edx, 70
+    sub edx, [rip + px_icon_y]
     mov r8d, 1
     call ui_skip_icon
-    mov ecx, 86
+    mov ecx, [rip + px_next_x]
     mov edx, [rip + ui_height]
-    sub edx, 70
+    sub edx, [rip + px_icon_y]
     xor r8d, r8d
     call ui_skip_icon
 .Lui_draw_pause:
@@ -749,40 +775,52 @@ FN ui_draw
     je .Lui_draw_play
     cmp dword ptr [rip + pause_requested], 0
     jne .Lui_draw_play
-    lea ecx, [r12 + 42]
+    mov ecx, [rip + px_pause_x]
+    add ecx, r12d
     mov edx, [rip + ui_height]
-    sub edx, 73
-    mov r8d, 5
-    mov r9d, 20
+    sub edx, [rip + px_play_y]
+    mov r8d, [rip + px_bar_w]
+    mov r9d, [rip + px_bar_h]
     mov eax, [rip + ui_text_color]
     call ui_rect
-    lea ecx, [r12 + 54]
+    mov ecx, [rip + px_pause_x2]
+    add ecx, r12d
     mov edx, [rip + ui_height]
-    sub edx, 73
-    mov r8d, 5
-    mov r9d, 20
+    sub edx, [rip + px_play_y]
+    mov r8d, [rip + px_bar_w]
+    mov r9d, [rip + px_bar_h]
     mov eax, [rip + ui_text_color]
     call ui_rect
     jmp .Lui_draw_volume
 .Lui_draw_play:
+    # Rows from those of the 21-row triangle at 96 DPI: 4 to 14 pixels wide.
+    mov ecx, 21
+    call ui_px
+    mov r13d, eax
     xor ebx, ebx
 .Lui_draw_triangle:
     mov eax, ebx
+    imul eax, eax, 21
+    xor edx, edx
+    div r13d
     sub eax, 10
     jns .Lui_triangle_width
     neg eax
 .Lui_triangle_width:
-    mov r8d, 14
-    sub r8d, eax
-    lea ecx, [r12 + 44]
+    mov ecx, 14
+    sub ecx, eax
+    call ui_px
+    mov r8d, eax
+    mov ecx, [rip + px_triangle_x]
+    add ecx, r12d
     mov edx, [rip + ui_height]
-    sub edx, 73
+    sub edx, [rip + px_play_y]
     add edx, ebx
     mov r9d, 1
     mov eax, [rip + ui_text_color]
     call ui_rect
     inc ebx
-    cmp ebx, 21
+    cmp ebx, r13d
     jb .Lui_draw_triangle
 .Lui_draw_volume:
     lea rcx, [rip + ui_volume_text]
@@ -792,30 +830,30 @@ FN ui_draw
     mov word ptr [rcx + 2], 0
     lea rcx, [rip + ui_volume_text]
     mov edx, [rip + ui_width]
-    sub edx, 178
+    sub edx, [rip + px_volume_text_x]
     mov r8d, [rip + ui_height]
-    sub r8d, 78
+    sub r8d, [rip + px_volume_text_y]
     mov r9d, [rip + ui_muted_color]
     call ui_text
     mov ecx, [rip + ui_width]
-    sub ecx, 180
+    sub ecx, [rip + px_volume_x]
     mov edx, [rip + ui_height]
-    sub edx, 49
-    mov r8d, 148
-    mov r9d, 3
+    sub edx, [rip + px_volume_y]
+    mov r8d, [rip + px_volume_w]
+    mov r9d, [rip + px_volume_h]
     mov eax, [rip + ui_line]
     call ui_rect
     mov eax, [rip + ui_volume_percent]
-    imul eax, 148
+    imul eax, [rip + px_volume_w]
     xor edx, edx
     mov ecx, 100
     div ecx
     mov r8d, eax
     mov ecx, [rip + ui_width]
-    sub ecx, 180
+    sub ecx, [rip + px_volume_x]
     mov edx, [rip + ui_height]
-    sub edx, 49
-    mov r9d, 3
+    sub edx, [rip + px_volume_y]
+    mov r9d, [rip + px_volume_h]
     mov eax, [rip + ui_accent]
     call ui_rect
 .Lui_draw_done:

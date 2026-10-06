@@ -24,6 +24,8 @@ and FFmpeg. Builds bin/ with the test tools (tools/build-windows.py --tests).
   - Choosing another output (WM_COMMAND, as the context menu's Output items
     send) continues the file there from the heard position, and choosing
     the default output brings it back.
+  - At 144 DPI (Wine's setting, restored afterwards) the window is half as
+    large again and the scaled next button works.
 Writes <out>/player-verification.json.
 """
 import importlib.util
@@ -93,7 +95,7 @@ def main():
     display = Display()
     wine = dict(env, **_nav.WINE_ENV, DISPLAY=display.name)
     checks = []
-    scenarios = [list_checks, list_playback, keys, folder_playback, killed_stream, output_menu]
+    scenarios = [list_checks, list_playback, keys, folder_playback, killed_stream, output_menu, dpi]
     only = sys.argv[sys.argv.index('--only') + 1].split(',') if '--only' in sys.argv else None
     try:
         for scenario in scenarios:
@@ -109,7 +111,7 @@ def main():
                             'scope': 'lamp.exe list building (folders, command line, drops, the open dialog), '
                                      'gapless list playback with the title following the file heard, N/P, the '
                                      'media next command, the next button, seeking, repeat, playlists, '
-                                     'reopening a killed stream and choosing outputs, under Wine on Xvfb.'})
+                                     'reopening a killed stream, choosing outputs and 144 DPI, under Wine on Xvfb.'})
     print(f'Passed {len(checks)} player checks.')
 
 
@@ -370,6 +372,46 @@ def output_menu(work, env, wine, checks):
     checks.append({'test': 'output menu', 'result': 'continued on the chosen endpoint, then the default',
                    'default': default, 'chosen': chosen})
     print(f'the Output menu: {default[0]} on the default, {chosen} on the chosen one, {default[1]} back', flush=True)
+
+
+def wine_dpi(wine, value):
+    """Sets Wine's DPI (None: removes the setting) -> the earlier value, or None."""
+    key = r'HKCU\Control Panel\Desktop'
+    query = subprocess.run(['wine', 'reg', 'query', key, '/v', 'LogPixels'], stdout=subprocess.PIPE,
+                           stderr=subprocess.DEVNULL, env=wine, timeout=120).stdout.decode().split()
+    earlier = int(query[-1], 16) if 'LogPixels' in query else None
+    if value is None:
+        subprocess.run(['wine', 'reg', 'delete', key, '/v', 'LogPixels', '/f'], stdout=subprocess.DEVNULL,
+                       stderr=subprocess.DEVNULL, env=wine, timeout=120)
+    else:
+        subprocess.run(['wine', 'reg', 'add', key, '/v', 'LogPixels', '/t', 'REG_DWORD', '/d', str(value), '/f'],
+                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, env=wine, timeout=120, check=True)
+    subprocess.run(['wineserver', '-k'], env=wine, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    return earlier
+
+
+def dpi(work, env, wine, checks):
+    """At 144 DPI the window, its layout and its controls are half as large again."""
+    paths = [tagged(work, f'keys/{n}.flac', name, 9, n + 11) for n, name in enumerate(['One', 'Two'])]
+    session = Session(work, env, wine, 'dpi-96', *map(windows_path, paths))
+    lines = session.drive('s1500', 'z', 'c')
+    session.finish()
+    normal = tuple(map(int, lines[0].split()))
+    earlier = wine_dpi(wine, 144)
+    try:
+        session = Session(work, env, wine, 'dpi-144', *map(windows_path, paths))
+        lines = session.drive('s2500', 'z', 't', 'm138,95', 's1500', 't', 'c')     # the next button, scaled
+        session.finish()
+    finally:
+        wine_dpi(wine, earlier)
+    scaled = tuple(map(int, lines[0].split()))
+    if not all(1.45 <= b / a <= 1.55 for a, b in zip(normal, scaled)):
+        raise Failure(f'at 144 DPI the client area is {scaled}, at 96 DPI {normal}')
+    if lines[1:] != [title('One'), title('Two')]:
+        raise Failure(f'at 144 DPI the next button gave titles {lines[1:]}')
+    checks.append({'test': '144 DPI', 'result': 'window 1.5 times as large; the scaled next button works',
+                   'client': [normal, scaled]})
+    print(f'144 DPI: client {normal} -> {scaled}; the scaled next button moved to the next file', flush=True)
 
 
 if __name__ == '__main__':

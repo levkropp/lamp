@@ -45,7 +45,7 @@
       "segments": [
         [
           "First",
-          190,
+          154,
           120000
         ],
         [
@@ -79,47 +79,47 @@
         [
           "One",
           288,
-          113040
+          111840
         ],
         [
           "Two",
-          89,
-          71520
+          164,
+          69600
         ],
         [
           "One",
-          94,
+          149,
           191760
         ],
         [
           "One",
-          144,
-          71760
+          118,
+          71280
         ],
         [
           "Two",
-          110,
+          122,
           71280
         ],
         [
           "Three",
-          126,
+          107,
           71280
         ],
         [
           "Three",
-          311045,
+          311125,
           432000
         ],
         [
           "Four",
           0,
-          188160
+          190800
         ],
         [
           "One",
-          153,
-          71520
+          149,
+          71280
         ]
       ]
     },
@@ -172,18 +172,18 @@
         ],
         [
           "Long",
-          22560,
-          55200
+          22080,
+          25440
         ],
         [
           "Long",
-          77760,
-          105840
+          47589,
+          137211
         ],
         [
           "Long",
-          175300,
-          208700
+          185406,
+          198594
         ]
       ]
     },
@@ -194,22 +194,36 @@
         [
           "Output",
           288,
-          153360
+          153600
         ],
         [
           "Output",
-          300675,
-          399840
+          300148,
+          395280
         ]
       ],
       "chosen": [
         [
           "Output",
-          153793,
-          300960
+          153682,
+          300480
+        ]
+      ]
+    },
+    {
+      "test": "144 DPI",
+      "result": "window 1.5 times as large; the scaled next button works",
+      "client": [
+        [
+          812,
+          476
+        ],
+        [
+          1220,
+          716
         ]
       ]
     }
   ],
-  "scope": "lamp.exe list building (folders, command line, drops, the open dialog), gapless list playback with the title following the file heard, N/P, the media next command, the next button, seeking, repeat, playlists, reopening a killed stream and choosing outputs, under Wine on Xvfb."
+  "scope": "lamp.exe list building (folders, command line, drops, the open dialog), gapless list playback with the title following the file heard, N/P, the media next command, the next button, seeking, repeat, playlists, reopening a killed stream, choosing outputs and 144 DPI, under Wine on Xvfb."
 }

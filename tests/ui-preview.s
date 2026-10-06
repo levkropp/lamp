@@ -12,6 +12,12 @@
 .ifndef PREVIEW_LIST
 .equ PREVIEW_LIST, 0
 .endif
+.ifndef PREVIEW_DPI
+.equ PREVIEW_DPI, 96
+.endif
+.equ PREVIEW_WIDTH, (800*PREVIEW_DPI + 48)/96   # an 800 by 450 window at 96 DPI
+.equ PREVIEW_HEIGHT, (450*PREVIEW_DPI + 48)/96
+.equ PREVIEW_BYTES, PREVIEW_WIDTH*PREVIEW_HEIGHT*4
 .data
 preview_name: .short 'l', 'a', 'm', 'p', '-', 'u', 'i', '-', 'p', 'r', 'e', 'v', 'i', 'e', 'w', '.', 'b', 'm', 'p', 0
 .if PREVIEW_CODEC == 6
@@ -20,7 +26,7 @@ preview_track: .short 'A', 'I', 'F', 'F', ' ', 'r', 'e', 'f', 'e', 'r', 'e', 'n'
 preview_track: .short 'A', 'u', 'r', 'o', 'r', 'a', ' ', '-', ' ', 'N', 'i', 'g', 'h', 't', ' ', 'D', 'r', 'i', 'v', 'e', '.', 'f', 'l', 'a', 'c', 0
 .endif
 preview_header: .byte 'B', 'M'
-    .long 1440054
+    .long PREVIEW_BYTES + 54
     .short 0, 0
     .long 54
 preview_file: .quad 0
@@ -59,8 +65,10 @@ preview_apic_end:
 .text
 FN preview_start
     sub rsp, 72
-    mov dword ptr [rip + ui_width], 800
-    mov dword ptr [rip + ui_height], 450
+    mov ecx, PREVIEW_DPI
+    call ui_layout
+    mov dword ptr [rip + ui_width], PREVIEW_WIDTH
+    mov dword ptr [rip + ui_height], PREVIEW_HEIGHT
     mov dword ptr [rip + ui_state], 1
     mov dword ptr [rip + engine_ready], 1
     lea rax, [rip + preview_track]
@@ -117,7 +125,7 @@ FN preview_start
     call WriteFile
     mov rcx, [rip + preview_file]
     mov rdx, [rip + ui_pixels]
-    mov r8d, 1440000
+    mov r8d, PREVIEW_BYTES
     lea r9, [rip + preview_written]
     call WriteFile
     mov rcx, [rip + preview_file]

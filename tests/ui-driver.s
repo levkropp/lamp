@@ -5,6 +5,7 @@
 #   aN       send WM_APPCOMMAND N (11 next, 12 previous, 14 play/pause)
 #   oN       send WM_COMMAND N, as the context menu's item N does
 #   r        open the context menu as the keyboard does
+#   z        print the client area's width and height
 #   mX,Y     click the client area at X, Y pixels above its bottom
 #   sN       sleep N milliseconds
 #   t        print the window's title
@@ -24,6 +25,7 @@ driver_rect: .zero 16
 driver_title: .zero 2048*2
 driver_last: .zero 2048*2
 driver_utf8: .zero 8192
+driver_digits: .zero 24
 
 .text
 FN driver_start
@@ -60,6 +62,8 @@ FN driver_start
     je .Ldriver_menu_command
     cmp eax, 'r'
     je .Ldriver_context
+    cmp eax, 'z'
+    je .Ldriver_size
     cmp eax, 'm'
     je .Ldriver_click
     cmp eax, 't'
@@ -127,6 +131,29 @@ FN driver_start
     mov r8, rcx
     mov r9, -1
     call PostMessageW
+    jmp .Ldriver_command
+.Ldriver_size:
+    mov r13d, edi                         # the next argument's index
+    mov rcx, [rip + driver_hwnd]
+    lea rdx, [rip + driver_rect]
+    call GetClientRect
+    lea rdi, [rip + driver_utf8]
+    mov eax, [rip + driver_rect + 8]
+    call driver_decimal
+    mov byte ptr [rdi], ' '
+    inc rdi
+    mov eax, [rip + driver_rect + 12]
+    call driver_decimal
+    mov byte ptr [rdi], 10
+    inc rdi
+    mov rcx, [rip + driver_stdout]
+    lea rdx, [rip + driver_utf8]
+    mov r8, rdi
+    sub r8, rdx
+    lea r9, [rip + driver_written]
+    mov qword ptr [rsp + 32], 0
+    call WriteFile
+    mov edi, r13d
     jmp .Ldriver_command
 .Ldriver_click:
     mov rcx, rsi
@@ -217,6 +244,29 @@ FN driver_start
     mov ecx, 1
     call ExitProcess
 ENDFN driver_start
+
+# EAX=value, RDI=destination -> its decimal digits, RDI past them.
+LOCALFN driver_decimal
+    lea r8, [rip + driver_digits + 24]    # digits backwards
+    mov r9, r8
+    mov ecx, 10
+.Ldriver_decimal_digit:
+    xor edx, edx
+    div ecx
+    add dl, '0'
+    dec r8
+    mov [r8], dl
+    test eax, eax
+    jnz .Ldriver_decimal_digit
+.Ldriver_decimal_copy:
+    mov al, [r8]
+    mov [rdi], al
+    inc rdi
+    inc r8
+    cmp r8, r9
+    jb .Ldriver_decimal_copy
+    ret
+ENDFN driver_decimal
 
 # RCX=wide digits, EDX=base -> EAX=value, RCX past the digits.
 LOCALFN driver_number

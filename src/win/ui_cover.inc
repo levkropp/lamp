@@ -578,8 +578,9 @@ LOCALFN ui_cover_blit
 ENDFN ui_cover_blit
 
 # -> EAX=the title's y. With a decoded picture and room for it (a side of 48
-# pixels or more), the picture and the title are centred together between
-# the header and the controls; otherwise the title takes its usual place.
+# pixels or more at 96 DPI), the picture and the title are centred together
+# between the header and the controls; otherwise the title takes its usual
+# place.
 LOCALFN ui_cover_place
     push rbx
     push rsi
@@ -592,17 +593,22 @@ LOCALFN ui_cover_place
     dec eax
     cmp eax, 1                            # playing or finished
     ja .Lui_place_title
-    mov ebx, [rip + ui_height]
-    sub ebx, 164 + 52 + 24 + 12 + 42      # the side's room
+    mov ebx, [rip + ui_height]            # the side's room
+    sub ebx, [rip + px_hint_y]
+    sub ebx, [rip + px_header]
+    sub ebx, [rip + px_margin]
+    sub ebx, [rip + px_cover_gap]
+    sub ebx, [rip + px_title_h]
     mov eax, [rip + ui_width]
-    sub eax, 64
+    sub eax, [rip + px_side]
+    sub eax, [rip + px_side]
     cmp ebx, eax
     cmovg ebx, eax
-    cmp ebx, 360
+    cmp ebx, [rip + px_cover_max]
     jle .Lui_place_side
-    mov ebx, 360
+    mov ebx, [rip + px_cover_max]
 .Lui_place_side:
-    cmp ebx, 48
+    cmp ebx, [rip + px_cover_min]
     jl .Lui_place_title
     # Fit the picture in a square of that side.
     mov esi, [rip + ui_cover_sw]
@@ -631,24 +637,27 @@ LOCALFN ui_cover_place
     call ui_cover_resample
     cmp qword ptr [rip + ui_cover_scaled], 0
     je .Lui_place_title
-    # The group: picture, 12 pixels, title (42).
+    # The group: picture, a gap, title.
     mov ebx, [rip + ui_height]
-    sub ebx, 164 + 52
+    sub ebx, [rip + px_hint_y]
+    sub ebx, [rip + px_header]
     sub ebx, edi
-    sub ebx, 12 + 42
+    sub ebx, [rip + px_cover_gap]
+    sub ebx, [rip + px_title_h]
     sar ebx, 1
-    add ebx, 52                           # its top
+    add ebx, [rip + px_header]            # its top
     mov ecx, [rip + ui_width]
     sub ecx, esi
     shr ecx, 1
     mov edx, ebx
     call ui_cover_blit
-    lea eax, [rbx + rdi + 12]
+    lea eax, [rbx + rdi]
+    add eax, [rip + px_cover_gap]
     jmp .Lui_place_return
 .Lui_place_title:
     mov eax, [rip + ui_height]
-    sub eax, 72
     shr eax, 1
+    sub eax, [rip + px_title_y]
 .Lui_place_return:
     add rsp, 48
     pop rdi

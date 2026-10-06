@@ -150,7 +150,7 @@ The codec suites record 43 WAV/FLAC, 103 MP3, and 83 Vorbis checks, plus 4,425 e
 
 The Ogg CRC pass uses eight-byte table updates while retaining complete validation. On this machine, median reopen time for the recorded ten-minute fixtures fell from 32.7 to 12.5 ms for Vorbis and from 13.8 to 5.3 ms for Opus. These are warm-filesystem decoder timings, excluding WASAPI, the UI and audible latency. [Decoder measurements and scope](docs/technical.md#playback-and-cpu-design) include silence and noise targets. A separate [headless playback comparison](docs/playback-benchmark.md) records mpv 0.41.0 and VLC 3.0.24, startup/seek observations and CPU/RAM during playback, pause and idle across all five formats, with and without four CPU load workers. Its timing clocks differ between players; it does not establish audible latency or a universal performance advantage.
 
-The UI image comes from the actual assembly renderer with synthetic state. Open-dialog, drag/drop, and monitor-DPI interaction still require desktop verification.
+The UI image comes from the actual assembly renderer with synthetic state. `tests/verify-player.py` drives the real window under Wine on a virtual display: lists, keys, buttons, the Output menu and 144 DPI. The open dialog and drag/drop parsing run through the player's own list code with built inputs. Real Explorer drops, the dialog's own window and moving between monitors of different DPI still need desktop verification.
 
 ## Roadmap and contribution
 
