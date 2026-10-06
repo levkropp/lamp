@@ -291,15 +291,15 @@ FN engine_start
     sub [rip + pulse_requested], rax
     add rbx, r12
     mov [rip + read_count], rbx        # publish after sending
-    add rbx, [rip + engine_seek_frames]
-    mov [rip + engine_position], rbx
-    mov ecx, [rip + space_event]
     mov rax, [rip + write_count]       # wake the producer only once it can refill
     sub rax, rbx
-    call event_signal
-    jmp .Leng_loop
+    add rbx, [rip + engine_seek_frames]
+    mov [rip + engine_position], rbx
     cmp rax, REFILL_FRAMES
     ja .Leng_loop
+    mov ecx, [rip + space_event]
+    call event_signal
+    jmp .Leng_loop
 .Leng_starved:
     cmp qword ptr [rip + pulse_requested], 8
     jb .Leng_wait
@@ -788,11 +788,11 @@ LOCALFN producer
     call event_signal
     jmp .Lprod_loop
 .Lprod_full:
+    # A full ring waits until a quarter of it has played, so the producer
+    # wakes about once a second rather than at every send.
     mov ecx, [rip + space_event]
     call event_clear
     mov rax, [rip + write_count]       # recheck after clearing to avoid a lost wakeup
-    # A full ring waits until a quarter of it has played, so the producer
-    # wakes about once a second rather than at every send.
     sub rax, [rip + read_count]
     cmp rax, REFILL_FRAMES
     jbe .Lprod_loop

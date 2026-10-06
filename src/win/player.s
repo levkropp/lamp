@@ -1348,6 +1348,10 @@ LOCALFN fill_render
     js .Lfill_bad
     mov rax, [rsp + 32]
     add [rip + read_count], rax      # publish consumed PCM after copy and ReleaseBuffer
+    mov rax, [rip + write_count]     # wake the producer only once it can refill
+    sub rax, [rip + read_count]
+    cmp rax, REFILL_FRAMES
+    ja .Lfill_done
     mov rcx, [rip + space_event]
     call SetEvent
     jmp .Lfill_done
@@ -1422,10 +1426,6 @@ LOCALFN keyboard
     mov r8d, -60
     cmp eax, 0x28                       # down
     je .Lkeyboard_seek
-    mov rax, [rip + write_count]     # wake the producer only once it can refill
-    sub rax, [rip + read_count]
-    cmp rax, REFILL_FRAMES
-    ja .Lfill_done
     cmp eax, 0x51                       # Q
     jne .Lkeyboard_wait
     mov dword ptr [rip + engine_quit], 1
