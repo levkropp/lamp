@@ -15,10 +15,14 @@
 .equ BUFFER_MS, 200                   # server buffer target, as on Windows
 
 .globl engine_mode, engine_stop_requested, pause_requested, engine_ready, engine_volume
-.globl engine_position, engine_seek_seconds, decoded_count, underruns, endpoint_dry, audio_status
+.globl engine_position, engine_seek_ms, decoded_count, underruns, endpoint_dry, audio_status
+.globl engine_command, engine_seek_delta, engine_heard_index, engine_heard_ms
 
 .data
-playing_text: .asciz "Playing. Space: pause / resume. Q or Ctrl+C: stop.\n"
+playing_text: .ascii "Playing. Space: pause / resume. N / P: next / previous file. Left / Right: -5 / +5 s.\n"
+    .asciz "Down / Up: -60 / +60 s. R: repeat. Q or Ctrl+C: stop.\n"
+repeat_on_text: .asciz "Repeat: on\n"
+repeat_off_text: .asciz "Repeat: off\n"
 audio_error_text: .asciz "Audio output unavailable. Start PulseAudio or PipeWire (pipewire-pulse), or use --check.\n"
 engine_volume: .float 1.0
 data_event: .long -1
@@ -36,6 +40,8 @@ underruns: .quad 0
 endpoint_dry: .quad 0
 engine_position: .quad 0
 engine_seek_frames: .quad 0
+engine_seek_ms: .quad 0                # where engine_start begins, in the current file
+engine_heard_ms: .quad 0               # position in the heard file at a command
 producer_thread: .quad 0
 dry_mark: .quad 0                      # server underflows when a pause began
 dry_ignored: .quad 0                   # underflows from pause/resume transitions
@@ -44,7 +50,11 @@ engine_mode: .long 0                   # 0 console, 1 API
 engine_stop_requested: .long 0
 pause_requested: .long 0
 engine_ready: .long 0
-engine_seek_seconds: .long 0
+engine_command: .long 0                # set by a key: 1 next, 2 previous, 3 seek by engine_seek_delta;
+                                       # 4 at the end with repeat on: the list again
+engine_seek_delta: .long 0             # seconds
+engine_heard_index: .long 0            # queue index heard at the command
+engine_greeted: .long 0
 producer_done: .long 0
 corked: .long 0
 waiting_data: .long 0
@@ -91,10 +101,18 @@ FN engine_start
     mov [rip + waiting_data], eax
     mov [rip + terminal_changed], eax
     mov r13d, 0                        # exit code
-    mov eax, [rip + engine_seek_seconds]
-    mul dword ptr [rip + queue_rate]
-    shl rdx, 32
-    or rax, rdx
+    mov [rip + engine_command], eax
+    mov rax, [rip + engine_seek_ms]    # milliseconds to frames
+    mov ecx, [rip + queue_rate]
+    mul rcx
+    mov ecx, 1000
+    cmp rdx, rcx
+    jae .Leng_seek_far
+    div rcx
+    jmp .Leng_seek_frames
+.Leng_seek_far:
+    mov rax, -1
+.Leng_seek_frames:
     mov rcx, [rip + output_frames]
     test rcx, rcx
     jz .Leng_seek_ready
@@ -180,8 +198,12 @@ FN engine_start
     mov dword ptr [rip + audio_status], 3
     cmp dword ptr [rip + engine_mode], 0
     jne .Leng_loop
+    cmp dword ptr [rip + engine_greeted], 0
+    jne .Leng_greeted                  # once, not again after each key
+    mov dword ptr [rip + engine_greeted], 1
     lea rcx, [rip + playing_text]
     call print_text
+.Leng_greeted:
     call terminal_raw_mode
 .Leng_loop:
     cmp dword ptr [rip + engine_stop_requested], 0
@@ -295,6 +317,15 @@ FN engine_start
     test eax, eax
     jz .Leng_audio_error
     mov dword ptr [rip + audio_status], 0
+    # Repeat turned on after the producer read the last file: play the list
+    # again from its first file (when this run played anything).
+    cmp dword ptr [rip + queue_repeat], 0
+    je .Leng_cleanup
+    cmp qword ptr [rip + read_count], 0
+    je .Leng_cleanup
+    cmp dword ptr [rip + engine_command], 0
+    jne .Leng_cleanup
+    mov dword ptr [rip + engine_command], 4
     jmp .Leng_cleanup
 .Leng_stopped:
     mov dword ptr [rip + audio_status], 0
@@ -455,7 +486,9 @@ LOCALFN engine_wait
     ret
 ENDFN engine_wait
 
-# Space toggles pause; Q stops.
+# Space toggles pause; Q stops; R toggles repeat. N or >, P or <, the arrow
+# keys (ESC [ C/D/A/B) stop with an engine_command for the caller, noting
+# the file heard and the position in it.
 LOCALFN engine_read_keys
     push rdi
     push rsi
@@ -473,13 +506,68 @@ LOCALFN engine_read_keys
 .Leng_keys_next:
     movzx eax, byte ptr [rsi]
     cmp al, ' '
-    jne .Leng_keys_quit
+    jne .Leng_keys_escape
     xor dword ptr [rip + pause_requested], 1
     jmp .Leng_keys_advance
-.Leng_keys_quit:
+.Leng_keys_escape:
+    cmp al, 27
+    jne .Leng_keys_letter
+    cmp ebx, 3                         # ESC [ and a letter
+    jb .Leng_keys_advance
+    cmp byte ptr [rsi + 1], '['
+    jne .Leng_keys_advance
+    movzx eax, byte ptr [rsi + 2]
+    add rsi, 2
+    sub ebx, 2
+    mov ecx, 5
+    cmp al, 'C'                        # right
+    je .Leng_keys_seek
+    mov ecx, -5
+    cmp al, 'D'                        # left
+    je .Leng_keys_seek
+    mov ecx, 60
+    cmp al, 'A'                        # up
+    je .Leng_keys_seek
+    mov ecx, -60
+    cmp al, 'B'                        # down
+    jne .Leng_keys_advance
+.Leng_keys_seek:
+    mov [rip + engine_seek_delta], ecx
+    mov ecx, 3
+    jmp .Leng_keys_command
+.Leng_keys_letter:
+    mov ecx, 1
+    cmp al, '>'
+    je .Leng_keys_command
+    mov ecx, 2
+    cmp al, '<'
+    je .Leng_keys_command
     or al, 0x20
+    mov ecx, 1
+    cmp al, 'n'
+    je .Leng_keys_command
+    mov ecx, 2
+    cmp al, 'p'
+    je .Leng_keys_command
+    cmp al, 'r'
+    je .Leng_keys_repeat
     cmp al, 'q'
     jne .Leng_keys_advance
+    mov dword ptr [rip + engine_stop_requested], 1
+    jmp .Leng_keys_advance
+.Leng_keys_repeat:
+    xor dword ptr [rip + queue_repeat], 1
+    lea rcx, [rip + repeat_on_text]
+    jnz .Leng_keys_repeat_text
+    lea rcx, [rip + repeat_off_text]
+.Leng_keys_repeat_text:
+    call print_text
+    jmp .Leng_keys_advance
+.Leng_keys_command:
+    cmp dword ptr [rip + engine_command], 0
+    jne .Leng_keys_advance             # the first command counts
+    mov [rip + engine_command], ecx
+    call engine_note_heard
     mov dword ptr [rip + engine_stop_requested], 1
 .Leng_keys_advance:
     inc rsi
@@ -492,6 +580,37 @@ LOCALFN engine_read_keys
     pop rdi
     ret
 ENDFN engine_read_keys
+
+# engine_heard_index and engine_heard_ms <- the file at engine_position.
+LOCALFN engine_note_heard
+    sub rsp, 40
+    mov rcx, [rip + engine_position]
+    call queue_heard
+    cmp eax, -1
+    jne .Leng_heard_found
+    mov eax, [rip + queue_index]
+    xor edx, edx
+.Leng_heard_found:
+    mov [rip + engine_heard_index], eax
+    mov rax, [rip + engine_position]
+    sub rax, rdx
+    jae .Leng_heard_offset
+    xor eax, eax
+.Leng_heard_offset:
+    mov ecx, 1000
+    mul rcx
+    mov ecx, [rip + queue_rate]
+    test ecx, ecx
+    jz .Leng_heard_none
+    div rcx
+    jmp .Leng_heard_store
+.Leng_heard_none:
+    xor eax, eax
+.Leng_heard_store:
+    mov [rip + engine_heard_ms], rax
+    add rsp, 40
+    ret
+ENDFN engine_note_heard
 
 # Unbuffered, unechoed terminal input while playing, when stdin is a terminal.
 LOCALFN terminal_raw_mode

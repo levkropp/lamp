@@ -13,15 +13,17 @@ usage:
     .ascii "Handwritten x86-64 assembly: PCM, G.711, IMA/MS/Flash ADPCM, FLAC, ALAC, WavPack, MP1/MP2/MP3, AAC-LC/HE-AAC, AC-3,\n"
     .ascii "Vorbis, Opus "
     .ascii "in WAV/W64, AIFF/AIFC, CAF, AU, FLAC, WavPack, MP3, AAC (ADTS), AC-3, Ogg, Matroska/WebM, MP4/MOV, AVI, FLV and MPEG-TS/PS files.\n"
-    .ascii "Usage: lamp-cli file.mp3 [more files...]\n"
-    .ascii "       lamp-cli --check file.flac [more files...]\n"
-    .ascii "       lamp-cli --decode file.flac [more files...] output.f32\n"
+    .ascii "Usage: lamp-cli [--start TIME] [--repeat] file.mp3 [more files...]\n"
+    .ascii "       lamp-cli --check [--start TIME] file.flac [more files...]\n"
+    .ascii "       lamp-cli --decode [--start TIME] file.flac [more files...] output.f32\n"
     .ascii "       lamp-cli --tags file.mp3\n"
     .ascii "       lamp-cli --chapters file.m4b\n"
     .ascii "       lamp-cli --cover file.mp3 cover-image\n"
     .ascii "Several files play one after another without a gap, at the first file's rate;\n"
-    .ascii "M3U/M3U8 and PLS playlists add their entries.\n"
-    .ascii "Playback: Space pauses/resumes; Q or Ctrl+C stops.\n"
+    .ascii "M3U/M3U8 and PLS playlists add their entries. --start begins the first file at TIME\n"
+    .ascii "(seconds, M:S or H:M:S, with an optional fraction); --repeat plays the list again and again.\n"
+    .ascii "Playback: Space pauses/resumes; N/P next/previous file; arrows seek 5 s or 60 s;\n"
+    .ascii "R toggles repeat; Q or Ctrl+C stops.\n"
     .ascii "RIFF/RIFX/RF64/BW64/W64 WAV: 1..8 channels, PCM 8/16/24/32 or float32/64.\n"
     .ascii "AIFF/AIFC: signed PCM 1..32 bits or float32/64, 1..8 channels.\n"
     .ascii "Native FLAC: 4..32 bit, 1..8 channels, speaker-mask-aware downmix.\n"
@@ -45,6 +47,12 @@ decode_arg: .asciz "--decode"
 tags_arg: .asciz "--tags"
 chapters_arg: .asciz "--chapters"
 cover_arg: .asciz "--cover"
+repeat_arg: .asciz "--repeat"
+start_arg: .asciz "--start"
+.p2align 3
+cli_modes: .quad check_arg, 1, decode_arg, 2, tags_arg, 3, chapters_arg, 4, cover_arg, 5, 0, 0
+cli_start_ms: .quad 0
+cli_repeat: .long 0
 no_cover: .asciz "No embedded cover art.\n"
 bytes_text: .asciz " bytes\n"
 space_text: .asciz " "
@@ -89,86 +97,109 @@ LOCALFN cli_main
     call clock_ms
     mov [rip + start_ms], rax
     mov rbx, [rip + argv]
-    cmp qword ptr [rip + argc], 2
-    jb .Lshow_help
-    mov rcx, [rbx + 8]
-    lea rdx, [rip + check_arg]
+    mov r12d, 1                        # argument index
+    # Options before the files: one mode, --start TIME, --repeat, "--".
+.Lcli_option:
+    cmp r12, [rip + argc]
+    jae .Lcli_files
+    mov rsi, [rbx + r12*8]
+    cmp word ptr [rsi], 0x2d2d         # "--"
+    jne .Lcli_files
+    inc r12
+    cmp byte ptr [rsi + 2], 0
+    je .Lcli_files                     # "--" ends the options
+    lea rdi, [rip + cli_modes]
+.Lcli_mode_entry:
+    mov rdx, [rdi]
+    test rdx, rdx
+    jz .Lcli_other_option
+    mov rcx, rsi
     call equal_text
     test eax, eax
-    jz .Ltry_decode
-    cmp qword ptr [rip + argc], 3
-    jb .Lshow_help
-    mov dword ptr [rip + operation], 1
-    lea r12, [rbx + 16]                # inputs
+    jnz .Lcli_mode
+    add rdi, 16
+    jmp .Lcli_mode_entry
+.Lcli_mode:
+    cmp dword ptr [rip + operation], 0
+    jne .Lshow_help                    # one mode
+    mov eax, [rdi + 8]
+    mov [rip + operation], eax
+    jmp .Lcli_option
+.Lcli_other_option:
+    mov rcx, rsi
+    lea rdx, [rip + repeat_arg]
+    call equal_text
+    test eax, eax
+    jz .Lcli_start_option
+    mov dword ptr [rip + cli_repeat], 1
+    jmp .Lcli_option
+.Lcli_start_option:
+    mov rcx, rsi
+    lea rdx, [rip + start_arg]
+    call equal_text
+    test eax, eax
+    jz .Lshow_help
+    cmp r12, [rip + argc]
+    jae .Lshow_help
+    mov rcx, [rbx + r12*8]
+    inc r12
+    call parse_time
+    jc .Lshow_help
+    mov [rip + cli_start_ms], rax
+    jmp .Lcli_option
+.Lcli_files:
     mov rsi, [rip + argc]
-    sub rsi, 2
-    jmp .Lopen_input
-.Ltry_decode:
-    mov rcx, [rbx + 8]
-    lea rdx, [rip + tags_arg]
-    call equal_text
-    mov edi, 3
+    sub rsi, r12                       # file arguments
+    lea r12, [rbx + r12*8]
+    mov eax, [rip + operation]
+    cmp dword ptr [rip + cli_repeat], 0
+    je .Lcli_repeat_checked
     test eax, eax
-    jnz .Lmetadata_arg
-    mov rcx, [rbx + 8]
-    lea rdx, [rip + chapters_arg]
-    call equal_text
-    mov edi, 4
-    test eax, eax
-    jnz .Lmetadata_arg
-    mov rcx, [rbx + 8]
-    lea rdx, [rip + cover_arg]
-    call equal_text
-    test eax, eax
-    jz .Ltry_decode_arg
-    cmp qword ptr [rip + argc], 4
-    jne .Lshow_help
-    mov dword ptr [rip + operation], 5
+    jnz .Lshow_help                    # --repeat plays
+.Lcli_repeat_checked:
+    cmp eax, 3
+    jb .Lcli_queue_mode
+    cmp qword ptr [rip + cli_start_ms], 0
+    jne .Lshow_help                    # --start decodes or plays
     lea rax, [rip + engine_stop_requested]
     mov [rip + ogg_cancel_ptr], rax
-    mov rcx, [rbx + 16]
-    call decoder_open
-    test eax, eax
-    jz .Lbad_input
-    call write_cover
-    jmp .Lcleanup
-.Lmetadata_arg:
-    cmp qword ptr [rip + argc], 3
+    cmp dword ptr [rip + operation], 5
+    je .Lcli_cover
+    cmp rsi, 1
     jne .Lshow_help
-    mov [rip + operation], edi
-    lea rax, [rip + engine_stop_requested]
-    mov [rip + ogg_cancel_ptr], rax
-    mov rcx, [rbx + 16]
+    mov rcx, [r12]
     call decoder_open
     test eax, eax
     jz .Lbad_input
     jmp .Ltags_only
-.Ltry_decode_arg:
-    mov rcx, [rbx + 8]
-    lea rdx, [rip + decode_arg]
-    call equal_text
+.Lcli_cover:
+    cmp rsi, 2
+    jne .Lshow_help
+    mov rcx, [r12]
+    call decoder_open
     test eax, eax
-    jz .Lplay_args
-    cmp qword ptr [rip + argc], 4
+    jz .Lbad_input
+    mov rcx, [r12 + 8]
+    call write_cover
+    jmp .Lcleanup
+.Lcli_queue_mode:
+    test rsi, rsi
+    jz .Lshow_help
+    cmp eax, 2
+    jne .Lopen_input
+    cmp rsi, 2
     jb .Lshow_help
-    mov dword ptr [rip + operation], 2
-    mov rax, [rip + argc]
-    mov rdi, [rbx + rax*8 - 8] # the last argument; create new: never truncate
+    dec rsi
+    mov rdi, [r12 + rsi*8]             # the last argument; create new: never truncate
+    mov [rsp + 32], rsi
     mov esi, O_WRONLY | O_CREAT | O_EXCL | O_CLOEXEC
     mov edx, 0644
     mov eax, SYS_open
     syscall
+    mov rsi, [rsp + 32]
     test eax, eax
     js .Lbad_output
     mov [rip + output_fd], rax
-    lea r12, [rbx + 16]
-    mov rsi, [rip + argc]
-    sub rsi, 3
-    jmp .Lopen_input
-.Lplay_args:
-    lea r12, [rbx + 8]
-    mov rsi, [rip + argc]
-    dec rsi
 .Lopen_input:
     lea rax, [rip + engine_stop_requested]
     mov [rip + ogg_cancel_ptr], rax
@@ -183,6 +214,7 @@ LOCALFN cli_main
     jz .Lbad_input
     cmp dword ptr [rip + operation], 0
     je .Lplayback
+    call offline_start
 .Loffline_loop:
     lea rcx, [rip + offline_pcm]
     mov edx, CHUNK_FRAMES
@@ -219,12 +251,21 @@ LOCALFN cli_main
     call print_tags
     lea rax, [rip + announce_next]
     mov [rip + queue_announce], rax
-    mov ecx, 1                         # console: messages, Space/Q, Ctrl+C
+    mov eax, [rip + cli_repeat]
+    mov [rip + queue_repeat], eax
+    mov rax, [rip + cli_start_ms]
+    mov [rip + engine_seek_ms], rax
+.Lplay_run:
+    mov ecx, 1                         # console: messages, keys, Ctrl+C
     call engine_start
     mov [rip + exit_code], eax
     cmp eax, 3
     je .Lcleanup                       # the engine reported the audio failure
-    jmp .Lreport_finish
+    cmp dword ptr [rip + engine_command], 0
+    je .Lreport_finish
+    call navigate
+    test eax, eax
+    jnz .Lplay_run
 .Lreport_finish:
     call report_stats
     jmp .Lcleanup
@@ -258,6 +299,155 @@ LOCALFN cli_main
     pop rbx
     ret
 ENDFN cli_main
+
+# --start for --check and --decode: the first file from cli_start_ms, read
+# exactly (a seek, then the frames before the start discarded).
+LOCALFN offline_start
+    push rbx
+    push rsi
+    sub rsp, 40
+    mov rax, [rip + cli_start_ms]
+    test rax, rax
+    jz .Loffline_start_done
+    mov ecx, [rip + queue_rate]
+    mul rcx
+    mov ecx, 1000
+    cmp rdx, rcx
+    jae .Loffline_start_far
+    div rcx
+    jmp .Loffline_start_frames
+.Loffline_start_far:
+    mov rax, -1
+.Loffline_start_frames:
+    mov rcx, [rip + output_frames]
+    test rcx, rcx
+    jz .Loffline_start_seek
+    cmp rax, rcx
+    cmova rax, rcx
+.Loffline_start_seek:
+    mov rbx, rax                       # the start
+    mov rcx, rax
+    call queue_seek
+    mov rsi, rax                       # where the decoder resumed
+.Loffline_start_skip:
+    mov rdx, rbx
+    sub rdx, rsi
+    jbe .Loffline_start_done
+    mov eax, CHUNK_FRAMES
+    cmp rdx, rax
+    cmova rdx, rax
+    lea rcx, [rip + offline_pcm]
+    call queue_read
+    test eax, eax
+    jz .Loffline_start_done
+    add rsi, rax
+    jmp .Loffline_start_skip
+.Loffline_start_done:
+    add rsp, 40
+    pop rsi
+    pop rbx
+    ret
+ENDFN offline_start
+
+# After the engine stopped with an engine_command: reopens the queue there
+# (queue_navigate) -> EAX=1 to play again, 0 to finish. Another file's tags
+# are printed.
+LOCALFN navigate
+    sub rsp, 40
+    mov ecx, [rip + engine_command]
+    mov edx, [rip + engine_heard_index]
+    mov r8, [rip + engine_heard_ms]
+    mov r9d, [rip + engine_seek_delta]
+    cmp ecx, 4
+    jne .Lnavigate_go
+    mov dword ptr [rip + engine_heard_index], -1   # the list again: its tags
+.Lnavigate_go:
+    call queue_navigate
+    test eax, eax
+    jz .Lnavigate_return
+    mov [rip + engine_seek_ms], rdx
+    mov eax, [rip + queue_index]
+    cmp eax, [rip + engine_heard_index]
+    je .Lnavigate_play
+    call announce_next                 # another file: its tags
+.Lnavigate_play:
+    mov eax, 1
+.Lnavigate_return:
+    add rsp, 40
+    ret
+ENDFN navigate
+
+# RCX=NUL-terminated time: seconds, M:S or H:M:S, the seconds with an
+# optional fraction -> RAX=milliseconds; CF when it is not a time.
+LOCALFN parse_time
+    xor eax, eax                       # whole units before this field
+    xor r8d, r8d                       # this field
+    xor r9d, r9d                       # its digits
+    xor r10d, r10d                     # colons
+.Lparse_time_char:
+    movzx edx, byte ptr [rcx]
+    inc rcx
+    lea r11d, [rdx - '0']
+    cmp r11d, 9
+    ja .Lparse_time_separator
+    mov r11, 100000000000
+    cmp r8, r11
+    jae .Lparse_time_bad
+    imul r8, r8, 10
+    sub edx, '0'
+    add r8, rdx
+    inc r9d
+    jmp .Lparse_time_char
+.Lparse_time_separator:
+    test r9d, r9d
+    jz .Lparse_time_bad
+    add rax, r8
+    xor r8d, r8d
+    xor r9d, r9d
+    cmp edx, ':'
+    jne .Lparse_time_seconds
+    inc r10d
+    cmp r10d, 2
+    ja .Lparse_time_bad
+    imul rax, rax, 60
+    jmp .Lparse_time_char
+.Lparse_time_seconds:
+    imul rax, rax, 1000
+    test edx, edx
+    jz .Lparse_time_done
+    cmp edx, '.'
+    jne .Lparse_time_bad
+    mov r8d, 100                       # milliseconds: three digits count
+.Lparse_time_fraction:
+    movzx edx, byte ptr [rcx]
+    inc rcx
+    test edx, edx
+    jz .Lparse_time_fraction_end
+    sub edx, '0'
+    cmp edx, 9
+    ja .Lparse_time_bad
+    inc r9d
+    imul edx, r8d
+    add rax, rdx
+    mov edx, r8d
+    mov r8d, 10
+    cmp edx, 100
+    je .Lparse_time_fraction
+    mov r8d, 1
+    cmp edx, 10
+    je .Lparse_time_fraction
+    xor r8d, r8d
+    jmp .Lparse_time_fraction
+.Lparse_time_fraction_end:
+    test r9d, r9d
+    jz .Lparse_time_bad
+.Lparse_time_done:
+    clc
+    ret
+.Lparse_time_bad:
+    stc
+    ret
+ENDFN parse_time
 
 # RCX, RDX = NUL-terminated strings -> EAX=1 when equal.
 LOCALFN equal_text
@@ -403,18 +593,18 @@ LOCALFN print_tags
     ret
 ENDFN print_tags
 
-# Writes the opened file's cover art to the new file argv[3] and reports its
-# type and size; exit code 2 when it has none, 4 when the file fails.
+# RCX=path: writes the opened file's cover art to it (a new file) and reports
+# its type and size; exit code 2 when it has none, 4 when the file fails.
 LOCALFN write_cover
     push rbx
     push rsi
     push rdi
     sub rsp, 32
+    mov rbx, rcx
     call cover_get
     test rax, rax
     jz .Lcover_none
-    mov rax, [rip + argv]
-    mov rdi, [rax + 24]                # create new: never truncate
+    mov rdi, rbx                       # create new: never truncate
     mov esi, O_WRONLY | O_CREAT | O_EXCL | O_CLOEXEC
     mov edx, 0644
     mov eax, SYS_open
