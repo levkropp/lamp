@@ -18,6 +18,7 @@ usage:
     .ascii "       lamp-cli --decode file.flac [more files...] output.f32\n"
     .ascii "       lamp-cli --tags file.mp3\n"
     .ascii "       lamp-cli --chapters file.m4b\n"
+    .ascii "       lamp-cli --cover file.mp3 cover-image\n"
     .ascii "Several files play one after another without a gap, at the first file's rate;\n"
     .ascii "M3U/M3U8 and PLS playlists add their entries.\n"
     .ascii "Playback: Space pauses/resumes; Q or Ctrl+C stops.\n"
@@ -43,6 +44,10 @@ check_arg: .asciz "--check"
 decode_arg: .asciz "--decode"
 tags_arg: .asciz "--tags"
 chapters_arg: .asciz "--chapters"
+cover_arg: .asciz "--cover"
+no_cover: .asciz "No embedded cover art.\n"
+bytes_text: .asciz " bytes\n"
+space_text: .asciz " "
 equals_text: .asciz "="
 skipped_text: .asciz "Skipped (unsupported, malformed, or inaccessible): "
 output_fd: .quad -1
@@ -56,7 +61,7 @@ timespec: .zero 16
 argc: .quad 0
 argv: .quad 0
 start_ms: .quad 0
-operation: .long 0             # 0 play, 1 check, 2 decode, 3 tags, 4 chapters
+operation: .long 0             # 0 play, 1 check, 2 decode, 3 tags, 4 chapters, 5 cover
 exit_code: .long 0
 
 .text
@@ -110,7 +115,23 @@ LOCALFN cli_main
     call equal_text
     mov edi, 4
     test eax, eax
+    jnz .Lmetadata_arg
+    mov rcx, [rbx + 8]
+    lea rdx, [rip + cover_arg]
+    call equal_text
+    test eax, eax
     jz .Ltry_decode_arg
+    cmp qword ptr [rip + argc], 4
+    jne .Lshow_help
+    mov dword ptr [rip + operation], 5
+    lea rax, [rip + engine_stop_requested]
+    mov [rip + ogg_cancel_ptr], rax
+    mov rcx, [rbx + 16]
+    call decoder_open
+    test eax, eax
+    jz .Lbad_input
+    call write_cover
+    jmp .Lcleanup
 .Lmetadata_arg:
     cmp qword ptr [rip + argc], 3
     jne .Lshow_help
@@ -381,6 +402,61 @@ LOCALFN print_tags
     pop rbx
     ret
 ENDFN print_tags
+
+# Writes the opened file's cover art to the new file argv[3] and reports its
+# type and size; exit code 2 when it has none, 4 when the file fails.
+LOCALFN write_cover
+    push rbx
+    push rsi
+    push rdi
+    sub rsp, 32
+    call cover_get
+    test rax, rax
+    jz .Lcover_none
+    mov rax, [rip + argv]
+    mov rdi, [rax + 24]                # create new: never truncate
+    mov esi, O_WRONLY | O_CREAT | O_EXCL | O_CLOEXEC
+    mov edx, 0644
+    mov eax, SYS_open
+    syscall
+    test eax, eax
+    js .Lcover_failed
+    mov [rip + output_fd], rax
+    call cover_get
+    mov r8, rdx
+    mov rdx, rax
+    mov rcx, [rip + output_fd]
+    call write_all
+    test eax, eax
+    jz .Lcover_failed
+    call cover_get
+    mov rbx, rdx
+    lea rax, [rip + cover_mimes]
+    mov rcx, [rax + r8*8]
+    call print_text
+    lea rcx, [rip + space_text]
+    call print_text
+    mov rcx, rbx
+    call print_number
+    lea rcx, [rip + bytes_text]
+    call print_text
+    jmp .Lcover_return
+.Lcover_none:
+    mov dword ptr [rip + exit_code], 2
+    lea rcx, [rip + no_cover]
+    call print_text
+    jmp .Lcover_return
+.Lcover_failed:
+    mov dword ptr [rip + exit_code], 4
+    lea rcx, [rip + output_error]
+    call print_text
+.Lcover_return:
+    add rsp, 32
+    pop rdi
+    pop rsi
+    pop rbx
+    ret
+ENDFN write_cover
 
 # Writes the opened file's chapters as "HH:MM:SS.mmm title" lines.
 LOCALFN print_chapters

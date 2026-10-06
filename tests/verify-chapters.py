@@ -167,9 +167,10 @@ def void(size):
     return b'\xec\x01' + (size - 9).to_bytes(7, 'big') + bytes(size - 9)
 
 
-def mkv_append_chapters(data, chapters, index):
-    """The file with `chapters` appended to its Segment (which runs to the end
-    of the file), named by a new SeekHead entry when `index` is set."""
+def mkv_append(data, chapters, index):
+    """The file with the level 1 element `chapters` appended to its Segment
+    (which runs to the end of the file), named by a new SeekHead entry when
+    `index` is set."""
     payload, children = mkv_children(data)
     position = len(data) - payload
     out = bytearray(data + chapters)
@@ -186,7 +187,8 @@ def mkv_append_chapters(data, chapters, index):
             size, q = vint(data, q)
             entries += data[p:q + size] if e == 0x4dbb else b''
             p = q + size
-        seekhead = element(0x114d9b74, entries + element(0x4dbb, element(0x53ab, b'\x10\x43\xa7\x70') +
+        seek_id = chapters[:9 - chapters[0].bit_length()]
+        seekhead = element(0x114d9b74, entries + element(0x4dbb, element(0x53ab, seek_id) +
                                                          element(0x53ac, uint(position))))
         out[start:vend] = seekhead + void(vend - start - len(seekhead))
     return bytes(out)
@@ -418,13 +420,13 @@ def main():
     ffmpeg(*source(), '-c:a', 'flac', nochapters)
     late = element(0x1043a770, edition(1, atom(1, 0, titles=['After the clusters']), atom(2, NS, titles=['B'])))
     path = work / 'indexed-at-end.mka'
-    path.write_bytes(mkv_append_chapters(nochapters.read_bytes(), late, True))
+    path.write_bytes(mkv_append(nochapters.read_bytes(), late, True))
     compare(path, 'Chapters after the clusters, named by the SeekHead')
     path = work / 'unindexed-at-end.mka'
-    path.write_bytes(mkv_append_chapters(nochapters.read_bytes(), late, False))
+    path.write_bytes(mkv_append(nochapters.read_bytes(), late, False))
     compare(path, 'Chapters after the clusters that no SeekHead names', empty=True)
     path = work / 'front-and-end.mka'
-    path.write_bytes(mkv_append_chapters(mka.read_bytes(), late, True))
+    path.write_bytes(mkv_append(mka.read_bytes(), late, True))
     compare(path, 'Chapters before the clusters and another, indexed, after them')
     path = work / 'zero-starts.mka'
     path.write_bytes(mkv_replace_chapters(mka.read_bytes(), element(0x1043a770, edition(

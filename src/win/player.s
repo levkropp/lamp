@@ -29,6 +29,8 @@ usage: .ascii "LAMP 0.4.0-dev - Lev's Assembly Media Player"
       .byte 13, 10
       .ascii "       lamp-cli.exe --chapters file.m4b"
       .byte 13, 10
+      .ascii "       lamp-cli.exe --cover file.mp3 cover-image"
+      .byte 13, 10
       .ascii "Several files play one after another without a gap, at the first file's rate;"
       .byte 13, 10
       .ascii "M3U/M3U8 and PLS playlists add their entries."
@@ -78,6 +80,12 @@ check_arg: .short '-', '-', 'c', 'h', 'e', 'c', 'k', 0
 decode_arg: .short '-', '-', 'd', 'e', 'c', 'o', 'd', 'e', 0
 tags_arg: .short '-', '-', 't', 'a', 'g', 's', 0
 chapters_arg: .short '-', '-', 'c', 'h', 'a', 'p', 't', 'e', 'r', 's', 0
+cover_arg: .short '-', '-', 'c', 'o', 'v', 'e', 'r', 0
+no_cover: .ascii "No embedded cover art."
+.byte 13, 10, 0
+bytes_text: .ascii " bytes"
+.byte 13, 10, 0
+space_text: .asciz " "
 skipped_text: .ascii "Skipped a file that is unsupported, malformed, or inaccessible."
 .byte 13, 10, 0
 .p2align 3
@@ -107,7 +115,7 @@ stdin: .quad 0
 output_file: .quad -1
 argv: .quad 0
 argc: .long 0
-operation: .long 0                  # 0 play, 1 check, 2 decode, 3 tags, 4 chapters
+operation: .long 0                  # 0 play, 1 check, 2 decode, 3 tags, 4 chapters, 5 cover
 exit_code: .long 0
 stop_event: .quad 0
 data_event: .quad 0
@@ -277,7 +285,68 @@ FN start
     call equal_wide
     mov dword ptr [rip + operation], 4
     test eax, eax
+    jnz .Lmetadata_arg
+    mov rax, [rip + argv]
+    mov rcx, [rax + 8]
+    lea rdx, [rip + cover_arg]
+    call equal_wide
+    test eax, eax
     jz .Ltry_decode_arg
+    cmp dword ptr [rip + argc], 4
+    jne .Lshow_help
+    mov dword ptr [rip + operation], 5
+    lea rax, [rip + engine_stop_requested]
+    mov [rip + ogg_cancel_ptr], rax
+    mov rax, [rip + argv]
+    mov rcx, [rax + 16]
+    call decoder_open
+    test eax, eax
+    jz bad_input
+    call cover_get
+    test rax, rax
+    jz .Lcover_none
+    mov rax, [rip + argv]
+    mov rcx, [rax + 24]
+    mov edx, 0x40000000
+    xor r8d, r8d
+    xor r9d, r9d
+    mov qword ptr [rsp + 32], 1 # CREATE_NEW: never truncate existing output
+    mov qword ptr [rsp + 40], 0x80
+    mov qword ptr [rsp + 48], 0
+    call CreateFileW
+    mov [rip + output_file], rax
+    cmp rax, -1
+    je .Lbad_output
+    call cover_get
+    mov [rip + render_bytes], edx
+    mov rcx, [rip + output_file]
+    mov r8d, edx
+    mov rdx, rax
+    lea r9, [rip + bytes_written]
+    mov qword ptr [rsp + 32], 0
+    call WriteFile
+    test eax, eax
+    jz .Lbad_output
+    mov eax, [rip + bytes_written]
+    cmp eax, [rip + render_bytes]
+    jne .Lbad_output
+    call cover_get
+    mov [rsp + 56], rdx
+    lea rax, [rip + cover_mimes]
+    mov rcx, [rax + r8*8]
+    call print_text
+    lea rcx, [rip + space_text]
+    call print_text
+    mov rcx, [rsp + 56]
+    call print_number
+    lea rcx, [rip + bytes_text]
+    call print_text
+    jmp cleanup
+.Lcover_none:
+    mov dword ptr [rip + exit_code], 2
+    lea rcx, [rip + no_cover]
+    call print_text
+    jmp cleanup
 .Lmetadata_arg:
     cmp dword ptr [rip + argc], 3
     jne .Lshow_help

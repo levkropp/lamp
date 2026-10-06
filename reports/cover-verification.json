@@ -1,0 +1,355 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "id3v24.mp3",
+      "result": "equal",
+      "comparator": "FFmpeg attached picture",
+      "picture": "image/jpeg, 1980 bytes",
+      "note": "FFmpeg-written"
+    },
+    {
+      "test": "id3v23.mp3",
+      "result": "equal",
+      "comparator": "FFmpeg attached picture",
+      "picture": "image/jpeg, 1980 bytes",
+      "note": "FFmpeg-written"
+    },
+    {
+      "test": "native.flac",
+      "result": "equal",
+      "comparator": "FFmpeg attached picture",
+      "picture": "image/jpeg, 1980 bytes",
+      "note": "FFmpeg-written"
+    },
+    {
+      "test": "aac.m4a",
+      "result": "equal",
+      "comparator": "FFmpeg attached picture",
+      "picture": "image/png, 390 bytes",
+      "note": "FFmpeg-written"
+    },
+    {
+      "test": "id3.aiff",
+      "result": "equal",
+      "comparator": "FFmpeg attached picture",
+      "picture": "image/jpeg, 1980 bytes",
+      "note": "FFmpeg-written"
+    },
+    {
+      "test": "attachments.mka",
+      "result": "equal",
+      "comparator": "FFmpeg attached picture",
+      "picture": "image/jpeg, 1980 bytes",
+      "note": "FFmpeg-written attachments"
+    },
+    {
+      "test": "upper-mime.mp3",
+      "result": "equal",
+      "comparator": "FFmpeg attached picture",
+      "picture": "image/jpeg, 1980 bytes",
+      "note": "ID3v2"
+    },
+    {
+      "test": "jpg-mime.mp3",
+      "result": "equal",
+      "comparator": "FFmpeg attached picture",
+      "picture": "image/jpeg, 1980 bytes",
+      "note": "ID3v2"
+    },
+    {
+      "test": "unknown-mime.mp3",
+      "result": "equal",
+      "comparator": "FFmpeg attached picture",
+      "picture": "image/png, 390 bytes",
+      "note": "ID3v2"
+    },
+    {
+      "test": "no-mime.mp3",
+      "result": "equal",
+      "comparator": "FFmpeg attached picture",
+      "picture": null,
+      "note": "ID3v2"
+    },
+    {
+      "test": "png-as-jpeg.mp3",
+      "result": "equal",
+      "comparator": "FFmpeg attached picture",
+      "picture": "image/png, 390 bytes",
+      "note": "ID3v2"
+    },
+    {
+      "test": "type-99.mp3",
+      "result": "equal",
+      "comparator": "FFmpeg attached picture",
+      "picture": "image/jpeg, 1980 bytes",
+      "note": "ID3v2"
+    },
+    {
+      "test": "two-fronts.mp3",
+      "result": "equal",
+      "comparator": "FFmpeg attached picture",
+      "picture": "image/gif, 967 bytes",
+      "note": "ID3v2"
+    },
+    {
+      "test": "bmp.mp3",
+      "result": "equal",
+      "comparator": "FFmpeg attached picture",
+      "picture": "image/bmp, 1206 bytes",
+      "note": "ID3v2"
+    },
+    {
+      "test": "empty-picture.mp3",
+      "result": "equal",
+      "comparator": "FFmpeg attached picture",
+      "picture": "image/png, 390 bytes",
+      "note": "ID3v2"
+    },
+    {
+      "test": "v22.mp3",
+      "result": "equal",
+      "comparator": "FFmpeg attached picture",
+      "picture": "image/jpeg, 1980 bytes",
+      "note": "ID3v2"
+    },
+    {
+      "test": "v22-gif.mp3",
+      "result": "equal",
+      "comparator": "FFmpeg attached picture",
+      "picture": null,
+      "note": "ID3v2"
+    },
+    {
+      "test": "big-v24.mp3",
+      "result": "equal",
+      "comparator": "FFmpeg attached picture",
+      "picture": "image/jpeg, 223974 bytes",
+      "note": "ID3v2"
+    },
+    {
+      "test": "unsync-v23.mp3",
+      "result": "equal",
+      "comparator": "FFmpeg attached picture",
+      "picture": "image/jpeg, 222954 bytes",
+      "note": "an unsynchronised ID3v2.3 tag"
+    },
+    {
+      "test": "unsync-v24.mp3",
+      "result": "equal",
+      "comparator": "FFmpeg attached picture",
+      "picture": "image/jpeg, 223974 bytes",
+      "note": "an unsynchronised ID3v2.4 frame with a data length indicator"
+    },
+    {
+      "test": "id3.aac",
+      "result": "equal",
+      "comparator": "FFmpeg attached picture",
+      "picture": "image/png, 390 bytes",
+      "note": "before ADTS"
+    },
+    {
+      "test": "id3.ac3",
+      "result": "equal",
+      "comparator": "FFmpeg attached picture",
+      "picture": null,
+      "note": "FFmpeg reads no pictures before AC-3"
+    },
+    {
+      "test": "id3-chunk.wav",
+      "result": "equal",
+      "comparator": "FFmpeg attached picture",
+      "picture": "image/jpeg, 1980 bytes",
+      "note": "a WAVE id3 chunk"
+    },
+    {
+      "test": "case-sensitive.flac",
+      "result": "equal",
+      "comparator": "FFmpeg attached picture",
+      "picture": "image/png, 390 bytes",
+      "note": "FLAC"
+    },
+    {
+      "test": "png-as-jpeg.flac",
+      "result": "equal",
+      "comparator": "FFmpeg attached picture",
+      "picture": "image/png, 390 bytes",
+      "note": "FLAC"
+    },
+    {
+      "test": "type-99.flac",
+      "result": "equal",
+      "comparator": "FFmpeg attached picture",
+      "picture": "image/jpeg, 1980 bytes",
+      "note": "FLAC"
+    },
+    {
+      "test": "link.flac",
+      "result": "equal",
+      "comparator": "FFmpeg attached picture",
+      "picture": null,
+      "note": "FLAC"
+    },
+    {
+      "test": "empty-picture.flac",
+      "result": "equal",
+      "comparator": "FFmpeg attached picture",
+      "picture": null,
+      "note": "FLAC"
+    },
+    {
+      "test": "comment-picture.flac",
+      "result": "equal",
+      "comparator": "FFmpeg attached picture",
+      "picture": "image/jpeg, 1980 bytes",
+      "note": "FLAC"
+    },
+    {
+      "test": "block-then-comment.flac",
+      "result": "equal",
+      "comparator": "FFmpeg attached picture",
+      "picture": "image/jpeg, 1980 bytes",
+      "note": "FLAC"
+    },
+    {
+      "test": "short-length.flac",
+      "result": "equal",
+      "comparator": "FFmpeg attached picture",
+      "picture": null,
+      "note": "FLAC"
+    },
+    {
+      "test": "vorbis.ogg",
+      "result": "equal",
+      "comparator": "FFmpeg attached picture",
+      "picture": "image/jpeg, 223974 bytes",
+      "note": "a comment over many Ogg pages"
+    },
+    {
+      "test": "opus.opus",
+      "result": "equal",
+      "comparator": "FFmpeg attached picture",
+      "picture": "image/jpeg, 223974 bytes",
+      "note": "a comment over many Ogg pages"
+    },
+    {
+      "test": "covr-types.m4a",
+      "result": "equal",
+      "comparator": "FFmpeg attached picture",
+      "picture": "image/bmp, 1206 bytes",
+      "note": "MP4 covr"
+    },
+    {
+      "test": "covr-png-as-jpeg.m4a",
+      "result": "equal",
+      "comparator": "FFmpeg attached picture",
+      "picture": "image/png, 390 bytes",
+      "note": "MP4 covr"
+    },
+    {
+      "test": "covr-jpeg-as-png.m4a",
+      "result": "equal",
+      "comparator": "FFmpeg attached picture",
+      "picture": "image/jpeg, 1980 bytes",
+      "note": "MP4 covr"
+    },
+    {
+      "test": "covr-later.m4a",
+      "result": "equal",
+      "comparator": "FFmpeg attached picture",
+      "picture": "image/jpeg, 1980 bytes",
+      "note": "MP4 covr"
+    },
+    {
+      "test": "font-first.mka",
+      "result": "equal",
+      "comparator": "FFmpeg attached picture",
+      "picture": "image/png, 390 bytes",
+      "note": "a font and a MIME type with parameters"
+    },
+    {
+      "test": "upper-mime.mka",
+      "result": "equal",
+      "comparator": "FFmpeg attached picture",
+      "picture": null,
+      "note": "Matroska MIME types are case-sensitive"
+    },
+    {
+      "test": "indexed-at-end.mka",
+      "result": "equal",
+      "comparator": "FFmpeg attached picture",
+      "picture": "image/png, 390 bytes",
+      "note": "Attachments after the clusters, named by the SeekHead"
+    },
+    {
+      "test": "unindexed-at-end.mka",
+      "result": "equal",
+      "comparator": "FFmpeg attached picture",
+      "picture": null,
+      "note": "Attachments after the clusters that no SeekHead names"
+    },
+    {
+      "test": "ape-cover.wv",
+      "result": "equal",
+      "comparator": "FFmpeg attached picture",
+      "picture": "image/jpeg, 1980 bytes",
+      "note": "APEv2 binary items"
+    },
+    {
+      "test": "ape-other.wv",
+      "result": "equal",
+      "comparator": "FFmpeg attached picture",
+      "picture": "image/bmp, 1206 bytes",
+      "note": "APEv2 binary items"
+    },
+    {
+      "test": "ape-no-name.wv",
+      "result": "equal",
+      "comparator": "FFmpeg attached picture",
+      "picture": null,
+      "note": "APEv2 binary items"
+    },
+    {
+      "test": "ape-in.mp3",
+      "result": "equal",
+      "comparator": "FFmpeg attached picture",
+      "picture": null,
+      "note": "FFmpeg reads no APEv2 tags in MP3"
+    },
+    {
+      "test": "base.mp3",
+      "result": "equal",
+      "comparator": "FFmpeg attached picture",
+      "picture": null,
+      "note": "no picture"
+    },
+    {
+      "test": "base.wav",
+      "result": "equal",
+      "comparator": "FFmpeg attached picture",
+      "picture": null,
+      "note": "no picture"
+    },
+    {
+      "test": "base.m4a",
+      "result": "equal",
+      "comparator": "FFmpeg attached picture",
+      "picture": null,
+      "note": "no picture"
+    },
+    {
+      "test": "base.wv",
+      "result": "equal",
+      "comparator": "FFmpeg attached picture",
+      "picture": null,
+      "note": "no picture"
+    },
+    {
+      "test": "mutated pictures",
+      "result": "no crash or hang",
+      "files": 1000,
+      "written": 742
+    }
+  ],
+  "scope": "Embedded cover art (ID3v2 APIC/PIC, FLAC PICTURE, METADATA_BLOCK_PICTURE, MP4 covr, Matroska attachments, APEv2 binary items) against FFmpeg attached pictures; mutated files."
+}
