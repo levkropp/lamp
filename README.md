@@ -4,7 +4,7 @@
 
 A small media player for Windows and Linux x86-64 and Apple Silicon macOS with handwritten assembly decoders and a native assembly UI. Audio comes first. The long-term goal is to support the relevant formats and playback features people use in **mpv**, with a small runtime and low CPU use.
 
-**Current source: 0.4.0-dev, an early audio prototype.** WAV, AIFF/AIFC, native FLAC, MP3, MP2/MP1, Ogg/Vorbis, Ogg/Opus and FLAC in Ogg play in source builds, including chained and multiplexed Ogg files, WavPack (`.wv`, lossless and hybrid), Matroska/WebM files with Opus, Vorbis, FLAC, ALAC, AAC, AC-3, WavPack, MPEG audio or PCM tracks, MP4/M4A/MOV files with AAC-LC or HE-AAC, AC-3, ALAC, MPEG audio, Opus, FLAC or PCM tracks (including the audio of video files and fragmented MP4), raw ADTS AAC and raw AC-3, and the audio of MPEG transport and program streams (`.ts`, `.m2ts`, `.mpg`, `.vob`) with MPEG audio, AAC or AC-3. Opus supports family 0 mono/stereo and family 1 layouts with 1–8 speaker channels, downmixed to stereo. Its elementary decoders include RFC 8251 updates and pass all 120 official vector checks across five output rates and mono/stereo. Video, subtitles and network streaming are future work. The published v0.3.0 prerelease contains WAV, native FLAC, MP3 and Ogg/Vorbis.
+**Current source: 0.4.0-dev, an early audio prototype.** WAV, AIFF/AIFC, native FLAC, MP3, MP2/MP1, Ogg/Vorbis, Ogg/Opus and FLAC in Ogg play in source builds, including chained and multiplexed Ogg files, WavPack (`.wv`, lossless and hybrid), Monkey's Audio (`.ape`, versions 3930–3990), Matroska/WebM files with Opus, Vorbis, FLAC, ALAC, AAC, AC-3, WavPack, MPEG audio or PCM tracks, MP4/M4A/MOV files with AAC-LC or HE-AAC, AC-3, ALAC, MPEG audio, Opus, FLAC or PCM tracks (including the audio of video files and fragmented MP4), raw ADTS AAC and raw AC-3, and the audio of MPEG transport and program streams (`.ts`, `.m2ts`, `.mpg`, `.vob`) with MPEG audio, AAC or AC-3. Opus supports family 0 mono/stereo and family 1 layouts with 1–8 speaker channels, downmixed to stereo. Its elementary decoders include RFC 8251 updates and pass all 120 official vector checks across five output rates and mono/stereo. Video, subtitles and network streaming are future work. The published v0.3.0 prerelease contains WAV, native FLAC, MP3 and Ogg/Vorbis.
 
 [Website](https://levkropp.github.io/lamp/) · [Download v0.3.0](https://github.com/levkropp/lamp/releases/tag/v0.3.0) · [Roadmap](ROADMAP.md) · [Compatibility matrix](docs/compatibility.md) · [Technical details and limits](docs/technical.md) · [Apple Silicon build](docs/macos.md)
 
@@ -82,6 +82,7 @@ Several files play, check or export as one gapless stream at the first file's ra
 | FLV | Flash Video audio: PCM, G.711, Flash ADPCM (2–5-bit codes), MP3 or AAC; video, script and other tags skipped; [details](docs/flv.md) |
 | CAF | Apple Core Audio Format with linear PCM (8–32-bit, float32/64, either byte order), G.711, IMA4, ALAC, AAC, MPEG audio, AC-3 or Opus; channel layouts, packet tables with priming/remainder trimming; [details](docs/caf.md) |
 | WavPack | WavPack 4/5 lossless and hybrid (lossy) audio, 8–32-bit integer and float, extra bits and shifts, joint and false stereo, 1–8 channels mixed to stereo, 8–192 kHz; block CRC checks; native `.wv` (ID3v2/APE tags skipped) or Matroska; exact seeks; DSD and `.wvc` correction files not yet; [details](docs/wavpack.md) |
+| Monkey's Audio | `.ape` versions 3930–3990 (Monkey's Audio 3.93 and later): mono and stereo, 8/16/24-bit, 8–192 kHz, compression levels fast to insane, 24-bit files of either predictor arithmetic; frame CRC checks; exact seeks; earlier versions not yet; [details](docs/ape.md) |
 | Ogg files | Chained links and multiplexed streams: each link plays its first Vorbis, Opus or FLAC stream (video and other streams are skipped); links at another rate are resampled to the first link's rate |
 
 See [precise coverage, limitations, and verification](docs/technical.md) before relying on a particular stream variant. Native surround output remains unfinished. [Ogg links, multiplexed streams, FLAC-in-Ogg and the resampler](docs/ogg.md) have their own notes. [WAV](docs/wav.md), [FLAC](docs/flac.md) and [Vorbis](docs/vorbis.md) speaker layouts downmix to stereo; WAV also accepts left-aligned valid bits and float64 samples. WAV and AIFF/AIFC seek directly; native FLAC uses seek tables or searches validated frames; MP3, Vorbis and Opus use sparse indexes.
@@ -118,6 +119,8 @@ python3 tests/run.py --quick     # smoke, table provenance, 35 Opus oracle suite
 python3 tests/run.py             # adds every FFmpeg-based PCM, seek, layout and container suite,
                                  # and bit-exact playback through a private PulseAudio null sink
 ```
+
+The Monkey's Audio suite encodes its fixtures with JMAC (`libjmac-java` and a Java runtime); `tests/run.py` skips it when they are missing.
 
 **Windows** needs [LLVM](https://llvm.org/) (`llvm-mc`, `lld-link`, `llvm-dlltool`, `llvm-rc`; for example `winget install LLVM.LLVM`) and Python. The same script also cross-builds the Windows binaries from Linux or macOS:
 
