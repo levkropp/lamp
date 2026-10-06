@@ -16,7 +16,7 @@ sample_rate: .long 0
 source_channels: .long 0
 source_bits: .long 0
 decode_error: .long 0
-codec_kind: .long 0                 #1 WAV,2 FLAC,3 MP3,4 Vorbis,5 Opus,6 AIFF/AIFC,...,11 AC-3,12 WavPack,13 CAF
+codec_kind: .long 0                 #1 WAV,2 FLAC,3 MP3,4 Vorbis,5 Opus,6 AIFF/AIFC,...,11 AC-3,12 WavPack,13 CAF,14 AVI
 total_frames: .quad 0
 map_token: .quad 0
 map_base: .quad 0
@@ -27,6 +27,7 @@ wav_end: .quad 0
 wav_begin: .quad 0
 wav_kind: .long 0                  # 0 RIFF, 1 RF64, 2 BW64
 wav_layout: .long 0                # chunks: 0 RIFF family, 1 RIFX (big-endian), 2 Wave64 (GUIDs)
+wav_codec_kind: .long 1            # codec_kind of an opened WAV reader: 1, or 14 for AVI
 wav_ds64: .quad 0
 wav_size_table: .quad 0
 wav_table_count: .long 0
@@ -175,6 +176,7 @@ LOCALFN decoder_open_format
     mov qword ptr [rip + wav_begin], 0
     mov dword ptr [rip + wav_kind], 0
     mov dword ptr [rip + wav_layout], 0
+    mov dword ptr [rip + wav_codec_kind], 1
     mov qword ptr [rip + wav_ds64], 0
     mov qword ptr [rip + wav_size_table], 0
     mov dword ptr [rip + wav_table_count], 0
@@ -373,7 +375,9 @@ LOCALFN decoder_open_format
 .Lopen_w64:
     # Sony Wave64: "riff" and "wave" GUIDs, 64-bit sizes counting the
     # 24-byte chunk headers, chunks aligned to 8 bytes.
-    cmp qword ptr [rip + file_size], 40
+    mov r8, [rip + input_end]
+    sub r8, rax                         # the file, or AVI's gathered image
+    cmp r8, 40
     jb .Lopen_bad
     cmp dword ptr [rax + 4], 0x11cf912e
     jne .Lopen_bad
@@ -390,7 +394,7 @@ LOCALFN decoder_open_format
     mov rdx, [rax + 16]
     cmp rdx, 40
     jb .Lopen_bad
-    cmp rdx, [rip + file_size]
+    cmp rdx, r8
     ja .Lopen_bad
     add rdx, rax
     mov [rip + input_end], rdx
@@ -405,7 +409,28 @@ LOCALFN decoder_open_format
     mov dword ptr [rip + wav_kind], 2
 .Lopen_wav:
     cmp dword ptr [rax + 8], 0x45564157
+    je .Lopen_wave
+    cmp dword ptr [rax + 8], 0x20495641 # "AVI "
     jne .Lopen_bad
+    mov ecx, [rip + wav_kind]
+    or ecx, [rip + wav_layout]
+    jnz .Lopen_bad                      # RIFF only
+    # The audio stream's chunks, gathered behind a Wave64 header (AAC opens
+    # its own track).
+    mov rcx, rax
+    mov rdx, [rip + input_end]
+    call avi_open
+    cmp eax, 1
+    jb .Lopen_bad
+    ja .Lopen_avi_image
+    leave
+    ret
+.Lopen_avi_image:
+    mov dword ptr [rip + wav_codec_kind], 14
+    mov [rip + input_end], rdx
+    mov rax, rcx
+    jmp .Lopen_w64
+.Lopen_wave:
     cmp dword ptr [rip + wav_kind], 0
     je .Lwav_riff_size
     # RF64/BW64 require ds64 immediately after the twelve-byte header.
@@ -856,7 +881,8 @@ LOCALFN decoder_open_format
 .Lwav_scale:
     shl eax, 23
     mov [rip + float_scale], eax
-    mov dword ptr [rip + codec_kind], 1
+    mov eax, [rip + wav_codec_kind]
+    mov [rip + codec_kind], eax
     mov eax, 1
     leave
     ret
@@ -925,7 +951,8 @@ LOCALFN decoder_open_format
     call track_finish
     test eax, eax
     jz .Lwav_adpcm_bad
-    mov dword ptr [rip + codec_kind], 1
+    mov eax, [rip + wav_codec_kind]
+    mov [rip + codec_kind], eax
     mov eax, 1
     leave
     ret
@@ -2169,6 +2196,8 @@ FN decoder_seek
     je .Lseek_wav
     cmp dword ptr [rip + codec_kind], 13
     je .Lseek_wav
+    cmp dword ptr [rip + codec_kind], 14
+    je .Lseek_wav
     cmp dword ptr [rip + codec_kind], 3
     je .Lseek_mp3
     cmp dword ptr [rip + codec_kind], 2
@@ -3359,6 +3388,8 @@ FN decoder_read
 .Lread_single:
     cmp dword ptr [rip + codec_kind], 13  # CAF linear PCM and G.711
     je .Lread_existing
+    cmp dword ptr [rip + codec_kind], 14  # AVI PCM and G.711
+    je .Lread_existing
     cmp dword ptr [rip + codec_kind], 1
     jb .Lread_done
     cmp dword ptr [rip + codec_kind], 6
@@ -3386,6 +3417,8 @@ FN decoder_read
     cmp dword ptr [rip + codec_kind], 6
     je .Lread_wav
     cmp dword ptr [rip + codec_kind], 13
+    je .Lread_wav
+    cmp dword ptr [rip + codec_kind], 14
     je .Lread_wav
 .Lread_flac:
     mov rcx, rdi
