@@ -82,6 +82,7 @@ def main():
     step(TESTS / 'verify-tags.py')
     step(TESTS / 'verify-chapters.py')
     step(TESTS / 'verify-cover.py')
+    step(TESTS / 'verify-robustness.py', '--count', '100')
     step(TESTS / 'verify-queue.py')
     step(TESTS / 'verify-navigation.py', *playback)
     step(TESTS / 'verify-rate.py', *playback)
