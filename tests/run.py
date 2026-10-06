@@ -77,6 +77,7 @@ def main():
     step(TESTS / 'verify-avi.py', *playback)
     step(TESTS / 'verify-flv.py', *playback)
     step(TESTS / 'verify-tags.py')
+    step(TESTS / 'verify-queue.py')
     if not WINDOWS and not playback:
         step(TESTS / 'verify-playback.py')
     if '--skip-network' not in arguments:

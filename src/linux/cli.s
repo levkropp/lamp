@@ -13,10 +13,11 @@ usage:
     .ascii "Handwritten x86-64 assembly: PCM, G.711, IMA/MS/Flash ADPCM, FLAC, ALAC, WavPack, MP1/MP2/MP3, AAC-LC/HE-AAC, AC-3,\n"
     .ascii "Vorbis, Opus "
     .ascii "in WAV/W64, AIFF/AIFC, CAF, FLAC, WavPack, MP3, AAC (ADTS), AC-3, Ogg, Matroska/WebM, MP4/MOV, AVI, FLV and MPEG-TS/PS files.\n"
-    .ascii "Usage: lamp-cli file.mp3\n"
-    .ascii "       lamp-cli --check file.flac\n"
-    .ascii "       lamp-cli --decode file.flac output.f32\n"
+    .ascii "Usage: lamp-cli file.mp3 [more files...]\n"
+    .ascii "       lamp-cli --check file.flac [more files...]\n"
+    .ascii "       lamp-cli --decode file.flac [more files...] output.f32\n"
     .ascii "       lamp-cli --tags file.mp3\n"
+    .ascii "Several files play one after another without a gap, at the first file's rate.\n"
     .ascii "Playback: Space pauses/resumes; Q or Ctrl+C stops.\n"
     .ascii "RIFF/RIFX/RF64/BW64/W64 WAV: 1..8 channels, PCM 8/16/24/32 or float32/64.\n"
     .ascii "AIFF/AIFC: signed PCM 1..32 bits or float32/64, 1..8 channels.\n"
@@ -40,6 +41,7 @@ check_arg: .asciz "--check"
 decode_arg: .asciz "--decode"
 tags_arg: .asciz "--tags"
 equals_text: .asciz "="
+skipped_text: .asciz "Skipped (unsupported, malformed, or inaccessible): "
 output_fd: .quad -1
 
 .bss
@@ -87,9 +89,11 @@ LOCALFN cli_main
     test eax, eax
     jz .Ltry_decode
     cmp qword ptr [rip + argc], 3
-    jne .Lshow_help
+    jb .Lshow_help
     mov dword ptr [rip + operation], 1
-    mov r12, [rbx + 16]
+    lea r12, [rbx + 16]                # inputs
+    mov rsi, [rip + argc]
+    sub rsi, 2
     jmp .Lopen_input
 .Ltry_decode:
     mov rcx, [rbx + 8]
@@ -100,8 +104,13 @@ LOCALFN cli_main
     cmp qword ptr [rip + argc], 3
     jne .Lshow_help
     mov dword ptr [rip + operation], 3
-    mov r12, [rbx + 16]
-    jmp .Lopen_input
+    lea rax, [rip + engine_stop_requested]
+    mov [rip + ogg_cancel_ptr], rax
+    mov rcx, [rbx + 16]
+    call decoder_open
+    test eax, eax
+    jz .Lbad_input
+    jmp .Ltags_only
 .Ltry_decode_arg:
     mov rcx, [rbx + 8]
     lea rdx, [rip + decode_arg]
@@ -109,9 +118,10 @@ LOCALFN cli_main
     test eax, eax
     jz .Lplay_args
     cmp qword ptr [rip + argc], 4
-    jne .Lshow_help
+    jb .Lshow_help
     mov dword ptr [rip + operation], 2
-    mov rdi, [rbx + 24]        # create new: never truncate existing output
+    mov rax, [rip + argc]
+    mov rdi, [rbx + rax*8 - 8] # the last argument; create new: never truncate
     mov esi, O_WRONLY | O_CREAT | O_EXCL | O_CLOEXEC
     mov edx, 0644
     mov eax, SYS_open
@@ -119,27 +129,30 @@ LOCALFN cli_main
     test eax, eax
     js .Lbad_output
     mov [rip + output_fd], rax
-    mov r12, [rbx + 16]
+    lea r12, [rbx + 16]
+    mov rsi, [rip + argc]
+    sub rsi, 3
     jmp .Lopen_input
 .Lplay_args:
-    cmp qword ptr [rip + argc], 2
-    jne .Lshow_help
-    mov r12, [rbx + 8]
+    lea r12, [rbx + 8]
+    mov rsi, [rip + argc]
+    dec rsi
 .Lopen_input:
     lea rax, [rip + engine_stop_requested]
     mov [rip + ogg_cancel_ptr], rax
+    lea rax, [rip + report_skipped]
+    mov [rip + queue_skipped], rax
     mov rcx, r12
-    call decoder_open
+    mov edx, esi
+    call queue_begin                   # files play one after another
     test eax, eax
     jz .Lbad_input
-    cmp dword ptr [rip + operation], 3
-    je .Ltags_only
     cmp dword ptr [rip + operation], 0
     je .Lplayback
 .Loffline_loop:
     lea rcx, [rip + offline_pcm]
     mov edx, CHUNK_FRAMES
-    call decoder_read
+    call queue_read
     test eax, eax
     jz .Loffline_finished
     add [rip + decoded_count], rax
@@ -154,12 +167,7 @@ LOCALFN cli_main
     jz .Lbad_output
     jmp .Loffline_loop
 .Loffline_finished:
-    cmp dword ptr [rip + decode_error], 0
-    jne .Ldecoding_failed
-    mov rax, [rip + output_frames]
-    test rax, rax
-    jz .Lreport_finish
-    cmp rax, [rip + decoded_count]
+    cmp dword ptr [rip + decode_error], 0   # the queue checks each file's length
     jne .Ldecoding_failed
     jmp .Lreport_finish
 .Ldecoding_failed:
@@ -170,6 +178,8 @@ LOCALFN cli_main
     jmp .Lcleanup
 .Lplayback:
     call print_tags
+    lea rax, [rip + announce_next]
+    mov [rip + queue_announce], rax
     mov ecx, 1                         # console: messages, Space/Q, Ctrl+C
     call engine_start
     mov [rip + exit_code], eax
@@ -276,6 +286,32 @@ FN print_text
     add rsp, 40
     ret
 ENDFN print_text
+
+# Queue hook: RCX=path of a file that does not play.
+LOCALFN report_skipped
+    push rbx
+    sub rsp, 32
+    mov rbx, rcx
+    lea rcx, [rip + skipped_text]
+    call print_text
+    mov rcx, rbx
+    call print_text
+    lea rcx, [rip + newline]
+    call print_text
+    add rsp, 32
+    pop rbx
+    ret
+ENDFN report_skipped
+
+# Queue hook during playback: the next file's tags after a blank line.
+LOCALFN announce_next
+    sub rsp, 40
+    lea rcx, [rip + newline]
+    call print_text
+    call print_tags
+    add rsp, 40
+    ret
+ENDFN announce_next
 
 # Writes the opened file's tags as "key=value" lines; control characters
 # in values print as spaces.
@@ -386,7 +422,7 @@ LOCALFN report_stats
     call print_number
     lea rcx, [rip + stats_b]
     call print_text
-    mov ecx, [rip + output_rate]
+    mov ecx, [rip + queue_rate]
     call print_number
     lea rcx, [rip + stats_c]
     call print_text

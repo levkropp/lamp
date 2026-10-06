@@ -156,6 +156,42 @@ def main():
                        'compared_frames': remaining // 2, 'stats': stats})
         print(f'{name}: {remaining // 2} frames bit-exact; {stats}', flush=True)
 
+    # A gapless queue: a first file shorter than the prebuffer (so the queue
+    # opens the next file before the stream starts), then a 44.1 kHz file
+    # resampled to the session's 48 kHz and two more formats.
+    queue = []
+    for name, source, coding in (('queue-1.flac', 'anoisesrc=r=48000:d=0.3:seed=31:a=0.25', ['-c:a', 'flac']),
+                                 ('queue-2.mp3', 'anoisesrc=r=44100:d=0.8:seed=32:a=0.25', ['-c:a', 'libmp3lame']),
+                                 ('queue-3.opus', 'anoisesrc=r=48000:d=0.7:seed=33:a=0.25', ['-c:a', 'libopus']),
+                                 ('queue-4.wav', 'anoisesrc=r=48000:d=0.6:seed=34:a=0.25', ['-c:a', 'pcm_s16le'])):
+        ffmpeg('-f', 'lavfi', '-i', source, '-ac', '2', *coding, work / name)
+        queue.append(work / name)
+    reference_path = work / 'queue.f32'
+    if reference_path.exists():
+        reference_path.unlink()
+    result = subprocess.run([str(lamp_cli()), '--decode', *[str(p) for p in queue], str(reference_path)],
+                            stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    if result.returncode:
+        raise Failure(f'Queue decode failed: {result.stdout[-300:]}')
+    reference = array.array('f', reference_path.read_bytes())
+    recorder = Recorder(env, work / 'queue.capture.f32')
+    result = subprocess.run([str(lamp_cli()), *[str(p) for p in queue]], stdout=subprocess.PIPE,
+                            stderr=subprocess.STDOUT, stdin=subprocess.DEVNULL, env=env, timeout=60)
+    capture = recorder.stop()
+    stats = result.stdout.decode('utf-8', 'replace').strip().splitlines()[-1]
+    if result.returncode or ' rate=48000 ' not in stats:
+        raise Failure(f'Queue playback failed: {stats}')
+    require_clean(stats, 'queue')
+    first, offset = locate(capture, reference)
+    if offset is None:
+        raise Failure('Queued audio not found in the capture')
+    remaining = len(reference) - offset
+    if capture[first:first + remaining] != reference[offset:] or any(capture[first + remaining:first + remaining + 9600]):
+        raise Failure('Captured queue playback differs from --decode output')
+    checks.append({'test': 'gapless queue', 'result': 'bit-exact', 'frames': len(reference) // 2,
+                   'compared_frames': remaining // 2, 'stats': stats})
+    print(f'gapless queue: {remaining // 2} frames bit-exact across four files; {stats}', flush=True)
+
     # Pause/resume: audio after each pause continues the stream and plays to the
     # end. On cork the server rewinds audio it rendered but had not played; its
     # monitor mirrors that boundary only approximately, so a resume may repeat or
