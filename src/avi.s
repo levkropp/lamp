@@ -11,7 +11,7 @@
 # in the format they become track packets, without one they are gathered and
 # open as ADTS. Video and other streams are skipped.
 .include "lamp.inc"
-.globl avi_open
+.globl avi_open, wav_image_begin, wav_image_end
 
 .equ AVI_MALFORMED, 100
 .equ AVI_UNSUPPORTED, 101
@@ -273,79 +273,128 @@ LOCALFN avi_append
     ret
 ENDFN avi_append
 
-# After hdrl: starts the packet list or the gathered stream -> EAX=1.
-LOCALFN avi_start
+# RCX=WAVE format, EDX=its bytes, R8=audio bytes at most: starts a Wave64
+# image in the gather buffer (riff, wave and fmt GUIDs, fmt's size, the
+# format padded to 8 bytes, then data's GUID and a size set by
+# wav_image_end) -> EAX=1. Shared with FLV.
+FN wav_image_begin
     push rbx
-    sub rsp, 32
-    cmp dword ptr [rip + avi_mode], AVI_PACKETS
-    jne .Lavi_start_gather
-    mov ecx, TK_AAC
-    call track_begin
-    jmp .Lavi_start_return
-.Lavi_start_gather:
-    mov rcx, [rip + avi_end]
-    sub rcx, [rip + avi_file]
-    mov eax, [rip + avi_fmt_bytes]
-    lea rcx, [rcx + rax + 128]            # the Wave64 header
+    push rsi
+    sub rsp, 40
+    mov rsi, rcx
+    mov ebx, edx
+    lea rcx, [r8 + rbx + 128]
     call mts_begin
     test eax, eax
-    jz .Lavi_start_return
-    cmp dword ptr [rip + avi_mode], AVI_ADTS
-    je .Lavi_start_return
-    # riff, wave and fmt GUIDs, fmt's size, the format padded to 8 bytes,
-    # then data's GUID and a size set at the end.
+    jz .Lwav_image_begin_return
     lea rcx, [rip + avi_w64_header]
     mov edx, 56
     call avi_append
     test eax, eax
-    jz .Lavi_start_return
-    mov ebx, [rip + avi_fmt_bytes]
+    jz .Lwav_image_begin_return
     lea rax, [rbx + 24]
     mov [rip + avi_size], rax
     lea rcx, [rip + avi_size]
     mov edx, 8
     call avi_append
     test eax, eax
-    jz .Lavi_start_return
-    mov rcx, [rip + avi_fmt]
+    jz .Lwav_image_begin_return
+    mov rcx, rsi
     mov edx, ebx
     call avi_append
     test eax, eax
-    jz .Lavi_start_return
+    jz .Lwav_image_begin_return
     mov edx, ebx
     neg edx
     and edx, 7
     lea rcx, [rip + avi_zeros]
     call avi_append
     test eax, eax
-    jz .Lavi_start_return
+    jz .Lwav_image_begin_return
     # A compressed format's zero block alignment means "unknown"; the WAV
     # reader needs it nonzero.
     mov rcx, [rip + mts_buffer]
     cmp word ptr [rcx + 64 + 12], 0
-    jne .Lavi_start_data
-    cmp dword ptr [rip + avi_tag], 0x50
-    je .Lavi_start_align
-    cmp dword ptr [rip + avi_tag], 0x55
-    je .Lavi_start_align
-    cmp dword ptr [rip + avi_tag], 0x2000
-    jne .Lavi_start_data
-.Lavi_start_align:
+    jne .Lwav_image_begin_data
+    movzx eax, word ptr [rcx + 64]
+    cmp eax, 0xfffe
+    jne .Lwav_image_begin_tag
+    cmp ebx, 40
+    jb .Lwav_image_begin_data
+    movzx eax, word ptr [rcx + 64 + 24]
+.Lwav_image_begin_tag:
+    cmp eax, 0x50
+    je .Lwav_image_begin_align
+    cmp eax, 0x55
+    je .Lwav_image_begin_align
+    cmp eax, 0x2000
+    jne .Lwav_image_begin_data
+.Lwav_image_begin_align:
     mov word ptr [rcx + 64 + 12], 1
-.Lavi_start_data:
+.Lwav_image_begin_data:
     mov rax, [rip + mts_bytes]
     mov [rip + avi_data], rax
     lea rcx, [rip + avi_w64_data]
     mov edx, 16
     call avi_append
     test eax, eax
-    jz .Lavi_start_return
+    jz .Lwav_image_begin_return
     lea rcx, [rip + avi_zeros]
     mov edx, 8
     call avi_append
-.Lavi_start_return:
-    add rsp, 32
+.Lwav_image_begin_return:
+    add rsp, 40
+    pop rsi
     pop rbx
+    ret
+ENDFN wav_image_begin
+
+# ECX=frame bytes to keep whole (0: every byte): sets the image's sizes ->
+# RCX=image, RDX=its end.
+FN wav_image_end
+    mov r8d, ecx
+    mov rcx, [rip + mts_buffer]
+    mov r9, [rip + mts_bytes]
+    sub r9, [rip + avi_data]
+    sub r9, 24                            # audio bytes
+    test r8d, r8d
+    jz .Lwav_image_end_sizes
+    mov rax, r9
+    xor edx, edx
+    div r8
+    sub r9, rdx
+.Lwav_image_end_sizes:
+    mov rdx, [rip + avi_data]
+    lea rax, [r9 + 24]
+    mov [rcx + rdx + 16], rax
+    lea rdx, [rdx + r9 + 24]              # image bytes
+    mov [rcx + 16], rdx
+    add rdx, rcx
+    ret
+ENDFN wav_image_end
+
+# After hdrl: starts the packet list or the gathered stream -> EAX=1.
+LOCALFN avi_start
+    sub rsp, 40
+    cmp dword ptr [rip + avi_mode], AVI_PACKETS
+    jne .Lavi_start_gather
+    mov ecx, TK_AAC
+    call track_begin
+    jmp .Lavi_start_return
+.Lavi_start_gather:
+    mov r8, [rip + avi_end]
+    sub r8, [rip + avi_file]
+    cmp dword ptr [rip + avi_mode], AVI_ADTS
+    je .Lavi_start_adts
+    mov rcx, [rip + avi_fmt]
+    mov edx, [rip + avi_fmt_bytes]
+    call wav_image_begin
+    jmp .Lavi_start_return
+.Lavi_start_adts:
+    mov rcx, r8
+    call mts_begin
+.Lavi_start_return:
+    add rsp, 40
     ret
 ENDFN avi_start
 
@@ -546,12 +595,8 @@ FN avi_open
     cmp eax, AVI_ADTS
     je .Lavi_open_adts
     # The Wave64 image: whole PCM frames (a truncated last chunk may end
-    # within one), then the sizes.
-    mov rcx, [rip + mts_buffer]
-    mov rbx, [rip + mts_bytes]
-    mov rax, [rip + avi_data]
-    sub rbx, rax
-    sub rbx, 24                           # audio bytes
+    # within one).
+    xor ecx, ecx
     mov eax, [rip + avi_tag]
     cmp eax, 1
     je .Lavi_open_frames
@@ -562,20 +607,10 @@ FN avi_open
     cmp eax, 7
     jne .Lavi_open_image
 .Lavi_open_frames:
-    movzx r8d, word ptr [rcx + 64 + 12]
-    test r8d, r8d
-    jz .Lavi_open_image
-    mov rax, rbx
-    xor edx, edx
-    div r8
-    sub rbx, rdx
+    mov rax, [rip + avi_fmt]
+    movzx ecx, word ptr [rax + 12]
 .Lavi_open_image:
-    mov rdx, [rip + avi_data]
-    lea rax, [rbx + 24]
-    mov [rcx + rdx + 16], rax
-    lea rdx, [rdx + rbx + 24]             # image bytes
-    mov [rcx + 16], rdx
-    add rdx, rcx
+    call wav_image_end
     mov eax, 2
     jmp .Lavi_open_return
 .Lavi_open_adts:

@@ -74,6 +74,7 @@ def main():
     step(TESTS / 'verify-wav-codecs.py', *playback)
     step(TESTS / 'verify-caf-wave64.py', *playback)
     step(TESTS / 'verify-avi.py', *playback)
+    step(TESTS / 'verify-flv.py', *playback)
     if not WINDOWS and not playback:
         step(TESTS / 'verify-playback.py')
     if '--skip-network' not in arguments:

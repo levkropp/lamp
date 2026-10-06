@@ -6,9 +6,14 @@
 # (CAF and AIFF-C "ima4", described by a WAVE-style fmt with the private tag
 # ADPCM_QT) packs 64 samples per channel in 34-byte blocks whose headers keep
 # only the predictor's top nine bits, so a header close to the running state
-# continues it (as FFmpeg does) and seeks decode one primer packet. Decoding
-# follows FFmpeg's adpcm_ima_wav, adpcm_ms and adpcm_ima_qt; the tables are
-# src/adpcm_tables.inc (with the G.711 expansions used by the PCM reader).
+# continues it (as FFmpeg does) and seeks decode one primer packet. Flash
+# ADPCM (FLV and SWF sound data, the private tag ADPCM_SWF) is a bitstream:
+# a 2-bit code size (2-5 bits), then blocks of 4096 samples per channel,
+# each a 16-bit sample and a 6-bit step index per channel and 4095
+# interleaved codes, with the SWF specification's step index tables.
+# Decoding follows FFmpeg's adpcm_ima_wav, adpcm_ms, adpcm_ima_qt and
+# adpcm_swf; the tables are src/adpcm_tables.inc (with the G.711 expansions
+# used by the PCM reader).
 .include "lamp.inc"
 .globl adpcm_track_open, adpcm_track_samples, adpcm_track_decode, adpcm_track_close, adpcm_track_reset
 .globl adpcm_primer, g711_alaw, g711_ulaw
@@ -18,6 +23,7 @@
 .equ ADPCM_IMA, 0x11
 .equ ADPCM_MS, 2
 .equ ADPCM_QT, 0x4d49               # LAMP's tag for QuickTime IMA4 (not a WAVE tag)
+.equ ADPCM_SWF, 0x5346              # LAMP's tag for Flash ADPCM (not a WAVE tag)
 .equ MS_C1, 0                       # Microsoft channel state
 .equ MS_C2, 4
 .equ MS_DELTA, 8
@@ -30,6 +36,13 @@ RODATA
 .include "adpcm_tables.inc"
 .p2align 2
 adpcm_scale: .float 3.0517578125e-5     # 2^-15
+# Flash ADPCM step index changes by code size (2-5 bits), indexed by the
+# code's magnitude bits (SWF File Format Specification, version 19).
+swf_index:
+    .byte -1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+    .byte -1, -1, 2, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+    .byte -1, -1, -1, -1, 2, 4, 6, 8, 0, 0, 0, 0, 0, 0, 0, 0
+    .byte -1, -1, -1, -1, -1, -1, -1, -1, 1, 2, 4, 6, 8, 10, 13, 16
 
 .data
 adpcm_tag: .long 0
@@ -38,6 +51,7 @@ adpcm_align: .long 0
 adpcm_stride: .long 0                    # bytes per channel plane
 adpcm_planes: .quad 0                    # int16 channel planes of one block
 adpcm_primer: .long 0                    # packets decoded before a seek target
+adpcm_bits: .long 0                      # Flash ADPCM code size of the packet
 
 .bss
 .p2align 3
@@ -49,6 +63,8 @@ ms_state: .zero 2*MS_SIZE
 # (FFmpeg: IMA 1 + whole 8-sample groups, Microsoft 2 + two per byte).
 LOCALFN adpcm_block_samples
     mov r8d, [rip + adpcm_channels]
+    cmp dword ptr [rip + adpcm_tag], ADPCM_SWF
+    je .Ladpcm_samples_swf
     cmp dword ptr [rip + adpcm_tag], ADPCM_QT
     je .Ladpcm_samples_qt
     cmp dword ptr [rip + adpcm_tag], ADPCM_IMA
@@ -77,6 +93,31 @@ LOCALFN adpcm_block_samples
     imul ecx, r8d, 34
     div ecx
     shl eax, 6
+    ret
+.Ladpcm_samples_swf:
+    # Flash (adpcm_bits per code): whole 4096-sample blocks, then a partial
+    # block's first sample and whole code groups.
+    lea r9d, [rcx*8 - 2]                  # bits after the code size
+    test ecx, ecx
+    jz .Ladpcm_samples_none
+    imul r10d, r8d, 22                    # block headers
+    mov r11d, [rip + adpcm_bits]
+    imul r11d, r8d                        # bits per code group
+    imul ecx, r11d, 4095
+    add ecx, r10d                         # bits per block
+    mov eax, r9d
+    xor edx, edx
+    div ecx
+    shl eax, 12
+    mov ecx, eax                          # samples of whole blocks
+    sub edx, r10d                         # bits left after a header
+    jb .Ladpcm_samples_swf_done
+    mov eax, edx
+    xor edx, edx
+    div r11d
+    lea ecx, [rcx + rax + 1]
+.Ladpcm_samples_swf_done:
+    mov eax, ecx
     ret
 .Ladpcm_samples_none:
     xor eax, eax
@@ -123,14 +164,20 @@ FN adpcm_track_open
     je .Ladpcm_open_layout
     cmp ebx, ADPCM_QT
     je .Ladpcm_open_layout
+    cmp ebx, ADPCM_SWF
+    je .Ladpcm_open_two
     cmp ebx, ADPCM_MS
     jne .Ladpcm_open_fail
+.Ladpcm_open_two:
     cmp esi, 2
     ja .Ladpcm_open_fail
 .Ladpcm_open_layout:
     mov dword ptr [rip + decode_error], ADPCM_MALFORMED
+    mov dword ptr [rip + adpcm_bits], 2   # Flash: the most samples per byte
+    mov [rsp + 32], r10d
     mov ecx, [rip + adpcm_align]
     call adpcm_block_samples
+    mov r10d, [rsp + 32]
     test eax, eax
     jz .Ladpcm_open_fail
     lea eax, [rax*2 + 63]
@@ -202,6 +249,7 @@ FN adpcm_track_samples
     mov eax, -1
     cmp edx, [rip + adpcm_align]
     ja .Ladpcm_track_samples_return
+    call adpcm_packet_bits
     mov ecx, edx
     call adpcm_block_samples
     test eax, eax
@@ -211,6 +259,20 @@ FN adpcm_track_samples
     add rsp, 40
     ret
 ENDFN adpcm_track_samples
+
+# RCX=packet, EDX=bytes: a Flash packet's code size -> adpcm_bits.
+LOCALFN adpcm_packet_bits
+    cmp dword ptr [rip + adpcm_tag], ADPCM_SWF
+    jne .Ladpcm_packet_bits_return
+    test edx, edx
+    jz .Ladpcm_packet_bits_return
+    movzx eax, byte ptr [rcx]
+    shr eax, 6
+    add eax, 2
+    mov [rip + adpcm_bits], eax
+.Ladpcm_packet_bits_return:
+    ret
+ENDFN adpcm_packet_bits
 
 # RCX=packet, EDX=bytes, R8=stereo float output, R9D=capacity -> EAX=frames,
 # or -1 with decode_error set (a step index above 88, a predictor above 6).
@@ -224,7 +286,9 @@ FN adpcm_track_decode
     mov rsi, rcx
     mov rdi, r8
     mov r12d, r9d
-    mov ecx, edx
+    mov r13d, edx
+    call adpcm_packet_bits
+    mov ecx, r13d
     call adpcm_block_samples
     mov ebx, eax
     test eax, eax
@@ -233,6 +297,8 @@ FN adpcm_track_decode
     ja .Ladpcm_decode_bad
     mov rcx, rsi
     mov edx, ebx
+    cmp dword ptr [rip + adpcm_tag], ADPCM_SWF
+    je .Ladpcm_decode_swf
     cmp dword ptr [rip + adpcm_tag], ADPCM_QT
     je .Ladpcm_decode_qt
     cmp dword ptr [rip + adpcm_tag], ADPCM_IMA
@@ -241,6 +307,10 @@ FN adpcm_track_decode
     jmp .Ladpcm_decode_check
 .Ladpcm_decode_qt:
     call ima4_block
+    jmp .Ladpcm_decode_check
+.Ladpcm_decode_swf:
+    mov edx, r13d
+    call swf_block
     jmp .Ladpcm_decode_check
 .Ladpcm_decode_ms:
     call ms_block
@@ -263,6 +333,164 @@ FN adpcm_track_decode
     pop rbx
     ret
 ENDFN adpcm_track_decode
+
+# ECX=bits (1-16), RSI=data, R13D=bit position (advanced) -> EAX, most
+# significant bit first. Clobbers EDX and R8D only.
+LOCALFN swf_get
+    xor eax, eax
+.Lswf_get_bit:
+    mov edx, r13d
+    shr edx, 3
+    movzx r8d, byte ptr [rsi + rdx]
+    mov edx, r13d
+    and edx, 7
+    xor edx, 7
+    bt r8d, edx
+    adc eax, eax
+    inc r13d
+    dec ecx
+    jnz .Lswf_get_bit
+    ret
+ENDFN swf_get
+
+# RCX=Flash ADPCM packet, EDX=bytes -> EAX=1 with the channel planes filled
+# (adpcm_block_samples samples per channel). Codes expand like IMA's with
+# shifts and adds, over the code's magnitude bits.
+LOCALFN swf_block
+    push rbx
+    push rsi
+    push rdi
+    push r12
+    push r13
+    push r14
+    push r15
+    sub rsp, 48
+    mov rsi, rcx
+    lea r12d, [rdx*8]                     # bits
+    xor r13d, r13d
+    mov ecx, 2
+    call swf_get
+    lea ebx, [rax + 2]                    # code size
+    lea r15, [rip + swf_index]
+    shl eax, 4
+    add r15, rax
+    xor r14d, r14d                        # output sample
+    mov edi, [rip + adpcm_channels]
+.Lswf_block:
+    imul eax, edi, 22
+    mov edx, r12d
+    sub edx, eax
+    cmp r13d, edx
+    jg .Lswf_done
+    mov dword ptr [rsp + 40], 0
+.Lswf_header:
+    mov ecx, 16
+    call swf_get
+    movsx r10d, ax
+    mov ecx, 6
+    call swf_get
+    mov r9d, [rsp + 40]
+    lea r8, [rip + adpcm_state]
+    mov [r8 + r9*8], r10d
+    mov [r8 + r9*8 + 4], eax
+    mov eax, [rip + adpcm_stride]
+    imul eax, r9d
+    add rax, [rip + adpcm_planes]
+    mov [rax + r14*2], r10w
+    inc r9d
+    mov [rsp + 40], r9d
+    cmp r9d, edi
+    jb .Lswf_header
+    inc r14d
+    mov dword ptr [rsp + 32], 0           # codes in this block
+.Lswf_codes:
+    cmp dword ptr [rsp + 32], 4095
+    jae .Lswf_block
+    mov eax, ebx
+    imul eax, edi
+    mov edx, r12d
+    sub edx, eax
+    cmp r13d, edx
+    jg .Lswf_block
+    mov dword ptr [rsp + 40], 0
+.Lswf_channel:
+    mov ecx, ebx
+    call swf_get                          # code
+    mov r9d, [rsp + 40]
+    lea r8, [rip + adpcm_state]
+    mov r10d, [r8 + r9*8]                 # predictor
+    mov r11d, [r8 + r9*8 + 4]             # step index
+    lea rdx, [rip + ima_steps]
+    movzx edx, word ptr [rdx + r11*2]     # step
+    xor r8d, r8d                          # difference
+    lea ecx, [rbx - 2]
+    mov r9d, 1
+    shl r9d, cl                           # magnitude bit
+.Lswf_bit:
+    test eax, r9d
+    jz .Lswf_bit_next
+    add r8d, edx
+.Lswf_bit_next:
+    shr edx, 1
+    shr r9d, 1
+    jnz .Lswf_bit
+    add r8d, edx
+    lea ecx, [rbx - 1]
+    bt eax, ecx                           # sign
+    jnc .Lswf_add
+    sub r10d, r8d
+    jmp .Lswf_index
+.Lswf_add:
+    add r10d, r8d
+.Lswf_index:
+    mov r9d, 1
+    shl r9d, cl
+    dec r9d
+    and eax, r9d
+    movsx eax, byte ptr [r15 + rax]
+    add r11d, eax
+    jns .Lswf_index_high
+    xor r11d, r11d
+.Lswf_index_high:
+    cmp r11d, 88
+    jbe .Lswf_clip
+    mov r11d, 88
+.Lswf_clip:
+    cmp r10d, -32768
+    jge .Lswf_clip_high
+    mov r10d, -32768
+.Lswf_clip_high:
+    cmp r10d, 32767
+    jle .Lswf_store
+    mov r10d, 32767
+.Lswf_store:
+    mov r9d, [rsp + 40]
+    lea r8, [rip + adpcm_state]
+    mov [r8 + r9*8], r10d
+    mov [r8 + r9*8 + 4], r11d
+    mov eax, [rip + adpcm_stride]
+    imul eax, r9d
+    add rax, [rip + adpcm_planes]
+    mov [rax + r14*2], r10w
+    inc r9d
+    mov [rsp + 40], r9d
+    cmp r9d, edi
+    jb .Lswf_channel
+    inc r14d
+    inc dword ptr [rsp + 32]
+    jmp .Lswf_codes
+.Lswf_done:
+    mov eax, 1
+    add rsp, 48
+    pop r15
+    pop r14
+    pop r13
+    pop r12
+    pop rdi
+    pop rsi
+    pop rbx
+    ret
+ENDFN swf_block
 
 # RCX=IMA block, EDX=samples per channel -> EAX=1 with the channel planes
 # filled. Each channel's header holds its first sample and step index; four

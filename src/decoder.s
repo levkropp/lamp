@@ -16,7 +16,7 @@ sample_rate: .long 0
 source_channels: .long 0
 source_bits: .long 0
 decode_error: .long 0
-codec_kind: .long 0                 #1 WAV,2 FLAC,3 MP3,4 Vorbis,5 Opus,6 AIFF/AIFC,...,11 AC-3,12 WavPack,13 CAF,14 AVI
+codec_kind: .long 0                 #1 WAV,2 FLAC,3 MP3,4 Vorbis,5 Opus,6 AIFF/AIFC,...,11 AC-3,12 WavPack,13 CAF,14 AVI,15 FLV
 total_frames: .quad 0
 map_token: .quad 0
 map_base: .quad 0
@@ -27,7 +27,7 @@ wav_end: .quad 0
 wav_begin: .quad 0
 wav_kind: .long 0                  # 0 RIFF, 1 RF64, 2 BW64
 wav_layout: .long 0                # chunks: 0 RIFF family, 1 RIFX (big-endian), 2 Wave64 (GUIDs)
-wav_codec_kind: .long 1            # codec_kind of an opened WAV reader: 1, or 14 for AVI
+wav_codec_kind: .long 1            # codec_kind of an opened WAV reader: 1, or 14 AVI, 15 FLV
 wav_ds64: .quad 0
 wav_size_table: .quad 0
 wav_table_count: .long 0
@@ -232,6 +232,8 @@ LOCALFN decoder_open_format
     je .Lopen_ogg
     cmp dword ptr [rax], 0xa3df451a # EBML: Matroska/WebM
     je .Lopen_matroska
+    cmp dword ptr [rax], 0x01564c46 # FLV version 1
+    je .Lopen_flv
     mov ecx, [rax + 4]              # ISO base media / QuickTime top-level box
     cmp ecx, 0x70797466             # ftyp
     je .Lopen_mp4
@@ -427,6 +429,21 @@ LOCALFN decoder_open_format
     ret
 .Lopen_avi_image:
     mov dword ptr [rip + wav_codec_kind], 14
+    mov [rip + input_end], rdx
+    mov rax, rcx
+    jmp .Lopen_w64
+.Lopen_flv:
+    # As AVI: gathered PCM, G.711 and MP3 open as a Wave64 image.
+    mov rcx, rax
+    mov rdx, [rip + input_end]
+    call flv_open
+    cmp eax, 1
+    jb .Lopen_bad
+    ja .Lopen_flv_image
+    leave
+    ret
+.Lopen_flv_image:
+    mov dword ptr [rip + wav_codec_kind], 15
     mov [rip + input_end], rdx
     mov rax, rcx
     jmp .Lopen_w64
@@ -2198,6 +2215,8 @@ FN decoder_seek
     je .Lseek_wav
     cmp dword ptr [rip + codec_kind], 14
     je .Lseek_wav
+    cmp dword ptr [rip + codec_kind], 15
+    je .Lseek_wav
     cmp dword ptr [rip + codec_kind], 3
     je .Lseek_mp3
     cmp dword ptr [rip + codec_kind], 2
@@ -3388,7 +3407,9 @@ FN decoder_read
 .Lread_single:
     cmp dword ptr [rip + codec_kind], 13  # CAF linear PCM and G.711
     je .Lread_existing
-    cmp dword ptr [rip + codec_kind], 14  # AVI PCM and G.711
+    cmp dword ptr [rip + codec_kind], 14  # AVI and FLV PCM and G.711
+    je .Lread_existing
+    cmp dword ptr [rip + codec_kind], 15
     je .Lread_existing
     cmp dword ptr [rip + codec_kind], 1
     jb .Lread_done
@@ -3419,6 +3440,8 @@ FN decoder_read
     cmp dword ptr [rip + codec_kind], 13
     je .Lread_wav
     cmp dword ptr [rip + codec_kind], 14
+    je .Lread_wav
+    cmp dword ptr [rip + codec_kind], 15
     je .Lread_wav
 .Lread_flac:
     mov rcx, rdi
