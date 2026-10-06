@@ -19,8 +19,11 @@ extern uint64_t vorbis_index_stride;
 extern uint64_t total_frames;
 static struct {uint64_t before;float values[4096];uint64_t after;} pcm;
 int lamp_main(int argc,lamp_char **argv){
- if(argc!=4&&argc!=5)return 2;
- unsigned bound=argc==5?(unsigned)lamp_atoi(argv[4]):UINT32_MAX;
+ if(argc<4||argc>6)return 2;
+ unsigned bound=argc>=5&&lamp_atoi(argv[4])>0?(unsigned)lamp_atoi(argv[4]):UINT32_MAX;
+ /* Optional sixth argument: largest sample deviation tolerated, in units of
+    2^-15 (codecs whose state carries across packets, such as IMA4). */
+ const float tolerance=argc==6?(float)lamp_atoi(argv[5])/32768.0f:0.0f;float deviation=0.0f;
  int invalid=lamp_atoi(argv[3]);
  if(invalid==5){
   if(!decoder_open(argv[1])||total_frames!=65537ULL*576||mp3_index_count>2048||mp3_index_stride!=64)return 1;
@@ -63,9 +66,10 @@ int lamp_main(int argc,lamp_char **argv){
   while(base<target){unsigned count=target-base>2048?2048:(unsigned)(target-base),n=decoder_read(pcm.values,count);if(n!=count||decode_error)return 1;base+=n;discarded+=n;}
   memset(pcm.values,0xa5,sizeof(pcm.values));pcm.before=0x13579bdf98765432ULL;pcm.after=0x2468ace012345678ULL;
   unsigned count=(i*37)%2048+1,n=decoder_read(pcm.values,count),wanted=frames-target<count?(unsigned)(frames-target):count;
-  if(n!=wanted||decode_error||memcmp(pcm.values,expected+target*8,n*8)||pcm.before!=0x13579bdf98765432ULL||pcm.after!=0x2468ace012345678ULL){fprintf(stderr,"Seek PCM mismatch %u at %llu\n",i,target);return 1;}
+  int differs=0;if(tolerance>0){const float *want=(const float *)(expected+target*8);for(unsigned j=0;j<n*2;j++){float d=pcm.values[j]-want[j];if(d<0)d=-d;if(d>deviation)deviation=d;if(d>tolerance)differs=1;}}else differs=memcmp(pcm.values,expected+target*8,n*8)!=0;
+  if(n!=wanted||decode_error||differs||pcm.before!=0x13579bdf98765432ULL||pcm.after!=0x2468ace012345678ULL){fprintf(stderr,"Seek PCM mismatch %u at %llu\n",i,target);return 1;}
   for(unsigned j=n*8;j<sizeof(pcm.values);j++)if(((unsigned char *)pcm.values)[j]!=0xa5)return 1;
   decoder_close();if(mp3_index_count||vorbis_index_count||decoder_seek(100)||decoder_read(pcm.values,1))return 1;checks++;
  }
- free(expected);printf("{\"result\":\"passed\",\"checks\":%u,\"advanced\":%u,\"discarded_frames\":%llu,\"maximum_discarded\":%llu,\"maximum_probes\":%u,\"index_points\":%u,\"maximum_skimmed_headers\":%llu,\"maximum_stride\":%llu,\"maximum_preroll\":%u}\n",checks,advanced,discarded,most_discarded,most_probes,most_points,most_headers,most_stride,most_preroll);return 0;
+ free(expected);printf("{\"result\":\"passed\",\"checks\":%u,\"advanced\":%u,\"discarded_frames\":%llu,\"maximum_discarded\":%llu,\"maximum_probes\":%u,\"index_points\":%u,\"maximum_skimmed_headers\":%llu,\"maximum_stride\":%llu,\"maximum_preroll\":%u,\"maximum_deviation\":%.9g}\n",checks,advanced,discarded,most_discarded,most_probes,most_points,most_headers,most_stride,most_preroll,(double)deviation);return 0;
 }

@@ -353,6 +353,8 @@ LOCALFN track_reset_codec
     je .Ltk_reset_aac
     cmp eax, TK_AC3
     je .Ltk_reset_ac3
+    cmp eax, TK_ADPCM
+    je .Ltk_reset_adpcm
     cmp eax, TK_MPA
     jne .Ltk_reset_return
     call mpa_track_reset
@@ -362,6 +364,9 @@ LOCALFN track_reset_codec
     jmp .Ltk_reset_return
 .Ltk_reset_ac3:
     call ac3_track_reset
+    jmp .Ltk_reset_return
+.Ltk_reset_adpcm:
+    call adpcm_track_reset
     jmp .Ltk_reset_return
 .Ltk_reset_opus:
     call opus_track_reset
@@ -716,8 +721,8 @@ ENDFN track_read
 # before it. Restarts at the packet holding the target, moved back by the
 # codec's pre-roll: Opus 80 ms, MPEG audio two frames (Layer III also earlier
 # frames holding up to 2 KiB of reservoir data), Vorbis, AAC and AC-3 one
-# primer packet whose output is skipped, HE-AAC two. FLAC, ALAC, WavPack,
-# ADPCM and PCM packets decode independently.
+# primer packet whose output is skipped, HE-AAC two, IMA4 one. FLAC, ALAC,
+# WavPack, other ADPCM and PCM packets decode independently.
 FN track_seek
     push rbx
     push rsi
@@ -771,6 +776,10 @@ FN track_seek
     je .Ltk_seek_primer
     cmp eax, TK_AC3
     je .Ltk_seek_primer
+    cmp eax, TK_ADPCM
+    jne .Ltk_seek_restart
+    cmp dword ptr [rip + adpcm_primer], 0  # IMA4 headers continue the state
+    jne .Ltk_seek_primer
     jmp .Ltk_seek_restart
 .Ltk_seek_opus:
     # Back up until at least 80 ms precede the target.

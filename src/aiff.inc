@@ -3,6 +3,7 @@
 .data
 aiff_kind: .long 0
 aiff_forced_bits: .long 0
+aiff_ima4: .long 0                  # AIFC ima4: COMM frames count 64-frame packets
 aiff_comm: .quad 0
 aiff_sound: .quad 0
 aiff_sound_end: .quad 0
@@ -121,6 +122,7 @@ LOCALFN aiff_open
     mov dword ptr [rip + aiff_version_seen], 0
     mov dword ptr [rip + aiff_kind], 0
     mov dword ptr [rip + aiff_forced_bits], 0
+    mov dword ptr [rip + aiff_ima4], 0
     mov dword ptr [rip + pcm_big_endian], 1
     mov dword ptr [rip + pcm_signed8], 1
     mov dword ptr [rip + wav_format], 1
@@ -224,7 +226,11 @@ LOCALFN aiff_open
     cmp ecx, 0x77616c75 # ulaw
     je .Laiff_g711
     cmp ecx, 0x57414c55 # ULAW
+    je .Laiff_g711
+    cmp ecx, 0x34616d69 # ima4: QuickTime IMA ADPCM packets
     jne .Laiff_try_float
+    mov dword ptr [rip + aiff_ima4], 1
+    jmp .Laiff_next
 .Laiff_g711:
     mov [rip + pcm_g711], edx
     mov dword ptr [rip + aiff_forced_bits], 8
@@ -312,6 +318,8 @@ LOCALFN aiff_open
     ja .Laiff_bad
 .Laiff_depth_valid:
     mov [rip + source_bits], edx
+    cmp dword ptr [rip + aiff_ima4], 0
+    jne .Laiff_ima4_depth
     cmp dword ptr [rip + aiff_forced_bits], 0
     je .Laiff_natural_container
     cmp dword ptr [rip + pcm_g711], 0
@@ -334,6 +342,14 @@ LOCALFN aiff_open
     shr edx, 3
     imul edx, ecx
     mov [rip + wav_align], edx
+    jmp .Laiff_frames
+.Laiff_ima4_depth:
+    # 34 bytes per channel and packet; COMM gives the decoded size.
+    cmp edx, 16
+    ja .Laiff_bad
+    imul edx, ecx, 34
+    mov [rip + wav_align], edx
+.Laiff_frames:
     mov edx, [rax + 2]
     bswap edx
     mov [rip + total_frames], rdx
@@ -380,6 +396,8 @@ LOCALFN aiff_open
     cmp r8, [rip + aiff_sound_end]
     ja .Laiff_bad
     mov [rip + wav_end], r8
+    cmp dword ptr [rip + aiff_ima4], 0
+    jne .Laiff_ima4
     call aiff_build_mix
     test eax, eax
     jz .Laiff_bad
@@ -394,6 +412,46 @@ LOCALFN aiff_open
     mov eax, 1
     add rsp, 40
     ret
+.Laiff_ima4:
+    # Packets through the ADPCM track decoder (default channel layout).
+    mov ecx, TK_ADPCM
+    call track_begin
+    test eax, eax
+    jz .Laiff_bad
+    lea rcx, [rip + caf_fmt]
+    mov word ptr [rcx], 0x4d49              # ADPCM_QT in src/adpcm.s
+    mov eax, [rip + source_channels]
+    mov [rcx + 2], ax
+    mov eax, [rip + sample_rate]
+    mov [rcx + 4], eax
+    mov eax, [rip + wav_align]
+    mov [rcx + 12], ax
+    mov word ptr [rcx + 14], 4
+    mov [rip + track_config], rcx
+    mov dword ptr [rip + track_config_bytes], 16
+    mov rcx, [rip + wav_begin]
+.Laiff_ima4_packet:
+    cmp rcx, [rip + wav_end]
+    jae .Laiff_ima4_done
+    mov edx, [rip + wav_align]
+    lea rax, [rcx + rdx]
+    mov [rsp + 32], rax
+    call track_add
+    test eax, eax
+    jz .Laiff_ima4_bad
+    mov rcx, [rsp + 32]
+    jmp .Laiff_ima4_packet
+.Laiff_ima4_done:
+    cmp qword ptr [rip + track_count], 0
+    je .Laiff_ima4_bad
+    call track_finish
+    test eax, eax
+    jz .Laiff_ima4_bad
+    mov eax, 1
+    add rsp, 40
+    ret
+.Laiff_ima4_bad:
+    call track_close
 .Laiff_bad:
     xor eax, eax
     add rsp, 40

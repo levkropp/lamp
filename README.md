@@ -57,8 +57,8 @@ The Linux desktop window is not available yet; see the [roadmap](ROADMAP.md).
 
 | Format | Current support |
 | --- | --- |
-| AIFF / AIFC | Signed PCM 1–32-bit, AIFC byte-order/fixed-container variants, float32/64 and G.711; 1–8 channels, ordered Core Audio layouts, rounded 8–192 kHz output |
-| WAV | Little-endian RIFF/RF64/BW64 audio framing, PCM 8/16/24/32-bit or float32/64; 1–8 channels, extensible valid bits/layouts, 8–192 kHz; G.711 A-law/µ-law, IMA and Microsoft ADPCM, MPEG audio and AC-3 data; [details](docs/wav.md#compressed-audio) |
+| AIFF / AIFC | Signed PCM 1–32-bit, AIFC byte-order/fixed-container variants, float32/64, G.711 and IMA4; 1–8 channels, ordered Core Audio layouts, rounded 8–192 kHz output |
+| WAV | Little-endian RIFF/RF64/BW64, Sony Wave64 and big-endian RIFX audio framing, PCM 8/16/24/32-bit or float32/64; 1–8 channels, extensible valid bits/layouts, 8–192 kHz; G.711 A-law/µ-law, IMA and Microsoft ADPCM, MPEG audio and AC-3 data; [details](docs/wav.md#compressed-audio) |
 | Native FLAC | 1–8 channels, 4–32-bit, 8–192 kHz; CRC checks; speaker-mask-aware stereo downmix |
 | MP3 | MPEG-1/2/2.5 Layer III, mono/stereo, CBR/VBR, encoder trimming when tagged |
 | MP2 / MP1 | MPEG-1 and MPEG-2 (16–24 kHz) Layers II and I: all allocation tables, stereo/joint/dual/mono, CRC checks; exact seeks |
@@ -70,6 +70,7 @@ The Linux desktop window is not available yet; see the [roadmap](ROADMAP.md).
 | MPEG-TS / PS | First supported audio stream of transport streams (188/192/204-byte packets, PAT/PMT, DVB AC-3 descriptors) and MPEG-1/MPEG-2 program streams (VOB AC-3 substreams): MPEG audio, ADTS AAC or AC-3, decoded and seeked as the raw stream; [details](docs/mpegts.md) |
 | AAC | AAC-LC (object type 2), 8–96 kHz, mono to 7.1, M/S, intensity, PNS, TNS and pulses; HE-AAC spectral band replication (explicit, backward-compatible or implicit signalling, 16–96 kHz output) and HE-AAC v2 parametric stereo; in MP4, Matroska or ADTS `.aac`; [details](docs/aac.md) |
 | AC-3 | Dolby Digital (ATSC A/52, bsid 0–10 including half and quarter rates), 32–48 kHz, every channel mode with LFE, block switching, coupling, rematrixing, delta bit allocation, dynamic range; CRC checks with FFmpeg-style concealment; in raw `.ac3`, Matroska or MP4; E-AC-3 not yet; [details](docs/ac3.md) |
+| CAF | Apple Core Audio Format with linear PCM (8–32-bit, float32/64, either byte order), G.711, IMA4, ALAC, AAC, MPEG audio, AC-3 or Opus; channel layouts, packet tables with priming/remainder trimming; [details](docs/caf.md) |
 | WavPack | WavPack 4/5 lossless and hybrid (lossy) audio, 8–32-bit integer and float, extra bits and shifts, joint and false stereo, 1–8 channels mixed to stereo, 8–192 kHz; block CRC checks; native `.wv` (ID3v2/APE tags skipped) or Matroska; exact seeks; DSD and `.wvc` correction files not yet; [details](docs/wavpack.md) |
 | Ogg files | Chained links and multiplexed streams: each link plays its first Vorbis, Opus or FLAC stream (video and other streams are skipped); links at another rate are resampled to the first link's rate |
 

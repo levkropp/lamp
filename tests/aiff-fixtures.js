@@ -86,7 +86,7 @@ function replace(m,id,b){return form(m.kind,m.parts.map(p=>p.toString('ascii',0,
 for(const [name,at,size,value] of [['channels-zero',0,2,0],['channels-nine',0,2,9],['bits-zero',6,2,0],['bits-33',6,2,33],['frames-outside',2,4,0xffffffff],['negative-rate',8,2,0xc00e],['zero-rate',8,2,0],['infinite-rate',8,2,0x7fff],['exponent-small',8,2,16394],['exponent-large',8,2,16401]])reject(name,m=>{if(size===2)m.comm.writeUInt16BE(value,at);else m.comm.writeUInt32BE(value,at);return replace(m,'COMM',m.comm);});
 reject('unnormalized-rate',m=>{m.comm[10]&=0x7f;return replace(m,'COMM',m.comm);});
 reject('rate-below',m=>m.data,{R:7999});reject('rate-above',m=>m.data,{R:192001});
-reject('unknown-compression',m=>{m.comm.write('ima4',18);return replace(m,'COMM',m.comm);});
+reject('unknown-compression',m=>{m.comm.write('MAC3',18);return replace(m,'COMM',m.comm);});
 reject('float-depth',m=>{m.comm.writeUInt16BE(16,6);return replace(m,'COMM',m.comm);},{code:'fl64'});
 for(const [code,bits] of [['raw ',9],['in24',25],['in32',33]])reject('fixed-depth-'+code.trim(),m=>{m.comm.write(code,18);m.comm.writeUInt16BE(bits,6);return replace(m,'COMM',m.comm);});
 reject('name-overrun',m=>{m.comm[22]=255;return replace(m,'COMM',m.comm);});

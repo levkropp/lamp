@@ -16,7 +16,7 @@ sample_rate: .long 0
 source_channels: .long 0
 source_bits: .long 0
 decode_error: .long 0
-codec_kind: .long 0                 #1 WAV,2 FLAC,3 MP3,4 Vorbis,5 Opus,6 AIFF/AIFC,...,11 AC-3,12 WavPack
+codec_kind: .long 0                 #1 WAV,2 FLAC,3 MP3,4 Vorbis,5 Opus,6 AIFF/AIFC,...,11 AC-3,12 WavPack,13 CAF
 total_frames: .quad 0
 map_token: .quad 0
 map_base: .quad 0
@@ -26,6 +26,7 @@ input_end: .quad 0
 wav_end: .quad 0
 wav_begin: .quad 0
 wav_kind: .long 0                  # 0 RIFF, 1 RF64, 2 BW64
+wav_layout: .long 0                # chunks: 0 RIFF family, 1 RIFX (big-endian), 2 Wave64 (GUIDs)
 wav_ds64: .quad 0
 wav_size_table: .quad 0
 wav_table_count: .long 0
@@ -124,8 +125,12 @@ wav_float_min: .double -3.4028234663852885981e38
 rate_table: .long 0, 88200, 176400, 192000, 8000, 16000, 22050, 24000, 32000, 44100, 48000, 96000
 depth_table: .long 0, 8, 12, 0, 16, 20, 24, 32
 
+# RIFX fmt fields to reverse: offset and width (8: the GUID's last bytes).
+wav_fmt_fields: .byte 0, 2, 2, 2, 4, 4, 8, 4, 12, 2, 14, 2, 16, 2, 18, 2, 20, 4, 24, 4, 28, 2, 30, 2, 32, 8, 0x80
+
 .bss
 left_samples: .zero 65536*8
+wav_fmt_copy: .zero 48              # RIFX fmt fields, little-endian
 right_samples: .zero 65536*8
 lpc_coeff: .zero 32*8
 crc8_table: .zero 256
@@ -136,6 +141,7 @@ fo_scan_checkpoint: .zero 2*8
 
 .text
 .include "aiff.inc"
+.include "caf.inc"
 # RCX=native path -> EAX=1. Publishes output_rate/output_frames, the rate and
 # length of the PCM that decoder_read returns; for a chained Ogg stream these
 # differ from the current link's sample_rate/total_frames.
@@ -168,6 +174,7 @@ LOCALFN decoder_open_format
     mov dword ptr [rip + frame_used], 0
     mov qword ptr [rip + wav_begin], 0
     mov dword ptr [rip + wav_kind], 0
+    mov dword ptr [rip + wav_layout], 0
     mov qword ptr [rip + wav_ds64], 0
     mov qword ptr [rip + wav_size_table], 0
     mov dword ptr [rip + wav_table_count], 0
@@ -205,12 +212,18 @@ LOCALFN decoder_open_format
     mov [rip + input_cursor], rax
     cmp dword ptr [rax], 0x46464952 # RIFF
     je .Lopen_wav
+    cmp dword ptr [rax], 0x58464952 # RIFX: big-endian sizes, fields and samples
+    je .Lopen_rifx
+    cmp dword ptr [rax], 0x66666972 # Wave64 "riff" GUID
+    je .Lopen_w64
     cmp dword ptr [rax], 0x34364652 # RF64
     je .Lopen_rf64
     cmp dword ptr [rax], 0x34365742 # BW64
     je .Lopen_bw64
     cmp dword ptr [rax], 0x4d524f46 # FORM AIFF/AIFC
     je .Lopen_aiff
+    cmp dword ptr [rax], 0x66666163 # caff: Core Audio Format
+    je .Lopen_caf
     cmp dword ptr [rax], 0x43614c66 # fLaC
     je .Lopen_flac
     cmp dword ptr [rax], 0x5367674f # OggS
@@ -303,6 +316,14 @@ LOCALFN decoder_open_format
     jz .Lopen_bad
     leave
     ret
+.Lopen_caf:
+    mov rcx, [rip + map_base]
+    mov rdx, [rip + input_end]
+    call caf_open
+    test eax, eax
+    jz .Lopen_bad
+    leave
+    ret
 .Lopen_aiff:
     mov rcx, [rip + map_base]
     mov rdx, [rip + input_end]
@@ -345,6 +366,38 @@ LOCALFN decoder_open_format
     xor eax, eax
     leave
     ret
+.Lopen_rifx:
+    mov dword ptr [rip + wav_layout], 1
+    mov dword ptr [rip + pcm_big_endian], 1
+    jmp .Lopen_wav
+.Lopen_w64:
+    # Sony Wave64: "riff" and "wave" GUIDs, 64-bit sizes counting the
+    # 24-byte chunk headers, chunks aligned to 8 bytes.
+    cmp qword ptr [rip + file_size], 40
+    jb .Lopen_bad
+    cmp dword ptr [rax + 4], 0x11cf912e
+    jne .Lopen_bad
+    mov rcx, 0x0000c104db28d6a5
+    cmp [rax + 8], rcx
+    jne .Lopen_bad
+    cmp dword ptr [rax + 24], 0x65766177 # wave
+    jne .Lopen_bad
+    cmp dword ptr [rax + 28], 0x11d3acf3
+    jne .Lopen_bad
+    mov rcx, 0x8adb8e4fc000d18c
+    cmp [rax + 32], rcx
+    jne .Lopen_bad
+    mov rdx, [rax + 16]
+    cmp rdx, 40
+    jb .Lopen_bad
+    cmp rdx, [rip + file_size]
+    ja .Lopen_bad
+    add rdx, rax
+    mov [rip + input_end], rdx
+    mov dword ptr [rip + wav_layout], 2
+    lea r10, [rax + 40]
+    xor r11d, r11d
+    jmp .Lwav_chunks
 .Lopen_rf64:
     mov dword ptr [rip + wav_kind], 1
     jmp .Lopen_wav
@@ -398,6 +451,10 @@ LOCALFN decoder_open_format
     jmp .Lwav_container_size
 .Lwav_riff_size:
     mov edx, [rax + 4]
+    cmp dword ptr [rip + wav_layout], 1
+    jne .Lwav_riff_native
+    bswap edx
+.Lwav_riff_native:
     lea r8, [rax + 12]
 .Lwav_container_size:
     cmp rdx, 4
@@ -426,12 +483,19 @@ LOCALFN decoder_open_format
 .Lwav_chunk_continue:
     cmp r10, [rip + input_end]
     je .Lwav_complete
+    cmp dword ptr [rip + wav_layout], 2
+    je .Lw64_chunk
     lea rax, [r10 + 8]
     cmp rax, r10
     jb .Lopen_bad
     cmp rax, [rip + input_end]
     ja .Lopen_bad
     mov edx, [r10 + 4]
+    cmp dword ptr [rip + wav_layout], 1
+    jne .Lwav_size_ordered
+    bswap edx
+    jmp .Lwav_chunk_size
+.Lwav_size_ordered:
     cmp edx, 0xffffffff
     jne .Lwav_chunk_size
     cmp dword ptr [rip + wav_kind], 0
@@ -478,6 +542,8 @@ LOCALFN decoder_open_format
     cmp dword ptr [r10], 0x34367364
     je .Lopen_bad
 .Lwav_next:
+    cmp dword ptr [rip + wav_layout], 2
+    je .Lw64_next
     add r8, 1
     jc .Lopen_bad
     and r8, -2
@@ -485,11 +551,89 @@ LOCALFN decoder_open_format
     ja .Lopen_bad
     mov r10, r8
     jmp .Lwav_chunks
+.Lw64_next:
+    # Pad to 8 bytes; the last chunk may end the file unpadded.
+    mov r10, [rip + input_end]
+    cmp r8, r10
+    je .Lwav_chunks
+    add r8, 7
+    jc .Lopen_bad
+    and r8, -8
+    cmp r8, r10
+    cmova r8, r10
+    mov r10, r8
+    jmp .Lwav_chunks
+.Lw64_chunk:
+    # Standard chunk GUIDs are the FourCC and a fixed tail; others skip.
+    lea rax, [r10 + 24]
+    cmp rax, r10
+    jb .Lopen_bad
+    cmp rax, [rip + input_end]
+    ja .Lopen_bad
+    mov rdx, [r10 + 16]
+    sub rdx, 24
+    jb .Lopen_bad
+    mov r8, rax
+    add r8, rdx
+    jc .Lopen_bad
+    cmp r8, [rip + input_end]
+    ja .Lopen_bad
+    cmp dword ptr [r10 + 4], 0x11d3acf3
+    jne .Lwav_next
+    mov rcx, 0x8adb8e4fc000d18c
+    cmp [r10 + 8], rcx
+    jne .Lwav_next
+    jmp .Lwav_chunk_size
 .Lwav_fmt:
     test r11d, r11d
     jnz .Lopen_bad
     cmp rdx, 16
     jb .Lopen_bad
+    cmp dword ptr [rip + wav_layout], 1
+    jne .Lwav_fmt_ordered
+    # RIFX: a little-endian copy of the fields LAMP reads (40 bytes).
+    mov [rsp + 32], rbx                   # nonvolatile in this function's callers
+    mov [rsp + 40], rdi
+    lea rcx, [rip + wav_fmt_copy]
+    xor r9d, r9d
+.Lwav_fmt_clear:
+    mov qword ptr [rcx + r9], 0
+    add r9d, 8
+    cmp r9d, 48
+    jb .Lwav_fmt_clear
+    lea r9, [rip + wav_fmt_fields]
+.Lwav_fmt_field:
+    movzx r8d, byte ptr [r9]              # offset, width
+    test r8d, 0x80
+    jnz .Lwav_fmt_copied
+    movzx ebx, byte ptr [r9 + 1]
+    add r9, 2
+    lea rdi, [r8 + rbx]
+    cmp rdi, rdx
+    ja .Lwav_fmt_copied
+    cmp ebx, 2
+    je .Lwav_fmt_word
+    cmp ebx, 4
+    je .Lwav_fmt_dword
+    mov rdi, [rax + r8]                   # GUID tail: bytes as stored
+    mov [rcx + r8], rdi
+    jmp .Lwav_fmt_field
+.Lwav_fmt_word:
+    mov di, [rax + r8]
+    rol di, 8
+    mov [rcx + r8], di
+    jmp .Lwav_fmt_field
+.Lwav_fmt_dword:
+    mov edi, [rax + r8]
+    bswap edi
+    mov [rcx + r8], edi
+    jmp .Lwav_fmt_field
+.Lwav_fmt_copied:
+    mov rbx, [rsp + 32]
+    mov rdi, [rsp + 40]
+    lea r8, [rax + rdx]                   # the chunk's end, for the next chunk
+    mov rax, rcx
+.Lwav_fmt_ordered:
     cmp rdx, 16
     je .Lwav_fmt_size_valid
     cmp rdx, 18
@@ -553,6 +697,8 @@ LOCALFN decoder_open_format
     cmp ecx, 0x2000
     jne .Lopen_bad
 .Lwav_codec:
+    cmp dword ptr [rip + wav_layout], 1    # not in RIFX
+    je .Lopen_bad
     cmp word ptr [rax + 2], 0
     je .Lopen_bad
     cmp word ptr [rax + 12], 0
@@ -653,6 +799,18 @@ LOCALFN decoder_open_format
     jb .Lopen_bad
     mov dword ptr [rip + wav_fact_seen], 1
     mov ecx, [rax]
+    cmp dword ptr [rip + wav_layout], 1
+    jne .Lwav_fact_w64
+    bswap ecx
+    jmp .Lwav_fact_count
+.Lwav_fact_w64:
+    cmp dword ptr [rip + wav_layout], 2
+    jne .Lwav_fact_sentinel
+    cmp rdx, 8                          # Wave64 counts may be 64-bit
+    jb .Lwav_fact_count
+    mov rcx, [rax]
+    jmp .Lwav_fact_count
+.Lwav_fact_sentinel:
     cmp ecx, 0xffffffff
     jne .Lwav_fact_count
     cmp dword ptr [rip + wav_kind], 1
@@ -674,7 +832,18 @@ LOCALFN decoder_open_format
     test rax, rax               # zero means unspecified for PCM/float
     jz .Lwav_frame_count_valid
     cmp rax, [rip + total_frames]
+    je .Lwav_frame_count_valid
+    # Wave64 writers may count the chunk's padding as data: a smaller fact
+    # count trims it. RIFF counts must agree.
+    cmp dword ptr [rip + wav_layout], 2
     jne .Lopen_bad
+    cmp rax, [rip + total_frames]
+    ja .Lopen_bad
+    mov [rip + total_frames], rax
+    mov ecx, [rip + wav_align]
+    imul rcx, rax
+    add rcx, [rip + wav_begin]
+    mov [rip + wav_end], rcx
 .Lwav_frame_count_valid:
     call pcm_build_mix
     test eax, eax
@@ -1998,6 +2167,8 @@ FN decoder_seek
     je .Lseek_wav
     cmp dword ptr [rip + codec_kind], 6
     je .Lseek_wav
+    cmp dword ptr [rip + codec_kind], 13
+    je .Lseek_wav
     cmp dword ptr [rip + codec_kind], 3
     je .Lseek_mp3
     cmp dword ptr [rip + codec_kind], 2
@@ -3186,6 +3357,8 @@ FN decoder_read
     mov ebx, eax
     jmp .Lread_done
 .Lread_single:
+    cmp dword ptr [rip + codec_kind], 13  # CAF linear PCM and G.711
+    je .Lread_existing
     cmp dword ptr [rip + codec_kind], 1
     jb .Lread_done
     cmp dword ptr [rip + codec_kind], 6
@@ -3211,6 +3384,8 @@ FN decoder_read
     cmp dword ptr [rip + codec_kind], 1
     je .Lread_wav
     cmp dword ptr [rip + codec_kind], 6
+    je .Lread_wav
+    cmp dword ptr [rip + codec_kind], 13
     je .Lread_wav
 .Lread_flac:
     mov rcx, rdi

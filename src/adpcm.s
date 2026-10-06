@@ -2,17 +2,22 @@
 # WAVE format tags 0x11 (IMA ADPCM, 4-bit samples, 1-8 channels) and 2
 # (Microsoft ADPCM, mono or stereo). Every block starts with its channels'
 # predictor state, so blocks are track packets that decode independently; a
-# short final block decodes the whole sample groups it holds. Decoding
-# follows FFmpeg's adpcm_ima_wav and adpcm_ms; the tables are
+# short final block decodes the whole sample groups it holds. QuickTime IMA4
+# (CAF and AIFF-C "ima4", described by a WAVE-style fmt with the private tag
+# ADPCM_QT) packs 64 samples per channel in 34-byte blocks whose headers keep
+# only the predictor's top nine bits, so a header close to the running state
+# continues it (as FFmpeg does) and seeks decode one primer packet. Decoding
+# follows FFmpeg's adpcm_ima_wav, adpcm_ms and adpcm_ima_qt; the tables are
 # src/adpcm_tables.inc (with the G.711 expansions used by the PCM reader).
 .include "lamp.inc"
-.globl adpcm_track_open, adpcm_track_samples, adpcm_track_decode, adpcm_track_close
-.globl g711_alaw, g711_ulaw
+.globl adpcm_track_open, adpcm_track_samples, adpcm_track_decode, adpcm_track_close, adpcm_track_reset
+.globl adpcm_primer, g711_alaw, g711_ulaw
 
 .equ ADPCM_MALFORMED, 100
 .equ ADPCM_UNSUPPORTED, 101
 .equ ADPCM_IMA, 0x11
 .equ ADPCM_MS, 2
+.equ ADPCM_QT, 0x4d49               # LAMP's tag for QuickTime IMA4 (not a WAVE tag)
 .equ MS_C1, 0                       # Microsoft channel state
 .equ MS_C2, 4
 .equ MS_DELTA, 8
@@ -32,6 +37,7 @@ adpcm_channels: .long 0
 adpcm_align: .long 0
 adpcm_stride: .long 0                    # bytes per channel plane
 adpcm_planes: .quad 0                    # int16 channel planes of one block
+adpcm_primer: .long 0                    # packets decoded before a seek target
 
 .bss
 .p2align 3
@@ -43,6 +49,8 @@ ms_state: .zero 2*MS_SIZE
 # (FFmpeg: IMA 1 + whole 8-sample groups, Microsoft 2 + two per byte).
 LOCALFN adpcm_block_samples
     mov r8d, [rip + adpcm_channels]
+    cmp dword ptr [rip + adpcm_tag], ADPCM_QT
+    je .Ladpcm_samples_qt
     cmp dword ptr [rip + adpcm_tag], ADPCM_IMA
     jne .Ladpcm_samples_ms
     lea eax, [r8*4]
@@ -62,6 +70,13 @@ LOCALFN adpcm_block_samples
     xor edx, edx
     div r8d
     add eax, 2
+    ret
+.Ladpcm_samples_qt:
+    mov eax, ecx                          # 64 per whole 34-byte block group
+    xor edx, edx
+    imul ecx, r8d, 34
+    div ecx
+    shl eax, 6
     ret
 .Ladpcm_samples_none:
     xor eax, eax
@@ -106,6 +121,8 @@ FN adpcm_track_open
     ja .Ladpcm_open_fail
     cmp ebx, ADPCM_IMA
     je .Ladpcm_open_layout
+    cmp ebx, ADPCM_QT
+    je .Ladpcm_open_layout
     cmp ebx, ADPCM_MS
     jne .Ladpcm_open_fail
     cmp esi, 2
@@ -137,6 +154,11 @@ FN adpcm_track_open
     test rax, rax
     jz .Ladpcm_open_fail
     mov [rip + adpcm_planes], rax
+    xor eax, eax
+    cmp dword ptr [rip + adpcm_tag], ADPCM_QT
+    sete al
+    mov [rip + adpcm_primer], eax
+    call adpcm_track_reset
     mov dword ptr [rip + decode_error], 0
     mov eax, 1
     jmp .Ladpcm_open_return
@@ -148,6 +170,18 @@ FN adpcm_track_open
     pop rbx
     ret
 ENDFN adpcm_track_open
+
+# Clears the IMA4 running state (stream start, seeks).
+FN adpcm_track_reset
+    lea rcx, [rip + adpcm_state]
+    xor eax, eax
+.Ladpcm_reset_word:
+    mov qword ptr [rcx + rax*8], 0
+    inc eax
+    cmp eax, 8
+    jb .Ladpcm_reset_word
+    ret
+ENDFN adpcm_track_reset
 
 FN adpcm_track_close
     sub rsp, 40
@@ -199,9 +233,14 @@ FN adpcm_track_decode
     ja .Ladpcm_decode_bad
     mov rcx, rsi
     mov edx, ebx
+    cmp dword ptr [rip + adpcm_tag], ADPCM_QT
+    je .Ladpcm_decode_qt
     cmp dword ptr [rip + adpcm_tag], ADPCM_IMA
     jne .Ladpcm_decode_ms
     call ima_block
+    jmp .Ladpcm_decode_check
+.Ladpcm_decode_qt:
+    call ima4_block
     jmp .Ladpcm_decode_check
 .Ladpcm_decode_ms:
     call ms_block
@@ -341,6 +380,144 @@ LOCALFN ima_block
     pop rbx
     ret
 ENDFN ima_block
+
+# RCX=IMA4 packet, EDX=samples per channel (64 per block group) -> EAX=1 with
+# the channel planes filled, 0 for a step index above 88. Each channel's
+# block: a big-endian header (predictor's top nine bits, step index), then
+# 32 bytes of samples, low nibble first, expanded with shifts and adds.
+LOCALFN ima4_block
+    push rbx
+    push rsi
+    push rdi
+    push r12
+    push r13
+    push r14
+    push r15
+    sub rsp, 32
+    mov rsi, rcx
+    mov r12d, edx
+    mov r13d, [rip + adpcm_channels]
+    lea r15, [rip + ima_steps]
+    lea rbx, [rip + ima_index]
+    xor r14d, r14d                        # output sample of this group
+.Lima4_group:
+    cmp r14d, r12d
+    jae .Lima4_done
+    xor ecx, ecx
+.Lima4_channel:
+    lea r8, [rip + adpcm_state]
+    movzx eax, word ptr [rsi]
+    rol ax, 8
+    movsx eax, ax
+    mov edx, eax
+    and edx, 0x7f                         # step index
+    and eax, -0x80                        # predictor
+    mov r10d, [r8 + rcx*8]
+    mov r11d, [r8 + rcx*8 + 4]
+    cmp r11d, edx
+    jne .Lima4_update
+    mov r9d, eax
+    sub r9d, r10d
+    jns .Lima4_distance
+    neg r9d
+.Lima4_distance:
+    cmp r9d, 0x7f
+    jle .Lima4_kept                       # close: keep the running predictor
+.Lima4_update:
+    mov r10d, eax
+    mov r11d, edx
+.Lima4_kept:
+    cmp r11d, 88
+    ja .Lima4_bad
+    add rsi, 2
+    mov eax, [rip + adpcm_stride]
+    imul eax, ecx
+    lea rdi, [rax + r14*2]
+    add rdi, [rip + adpcm_planes]
+    push rcx
+    mov ecx, 64
+.Lima4_nibble:
+    test ecx, 1
+    jnz .Lima4_high
+    movzx edx, byte ptr [rsi]
+    and edx, 15
+    jmp .Lima4_expand
+.Lima4_high:
+    movzx edx, byte ptr [rsi]
+    shr edx, 4
+    inc rsi
+.Lima4_expand:
+    movzx eax, word ptr [r15 + r11*2]     # step
+    mov r8d, eax
+    shr r8d, 3                            # diff
+    test edx, 4
+    jz .Lima4_bit2
+    add r8d, eax
+.Lima4_bit2:
+    test edx, 2
+    jz .Lima4_bit1
+    mov r9d, eax
+    shr r9d, 1
+    add r8d, r9d
+.Lima4_bit1:
+    test edx, 1
+    jz .Lima4_sign
+    shr eax, 2
+    add r8d, eax
+.Lima4_sign:
+    test edx, 8
+    jz .Lima4_add
+    sub r10d, r8d
+    jmp .Lima4_clip
+.Lima4_add:
+    add r10d, r8d
+.Lima4_clip:
+    cmp r10d, -32768
+    jge .Lima4_clip_high
+    mov r10d, -32768
+.Lima4_clip_high:
+    cmp r10d, 32767
+    jle .Lima4_index
+    mov r10d, 32767
+.Lima4_index:
+    movsx eax, byte ptr [rbx + rdx]
+    add r11d, eax
+    jns .Lima4_index_high
+    xor r11d, r11d
+.Lima4_index_high:
+    cmp r11d, 88
+    jbe .Lima4_store
+    mov r11d, 88
+.Lima4_store:
+    mov [rdi], r10w
+    add rdi, 2
+    dec ecx
+    jnz .Lima4_nibble
+    pop rcx
+    lea r8, [rip + adpcm_state]
+    mov [r8 + rcx*8], r10d
+    mov [r8 + rcx*8 + 4], r11d
+    inc ecx
+    cmp ecx, r13d
+    jb .Lima4_channel
+    add r14d, 64
+    jmp .Lima4_group
+.Lima4_done:
+    mov eax, 1
+    jmp .Lima4_return
+.Lima4_bad:
+    xor eax, eax
+.Lima4_return:
+    add rsp, 32
+    pop r15
+    pop r14
+    pop r13
+    pop r12
+    pop rdi
+    pop rsi
+    pop rbx
+    ret
+ENDFN ima4_block
 
 # R8=Microsoft channel state, EAX=nibble -> the next sample stored at [RDI]
 # (RDI advances). Clobbers RAX, RCX, RDX, R9.
