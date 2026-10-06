@@ -17,7 +17,7 @@
 # Key mappings and precedence follow FFmpeg's demuxers. Values are cut at
 # their first NUL and at TAG_VALUE_MAX bytes; empty values are not stored.
 .include "lamp.inc"
-.globl tags_read, tags_clear, tags_get, tag_names
+.globl tags_read, tags_clear, tags_get, tag_names, chapters_count, chapters_get, chapter_line
 
 .equ TAG_KEYS, 10
 .equ TAG_TITLE, 0
@@ -35,6 +35,7 @@
 .equ TAG_YEAR, 12                   # ID3 frame table: TYER, TDAT, TIME (merged into the date)
 .equ TAG_DAY, 13
 .equ TAG_TIME, 14
+.equ TAG_CHAPTER, 15                # ID3 frame table: CHAP
 .equ TAG_ARENA, 1 << 17
 .equ TAG_VALUE_MAX, 4096
 .equ TAG_KEEP, 0                    # first value wins
@@ -89,6 +90,8 @@ id3_frames4:
     .long TAG_COMMENT_DESCRIBED
     .ascii "TXXX"
     .long TAG_USER
+    .ascii "CHAP"
+    .long TAG_CHAPTER
     .long 0, 0
 id3_frames3:
     .ascii "TT2\0"
@@ -340,6 +343,7 @@ tag_offset: .zero TAG_KEYS*4
 tag_length: .zero TAG_KEYS*4        # 0: no value
 tag_any: .long 0                    # a value was stored
 tag_gather: .quad 0                 # Ogg comment packet buffer
+id3_version: .long 0                # of the tag being read
 # ID3v2.3 date parts (TYER, TDAT, TIME): the first frame of each, its four
 # characters and whether they are all digits.
 id3_date_seen: .zero 3
@@ -357,6 +361,7 @@ tag_number: .zero 32
 
 .text
 FN tags_clear
+    call chap_clear
     xor eax, eax
     mov [rip + tag_used], eax
     mov [rip + tag_any], eax
@@ -903,6 +908,8 @@ LOCALFN id3_frame
     je .Lid3_frame_comment
     cmp ebx, TAG_USER
     je .Lid3_frame_user
+    cmp ebx, TAG_CHAPTER
+    je .Lid3_frame_chapter
     test edi, edi
     jz .Lid3_frame_return
     movzx ecx, byte ptr [rsi]
@@ -973,6 +980,14 @@ LOCALFN id3_frame
     mov [r8 + rcx*4], r10d
     lea r8, [rip + id3_date_valid]
     mov byte ptr [r8 + rcx], 1
+    jmp .Lid3_frame_return
+.Lid3_frame_chapter:
+    mov rdx, rsi
+    mov r8d, edi
+    mov r9d, [rip + id3_version]
+    cmp r9d, 3
+    jb .Lid3_frame_return
+    call id3_chapter
     jmp .Lid3_frame_return
 .Lid3_frame_user:
     # TXXX: a description naming one of the keys, then the value.
@@ -1092,6 +1107,7 @@ LOCALFN id3_parse
     cmp byte ptr [rsi + 2], '3'
     jne .Lid3_none
     movzx r12d, byte ptr [rsi + 3]        # version
+    mov [rip + id3_version], r12d
     cmp r12d, 2
     jb .Lid3_none
     cmp r12d, 4
@@ -1549,6 +1565,15 @@ LOCALFN vc_parse
     jmp .Lvc_equals
 .Lvc_key:
     mov [rsp + 32], edx
+    mov rcx, rsi                          # CHAPTERnnn comments are chapters
+    lea r8, [rsi + rdx + 1]
+    mov r9d, ebx
+    sub r9d, edx
+    dec r9d
+    call vc_chapter
+    test eax, eax
+    jnz .Lvc_next
+    mov edx, [rsp + 32]
     mov r8d, edx
     mov rdx, rsi
     lea rcx, [rip + vc_keys]
@@ -1575,13 +1600,18 @@ LOCALFN vc_parse
     ret
 ENDFN vc_parse
 
-# RCX=file ("fLaC"), RDX=end: the first VORBIS_COMMENT block.
+# RCX=native FLAC file ("fLaC"), RDX=end: the first VORBIS_COMMENT block and
+# CUESHEET chapters.
 LOCALFN flac_tags
+    push rbx
     push rsi
     push rdi
+    push r12
     sub rsp, 40
     lea rsi, [rcx + 4]
     mov rdi, rdx
+    xor ebx, ebx                          # sample rate (STREAMINFO)
+    xor r12d, r12d                        # comments read
 .Lflac_tags_block:
     mov rax, rdi
     sub rax, rsi
@@ -1596,21 +1626,43 @@ LOCALFN flac_tags
     lea rsi, [rdx + rax]
     cmp rsi, rdi
     ja .Lflac_tags_return
-    mov eax, ecx
-    and eax, 0x7f
-    cmp eax, 4
+    mov [rsp + 32], ecx
+    and ecx, 0x7f
+    jz .Lflac_tags_info
+    cmp ecx, 5
+    je .Lflac_tags_cuesheet
+    cmp ecx, 4
     jne .Lflac_tags_next
+    test r12d, r12d
+    jnz .Lflac_tags_next
+    inc r12d
     mov rcx, rdx
     mov rdx, rsi
     call vc_parse
-    jmp .Lflac_tags_return
+    jmp .Lflac_tags_next
+.Lflac_tags_info:
+    cmp eax, 13
+    jb .Lflac_tags_next
+    mov ebx, [rdx + 10]
+    bswap ebx
+    shr ebx, 12                           # 20-bit sample rate
+    jmp .Lflac_tags_next
+.Lflac_tags_cuesheet:
+    test ebx, ebx
+    jz .Lflac_tags_next
+    mov rcx, rdx
+    mov rdx, rsi
+    mov r8d, ebx
+    call flac_cuesheet
 .Lflac_tags_next:
-    test ecx, 0x80
+    test dword ptr [rsp + 32], 0x80
     jz .Lflac_tags_block
 .Lflac_tags_return:
     add rsp, 40
+    pop r12
     pop rdi
     pop rsi
+    pop rbx
     ret
 ENDFN flac_tags
 
@@ -2047,9 +2099,15 @@ LOCALFN mp4_udta
     jz .Lmp4_udta_return
     mov rsi, rax
     cmp edx, 0x6174656d                   # meta
-    jne .Lmp4_udta_text
+    jne .Lmp4_udta_chpl
     mov rdx, rax
     call mp4_meta
+    jmp .Lmp4_udta_box
+.Lmp4_udta_chpl:
+    cmp edx, 0x6c706863                   # chpl: Nero chapters
+    jne .Lmp4_udta_text
+    mov rdx, rax
+    call mp4_chpl
     jmp .Lmp4_udta_box
 .Lmp4_udta_text:
     cmp dl, 0xa9
@@ -2095,26 +2153,38 @@ LOCALFN mp4_udta
 ENDFN mp4_udta
 
 # RCX=file, RDX=end: moov's udta and meta boxes in file order (later values
-# replace earlier ones, as in FFmpeg).
+# replace earlier ones, as in FFmpeg), then the chapter tracks the last
+# tref/chap box names, in its order (a video track's chapter images give
+# no chapters).
 LOCALFN mp4_tags
+    push rbx
     push rsi
     push rdi
-    sub rsp, 40
+    push r12
+    push r13
+    push r14
+    push r15
+    sub rsp, 48
+    mov r12, rcx                          # file
+    mov r13, rdx
     mov r8d, 0x766f6f6d                   # moov
     call mp4_find
     test rax, rax
     jz .Lmp4_tags_return
     mov rsi, rcx
     mov rdi, rax
+    mov rbx, rcx                          # moov's children
 .Lmp4_tags_box:
     mov rcx, rsi
     mov rdx, rdi
     call mp4_box
     test rax, rax
-    jz .Lmp4_tags_return
+    jz .Lmp4_tags_chapters
     mov rsi, rax
     cmp edx, 0x61746475                   # udta
     je .Lmp4_tags_udta
+    cmp edx, 0x6b617274                   # trak
+    je .Lmp4_tags_trak
     cmp edx, 0x6174656d                   # meta
     jne .Lmp4_tags_box
     mov rdx, rax
@@ -2124,10 +2194,62 @@ LOCALFN mp4_tags
     mov rdx, rax
     call mp4_udta
     jmp .Lmp4_tags_box
+.Lmp4_tags_trak:
+    mov rdx, rax
+    mov r8d, 1
+    call mp4_trak_ids
+    jmp .Lmp4_tags_box
+.Lmp4_tags_chapters:
+    xor r14d, r14d                        # the tref/chap entry
+.Lmp4_tags_chapter_next:
+    cmp r14d, [rip + mp4_chapter_count]
+    jae .Lmp4_tags_return
+    lea rax, [rip + mp4_chapter_tracks]
+    mov r15d, [rax + r14*4]
+    inc r14d
+    mov rsi, rbx
+.Lmp4_tags_chapter_trak:
+    mov rcx, rsi
+    mov rdx, rdi
+    call mp4_box
+    test rax, rax
+    jz .Lmp4_tags_chapter_next            # no such track
+    mov rsi, rax
+    cmp edx, 0x6b617274                   # trak
+    jne .Lmp4_tags_chapter_trak
+    mov [rsp + 32], rcx
+    mov rdx, rax
+    xor r8d, r8d
+    call mp4_trak_ids
+    cmp eax, r15d
+    jne .Lmp4_tags_chapter_trak
+    mov rcx, [rsp + 32]                   # the first track with that ID
+    mov rdx, rsi
+    lea r9, [rip + mp4_hdlr_path]
+    call mp4_path
+    test rax, rax
+    jz .Lmp4_tags_chapter_text
+    sub rax, rcx
+    cmp rax, 12
+    jb .Lmp4_tags_chapter_text
+    cmp dword ptr [rcx + 8], 0x65646976   # vide
+    je .Lmp4_tags_chapter_next
+.Lmp4_tags_chapter_text:
+    mov rcx, [rsp + 32]
+    mov rdx, rsi
+    mov r8, r12
+    mov r9, r13
+    call mp4_chapter_samples
+    jmp .Lmp4_tags_chapter_next
 .Lmp4_tags_return:
-    add rsp, 40
+    add rsp, 48
+    pop r15
+    pop r14
+    pop r13
+    pop r12
     pop rdi
     pop rsi
+    pop rbx
     ret
 ENDFN mp4_tags
 
@@ -2529,14 +2651,14 @@ LOCALFN mkv_simple
     ret
 ENDFN mkv_simple
 
-# RCX=EBML file, RDX=end: Segment Info Title and global Tags.
+# RCX=EBML file, RDX=end: Segment Info Title, global Tags and Chapters.
 LOCALFN mkv_tags
     push rbx
     push rsi
     push rdi
     push r12
     push r13
-    sub rsp, 32
+    sub rsp, 48
     mov rsi, rcx
     mov rdi, rdx
     call mkv_element                      # EBML header
@@ -2552,6 +2674,7 @@ LOCALFN mkv_tags
     jne .Lmkv_tags_segment
     mov rsi, rcx
     mov rdi, rax
+    mov [rsp + 40], rcx                   # the Segment's payload
 .Lmkv_tags_child:
     mov rax, [rip + ogg_cancel_ptr]
     test rax, rax
@@ -2559,12 +2682,19 @@ LOCALFN mkv_tags
     cmp dword ptr [rax], 0
     jne .Lmkv_tags_return
 .Lmkv_tags_continue:
+    mov [rsp + 32], rsi                   # this element
     call mkv_element
     test rax, rax
     jz .Lmkv_tags_return
     mov rsi, rax
     cmp edx, 0x1549a966                   # Info
     je .Lmkv_tags_info
+    cmp edx, 0x1043a770                   # Chapters
+    je .Lmkv_tags_chapters
+    cmp edx, 0x114d9b74                   # SeekHead
+    je .Lmkv_tags_seekhead
+    cmp edx, 0x1f43b675                   # Cluster
+    je .Lmkv_tags_cluster
     cmp edx, 0x1254c367                   # Tags
     jne .Lmkv_tags_child
     # Tag elements.
@@ -2613,6 +2743,40 @@ LOCALFN mkv_tags
     mov rsi, r12
     mov rdi, r13
     jmp .Lmkv_tags_child
+.Lmkv_tags_cluster:
+    mov dword ptr [rip + mkv_cluster_seen], 1
+    jmp .Lmkv_tags_child
+.Lmkv_tags_seekhead:
+    cmp dword ptr [rip + mkv_cluster_seen], 0
+    jne .Lmkv_tags_child
+    mov r12, rsi
+    mov r13, rdi
+    mov rsi, rcx
+    mov rdi, rax
+    call mkv_seek_chapters
+    mov rsi, r12
+    mov rdi, r13
+    jmp .Lmkv_tags_child
+.Lmkv_tags_chapters:
+    # As FFmpeg reads them: every Chapters element before the first Cluster;
+    # after it, only the one a SeekHead names, when none came before.
+    cmp dword ptr [rip + mkv_cluster_seen], 0
+    je .Lmkv_tags_chapters_read
+    cmp dword ptr [rip + mkv_chapters_seen], 0
+    jne .Lmkv_tags_child
+    mov r8, [rsp + 32]
+    sub r8, [rsp + 40]
+    cmp r8, [rip + mkv_chapters_seek]
+    jne .Lmkv_tags_child
+.Lmkv_tags_chapters_read:
+    mov r12, rsi
+    mov r13, rdi
+    mov rsi, rcx
+    mov rdi, rax
+    call mkv_chapters
+    mov rsi, r12
+    mov rdi, r13
+    jmp .Lmkv_tags_child
 .Lmkv_tags_info:
     mov r12, rsi
     mov r13, rdi
@@ -2636,7 +2800,7 @@ LOCALFN mkv_tags
     mov rdi, r13
     jmp .Lmkv_tags_child
 .Lmkv_tags_return:
-    add rsp, 32
+    add rsp, 48
     pop r13
     pop r12
     pop rdi
@@ -2789,6 +2953,13 @@ LOCALFN raw_tags
     cmp rbx, rdi
     jb .Lraw_tags_id3
 .Lraw_tags_end:
+    mov eax, [rip + codec_kind]           # FFmpeg reads ID3v2 chapters only
+    cmp eax, 3                            # before MPEG audio and ADTS AAC
+    je .Lraw_tags_chapters
+    cmp eax, 10
+    je .Lraw_tags_chapters
+    call chap_clear
+.Lraw_tags_chapters:
     call id3_finish
     xor ebx, ebx                          # an ID3v1 tag at the end
     mov rax, rdi
@@ -2922,3 +3093,5 @@ FN tags_read
     pop rsi
     ret
 ENDFN tags_read
+
+.include "chapters.inc"
