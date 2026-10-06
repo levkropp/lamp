@@ -1,9 +1,9 @@
 # Original MPEG transport and program stream audio demuxer in x86-64
 # assembly. MIT, see LICENSE. Reference: ISO/IEC 13818-1. The first
-# supported audio stream (MPEG audio, AAC in ADTS or AC-3) is gathered from
-# its PES packets into one buffer, which then opens as the raw stream it
-# carries, so decoding, timing and seeking are those of .mp3, .aac and .ac3
-# files. Transport streams: 188-byte packets, 192-byte M2TS/BDAV packets and
+# supported audio stream (MPEG audio, AAC in ADTS or LATM, or AC-3) is
+# gathered from its PES packets into one buffer, which then opens as the raw
+# stream it carries, so decoding, timing and seeking are those of .mp3,
+# .aac, .loas and .ac3 files. Transport streams: 188-byte packets, 192-byte M2TS/BDAV packets and
 # 204-byte packets; the program association table and the first program's
 # map select the stream. Program streams (.mpg, .vob): MPEG-1 and MPEG-2
 # packs, audio stream ids 0xC0-0xDF and private stream 1 AC-3 substreams.
@@ -19,6 +19,8 @@
 .equ KIND_AC3, 3
 .equ KIND_OTHER, 4                  # audio LAMP does not decode
 .equ KIND_PROBE, 5                  # private data without descriptors: by content
+.equ KIND_LATM, 6                   # AAC in LOAS/LATM
+.equ KIND_NONE, 7                   # private data that is not audio
 
 RODATA
 # Transport packet sizes and the sync byte's offset in each.
@@ -131,10 +133,21 @@ LOCALFN mts_open_stream
     je .Lmts_stream_mpa
     cmp eax, KIND_ADTS
     je .Lmts_stream_adts
+    cmp eax, KIND_LATM
+    je .Lmts_stream_latm
     call ac3_open
     jmp .Lmts_stream_return
 .Lmts_stream_adts:
     call adts_open
+    jmp .Lmts_stream_return
+.Lmts_stream_latm:
+    call adts_probe                       # ADTS labelled LATM (FFmpeg's -c copy
+    mov rcx, [rip + mts_buffer]           # with -mpegts_flags latm) plays as ADTS
+    mov rdx, rcx
+    add rdx, [rip + mts_bytes]
+    test eax, eax
+    jnz .Lmts_stream_adts
+    call loas_open
     jmp .Lmts_stream_return
 .Lmts_stream_mpa:
     call mp3_open
@@ -289,9 +302,10 @@ LOCALFN mts_classify
     mov eax, KIND_AC3
     cmp ecx, 0x81
     je .Lmts_classify_done
-    mov eax, KIND_OTHER
+    mov eax, KIND_LATM
     cmp ecx, 0x11                         # LATM AAC
     je .Lmts_classify_done
+    mov eax, KIND_OTHER
     cmp ecx, 0x80                         # Blu-ray LPCM
     jb .Lmts_classify_private
     cmp ecx, 0x87                         # DTS, TrueHD, E-AC-3
@@ -374,11 +388,11 @@ ENDFN mts_pes_data
 # Private data identified by its first PES packet: RCX=PES start code,
 # RAX=its elementary data, RDX=payload end -> ECX=kind: MPEG audio or ADTS
 # for audio stream ids (0xC0-0xDF), AC-3 for private stream 1 starting with
-# an AC-3 sync frame; KIND_OTHER for E-AC-3 or DTS there; 6 for anything
-# else. RAX and RDX are kept.
+# an AC-3 sync frame; KIND_OTHER for E-AC-3 or DTS there; KIND_NONE for
+# anything else. RAX and RDX are kept.
 LOCALFN mts_identify
     movzx r8d, byte ptr [rcx + 3]         # stream id
-    mov ecx, 6
+    mov ecx, KIND_NONE
     lea r9, [rax + 6]
     cmp r9, rdx
     ja .Lmts_identify_done

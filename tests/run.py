@@ -71,6 +71,7 @@ def main():
     step(TESTS / 'verify-mp4.py', *playback)
     step(TESTS / 'verify-aac.py', *playback)
     step(TESTS / 'verify-heaac.py', *playback)
+    step(TESTS / 'verify-latm.py', *playback)
     step(TESTS / 'verify-ac3.py', *playback)
     step(TESTS / 'verify-mpegts.py', *playback)
     step(TESTS / 'verify-wavpack.py', *playback)

@@ -1,0 +1,407 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "mono-8k-smc1.loas",
+      "result": "exact",
+      "comparator": "mono-8k.aac",
+      "ffmpeg": "equal to its decode of mono-8k.aac"
+    },
+    {
+      "test": "mono-8k-smc20.loas",
+      "result": "exact",
+      "comparator": "mono-8k.aac",
+      "ffmpeg": "equal to its decode of mono-8k.aac"
+    },
+    {
+      "test": "mono-8k-smc1000.loas",
+      "result": "exact",
+      "comparator": "mono-8k.aac",
+      "ffmpeg": "equal to its decode of mono-8k.aac"
+    },
+    {
+      "test": "mono-16k-smc1.loas",
+      "result": "exact",
+      "comparator": "mono-16k.aac",
+      "ffmpeg": "equal to its decode of mono-16k.aac"
+    },
+    {
+      "test": "mono-16k-smc20.loas",
+      "result": "exact",
+      "comparator": "mono-16k.aac",
+      "ffmpeg": "equal to its decode of mono-16k.aac"
+    },
+    {
+      "test": "mono-16k-smc1000.loas",
+      "result": "exact",
+      "comparator": "mono-16k.aac",
+      "ffmpeg": "equal to its decode of mono-16k.aac"
+    },
+    {
+      "test": "mono-22k-smc1.loas",
+      "result": "exact",
+      "comparator": "mono-22k.aac",
+      "ffmpeg": "equal to its decode of mono-22k.aac"
+    },
+    {
+      "test": "mono-22k-smc20.loas",
+      "result": "exact",
+      "comparator": "mono-22k.aac",
+      "ffmpeg": "equal to its decode of mono-22k.aac"
+    },
+    {
+      "test": "mono-22k-smc1000.loas",
+      "result": "exact",
+      "comparator": "mono-22k.aac",
+      "ffmpeg": "equal to its decode of mono-22k.aac"
+    },
+    {
+      "test": "stereo-32k-smc1.loas",
+      "result": "exact",
+      "comparator": "stereo-32k.aac",
+      "ffmpeg": "equal to its decode of stereo-32k.aac"
+    },
+    {
+      "test": "stereo-32k-smc20.loas",
+      "result": "exact",
+      "comparator": "stereo-32k.aac",
+      "ffmpeg": "equal to its decode of stereo-32k.aac"
+    },
+    {
+      "test": "stereo-32k-smc1000.loas",
+      "result": "exact",
+      "comparator": "stereo-32k.aac",
+      "ffmpeg": "equal to its decode of stereo-32k.aac"
+    },
+    {
+      "test": "stereo-44k-smc1.loas",
+      "result": "exact",
+      "comparator": "stereo-44k.aac",
+      "ffmpeg": "equal to its decode of stereo-44k.aac"
+    },
+    {
+      "test": "stereo-44k-smc20.loas",
+      "result": "exact",
+      "comparator": "stereo-44k.aac",
+      "ffmpeg": "equal to its decode of stereo-44k.aac"
+    },
+    {
+      "test": "stereo-44k-smc1000.loas",
+      "result": "exact",
+      "comparator": "stereo-44k.aac",
+      "ffmpeg": "equal to its decode of stereo-44k.aac"
+    },
+    {
+      "test": "stereo-48k-smc1.loas",
+      "result": "exact",
+      "comparator": "stereo-48k.aac",
+      "ffmpeg": "equal to its decode of stereo-48k.aac"
+    },
+    {
+      "test": "stereo-48k-smc20.loas",
+      "result": "exact",
+      "comparator": "stereo-48k.aac",
+      "ffmpeg": "equal to its decode of stereo-48k.aac"
+    },
+    {
+      "test": "stereo-48k-smc1000.loas",
+      "result": "exact",
+      "comparator": "stereo-48k.aac",
+      "ffmpeg": "equal to its decode of stereo-48k.aac"
+    },
+    {
+      "test": "stereo-96k-smc1.loas",
+      "result": "exact",
+      "comparator": "stereo-96k.aac",
+      "ffmpeg": "equal to its decode of stereo-96k.aac"
+    },
+    {
+      "test": "stereo-96k-smc20.loas",
+      "result": "exact",
+      "comparator": "stereo-96k.aac",
+      "ffmpeg": "equal to its decode of stereo-96k.aac"
+    },
+    {
+      "test": "stereo-96k-smc1000.loas",
+      "result": "exact",
+      "comparator": "stereo-96k.aac",
+      "ffmpeg": "equal to its decode of stereo-96k.aac"
+    },
+    {
+      "test": "5.1-48k-smc1.loas",
+      "result": "exact",
+      "comparator": "5.1-48k.aac",
+      "ffmpeg": "equal to its decode of 5.1-48k.aac"
+    },
+    {
+      "test": "5.1-48k-smc20.loas",
+      "result": "exact",
+      "comparator": "5.1-48k.aac",
+      "ffmpeg": "equal to its decode of 5.1-48k.aac"
+    },
+    {
+      "test": "5.1-48k-smc1000.loas",
+      "result": "exact",
+      "comparator": "5.1-48k.aac",
+      "ffmpeg": "equal to its decode of 5.1-48k.aac"
+    },
+    {
+      "test": "stereo-48k-smc20.loas against FFmpeg",
+      "result": "matched",
+      "snr_db": 137.9
+    },
+    {
+      "test": "version1.loas",
+      "result": "exact",
+      "comparator": "stereo-48k.aac",
+      "ffmpeg": "equal to its decode of stereo-48k.aac"
+    },
+    {
+      "test": "version1-fill.loas",
+      "result": "exact",
+      "comparator": "stereo-48k.aac",
+      "ffmpeg": "equal to its decode of stereo-48k.aac"
+    },
+    {
+      "test": "version1-other.loas",
+      "result": "exact",
+      "comparator": "stereo-48k.aac",
+      "ffmpeg": "equal to its decode of stereo-48k.aac"
+    },
+    {
+      "test": "version0-other.loas",
+      "result": "exact",
+      "comparator": "stereo-48k.aac",
+      "ffmpeg": "equal to its decode of stereo-48k.aac"
+    },
+    {
+      "test": "version0-other-byte.loas",
+      "result": "exact",
+      "comparator": "stereo-48k.aac",
+      "ffmpeg": "equal to its decode of stereo-48k.aac"
+    },
+    {
+      "test": "late-config.loas",
+      "result": "exact",
+      "comparator": "stereo-48k.aac",
+      "ffmpeg": "equal to its decode of stereo-48k.aac"
+    },
+    {
+      "test": "skipped-frames.loas",
+      "result": "exact",
+      "comparator": "skipped-frames.aac",
+      "ffmpeg": "equal to its decode of skipped-frames.aac",
+      "note": "mismatched frames skipped, as FFmpeg skips them"
+    },
+    {
+      "test": "subframes-2.loas",
+      "result": "exact",
+      "comparator": "subframes-2.aac",
+      "note": "FFmpeg 6.1 reads only the first sub-frame"
+    },
+    {
+      "test": "subframes-3.loas",
+      "result": "exact",
+      "comparator": "subframes-3.aac",
+      "note": "FFmpeg 6.1 reads only the first sub-frame"
+    },
+    {
+      "test": "subframes-4.loas",
+      "result": "exact",
+      "comparator": "subframes-4.aac",
+      "note": "FFmpeg 6.1 reads only the first sub-frame"
+    },
+    {
+      "test": "sbr-implicit.loas",
+      "result": "exact",
+      "comparator": "sbr-stereo.aac",
+      "ffmpeg": "equal to its decode of sbr-stereo.aac"
+    },
+    {
+      "test": "sbr-explicit.loas",
+      "result": "exact",
+      "comparator": "sbr-stereo.aac",
+      "ffmpeg": "equal to its decode of sbr-stereo.aac"
+    },
+    {
+      "test": "sbr-sync-extension.loas",
+      "result": "exact",
+      "comparator": "sbr-stereo.aac",
+      "ffmpeg": "equal to its decode of sbr-stereo.aac"
+    },
+    {
+      "test": "sbr-absent.loas",
+      "result": "core only, matched FFmpeg",
+      "snr_db": 138.0
+    },
+    {
+      "test": "ps-implicit.loas",
+      "result": "exact",
+      "comparator": "ps-mono.aac",
+      "ffmpeg": "equal to its decode of ps-mono.aac"
+    },
+    {
+      "test": "ps-object.loas",
+      "result": "exact",
+      "comparator": "ps-mono.aac",
+      "ffmpeg": "equal to its decode of ps-mono.aac"
+    },
+    {
+      "test": "encoded-latm.ts",
+      "result": "exact",
+      "comparator": "encoded-latm.loas",
+      "ffmpeg": "equal to its decode of encoded-latm.loas"
+    },
+    {
+      "test": "encoded-latm.ts against FFmpeg",
+      "result": "matched",
+      "snr_db": 138.0
+    },
+    {
+      "test": "version1-other.ts",
+      "result": "exact",
+      "comparator": "version1-other.loas",
+      "ffmpeg": "equal to its decode of version1-other.loas"
+    },
+    {
+      "test": "sbr-explicit.ts",
+      "result": "exact",
+      "comparator": "sbr-explicit.loas",
+      "ffmpeg": "equal to its decode of sbr-explicit.loas"
+    },
+    {
+      "test": "stereo-44k-smc20.ts",
+      "result": "exact",
+      "comparator": "stereo-44k-smc20.loas",
+      "ffmpeg": "equal to its decode of stereo-44k-smc20.loas"
+    },
+    {
+      "test": "written-subframes-3.ts",
+      "result": "exact",
+      "comparator": "subframes-3.loas"
+    },
+    {
+      "test": "written-version0-other.ts",
+      "result": "exact",
+      "comparator": "version0-other.loas",
+      "ffmpeg": "equal to its decode of version0-other.loas"
+    },
+    {
+      "test": "written-mono-22k-smc20.ts",
+      "result": "exact",
+      "comparator": "mono-22k-smc20.loas",
+      "ffmpeg": "equal to its decode of mono-22k-smc20.loas"
+    },
+    {
+      "test": "adts-labelled-latm.ts",
+      "result": "exact",
+      "comparator": "stereo-48k.aac",
+      "note": "FFmpeg writes ADTS frames under stream type 0x11 here"
+    },
+    {
+      "test": "stereo-44k-smc20.loas seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":7933,\"maximum_discarded\":1024,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "version0-other.loas seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":7421,\"maximum_discarded\":1024,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "subframes-3.loas seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":7933,\"maximum_discarded\":1024,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "encoded-latm.ts seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":7421,\"maximum_discarded\":1024,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "mono-22k-smc1000.loas seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":7421,\"maximum_discarded\":1024,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "tagged.loas",
+      "result": "exact",
+      "comparator": "stereo-48k.aac"
+    },
+    {
+      "test": "tagged.loas tags",
+      "result": "ID3v2 title read, ID3v1 ignored, as FFmpeg does"
+    },
+    {
+      "test": "version-a.loas",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "two-programs.loas",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "two-layers.loas",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "fixed-length.loas",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "celp-length.loas",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "er-aac-ld.loas",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "usac.loas",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "pce.loas",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "frame-960.loas",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "config-change.loas",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "short-asclen.loas",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":100}"
+    },
+    {
+      "test": "junk-between-frames.loas",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":100}"
+    },
+    {
+      "test": "no-config.loas",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":100}"
+    },
+    {
+      "test": "cancel-open stereo-48k-smc20.loas",
+      "result": "{\"result\":\"cancelled\"}"
+    },
+    {
+      "test": "LATM playback",
+      "result": "played",
+      "stats": "Playing. Space: pause / resume. N / P: next / previous file. Left / Right: -5 / +5 s. Down / Up: -60 / +60 s. R: repeat. Q or Ctrl+C: stop. codec=10 rate=48000 channels=2 bits=0 frames=73728 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3599 cpu_us=24240 endpoint_dry=0"
+    }
+  ],
+  "rejections": 13,
+  "scope": "AAC-LC and HE-AAC in LOAS/LATM files and MPEG-TS (stream type 0x11): FFmpeg and test-written streams (mux versions 0 and 1, other data, CRC, late configuration, skipped frames, sub-frames) exact against ADTS; seeks; tags; unsupported and malformed streams; cancellation."
+}

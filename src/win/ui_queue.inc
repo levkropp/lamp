@@ -56,7 +56,7 @@ ui_title_tail: .short ' ', '-', ' ', 'L', 'A', 'M', 'P', 0
 # Extensions of the audio files a folder adds (the open dialog's types,
 # without playlists).
 ui_audio_types: .asciz "wav", "aif", "aiff", "aifc", "flac", "mp3", "ogg", "opus", "oga", "mp2", "mp1", "mpa"
-    .asciz "mka", "mkv", "webm", "m4a", "m4b", "mp4", "mov", "aac", "ac3", "wv", "ape", "caf", "w64", "avi", "flv"
+    .asciz "mka", "mkv", "webm", "m4a", "m4b", "mp4", "mov", "aac", "loas", "latm", "ac3", "wv", "ape", "caf", "w64", "avi", "flv"
     .asciz "au", "snd", "ts", "m2ts", "mts", "mpg", "mpeg", "vob"
     .byte 0
 .bss
