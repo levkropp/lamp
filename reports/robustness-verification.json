@@ -387,56 +387,70 @@
       "rejected_or_damaged": 255
     },
     {
+      "test": "gsm.wav",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 500,
+      "decoded": 305,
+      "rejected_or_damaged": 195
+    },
+    {
+      "test": "tone.gsm",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 500,
+      "decoded": 284,
+      "rejected_or_damaged": 216
+    },
+    {
       "test": "lpcm.vob",
       "result": "no crash, hang or runaway memory",
       "mutations": 500,
-      "decoded": 500,
-      "rejected_or_damaged": 0
+      "decoded": 499,
+      "rejected_or_damaged": 1
     },
     {
       "test": "lpcm.m2ts",
       "result": "no crash, hang or runaway memory",
       "mutations": 500,
-      "decoded": 493,
-      "rejected_or_damaged": 7
+      "decoded": 488,
+      "rejected_or_damaged": 12
     },
     {
       "test": "ac3.ts",
       "result": "no crash, hang or runaway memory",
       "mutations": 500,
-      "decoded": 393,
-      "rejected_or_damaged": 107
+      "decoded": 385,
+      "rejected_or_damaged": 115
     },
     {
       "test": "mp2.mpg",
       "result": "no crash, hang or runaway memory",
       "mutations": 500,
-      "decoded": 220,
-      "rejected_or_damaged": 280
+      "decoded": 229,
+      "rejected_or_damaged": 271
     },
     {
       "test": "ac3.vob",
       "result": "no crash, hang or runaway memory",
       "mutations": 500,
-      "decoded": 344,
-      "rejected_or_damaged": 156
+      "decoded": 341,
+      "rejected_or_damaged": 159
     },
     {
       "test": "tone.ape",
       "result": "no crash, hang or runaway memory",
       "mutations": 500,
-      "decoded": 50,
-      "rejected_or_damaged": 450
+      "decoded": 57,
+      "rejected_or_damaged": 443
     },
     {
       "test": "old.ape",
       "result": "no crash, hang or runaway memory",
       "mutations": 500,
-      "decoded": 4,
-      "rejected_or_damaged": 496
+      "decoded": 10,
+      "rejected_or_damaged": 490
     }
   ],
-  "mutations": 31000,
-  "decoded": 13241,
-  "scope": "62 container/codec sources, 500 mutations each (Linux, 2 GiB address space), seed 20261006: byte flips, zero/0xff runs, cuts, removed and duplicated spans, large length fields; --check, every fourth from a random --start."
+  "mutations": 32000,
+  "decoded": 13835,
+  "scope": "64 container/codec sources, 500 mutations each (Linux, 2 GiB address space), seed 20261006: byte flips, zero/0xff runs, cuts, removed and duplicated spans, large length fields; --check, every fourth from a random --start."
 }

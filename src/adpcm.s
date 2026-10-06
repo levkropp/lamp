@@ -16,8 +16,10 @@
 # used by the PCM reader). G.726 (WAVE tags 0x45, 0x14, 0x40 and 0x64, codes
 # packed from the most significant bit; AU, the private tag ADPCM_G726LE,
 # from the least) and G.722 (0x28f) are mono bitstreams whose state runs on
-# across packets of about 4 KiB (src/g72x.s): a seek decodes one primer
-# packet from a reset state.
+# across packets of about 4 KiB (src/g72x.s): a seek decodes three primer
+# packets from a reset state. GSM 06.10 (src/gsm.s), whose state runs on as
+# well, comes as Microsoft's 65-byte blocks of two frames (WAVE tag 0x31) or
+# as 33-byte frames (the private tag ADPCM_GSM: AIFF-C, QuickTime, raw).
 .include "lamp.inc"
 .globl adpcm_track_open, adpcm_track_samples, adpcm_track_decode, adpcm_track_close, adpcm_track_reset
 .globl adpcm_primer, g711_alaw, g711_ulaw, adpcm_packet_layout
@@ -31,6 +33,9 @@
 .equ ADPCM_G726, 0x45
 .equ ADPCM_G726LE, 0x4c47           # LAMP's tag for AU's G.726 (codes from the low bit)
 .equ ADPCM_G722, 0x28f
+.equ ADPCM_GSM_MS, 0x31
+.equ ADPCM_GSM, 0x5347              # LAMP's tag for 33-byte GSM frames (not a WAVE tag)
+.equ GSM_PRIMER, 3                  # packets decoded before a seek target
 .equ G72X_PACKET, 4096              # bytes per packet at most
 .equ G72X_PRIMER, 3                 # packets decoded before a seek target
 .equ MS_C1, 0                       # Microsoft channel state
@@ -72,6 +77,10 @@ ms_state: .zero 2*MS_SIZE
 # (FFmpeg: IMA 1 + whole 8-sample groups, Microsoft 2 + two per byte).
 LOCALFN adpcm_block_samples
     mov r8d, [rip + adpcm_channels]
+    cmp dword ptr [rip + adpcm_tag], ADPCM_GSM
+    je .Ladpcm_samples_gsm
+    cmp dword ptr [rip + adpcm_tag], ADPCM_GSM_MS
+    je .Ladpcm_samples_gsm_ms
     cmp dword ptr [rip + adpcm_tag], ADPCM_G722
     je .Ladpcm_samples_g722
     cmp dword ptr [rip + adpcm_tag], ADPCM_G726
@@ -137,6 +146,20 @@ LOCALFN adpcm_block_samples
 .Ladpcm_samples_g722:
     lea eax, [rcx*2]                      # two samples per codeword
     ret
+.Ladpcm_samples_gsm:
+    mov eax, ecx                          # 160 per whole 33-byte frame
+    xor edx, edx
+    mov ecx, 33
+    div ecx
+    imul eax, eax, 160
+    ret
+.Ladpcm_samples_gsm_ms:
+    mov eax, ecx                          # 320 per whole 65-byte block
+    xor edx, edx
+    mov ecx, 65
+    div ecx
+    imul eax, eax, 320
+    ret
 .Ladpcm_samples_g726:
     lea eax, [rcx*8]                      # whole codes
     xor edx, edx
@@ -159,6 +182,8 @@ FN adpcm_packet_layout
 .Ladpcm_layout_tag:
     mov r9d, eax
     call adpcm_g72x_tag
+    cmp eax, 2
+    je .Ladpcm_layout_gsm
     test eax, eax
     jnz .Ladpcm_layout_g72x
     movzx edx, word ptr [rcx + 2]
@@ -184,10 +209,22 @@ FN adpcm_packet_layout
     dec eax                               # 4095: whole 3- or 5-bit codes
 .Ladpcm_layout_return:
     ret
+.Ladpcm_layout_gsm:
+    mov eax, 65*20                        # 20 blocks (or frames) per packet
+    mov edx, 65
+    cmp r9d, ADPCM_GSM_MS
+    je .Ladpcm_layout_return
+    mov eax, 33*20
+    mov edx, 33
+    ret
 ENDFN adpcm_packet_layout
 
-# EAX=format tag -> EAX=1 for G.726 (any of its tags) or G.722.
+# EAX=format tag -> EAX=1 for G.726 (any of its tags) or G.722, 2 for GSM.
 LOCALFN adpcm_g72x_tag
+    cmp eax, ADPCM_GSM_MS
+    je .Ladpcm_g72x_gsm
+    cmp eax, ADPCM_GSM
+    je .Ladpcm_g72x_gsm
     cmp eax, ADPCM_G726
     je .Ladpcm_g72x_yes
     cmp eax, 0x14
@@ -204,6 +241,9 @@ LOCALFN adpcm_g72x_tag
     ret
 .Ladpcm_g72x_yes:
     mov eax, 1
+    ret
+.Ladpcm_g72x_gsm:
+    mov eax, 2
     ret
 ENDFN adpcm_g72x_tag
 
@@ -241,6 +281,8 @@ FN adpcm_track_open
     mov [rip + sample_rate], eax
     mov eax, ebx
     call adpcm_g72x_tag
+    cmp eax, 2
+    je .Ladpcm_open_gsm
     test eax, eax
     jnz .Ladpcm_open_g72x
     cmp word ptr [rcx + 14], 4             # 4-bit samples only
@@ -281,6 +323,18 @@ FN adpcm_track_open
     jmp .Ladpcm_open_g72x_layout
 .Ladpcm_open_g722:
     mov dword ptr [rip + adpcm_bits], 4
+    jmp .Ladpcm_open_g72x_layout
+.Ladpcm_open_gsm:
+    # GSM: one channel, packets of 20 frames or blocks.
+    cmp esi, 1
+    jne .Ladpcm_open_fail
+    mov eax, 65*20
+    cmp ebx, ADPCM_GSM_MS
+    je .Ladpcm_open_gsm_align
+    mov eax, 33*20
+.Ladpcm_open_gsm_align:
+    mov [rip + adpcm_align], eax
+    mov dword ptr [rip + adpcm_bits], 0
 .Ladpcm_open_g72x_layout:
     mov dword ptr [rip + decode_error], ADPCM_MALFORMED
     jmp .Ladpcm_open_samples
@@ -298,10 +352,14 @@ FN adpcm_track_open
     and eax, -64
     mov [rip + adpcm_stride], eax
     mov [rip + source_channels], esi
-    mov eax, [rip + adpcm_bits]           # G.726: its code size; others 4
+    mov eax, [rip + adpcm_bits]           # G.726: its code size; GSM 0; others 4
     cmp dword ptr [rip + adpcm_tag], ADPCM_G726
     je .Ladpcm_open_bits
     cmp dword ptr [rip + adpcm_tag], ADPCM_G726LE
+    je .Ladpcm_open_bits
+    cmp dword ptr [rip + adpcm_tag], ADPCM_GSM
+    je .Ladpcm_open_bits
+    cmp dword ptr [rip + adpcm_tag], ADPCM_GSM_MS
     je .Ladpcm_open_bits
     mov eax, 4
 .Ladpcm_open_bits:
@@ -332,6 +390,11 @@ FN adpcm_track_open
     cmove eax, ecx
     cmp dword ptr [rip + adpcm_tag], ADPCM_G722
     cmove eax, ecx
+    mov ecx, GSM_PRIMER
+    cmp dword ptr [rip + adpcm_tag], ADPCM_GSM
+    cmove eax, ecx
+    cmp dword ptr [rip + adpcm_tag], ADPCM_GSM_MS
+    cmove eax, ecx
     mov [rip + adpcm_primer], eax
     call adpcm_track_reset
     mov dword ptr [rip + decode_error], 0
@@ -358,6 +421,10 @@ FN adpcm_track_reset
     jb .Ladpcm_reset_word
     cmp dword ptr [rip + adpcm_tag], ADPCM_G722
     je .Ladpcm_reset_g722
+    cmp dword ptr [rip + adpcm_tag], ADPCM_GSM
+    je .Ladpcm_reset_gsm
+    cmp dword ptr [rip + adpcm_tag], ADPCM_GSM_MS
+    je .Ladpcm_reset_gsm
     cmp dword ptr [rip + adpcm_tag], ADPCM_G726
     je .Ladpcm_reset_g726
     cmp dword ptr [rip + adpcm_tag], ADPCM_G726LE
@@ -368,6 +435,9 @@ FN adpcm_track_reset
     jmp .Ladpcm_reset_return
 .Ladpcm_reset_g722:
     call g722_reset
+    jmp .Ladpcm_reset_return
+.Ladpcm_reset_gsm:
+    call gsm_reset
 .Ladpcm_reset_return:
     add rsp, 40
     ret
@@ -446,6 +516,12 @@ FN adpcm_track_decode
     cmp dword ptr [rip + adpcm_tag], ADPCM_G726
     je .Ladpcm_decode_g726
     xor r9d, r9d
+    cmp dword ptr [rip + adpcm_tag], ADPCM_GSM
+    je .Ladpcm_decode_gsm
+    inc r9d
+    cmp dword ptr [rip + adpcm_tag], ADPCM_GSM_MS
+    je .Ladpcm_decode_gsm
+    xor r9d, r9d
     inc r9d
     cmp dword ptr [rip + adpcm_tag], ADPCM_G726LE
     je .Ladpcm_decode_g726_codes
@@ -474,6 +550,10 @@ FN adpcm_track_decode
     mov edx, r13d                         # bytes
     call g722_block
     mov eax, 1
+    jmp .Ladpcm_decode_check
+.Ladpcm_decode_gsm:
+    mov edx, r13d                         # bytes; R9D: Microsoft blocks
+    call gsm_block
     jmp .Ladpcm_decode_check
 .Ladpcm_decode_ms:
     call ms_block

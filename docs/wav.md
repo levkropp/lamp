@@ -51,12 +51,32 @@ These WAVE format tags (in a basic fmt chunk, or as an extensible chunk's subfor
 | 2 | Microsoft ADPCM, mono or stereo, with the standard seven predictors |
 | 0x45, 0x14, 0x40, 0x64 | G.726 (ITU-T G.726 and the G.721/G.723 tags), 16–40 kbit/s: 2-, 3-, 4- or 5-bit codes (the fmt chunk's bits per sample), packed from the most significant bit, mono, decoding as FFmpeg's `adpcm_g726` does |
 | 0x28f | G.722 at 64 kbit/s: one 8-bit codeword (a 6-bit low and a 2-bit high band) per two output samples, mono |
+| 0x31 | [GSM 06.10](#gsm-0610) full-rate speech, Microsoft's 65-byte blocks of two 20 ms frames, mono |
 | 0x50, 0x55 | MPEG audio Layers I-III: the data chunk opens as a raw [MPEG audio](mp2.md) stream |
 | 0x2000 | AC-3: the data chunk opens as a raw [AC-3](ac3.md) stream |
 
-ADPCM blocks (block_align bytes, each starting with its channels' predictor state) are packets of the shared [track layer](matroska.md#track-layer), so seeks restart at the block holding the target. A short final block decodes the whole sample groups it holds; one too short for its headers is dropped. A `fact` sample count trims the padding of the last block (FFmpeg ignores it and plays the padding). A step index above 88 or a predictor above 6 stops decoding with `decode_error` 100. IMA ADPCM with 2, 3 or 5-bit samples and Microsoft ADPCM with more than two channels reject as unsupported (101); FFmpeg decodes only one or two IMA channels and lays out Microsoft ADPCM beyond two channels its own way. GSM 6.10, other ADPCM variants and other compressed tags reject.
+ADPCM blocks (block_align bytes, each starting with its channels' predictor state) are packets of the shared [track layer](matroska.md#track-layer), so seeks restart at the block holding the target. A short final block decodes the whole sample groups it holds; one too short for its headers is dropped. A `fact` sample count trims the padding of the last block (FFmpeg ignores it and plays the padding). A step index above 88 or a predictor above 6 stops decoding with `decode_error` 100. IMA ADPCM with 2, 3 or 5-bit samples and Microsoft ADPCM with more than two channels reject as unsupported (101); FFmpeg decodes only one or two IMA channels and lays out Microsoft ADPCM beyond two channels its own way. Other ADPCM variants and other compressed tags reject.
 
 G.726 and G.722 carry no block headers: the decoder's state runs on through the data, which LAMP splits as FFmpeg's demuxer does into packets of 4096 bytes (4095 for 3- and 5-bit codes, so that packets hold whole codes). Data ending inside a code decodes the whole codes before it. A seek restarts three packets (1.5–6 seconds) before the target from a reset state. The adaptive state converges on the continuous decode within them: every seek tested equals continuous decoding, though nothing in the format guarantees it. G.726 and G.722 with more than one channel, and G.726 codes outside 2–5 bits, reject as unsupported (101). The decoders (`src/g72x.s`) follow FFmpeg's `g726.c` and `g722.c`, including G.726's 11-bit floating-point products; their tables are G.726's and G.722's quantizer, scale and filter tables as FFmpeg lists them.
+
+### GSM 06.10
+
+GSM 06.10 full-rate speech (RPE-LTP, 13 kbit/s at 8 kHz) decodes in WAVE (tag 0x31), in AIFF-C (`GSM `) and in raw `.gsm` files with a handwritten decoder (`src/gsm.s`). The decoder works in 16-bit fixed point, bit-exact with libgsm, the reference implementation from TU Berlin. It implements RPE decoding (APCM inverse quantization and grid positioning), long-term synthesis, decoding and interpolation of the log-area ratios, the short-term synthesis lattice, and de-emphasis. Each 20 ms frame of 160 samples holds 260 bits:
+
+- eight log-area ratios;
+- then, for each 5 ms subframe, the long-term lag and gain, the grid position, the block maximum and 13 pulses.
+
+Raw and AIFF-C frames are 33 bytes: a 0xD nibble, then the bits from the most significant. Microsoft's WAVE blocks pack two frames in 65 bytes from the least significant bit. A raw stream is recognised when it holds two or more 33-byte frames that each begin with the 0xD nibble; `--check` reports codec 19. In WAVE and AIFF-C the nibble is not checked, as FFmpeg does not check it.
+
+The decoder's state runs on from frame to frame. Frames go to the [track layer](matroska.md#track-layer) in packets of 20 (20 WAVE blocks), and a seek decodes three packets (1.2–2.4 seconds) from a reset state before the target. A lag outside 40–120 keeps the previous lag, as GSM 06.10 (4.3.2) and libgsm specify; FFmpeg's own decoder clips it instead. That decoder also saturates differently at extremes, so it departs from libgsm on random frames, though encoders write neither case. A cut last frame or block is dropped. Stereo GSM rejects as unsupported (101); GSM in QuickTime is not read yet. The tables are GSM 06.10's tables 4.1–4.6, checked against libgsm 1.0.22's by `tests/check-gsm-tables.py` (see `THIRD_PARTY_NOTICES`).
+
+`python3 tests/verify-gsm.py` ([report](../reports/gsm-verification.json)) checks:
+
+- 15 files written by FFmpeg's libgsm encoders: speech-like, tonal, noise, silent and clipping signals in WAVE, in raw `.gsm`, and wrapped by the test in AIFF-C. Each equals both libgsm's and FFmpeg's own decodes exactly.
+- 32 streams of random frames, which reach every parameter value including out-of-range lags, exact against libgsm.
+- Raw and WAVE files cut inside a frame, which equal libgsm's decode of their whole frames.
+- 60 seeks equal to continuous decoding.
+- Stereo WAVE and AIFF-C files rejecting; a cancelled open; playback through the Linux null sink.
 
 `python3 tests/verify-wav-codecs.py` ([report](../reports/wav-codecs-verification.json)) checks 24 files from FFmpeg's encoders (G.711 in WAVE and AIFF-C, mono to 7.1; IMA and Microsoft ADPCM at 8-96 kHz with 32- to 8192-byte blocks, including an extensible header), exact against FFmpeg (ADPCM up to the `fact` count); 30 random valid ADPCM streams from `tests/adpcm_model.py` with every Microsoft predictor, every IMA step index, negative and large deltas, edge predictors, small blocks and short final blocks, exact against the model and FFmpeg (IMA with three to eight channels against the model); MPEG Layer II/III and AC-3 copied into WAVE files, exact against LAMP's raw-stream decodes and 124.8-139.6 dB against FFmpeg's float decoders; 105 exact seeks; and 12 unsupported, malformed or invalid files.
 

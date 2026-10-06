@@ -1,0 +1,342 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "speech.wav",
+      "result": "exact",
+      "comparator": "libgsm and FFmpeg",
+      "stats": "codec=1 rate=8000 channels=1 bits=0 frames=32000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1875 endpoint_dry=0"
+    },
+    {
+      "test": "speech.gsm",
+      "result": "exact",
+      "comparator": "libgsm and FFmpeg",
+      "stats": "codec=19 rate=8000 channels=1 bits=0 frames=32000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1595 endpoint_dry=0"
+    },
+    {
+      "test": "speech.aifc",
+      "result": "exact",
+      "comparator": "libgsm and FFmpeg",
+      "stats": "codec=6 rate=8000 channels=1 bits=0 frames=32000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1565 endpoint_dry=0"
+    },
+    {
+      "test": "tone.wav",
+      "result": "exact",
+      "comparator": "libgsm and FFmpeg",
+      "stats": "codec=1 rate=8000 channels=1 bits=0 frames=24000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1284 endpoint_dry=0"
+    },
+    {
+      "test": "tone.gsm",
+      "result": "exact",
+      "comparator": "libgsm and FFmpeg",
+      "stats": "codec=19 rate=8000 channels=1 bits=0 frames=24000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1311 endpoint_dry=0"
+    },
+    {
+      "test": "tone.aifc",
+      "result": "exact",
+      "comparator": "libgsm and FFmpeg",
+      "stats": "codec=6 rate=8000 channels=1 bits=0 frames=24000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=1564 endpoint_dry=0"
+    },
+    {
+      "test": "noise.wav",
+      "result": "exact",
+      "comparator": "libgsm and FFmpeg",
+      "stats": "codec=1 rate=8000 channels=1 bits=0 frames=24000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=1428 endpoint_dry=0"
+    },
+    {
+      "test": "noise.gsm",
+      "result": "exact",
+      "comparator": "libgsm and FFmpeg",
+      "stats": "codec=19 rate=8000 channels=1 bits=0 frames=24000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1256 endpoint_dry=0"
+    },
+    {
+      "test": "noise.aifc",
+      "result": "exact",
+      "comparator": "libgsm and FFmpeg",
+      "stats": "codec=6 rate=8000 channels=1 bits=0 frames=24000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=1229 endpoint_dry=0"
+    },
+    {
+      "test": "silence.wav",
+      "result": "exact",
+      "comparator": "libgsm and FFmpeg",
+      "stats": "codec=1 rate=8000 channels=1 bits=0 frames=16000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=913 endpoint_dry=0"
+    },
+    {
+      "test": "silence.gsm",
+      "result": "exact",
+      "comparator": "libgsm and FFmpeg",
+      "stats": "codec=19 rate=8000 channels=1 bits=0 frames=16000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=951 endpoint_dry=0"
+    },
+    {
+      "test": "silence.aifc",
+      "result": "exact",
+      "comparator": "libgsm and FFmpeg",
+      "stats": "codec=6 rate=8000 channels=1 bits=0 frames=16000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=1127 endpoint_dry=0"
+    },
+    {
+      "test": "clipping.wav",
+      "result": "exact",
+      "comparator": "libgsm and FFmpeg",
+      "stats": "codec=1 rate=8000 channels=1 bits=0 frames=16000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1468 endpoint_dry=0"
+    },
+    {
+      "test": "clipping.gsm",
+      "result": "exact",
+      "comparator": "libgsm and FFmpeg",
+      "stats": "codec=19 rate=8000 channels=1 bits=0 frames=16000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=972 endpoint_dry=0"
+    },
+    {
+      "test": "clipping.aifc",
+      "result": "exact",
+      "comparator": "libgsm and FFmpeg",
+      "stats": "codec=6 rate=8000 channels=1 bits=0 frames=16000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=937 endpoint_dry=0"
+    },
+    {
+      "test": "random-0.gsm",
+      "result": "exact",
+      "comparator": "libgsm",
+      "stats": "codec=19 rate=8000 channels=1 bits=0 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2151 endpoint_dry=0"
+    },
+    {
+      "test": "random-0.wav",
+      "result": "exact",
+      "comparator": "libgsm",
+      "stats": "codec=1 rate=8000 channels=1 bits=0 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2105 endpoint_dry=0"
+    },
+    {
+      "test": "random-1.gsm",
+      "result": "exact",
+      "comparator": "libgsm",
+      "stats": "codec=19 rate=8000 channels=1 bits=0 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2218 endpoint_dry=0"
+    },
+    {
+      "test": "random-1.wav",
+      "result": "exact",
+      "comparator": "libgsm",
+      "stats": "codec=1 rate=8000 channels=1 bits=0 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2179 endpoint_dry=0"
+    },
+    {
+      "test": "random-2.gsm",
+      "result": "exact",
+      "comparator": "libgsm",
+      "stats": "codec=19 rate=8000 channels=1 bits=0 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2201 endpoint_dry=0"
+    },
+    {
+      "test": "random-2.wav",
+      "result": "exact",
+      "comparator": "libgsm",
+      "stats": "codec=1 rate=8000 channels=1 bits=0 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2277 endpoint_dry=0"
+    },
+    {
+      "test": "random-3.gsm",
+      "result": "exact",
+      "comparator": "libgsm",
+      "stats": "codec=19 rate=8000 channels=1 bits=0 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2243 endpoint_dry=0"
+    },
+    {
+      "test": "random-3.wav",
+      "result": "exact",
+      "comparator": "libgsm",
+      "stats": "codec=1 rate=8000 channels=1 bits=0 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2363 endpoint_dry=0"
+    },
+    {
+      "test": "random-4.gsm",
+      "result": "exact",
+      "comparator": "libgsm",
+      "stats": "codec=19 rate=8000 channels=1 bits=0 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2119 endpoint_dry=0"
+    },
+    {
+      "test": "random-4.wav",
+      "result": "exact",
+      "comparator": "libgsm",
+      "stats": "codec=1 rate=8000 channels=1 bits=0 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2145 endpoint_dry=0"
+    },
+    {
+      "test": "random-5.gsm",
+      "result": "exact",
+      "comparator": "libgsm",
+      "stats": "codec=19 rate=8000 channels=1 bits=0 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=2880 endpoint_dry=0"
+    },
+    {
+      "test": "random-5.wav",
+      "result": "exact",
+      "comparator": "libgsm",
+      "stats": "codec=1 rate=8000 channels=1 bits=0 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2066 endpoint_dry=0"
+    },
+    {
+      "test": "random-6.gsm",
+      "result": "exact",
+      "comparator": "libgsm",
+      "stats": "codec=19 rate=8000 channels=1 bits=0 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2166 endpoint_dry=0"
+    },
+    {
+      "test": "random-6.wav",
+      "result": "exact",
+      "comparator": "libgsm",
+      "stats": "codec=1 rate=8000 channels=1 bits=0 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2233 endpoint_dry=0"
+    },
+    {
+      "test": "random-7.gsm",
+      "result": "exact",
+      "comparator": "libgsm",
+      "stats": "codec=19 rate=8000 channels=1 bits=0 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2610 endpoint_dry=0"
+    },
+    {
+      "test": "random-7.wav",
+      "result": "exact",
+      "comparator": "libgsm",
+      "stats": "codec=1 rate=8000 channels=1 bits=0 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2193 endpoint_dry=0"
+    },
+    {
+      "test": "random-8.gsm",
+      "result": "exact",
+      "comparator": "libgsm",
+      "stats": "codec=19 rate=8000 channels=1 bits=0 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2503 endpoint_dry=0"
+    },
+    {
+      "test": "random-8.wav",
+      "result": "exact",
+      "comparator": "libgsm",
+      "stats": "codec=1 rate=8000 channels=1 bits=0 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2256 endpoint_dry=0"
+    },
+    {
+      "test": "random-9.gsm",
+      "result": "exact",
+      "comparator": "libgsm",
+      "stats": "codec=19 rate=8000 channels=1 bits=0 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=2354 endpoint_dry=0"
+    },
+    {
+      "test": "random-9.wav",
+      "result": "exact",
+      "comparator": "libgsm",
+      "stats": "codec=1 rate=8000 channels=1 bits=0 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2211 endpoint_dry=0"
+    },
+    {
+      "test": "random-10.gsm",
+      "result": "exact",
+      "comparator": "libgsm",
+      "stats": "codec=19 rate=8000 channels=1 bits=0 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2269 endpoint_dry=0"
+    },
+    {
+      "test": "random-10.wav",
+      "result": "exact",
+      "comparator": "libgsm",
+      "stats": "codec=1 rate=8000 channels=1 bits=0 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2291 endpoint_dry=0"
+    },
+    {
+      "test": "random-11.gsm",
+      "result": "exact",
+      "comparator": "libgsm",
+      "stats": "codec=19 rate=8000 channels=1 bits=0 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=2528 endpoint_dry=0"
+    },
+    {
+      "test": "random-11.wav",
+      "result": "exact",
+      "comparator": "libgsm",
+      "stats": "codec=1 rate=8000 channels=1 bits=0 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2121 endpoint_dry=0"
+    },
+    {
+      "test": "random-12.gsm",
+      "result": "exact",
+      "comparator": "libgsm",
+      "stats": "codec=19 rate=8000 channels=1 bits=0 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2070 endpoint_dry=0"
+    },
+    {
+      "test": "random-12.wav",
+      "result": "exact",
+      "comparator": "libgsm",
+      "stats": "codec=1 rate=8000 channels=1 bits=0 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2287 endpoint_dry=0"
+    },
+    {
+      "test": "random-13.gsm",
+      "result": "exact",
+      "comparator": "libgsm",
+      "stats": "codec=19 rate=8000 channels=1 bits=0 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2249 endpoint_dry=0"
+    },
+    {
+      "test": "random-13.wav",
+      "result": "exact",
+      "comparator": "libgsm",
+      "stats": "codec=1 rate=8000 channels=1 bits=0 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2187 endpoint_dry=0"
+    },
+    {
+      "test": "random-14.gsm",
+      "result": "exact",
+      "comparator": "libgsm",
+      "stats": "codec=19 rate=8000 channels=1 bits=0 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2248 endpoint_dry=0"
+    },
+    {
+      "test": "random-14.wav",
+      "result": "exact",
+      "comparator": "libgsm",
+      "stats": "codec=1 rate=8000 channels=1 bits=0 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2200 endpoint_dry=0"
+    },
+    {
+      "test": "random-15.gsm",
+      "result": "exact",
+      "comparator": "libgsm",
+      "stats": "codec=19 rate=8000 channels=1 bits=0 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2284 endpoint_dry=0"
+    },
+    {
+      "test": "random-15.wav",
+      "result": "exact",
+      "comparator": "libgsm",
+      "stats": "codec=1 rate=8000 channels=1 bits=0 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2151 endpoint_dry=0"
+    },
+    {
+      "test": "FFmpeg native decoder on random frames",
+      "result": "differs from libgsm",
+      "note": "it clips lags outside 40-120 rather than keeping the last (GSM 06.10 4.3.2) and saturates differently at extremes; encoders write neither, and its decodes of every encoded file above equal libgsm",
+      "equal": false
+    },
+    {
+      "test": "cut.gsm",
+      "result": "exact",
+      "comparator": "libgsm on whole-cut.gsm",
+      "note": "a cut last frame or block is dropped"
+    },
+    {
+      "test": "cut.wav",
+      "result": "exact",
+      "comparator": "libgsm on whole-cut.wav",
+      "note": "a cut last frame or block is dropped"
+    },
+    {
+      "test": "speech.wav seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":7,\"discarded_frames\":52093,\"maximum_discarded\":6400,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "noise.gsm seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":19293,\"maximum_discarded\":2816,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "speech.aifc seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":23293,\"maximum_discarded\":3200,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "random-3.wav seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":7,\"discarded_frames\":40893,\"maximum_discarded\":4817,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "stereo.wav",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "stereo.aifc",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":1}"
+    },
+    {
+      "test": "cancel-open speech.wav",
+      "result": "{\"result\":\"cancelled\"}"
+    },
+    {
+      "test": "GSM playback",
+      "result": "played",
+      "stats": "Playing. Space: pause / resume. N / P: next / previous file. Left / Right: -5 / +5 s. Down / Up: -60 / +60 s. R: repeat. Q or Ctrl+C: stop. codec=19 rate=8000 channels=1 bits=0 frames=32000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=6003 cpu_us=4237 endpoint_dry=0"
+    }
+  ],
+  "rejections": 2,
+  "scope": "GSM 06.10 in WAVE (Microsoft blocks), AIFF-C and raw .gsm files: FFmpeg libgsm encodes and random frames exact against FFmpeg and libgsm; truncation; seeks; stereo rejections; cancellation."
+}

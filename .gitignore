@@ -18,3 +18,4 @@ __pycache__/
 tests/reference/pv-aacdec/
 tests/reference/jaadec/
 tests/reference/codec-ac3/
+tests/reference/libgsm/
