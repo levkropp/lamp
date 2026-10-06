@@ -36,6 +36,8 @@ except ImportError:
 NOISE = ['-f', 'lavfi', '-i', 'anoisesrc=r=44100:d=1.2:seed=9:a=0.3', '-ac', '2']
 MONO = ['-f', 'lavfi', '-i', 'anoisesrc=r=22050:d=1.2:seed=10:a=0.3', '-ac', '1']
 SURROUND = ['-f', 'lavfi', '-i', 'anoisesrc=r=48000:d=1.2:seed=11:a=0.3', '-ac', '6']
+PHONE = ['-f', 'lavfi', '-i', 'anoisesrc=r=8000:d=1.2:seed=12:a=0.3', '-ac', '1']
+WIDE = ['-f', 'lavfi', '-i', 'anoisesrc=r=16000:d=1.2:seed=13:a=0.3', '-ac', '1']
 # (file name, FFmpeg input and output options)
 SOURCES = [
     ('pcm16.wav', NOISE + ['-c:a', 'pcm_s16le']),
@@ -53,6 +55,8 @@ SOURCES = [
     ('alac.caf', NOISE + ['-c:a', 'alac']),
     ('ima4.caf', MONO + ['-c:a', 'adpcm_ima_qt']),
     ('pcm.au', NOISE + ['-c:a', 'pcm_s16be']),
+    ('g726.wav', PHONE + ['-c:a', 'g726']),
+    ('g722.au', WIDE + ['-c:a', 'g722']),
     ('tone.flac', NOISE + ['-c:a', 'flac']),
     ('surround.flac', SURROUND + ['-c:a', 'flac']),
     ('flac.oga', NOISE + ['-c:a', 'flac', '-f', 'ogg']),
@@ -160,6 +164,10 @@ def main():
         command = ['wine', str(ROOT / 'bin' / 'lamp-cli.exe')]
         env = dict(os.environ, WINEPREFIX=os.environ.get('WINEPREFIX', str(Path.home() / '.wine')), WINEDEBUG='-all')
         step = 10
+        try:                         # Wine's first start may set up its prefix at length
+            subprocess.run(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, env=env, timeout=600)
+        except subprocess.TimeoutExpired:
+            pass
     else:
         command = [str(lamp_cli())]
         env = os.environ

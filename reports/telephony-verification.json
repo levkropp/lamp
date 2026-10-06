@@ -1,0 +1,427 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "g726-2bit-8000.wav",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "G.726 2-bit, tag 0x45",
+      "stats": "codec=1 rate=8000 channels=1 bits=2 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=8 cpu_us=7555 endpoint_dry=0"
+    },
+    {
+      "test": "g726-2bit-16000.wav",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "G.726 2-bit, tag 0x45",
+      "stats": "codec=1 rate=16000 channels=1 bits=2 frames=96000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=15435 endpoint_dry=0"
+    },
+    {
+      "test": "g726-2bit.au",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "G.726 2-bit in AU, encoding 0x37323632",
+      "stats": "codec=16 rate=8000 channels=1 bits=2 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=5 cpu_us=6024 endpoint_dry=0"
+    },
+    {
+      "test": "g726-3bit-8000.wav",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "G.726 3-bit, tag 0x45",
+      "stats": "codec=1 rate=8000 channels=1 bits=3 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=7 cpu_us=7275 endpoint_dry=0"
+    },
+    {
+      "test": "g726-3bit-16000.wav",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "G.726 3-bit, tag 0x45",
+      "stats": "codec=1 rate=16000 channels=1 bits=3 frames=96000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=11 cpu_us=11429 endpoint_dry=0"
+    },
+    {
+      "test": "g726-3bit.au",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "G.726 3-bit in AU, encoding 0x19",
+      "stats": "codec=16 rate=8000 channels=1 bits=3 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=6 cpu_us=5793 endpoint_dry=0"
+    },
+    {
+      "test": "g726-4bit-8000.wav",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "G.726 4-bit, tag 0x45",
+      "stats": "codec=1 rate=8000 channels=1 bits=4 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=8 cpu_us=7594 endpoint_dry=0"
+    },
+    {
+      "test": "g726-4bit-16000.wav",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "G.726 4-bit, tag 0x45",
+      "stats": "codec=1 rate=16000 channels=1 bits=4 frames=96000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=11 cpu_us=11584 endpoint_dry=0"
+    },
+    {
+      "test": "g726-4bit.au",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "G.726 4-bit in AU, encoding 0x17",
+      "stats": "codec=16 rate=8000 channels=1 bits=4 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=8 cpu_us=8265 endpoint_dry=0"
+    },
+    {
+      "test": "g726-5bit-8000.wav",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "G.726 5-bit, tag 0x45",
+      "stats": "codec=1 rate=8000 channels=1 bits=5 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=7 cpu_us=7541 endpoint_dry=0"
+    },
+    {
+      "test": "g726-5bit-16000.wav",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "G.726 5-bit, tag 0x45",
+      "stats": "codec=1 rate=16000 channels=1 bits=5 frames=96000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=11 cpu_us=11647 endpoint_dry=0"
+    },
+    {
+      "test": "g726-5bit.au",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "G.726 5-bit in AU, encoding 0x1a",
+      "stats": "codec=16 rate=8000 channels=1 bits=5 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=6 cpu_us=6294 endpoint_dry=0"
+    },
+    {
+      "test": "g722.wav",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "G.722",
+      "stats": "codec=1 rate=16000 channels=1 bits=4 frames=96000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=5 cpu_us=5948 endpoint_dry=0"
+    },
+    {
+      "test": "g722.au",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "G.722",
+      "stats": "codec=16 rate=16000 channels=1 bits=4 frames=96000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=5 cpu_us=5980 endpoint_dry=0"
+    },
+    {
+      "test": "g726-tag-0x0014.wav",
+      "result": "exact",
+      "comparator": "tag 0x45"
+    },
+    {
+      "test": "g726-tag-0x0040.wav",
+      "result": "exact",
+      "comparator": "tag 0x45"
+    },
+    {
+      "test": "g726-tag-0x0064.wav",
+      "result": "exact",
+      "comparator": "tag 0x45"
+    },
+    {
+      "test": "random-2bit-0.wav",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "random 2-bit codes, 7 bytes",
+      "stats": "codec=1 rate=8000 channels=1 bits=2 frames=28 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=381 endpoint_dry=0"
+    },
+    {
+      "test": "random-2bit-0.au",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "random 2-bit codes in AU, 7 bytes",
+      "stats": "codec=16 rate=8000 channels=1 bits=2 frames=28 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=368 endpoint_dry=0"
+    },
+    {
+      "test": "random-2bit-1.wav",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "random 2-bit codes, 1 bytes",
+      "stats": "codec=1 rate=8000 channels=1 bits=2 frames=4 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=449 endpoint_dry=0"
+    },
+    {
+      "test": "random-2bit-1.au",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "random 2-bit codes in AU, 1 bytes",
+      "stats": "codec=16 rate=8000 channels=1 bits=2 frames=4 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=365 endpoint_dry=0"
+    },
+    {
+      "test": "random-2bit-2.wav",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "random 2-bit codes, 9001 bytes",
+      "stats": "codec=1 rate=8000 channels=1 bits=2 frames=36004 underruns=0 decode_error=0 audio_error=0 elapsed_ms=6 cpu_us=6083 endpoint_dry=0"
+    },
+    {
+      "test": "random-2bit-3.wav",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "random 2-bit codes, 4096 bytes",
+      "stats": "codec=1 rate=8000 channels=1 bits=2 frames=16384 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=3250 endpoint_dry=0"
+    },
+    {
+      "test": "random-2bit-4.wav",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "random 2-bit codes, 4095 bytes",
+      "stats": "codec=1 rate=8000 channels=1 bits=2 frames=16380 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=3201 endpoint_dry=0"
+    },
+    {
+      "test": "random-3bit-0.wav",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "random 3-bit codes, 4096 bytes",
+      "stats": "codec=1 rate=8000 channels=1 bits=3 frames=10922 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2203 endpoint_dry=0"
+    },
+    {
+      "test": "random-3bit-0.au",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "random 3-bit codes in AU, 4096 bytes",
+      "stats": "codec=16 rate=8000 channels=1 bits=3 frames=10922 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=2809 endpoint_dry=0"
+    },
+    {
+      "test": "random-3bit-1.wav",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "random 3-bit codes, 9001 bytes",
+      "stats": "codec=1 rate=8000 channels=1 bits=3 frames=24002 underruns=0 decode_error=0 audio_error=0 elapsed_ms=5 cpu_us=4796 endpoint_dry=0"
+    },
+    {
+      "test": "random-3bit-1.au",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "random 3-bit codes in AU, 9001 bytes",
+      "stats": "codec=16 rate=8000 channels=1 bits=3 frames=24002 underruns=0 decode_error=0 audio_error=0 elapsed_ms=4 cpu_us=4617 endpoint_dry=0"
+    },
+    {
+      "test": "random-3bit-2.wav",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "random 3-bit codes, 2 bytes",
+      "stats": "codec=1 rate=8000 channels=1 bits=3 frames=5 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=504 endpoint_dry=0"
+    },
+    {
+      "test": "random-3bit-3.wav",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "random 3-bit codes, 20000 bytes",
+      "stats": "codec=1 rate=8000 channels=1 bits=3 frames=53333 underruns=0 decode_error=0 audio_error=0 elapsed_ms=10 cpu_us=9787 endpoint_dry=0"
+    },
+    {
+      "test": "random-3bit-4.wav",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "random 3-bit codes, 9001 bytes",
+      "stats": "codec=1 rate=8000 channels=1 bits=3 frames=24002 underruns=0 decode_error=0 audio_error=0 elapsed_ms=5 cpu_us=5131 endpoint_dry=0"
+    },
+    {
+      "test": "random-4bit-0.wav",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "random 4-bit codes, 7 bytes",
+      "stats": "codec=1 rate=8000 channels=1 bits=4 frames=14 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=579 endpoint_dry=0"
+    },
+    {
+      "test": "random-4bit-0.au",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "random 4-bit codes in AU, 7 bytes",
+      "stats": "codec=16 rate=8000 channels=1 bits=4 frames=14 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=361 endpoint_dry=0"
+    },
+    {
+      "test": "random-4bit-1.wav",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "random 4-bit codes, 7 bytes",
+      "stats": "codec=1 rate=8000 channels=1 bits=4 frames=14 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=380 endpoint_dry=0"
+    },
+    {
+      "test": "random-4bit-1.au",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "random 4-bit codes in AU, 7 bytes",
+      "stats": "codec=16 rate=8000 channels=1 bits=4 frames=14 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=365 endpoint_dry=0"
+    },
+    {
+      "test": "random-4bit-2.wav",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "random 4-bit codes, 4096 bytes",
+      "stats": "codec=1 rate=8000 channels=1 bits=4 frames=8192 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1764 endpoint_dry=0"
+    },
+    {
+      "test": "random-4bit-3.wav",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "random 4-bit codes, 4095 bytes",
+      "stats": "codec=1 rate=8000 channels=1 bits=4 frames=8190 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2518 endpoint_dry=0"
+    },
+    {
+      "test": "random-4bit-4.wav",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "random 4-bit codes, 4095 bytes",
+      "stats": "codec=1 rate=8000 channels=1 bits=4 frames=8190 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=1723 endpoint_dry=0"
+    },
+    {
+      "test": "random-5bit-0.wav",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "random 5-bit codes, 20000 bytes",
+      "stats": "codec=1 rate=8000 channels=1 bits=5 frames=32000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=7 cpu_us=7470 endpoint_dry=0"
+    },
+    {
+      "test": "random-5bit-0.au",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "random 5-bit codes in AU, 20000 bytes",
+      "stats": "codec=16 rate=8000 channels=1 bits=5 frames=32000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=5 cpu_us=5734 endpoint_dry=0"
+    },
+    {
+      "test": "random-5bit-1.wav",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "random 5-bit codes, 1 bytes",
+      "stats": "codec=1 rate=8000 channels=1 bits=5 frames=1 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=576 endpoint_dry=0"
+    },
+    {
+      "test": "random-5bit-1.au",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "random 5-bit codes in AU, 1 bytes",
+      "stats": "codec=16 rate=8000 channels=1 bits=5 frames=1 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=453 endpoint_dry=0"
+    },
+    {
+      "test": "random-5bit-2.wav",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "random 5-bit codes, 2 bytes",
+      "stats": "codec=1 rate=8000 channels=1 bits=5 frames=3 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=341 endpoint_dry=0"
+    },
+    {
+      "test": "random-5bit-3.wav",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "random 5-bit codes, 20000 bytes",
+      "stats": "codec=1 rate=8000 channels=1 bits=5 frames=32000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=6 cpu_us=5499 endpoint_dry=0"
+    },
+    {
+      "test": "random-5bit-4.wav",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "random 5-bit codes, 4095 bytes",
+      "stats": "codec=1 rate=8000 channels=1 bits=5 frames=6552 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1524 endpoint_dry=0"
+    },
+    {
+      "test": "random-g722-0.wav",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "random G.722 codewords, 1 bytes",
+      "stats": "codec=1 rate=16000 channels=1 bits=4 frames=2 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=394 endpoint_dry=0"
+    },
+    {
+      "test": "random-g722-1.wav",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "random G.722 codewords, 333 bytes",
+      "stats": "codec=1 rate=16000 channels=1 bits=4 frames=666 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=488 endpoint_dry=0"
+    },
+    {
+      "test": "random-g722-2.wav",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "random G.722 codewords, 4096 bytes",
+      "stats": "codec=1 rate=16000 channels=1 bits=4 frames=8192 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1103 endpoint_dry=0"
+    },
+    {
+      "test": "random-g722-3.wav",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "random G.722 codewords, 30001 bytes",
+      "stats": "codec=1 rate=16000 channels=1 bits=4 frames=60002 underruns=0 decode_error=0 audio_error=0 elapsed_ms=4 cpu_us=4462 endpoint_dry=0"
+    },
+    {
+      "test": "g726-2bit-8000.wav seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":5,\"discarded_frames\":104637,\"maximum_discarded\":15232,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "g726-3bit-16000.wav seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":5,\"discarded_frames\":74973,\"maximum_discarded\":9216,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "g726-4bit-8000.wav seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":7,\"discarded_frames\":55485,\"maximum_discarded\":7633,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "g726-5bit-8000.wav seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":7,\"discarded_frames\":35877,\"maximum_discarded\":4608,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "g726-3bit.au seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":5,\"discarded_frames\":55533,\"maximum_discarded\":9216,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "g722.wav seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":7,\"discarded_frames\":50301,\"maximum_discarded\":7057,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "g722.au seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":7,\"discarded_frames\":50301,\"maximum_discarded\":7057,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "g726-stereo.wav",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "g726-1bit.wav",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "g726-6bit.wav",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "g722-stereo.wav",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "g726-stereo.au",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "g726-7khz.wav",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "g726-no-channels.wav",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":1}"
+    },
+    {
+      "test": "g726-no-block.wav",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":1}"
+    },
+    {
+      "test": "g726-no-data.au",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":100}"
+    },
+    {
+      "test": "cancel-open g726-4bit-8000.wav",
+      "result": "{\"result\":\"cancelled\"}"
+    },
+    {
+      "test": "G.722 playback",
+      "result": "played",
+      "stats": "Playing. Space: pause / resume. N / P: next / previous file. Left / Right: -5 / +5 s. Down / Up: -60 / +60 s. R: repeat. Q or Ctrl+C: stop. codec=1 rate=16000 channels=1 bits=4 frames=96000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=8006 cpu_us=10347 endpoint_dry=0"
+    }
+  ],
+  "random_streams": 32,
+  "rejections": 9,
+  "scope": "G.726 (2-5-bit codes, 8 and 16 kHz) and G.722 in WAVE and AU, FFmpeg-encoded and random code streams, exact against FFmpeg; other G.726 tags; seeks; unsupported and malformed files; cancellation."
+}

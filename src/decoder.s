@@ -358,6 +358,8 @@ LOCALFN decoder_open_format
     call au_open
     test eax, eax
     jz .Lopen_bad
+    cmp eax, 2
+    je .Lwav_compressed                 # G.726, G.722
     leave
     ret
 .Lopen_aiff:
@@ -758,11 +760,21 @@ LOCALFN decoder_open_format
     cmp ecx, 7
     je .Lwav_ulaw
     # Compressed audio (a basic tag or an extensible subformat): IMA and
-    # Microsoft ADPCM (track packets), MPEG audio and AC-3 (the data chunk
-    # opens as the raw stream).
+    # Microsoft ADPCM, G.726 and G.722 (track packets), MPEG audio and AC-3
+    # (the data chunk opens as the raw stream).
     cmp ecx, 2
     je .Lwav_codec
     cmp ecx, 0x11
+    je .Lwav_codec
+    cmp ecx, 0x45                           # G.726, and its other tags
+    je .Lwav_codec
+    cmp ecx, 0x14
+    je .Lwav_codec
+    cmp ecx, 0x40
+    je .Lwav_codec
+    cmp ecx, 0x64
+    je .Lwav_codec
+    cmp ecx, 0x28f                          # G.722
     je .Lwav_codec
     cmp ecx, 0x50
     je .Lwav_codec
@@ -945,21 +957,18 @@ LOCALFN decoder_open_format
     je .Lwav_mpeg
     cmp eax, 0x55
     je .Lwav_mpeg
-    # ADPCM blocks become track packets; a final block too short for its
-    # headers is dropped, and a fact count trims the padding of the last.
+    # ADPCM blocks (or G.726/G.722 runs of whole codes) become track
+    # packets; a final block too short for its headers is dropped, and a
+    # fact count trims the padding of the last.
     mov ecx, TK_ADPCM
     call track_begin
     test eax, eax
     jz .Lopen_bad
-    mov r9, [rip + wav_codec_fmt]
-    movzx eax, word ptr [r9 + 2]
-    mov ecx, 4
-    cmp dword ptr [rip + wav_codec], 0x11
-    je .Lwav_adpcm_header
-    mov ecx, 7
-.Lwav_adpcm_header:
-    imul eax, ecx
-    mov [rbp - 8], rax                  # block header bytes
+.Lwav_adpcm_packets:
+    mov rcx, [rip + wav_codec_fmt]
+    call adpcm_packet_layout
+    mov [rbp - 8], rdx                  # block header bytes
+    mov [rbp - 24], rax                 # packet bytes
     mov rax, [rip + wav_begin]
     mov [rbp - 16], rax
 .Lwav_adpcm_block:
@@ -973,8 +982,7 @@ LOCALFN decoder_open_format
     mov rdx, [rip + wav_end]
     sub rdx, rcx
     jbe .Lwav_adpcm_done
-    mov r9, [rip + wav_codec_fmt]
-    movzx eax, word ptr [r9 + 12]
+    mov rax, [rbp - 24]
     cmp rdx, rax
     cmova rdx, rax
     cmp rdx, [rbp - 8]
