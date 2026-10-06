@@ -15,7 +15,7 @@
 .include "lamp.inc"
 .globl queue_begin, queue_read, queue_seek, queue_announce, queue_skipped
 .globl queue_count, queue_failures, queue_rate, queue_index, queue_repeat, queue_goto, queue_heard
-.globl queue_navigate
+.globl queue_navigate, parse_time, queue_start
 
 .equ QUEUE_SKIPPED, 6               # decode_error after skipped files
 .equ CH_SIZE, 64                    # src/ogg_chain.s link entries
@@ -45,6 +45,7 @@ queue_output: .quad 0               # frames queue_read returned, from the first
 .bss
 .p2align 3
 queue_marks: .zero QUEUE_MARKS*16    # (output frame where a file starts, its index)
+queue_skip_pcm: .zero 2048*8         # frames read and dropped by queue_start
 
 .text
 # RCX=path pointers, EDX=count -> EAX=1 when a file opened (the first that
@@ -427,3 +428,125 @@ FN queue_navigate
     pop rbx
     ret
 ENDFN queue_navigate
+
+# RCX=NUL-terminated time: seconds, M:S or H:M:S, the seconds with an
+# optional fraction -> RAX=milliseconds; CF when it is not a time.
+FN parse_time
+    xor eax, eax                       # whole units before this field
+    xor r8d, r8d                       # this field
+    xor r9d, r9d                       # its digits
+    xor r10d, r10d                     # colons
+.Lparse_time_char:
+    movzx edx, byte ptr [rcx]
+    inc rcx
+    lea r11d, [rdx - '0']
+    cmp r11d, 9
+    ja .Lparse_time_separator
+    mov r11, 100000000000
+    cmp r8, r11
+    jae .Lparse_time_bad
+    imul r8, r8, 10
+    sub edx, '0'
+    add r8, rdx
+    inc r9d
+    jmp .Lparse_time_char
+.Lparse_time_separator:
+    test r9d, r9d
+    jz .Lparse_time_bad
+    add rax, r8
+    xor r8d, r8d
+    xor r9d, r9d
+    cmp edx, ':'
+    jne .Lparse_time_seconds
+    inc r10d
+    cmp r10d, 2
+    ja .Lparse_time_bad
+    imul rax, rax, 60
+    jmp .Lparse_time_char
+.Lparse_time_seconds:
+    imul rax, rax, 1000
+    test edx, edx
+    jz .Lparse_time_done
+    cmp edx, '.'
+    jne .Lparse_time_bad
+    mov r8d, 100                       # milliseconds: three digits count
+.Lparse_time_fraction:
+    movzx edx, byte ptr [rcx]
+    inc rcx
+    test edx, edx
+    jz .Lparse_time_fraction_end
+    sub edx, '0'
+    cmp edx, 9
+    ja .Lparse_time_bad
+    inc r9d
+    imul edx, r8d
+    add rax, rdx
+    mov edx, r8d
+    mov r8d, 10
+    cmp edx, 100
+    je .Lparse_time_fraction
+    mov r8d, 1
+    cmp edx, 10
+    je .Lparse_time_fraction
+    xor r8d, r8d
+    jmp .Lparse_time_fraction
+.Lparse_time_fraction_end:
+    test r9d, r9d
+    jz .Lparse_time_bad
+.Lparse_time_done:
+    clc
+    ret
+.Lparse_time_bad:
+    stc
+    ret
+ENDFN parse_time
+
+# RCX=milliseconds: the first file (just opened by queue_begin) continues
+# from there, exactly: a seek, then the frames before it read and dropped.
+# A start past its known end is its end.
+FN queue_start
+    push rbx
+    push rsi
+    sub rsp, 40
+    mov rax, rcx
+    test rax, rax
+    jz .Lqueue_start_done
+    mov ecx, [rip + queue_rate]
+    mul rcx
+    mov ecx, 1000
+    cmp rdx, rcx
+    jae .Lqueue_start_far
+    div rcx
+    jmp .Lqueue_start_frames
+.Lqueue_start_far:
+    mov rax, -1
+.Lqueue_start_frames:
+    mov rcx, [rip + output_frames]
+    test rcx, rcx
+    jz .Lqueue_start_seek
+    cmp rax, rcx
+    cmova rax, rcx
+.Lqueue_start_seek:
+    mov rbx, rax                          # the start
+    mov rcx, rax
+    call queue_seek
+    mov rsi, rax                          # where the decoder resumed
+.Lqueue_start_skip:
+    mov rdx, rbx
+    sub rdx, rsi
+    jbe .Lqueue_start_done
+    mov eax, 2048
+    cmp rdx, rax
+    cmova rdx, rax
+    lea rcx, [rip + queue_skip_pcm]
+    call queue_read
+    test eax, eax
+    jz .Lqueue_start_done
+    add rsi, rax
+    jmp .Lqueue_start_skip
+.Lqueue_start_done:
+    add rsp, 40
+    pop rsi
+    pop rbx
+    ret
+ENDFN queue_start

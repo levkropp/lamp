@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Start positions, queue navigation and repeat.
 
-usage: python3 tests/verify-navigation.py [--skip-playback]
+usage: python3 tests/verify-navigation.py [--skip-playback] [--wine]
 - --start: --decode of ten formats from several start times equals their
   whole decode without the frames before the start, sample for sample (Opus
   after its state converges, within half a second; AC-3 within its dither);
@@ -14,7 +14,12 @@ usage: python3 tests/verify-navigation.py [--skip-playback]
   from its start after 3 s), N on the last file, the arrow keys (+5 s,
   -60 s), --repeat and the R key. The captured audio is cut into runs of
   the files' own decodes, which must follow the expected order and starts.
-Writes <out>/navigation-verification.json.
+- --wine runs the same checks against bin/lamp-cli.exe under Wine: its
+  decodes must equal the Linux build's whole decodes the same way, and its
+  playback (through Wine's PulseAudio driver, which drops audio here) must
+  show the same files, jumps and restarts in order.
+Writes <out>/navigation-verification.json (navigation-wine-verification.json
+with --wine).
 """
 import array
 import math
@@ -28,8 +33,27 @@ import sys
 import time
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from lamp_test import (WINDOWS, Failure, audio_environment, decode_f32, ffmpeg, lamp_cli, main_guard, run, scratch,
-                       stats_frames, write_report)
+from lamp_test import (ROOT, WINDOWS, Failure, audio_environment, decode_f32, ffmpeg, lamp_cli, main_guard, run,
+                       scratch, stats_frames, write_report)
+
+WINE = '--wine' in sys.argv[1:]
+WINE_ENV = dict(os.environ, WINEPREFIX=os.environ.get('WINEPREFIX', str(Path.home() / '.wine')), WINEDEBUG='-all',
+                LANG='C.UTF-8')
+
+
+def command(*arguments):
+    """The player under test: the Linux lamp-cli, or lamp-cli.exe under Wine."""
+    if WINE:
+        return ['wine', str(ROOT / 'bin' / 'lamp-cli.exe'), *[str(a) for a in arguments]]
+    return [str(lamp_cli()), *[str(a) for a in arguments]]
+
+
+def linux_decode(work, path):
+    output = work / 'linux.f32'
+    if output.exists():
+        output.unlink()
+    run([lamp_cli(), '--decode', path, output])
+    return output.read_bytes()
 
 RATE = 48000
 FRAME = 8                           # stereo float32 bytes
@@ -39,6 +63,7 @@ KEY_SLACK = RATE                    # a key's effect, against the time it was se
 # reaches the continuous decode's within half a second (as tests/verify-seek.py
 # compares Opus seeks with a reset reference rather than bit for bit).
 CONVERGE = {'opus': 24000}
+WINE_STARTUP = 1.5                  # Wine starts a program this much later
 # AC-3 decoders dither zero-bit mantissas from a running generator (FFmpeg's
 # encoder sets the dither flags), so its frames after a seek match within
 # the dither only (tests/verify-ac3.py seeks dither-free streams exactly).
@@ -56,11 +81,11 @@ def decode(work, paths, *options):
     output = work / 'decoded.f32'
     if output.exists():
         output.unlink()
-    result = subprocess.run([str(lamp_cli()), '--decode', *options, *[str(p) for p in paths], str(output)],
-                            stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    result = subprocess.run(command('--decode', *options, *paths, output), stdout=subprocess.PIPE,
+                            stderr=subprocess.STDOUT, env=WINE_ENV)
     if result.returncode:
         raise Failure(f'--decode {options} failed: {result.stdout[-300:]}')
-    return output.read_bytes(), result.stdout.decode().strip().splitlines()[-1]
+    return output.read_bytes(), result.stdout.decode().replace('\r', '').strip().splitlines()[-1]
 
 
 class Recorder:
@@ -85,7 +110,8 @@ def interactive(arguments, env, actions):
     -> (exit code, its output)."""
     pid, fd = pty.fork()
     if pid == 0:
-        os.execve(str(lamp_cli()), ['lamp-cli', *[str(a) for a in arguments]], env)
+        argv = command(*arguments)
+        os.execvpe(argv[0], argv, dict(env, **WINE_ENV) if WINE else env)
     output = b''
 
     def pump(seconds):
@@ -98,8 +124,8 @@ def interactive(arguments, env, actions):
                     output += os.read(fd, 4096)
                 except OSError:
                     return
-    for delay, action in actions:
-        pump(delay)
+    for n, (delay, action) in enumerate(actions):
+        pump(delay + (WINE_STARTUP if WINE and n == 0 else 0))
         os.write(fd, action)
     deadline = time.time() + 60
     while time.time() < deadline:
@@ -162,7 +188,7 @@ def runs(capture, references):
 
 def main():
     playback = '--skip-playback' not in sys.argv[1:] and not WINDOWS
-    work = scratch('navigation')
+    work = scratch('navigation-wine' if WINE else 'navigation')
     checks = []
 
     # --start: exact against the whole decode.
@@ -174,6 +200,8 @@ def main():
         tones = f'0.3*sin(2*PI*{220 + 37 * n}*t)*sin(2*PI*0.7*t)+0.2*sin(2*PI*{1500 + 91 * n}*t)'  # no PNS in AAC
         ffmpeg('-f', 'lavfi', '-i', f'aevalsrc={tones}|{tones.replace("0.7", "0.9")}:s=44100:d=4.2', *coding, path)
         whole, stats = decode(work, [path])
+        if WINE and whole != linux_decode(work, path):
+            raise Failure(f'{path.name}: the Windows decode differs from the Linux one')
         rate = int(stats.split(' rate=')[1].split()[0])
         for time_text, milliseconds in (('0.25', 250), ('1.5', 1500), ('0:02.125', 2125), ('0:00:03.9999', 3999),
                                         ('9', 9000)):
@@ -186,7 +214,8 @@ def main():
             elif len(ours) != len(whole) - skip or ours[settle:] != whole[skip + settle:]:
                 raise Failure(f'{path.name} --start {time_text}: {len(ours) // FRAME} frames differ from the whole '
                               f'decode after frame {skip // FRAME}')
-            frames = stats_frames(run([lamp_cli(), '--check', '--start', time_text, path]).splitlines()[-1])
+            frames = stats_frames(run(command('--check', '--start', time_text, path),
+                                      env=WINE_ENV).replace('\r', '').splitlines()[-1])
             if frames != len(ours) // FRAME:
                 raise Failure(f'{path.name} --check --start {time_text}: {frames} frames, not {len(ours) // FRAME}')
         note = (f'exact after {CONVERGE[extension]} frames' if extension in CONVERGE else
@@ -204,8 +233,8 @@ def main():
     for arguments in (['--decode', '--start'], ['--start', 'x', first], ['--start', '1:', first],
                       ['--start', '1:2:3:4', first], ['--start', '5.', first], ['--decode', '--repeat', first, 'x.f32'],
                       ['--tags', '--start', '1', first], ['--check', '--decode', first], ['--bogus', first]):
-        result = subprocess.run([str(lamp_cli()), *[str(a) for a in arguments]], stdout=subprocess.PIPE,
-                                stderr=subprocess.STDOUT, stdin=subprocess.DEVNULL, timeout=30)
+        result = subprocess.run(command(*arguments), stdout=subprocess.PIPE, env=WINE_ENV,
+                                stderr=subprocess.STDOUT, stdin=subprocess.DEVNULL, timeout=60)
         if not result.stdout.startswith(b'LAMP ') or (work / 'x.f32').exists():
             raise Failure(f'{arguments}: expected the usage, got {result.stdout[:200]}')
     checks.append({'test': 'option errors', 'result': 'usage', 'cases': 9})
@@ -224,14 +253,16 @@ def main():
         references = {name: decode(work, [path])[0] for name, path in files.items()}
         frames = {name: len(data) // FRAME for name, data in references.items()}
 
-        def play(label, arguments, actions, expect):
+        def play(label, arguments, actions, expect, loose=None):
+            if WINE and loose is None:
+                return
             recorder = Recorder(env, work / f'{label}.capture.f32')
             code, output = interactive(arguments, env, actions)
             capture = recorder.stop()
             if code:
                 raise Failure(f'{label}: exit {code}: {output[-300:]}')
             found = runs(capture, references)
-            problem = expect(found)
+            problem = (loose if WINE else expect)(found)
             if problem:
                 raise Failure(f'{label}: {problem}; runs {found}')
             checks.append({'test': label, 'result': 'passed', 'runs': [list(r) for r in found]})
@@ -244,36 +275,73 @@ def main():
         def near(value, target, slack=KEY_SLACK):
             return abs(value - target) <= slack
 
+        def order(r):
+            """File names in order, with each run's (start, end)."""
+            names = []
+            for n, s, f in r:
+                if not names or names[-1][0] != n:
+                    names.append([n, []])
+                names[-1][1].append((s, s + f))
+            return names
+
+        def ends(run_, name):
+            """Under Wine: a run reaching within half a second of the file's end."""
+            return run_[0] == name and run_[1] + run_[2] >= frames[name] - RATE // 2
+
+        def jumps(spans):
+            """Moves between consecutive runs of one file: (forward frames) list."""
+            return [b[0] - a[1] for a, b in zip(spans, spans[1:])]
+
         play('start', ['--start', '2.5', files['a']], [],
-             lambda r: None if len(r) == 1 and whole(r[0], 'a', 120000) else 'expected a from 2.5 s to its end')
+             lambda r: None if len(r) == 1 and whole(r[0], 'a', 120000) else 'expected a from 2.5 s to its end',
+             lambda r: None if r and r[0][0] == 'a' and 120000 <= r[0][1] < 120000 + RATE
+             and ends(r[-1], 'a') else 'expected a from 2.5 s to its end')
         play('next', [files['a'], files['b']], [(2.5, b'n')],
              lambda r: None if len(r) == 2 and r[0][0] == 'a' and r[0][1] <= START_SLACK and r[0][2] < frames['a']
-             and whole(r[1], 'b') else 'expected part of a, then all of b')
+             and whole(r[1], 'b') else 'expected part of a, then all of b',
+             lambda r: None if [n for n, _ in order(r)] == ['a', 'b'] and order(r)[0][1][-1][1] < frames['a']
+             and order(r)[1][1][0][0] < RATE and order(r)[1][1][-1][1] >= frames['b'] - RATE // 2
+             else 'expected part of a, then b to its end')
         play('next on the last file', [files['a']], [(2.5, b'n')],
-             lambda r: None if len(r) == 1 and r[0][0] == 'a' and r[0][2] < frames['a'] else 'expected part of a only')
+             lambda r: None if len(r) == 1 and r[0][0] == 'a' and r[0][2] < frames['a'] else 'expected part of a only',
+             lambda r: None if [n for n, _ in order(r)] == ['a'] and r[-1][1] + r[-1][2] < frames['a']
+             else 'expected part of a only')
         play('previous file', [files['c'], files['a']], [(3.6, b'p')],
              lambda r: None if len(r) == 4 and whole(r[0], 'c') and r[1][0] == 'a' and r[1][1] == 0
              and r[1][2] < 3 * RATE and whole(r[2], 'c') and whole(r[3], 'a')
+             else 'expected c, part of a, then c and a again',
+             lambda r: None if [n for n, _ in order(r)] == ['c', 'a', 'c', 'a'] and ends(r[-1], 'a')
              else 'expected c, part of a, then c and a again')
         play('previous restarts', [files['a']], [(5.0, b'P')],
              lambda r: None if len(r) == 2 and r[0][0] == 'a' and r[0][2] > 3 * RATE and whole(r[1], 'a')
-             else 'expected a for over 3 s, then a from its start')
+             else 'expected a for over 3 s, then a from its start',
+             lambda r: None if [n for n, _ in order(r)] == ['a'] and any(j < -3 * RATE for j in jumps(order(r)[0][1]))
+             and ends(r[-1], 'a') else 'expected a for over 3 s, then a from its start')
         play('seek', [files['d']], [(3.0, b'\x1b[C'), (2.5, b'\x1b[B')],
              lambda r: None if len(r) == 3 and r[0][0] == r[1][0] == r[2][0] == 'd'
              and near(r[1][1] - (r[0][1] + r[0][2]), 5 * RATE, RATE // 2) and whole(r[2], 'd')
-             else 'expected d, d 5 s later, then d from its start')
+             else 'expected d, d 5 s later, then d from its start',
+             lambda r: None if [n for n, _ in order(r)] == ['d']
+             and any(4 * RATE <= j <= 6 * RATE for j in jumps(order(r)[0][1]))
+             and any(j < -4 * RATE for j in jumps(order(r)[0][1])) and ends(r[-1], 'd')
+             else 'expected d with a jump of about 5 s, then back to its start')
         def repeated(r):
             if not r or any(n != 'e' for n, _, _ in r):
                 return 'expected only e'
             if len(r) < 3 or any(s > START_SLACK for _, s, _ in r) or any(s + f != frames['e'] for _, s, f in r[:-1]):
                 return 'expected e again and again from its start'
             return None
-        play('--repeat', ['--repeat', files['e']], [(4.5, b'q')], repeated)
-        play('R key', [files['e']], [(1.0, b'r'), (3.5, b'q')], repeated)
+        def restarted(r):
+            spans = order(r)
+            if [n for n, _ in spans] != ['e'] or sum(j < -RATE // 2 for j in jumps(spans[0][1])) < 2:
+                return 'expected e to start again at least twice'
+            return None
+        play('--repeat', ['--repeat', files['e']], [(4.5, b'q')], repeated, restarted)
+        play('R key', [files['e']], [(1.0, b'r'), (3.5, b'q')], repeated, restarted)
         play('R key twice', [files['e']], [(0.9, b'r'), (0.2, b'R')],
              lambda r: None if len(r) == 1 and whole(r[0], 'e') else 'expected e once')
 
-    write_report('navigation', {'result': 'passed', 'checks': checks,
+    write_report('navigation-wine' if WINE else 'navigation', {'result': 'passed', 'checks': checks,
                                 'scope': '--start against whole decodes in ten formats, queues and option errors; '
                                          'keys N/P, arrows, R and --repeat through the null sink.'})
     print(f'Passed {len(checks)} navigation checks.')

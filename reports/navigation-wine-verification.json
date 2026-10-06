@@ -1,0 +1,284 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "start.flac --start",
+      "result": "exact",
+      "starts": 5
+    },
+    {
+      "test": "start.mp3 --start",
+      "result": "exact",
+      "starts": 5
+    },
+    {
+      "test": "start.ogg --start",
+      "result": "exact",
+      "starts": 5
+    },
+    {
+      "test": "start.opus --start",
+      "result": "exact after 24000 frames",
+      "starts": 5
+    },
+    {
+      "test": "start.m4a --start",
+      "result": "exact",
+      "starts": 5
+    },
+    {
+      "test": "start.wav --start",
+      "result": "exact",
+      "starts": 5
+    },
+    {
+      "test": "start.wv --start",
+      "result": "exact",
+      "starts": 5
+    },
+    {
+      "test": "start.mka --start",
+      "result": "exact",
+      "starts": 5
+    },
+    {
+      "test": "start.ac3 --start",
+      "result": "within the dither (50 dB or more)",
+      "starts": 5
+    },
+    {
+      "test": "start.mp2 --start",
+      "result": "exact",
+      "starts": 5
+    },
+    {
+      "test": "queue --start",
+      "result": "exact",
+      "note": "only the first file starts late"
+    },
+    {
+      "test": "option errors",
+      "result": "usage",
+      "cases": 9
+    },
+    {
+      "test": "start",
+      "result": "passed",
+      "runs": [
+        [
+          "a",
+          120288,
+          167472
+        ]
+      ]
+    },
+    {
+      "test": "next",
+      "result": "passed",
+      "runs": [
+        [
+          "a",
+          288,
+          912
+        ],
+        [
+          "a",
+          28800,
+          54240
+        ],
+        [
+          "a",
+          83040,
+          65760
+        ],
+        [
+          "b",
+          81,
+          101439
+        ],
+        [
+          "b",
+          101748,
+          42252
+        ]
+      ]
+    },
+    {
+      "test": "next on the last file",
+      "result": "passed",
+      "runs": [
+        [
+          "a",
+          288,
+          912
+        ],
+        [
+          "a",
+          4800,
+          121680
+        ]
+      ]
+    },
+    {
+      "test": "previous file",
+      "result": "passed",
+      "runs": [
+        [
+          "c",
+          288,
+          912
+        ],
+        [
+          "c",
+          3840,
+          92160
+        ],
+        [
+          "a",
+          0,
+          82560
+        ],
+        [
+          "c",
+          38,
+          95962
+        ],
+        [
+          "a",
+          0,
+          148560
+        ],
+        [
+          "a",
+          148726,
+          139274
+        ]
+      ]
+    },
+    {
+      "test": "previous restarts",
+      "result": "passed",
+      "runs": [
+        [
+          "a",
+          288,
+          912
+        ],
+        [
+          "a",
+          28800,
+          55200
+        ],
+        [
+          "a",
+          84000,
+          185280
+        ],
+        [
+          "a",
+          52,
+          287948
+        ]
+      ]
+    },
+    {
+      "test": "seek",
+      "result": "passed",
+      "runs": [
+        [
+          "d",
+          288,
+          912
+        ],
+        [
+          "d",
+          5280,
+          145680
+        ],
+        [
+          "d",
+          386997,
+          118923
+        ],
+        [
+          "d",
+          117,
+          671883
+        ]
+      ]
+    },
+    {
+      "test": "--repeat",
+      "result": "passed",
+      "runs": [
+        [
+          "e",
+          288,
+          912
+        ],
+        [
+          "e",
+          25920,
+          31680
+        ],
+        [
+          "e",
+          0,
+          22560
+        ],
+        [
+          "e",
+          22560,
+          35040
+        ],
+        [
+          "e",
+          0,
+          57600
+        ],
+        [
+          "e",
+          0,
+          57600
+        ],
+        [
+          "e",
+          0,
+          12720
+        ]
+      ]
+    },
+    {
+      "test": "R key",
+      "result": "passed",
+      "runs": [
+        [
+          "e",
+          288,
+          912
+        ],
+        [
+          "e",
+          4800,
+          52800
+        ],
+        [
+          "e",
+          64,
+          57536
+        ],
+        [
+          "e",
+          0,
+          57600
+        ],
+        [
+          "e",
+          0,
+          44640
+        ]
+      ]
+    }
+  ],
+  "scope": "--start against whole decodes in ten formats, queues and option errors; keys N/P, arrows, R and --repeat through the null sink."
+}

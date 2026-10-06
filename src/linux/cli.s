@@ -214,7 +214,8 @@ LOCALFN cli_main
     jz .Lbad_input
     cmp dword ptr [rip + operation], 0
     je .Lplayback
-    call offline_start
+    mov rcx, [rip + cli_start_ms]      # --start, read exactly
+    call queue_start
 .Loffline_loop:
     lea rcx, [rip + offline_pcm]
     mov edx, CHUNK_FRAMES
@@ -300,54 +301,6 @@ LOCALFN cli_main
     ret
 ENDFN cli_main
 
-# --start for --check and --decode: the first file from cli_start_ms, read
-# exactly (a seek, then the frames before the start discarded).
-LOCALFN offline_start
-    push rbx
-    push rsi
-    sub rsp, 40
-    mov rax, [rip + cli_start_ms]
-    test rax, rax
-    jz .Loffline_start_done
-    mov ecx, [rip + queue_rate]
-    mul rcx
-    mov ecx, 1000
-    cmp rdx, rcx
-    jae .Loffline_start_far
-    div rcx
-    jmp .Loffline_start_frames
-.Loffline_start_far:
-    mov rax, -1
-.Loffline_start_frames:
-    mov rcx, [rip + output_frames]
-    test rcx, rcx
-    jz .Loffline_start_seek
-    cmp rax, rcx
-    cmova rax, rcx
-.Loffline_start_seek:
-    mov rbx, rax                       # the start
-    mov rcx, rax
-    call queue_seek
-    mov rsi, rax                       # where the decoder resumed
-.Loffline_start_skip:
-    mov rdx, rbx
-    sub rdx, rsi
-    jbe .Loffline_start_done
-    mov eax, CHUNK_FRAMES
-    cmp rdx, rax
-    cmova rdx, rax
-    lea rcx, [rip + offline_pcm]
-    call queue_read
-    test eax, eax
-    jz .Loffline_start_done
-    add rsi, rax
-    jmp .Loffline_start_skip
-.Loffline_start_done:
-    add rsp, 40
-    pop rsi
-    pop rbx
-    ret
-ENDFN offline_start
 
 # After the engine stopped with an engine_command: reopens the queue there
 # (queue_navigate) -> EAX=1 to play again, 0 to finish. Another file's tags
@@ -377,77 +330,6 @@ LOCALFN navigate
     ret
 ENDFN navigate
 
-# RCX=NUL-terminated time: seconds, M:S or H:M:S, the seconds with an
-# optional fraction -> RAX=milliseconds; CF when it is not a time.
-LOCALFN parse_time
-    xor eax, eax                       # whole units before this field
-    xor r8d, r8d                       # this field
-    xor r9d, r9d                       # its digits
-    xor r10d, r10d                     # colons
-.Lparse_time_char:
-    movzx edx, byte ptr [rcx]
-    inc rcx
-    lea r11d, [rdx - '0']
-    cmp r11d, 9
-    ja .Lparse_time_separator
-    mov r11, 100000000000
-    cmp r8, r11
-    jae .Lparse_time_bad
-    imul r8, r8, 10
-    sub edx, '0'
-    add r8, rdx
-    inc r9d
-    jmp .Lparse_time_char
-.Lparse_time_separator:
-    test r9d, r9d
-    jz .Lparse_time_bad
-    add rax, r8
-    xor r8d, r8d
-    xor r9d, r9d
-    cmp edx, ':'
-    jne .Lparse_time_seconds
-    inc r10d
-    cmp r10d, 2
-    ja .Lparse_time_bad
-    imul rax, rax, 60
-    jmp .Lparse_time_char
-.Lparse_time_seconds:
-    imul rax, rax, 1000
-    test edx, edx
-    jz .Lparse_time_done
-    cmp edx, '.'
-    jne .Lparse_time_bad
-    mov r8d, 100                       # milliseconds: three digits count
-.Lparse_time_fraction:
-    movzx edx, byte ptr [rcx]
-    inc rcx
-    test edx, edx
-    jz .Lparse_time_fraction_end
-    sub edx, '0'
-    cmp edx, 9
-    ja .Lparse_time_bad
-    inc r9d
-    imul edx, r8d
-    add rax, rdx
-    mov edx, r8d
-    mov r8d, 10
-    cmp edx, 100
-    je .Lparse_time_fraction
-    mov r8d, 1
-    cmp edx, 10
-    je .Lparse_time_fraction
-    xor r8d, r8d
-    jmp .Lparse_time_fraction
-.Lparse_time_fraction_end:
-    test r9d, r9d
-    jz .Lparse_time_bad
-.Lparse_time_done:
-    clc
-    ret
-.Lparse_time_bad:
-    stc
-    ret
-ENDFN parse_time
 
 # RCX, RDX = NUL-terminated strings -> EAX=1 when equal.
 LOCALFN equal_text
