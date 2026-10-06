@@ -317,6 +317,19 @@
       "note": ""
     },
     {
+      "test": "annotation.au",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "keys": [
+        "album",
+        "artist",
+        "genre",
+        "title",
+        "track"
+      ],
+      "note": ""
+    },
+    {
       "test": "id3v24.mp2",
       "result": "equal",
       "comparator": "ffprobe",

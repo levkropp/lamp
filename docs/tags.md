@@ -8,6 +8,7 @@ LAMP 0.4.0-dev reads the opened file's tags with a handwritten reader (`src/tags
 | WAVE | `LIST INFO` (`INAM`, `IART`, `IPRD`, `ICRD`, `IGNR`, `ICMT`, `ITRK`/`IPRT`) and `id3 `/`ID3 ` chunks |
 | AVI | `LIST INFO` as WAVE, except that `IPRD` is the product, not the album (as FFmpeg reads AVI) |
 | AIFF/AIFC | `NAME`, `AUTH` (artist), `ANNO` (comment) and `ID3 ` chunks |
+| AU | The annotation's `Title=`, `Artist=`, `Album=`, `Track=` and `Genre=` lines (the keys FFmpeg reads) |
 | CAF | The `info` chunk's key/value strings, with Apple's keys (`year`, `track number`, `comments`) |
 | FLAC | The first `VORBIS_COMMENT` block |
 | Ogg Vorbis, Opus, FLAC | The comment packet of the first stream LAMP decodes, gathered across pages |
@@ -44,7 +45,7 @@ Reading tags also made two decoders more tolerant: the MP3 reader skips consecut
 
 `python3 tests/verify-tags.py` ([report](../reports/tags-verification.json)) checks:
 
-- Tags FFmpeg writes with non-ASCII values (including a supplementary-plane character and a newline) in 19 files: ID3v2.4, ID3v2.3, ID3v2 with ID3v1, and ID3v1 MP3; ADTS AAC with ID3v2; native FLAC; Ogg Vorbis, Opus and FLAC; M4A and QuickTime MOV; Matroska and WebM; WAVE and AVI INFO; CAF; WavPack APEv2; AIFF ID3 and text chunks; FFmpeg's ID3v2.4 tag on MPEG Layer II. Each equals ffprobe.
+- Tags FFmpeg writes with non-ASCII values (including a supplementary-plane character and a newline) in 20 files: ID3v2.4, ID3v2.3, ID3v2 with ID3v1, and ID3v1 MP3; ADTS AAC with ID3v2; native FLAC; Ogg Vorbis, Opus and FLAC; M4A and QuickTime MOV; Matroska and WebM; WAVE and AVI INFO; CAF; WavPack APEv2; AIFF ID3 and text chunks; an AU annotation; FFmpeg's ID3v2.4 tag on MPEG Layer II. Each equals ffprobe.
 - ID3v2 written by the test: version 2.2, every text encoding with surrogate pairs, described and plain comments in other languages, whole-tag and per-frame unsynchronisation, extended headers, data length indicators, an encrypted frame, `TXXX` keys, repeated frames, two tags in a row, odd genre strings and all 192 numeric genres, against ffprobe.
 - ID3v1.1 with a track and genre, ID3v1 without a genre, Latin-1 ID3v1 text; APEv2 with ID3v2, alone (with a binary item) and before ID3v1; repeated, differently cased and malformed Vorbis comments; a comment packet over two Ogg pages cut at 4096 bytes; MP4 genre numbers and track/disc forms in ISO and QuickTime meta boxes; Matroska track-targeted tags; a WAVE `id3 ` chunk; CAF with Apple's keys.
 - 1200 files with mutated tags neither crash nor hang.
