@@ -24,7 +24,7 @@ The Windows player shows the picture above the title while a file plays (`src/wi
 | Ogg Vorbis, Opus, FLAC | `METADATA_BLOCK_PICTURE` comments |
 | MP4/M4A/M4B/MOV | `covr` items |
 | Matroska/WebM | Image attachments |
-| WavPack | APEv2 binary items |
+| WavPack, Monkey's Audio | APEv2 binary items |
 
 LAMP does not read pictures from CAF, AVI, FLV, AU, AC-3, MPEG-TS/PS, RIFX, RF64/BW64 or Wave64 files. FFmpeg reads no ID3v2 pictures before AC-3 data either. Separate `cover.jpg` files are not read.
 
@@ -54,7 +54,7 @@ The rules follow FFmpeg's demuxers. Pictures may be JPEG, PNG, GIF, BMP, TIFF or
   - An AttachedFile is a picture when it has a FileName, a FileMimeType starting with `image/gif`, `image/jpeg`, `image/png` or `image/tiff` (exact case) and nonempty FileData.
   - A FileName starting with `cover.` (any case) is the front cover.
   - Attachments elements are read where Chapters elements are read: before the first Cluster, or the one a SeekHead names (see [chapter notes](chapters.md)).
-- APEv2 (WavPack only; FFmpeg reads no APEv2 tags in MP3):
+- APEv2 (WavPack and Monkey's Audio; FFmpeg reads no APEv2 tags in MP3):
   - A binary item is a file name, a NUL, then data.
   - It is a picture when the name ends in `.jpg`, `.jpeg`, `.png`, `.gif`, `.bmp`, `.tif`, `.tiff` or `.webp` (any case).
   - The item `Cover Art (Front)` is the front cover.

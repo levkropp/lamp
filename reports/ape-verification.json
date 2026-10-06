@@ -1,0 +1,1364 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "stereo-1.ape",
+      "result": "exact",
+      "comparator": "the source and FFmpeg",
+      "stats": [
+        "codec=17 rate=44100 channels=2 bits=16 frames=220500 underruns=0 decode_error=0 audio_error=0 elapsed_ms=28 cpu_us=28178 endpoint_dry=0"
+      ]
+    },
+    {
+      "test": "stereo-2.ape",
+      "result": "exact",
+      "comparator": "the source and FFmpeg",
+      "stats": [
+        "codec=17 rate=44100 channels=2 bits=16 frames=220500 underruns=0 decode_error=0 audio_error=0 elapsed_ms=32 cpu_us=32065 endpoint_dry=0"
+      ]
+    },
+    {
+      "test": "stereo-3.ape",
+      "result": "exact",
+      "comparator": "the source and FFmpeg",
+      "stats": [
+        "codec=17 rate=44100 channels=2 bits=16 frames=220500 underruns=0 decode_error=0 audio_error=0 elapsed_ms=31 cpu_us=31443 endpoint_dry=0"
+      ]
+    },
+    {
+      "test": "stereo-4.ape",
+      "result": "exact",
+      "comparator": "the source and FFmpeg",
+      "stats": [
+        "codec=17 rate=44100 channels=2 bits=16 frames=220500 underruns=0 decode_error=0 audio_error=0 elapsed_ms=55 cpu_us=54934 endpoint_dry=0"
+      ]
+    },
+    {
+      "test": "stereo-5.ape",
+      "result": "exact",
+      "comparator": "the source and FFmpeg",
+      "stats": [
+        "codec=17 rate=44100 channels=2 bits=16 frames=220500 underruns=0 decode_error=0 audio_error=0 elapsed_ms=92 cpu_us=92549 endpoint_dry=0"
+      ]
+    },
+    {
+      "test": "loud-1.ape",
+      "result": "exact",
+      "comparator": "the source and FFmpeg",
+      "stats": [
+        "codec=17 rate=44100 channels=2 bits=16 frames=132300 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=16285 endpoint_dry=0"
+      ]
+    },
+    {
+      "test": "loud-2.ape",
+      "result": "exact",
+      "comparator": "the source and FFmpeg",
+      "stats": [
+        "codec=17 rate=44100 channels=2 bits=16 frames=132300 underruns=0 decode_error=0 audio_error=0 elapsed_ms=23 cpu_us=23167 endpoint_dry=0"
+      ]
+    },
+    {
+      "test": "loud-3.ape",
+      "result": "exact",
+      "comparator": "the source and FFmpeg",
+      "stats": [
+        "codec=17 rate=44100 channels=2 bits=16 frames=132300 underruns=0 decode_error=0 audio_error=0 elapsed_ms=19 cpu_us=19464 endpoint_dry=0"
+      ]
+    },
+    {
+      "test": "loud-4.ape",
+      "result": "exact",
+      "comparator": "the source and FFmpeg",
+      "stats": [
+        "codec=17 rate=44100 channels=2 bits=16 frames=132300 underruns=0 decode_error=0 audio_error=0 elapsed_ms=26 cpu_us=26227 endpoint_dry=0"
+      ]
+    },
+    {
+      "test": "loud-5.ape",
+      "result": "exact",
+      "comparator": "the source and FFmpeg",
+      "stats": [
+        "codec=17 rate=44100 channels=2 bits=16 frames=132300 underruns=0 decode_error=0 audio_error=0 elapsed_ms=55 cpu_us=55888 endpoint_dry=0"
+      ]
+    },
+    {
+      "test": "stereo8-1.ape",
+      "result": "exact",
+      "comparator": "the source and FFmpeg",
+      "stats": [
+        "codec=17 rate=22050 channels=2 bits=8 frames=88200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=9 cpu_us=8925 endpoint_dry=0"
+      ]
+    },
+    {
+      "test": "stereo8-2.ape",
+      "result": "exact",
+      "comparator": "the source and FFmpeg",
+      "stats": [
+        "codec=17 rate=22050 channels=2 bits=8 frames=88200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=11 cpu_us=11795 endpoint_dry=0"
+      ]
+    },
+    {
+      "test": "stereo8-3.ape",
+      "result": "exact",
+      "comparator": "the source and FFmpeg",
+      "stats": [
+        "codec=17 rate=22050 channels=2 bits=8 frames=88200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=12 cpu_us=12116 endpoint_dry=0"
+      ]
+    },
+    {
+      "test": "stereo8-4.ape",
+      "result": "exact",
+      "comparator": "the source and FFmpeg",
+      "stats": [
+        "codec=17 rate=22050 channels=2 bits=8 frames=88200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=24 cpu_us=23594 endpoint_dry=0"
+      ]
+    },
+    {
+      "test": "stereo8-5.ape",
+      "result": "exact",
+      "comparator": "the source and FFmpeg",
+      "stats": [
+        "codec=17 rate=22050 channels=2 bits=8 frames=88200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=47 cpu_us=46984 endpoint_dry=0"
+      ]
+    },
+    {
+      "test": "stereo24-1.ape",
+      "result": "exact",
+      "comparator": "the source and FFmpeg",
+      "stats": [
+        "codec=17 rate=48000 channels=2 bits=24 frames=192000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=25 cpu_us=25452 endpoint_dry=0"
+      ]
+    },
+    {
+      "test": "stereo24-2.ape",
+      "result": "exact",
+      "comparator": "the source and FFmpeg",
+      "stats": [
+        "codec=17 rate=48000 channels=2 bits=24 frames=192000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=31 cpu_us=31329 endpoint_dry=0"
+      ]
+    },
+    {
+      "test": "stereo24-3.ape",
+      "result": "exact",
+      "comparator": "the source and FFmpeg",
+      "stats": [
+        "codec=17 rate=48000 channels=2 bits=24 frames=192000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=32 cpu_us=32102 endpoint_dry=0"
+      ]
+    },
+    {
+      "test": "stereo24-4.ape",
+      "result": "exact",
+      "comparator": "the source and FFmpeg",
+      "stats": [
+        "codec=17 rate=48000 channels=2 bits=24 frames=192000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=44 cpu_us=44143 endpoint_dry=0"
+      ]
+    },
+    {
+      "test": "stereo24-5.ape",
+      "result": "exact",
+      "comparator": "the source (FFmpeg fails its CRC check)",
+      "stats": [
+        "codec=17 rate=48000 channels=2 bits=24 frames=192000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=85 cpu_us=85817 endpoint_dry=0"
+      ]
+    },
+    {
+      "test": "loud24-1.ape",
+      "result": "exact",
+      "comparator": "the source and FFmpeg",
+      "stats": [
+        "codec=17 rate=96000 channels=2 bits=24 frames=288000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=44 cpu_us=44061 endpoint_dry=0"
+      ]
+    },
+    {
+      "test": "loud24-2.ape",
+      "result": "exact",
+      "comparator": "the source and FFmpeg",
+      "stats": [
+        "codec=17 rate=96000 channels=2 bits=24 frames=288000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=51 cpu_us=51674 endpoint_dry=0"
+      ]
+    },
+    {
+      "test": "loud24-3.ape",
+      "result": "exact",
+      "comparator": "the source and FFmpeg",
+      "stats": [
+        "codec=17 rate=96000 channels=2 bits=24 frames=288000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=52 cpu_us=52474 endpoint_dry=0"
+      ]
+    },
+    {
+      "test": "loud24-4.ape",
+      "result": "exact",
+      "comparator": "the source and FFmpeg",
+      "stats": [
+        "codec=17 rate=96000 channels=2 bits=24 frames=288000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=68 cpu_us=68082 endpoint_dry=0"
+      ]
+    },
+    {
+      "test": "loud24-5.ape",
+      "result": "exact",
+      "comparator": "the source (FFmpeg fails its CRC check)",
+      "stats": [
+        "codec=17 rate=96000 channels=2 bits=24 frames=288000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=139 cpu_us=139130 endpoint_dry=0"
+      ]
+    },
+    {
+      "test": "mono-1.ape",
+      "result": "exact",
+      "comparator": "the source and FFmpeg",
+      "stats": [
+        "codec=17 rate=22050 channels=1 bits=16 frames=88200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=5 cpu_us=4943 endpoint_dry=0"
+      ]
+    },
+    {
+      "test": "mono-2.ape",
+      "result": "exact",
+      "comparator": "the source and FFmpeg",
+      "stats": [
+        "codec=17 rate=22050 channels=1 bits=16 frames=88200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=6 cpu_us=6184 endpoint_dry=0"
+      ]
+    },
+    {
+      "test": "mono-3.ape",
+      "result": "exact",
+      "comparator": "the source and FFmpeg",
+      "stats": [
+        "codec=17 rate=22050 channels=1 bits=16 frames=88200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=6 cpu_us=6021 endpoint_dry=0"
+      ]
+    },
+    {
+      "test": "mono-4.ape",
+      "result": "exact",
+      "comparator": "the source and FFmpeg",
+      "stats": [
+        "codec=17 rate=22050 channels=1 bits=16 frames=88200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=8 cpu_us=8493 endpoint_dry=0"
+      ]
+    },
+    {
+      "test": "mono-5.ape",
+      "result": "exact",
+      "comparator": "the source and FFmpeg",
+      "stats": [
+        "codec=17 rate=22050 channels=1 bits=16 frames=88200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=20 cpu_us=19613 endpoint_dry=0"
+      ]
+    },
+    {
+      "test": "mono8-1.ape",
+      "result": "exact",
+      "comparator": "the source and FFmpeg",
+      "stats": [
+        "codec=17 rate=8000 channels=1 bits=8 frames=32000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=1870 endpoint_dry=0"
+      ]
+    },
+    {
+      "test": "mono8-2.ape",
+      "result": "exact",
+      "comparator": "the source and FFmpeg",
+      "stats": [
+        "codec=17 rate=8000 channels=1 bits=8 frames=32000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=2488 endpoint_dry=0"
+      ]
+    },
+    {
+      "test": "mono8-3.ape",
+      "result": "exact",
+      "comparator": "the source and FFmpeg",
+      "stats": [
+        "codec=17 rate=8000 channels=1 bits=8 frames=32000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2495 endpoint_dry=0"
+      ]
+    },
+    {
+      "test": "mono8-4.ape",
+      "result": "exact",
+      "comparator": "the source and FFmpeg",
+      "stats": [
+        "codec=17 rate=8000 channels=1 bits=8 frames=32000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=3224 endpoint_dry=0"
+      ]
+    },
+    {
+      "test": "mono8-5.ape",
+      "result": "exact",
+      "comparator": "the source and FFmpeg",
+      "stats": [
+        "codec=17 rate=8000 channels=1 bits=8 frames=32000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=7 cpu_us=7307 endpoint_dry=0"
+      ]
+    },
+    {
+      "test": "mono24-1.ape",
+      "result": "exact",
+      "comparator": "the source and FFmpeg",
+      "stats": [
+        "codec=17 rate=32000 channels=1 bits=24 frames=96000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=7 cpu_us=7663 endpoint_dry=0"
+      ]
+    },
+    {
+      "test": "mono24-2.ape",
+      "result": "exact",
+      "comparator": "the source and FFmpeg",
+      "stats": [
+        "codec=17 rate=32000 channels=1 bits=24 frames=96000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=9 cpu_us=8890 endpoint_dry=0"
+      ]
+    },
+    {
+      "test": "mono24-3.ape",
+      "result": "exact",
+      "comparator": "the source and FFmpeg",
+      "stats": [
+        "codec=17 rate=32000 channels=1 bits=24 frames=96000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=9 cpu_us=8681 endpoint_dry=0"
+      ]
+    },
+    {
+      "test": "mono24-4.ape",
+      "result": "exact",
+      "comparator": "the source and FFmpeg",
+      "stats": [
+        "codec=17 rate=32000 channels=1 bits=24 frames=96000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=13 cpu_us=13339 endpoint_dry=0"
+      ]
+    },
+    {
+      "test": "mono24-5.ape",
+      "result": "exact",
+      "comparator": "the source and FFmpeg",
+      "stats": [
+        "codec=17 rate=32000 channels=1 bits=24 frames=96000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=23 cpu_us=22931 endpoint_dry=0"
+      ]
+    },
+    {
+      "test": "hires-2.ape",
+      "result": "exact",
+      "comparator": "the source and FFmpeg",
+      "stats": [
+        "codec=17 rate=192000 channels=2 bits=24 frames=192000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=33 cpu_us=33134 endpoint_dry=0"
+      ]
+    },
+    {
+      "test": "hires-5.ape",
+      "result": "exact",
+      "comparator": "the source (FFmpeg fails its CRC check)",
+      "stats": [
+        "codec=17 rate=192000 channels=2 bits=24 frames=192000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=91 cpu_us=91214 endpoint_dry=0"
+      ]
+    },
+    {
+      "test": "silence-2.ape",
+      "result": "exact",
+      "comparator": "the source and FFmpeg",
+      "stats": [
+        "codec=17 rate=44100 channels=2 bits=16 frames=132300 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=2635 endpoint_dry=0"
+      ]
+    },
+    {
+      "test": "silence-5.ape",
+      "result": "exact",
+      "comparator": "the source and FFmpeg",
+      "stats": [
+        "codec=17 rate=44100 channels=2 bits=16 frames=132300 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2550 endpoint_dry=0"
+      ]
+    },
+    {
+      "test": "dual-2.ape",
+      "result": "exact",
+      "comparator": "the source and FFmpeg",
+      "stats": [
+        "codec=17 rate=44100 channels=2 bits=16 frames=132300 underruns=0 decode_error=0 audio_error=0 elapsed_ms=11 cpu_us=10941 endpoint_dry=0"
+      ]
+    },
+    {
+      "test": "dual-5.ape",
+      "result": "exact",
+      "comparator": "the source and FFmpeg",
+      "stats": [
+        "codec=17 rate=44100 channels=2 bits=16 frames=132300 underruns=0 decode_error=0 audio_error=0 elapsed_ms=31 cpu_us=31109 endpoint_dry=0"
+      ]
+    },
+    {
+      "test": "long-1.ape",
+      "result": "exact",
+      "comparator": "the source and FFmpeg",
+      "stats": [
+        "codec=17 rate=44100 channels=2 bits=16 frames=1323000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=156 cpu_us=156197 endpoint_dry=0"
+      ]
+    },
+    {
+      "test": "long-4.ape",
+      "result": "exact",
+      "comparator": "the source and FFmpeg",
+      "stats": [
+        "codec=17 rate=44100 channels=2 bits=16 frames=1323000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=263 cpu_us=263719 endpoint_dry=0"
+      ]
+    },
+    {
+      "test": "long-5.ape",
+      "result": "exact",
+      "comparator": "the source and FFmpeg",
+      "stats": [
+        "codec=17 rate=44100 channels=2 bits=16 frames=1323000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=605 cpu_us=605703 endpoint_dry=0"
+      ]
+    },
+    {
+      "test": "written v3930-1",
+      "result": "exact",
+      "comparator": "written PCM and FFmpeg",
+      "features": [
+        "16-bit",
+        "32-byte header",
+        "level 1000",
+        "predictor 3930",
+        "stereo",
+        "version 3930"
+      ]
+    },
+    {
+      "test": "written v3930-2",
+      "result": "exact",
+      "comparator": "written PCM and FFmpeg",
+      "features": [
+        "16-bit",
+        "32-byte header",
+        "3900 escape",
+        "adaption before 3980",
+        "level 2000",
+        "predictor 3930",
+        "stereo",
+        "version 3930"
+      ]
+    },
+    {
+      "test": "written v3930-3",
+      "result": "exact",
+      "comparator": "written PCM and FFmpeg",
+      "features": [
+        "16-bit",
+        "32-byte header",
+        "adaption before 3980",
+        "level 3000",
+        "predictor 3930",
+        "stereo",
+        "version 3930"
+      ]
+    },
+    {
+      "test": "written v3930-mono",
+      "result": "exact",
+      "comparator": "written PCM and FFmpeg",
+      "features": [
+        "16-bit",
+        "32-byte header",
+        "adaption before 3980",
+        "level 2000",
+        "mono",
+        "predictor 3930",
+        "version 3930"
+      ]
+    },
+    {
+      "test": "written v3940-1",
+      "result": "exact",
+      "comparator": "written PCM and FFmpeg",
+      "features": [
+        "16-bit",
+        "32-byte header",
+        "3900 escape",
+        "level 1000",
+        "predictor 3930",
+        "stereo",
+        "version 3940"
+      ]
+    },
+    {
+      "test": "written v3940-2",
+      "result": "exact",
+      "comparator": "written PCM and FFmpeg",
+      "features": [
+        "16-bit",
+        "32-byte header",
+        "adaption before 3980",
+        "level 2000",
+        "predictor 3930",
+        "stereo",
+        "version 3940"
+      ]
+    },
+    {
+      "test": "written v3940-3",
+      "result": "exact",
+      "comparator": "written PCM and FFmpeg",
+      "features": [
+        "16-bit",
+        "32-byte header",
+        "adaption before 3980",
+        "level 3000",
+        "predictor 3930",
+        "stereo",
+        "version 3940"
+      ]
+    },
+    {
+      "test": "written v3940-mono",
+      "result": "exact",
+      "comparator": "written PCM and FFmpeg",
+      "features": [
+        "16-bit",
+        "32-byte header",
+        "adaption before 3980",
+        "level 2000",
+        "mono",
+        "predictor 3930",
+        "version 3940"
+      ]
+    },
+    {
+      "test": "written v3950-1",
+      "result": "exact",
+      "comparator": "written PCM and FFmpeg",
+      "features": [
+        "16-bit",
+        "32-byte header",
+        "level 1000",
+        "predictor 3950",
+        "stereo",
+        "version 3950"
+      ]
+    },
+    {
+      "test": "written v3950-2",
+      "result": "exact",
+      "comparator": "written PCM and FFmpeg",
+      "features": [
+        "16-bit",
+        "32-byte header",
+        "adaption before 3980",
+        "level 2000",
+        "predictor 3950",
+        "stereo",
+        "version 3950"
+      ]
+    },
+    {
+      "test": "written v3950-3",
+      "result": "exact",
+      "comparator": "written PCM and FFmpeg",
+      "features": [
+        "16-bit",
+        "32-byte header",
+        "adaption before 3980",
+        "level 3000",
+        "predictor 3950",
+        "stereo",
+        "version 3950"
+      ]
+    },
+    {
+      "test": "written v3950-mono",
+      "result": "exact",
+      "comparator": "written PCM and FFmpeg",
+      "features": [
+        "16-bit",
+        "32-byte header",
+        "adaption before 3980",
+        "level 2000",
+        "mono",
+        "predictor 3950",
+        "version 3950"
+      ]
+    },
+    {
+      "test": "written v3960-1",
+      "result": "exact",
+      "comparator": "written PCM and FFmpeg",
+      "features": [
+        "16-bit",
+        "32-byte header",
+        "level 1000",
+        "predictor 3950",
+        "stereo",
+        "version 3960"
+      ]
+    },
+    {
+      "test": "written v3960-2",
+      "result": "exact",
+      "comparator": "written PCM and FFmpeg",
+      "features": [
+        "16-bit",
+        "32-byte header",
+        "3900 escape",
+        "adaption before 3980",
+        "level 2000",
+        "predictor 3950",
+        "stereo",
+        "version 3960"
+      ]
+    },
+    {
+      "test": "written v3960-3",
+      "result": "exact",
+      "comparator": "written PCM and FFmpeg",
+      "features": [
+        "16-bit",
+        "32-byte header",
+        "adaption before 3980",
+        "level 3000",
+        "predictor 3950",
+        "stereo",
+        "version 3960"
+      ]
+    },
+    {
+      "test": "written v3960-mono",
+      "result": "exact",
+      "comparator": "written PCM and FFmpeg",
+      "features": [
+        "16-bit",
+        "32-byte header",
+        "adaption before 3980",
+        "level 2000",
+        "mono",
+        "predictor 3950",
+        "version 3960"
+      ]
+    },
+    {
+      "test": "written v3970-1",
+      "result": "exact",
+      "comparator": "written PCM and FFmpeg",
+      "features": [
+        "16-bit",
+        "32-byte header",
+        "level 1000",
+        "predictor 3950",
+        "stereo",
+        "version 3970"
+      ]
+    },
+    {
+      "test": "written v3970-2",
+      "result": "exact",
+      "comparator": "written PCM and FFmpeg",
+      "features": [
+        "16-bit",
+        "32-byte header",
+        "adaption before 3980",
+        "level 2000",
+        "predictor 3950",
+        "stereo",
+        "version 3970"
+      ]
+    },
+    {
+      "test": "written v3970-3",
+      "result": "exact",
+      "comparator": "written PCM and FFmpeg",
+      "features": [
+        "16-bit",
+        "32-byte header",
+        "adaption before 3980",
+        "level 3000",
+        "predictor 3950",
+        "stereo",
+        "version 3970"
+      ]
+    },
+    {
+      "test": "written v3970-mono",
+      "result": "exact",
+      "comparator": "written PCM and FFmpeg",
+      "features": [
+        "16-bit",
+        "32-byte header",
+        "adaption before 3980",
+        "level 2000",
+        "mono",
+        "predictor 3950",
+        "version 3970"
+      ]
+    },
+    {
+      "test": "written v3980-1",
+      "result": "exact",
+      "comparator": "written PCM and FFmpeg",
+      "features": [
+        "16-bit",
+        "descriptor",
+        "frame at byte 3 of a word",
+        "level 1000",
+        "predictor 3950",
+        "stereo",
+        "version 3980"
+      ]
+    },
+    {
+      "test": "written v3980-2",
+      "result": "exact",
+      "comparator": "written PCM and FFmpeg",
+      "features": [
+        "16-bit",
+        "adaption 3980",
+        "descriptor",
+        "level 2000",
+        "predictor 3950",
+        "stereo",
+        "version 3980"
+      ]
+    },
+    {
+      "test": "written v3980-3",
+      "result": "exact",
+      "comparator": "written PCM and FFmpeg",
+      "features": [
+        "16-bit",
+        "adaption 3980",
+        "descriptor",
+        "frame at byte 2 of a word",
+        "level 3000",
+        "predictor 3950",
+        "stereo",
+        "version 3980"
+      ]
+    },
+    {
+      "test": "written v3980-mono",
+      "result": "exact",
+      "comparator": "written PCM and FFmpeg",
+      "features": [
+        "16-bit",
+        "adaption 3980",
+        "descriptor",
+        "frame at byte 1 of a word",
+        "level 2000",
+        "mono",
+        "predictor 3950",
+        "version 3980"
+      ]
+    },
+    {
+      "test": "written v3985-1",
+      "result": "exact",
+      "comparator": "written PCM and FFmpeg",
+      "features": [
+        "16-bit",
+        "descriptor",
+        "frame at byte 2 of a word",
+        "level 1000",
+        "predictor 3950",
+        "stereo",
+        "version 3985"
+      ]
+    },
+    {
+      "test": "written v3985-2",
+      "result": "exact",
+      "comparator": "written PCM and FFmpeg",
+      "features": [
+        "16-bit",
+        "3900 escape",
+        "adaption 3980",
+        "descriptor",
+        "frame at byte 3 of a word",
+        "level 2000",
+        "predictor 3950",
+        "stereo",
+        "version 3985"
+      ]
+    },
+    {
+      "test": "written v3985-3",
+      "result": "exact",
+      "comparator": "written PCM and FFmpeg",
+      "features": [
+        "16-bit",
+        "adaption 3980",
+        "descriptor",
+        "frame at byte 1 of a word",
+        "level 3000",
+        "predictor 3950",
+        "stereo",
+        "version 3985"
+      ]
+    },
+    {
+      "test": "written v3985-mono",
+      "result": "exact",
+      "comparator": "written PCM and FFmpeg",
+      "features": [
+        "16-bit",
+        "adaption 3980",
+        "descriptor",
+        "frame at byte 3 of a word",
+        "level 2000",
+        "mono",
+        "predictor 3950",
+        "version 3985"
+      ]
+    },
+    {
+      "test": "written v3990-1",
+      "result": "exact",
+      "comparator": "written PCM and FFmpeg",
+      "features": [
+        "16-bit",
+        "descriptor",
+        "frame at byte 1 of a word",
+        "frame at byte 2 of a word",
+        "level 1000",
+        "predictor 3950",
+        "stereo",
+        "version 3990"
+      ]
+    },
+    {
+      "test": "written v3990-2",
+      "result": "exact",
+      "comparator": "written PCM and FFmpeg",
+      "features": [
+        "16-bit",
+        "adaption 3980",
+        "descriptor",
+        "frame at byte 3 of a word",
+        "level 2000",
+        "predictor 3950",
+        "stereo",
+        "version 3990"
+      ]
+    },
+    {
+      "test": "written v3990-3",
+      "result": "exact",
+      "comparator": "written PCM and FFmpeg",
+      "features": [
+        "16-bit",
+        "3990 escape",
+        "adaption 3980",
+        "descriptor",
+        "frame at byte 1 of a word",
+        "frame at byte 3 of a word",
+        "level 3000",
+        "predictor 3950",
+        "stereo",
+        "version 3990"
+      ]
+    },
+    {
+      "test": "written v3990-mono",
+      "result": "exact",
+      "comparator": "written PCM and FFmpeg",
+      "features": [
+        "16-bit",
+        "adaption 3980",
+        "descriptor",
+        "frame at byte 1 of a word",
+        "level 2000",
+        "mono",
+        "predictor 3950",
+        "version 3990"
+      ]
+    },
+    {
+      "test": "written v3990-4",
+      "result": "exact",
+      "comparator": "written PCM and FFmpeg",
+      "features": [
+        "16-bit",
+        "3990 escape",
+        "adaption 3980",
+        "descriptor",
+        "level 4000",
+        "predictor 3950",
+        "stereo",
+        "version 3990"
+      ]
+    },
+    {
+      "test": "written v3990-5",
+      "result": "exact",
+      "comparator": "written PCM and FFmpeg",
+      "features": [
+        "16-bit",
+        "adaption 3980",
+        "descriptor",
+        "frame at byte 3 of a word",
+        "level 5000",
+        "predictor 3950",
+        "stereo",
+        "version 3990"
+      ]
+    },
+    {
+      "test": "written v3970-5",
+      "result": "exact",
+      "comparator": "written PCM and FFmpeg",
+      "features": [
+        "16-bit",
+        "32-byte header",
+        "adaption before 3980",
+        "level 5000",
+        "predictor 3950",
+        "stereo",
+        "version 3970"
+      ]
+    },
+    {
+      "test": "written v3940-4",
+      "result": "exact",
+      "comparator": "written PCM and FFmpeg",
+      "features": [
+        "16-bit",
+        "32-byte header",
+        "3900 escape",
+        "adaption before 3980",
+        "level 4000",
+        "predictor 3930",
+        "stereo",
+        "version 3940"
+      ]
+    },
+    {
+      "test": "written wide24",
+      "result": "exact",
+      "comparator": "written PCM and FFmpeg",
+      "features": [
+        "24-bit",
+        "3990 escape",
+        "64-bit prediction beyond 32 bits",
+        "64-bit predictor",
+        "adaption 3980",
+        "descriptor",
+        "level 2000",
+        "predictor 3950",
+        "stereo",
+        "version 3990",
+        "wide pivot"
+      ]
+    },
+    {
+      "test": "written narrow24",
+      "result": "exact",
+      "comparator": "written PCM and FFmpeg",
+      "features": [
+        "24-bit",
+        "3990 escape",
+        "adaption 3980",
+        "descriptor",
+        "level 2000",
+        "predictor 3950",
+        "stereo",
+        "version 3990",
+        "wide pivot"
+      ]
+    },
+    {
+      "test": "written wide24-3950",
+      "result": "exact",
+      "comparator": "written PCM and FFmpeg",
+      "features": [
+        "24-bit",
+        "32-byte header",
+        "3900 escape",
+        "3900 wide bits",
+        "64-bit prediction beyond 32 bits",
+        "64-bit predictor",
+        "level 1000",
+        "predictor 3950",
+        "stereo",
+        "version 3950"
+      ]
+    },
+    {
+      "test": "written impulses24",
+      "result": "exact",
+      "comparator": "written PCM and FFmpeg",
+      "features": [
+        "24-bit",
+        "3990 escape",
+        "descriptor",
+        "level 1000",
+        "predictor 3950",
+        "stereo",
+        "version 3990",
+        "wide pivot"
+      ]
+    },
+    {
+      "test": "written impulses24-3940",
+      "result": "exact",
+      "comparator": "written PCM and FFmpeg",
+      "features": [
+        "24-bit",
+        "32-byte header",
+        "3900 escape",
+        "3900 wide bits",
+        "level 1000",
+        "predictor 3930",
+        "stereo",
+        "version 3940"
+      ]
+    },
+    {
+      "test": "written stereo8",
+      "result": "exact",
+      "comparator": "written PCM and FFmpeg",
+      "features": [
+        "8-bit",
+        "adaption 3980",
+        "descriptor",
+        "frame at byte 2 of a word",
+        "level 3000",
+        "predictor 3950",
+        "stereo",
+        "version 3990"
+      ]
+    },
+    {
+      "test": "written mono8-3960",
+      "result": "exact",
+      "comparator": "written PCM and FFmpeg",
+      "features": [
+        "32-byte header",
+        "8-bit",
+        "adaption before 3980",
+        "level 2000",
+        "mono",
+        "predictor 3950",
+        "version 3960"
+      ]
+    },
+    {
+      "test": "written flags",
+      "result": "exact",
+      "comparator": "written PCM and FFmpeg",
+      "features": [
+        "16-bit",
+        "adaption 3980",
+        "descriptor",
+        "frame at byte 1 of a word",
+        "frame flags",
+        "level 2000",
+        "predictor 3950",
+        "pseudo-stereo",
+        "stereo",
+        "stereo silence",
+        "version 3990"
+      ]
+    },
+    {
+      "test": "written flags-3950",
+      "result": "exact",
+      "comparator": "written PCM and FFmpeg",
+      "features": [
+        "16-bit",
+        "32-byte header",
+        "adaption before 3980",
+        "frame flags",
+        "level 2000",
+        "mono silence",
+        "predictor 3950",
+        "pseudo-stereo",
+        "stereo",
+        "version 3950"
+      ]
+    },
+    {
+      "test": "written one-silent-flag",
+      "result": "exact",
+      "comparator": "written PCM and FFmpeg",
+      "features": [
+        "16-bit",
+        "adaption 3980",
+        "descriptor",
+        "frame flags",
+        "level 2000",
+        "one silent channel flag (ignored)",
+        "predictor 3950",
+        "stereo",
+        "version 3990"
+      ]
+    },
+    {
+      "test": "written mono-silence",
+      "result": "exact",
+      "comparator": "written PCM and FFmpeg",
+      "features": [
+        "16-bit",
+        "adaption 3980",
+        "descriptor",
+        "frame at byte 1 of a word",
+        "frame flags",
+        "level 2000",
+        "mono",
+        "mono silence",
+        "predictor 3950",
+        "version 3990"
+      ]
+    },
+    {
+      "test": "written header-options",
+      "result": "exact",
+      "comparator": "written PCM and FFmpeg",
+      "features": [
+        "16-bit",
+        "32-byte header",
+        "WAV tail",
+        "adaption before 3980",
+        "level 2000",
+        "peak level",
+        "predictor 3950",
+        "seek element count",
+        "stereo",
+        "version 3950"
+      ]
+    },
+    {
+      "test": "written no-wav-header",
+      "result": "exact",
+      "comparator": "written PCM and FFmpeg",
+      "features": [
+        "16-bit",
+        "32-byte header",
+        "WAV tail",
+        "level 1000",
+        "no stored WAV header",
+        "predictor 3930",
+        "stereo",
+        "version 3940"
+      ]
+    },
+    {
+      "test": "written no-wav-header-3990",
+      "result": "exact",
+      "comparator": "written PCM and FFmpeg",
+      "features": [
+        "16-bit",
+        "3990 escape",
+        "descriptor",
+        "frame at byte 1 of a word",
+        "level 1000",
+        "predictor 3950",
+        "stereo",
+        "version 3990"
+      ]
+    },
+    {
+      "test": "written frames-3940",
+      "result": "exact",
+      "comparator": "written PCM and FFmpeg",
+      "features": [
+        "32-byte header",
+        "8-bit",
+        "frame at byte 1 of a word",
+        "frame at byte 2 of a word",
+        "level 1000",
+        "mono",
+        "predictor 3930",
+        "version 3940"
+      ]
+    },
+    {
+      "test": "written frames-3970",
+      "result": "exact",
+      "comparator": "written PCM and FFmpeg",
+      "features": [
+        "32-byte header",
+        "8-bit",
+        "frame at byte 3 of a word",
+        "level 1000",
+        "mono",
+        "predictor 3950",
+        "version 3970"
+      ]
+    },
+    {
+      "test": "coverage",
+      "result": "passed",
+      "features": [
+        "16-bit",
+        "24-bit",
+        "32-byte header",
+        "3900 escape",
+        "3900 wide bits",
+        "3990 escape",
+        "64-bit prediction beyond 32 bits",
+        "64-bit predictor",
+        "8-bit",
+        "WAV tail",
+        "adaption 3980",
+        "adaption before 3980",
+        "descriptor",
+        "frame at byte 1 of a word",
+        "frame at byte 2 of a word",
+        "frame at byte 3 of a word",
+        "frame flags",
+        "level 1000",
+        "level 2000",
+        "level 3000",
+        "level 4000",
+        "level 5000",
+        "mono",
+        "mono silence",
+        "no stored WAV header",
+        "one silent channel flag (ignored)",
+        "peak level",
+        "predictor 3930",
+        "predictor 3950",
+        "pseudo-stereo",
+        "seek element count",
+        "stereo",
+        "stereo silence",
+        "version 3930",
+        "version 3940",
+        "version 3950",
+        "version 3960",
+        "version 3970",
+        "version 3980",
+        "version 3985",
+        "version 3990",
+        "wide pivot"
+      ]
+    },
+    {
+      "test": "stereo-1.ape seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":5,\"discarded_frames\":364791,\"maximum_discarded\":73044,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "long-4.ape seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":5,\"discarded_frames\":681177,\"maximum_discarded\":143352,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "long-5.ape seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":4,\"discarded_frames\":1271001,\"maximum_discarded\":661517,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "loud24-3.ape seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":5,\"discarded_frames\":373629,\"maximum_discarded\":70289,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "mono8-2.ape seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":0,\"discarded_frames\":180093,\"maximum_discarded\":32000,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "frames-3940.ape seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":5,\"discarded_frames\":92541,\"maximum_discarded\":12544,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "frames-3970.ape seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":4,\"discarded_frames\":206445,\"maximum_discarded\":150017,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "flags.ape seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":25162,\"maximum_discarded\":3000,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "ID3v2 and APEv2 tags",
+      "result": "decode unchanged; the APEv2 title, artist and cover read, the ID3v2 title ignored as FFmpeg ignores it",
+      "tags": [
+        "title=APE title",
+        "artist=APE artist"
+      ]
+    },
+    {
+      "test": "flipped.ape",
+      "result": "a flipped bit fails its frame's CRC; stopped with decode_error 100 after 658944 frames, a prefix of FFmpeg's 1318392"
+    },
+    {
+      "test": "cut.ape",
+      "result": "cut inside the last frame; stopped with decode_error 100 after 1317888 frames, a prefix of FFmpeg's 1317888"
+    },
+    {
+      "test": "missing.ape",
+      "result": "cut where the last frame starts; stopped with decode_error 100 after 1253376 frames, a prefix of FFmpeg's 1253376"
+    },
+    {
+      "test": "decreasing.ape",
+      "result": "rejected with decode_error 100",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":100}"
+    },
+    {
+      "test": "level-6000.ape",
+      "result": "rejected with decode_error 100",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":100}"
+    },
+    {
+      "test": "level-1500.ape",
+      "result": "rejected with decode_error 100",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":100}"
+    },
+    {
+      "test": "no-frames.ape",
+      "result": "rejected with decode_error 100",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":100}"
+    },
+    {
+      "test": "final-too-long.ape",
+      "result": "rejected with decode_error 100",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":100}"
+    },
+    {
+      "test": "short-descriptor.ape",
+      "result": "rejected with decode_error 100",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":100}"
+    },
+    {
+      "test": "version-3920.ape",
+      "result": "rejected with decode_error 101",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "version-3991.ape",
+      "result": "rejected with decode_error 101",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "three-channels.ape",
+      "result": "rejected with decode_error 101",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "32-bit.ape",
+      "result": "rejected with decode_error 101",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "7-khz.ape",
+      "result": "rejected with decode_error 101",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "cancel-open long-5.ape",
+      "result": "{\"result\":\"cancelled\"}"
+    },
+    {
+      "test": "speed",
+      "result": "a 60-second 44.1 kHz stereo file, best of three",
+      "seconds": {
+        "level 1000": {
+          "lamp_s": 0.279,
+          "ffmpeg_s": 0.265
+        },
+        "level 2000": {
+          "lamp_s": 0.356,
+          "ffmpeg_s": 0.368
+        },
+        "level 3000": {
+          "lamp_s": 0.357,
+          "ffmpeg_s": 0.396
+        },
+        "level 4000": {
+          "lamp_s": 0.518,
+          "ffmpeg_s": 0.56
+        },
+        "level 5000": {
+          "lamp_s": 1.096,
+          "ffmpeg_s": 1.109
+        }
+      }
+    },
+    {
+      "test": "APE playback",
+      "result": "played",
+      "stats": "Playing. Space: pause / resume. N / P: next / previous file. Left / Right: -5 / +5 s. Down / Up: -60 / +60 s. R: repeat. Q or Ctrl+C: stop. codec=17 rate=48000 channels=2 bits=24 frames=192000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=6002 cpu_us=103402 endpoint_dry=0"
+    }
+  ],
+  "ffmpeg_crc_failures": [
+    "stereo24-5.ape",
+    "loud24-5.ape",
+    "hires-5.ape"
+  ],
+  "scope": "JMAC fixtures at every level, exact against their sources and FFmpeg; written streams of versions 3930-3990; seeks; tags and covers; damage, malformed and unsupported files; cancellation; speed."
+}

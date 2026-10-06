@@ -74,6 +74,10 @@ def main():
     step(TESTS / 'verify-ac3.py', *playback)
     step(TESTS / 'verify-mpegts.py', *playback)
     step(TESTS / 'verify-wavpack.py', *playback)
+    if shutil.which('java') and Path('/usr/share/java/jmac.jar').exists():
+        step(TESTS / 'verify-ape.py', *playback)
+    else:
+        print('JMAC (libjmac-java) is not installed; skipping the Monkey\'s Audio suite.', flush=True)
     step(TESTS / 'verify-wav-codecs.py', *playback)
     step(TESTS / 'verify-caf-wave64.py', *playback)
     step(TESTS / 'verify-avi.py', *playback)

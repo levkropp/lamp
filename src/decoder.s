@@ -16,7 +16,7 @@ sample_rate: .long 0
 source_channels: .long 0
 source_bits: .long 0
 decode_error: .long 0
-codec_kind: .long 0                 #1 WAV,2 FLAC,3 MP3,4 Vorbis,5 Opus,6 AIFF/AIFC,...,11 AC-3,12 WavPack,13 CAF,14 AVI,15 FLV,16 AU
+codec_kind: .long 0                 #1 WAV,2 FLAC,3 MP3,4 Vorbis,5 Opus,6 AIFF/AIFC,...,11 AC-3,12 WavPack,13 CAF,14 AVI,15 FLV,16 AU,17 APE
 total_frames: .quad 0
 map_token: .quad 0
 map_base: .quad 0
@@ -260,6 +260,11 @@ LOCALFN decoder_open_format
     je .Lopen_mp4
     mov rcx, [rip + input_cursor]
     mov rdx, [rip + input_end]
+    call ape_probe                  # Monkey's Audio ("MAC ")
+    test eax, eax
+    jnz .Lopen_ape
+    mov rcx, [rip + input_cursor]
+    mov rdx, [rip + input_end]
     call wv_probe                   # WavPack blocks ("wvpk")
     test eax, eax
     jnz .Lopen_wavpack
@@ -311,6 +316,14 @@ LOCALFN decoder_open_format
     mov rcx, [rip + input_cursor]
     mov rdx, [rip + input_end]
     call wv_open
+    test eax, eax
+    jz .Lopen_bad
+    leave
+    ret
+.Lopen_ape:
+    mov rcx, [rip + input_cursor]
+    mov rdx, [rip + input_end]
+    call ape_open
     test eax, eax
     jz .Lopen_bad
     leave
@@ -2240,6 +2253,8 @@ FN decoder_seek
     je .Lseek_wav
     cmp dword ptr [rip + codec_kind], 3
     je .Lseek_mp3
+    cmp dword ptr [rip + codec_kind], 17
+    je .Lseek_ape
     cmp dword ptr [rip + codec_kind], 2
     jne .Lseek_return
     test rcx, rcx
@@ -2313,6 +2328,9 @@ FN decoder_seek
     jmp .Lseek_return
 .Lseek_mp3:
     call mp3_seek
+    jmp .Lseek_return
+.Lseek_ape:
+    call ape_seek
     jmp .Lseek_return
 .Lseek_chain:
     call chain_seek
@@ -3426,6 +3444,14 @@ FN decoder_read
     mov ebx, eax
     jmp .Lread_done
 .Lread_single:
+    cmp dword ptr [rip + codec_kind], 17  # Monkey's Audio
+    jne .Lread_not_ape
+    mov rcx, rdi
+    mov edx, r12d
+    call ape_read
+    mov ebx, eax
+    jmp .Lread_done
+.Lread_not_ape:
     cmp dword ptr [rip + codec_kind], 13  # CAF linear PCM and G.711
     je .Lread_existing
     cmp dword ptr [rip + codec_kind], 14  # AVI and FLV PCM and G.711

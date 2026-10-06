@@ -1516,7 +1516,10 @@ LOCALFN ape_parse
     test ebx, 1                           # binary (FFmpeg's test)
     jz .Lape_item
     cmp dword ptr [rip + codec_kind], 12  # FFmpeg reads APEv2 pictures in WavPack
+    je .Lape_cover
+    cmp dword ptr [rip + codec_kind], 17  # and Monkey's Audio
     jne .Lape_item
+.Lape_cover:
     mov r9d, r13d
     sub rdx, rcx
     call ape_picture
@@ -3011,6 +3014,19 @@ LOCALFN raw_tags
     mov rsi, rcx
     mov rdi, rdx
     mov rbx, rcx
+    mov eax, [rip + codec_kind]
+    cmp eax, 12
+    je .Lraw_tags_ape_first
+    cmp eax, 17
+    jne .Lraw_tags_id3
+.Lraw_tags_ape_first:
+    # WavPack and Monkey's Audio: as FFmpeg's demuxers read the APEv2 tag,
+    # ID3v2 tags count only when it holds no text.
+    mov rcx, rsi
+    mov rdx, rdi
+    call raw_ape
+    cmp dword ptr [rip + tag_any], 0
+    jne .Lraw_tags_return
 .Lraw_tags_id3:
     mov rcx, rbx
     mov rdx, rdi
@@ -3030,26 +3046,10 @@ LOCALFN raw_tags
     call cover_clear                      # pictures too
 .Lraw_tags_chapters:
     call id3_finish
-    xor ebx, ebx                          # an ID3v1 tag at the end
-    mov rax, rdi
-    sub rax, rsi
-    cmp rax, 128
-    jb .Lraw_tags_ape
-    cmp word ptr [rdi - 128], 0x4154      # "TA"
-    jne .Lraw_tags_ape
-    cmp byte ptr [rdi - 126], 'G'
-    jne .Lraw_tags_ape
-    mov ebx, 128
-.Lraw_tags_ape:
-    mov rcx, rdi
-    sub rcx, rbx
-    sub rcx, 32
-    mov rax, rcx
-    sub rax, rsi
-    jl .Lraw_tags_v1
-    mov rdx, rsi
-    call ape_parse
-.Lraw_tags_v1:
+    mov rcx, rsi
+    mov rdx, rdi
+    call raw_ape
+    mov ebx, eax
     test ebx, ebx
     jz .Lraw_tags_return
     cmp dword ptr [rip + tag_any], 0
@@ -3063,6 +3063,43 @@ LOCALFN raw_tags
     pop rsi
     ret
 ENDFN raw_tags
+
+# RCX=file start, RDX=end: reads an APEv2 tag at the end or before an ID3v1
+# tag -> EAX=bytes of that ID3v1 tag (0 or 128).
+LOCALFN raw_ape
+    push rsi
+    push rdi
+    push rbx
+    sub rsp, 32
+    mov rsi, rcx
+    mov rdi, rdx
+    xor ebx, ebx                          # an ID3v1 tag at the end
+    mov rax, rdi
+    sub rax, rsi
+    cmp rax, 128
+    jb .Lraw_ape_tag
+    cmp word ptr [rdi - 128], 0x4154      # "TA"
+    jne .Lraw_ape_tag
+    cmp byte ptr [rdi - 126], 'G'
+    jne .Lraw_ape_tag
+    mov ebx, 128
+.Lraw_ape_tag:
+    mov rcx, rdi
+    sub rcx, rbx
+    sub rcx, 32
+    mov rax, rcx
+    sub rax, rsi
+    jl .Lraw_ape_return
+    mov rdx, rsi
+    call ape_parse
+.Lraw_ape_return:
+    mov eax, ebx
+    add rsp, 32
+    pop rbx
+    pop rdi
+    pop rsi
+    ret
+ENDFN raw_ape
 
 # RCX=mapped file, RDX=its end: reads the file's tags (never fails).
 FN tags_read

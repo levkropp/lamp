@@ -11,9 +11,10 @@
 .data
 usage:
     .ascii "LAMP 0.4.0-dev - Lev's Assembly Media Player\n"
-    .ascii "Handwritten x86-64 assembly: PCM, G.711, IMA/MS/Flash ADPCM, FLAC, ALAC, WavPack, MP1/MP2/MP3, AAC-LC/HE-AAC, AC-3,\n"
+    .ascii "Handwritten x86-64 assembly: PCM, G.711, IMA/MS/Flash ADPCM, FLAC, ALAC, WavPack, Monkey's Audio, MP1/MP2/MP3,\n"
+    .ascii "AAC-LC/HE-AAC, AC-3, "
     .ascii "Vorbis, Opus "
-    .ascii "in WAV/W64, AIFF/AIFC, CAF, AU, FLAC, WavPack, MP3, AAC (ADTS), AC-3, Ogg, Matroska/WebM, MP4/MOV, AVI, FLV and MPEG-TS/PS files.\n"
+    .ascii "in WAV/W64, AIFF/AIFC, CAF, AU, FLAC, WavPack, APE, MP3, AAC (ADTS), AC-3, Ogg, Matroska/WebM, MP4/MOV, AVI, FLV and MPEG-TS/PS files.\n"
     .ascii "Usage: lamp-cli [--start TIME] [--repeat] [--resume] [--device NAME] [--rate HZ|device]\n"
     .ascii "                file.mp3 [more files...]\n"
     .ascii "       lamp-cli --check [--start TIME] [--rate HZ] file.flac [more files...]\n"
@@ -35,7 +36,7 @@ usage:
     .ascii "Native FLAC: 4..32 bit, 1..8 channels, speaker-mask-aware downmix.\n"
     .asciz "Opus families 0/1; playback and float export output stereo.\n"
 audio_unavailable: .asciz "Audio output unavailable. Start PulseAudio or PipeWire (pipewire-pulse).\n"
-open_error: .asciz "Unsupported, malformed, or inaccessible file. Supports WAV/W64, AIFF/AIFC, CAF, AU, FLAC, WavPack, MP1/MP2/MP3, AAC (LC, HE), AC-3, Ogg (Vorbis, Opus, FLAC), Matroska/WebM, MP4/MOV, AVI, FLV and MPEG-TS/PS audio.\n"
+open_error: .asciz "Unsupported, malformed, or inaccessible file. Supports WAV/W64, AIFF/AIFC, CAF, AU, FLAC, WavPack, Monkey's Audio, MP1/MP2/MP3, AAC (LC, HE), AC-3, Ogg (Vorbis, Opus, FLAC), Matroska/WebM, MP4/MOV, AVI, FLV and MPEG-TS/PS audio.\n"
 output_error: .asciz "Cannot create output file.\n"
 stats_a: .asciz "codec="
 stats_b: .asciz " rate="

@@ -2,8 +2,9 @@
 """Malformed input across every container and codec: no crash, hang or runaway memory.
 
 usage: python3 tests/verify-robustness.py [--count N] [--seed S] [--wine]
-One small file per supported container/codec pairing, written by FFmpeg, is
-mutated N times (500 by default) each:
+One small file per supported container/codec pairing, written by FFmpeg (or,
+for Monkey's Audio, tests/ape_vectors.py), is mutated N times (500 by
+default) each:
 - **Bytes:** byte flips in the first 4 KiB or anywhere, runs of zero or 0xff
   bytes.
 - **Structure:** a cut at any point, a span removed, a span duplicated.
@@ -17,6 +18,7 @@ Writes <out>/robustness-verification.json (robustness-wine-verification.json
 with --wine).
 """
 import argparse
+import math
 import os
 from pathlib import Path
 import random
@@ -90,6 +92,8 @@ SOURCES = [
     ('ac3.ts', SURROUND + ['-c:a', 'ac3']),
     ('mp2.mpg', NOISE + ['-c:a', 'mp2', '-f', 'mpeg']),
     ('ac3.vob', SURROUND + ['-c:a', 'ac3', '-f', 'vob']),
+    ('tone.ape', None),                # Monkey's Audio, written by tests/ape_vectors.py
+    ('old.ape', None),
 ]
 LIMIT = 2 << 30                      # address space, Linux
 
@@ -124,6 +128,21 @@ def mutate(data, rng):
     return bytes(data) if data else b'\0'
 
 
+def monkeys_audio(name, path):
+    """FFmpeg writes no Monkey's Audio: version 3990 at level 3000 in frames of
+    4000 blocks, or version 3950 (the 32-byte header) at level 2000."""
+    import ape_vectors
+    rng = random.Random(name)
+    count, rate = (13000, 22050) if name == 'tone.ape' else (8000, 16000)
+    pcm = [(round(9000 * math.sin(i * 0.05) + rng.randint(-3000, 3000)), rng.randint(-8000, 8000))
+           for i in range(count)]
+    if name == 'tone.ape':
+        data, _ = ape_vectors.write(pcm, 2, 16, rate, 3990, 3, frame_blocks=4000)
+    else:
+        data, _ = ape_vectors.write([(left * 256,) for left, _ in pcm], 1, 24, rate, 3950, 2)
+    path.write_bytes(data)
+
+
 def limit_memory():
     resource.setrlimit(resource.RLIMIT_AS, (LIMIT, LIMIT))
 
@@ -150,7 +169,10 @@ def main():
     for name, options in SOURCES:
         source = work / name
         if not source.exists():
-            ffmpeg(*options, source)
+            if options is None:
+                monkeys_audio(name, source)
+            else:
+                ffmpeg(*options, source)
         original = source.read_bytes()
         good = subprocess.run([*command, '--check', str(source)], stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
                               env=env, timeout=120)

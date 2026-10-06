@@ -378,9 +378,23 @@
       "mutations": 500,
       "decoded": 342,
       "rejected_or_damaged": 158
+    },
+    {
+      "test": "tone.ape",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 500,
+      "decoded": 48,
+      "rejected_or_damaged": 452
+    },
+    {
+      "test": "old.ape",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 500,
+      "decoded": 9,
+      "rejected_or_damaged": 491
     }
   ],
-  "mutations": 27000,
-  "decoded": 11032,
-  "scope": "54 container/codec sources, 500 mutations each (Linux, 2 GiB address space), seed 20261006: byte flips, zero/0xff runs, cuts, removed and duplicated spans, large length fields; --check, every fourth from a random --start."
+  "mutations": 28000,
+  "decoded": 11089,
+  "scope": "56 container/codec sources, 500 mutations each (Linux, 2 GiB address space), seed 20261006: byte flips, zero/0xff runs, cuts, removed and duplicated spans, large length fields; --check, every fourth from a random --start."
 }

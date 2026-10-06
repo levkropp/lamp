@@ -4,7 +4,7 @@ LAMP 0.4.0-dev reads the opened file's tags with a handwritten reader (`src/tags
 
 | Format | Tags read |
 | --- | --- |
-| MP3, MP1/MP2, ADTS AAC, AC-3, WavPack (raw streams) | ID3v2 tags at the start (several in a row), an APEv2 tag at the end or before an ID3v1 tag, then ID3v1/1.1 when nothing else was found |
+| MP3, MP1/MP2, ADTS AAC, AC-3, WavPack, Monkey's Audio (raw streams) | ID3v2 tags at the start (several in a row), an APEv2 tag at the end or before an ID3v1 tag, then ID3v1/1.1 when nothing else was found. In WavPack and Monkey's Audio files the APEv2 tag comes first, and ID3v2 tags count only when it holds no text, as FFmpeg's demuxers read them |
 | WAVE | `LIST INFO` (`INAM`, `IART`, `IPRD`, `ICRD`, `IGNR`, `ICMT`, `ITRK`/`IPRT`) and `id3 `/`ID3 ` chunks |
 | AVI | `LIST INFO` as WAVE, except that `IPRD` is the product, not the album (as FFmpeg reads AVI) |
 | AIFF/AIFC | `NAME`, `AUTH` (artist), `ANNO` (comment) and `ID3 ` chunks |
