@@ -22,6 +22,7 @@
 playing_text: .ascii "Playing. Space: pause / resume. N / P: next / previous file. Left / Right: -5 / +5 s.\n"
     .asciz "Down / Up: -60 / +60 s. R: repeat. Q or Ctrl+C: stop.\n"
 repeat_on_text: .asciz "Repeat: on\n"
+audio_lost_text: .asciz "Audio output lost; reopening.\n"
 repeat_off_text: .asciz "Repeat: off\n"
 audio_error_text: .asciz "Audio output unavailable. Start PulseAudio or PipeWire (pipewire-pulse), or use --check.\n"
 engine_volume: .float 1.0
@@ -51,7 +52,8 @@ engine_stop_requested: .long 0
 pause_requested: .long 0
 engine_ready: .long 0
 engine_command: .long 0                # set by a key: 1 next, 2 previous, 3 seek by engine_seek_delta;
-                                       # 4 at the end with repeat on: the list again
+                                       # 4 at the end with repeat on: the list again;
+                                       # 5 the stream failed: the heard file where it was
 engine_seek_delta: .long 0             # seconds
 engine_heard_index: .long 0            # queue index heard at the command
 engine_greeted: .long 0
@@ -334,6 +336,22 @@ FN engine_start
     call engine_count_dry
     jmp .Leng_cleanup
 .Leng_audio_error:
+    # A console stream that played and then failed (killed, or the server
+    # lost it): the caller reopens the heard file where it was.
+    cmp dword ptr [rip + engine_mode], 0
+    jne .Leng_audio_failed
+    cmp dword ptr [rip + audio_status], 3
+    jne .Leng_audio_failed
+    cmp qword ptr [rip + read_count], 0
+    je .Leng_audio_failed
+    cmp dword ptr [rip + engine_command], 0
+    jne .Leng_audio_failed
+    call engine_note_heard
+    mov dword ptr [rip + engine_command], 5
+    lea rcx, [rip + audio_lost_text]
+    call print_text
+    jmp .Leng_cleanup
+.Leng_audio_failed:
     mov r13d, 3
     cmp dword ptr [rip + engine_mode], 0
     jne .Leng_cleanup

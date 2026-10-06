@@ -3,3 +3,5 @@ EXPORTS
     CoCreateInstance
     CoInitializeEx
     CoUninitialize
+    CoTaskMemFree
+    PropVariantClear

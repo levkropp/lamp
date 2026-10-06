@@ -23,6 +23,7 @@ LAMP's long-term goal is to support everything relevant that mpv supports. This 
 | Network and live media | Planned | HTTP(S), ranges, redirects, buffering, HLS/DASH, proxies/auth and relevant live transports | 5 |
 | Playlists and other inputs | Partial; [several files and M3U/M3U8/PLS playlists](queue.md) on the `lamp-cli` command line play, check or export as one gapless stream, resampled to the first file's rate, with next/previous keys and repeat during playback | URL playlists, a Windows player queue, stdin/pipes, image sequences, disc and specialist sources where relevant | 2, 5–6 |
 | Web media extraction | Planned | An explicit optional integration strategy, including dependency and failure behavior | 5 |
+| Output devices | Partial; [listing and choosing outputs](devices.md) (PulseAudio sinks, WASAPI endpoints) and reopening a lost output during console playback | Windows player device choice and reopening, exclusive mode, per-device settings | 2 |
 | Controls and configuration | Partial | Configurable bindings, profiles, per-file options, track/chapter selection and accessible UI | 2, 6 |
 | Commands, IPC and scripting | Planned | Documented commands/properties/events, automation and a use-case-based scripting/compatibility design | 6 |
 | Filters, screenshots and diagnostics | Planned | Audio/video filters, equalization, screenshots, playback stats and useful export controls | 4, 6 |

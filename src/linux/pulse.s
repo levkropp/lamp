@@ -13,6 +13,7 @@
 .equ PA_COMMAND_AUTH, 8
 .equ PA_COMMAND_SET_CLIENT_NAME, 9
 .equ PA_COMMAND_DRAIN_PLAYBACK_STREAM, 12
+.equ PA_COMMAND_GET_SINK_INFO_LIST, 22
 .equ PA_COMMAND_CORK_PLAYBACK_STREAM, 41
 .equ PA_COMMAND_FLUSH_PLAYBACK_STREAM, 42
 .equ PA_COMMAND_REQUEST, 61
@@ -23,13 +24,15 @@
 .equ PA_VOLUME_NORM, 0x10000
 .equ PA_COOKIE_BYTES, 256
 .equ PA_HEADER, 20                    # length, channel, offset hi/lo, flags (big endian)
-.equ PA_RECEIVE_CAP, 65536
+.equ PA_RECEIVE_CAP, 262144            # a sink list arrives in one packet
 .equ PA_DATA_CAP, 65536               # largest audio packet this client sends
-.equ PA_REPLY_CAP, 1024
+.equ PA_REPLY_CAP, PA_RECEIVE_CAP
 
-.globl pulse_requested, pulse_underflows, pulse_started
+.globl pulse_requested, pulse_underflows, pulse_started, pulse_device, pulse_sinks
 
 .data
+.p2align 3
+pulse_device: .quad 0                  # sink name for new streams, 0 for the default
 pa_fd: .long -1
 pa_stream: .long -1
 pa_runtime_name: .asciz "XDG_RUNTIME_DIR"
@@ -43,6 +46,7 @@ pa_application_key: .asciz "application.name"
 pa_application_value: .asciz "LAMP"
 pa_media_key: .asciz "media.name"
 pa_media_value: .asciz "LAMP playback"
+pa_empty: .byte 0
 
 .bss
 .p2align 4
@@ -165,10 +169,28 @@ FN pulse_create_stream
     mov [rdi + 3], eax
     mov dword ptr [rdi + 7], 0x0201026d            # 'm', 2 channels, front left, front right
     add rdi, 11
-    mov eax, -1                        # any sink
+    mov eax, -1                        # the sink by name, or the default
     call pa_u32
+    mov rsi, [rip + pulse_device]
+    test rsi, rsi
+    jz .Lpa_stream_default
+    mov byte ptr [rdi], 't'
+    inc rdi
+    mov ecx, 256                       # names are short; a longer one fails
+.Lpa_stream_name:
+    movzx eax, byte ptr [rsi]
+    mov [rdi], al
+    inc rdi
+    inc rsi
+    test eax, eax
+    jz .Lpa_stream_named
+    dec ecx
+    jnz .Lpa_stream_name
+    jmp .Lpa_stream_fail
+.Lpa_stream_default:
     mov byte ptr [rdi], 'N'
     inc rdi
+.Lpa_stream_named:
     mov eax, -1                        # maxlength: server default
     call pa_u32
     mov byte ptr [rdi], '0'            # not corked
@@ -848,6 +870,188 @@ LOCALFN pa_handle_packet
     pop rsi
     ret
 ENDFN pa_handle_packet
+
+# RCX=callback, called with ECX=sink index, RDX=its name, R8=its description
+# (NUL-terminated, valid during the call) for each sink -> EAX=1 when the
+# server listed them. Needs pulse_connect.
+FN pulse_sinks
+    push rbx
+    push rsi
+    push rdi
+    push r12
+    push r13
+    sub rsp, 32
+    mov r12, rcx
+    lea rdi, [rip + pa_command]
+    mov eax, PA_COMMAND_GET_SINK_INFO_LIST
+    call pa_begin
+    call pa_send_command
+    test eax, eax
+    jz .Lpa_sinks_fail
+    mov rsi, [rip + pa_reply]
+    mov rdx, [rip + pa_reply_end]
+.Lpa_sinks_entry:
+    cmp rsi, rdx
+    jae .Lpa_sinks_done
+    call pa_read_u32                   # index
+    jc .Lpa_sinks_fail
+    mov ebx, eax
+    cmp byte ptr [rsi], 't'            # name
+    jne .Lpa_sinks_fail
+    lea r13, [rsi + 1]
+    call pa_skip
+    jc .Lpa_sinks_fail
+    cmp byte ptr [rsi], 't'            # description
+    lea rdi, [rsi + 1]
+    je .Lpa_sinks_fields
+    lea rdi, [rip + pa_empty]          # none
+.Lpa_sinks_fields:
+    call pa_skip
+    jc .Lpa_sinks_fail
+    # The rest of a version 15 entry: sample spec, channel map, owner module,
+    # volume, mute, monitor source and its name, latency, driver, flags,
+    # properties, configured latency, base volume, state, volume steps and
+    # card.
+    mov ecx, 16
+.Lpa_sinks_skip:
+    push rcx
+    call pa_skip
+    pop rcx
+    jc .Lpa_sinks_fail
+    dec ecx
+    jnz .Lpa_sinks_skip
+    push rsi
+    push rdx
+    mov ecx, ebx
+    mov rdx, r13
+    mov r8, rdi
+    sub rsp, 32
+    call r12
+    add rsp, 32
+    pop rdx
+    pop rsi
+    jmp .Lpa_sinks_entry
+.Lpa_sinks_done:
+    mov eax, 1
+    jmp .Lpa_sinks_return
+.Lpa_sinks_fail:
+    xor eax, eax
+.Lpa_sinks_return:
+    add rsp, 32
+    pop r13
+    pop r12
+    pop rdi
+    pop rsi
+    pop rbx
+    ret
+ENDFN pulse_sinks
+
+# RSI=tagstruct cursor, RDX=end: skips one value -> RSI advances; CF when it
+# is missing or of an unknown type.
+LOCALFN pa_skip
+    cmp rsi, rdx
+    jae .Lpa_skip_bad
+    movzx eax, byte ptr [rsi]
+    inc rsi
+    cmp eax, 't'                       # a string
+    je .Lpa_skip_string
+    mov ecx, 0
+    cmp eax, 'N'
+    je .Lpa_skip_fixed
+    cmp eax, '1'
+    je .Lpa_skip_fixed
+    cmp eax, '0'
+    je .Lpa_skip_fixed
+    mov ecx, 1
+    cmp eax, 'B'
+    je .Lpa_skip_fixed
+    mov ecx, 4
+    cmp eax, 'L'
+    je .Lpa_skip_fixed
+    cmp eax, 'V'
+    je .Lpa_skip_fixed
+    mov ecx, 6
+    cmp eax, 'a'                       # format, channels, rate
+    je .Lpa_skip_fixed
+    mov ecx, 8
+    cmp eax, 'R'
+    je .Lpa_skip_fixed
+    cmp eax, 'r'
+    je .Lpa_skip_fixed
+    cmp eax, 'U'
+    je .Lpa_skip_fixed
+    cmp eax, 'T'                       # a timeval
+    je .Lpa_skip_fixed
+    cmp eax, 'm'                       # channels, then a byte each
+    je .Lpa_skip_map
+    cmp eax, 'v'                       # channels, then four bytes each
+    je .Lpa_skip_volume
+    cmp eax, 'x'
+    je .Lpa_skip_arbitrary
+    cmp eax, 'P'
+    je .Lpa_skip_properties
+    cmp eax, 'f'                       # encoding, then properties
+    je .Lpa_skip_format
+    jmp .Lpa_skip_bad
+.Lpa_skip_string:
+    cmp rsi, rdx
+    jae .Lpa_skip_bad
+    inc rsi
+    cmp byte ptr [rsi - 1], 0
+    jne .Lpa_skip_string
+    clc
+    ret
+.Lpa_skip_fixed:
+    add rsi, rcx
+    cmp rsi, rdx
+    ja .Lpa_skip_bad
+    clc
+    ret
+.Lpa_skip_map:
+    cmp rsi, rdx
+    jae .Lpa_skip_bad
+    movzx ecx, byte ptr [rsi]
+    inc rsi
+    jmp .Lpa_skip_fixed
+.Lpa_skip_volume:
+    cmp rsi, rdx
+    jae .Lpa_skip_bad
+    movzx ecx, byte ptr [rsi]
+    inc rsi
+    shl ecx, 2
+    jmp .Lpa_skip_fixed
+.Lpa_skip_arbitrary:
+    lea rax, [rsi + 4]
+    cmp rax, rdx
+    ja .Lpa_skip_bad
+    mov ecx, [rsi]
+    bswap ecx
+    add rsi, 4
+    jmp .Lpa_skip_fixed
+.Lpa_skip_properties:
+    cmp rsi, rdx
+    jae .Lpa_skip_bad
+    cmp byte ptr [rsi], 'N'            # the end of the list
+    je .Lpa_skip_properties_end
+    call pa_skip                       # key
+    jc .Lpa_skip_bad
+    call pa_skip                       # length
+    jc .Lpa_skip_bad
+    call pa_skip                       # value
+    jc .Lpa_skip_bad
+    jmp .Lpa_skip_properties
+.Lpa_skip_properties_end:
+    inc rsi
+    clc
+    ret
+.Lpa_skip_format:
+    call pa_skip
+    jc .Lpa_skip_bad
+    jmp pa_skip
+.Lpa_skip_bad:
+    stc
+    ret
+ENDFN pa_skip
 
 # RSI=tagstruct cursor, RDX=end -> EAX=u32, RSI advances; CF when missing.
 LOCALFN pa_read_u32

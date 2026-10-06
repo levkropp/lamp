@@ -21,7 +21,7 @@ usage: .ascii "LAMP 0.4.0-dev - Lev's Assembly Media Player"
       .byte 13, 10
       .ascii "in WAV/W64, AIFF/AIFC, CAF, AU, FLAC, WavPack, MP3, AAC (ADTS), AC-3, Ogg, Matroska/WebM, MP4/MOV, AVI, FLV and MPEG-TS/PS files."
       .byte 13, 10
-      .ascii "Usage: lamp-cli.exe [--start TIME] [--repeat] [--resume] file.mp3 [more files...]"
+      .ascii "Usage: lamp-cli.exe [--start TIME] [--repeat] [--resume] [--device NAME] file.mp3 [more files...]"
       .byte 13, 10
       .ascii "       lamp-cli.exe --check [--start TIME] file.flac [more files...]"
       .byte 13, 10
@@ -32,6 +32,8 @@ usage: .ascii "LAMP 0.4.0-dev - Lev's Assembly Media Player"
       .ascii "       lamp-cli.exe --chapters file.m4b"
       .byte 13, 10
       .ascii "       lamp-cli.exe --cover file.mp3 cover-image"
+      .byte 13, 10
+      .ascii "       lamp-cli.exe --list-devices"
       .byte 13, 10
       .ascii "Several files play one after another without a gap, at the first file's rate;"
       .byte 13, 10
@@ -58,6 +60,8 @@ play_text: .ascii "Playing. Space: pause / resume. N / P: next / previous file. 
     .ascii "Down / Up: -60 / +60 s. R: repeat. Q or Ctrl+C: stop."
 .byte 13, 10, 0
 repeat_on_text: .ascii "Repeat: on"
+.byte 13, 10, 0
+audio_lost: .ascii "Audio output lost; reopening."
 .byte 13, 10, 0
 repeat_off_text: .ascii "Repeat: off"
 .byte 13, 10, 0
@@ -92,13 +96,28 @@ cover_arg: .short '-', '-', 'c', 'o', 'v', 'e', 'r', 0
 repeat_arg: .short '-', '-', 'r', 'e', 'p', 'e', 'a', 't', 0
 start_arg: .short '-', '-', 's', 't', 'a', 'r', 't', 0
 resume_arg: .short '-', '-', 'r', 'e', 's', 'u', 'm', 'e', 0
+device_arg: .short '-', '-', 'd', 'e', 'v', 'i', 'c', 'e', 0
+list_devices_arg: .short '-', '-', 'l', 'i', 's', 't', '-', 'd', 'e', 'v', 'i', 'c', 'e', 's', 0
+unknown_device: .ascii "Unknown audio device."
+.byte 13, 10, 0
+devices_failed: .ascii "Audio devices unavailable."
+.byte 13, 10, 0
+tab_text: .asciz "\t"
+.p2align 2
+pkey_friendly_name: .long 0xa45c254e      # PKEY_Device_FriendlyName
+    .short 0xdf1c, 0x4efd
+    .byte 0x80, 0x20, 0x67, 0xd1, 0x46, 0xa8, 0x50, 0xe0
+    .long 14
 resume_local: .short 'L', 'O', 'C', 'A', 'L', 'A', 'P', 'P', 'D', 'A', 'T', 'A', 0
 resume_folder_tail: .short 92, 'L', 'A', 'M', 'P', 0
 resume_file_tail: .short 92, 'r', 'e', 's', 'u', 'm', 'e', '.', 't', 'x', 't', 0
 resume_temp_tail: .short '.', 't', 'm', 'p', 0
 resuming_text: .asciz "Resuming at "
 .p2align 3
-cli_modes: .quad check_arg, 1, decode_arg, 2, tags_arg, 3, chapters_arg, 4, cover_arg, 5, 0, 0
+cli_modes: .quad check_arg, 1, decode_arg, 2, tags_arg, 3, chapters_arg, 4, cover_arg, 5, list_devices_arg, 6
+    .quad 0, 0
+cli_device: .quad 0                  # --device's argument (wide)
+device_chosen: .quad 0               # its endpoint ID (device_id), 0 for the default
 cli_start_ms: .quad 0
 engine_seek_ms: .quad 0              # console: where playback starts in the current file
 engine_heard_ms: .quad 0             # position in the heard file at a command
@@ -116,6 +135,7 @@ engine_heard_index: .long 0
 console_greeted: .long 0
 time_text: .zero 64
 clock_text: .zero 32
+device_text: .zero 1024              # a device's ID or name in UTF-8
 no_cover: .ascii "No embedded cover art."
 .byte 13, 10, 0
 bytes_text: .ascii " bytes"
@@ -213,6 +233,12 @@ resume_wide: .zero RESUME_WIDE*2
 resume_key: .zero RESUME_PATH
 resume_heard: .zero RESUME_PATH
 resume_found: .zero RESUME_PATH
+device_id: .zero 1024                # the chosen endpoint's ID (wide)
+device_variant: .zero 24             # PROPVARIANT
+device_collection: .quad 0
+device_item: .quad 0
+device_store: .quad 0
+device_string: .quad 0               # an endpoint ID from GetId
 ring_pcm: .zero RING_FRAMES*8
 offline_pcm: .zero CHUNK_FRAMES*8
 bytes_written: .zero 4
@@ -355,6 +381,20 @@ FN start
     jmp .Lopt_next
 .Lopt_start_name:
     mov rcx, [rsp + 64]
+    lea rdx, [rip + device_arg]
+    call equal_wide
+    test eax, eax
+    jz .Lopt_start_time
+    mov eax, [rip + arg_index]
+    cmp eax, [rip + argc]
+    jae .Lshow_help
+    inc dword ptr [rip + arg_index]
+    mov rcx, [rip + argv]
+    mov rcx, [rcx + rax*8]
+    mov [rip + cli_device], rcx
+    jmp .Lopt_next
+.Lopt_start_time:
+    mov rcx, [rsp + 64]
     lea rdx, [rip + start_arg]
     call equal_wide
     test eax, eax
@@ -393,10 +433,21 @@ FN start
     mov eax, [rip + operation]
     mov ecx, [rip + cli_repeat]
     or ecx, [rip + cli_resume]
+    or rcx, [rip + cli_device]
     jz .Lopt_repeat_checked
     test eax, eax
-    jnz .Lshow_help                     # --repeat and --resume play
+    jnz .Lshow_help                     # --repeat, --resume and --device play
 .Lopt_repeat_checked:
+    cmp eax, 6
+    jne .Lopt_not_list
+    cmp qword ptr [rip + input_count], 0
+    jne .Lshow_help
+    cmp qword ptr [rip + cli_start_ms], 0
+    jne .Lshow_help
+    xor ecx, ecx
+    call audio_devices
+    jmp cleanup
+.Lopt_not_list:
     cmp eax, 3
     jb .Lopt_queue_mode
     cmp qword ptr [rip + cli_start_ms], 0
@@ -503,6 +554,13 @@ FN start
     jz bad_input
     cmp dword ptr [rip + operation], 0
     jne .Loffline_start
+    cmp qword ptr [rip + cli_device], 0
+    je .Lconsole_device
+    mov ecx, 1
+    call audio_devices                  # find --device
+    test eax, eax
+    jz cleanup                          # exit code 3, reported
+.Lconsole_device:
     mov rax, [rip + cli_start_ms]
     mov [rip + engine_seek_ms], rax
     cmp dword ptr [rip + cli_resume], 0
@@ -649,11 +707,23 @@ start_playback:
     test eax, eax
     js .Lbad_audio
     mov rcx, [rip + enum_obj]
+    mov rdx, [rip + device_chosen]
+    test rdx, rdx
+    jz .Laudio_default_device
+    lea r8, [rip + device_obj]
+    mov rax, [rcx]
+    call qword ptr [rax + 40]           # GetDevice: --device's endpoint
+    test eax, eax
+    jns .Laudio_device_opened
+    mov qword ptr [rip + device_chosen], 0   # gone: the default from now on
+    mov rcx, [rip + enum_obj]
+.Laudio_default_device:
     xor edx, edx
     xor r8d, r8d
     lea r9, [rip + device_obj]
     mov rax, [rcx]
-    call qword ptr [rax + 32]
+    call qword ptr [rax + 32]           # GetDefaultAudioEndpoint
+.Laudio_device_opened:
     test eax, eax
     js .Lbad_audio
     mov rcx, [rip + device_obj]
@@ -665,7 +735,7 @@ start_playback:
     mov rax, [rcx]
     call qword ptr [rax + 24]
     test eax, eax
-    js .Lbad_audio
+    js .Laudio_device_failed
     mov eax, [rip + queue_rate]            # the session rate; later files may differ
     mov dword ptr [rip + wavefmt + 4], eax
     shl eax, 3
@@ -681,7 +751,7 @@ start_playback:
     mov rax, [rcx]
     call qword ptr [rax + 24]
     test eax, eax
-    js .Lbad_audio
+    js .Laudio_device_failed
     mov rcx, [rip + client_obj]
     lea rdx, [rip + buffer_frames]
     mov rax, [rcx]
@@ -877,11 +947,46 @@ start_playback:
     cmp dword ptr [rip + audio_hresult], 0
     jne .Lbad_audio_saved
     jmp .Laudio_wait
+.Laudio_device_failed:
+    # --device's endpoint would not activate or initialize (it may have gone
+    # since it was chosen): the default endpoint from now on.
+    cmp qword ptr [rip + device_chosen], 0
+    je .Lbad_audio
+    mov qword ptr [rip + device_chosen], 0
+    lea rcx, [rip + client_obj]
+    call release_com
+    lea rcx, [rip + device_obj]
+    call release_com
+    mov rcx, [rip + enum_obj]
+    jmp .Laudio_default_device
 .Lbad_audio_timeout:
     mov eax, 0x800705b4
 .Lbad_audio:
     mov [rip + audio_hresult], eax
 .Lbad_audio_saved:
+    # A console stream that played and then lost its endpoint (invalidated,
+    # or silent past the timeout): reopen the heard file where it was.
+    cmp dword ptr [rip + engine_mode], 0
+    jne .Lbad_audio_report
+    cmp dword ptr [rip + engine_ready], 0
+    je .Lbad_audio_report
+    cmp qword ptr [rip + read_count], 0
+    je .Lbad_audio_report
+    cmp dword ptr [rip + engine_command], 0
+    jne .Lbad_audio_report
+    mov eax, [rip + audio_hresult]
+    cmp eax, 0x88890004                 # AUDCLNT_E_DEVICE_INVALIDATED
+    je .Lbad_audio_lost
+    cmp eax, 0x800705b4                 # no callback within 2 s
+    jne .Lbad_audio_report
+.Lbad_audio_lost:
+    call console_note_heard
+    mov dword ptr [rip + engine_command], 5
+    mov dword ptr [rip + audio_hresult], 0
+    lea rcx, [rip + audio_lost]
+    call print_text
+    jmp .Lplayback_stopped
+.Lbad_audio_report:
     mov dword ptr [rip + exit_code], 3
     lea rcx, [rip + audio_error]
     call print_text
@@ -1421,6 +1526,12 @@ LOCALFN console_restart
     mov edx, [rip + engine_heard_index]
     mov r8, [rip + engine_heard_ms]
     mov r9d, [rip + engine_seek_delta]
+    cmp ecx, 5
+    jne .Lrestart_list
+    mov ecx, 3                          # reopen: a seek by 0
+    xor r9d, r9d
+    jmp .Lrestart_navigate
+.Lrestart_list:
     cmp ecx, 4
     jne .Lrestart_navigate
     mov dword ptr [rip + engine_heard_index], -1   # the list again: its tags
@@ -2019,3 +2130,224 @@ LOCALFN absolute_utf8
     pop rbx
     ret
 ENDFN absolute_utf8
+
+# Active render endpoints, in the enumerator's order. ECX=0 prints each as
+# "number<TAB>endpoint ID<TAB>friendly name" (UTF-8); ECX=1 finds the one
+# whose ID, friendly name or number equals cli_device and makes it
+# device_chosen. -> EAX=1; else reports the failure, exit code 3, EAX=0.
+LOCALFN audio_devices
+    push rbx
+    push rsi
+    push rdi
+    push r12
+    sub rsp, 56
+    mov r12d, ecx
+    xor ecx, ecx
+    mov edx, 2                          # COINIT_APARTMENTTHREADED
+    call CoInitializeEx
+    mov ebx, eax                        # uninitialize after a success
+    lea rcx, [rip + clsid_enumerator]
+    xor edx, edx
+    mov r8d, 1
+    lea r9, [rip + iid_enumerator]
+    lea rax, [rip + enum_obj]
+    mov [rsp + 32], rax
+    call CoCreateInstance
+    test eax, eax
+    js .Ldevices_failed
+    mov rcx, [rip + enum_obj]
+    xor edx, edx                        # eRender
+    mov r8d, 1                          # DEVICE_STATE_ACTIVE
+    lea r9, [rip + device_collection]
+    mov rax, [rcx]
+    call qword ptr [rax + 24]           # EnumAudioEndpoints
+    test eax, eax
+    js .Ldevices_failed
+    mov rcx, [rip + device_collection]
+    lea rdx, [rsp + 48]
+    mov rax, [rcx]
+    call qword ptr [rax + 24]           # GetCount
+    test eax, eax
+    js .Ldevices_failed
+    xor esi, esi                        # endpoint number
+.Ldevices_next:
+    cmp esi, [rsp + 48]
+    jae .Ldevices_end
+    mov rcx, [rip + device_collection]
+    mov edx, esi
+    lea r8, [rip + device_item]
+    mov rax, [rcx]
+    call qword ptr [rax + 32]           # Item
+    test eax, eax
+    js .Ldevices_skip
+    mov rcx, [rip + device_item]
+    lea rdx, [rip + device_string]
+    mov rax, [rcx]
+    call qword ptr [rax + 40]           # GetId
+    test eax, eax
+    js .Ldevices_release
+    mov rcx, [rip + device_item]
+    xor edx, edx                        # STGM_READ
+    lea r8, [rip + device_store]
+    mov rax, [rcx]
+    call qword ptr [rax + 32]           # OpenPropertyStore
+    test eax, eax
+    js .Ldevices_free_id
+    lea rdi, [rip + device_variant]
+    xor eax, eax
+    mov [rdi], rax
+    mov [rdi + 8], rax
+    mov [rdi + 16], rax
+    mov rcx, [rip + device_store]
+    lea rdx, [rip + pkey_friendly_name]
+    mov r8, rdi
+    mov rax, [rcx]
+    call qword ptr [rax + 40]           # GetValue
+    xor edi, edi                        # its name (VT_LPWSTR), or none
+    test eax, eax
+    js .Ldevices_named
+    cmp word ptr [rip + device_variant], 31
+    jne .Ldevices_named
+    mov rdi, [rip + device_variant + 8]
+.Ldevices_named:
+    test r12d, r12d
+    jnz .Ldevices_match
+    mov ecx, esi                        # print it
+    call print_number
+    lea rcx, [rip + tab_text]
+    call print_text
+    mov rcx, [rip + device_string]
+    call print_wide
+    lea rcx, [rip + tab_text]
+    call print_text
+    test rdi, rdi
+    jz .Ldevices_printed
+    mov rcx, rdi
+    call print_wide
+.Ldevices_printed:
+    lea rcx, [rip + line_end]
+    call print_text
+    jmp .Ldevices_close
+.Ldevices_match:
+    cmp qword ptr [rip + device_chosen], 0
+    jne .Ldevices_close
+    mov rcx, [rip + cli_device]
+    mov rdx, [rip + device_string]
+    call equal_wide
+    test eax, eax
+    jnz .Ldevices_chosen
+    test rdi, rdi
+    jz .Ldevices_number
+    mov rcx, [rip + cli_device]
+    mov rdx, rdi
+    call equal_wide
+    test eax, eax
+    jnz .Ldevices_chosen
+.Ldevices_number:
+    mov rcx, [rip + cli_device]
+    xor eax, eax
+    xor edx, edx
+.Ldevices_digit:
+    movzx r8d, word ptr [rcx]
+    test r8d, r8d
+    jz .Ldevices_digits
+    sub r8d, '0'
+    cmp r8d, 9
+    ja .Ldevices_close
+    cmp eax, 100000
+    jae .Ldevices_close
+    imul eax, eax, 10
+    add eax, r8d
+    add rcx, 2
+    inc edx
+    jmp .Ldevices_digit
+.Ldevices_digits:
+    test edx, edx
+    jz .Ldevices_close
+    cmp eax, esi
+    jne .Ldevices_close
+.Ldevices_chosen:
+    mov rcx, [rip + device_string]      # keep its ID
+    lea rdx, [rip + device_id]
+    xor eax, eax
+.Ldevices_copy:
+    movzx r8d, word ptr [rcx + rax*2]
+    mov [rdx + rax*2], r8w
+    test r8d, r8d
+    jz .Ldevices_copied
+    inc eax
+    cmp eax, 511
+    jb .Ldevices_copy
+    jmp .Ldevices_close                 # too long to keep
+.Ldevices_copied:
+    mov [rip + device_chosen], rdx
+.Ldevices_close:
+    lea rcx, [rip + device_variant]
+    call PropVariantClear
+    lea rcx, [rip + device_store]
+    call release_com
+.Ldevices_free_id:
+    mov rcx, [rip + device_string]
+    call CoTaskMemFree
+    mov qword ptr [rip + device_string], 0
+.Ldevices_release:
+    lea rcx, [rip + device_item]
+    call release_com
+.Ldevices_skip:
+    inc esi
+    jmp .Ldevices_next
+.Ldevices_end:
+    mov eax, 1
+    test r12d, r12d
+    jz .Ldevices_done
+    cmp qword ptr [rip + device_chosen], 0
+    jne .Ldevices_done
+    lea rcx, [rip + unknown_device]
+    call print_text
+    jmp .Ldevices_error
+.Ldevices_failed:
+    lea rcx, [rip + devices_failed]
+    call print_text
+.Ldevices_error:
+    mov dword ptr [rip + exit_code], 3
+    xor eax, eax
+.Ldevices_done:
+    mov [rsp + 48], eax
+    lea rcx, [rip + device_collection]
+    call release_com
+    lea rcx, [rip + enum_obj]
+    call release_com
+    test ebx, ebx
+    js .Ldevices_return
+    call CoUninitialize
+.Ldevices_return:
+    mov eax, [rsp + 48]
+    add rsp, 56
+    pop r12
+    pop rdi
+    pop rsi
+    pop rbx
+    ret
+ENDFN audio_devices
+
+# RCX=wide text: written in UTF-8.
+LOCALFN print_wide
+    sub rsp, 72
+    mov r8, rcx
+    mov ecx, 65001                      # CP_UTF8
+    xor edx, edx
+    mov r9d, -1
+    lea rax, [rip + device_text]
+    mov [rsp + 32], rax
+    mov qword ptr [rsp + 40], 1024
+    mov qword ptr [rsp + 48], 0
+    mov qword ptr [rsp + 56], 0
+    call WideCharToMultiByte
+    test eax, eax
+    jz .Lprint_wide_done
+    lea rcx, [rip + device_text]
+    call print_text
+.Lprint_wide_done:
+    add rsp, 72
+    ret
+ENDFN print_wide
