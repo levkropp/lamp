@@ -27,7 +27,9 @@ usage: .ascii "LAMP 0.4.0-dev - Lev's Assembly Media Player"
       .byte 13, 10
       .ascii "       lamp-cli.exe --tags file.mp3"
       .byte 13, 10
-      .ascii "Several files play one after another without a gap, at the first file's rate."
+      .ascii "Several files play one after another without a gap, at the first file's rate;"
+      .byte 13, 10
+      .ascii "M3U/M3U8 and PLS playlists add their entries."
       .byte 13, 10
       .ascii "Playback: Space pauses/resumes; Q or Ctrl+C stops."
       .byte 13, 10
@@ -320,6 +322,8 @@ FN start
     mov [rip + queue_skipped], rax
     mov rcx, [rip + input_list]
     mov edx, [rip + input_count]
+    call playlist_expand                # M3U and PLS playlists become their entries
+    mov rcx, rax
     call queue_begin                    # files play one after another
     test eax, eax
     jz bad_input

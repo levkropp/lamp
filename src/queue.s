@@ -30,6 +30,7 @@ queue_rate: .long 0
 queue_resampling: .long 0
 queue_failures: .long 0
 queue_playing: .long 0              # a file is open
+queue_open_error: .long 0           # decode_error of the last file that did not open
 
 .text
 # RCX=path pointers, EDX=count -> EAX=1 when a file opened (the first that
@@ -44,12 +45,17 @@ FN queue_begin
     mov [rip + queue_failures], eax
     mov [rip + queue_resampling], eax
     mov [rip + queue_playing], eax
+    mov dword ptr [rip + queue_open_error], 1  # an empty queue: decoder_open's generic error
     mov dword ptr [rip + queue_index], -1
     call queue_advance
     test eax, eax
-    jz .Lqueue_begin_return
+    jz .Lqueue_begin_none
     mov ecx, [rip + output_rate]
     mov [rip + queue_rate], ecx
+    jmp .Lqueue_begin_return
+.Lqueue_begin_none:
+    mov ecx, [rip + queue_open_error]     # nothing opened: the last reason
+    mov [rip + decode_error], ecx
 .Lqueue_begin_return:
     add rsp, 40
     ret
@@ -112,6 +118,9 @@ LOCALFN queue_advance
     jmp .Lqueue_advance_return
 .Lqueue_advance_skip:
     inc dword ptr [rip + queue_failures]
+    mov eax, [rip + decode_error]
+    mov [rip + queue_open_error], eax
+    mov dword ptr [rip + decode_error], 0  # skipped files end the run with 6
     mov rax, [rip + queue_skipped]
     test rax, rax
     jz .Lqueue_advance_next

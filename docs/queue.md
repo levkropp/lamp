@@ -16,6 +16,17 @@ Files that do not open are skipped with a message (`Skipped (unsupported, malfor
 
 During playback the first file's tags are printed before it starts and each later file's tags when the queue moves to it. The status line reports the session rate and the total frames; codec, channel and bit fields describe the last file. Seeking (the Windows player) applies within the current file of a queue without rate conversion. `--tags` takes one file.
 
+## Playlists
+
+M3U, M3U8 and PLS playlists on the command line are replaced by their entries (`src/playlist.s`), recognized by the extension `.m3u`, `.m3u8` or `.pls` in any case:
+
+- M3U/M3U8: one entry per line; lines starting with `#` (`#EXTM3U`, `#EXTINF` and others) and empty lines are skipped.
+- PLS: `FileN=` lines (any case), in file order; titles, lengths and other lines are skipped.
+- Text is UTF-8 with an optional byte order mark and LF or CRLF line ends; a line that is not valid UTF-8 is read as Latin-1, as older `.m3u` files often are.
+- Relative entries resolve against the playlist's directory. `file://` URIs (with or without `localhost`) are percent-decoded; other URLs are not supported and are skipped with the usual message, as are entries that do not exist.
+- Playlists inside playlists expand too, to a depth of four, so a playlist that names itself ends.
+- A playlist that cannot be read is skipped like a file that does not open. Up to 65,536 entries and 4 MiB of paths are kept; longer playlists are cut.
+
 The Windows player still opens one file at a time; drag-and-drop queues, repeat and track navigation remain on the [roadmap](../ROADMAP.md).
 
 ## Verification
@@ -26,5 +37,6 @@ The Windows player still opens one file at a time; drag-and-drop queues, repeat 
 - Opus at 48 kHz, MP3 at 22.05 kHz, FLAC at 96 kHz, WAV at 8 kHz and Vorbis at 32 kHz resample to a 44.1 kHz session exactly as `tests/resample-oracle.c` resamples their own decodes, and 44.1 and 8 kHz files to a 48 kHz session.
 - A 48 kHz chained Ogg file resamples to 44.1 kHz; a chain whose links change rate plays at its own rate and is skipped at another.
 - Two files that do not open are skipped (exit 2); a truncated FLAC file in the middle contributes its partial decode; the last file keeps its own error; nothing opening fails as a single file does.
+- A PLS playlist with an absolute path, a percent-encoded `file://localhost` URI, a nested M3U8 (byte order mark, CRLF, `#EXTINF` and comments, a UTF-8 name with a space, an absolute path, a missing entry and a URL) and a Latin-1 M3U decodes as its expanded list; a playlist naming itself expands four times; an unreadable playlist is skipped.
 
 `python3 tests/verify-playback.py` plays a four-file queue (a 0.3 s first file shorter than the prebuffer, a resampled 44.1 kHz MP3, Opus and WAV) through the private null sink: the captured stream equals the `--decode` output bit for bit, with no gap between files.

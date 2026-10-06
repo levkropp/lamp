@@ -17,7 +17,8 @@ usage:
     .ascii "       lamp-cli --check file.flac [more files...]\n"
     .ascii "       lamp-cli --decode file.flac [more files...] output.f32\n"
     .ascii "       lamp-cli --tags file.mp3\n"
-    .ascii "Several files play one after another without a gap, at the first file's rate.\n"
+    .ascii "Several files play one after another without a gap, at the first file's rate;\n"
+    .ascii "M3U/M3U8 and PLS playlists add their entries.\n"
     .ascii "Playback: Space pauses/resumes; Q or Ctrl+C stops.\n"
     .ascii "RIFF/RIFX/RF64/BW64/W64 WAV: 1..8 channels, PCM 8/16/24/32 or float32/64.\n"
     .ascii "AIFF/AIFC: signed PCM 1..32 bits or float32/64, 1..8 channels.\n"
@@ -144,6 +145,8 @@ LOCALFN cli_main
     mov [rip + queue_skipped], rax
     mov rcx, r12
     mov edx, esi
+    call playlist_expand               # M3U and PLS playlists become their entries
+    mov rcx, rax
     call queue_begin                   # files play one after another
     test eax, eax
     jz .Lbad_input

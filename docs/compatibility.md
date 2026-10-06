@@ -21,7 +21,7 @@ LAMP's long-term goal is to support everything relevant that mpv supports. This 
 | Video rendering and color | Planned | Scaling, crop/zoom/pan/rotation, deinterlacing, HDR/tone mapping, ICC, user shaders and display sync | 4, 6 |
 | Subtitles | Planned | Embedded/external text and bitmap subtitles, ASS/SSA, fonts, styling, delays and secondary tracks | 5 |
 | Network and live media | Planned | HTTP(S), ranges, redirects, buffering, HLS/DASH, proxies/auth and relevant live transports | 5 |
-| Playlists and other inputs | Partial; [several files](queue.md) on the `lamp-cli` command line play, check or export as one gapless stream, resampled to the first file's rate | File/URL playlists, repeat, track navigation, a Windows queue, stdin/pipes, image sequences, disc and specialist sources where relevant | 2, 5–6 |
+| Playlists and other inputs | Partial; [several files and M3U/M3U8/PLS playlists](queue.md) on the `lamp-cli` command line play, check or export as one gapless stream, resampled to the first file's rate | URL playlists, repeat, track navigation, a Windows queue, stdin/pipes, image sequences, disc and specialist sources where relevant | 2, 5–6 |
 | Web media extraction | Planned | An explicit optional integration strategy, including dependency and failure behavior | 5 |
 | Controls and configuration | Partial | Configurable bindings, profiles, per-file options, track/chapter selection and accessible UI | 2, 6 |
 | Commands, IPC and scripting | Planned | Documented commands/properties/events, automation and a use-case-based scripting/compatibility design | 6 |

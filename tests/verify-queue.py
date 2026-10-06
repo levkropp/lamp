@@ -14,6 +14,11 @@ usage: python3 tests/verify-queue.py
 - Files that do not open are skipped with a message (exit 2); a file that
   fails while decoding contributes what it decoded and the queue continues;
   the last file's own error is kept; a queue where nothing opens fails.
+- M3U/M3U8 and PLS playlists expand to their entries: relative entries
+  against the playlist's directory, absolute paths, file:// URIs with
+  percent escapes, nested playlists (to a depth of four), a byte order mark,
+  CRLF lines, comments, a Latin-1 M3U, missing entries and URLs skipped, and
+  an unreadable playlist skipped.
 Playback of a queue through the null sink is in tests/verify-playback.py.
 Writes <out>/queue-verification.json.
 """
@@ -163,6 +168,8 @@ def main():
     if ' decode_error=6 ' in text.splitlines()[-1] + ' ':
         raise Failure('broken-last: the last file should keep its own error')
     record('broken-last', ours, own(files[1]) + partial, "the last file's own error kept", text)
+    if (work / 'none.f32').exists():
+        (work / 'none.f32').unlink()
     text = lamp('--decode', junk, missing, work / 'none.f32', expect=2)
     if 'Unsupported' not in text:
         raise Failure(f'none: {text[-300:]}')
@@ -171,10 +178,44 @@ def main():
     checks.append({'test': '--check with a skipped file', 'result': 'exit 2', 'stats': text.strip().splitlines()[-1]})
     print('Failure cases behave as documented', flush=True)
 
+    # Playlists.
+    folder = work / 'playlists' / 'sub dir'
+    folder.mkdir(parents=True, exist_ok=True)
+    named = folder / 'é track.flac'
+    named.write_bytes(files[0].read_bytes())
+    plain = folder / 'plain.wav'
+    plain.write_bytes(files[1].read_bytes())
+    m3u = folder / 'list.m3u8'
+    m3u.write_bytes(b'\xef\xbb\xbf#EXTM3U\r\n#EXTINF:1,One\r\n' + 'é track.flac'.encode() + b'\r\n\r\n'
+                    b'# a comment\r\nplain.wav\r\n' + str(files[2]).encode() + b'\r\nmissing.flac\r\n'
+                    b'https://example.com/stream.mp3\r\n')
+    latin = folder / 'latin.m3u'
+    latin.write_bytes('é track.flac\n'.encode('latin-1'))
+    uri = 'file://localhost' + str(named).replace(' ', '%20').replace('é', '%C3%A9')
+    pls = work / 'playlists' / 'top.pls'
+    pls.write_text(f'[playlist]\nFile1={files[3]}\nTitle1=Four\nfile2={uri}\nFile3=sub dir/list.m3u8\n'
+                   f'File4=sub dir/latin.m3u\nNumberOfEntries=4\nVersion=2\n', encoding='utf-8')
+    expected = [files[3], named, named, plain, files[2], named]
+    ours, text = decode('playlists.f32', [pls, files[4]], expect=2)
+    if text.count('Skipped') != 2:
+        raise Failure(f'playlists: {text[-400:]}')
+    record('playlists', ours, b''.join(own(p) for p in expected + [files[4]]),
+           'PLS with a file:// URI, a nested M3U8 (BOM, CRLF, comments, a missing entry and a URL) and a '
+           'Latin-1 M3U', text)
+    loop = work / 'playlists' / 'loop.m3u'
+    loop.write_text(f'{files[5].name}\nloop.m3u\n', encoding='utf-8')
+    (work / 'playlists' / files[5].name).write_bytes(files[5].read_bytes())
+    ours, text = decode('loop.f32', [loop])
+    record('loop', ours, own(files[5]) * 4, 'a playlist naming itself expands to a depth of four', text)
+    ours, text = decode('unreadable.f32', [work / 'playlists' / 'absent.m3u', files[6]], expect=2)
+    if 'absent.m3u' not in text:
+        raise Failure(f'unreadable: {text[-300:]}')
+    record('unreadable-playlist', ours, own(files[6]), 'a playlist that does not exist is skipped', text)
+
     write_report('queue', {'result': 'passed', 'checks': checks,
                            'scope': 'Gapless queues of several files: exact concatenation at one rate, resampling '
                                     'to the first file\'s rate against the resampler oracle, chained Ogg files, '
-                                    'skipped and failing files.'})
+                                    'skipped and failing files, M3U/M3U8/PLS playlists.'})
     print(f'Passed {len(checks)} queue checks.')
 
 
