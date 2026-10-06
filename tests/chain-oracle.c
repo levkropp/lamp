@@ -6,7 +6,7 @@
        Seeks inside Opus links are checked by dump instead (pre-roll).
    chain-oracle dump file target frames output.f32
        Seeks, discards to the target and writes the next frames.
-   chain-oracle reject file      Opening must fail.
+   chain-oracle reject file [track]  Opening (with track_choice track) must fail.
    chain-oracle cancel-open file A pre-cancelled open must fail cleanly.
    chain-oracle cancel-read file Cancelling during playback stops reads.
    Prints one JSON line. */
@@ -20,7 +20,7 @@ LAMP_ABI int decoder_open(const lamp_char *);
 LAMP_ABI void decoder_close(void);
 LAMP_ABI uint64_t decoder_seek(uint64_t);
 LAMP_ABI unsigned decoder_read(float *, unsigned);
-extern unsigned decode_error, codec_kind, output_rate, chain_active, chain_count;
+extern unsigned decode_error, codec_kind, output_rate, chain_active, chain_count, track_choice;
 extern unsigned *ogg_cancel_ptr;
 extern uint64_t output_frames;
 extern unsigned char *chain_links;
@@ -50,6 +50,7 @@ int lamp_main(int argc, lamp_char **argv) {
     const lamp_char *mode = argv[1], *path = argv[2];
     if (!lamp_strcmp(mode, LT("reject"))) {
         /* Structure and timing fail at open; frame contents fail when read. */
+        if (argc > 3) track_choice = (unsigned)lamp_atoi(argv[3]);
         int opened = decoder_open(path);
         uint64_t decoded = 0;
         unsigned n;

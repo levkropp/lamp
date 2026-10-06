@@ -2,9 +2,10 @@
 # MIT, see LICENSE.
 # A physical stream is a sequence of links. Each link starts with the BOS
 # pages of its logical streams; a BOS page after any other page starts the next
-# link. Each link plays its first Vorbis, Opus or FLAC stream; other streams
-# (video, metadata, a second audio track) are skipped. A link without one of
-# those streams rejects the file.
+# link. Each link plays its first Vorbis, Opus or FLAC stream, or the audio
+# stream that track_choice numbers (Vorbis, Opus, FLAC, Speex, CELT and OGM
+# audio count, in BOS order); other streams (video, metadata, other audio
+# tracks) are skipped. A link without the stream rejects the file.
 # Every link is opened at chain_open to validate it and learn its duration.
 # Output keeps the first link's rate; later links at another rate pass through
 # the resampler. One codec instance is open at a time.
@@ -37,6 +38,7 @@ chain_resampling: .long 0
 output_rate: .long 0
 output_frames: .quad 0
 chain_serial_count: .long 0
+chain_audio_index: .long 0        # audio streams begun in the current link
 .bss
 chain_serials: .zero CH_STREAMS*4       # logical streams of the link being scanned
 
@@ -241,6 +243,32 @@ LOCALFN chain_probe
     ret
 ENDFN chain_probe
 
+# RCX=BOS page -> EAX=1 when its first packet begins an audio stream LAMP
+# does not decode: Speex, CELT or OGM audio (counted by track_choice).
+LOCALFN chain_other_audio
+    xor eax, eax
+    cmp byte ptr [rcx + 26], 0
+    je .Lch_other_return
+    cmp byte ptr [rcx + 27], 8            # the first lace: a header of 8 bytes or more
+    jb .Lch_other_return
+    movzx r8d, byte ptr [rcx + 26]
+    lea r9, [rcx + r8 + 27]
+    mov rdx, 0x2020207865657053           # "Speex   "
+    cmp [r9], rdx
+    je .Lch_other_yes
+    mov rdx, 0x202020205443454c           # "CELT    "
+    cmp [r9], rdx
+    je .Lch_other_yes
+    cmp dword ptr [r9], 0x64756101        # OGM: 01 "audio"
+    jne .Lch_other_return
+    cmp word ptr [r9 + 4], 0x6f69
+    jne .Lch_other_return
+.Lch_other_yes:
+    mov eax, 1
+.Lch_other_return:
+    ret
+ENDFN chain_other_audio
+
 # RCX=mapped start, RDX=end -> EAX=1 when every link validated. Sets
 # output_rate/output_frames, codec_kind and the link-0 format globals.
 FN chain_open
@@ -307,6 +335,7 @@ FN chain_open
     mov [r12 + CH_BEGIN], rsi
     mov dword ptr [r12 + CH_CODEC], 0
     mov dword ptr [rip + chain_serial_count], 0
+    mov dword ptr [rip + chain_audio_index], 0
 .Lch_scan_bos:
     # Each logical stream begins once per link.
     mov ecx, [rsi + 14]
@@ -320,12 +349,34 @@ FN chain_open
     mov ecx, [rsi + 14]
     mov [rdx + rax*4], ecx
     inc dword ptr [rip + chain_serial_count]
+    cmp dword ptr [rip + track_choice], 0
+    jne .Lch_scan_choice
     cmp dword ptr [r12 + CH_CODEC], 0
     jne .Lch_scan_next
     mov rcx, rsi
     call chain_probe
     test eax, eax
     jz .Lch_scan_next
+    jmp .Lch_scan_select
+.Lch_scan_choice:
+    mov rcx, rsi
+    call chain_probe
+    test eax, eax
+    jnz .Lch_scan_audio
+    mov rcx, rsi
+    call chain_other_audio
+    test eax, eax
+    jz .Lch_scan_next
+    xor eax, eax                     # audio LAMP does not decode
+.Lch_scan_audio:
+    inc dword ptr [rip + chain_audio_index]
+    mov ecx, [rip + chain_audio_index]
+    cmp ecx, [rip + track_choice]
+    jne .Lch_scan_next
+    mov dword ptr [rip + track_choice_used], 1
+    test eax, eax
+    jz .Lch_scan_next
+.Lch_scan_select:
     mov [r12 + CH_CODEC], eax
     mov eax, [rsi + 14]
     mov [r12 + CH_SERIAL], eax
@@ -357,7 +408,12 @@ FN chain_open
     shl r12, 6
     add r12, [rip + chain_links]
     cmp dword ptr [r12 + CH_CODEC], 0
+    jne .Lch_open_codec
+    cmp dword ptr [rip + track_choice], 0
     je .Lch_open_bad
+    mov dword ptr [rip + decode_error], 101   # the chosen track is missing or unsupported
+    jmp .Lch_open_bad
+.Lch_open_codec:
     call chain_codec_close
     mov rcx, r12
     call chain_codec_open

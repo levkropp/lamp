@@ -1,6 +1,6 @@
 # AVI
 
-LAMP 0.4.0-dev plays the audio of AVI files (`.avi`) with a handwritten demuxer (`src/avi.s`) following Microsoft's AVI RIFF format and the OpenDML extensions: a `RIFF AVI ` list, then any `RIFF AVIX` continuations. `LIST hdrl` must come before the first `LIST movi`; its stream lists (`strh`, `strf`) choose the first audio stream (`auds`) whose format LAMP decodes, and that stream's `NNwb` chunks are read from every `movi` list, including chunks grouped in `LIST rec`. Video and other streams, `JUNK`, `idx1`, OpenDML `indx`/`ix##` indexes and unknown chunks are skipped; LAMP reads the chunks in file order and needs no index.
+LAMP 0.4.0-dev plays the audio of AVI files (`.avi`) with a handwritten demuxer (`src/avi.s`) following Microsoft's AVI RIFF format and the OpenDML extensions: a `RIFF AVI ` list, then any `RIFF AVIX` continuations. `LIST hdrl` must come before the first `LIST movi`; its stream lists (`strh`, `strf`) choose the first audio stream (`auds`) whose format LAMP decodes (or, with `--track N`, the Nth one; see [track selection](tracks.md)), and that stream's `NNwb` chunks are read from every `movi` list, including chunks grouped in `LIST rec`. Video and other streams, `JUNK`, `idx1`, OpenDML `indx`/`ix##` indexes and unknown chunks are skipped; LAMP reads the chunks in file order and needs no index.
 
 | WAVE format tag | Audio |
 | --- | --- |

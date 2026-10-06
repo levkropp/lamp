@@ -2,7 +2,8 @@
 # Reference: ISO/IEC 14496-12 and 14496-14, QuickTime File Format; codec
 # mappings: ISO/IEC 14496-3 (esds), Opus in ISOBMFF (dOps), FLAC in
 # ISOBMFF (dfLa), Apple Lossless ('alac' box), ISO/IEC 23003-5 (pcmC).
-# Selects the first enabled sound track with a supported sample entry and
+# Selects the first enabled sound track with a supported sample entry (or
+# the sound track that track_choice numbers, in trak order) and
 # lists its samples as track packets, from the sample tables (stsz/stz2,
 # stsc, stco/co64) or from movie fragments (moof/traf/tfhd/trun). The
 # first non-empty edit trims the start and limits the presented duration.
@@ -87,6 +88,7 @@ mp4_formats:
 .data
 mp4_track_id: .long 0
 mp4_selected: .long 0
+mp4_audio_index: .long 0             # sound traks read
 mp4_codec: .long 0
 mp4_pcm_bits: .long 0
 mp4_pcm_flags: .long 0
@@ -628,7 +630,10 @@ LOCALFN mp4_trak
     cmp rcx, rdx
     ja .Lmp4_trak_bad
     test byte ptr [rax + 3], 1
-    jz .Lmp4_trak_ok                      # disabled
+    jnz .Lmp4_trak_enabled
+    cmp dword ptr [rip + track_choice], 0
+    je .Lmp4_trak_ok                      # disabled (a chosen track may be)
+.Lmp4_trak_enabled:
     mov ecx, [rax + 12]
     cmp byte ptr [rax], 1
     jne .Lmp4_trak_id
@@ -656,6 +661,14 @@ LOCALFN mp4_trak
     ja .Lmp4_trak_bad
     cmp dword ptr [rax + 8], SOUN
     jne .Lmp4_trak_ok
+    inc dword ptr [rip + mp4_audio_index]
+    mov eax, [rip + track_choice]
+    test eax, eax
+    jz .Lmp4_trak_sound
+    cmp eax, [rip + mp4_audio_index]
+    jne .Lmp4_trak_ok
+    mov dword ptr [rip + track_choice_used], 1
+.Lmp4_trak_sound:
     mov rcx, r12
     mov rdx, r13
     mov r8d, BOX_MDHD
@@ -1355,6 +1368,7 @@ FN mp4_open
     mov [rip + mp4_begin], rcx
     mov [rip + mp4_end], rdx
     mov dword ptr [rip + mp4_selected], 0
+    mov dword ptr [rip + mp4_audio_index], 0
     mov dword ptr [rip + mp4_fragmented], 0
     mov dword ptr [rip + mp4_trex_size], 0
     mov dword ptr [rip + mp4_trex_duration], 0
@@ -1421,7 +1435,12 @@ FN mp4_open
     jmp .Lmp4_tracks
 .Lmp4_tracks_done:
     cmp dword ptr [rip + mp4_selected], 0
+    jne .Lmp4_tracks_selected
+    cmp dword ptr [rip + track_choice], 0
     je .Lmp4_open_bad
+    mov dword ptr [rip + decode_error], 101   # the chosen track is missing or unsupported
+    jmp .Lmp4_open_bad
+.Lmp4_tracks_selected:
     # Fragment defaults for the selected track.
     mov rcx, rbx
     mov rdx, rdi

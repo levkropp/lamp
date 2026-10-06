@@ -8,6 +8,7 @@
 .globl maximum_block, pcm_channel_mask, pcm_mask_seen, pcm_ignore_extra, pcm_mix, frame_samples, frame_used
 .globl flac_channel_ptrs
 .globl pcm_speaker_weights, pcm_mix_coeff
+.globl track_choice, track_choice_used
 
 .equ TK_ADPCM, 10                   # track codec of WAVE ADPCM (src/track.s)
 
@@ -28,6 +29,12 @@ wav_begin: .quad 0
 wav_kind: .long 0                  # 0 RIFF, 1 RF64, 2 BW64
 wav_layout: .long 0                # chunks: 0 RIFF family, 1 RIFX (big-endian), 2 Wave64 (GUIDs)
 wav_codec_kind: .long 1            # codec_kind of an opened WAV reader: 1, or 14 AVI, 15 FLV, 18 LPCM in MPEG-TS/PS
+# The audio track to play: 0 for the container's own choice, else the Nth
+# audio track (from 1) in the container's order. Containers of several
+# tracks set track_choice_used when they honoured it; any other file plays
+# only as track 1.
+track_choice: .long 0
+track_choice_used: .long 0
 wav_ds64: .quad 0
 wav_size_table: .quad 0
 wav_table_count: .long 0
@@ -153,10 +160,20 @@ FN decoder_open
     mov qword ptr [rip + output_frames], 0
     mov [rsp + 32], rcx
     call tags_clear
+    mov dword ptr [rip + track_choice_used], 0
     mov rcx, [rsp + 32]                 # the path
     call decoder_open_format
     test eax, eax
     jz .Lopen_published
+    cmp dword ptr [rip + track_choice], 1
+    jbe .Lopen_track_ok
+    cmp dword ptr [rip + track_choice_used], 0
+    jne .Lopen_track_ok
+    call decoder_close                  # one track: no Nth
+    mov dword ptr [rip + decode_error], 101
+    xor eax, eax
+    jmp .Lopen_published
+.Lopen_track_ok:
     mov rcx, [rip + map_base]           # metadata, from the whole file
     mov rdx, rcx
     add rdx, [rip + file_size]

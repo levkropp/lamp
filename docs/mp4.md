@@ -4,7 +4,7 @@ LAMP 0.4.0-dev plays the audio track of ISO base media files (`.mp4`, `.m4a`) an
 
 ## Track selection
 
-A file is recognised by a leading `ftyp`, `moov`, `mdat`, `wide`, `free` or `skip` box and must hold exactly one top-level `moov`. The first enabled track whose handler is `soun` and whose first sample description is supported is played; video, text and unsupported audio tracks are skipped. Samples that refer to any other sample description reject.
+A file is recognised by a leading `ftyp`, `moov`, `mdat`, `wide`, `free` or `skip` box and must hold exactly one top-level `moov`. The first enabled track whose handler is `soun` and whose first sample description is supported is played; video, text and unsupported audio tracks are skipped. `--track N` plays the Nth `soun` track instead, enabled or not ([track selection](tracks.md)). Samples that refer to any other sample description reject.
 
 | Sample entry | Decoder |
 | --- | --- |

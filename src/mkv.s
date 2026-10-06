@@ -1,7 +1,8 @@
 # Original Matroska/WebM audio demuxer. MIT, see LICENSE.
 # Reference: IETF RFC 9559 (Matroska) and RFC 8794 (EBML).
 # Selects one audio track: the first enabled track with a supported codec
-# whose FlagDefault is set, else the first enabled supported track. Its
+# whose FlagDefault is set, else the first enabled supported track, or the
+# audio track that track_choice numbers (in TrackEntry order). Its
 # frames, including Xiph, EBML and fixed lacing, become track packets;
 # video, subtitles and other tracks are skipped. Compressed or encrypted
 # tracks (ContentEncodings) are not supported. Unknown-size Segment and
@@ -114,6 +115,7 @@ mkv_entry_rate: .double 0.0
 mkv_entry_channels: .quad 1
 mkv_entry_bits: .quad 0
 mkv_selected_default: .long 0
+mkv_audio_index: .long 0              # audio TrackEntries read
 
 .text
 # RCX=element start, RDX=limit -> EAX=ID with its length marker (0 on error),
@@ -404,9 +406,25 @@ LOCALFN mkv_track_entry
     mov r8, [rsp + 32]
     jmp .Lmkv_audio_child
 .Lmkv_entry_done:
-    # Usable: enabled audio, supported codec, no content encodings.
+    # Usable: enabled audio, supported codec, no content encodings. A
+    # chosen track need only be supported.
     cmp qword ptr [rip + mkv_entry_type], 2
     jne .Lmkv_entry_ok
+    inc dword ptr [rip + mkv_audio_index]
+    mov eax, [rip + track_choice]
+    test eax, eax
+    jz .Lmkv_entry_automatic
+    cmp eax, [rip + mkv_audio_index]
+    jne .Lmkv_entry_ok
+    mov dword ptr [rip + track_choice_used], 1
+    cmp dword ptr [rip + mkv_entry_codec], 0
+    je .Lmkv_entry_ok
+    cmp dword ptr [rip + mkv_entry_encoded], 0
+    jne .Lmkv_entry_ok
+    cmp qword ptr [rip + mkv_entry_number], 0
+    je .Lmkv_entry_bad
+    jmp .Lmkv_entry_select
+.Lmkv_entry_automatic:
     cmp qword ptr [rip + mkv_entry_enabled], 0
     je .Lmkv_entry_ok
     cmp dword ptr [rip + mkv_entry_codec], 0
@@ -691,6 +709,7 @@ FN mkv_open
     mov rdi, rdx
     mov qword ptr [rip + mkv_track_number], 0
     mov dword ptr [rip + mkv_selected_default], 0
+    mov dword ptr [rip + mkv_audio_index], 0
     mov dword ptr [rip + mkv_tracks_seen], 0
     mov qword ptr [rip + mkv_discard], 0
     mov qword ptr [rip + mkv_discard_packet], -1
@@ -814,7 +833,12 @@ FN mkv_open
 .Lmkv_tracks_done:
     mov rsi, r14
     cmp qword ptr [rip + mkv_track_number], 0
+    jne .Lmkv_tracks_chosen
+    cmp dword ptr [rip + track_choice], 0
     je .Lmkv_open_bad                    # no supported audio track
+    mov dword ptr [rip + decode_error], 101   # the chosen one is missing or unsupported
+    jmp .Lmkv_open_bad
+.Lmkv_tracks_chosen:
     mov eax, [rip + mkv_codec]
     mov [rip + track_codec], eax
     jmp .Lmkv_top
