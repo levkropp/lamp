@@ -269,6 +269,117 @@ LOCALFN ui_number
     ret
 ENDFN ui_number
 
+# RSI=UTF-8, ECX=bytes, RDI=UTF-16 destination, EDX=units at most -> RDI
+# advanced. Malformed sequences become U+FFFD.
+LOCALFN ui_wide_text
+    push rbx
+    lea r10, [rsi + rcx]                  # end
+    lea r11, [rdi + rdx*2]                # destination limit
+.Lui_wide_char:
+    cmp rsi, r10
+    jae .Lui_wide_done
+    lea rax, [rdi + 4]
+    cmp rax, r11
+    ja .Lui_wide_done
+    movzx eax, byte ptr [rsi]
+    inc rsi
+    cmp eax, 0x80
+    jb .Lui_wide_store
+    mov ebx, 1
+    and eax, 0x1f
+    cmp byte ptr [rsi - 1], 0xe0
+    jb .Lui_wide_lead
+    mov ebx, 2
+    and eax, 0x0f
+    cmp byte ptr [rsi - 1], 0xf0
+    jb .Lui_wide_lead
+    mov ebx, 3
+    and eax, 0x07
+    cmp byte ptr [rsi - 1], 0xf5
+    jae .Lui_wide_bad
+.Lui_wide_lead:
+    cmp byte ptr [rsi - 1], 0xc2
+    jb .Lui_wide_bad
+.Lui_wide_continue:
+    cmp rsi, r10
+    jae .Lui_wide_bad
+    movzx ecx, byte ptr [rsi]
+    mov edx, ecx
+    and edx, 0xc0
+    cmp edx, 0x80
+    jne .Lui_wide_bad
+    inc rsi
+    shl eax, 6
+    and ecx, 0x3f
+    or eax, ecx
+    dec ebx
+    jnz .Lui_wide_continue
+    cmp eax, 0x10000
+    jb .Lui_wide_store
+    sub eax, 0x10000                      # a surrogate pair
+    mov ecx, eax
+    shr ecx, 10
+    add ecx, 0xd800
+    mov [rdi], cx
+    add rdi, 2
+    and eax, 0x3ff
+    add eax, 0xdc00
+    jmp .Lui_wide_store
+.Lui_wide_bad:
+    mov eax, 0xfffd
+.Lui_wide_store:
+    mov [rdi], ax
+    add rdi, 2
+    jmp .Lui_wide_char
+.Lui_wide_done:
+    pop rbx
+    ret
+ENDFN ui_wide_text
+
+# -> RAX=ui_tag_text holding "Artist - Title" (or the title alone) when the
+# opened file has a title tag, 0 otherwise.
+LOCALFN ui_tag_title
+    push rsi
+    push rdi
+    push rbx
+    sub rsp, 32
+    xor ecx, ecx                          # title
+    call tags_get
+    test rax, rax
+    jz .Lui_tag_none
+    mov rbx, rax
+    mov [rsp + 24], edx
+    lea rdi, [rip + ui_tag_text]
+    mov ecx, 1                            # artist
+    call tags_get
+    test rax, rax
+    jz .Lui_tag_title
+    mov rsi, rax
+    mov ecx, edx
+    mov edx, 512
+    call ui_wide_text
+    mov word ptr [rdi], 0x20              # " - " (an en dash)
+    mov word ptr [rdi + 2], 0x2013
+    mov word ptr [rdi + 4], 0x20
+    add rdi, 6
+.Lui_tag_title:
+    mov rsi, rbx
+    mov ecx, [rsp + 24]
+    mov edx, 512
+    call ui_wide_text
+    mov word ptr [rdi], 0
+    lea rax, [rip + ui_tag_text]
+    jmp .Lui_tag_return
+.Lui_tag_none:
+    xor eax, eax
+.Lui_tag_return:
+    add rsp, 32
+    pop rbx
+    pop rdi
+    pop rsi
+    ret
+ENDFN ui_tag_title
+
 FN ui_draw
     push rbx
     push rsi
@@ -317,8 +428,18 @@ FN ui_draw
     je .Lui_draw_title
     mov rcx, [rip + ui_filename]
     cmp dword ptr [rip + ui_state], 3
-    jne .Lui_draw_title
+    jne .Lui_draw_tagged
     lea rcx, [rip + ui_error]
+    jmp .Lui_draw_title
+.Lui_draw_tagged:
+    cmp dword ptr [rip + engine_ready], 0
+    je .Lui_draw_title
+    mov [rsp + 40], rcx
+    call ui_tag_title                     # the opened file's title, if tagged
+    mov rcx, [rsp + 40]
+    test rax, rax
+    jz .Lui_draw_title
+    mov rcx, rax
 .Lui_draw_title:
     mov edx, [rip + ui_height]
     sub edx, 72
@@ -371,7 +492,7 @@ FN ui_draw
     mov eax, [rip + codec_kind]
     test eax, eax
     jz .Lui_draw_hints
-    cmp eax, 10
+    cmp eax, 15
     ja .Lui_draw_hints
     lea rcx, [rip + ui_codec_names]
     mov rcx, [rcx + rax*8]

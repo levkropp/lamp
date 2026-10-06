@@ -3,6 +3,9 @@
 .ifndef PREVIEW_CODEC
 .equ PREVIEW_CODEC, 2
 .endif
+.ifndef PREVIEW_TAGS
+.equ PREVIEW_TAGS, 0
+.endif
 .data
 preview_name: .short 'l', 'a', 'm', 'p', '-', 'u', 'i', '-', 'p', 'r', 'e', 'v', 'i', 'e', 'w', '.', 'b', 'm', 'p', 0
 .if PREVIEW_CODEC == 6
@@ -16,6 +19,18 @@ preview_header: .byte 'B', 'M'
     .long 54
 preview_file: .quad 0
 preview_written: .long 0
+# An ID3v2.4 tag read as the opened file's: artist and title (UTF-8).
+preview_id3: .ascii "ID3"
+    .byte 4, 0, 0, 0, 0, 0, 46
+    .ascii "TPE1"
+    .byte 0, 0, 0, 13, 0, 0, 3
+    .ascii "Aurora Ens"
+    .byte 0xc3, 0xa9
+    .ascii "TIT2"
+    .byte 0, 0, 0, 13, 0, 0, 3
+    .ascii "Night Drive"
+    .byte 0
+preview_id3_end:
 .text
 FN preview_start
     sub rsp, 72
@@ -30,6 +45,11 @@ FN preview_start
     mov qword ptr [rip + output_frames], 5760000
     mov qword ptr [rip + engine_position], 1776000
     mov dword ptr [rip + codec_kind], PREVIEW_CODEC
+.if PREVIEW_TAGS
+    lea rcx, [rip + preview_id3]
+    lea rdx, [rip + preview_id3_end]
+    call tags_read
+.endif
     call ui_draw
     cmp qword ptr [rip + ui_pixels], 0
     je .Lpreview_bad

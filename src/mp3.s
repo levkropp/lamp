@@ -97,6 +97,56 @@ mp_pcm: .zero 1152*8
 # RCX=file bytes, RDX=end. Layer III MPEG-1/2/2.5 and Layers I/II MPEG-1/2,
 # known bitrate; every frame keeps the first frame's layer, version, rate and
 # channel count.
+# An APEv2 tag at the end of the stream (or before a final ID3v1 tag) ends
+# the frames there.
+LOCALFN mp_strip_ape
+    mov r8, [rip + mp_cursor]
+    mov r9, [rip + mp_end]
+    mov rax, r9
+    sub rax, r8
+    xor r10d, r10d
+    cmp rax, 128
+    jb .Lmp_ape_footer
+    cmp word ptr [r9 - 128], 0x4154       # "TA"
+    jne .Lmp_ape_footer
+    cmp byte ptr [r9 - 126], 'G'
+    jne .Lmp_ape_footer
+    mov r10d, 128
+.Lmp_ape_footer:
+    sub r9, r10
+    sub r9, 32                            # footer
+    cmp r9, r8
+    jb .Lmp_ape_none
+    mov rax, 0x5845474154455041           # "APETAGEX"
+    cmp [r9], rax
+    jne .Lmp_ape_none
+    mov eax, [r9 + 12]                    # items and footer
+    cmp eax, 32
+    jb .Lmp_ape_none
+    mov edx, [r9 + 20]
+    test edx, edx
+    jns .Lmp_ape_sized
+    add rax, 32                           # a header too
+.Lmp_ape_sized:
+    add r9, 32
+    sub r9, rax
+    cmp r9, r8
+    jb .Lmp_ape_none
+    test edx, edx
+    js .Lmp_ape_end
+    lea rax, [r8 + 32]                    # an unflagged header before the items
+    cmp r9, rax
+    jb .Lmp_ape_end
+    mov rax, 0x5845474154455041
+    cmp [r9 - 32], rax
+    jne .Lmp_ape_end
+    sub r9, 32
+.Lmp_ape_end:
+    mov [rip + mp_end], r9
+.Lmp_ape_none:
+    ret
+ENDFN mp_strip_ape
+
 FN mp3_open
     push rbp
     mov rbp, rsp
@@ -112,6 +162,7 @@ FN mp3_open
     mov rdx, r12
     mov [rip + mp_cursor], rcx
     mov [rip + mp_end], rdx
+    call mp_strip_ape
     mov dword ptr [rip + mp_reserv_size], 0
     mov dword ptr [rip + mp_frame_ready], 0
     mov dword ptr [rip + mp_frame_used], 0
@@ -129,6 +180,7 @@ FN mp3_open
     mov ecx, 960
     rep stosd
     mov rsi, [rip + mp_cursor]
+.Lmp_id3:
     lea rax, [rsi + 10]
     cmp rax, [rip + mp_end]
     ja .Lmp_open_bad
@@ -186,6 +238,7 @@ FN mp3_open
     add rsi, 10
 .Lid3_done:
     mov [rip + mp_cursor], rsi
+    jmp .Lmp_id3                          # consecutive tags
 .Lmp_no_id3:
     mov rcx, rsi
     call mp_parse_header

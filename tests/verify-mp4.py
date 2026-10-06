@@ -78,6 +78,9 @@ def main():
         ('alac-5.1', 'alac', 48000, ['-c:a', 'alac'], 6, '5.1', 'm4a'),
         ('alac-small-frames', 'alac', 48000, ['-c:a', 'alac', '-sample_fmt', 's16p', '-frame_size', '1024',
                                                 '-compression_level', '2'], 2, None, 'm4a'),
+        # QuickTime: a version 1 sound description with the cookie in 'wave'.
+        ('alac-qt', 'alac', 44100, ['-c:a', 'alac', '-sample_fmt', 's16p'], 2, None, 'mov'),
+        ('alac-qt-24-mono', 'alac', 48000, ['-c:a', 'alac', '-sample_fmt', 's32p'], 1, None, 'mov'),
         ('mp3', 'mp3', 44100, ['-c:a', 'libmp3lame', '-b:a', '160k'], 2, None, 'mp4'),
         ('mp2', 'mp2', 48000, ['-c:a', 'mp2', '-b:a', '192k'], 2, None, 'mp4'),
         ('opus', 'opus', 48000, ['-c:a', 'libopus', '-b:a', '96k'], 2, None, 'mp4'),
@@ -110,7 +113,7 @@ def main():
             ours = Path(str(path) + '.f32')
             stats = decode_f32(path, ours)
             depth = {'alac-16': 16, 'alac-mono': 16, 'alac-small-frames': 16, 'alac-24-96k': 24, 'alac-5.1': 24,
-                     'flac': 16, 'flac-24': 24}.get(name)
+                     'alac-qt': 16, 'alac-qt-24-mono': 24, 'flac': 16, 'flac-24': 24}.get(name)
             if depth and f' bits={depth} ' not in stats.splitlines()[-1]:
                 raise Failure(f'{filename}: expected {depth}-bit source, got {stats.splitlines()[-1]}')
             if channels <= 2:

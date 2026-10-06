@@ -46,6 +46,7 @@ def main():
     step(TESTS / 'generate-ac3-tables.py', '--check')
     step(TESTS / 'generate-wavpack-tables.py', '--check')
     step(TESTS / 'generate-adpcm-tables.py', '--check')
+    step(TESTS / 'generate-genre-table.py', '--check')
     for generator in ('celt-tables', 'celt-spectral-tables', 'celt-transform-tables', 'silk-stereo-tables',
                       'silk-resampler-tables', 'silk-lpc-tables', 'silk-nlsf-tables', 'silk-indices-tables',
                       'silk-parameters-tables'):
@@ -75,6 +76,7 @@ def main():
     step(TESTS / 'verify-caf-wave64.py', *playback)
     step(TESTS / 'verify-avi.py', *playback)
     step(TESTS / 'verify-flv.py', *playback)
+    step(TESTS / 'verify-tags.py')
     if not WINDOWS and not playback:
         step(TESTS / 'verify-playback.py')
     if '--skip-network' not in arguments:

@@ -61,6 +61,7 @@ def main():
     parser.add_argument('--out', default=str(ROOT / 'bin'), help='output directory (default: bin)')
     parser.add_argument('--tests', action='store_true', help='also build engine-probe.exe and ui-preview.exe')
     parser.add_argument('--preview-codec', type=int, default=None, help='codec kind shown by ui-preview.exe')
+    parser.add_argument('--preview-tags', action='store_true', help='ui-preview.exe shows a tagged title')
     parser.add_argument('--debug', action='store_true', help='emit a PDB')
     args = parser.parse_args()
     out = Path(args.out).resolve()
@@ -77,6 +78,8 @@ def main():
         defines = ['-defsym=WINDOWS=1']
         if path.stem == 'ui-preview' and args.preview_codec is not None:
             defines.append(f'-defsym=PREVIEW_CODEC={args.preview_codec}')
+        if path.stem == 'ui-preview' and args.preview_tags:
+            defines.append('-defsym=PREVIEW_TAGS=1')
         run([mc, '-triple=x86_64-pc-windows-msvc', '-filetype=obj', *defines,
              '-I', ROOT / 'src', '-I', ROOT / 'src/win', path, '-o', obj])
         return obj

@@ -25,6 +25,8 @@ usage: .ascii "LAMP 0.4.0-dev - Lev's Assembly Media Player"
       .byte 13, 10
       .ascii "       lamp-cli.exe --decode file.flac output.f32"
       .byte 13, 10
+      .ascii "       lamp-cli.exe --tags file.mp3"
+      .byte 13, 10
       .ascii "Playback: Space pauses/resumes; Q or Ctrl+C stops."
       .byte 13, 10
       .ascii "RIFF/RF64/BW64 WAV: 1..8 channels, PCM 8/16/24/32 or float32/64."
@@ -68,6 +70,9 @@ stats_k: .ascii " endpoint_dry="
 newline: .byte 13, 10, 0
 check_arg: .short '-', '-', 'c', 'h', 'e', 'c', 'k', 0
 decode_arg: .short '-', '-', 'd', 'e', 'c', 'o', 'd', 'e', 0
+tags_arg: .short '-', '-', 't', 'a', 'g', 's', 0
+equals_text: .asciz "="
+line_end: .byte 13, 10, 0
 audio_task: .short 'A', 'u', 'd', 'i', 'o', 0
 clsid_enumerator: .long 0xbcde0395
     .short 0xe52f, 0x467c
@@ -89,7 +94,7 @@ stdin: .quad 0
 output_file: .quad -1
 argv: .quad 0
 argc: .long 0
-operation: .long 0                  # 0 play, 1 check, 2 decode
+operation: .long 0                  # 0 play, 1 check, 2 decode, 3 tags
 exit_code: .long 0
 stop_event: .quad 0
 data_event: .quad 0
@@ -142,6 +147,7 @@ engine_seek_frames: .quad 0
 engine_volume: .float 1.0
 
 .bss
+tag_line: .zero 4100
 ring_pcm: .zero RING_FRAMES*8
 offline_pcm: .zero CHUNK_FRAMES*8
 bytes_written: .zero 4
@@ -238,6 +244,19 @@ FN start
 .Ltry_decode:
     mov rax, [rip + argv]
     mov rcx, [rax + 8]
+    lea rdx, [rip + tags_arg]
+    call equal_wide
+    test eax, eax
+    jz .Ltry_decode_arg
+    cmp dword ptr [rip + argc], 3
+    jne .Lshow_help
+    mov dword ptr [rip + operation], 3
+    mov rax, [rip + argv]
+    mov rcx, [rax + 16]
+    jmp .Lopen_input
+.Ltry_decode_arg:
+    mov rax, [rip + argv]
+    mov rcx, [rax + 8]
     lea rdx, [rip + decode_arg]
     call equal_wide
     test eax, eax
@@ -271,8 +290,15 @@ FN start
     call decoder_open
     test eax, eax
     jz bad_input
+    cmp dword ptr [rip + operation], 3
+    je .Ltags_only
     cmp dword ptr [rip + operation], 0
-    je start_playback
+    jne .Loffline_loop
+    call print_tags
+    jmp start_playback
+.Ltags_only:
+    call print_tags
+    jmp cleanup
 .Loffline_loop:
     lea rcx, [rip + offline_pcm]
     mov edx, CHUNK_FRAMES
@@ -1014,6 +1040,58 @@ LOCALFN print_text
     add rsp, 56
     ret
 ENDFN print_text
+
+# Writes the opened file's tags as "key=value" lines (UTF-8); control
+# characters in values print as spaces.
+LOCALFN print_tags
+    push rbx
+    push rsi
+    push rdi
+    sub rsp, 48
+    xor ebx, ebx
+.Ltags_key:
+    mov ecx, ebx
+    call tags_get
+    test rax, rax
+    jz .Ltags_next
+    mov rsi, rax
+    mov edi, edx
+    lea rax, [rip + tag_names]
+    mov rcx, [rax + rbx*8]
+    call print_text
+    lea rcx, [rip + equals_text]
+    call print_text
+    lea rdx, [rip + tag_line]
+    xor ecx, ecx
+.Ltags_char:
+    cmp ecx, edi
+    jae .Ltags_end
+    cmp ecx, 4096
+    jae .Ltags_end
+    movzx eax, byte ptr [rsi + rcx]
+    cmp eax, 0x20
+    jae .Ltags_store
+    mov eax, 0x20
+.Ltags_store:
+    mov [rdx + rcx], al
+    inc ecx
+    jmp .Ltags_char
+.Ltags_end:
+    mov byte ptr [rdx + rcx], 0
+    lea rcx, [rip + tag_line]
+    call print_text
+    lea rcx, [rip + line_end]
+    call print_text
+.Ltags_next:
+    inc ebx
+    cmp ebx, 10
+    jb .Ltags_key
+    add rsp, 48
+    pop rdi
+    pop rsi
+    pop rbx
+    ret
+ENDFN print_tags
 
 LOCALFN print_number
     sub rsp, 56
