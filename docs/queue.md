@@ -54,6 +54,16 @@ During console playback (Linux and Windows):
 | R | Repeat on or off (turned on after the last file was read, the list starts again when it ends) |
 | Q, Ctrl+C | Stop |
 
+## Resume
+
+`--resume` (playback only) remembers where a list stopped:
+
+- Q or Ctrl+C keeps the list's key, the file being heard and the position in it. The key is the absolute path of the list's first file (after playlist expansion).
+- The next `--resume` run of the same list starts there, printing `Resuming at H:MM:SS.mmm`, in whichever of the list's files was heard.
+- Playing to the end forgets the list. `--start` wins over a kept position (and Q still keeps the new one).
+- The state is a UTF-8 text file of `milliseconds<TAB>key<TAB>heard file` lines, newest first, at most 256 (`src/resume.s`). It lives at `$XDG_STATE_HOME/lamp/resume` or `~/.local/state/lamp/resume` on Linux, and at `%LOCALAPPDATA%\LAMP\resume.txt` on Windows. Other lists' lines stay and malformed lines are dropped.
+- It is rewritten through a temporary file and a rename, so an interrupted write leaves the old file. Failures to read or write it are silent.
+
 The queue notes where each file starts in its output, so a key acts on the file being heard rather than on one the decoder already reads ahead. A key stops the stream with a command; the CLI then reopens the queue at the target (`queue_navigate`, `queue_goto`) and starts a new stream, as the Windows player restarts for its seeks. Natural transitions stay gapless; a key's transition is a new stream. Seeks keep the session rate and work in resampled files too, which read up to the target.
 
 ## Verification
@@ -79,6 +89,12 @@ The queue notes where each file starts in its output, so a key acts on the file 
   - `--repeat`, R, and R twice.
 
   The captured audio is cut into runs of the files' own decodes, which must follow the expected files, starts and ends.
+- `--resume`:
+  - Q keeps a file and, in a list, a later file; the next run starts at the kept position.
+  - Playing to the end forgets the list. `--start` wins.
+  - Two lists are kept newest first.
+  - Rewriting a crafted state file of 300 lines and three malformed ones keeps 256 well-formed lines with the new line first.
+  - With `--check` it prints the usage.
 - `--wine` runs the same checks with the Windows `lamp-cli.exe` ([report](../reports/navigation-wine-verification.json)):
   - Its decodes equal the Linux build's.
   - Its playback goes through Wine's PulseAudio driver, which drops audio here. The order of files, the jumps and the restarts must still match.

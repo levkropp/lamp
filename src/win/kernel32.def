@@ -26,3 +26,8 @@ EXPORTS
     WaitForMultipleObjects
     WaitForSingleObject
     WriteFile
+    CreateDirectoryW
+    GetEnvironmentVariableW
+    GetFullPathNameW
+    MoveFileExW
+    WideCharToMultiByte

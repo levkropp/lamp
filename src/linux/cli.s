@@ -629,65 +629,12 @@ ENDFN print_chapters
 
 # RCX=milliseconds, written as H:MM:SS.mmm.
 LOCALFN print_clock
-    push rbx
-    sub rsp, 32
-    mov rax, rcx
-    xor edx, edx
-    mov ecx, 1000
-    div rcx
-    mov rbx, rdx                       # milliseconds
-    lea r9, [rip + number_buffer + 31]
-    mov byte ptr [r9], 0
-    mov r8d, 3                         # .mmm
-.Lclock_milliseconds:
-    mov r10, rax
-    mov rax, rbx
-    xor edx, edx
-    mov ecx, 10
-    div rcx
-    mov rbx, rax
-    add dl, '0'
-    dec r9
-    mov [r9], dl
-    mov rax, r10
-    dec r8d
-    jnz .Lclock_milliseconds
-    dec r9
-    mov byte ptr [r9], '.'
-    mov r8d, 2                         # seconds, then minutes
-.Lclock_field:
-    xor edx, edx
-    mov ecx, 60
-    div rcx
-    mov r10, rax
-    mov eax, edx
-    xor edx, edx
-    mov ecx, 10
-    div ecx
-    add dl, '0'
-    dec r9
-    mov [r9], dl
-    add al, '0'
-    dec r9
-    mov [r9], al
-    dec r9
-    mov byte ptr [r9], ':'
-    mov rax, r10
-    dec r8d
-    jnz .Lclock_field
-    mov r8d, 10                        # hours
-.Lclock_hours:
-    xor edx, edx
-    div r8
-    add dl, '0'
-    dec r9
-    mov [r9], dl
-    test rax, rax
-    jnz .Lclock_hours
-    mov rcx, r9
+    sub rsp, 40
+    lea rdx, [rip + number_buffer]
+    call format_clock
+    mov rcx, rax
     call print_text
-    add rsp, 32
-    pop rbx
+    add rsp, 40
     ret
 ENDFN print_clock
 
