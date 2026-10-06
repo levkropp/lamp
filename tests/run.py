@@ -78,6 +78,7 @@ def main():
     step(TESTS / 'verify-flv.py', *playback)
     step(TESTS / 'verify-au.py')
     step(TESTS / 'verify-tags.py')
+    step(TESTS / 'verify-chapters.py')
     step(TESTS / 'verify-queue.py')
     if not WINDOWS and not playback:
         step(TESTS / 'verify-playback.py')

@@ -17,6 +17,7 @@ usage:
     .ascii "       lamp-cli --check file.flac [more files...]\n"
     .ascii "       lamp-cli --decode file.flac [more files...] output.f32\n"
     .ascii "       lamp-cli --tags file.mp3\n"
+    .ascii "       lamp-cli --chapters file.m4b\n"
     .ascii "Several files play one after another without a gap, at the first file's rate;\n"
     .ascii "M3U/M3U8 and PLS playlists add their entries.\n"
     .ascii "Playback: Space pauses/resumes; Q or Ctrl+C stops.\n"
@@ -41,6 +42,7 @@ newline: .asciz "\n"
 check_arg: .asciz "--check"
 decode_arg: .asciz "--decode"
 tags_arg: .asciz "--tags"
+chapters_arg: .asciz "--chapters"
 equals_text: .asciz "="
 skipped_text: .asciz "Skipped (unsupported, malformed, or inaccessible): "
 output_fd: .quad -1
@@ -54,7 +56,7 @@ timespec: .zero 16
 argc: .quad 0
 argv: .quad 0
 start_ms: .quad 0
-operation: .long 0             # 0 play, 1 check, 2 decode, 3 tags
+operation: .long 0             # 0 play, 1 check, 2 decode, 3 tags, 4 chapters
 exit_code: .long 0
 
 .text
@@ -100,11 +102,19 @@ LOCALFN cli_main
     mov rcx, [rbx + 8]
     lea rdx, [rip + tags_arg]
     call equal_text
+    mov edi, 3
+    test eax, eax
+    jnz .Lmetadata_arg
+    mov rcx, [rbx + 8]
+    lea rdx, [rip + chapters_arg]
+    call equal_text
+    mov edi, 4
     test eax, eax
     jz .Ltry_decode_arg
+.Lmetadata_arg:
     cmp qword ptr [rip + argc], 3
     jne .Lshow_help
-    mov dword ptr [rip + operation], 3
+    mov [rip + operation], edi
     lea rax, [rip + engine_stop_requested]
     mov [rip + ogg_cancel_ptr], rax
     mov rcx, [rbx + 16]
@@ -177,7 +187,12 @@ LOCALFN cli_main
     mov dword ptr [rip + exit_code], 2
     jmp .Lreport_finish
 .Ltags_only:
+    cmp dword ptr [rip + operation], 4
+    je .Lchapters_only
     call print_tags
+    jmp .Lcleanup
+.Lchapters_only:
+    call print_chapters
     jmp .Lcleanup
 .Lplayback:
     call print_tags
@@ -366,6 +381,34 @@ LOCALFN print_tags
     pop rbx
     ret
 ENDFN print_tags
+
+# Writes the opened file's chapters as "HH:MM:SS.mmm title" lines.
+LOCALFN print_chapters
+    push rbx
+    push rsi
+    sub rsp, 40
+    call chapters_count
+    mov esi, eax
+    xor ebx, ebx
+.Lchapters_next:
+    cmp ebx, esi
+    jae .Lchapters_done
+    mov ecx, ebx
+    lea rdx, [rip + tag_line]
+    call chapter_line
+    lea rdx, [rip + tag_line]
+    mov byte ptr [rdx + rax], 10
+    lea r8d, [rax + 1]
+    mov ecx, 1
+    call write_all
+    inc ebx
+    jmp .Lchapters_next
+.Lchapters_done:
+    add rsp, 40
+    pop rsi
+    pop rbx
+    ret
+ENDFN print_chapters
 
 # RCX=unsigned value, written in decimal.
 FN print_number

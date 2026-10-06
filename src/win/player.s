@@ -27,6 +27,8 @@ usage: .ascii "LAMP 0.4.0-dev - Lev's Assembly Media Player"
       .byte 13, 10
       .ascii "       lamp-cli.exe --tags file.mp3"
       .byte 13, 10
+      .ascii "       lamp-cli.exe --chapters file.m4b"
+      .byte 13, 10
       .ascii "Several files play one after another without a gap, at the first file's rate;"
       .byte 13, 10
       .ascii "M3U/M3U8 and PLS playlists add their entries."
@@ -75,6 +77,7 @@ newline: .byte 13, 10, 0
 check_arg: .short '-', '-', 'c', 'h', 'e', 'c', 'k', 0
 decode_arg: .short '-', '-', 'd', 'e', 'c', 'o', 'd', 'e', 0
 tags_arg: .short '-', '-', 't', 'a', 'g', 's', 0
+chapters_arg: .short '-', '-', 'c', 'h', 'a', 'p', 't', 'e', 'r', 's', 0
 skipped_text: .ascii "Skipped a file that is unsupported, malformed, or inaccessible."
 .byte 13, 10, 0
 .p2align 3
@@ -104,7 +107,7 @@ stdin: .quad 0
 output_file: .quad -1
 argv: .quad 0
 argc: .long 0
-operation: .long 0                  # 0 play, 1 check, 2 decode, 3 tags
+operation: .long 0                  # 0 play, 1 check, 2 decode, 3 tags, 4 chapters
 exit_code: .long 0
 stop_event: .quad 0
 data_event: .quad 0
@@ -265,11 +268,19 @@ FN start
     mov rcx, [rax + 8]
     lea rdx, [rip + tags_arg]
     call equal_wide
+    mov dword ptr [rip + operation], 3
+    test eax, eax
+    jnz .Lmetadata_arg
+    mov rax, [rip + argv]
+    mov rcx, [rax + 8]
+    lea rdx, [rip + chapters_arg]
+    call equal_wide
+    mov dword ptr [rip + operation], 4
     test eax, eax
     jz .Ltry_decode_arg
+.Lmetadata_arg:
     cmp dword ptr [rip + argc], 3
     jne .Lshow_help
-    mov dword ptr [rip + operation], 3
     lea rax, [rip + engine_stop_requested]
     mov [rip + ogg_cancel_ptr], rax
     mov rax, [rip + argv]
@@ -279,6 +290,7 @@ FN start
     jz bad_input
     jmp .Ltags_only
 .Ltry_decode_arg:
+    mov dword ptr [rip + operation], 0
     mov rax, [rip + argv]
     mov rcx, [rax + 8]
     lea rdx, [rip + decode_arg]
@@ -334,7 +346,12 @@ FN start
     mov [rip + queue_announce], rax
     jmp start_playback
 .Ltags_only:
+    cmp dword ptr [rip + operation], 4
+    je .Lchapters_only
     call print_tags
+    jmp cleanup
+.Lchapters_only:
+    call print_chapters
     jmp cleanup
 .Loffline_loop:
     lea rcx, [rip + offline_pcm]
@@ -1137,6 +1154,33 @@ LOCALFN print_tags
     pop rbx
     ret
 ENDFN print_tags
+
+# Writes the opened file's chapters as "HH:MM:SS.mmm title" lines (UTF-8).
+LOCALFN print_chapters
+    push rbx
+    push rsi
+    sub rsp, 40
+    call chapters_count
+    mov esi, eax
+    xor ebx, ebx
+.Lchapters_next:
+    cmp ebx, esi
+    jae .Lchapters_done
+    mov ecx, ebx
+    lea rdx, [rip + tag_line]
+    call chapter_line
+    lea rcx, [rip + tag_line]
+    call print_text
+    lea rcx, [rip + line_end]
+    call print_text
+    inc ebx
+    jmp .Lchapters_next
+.Lchapters_done:
+    add rsp, 40
+    pop rsi
+    pop rbx
+    ret
+ENDFN print_chapters
 
 LOCALFN print_number
     sub rsp, 56

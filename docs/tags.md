@@ -1,6 +1,6 @@
 # Metadata tags
 
-LAMP 0.4.0-dev reads the opened file's tags with a handwritten reader (`src/tags.s`). After a successful open, `tags_read` walks the mapped file's metadata (it never fails the open) and keeps ten normalized keys as UTF-8: `title`, `artist`, `album`, `album_artist`, `date`, `track`, `disc`, `genre`, `comment` and `composer`. `lamp-cli --tags file` prints them as `key=value` lines, and playback prints them before starting. The Windows player shows "Artist – Title" (or the title alone) in place of the file name once a tagged file is open.
+LAMP 0.4.0-dev reads the opened file's tags with a handwritten reader (`src/tags.s`). After a successful open, `tags_read` walks the mapped file's metadata (it never fails the open) and keeps ten normalized keys as UTF-8: `title`, `artist`, `album`, `album_artist`, `date`, `track`, `disc`, `genre`, `comment` and `composer`. `lamp-cli --tags file` prints them as `key=value` lines, and playback prints them before starting. The Windows player shows "Artist – Title" (or the title alone) in place of the file name once a tagged file is open. The same reader keeps the file's [chapters](chapters.md).
 
 | Format | Tags read |
 | --- | --- |

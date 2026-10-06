@@ -50,12 +50,13 @@ On Linux x86-64, `./build.sh` produces a static `build/lamp-cli` with the same d
 ./build/lamp-cli --check ~/Music/track.mp3
 ./build/lamp-cli --decode ~/Music/track.ogg track.f32
 ./build/lamp-cli --tags ~/Music/track.m4a
+./build/lamp-cli --chapters ~/Music/book.m4b
 ./build/lamp-cli ~/Music/album/*.flac
 ```
 
 The Linux desktop window is not available yet; see the [roadmap](ROADMAP.md).
 
-Several files play, check or export as one gapless stream at the first file's rate (later files at other rates are resampled; files that cannot play are skipped), and M3U/M3U8/PLS playlists add their entries; see [queue notes](docs/queue.md). `--tags` prints the file's title, artist, album, album artist, date, track, disc, genre, comment and composer as `key=value` lines (ID3v2/ID3v1/APEv2, Vorbis comments, MP4, Matroska, RIFF INFO, AIFF and CAF tags; see [tag notes](docs/tags.md)); playback prints them first, and the Windows player shows the artist and title. `--check` decodes without an audio device. `--decode` writes little-endian float32 PCM with two interleaved channels; mono is duplicated. Opus output is 48 kHz; AIFF/AIFC rates round to integer hertz; chained Ogg files use their first link's rate; other formats use their source rate. The destination must be new. Failed exports can leave partial output.
+Several files play, check or export as one gapless stream at the first file's rate (later files at other rates are resampled; files that cannot play are skipped), and M3U/M3U8/PLS playlists add their entries; see [queue notes](docs/queue.md). `--tags` prints the file's title, artist, album, album artist, date, track, disc, genre, comment and composer as `key=value` lines (ID3v2/ID3v1/APEv2, Vorbis comments, MP4, Matroska, RIFF INFO, AIFF and CAF tags; see [tag notes](docs/tags.md)); playback prints them first, and the Windows player shows the artist and title. `--chapters` lists the file's chapters as `HH:MM:SS.mmm title` lines (Vorbis comments, FLAC cue sheets, ID3v2 `CHAP` frames, Matroska and MP4 chapters; see [chapter notes](docs/chapters.md)). `--check` decodes without an audio device. `--decode` writes little-endian float32 PCM with two interleaved channels; mono is duplicated. Opus output is 48 kHz; AIFF/AIFC rates round to integer hertz; chained Ogg files use their first link's rate; other formats use their source rate. The destination must be new. Failed exports can leave partial output.
 
 | Format | Current support |
 | --- | --- |
