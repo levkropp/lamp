@@ -19,11 +19,11 @@ usage: .ascii "LAMP 0.4.0-dev - Lev's Assembly Media Player"
       .byte 13, 10
       .ascii "in WAV/W64, AIFF/AIFC, CAF, AU, FLAC, WavPack, MP3, AAC (ADTS), AC-3, Ogg, Matroska/WebM, MP4/MOV, AVI, FLV and MPEG-TS/PS files."
       .byte 13, 10
-      .ascii "Usage: lamp-cli.exe file.mp3 [more files...]"
+      .ascii "Usage: lamp-cli.exe [--start TIME] [--repeat] file.mp3 [more files...]"
       .byte 13, 10
-      .ascii "       lamp-cli.exe --check file.flac [more files...]"
+      .ascii "       lamp-cli.exe --check [--start TIME] file.flac [more files...]"
       .byte 13, 10
-      .ascii "       lamp-cli.exe --decode file.flac [more files...] output.f32"
+      .ascii "       lamp-cli.exe --decode [--start TIME] file.flac [more files...] output.f32"
       .byte 13, 10
       .ascii "       lamp-cli.exe --tags file.mp3"
       .byte 13, 10
@@ -51,7 +51,13 @@ audio_error: .ascii "Audio endpoint unavailable or WASAPI failed. Try --check to
 .byte 13, 10, 0
 output_error: .ascii "Cannot create output file."
 .byte 13, 10, 0
-play_text: .ascii "Playing. Space: pause / resume. Q or Ctrl+C: stop."
+play_text: .ascii "Playing. Space: pause / resume. N / P: next / previous file. Left / Right: -5 / +5 s."
+.byte 13, 10
+    .ascii "Down / Up: -60 / +60 s. R: repeat. Q or Ctrl+C: stop."
+.byte 13, 10, 0
+repeat_on_text: .ascii "Repeat: on"
+.byte 13, 10, 0
+repeat_off_text: .ascii "Repeat: off"
 .byte 13, 10, 0
 stats_a: .ascii "codec="
 .byte 0
@@ -81,6 +87,20 @@ decode_arg: .short '-', '-', 'd', 'e', 'c', 'o', 'd', 'e', 0
 tags_arg: .short '-', '-', 't', 'a', 'g', 's', 0
 chapters_arg: .short '-', '-', 'c', 'h', 'a', 'p', 't', 'e', 'r', 's', 0
 cover_arg: .short '-', '-', 'c', 'o', 'v', 'e', 'r', 0
+repeat_arg: .short '-', '-', 'r', 'e', 'p', 'e', 'a', 't', 0
+start_arg: .short '-', '-', 's', 't', 'a', 'r', 't', 0
+.p2align 3
+cli_modes: .quad check_arg, 1, decode_arg, 2, tags_arg, 3, chapters_arg, 4, cover_arg, 5, 0, 0
+cli_start_ms: .quad 0
+engine_seek_ms: .quad 0              # console: where playback starts in the current file
+engine_heard_ms: .quad 0             # position in the heard file at a command
+cli_repeat: .long 0
+arg_index: .long 0
+engine_command: .long 0              # set by a key: 1 next, 2 previous, 3 seek; 4 the list again
+engine_seek_delta: .long 0           # seconds
+engine_heard_index: .long 0
+console_greeted: .long 0
+time_text: .zero 64
 no_cover: .ascii "No embedded cover art."
 .byte 13, 10, 0
 bytes_text: .ascii " bytes"
@@ -260,59 +280,120 @@ FN start
     mov [rip + argv], rax
     test rax, rax
     jz .Lshow_help
-    cmp dword ptr [rip + argc], 2
-    jb .Lshow_help
-    mov rcx, [rax + 8]
-    lea rdx, [rip + check_arg]
+    mov dword ptr [rip + arg_index], 1
+    # Options before the files: one mode, --start TIME, --repeat, "--".
+.Lopt_next:
+    mov eax, [rip + arg_index]
+    cmp eax, [rip + argc]
+    jae .Lopt_files
+    mov rcx, [rip + argv]
+    mov rcx, [rcx + rax*8]
+    cmp dword ptr [rcx], 0x002d002d     # L"--"
+    jne .Lopt_files
+    inc dword ptr [rip + arg_index]
+    cmp word ptr [rcx + 4], 0
+    je .Lopt_files                      # "--" ends the options
+    mov [rsp + 64], rcx
+    lea rax, [rip + cli_modes]
+    mov [rsp + 72], rax
+.Lopt_mode:
+    mov rax, [rsp + 72]
+    mov rdx, [rax]
+    test rdx, rdx
+    jz .Lopt_other
+    mov rcx, [rsp + 64]
     call equal_wide
     test eax, eax
-    jz .Ltry_decode
-    cmp dword ptr [rip + argc], 3
-    jb .Lshow_help
-    mov dword ptr [rip + operation], 1
-    mov rax, [rip + argv]
-    add rax, 16
-    mov [rip + input_list], rax
+    jnz .Lopt_mode_found
+    add qword ptr [rsp + 72], 16
+    jmp .Lopt_mode
+.Lopt_mode_found:
+    cmp dword ptr [rip + operation], 0
+    jne .Lshow_help                     # one mode
+    mov rax, [rsp + 72]
+    mov eax, [rax + 8]
+    mov [rip + operation], eax
+    jmp .Lopt_next
+.Lopt_other:
+    mov rcx, [rsp + 64]
+    lea rdx, [rip + repeat_arg]
+    call equal_wide
+    test eax, eax
+    jz .Lopt_start
+    mov dword ptr [rip + cli_repeat], 1
+    jmp .Lopt_next
+.Lopt_start:
+    mov rcx, [rsp + 64]
+    lea rdx, [rip + start_arg]
+    call equal_wide
+    test eax, eax
+    jz .Lshow_help
+    mov eax, [rip + arg_index]
+    cmp eax, [rip + argc]
+    jae .Lshow_help
+    inc dword ptr [rip + arg_index]
+    mov rcx, [rip + argv]
+    mov rcx, [rcx + rax*8]
+    xor edx, edx                        # narrow the time to ASCII
+.Lopt_time_char:
+    movzx eax, word ptr [rcx + rdx*2]
+    cmp eax, 0x7f
+    ja .Lshow_help
+    cmp edx, 63
+    jae .Lshow_help
+    lea r8, [rip + time_text]
+    mov [r8 + rdx], al
+    inc edx
+    test eax, eax
+    jnz .Lopt_time_char
+    lea rcx, [rip + time_text]
+    call parse_time
+    jc .Lshow_help
+    mov [rip + cli_start_ms], rax
+    jmp .Lopt_next
+.Lopt_files:
     mov eax, [rip + argc]
-    sub eax, 2
+    sub eax, [rip + arg_index]
     mov [rip + input_count], rax
-    jmp .Lopen_input
-.Ltry_decode:
+    mov ecx, [rip + arg_index]
     mov rax, [rip + argv]
-    mov rcx, [rax + 8]
-    lea rdx, [rip + tags_arg]
-    call equal_wide
-    mov dword ptr [rip + operation], 3
+    lea rax, [rax + rcx*8]
+    mov [rip + input_list], rax
+    mov eax, [rip + operation]
+    cmp dword ptr [rip + cli_repeat], 0
+    je .Lopt_repeat_checked
     test eax, eax
-    jnz .Lmetadata_arg
-    mov rax, [rip + argv]
-    mov rcx, [rax + 8]
-    lea rdx, [rip + chapters_arg]
-    call equal_wide
-    mov dword ptr [rip + operation], 4
-    test eax, eax
-    jnz .Lmetadata_arg
-    mov rax, [rip + argv]
-    mov rcx, [rax + 8]
-    lea rdx, [rip + cover_arg]
-    call equal_wide
-    test eax, eax
-    jz .Ltry_decode_arg
-    cmp dword ptr [rip + argc], 4
-    jne .Lshow_help
-    mov dword ptr [rip + operation], 5
+    jnz .Lshow_help                     # --repeat plays
+.Lopt_repeat_checked:
+    cmp eax, 3
+    jb .Lopt_queue_mode
+    cmp qword ptr [rip + cli_start_ms], 0
+    jne .Lshow_help                     # --start decodes or plays
     lea rax, [rip + engine_stop_requested]
     mov [rip + ogg_cancel_ptr], rax
-    mov rax, [rip + argv]
-    mov rcx, [rax + 16]
+    cmp dword ptr [rip + operation], 5
+    je .Lopt_cover
+    cmp qword ptr [rip + input_count], 1
+    jne .Lshow_help
+    mov rax, [rip + input_list]
+    mov rcx, [rax]
+    call decoder_open
+    test eax, eax
+    jz bad_input
+    jmp .Ltags_only
+.Lopt_cover:
+    cmp qword ptr [rip + input_count], 2
+    jne .Lshow_help
+    mov rax, [rip + input_list]
+    mov rcx, [rax]
     call decoder_open
     test eax, eax
     jz bad_input
     call cover_get
     test rax, rax
     jz .Lcover_none
-    mov rax, [rip + argv]
-    mov rcx, [rax + 24]
+    mov rax, [rip + input_list]
+    mov rcx, [rax + 8]                  # the output
     mov edx, 0x40000000
     xor r8d, r8d
     xor r9d, r9d
@@ -353,31 +434,17 @@ FN start
     lea rcx, [rip + no_cover]
     call print_text
     jmp cleanup
-.Lmetadata_arg:
-    cmp dword ptr [rip + argc], 3
-    jne .Lshow_help
-    lea rax, [rip + engine_stop_requested]
-    mov [rip + ogg_cancel_ptr], rax
-    mov rax, [rip + argv]
-    mov rcx, [rax + 16]
-    call decoder_open
-    test eax, eax
-    jz bad_input
-    jmp .Ltags_only
-.Ltry_decode_arg:
-    mov dword ptr [rip + operation], 0
-    mov rax, [rip + argv]
-    mov rcx, [rax + 8]
-    lea rdx, [rip + decode_arg]
-    call equal_wide
-    test eax, eax
-    jz .Lplay_args
-    cmp dword ptr [rip + argc], 4
+.Lopt_queue_mode:
+    cmp qword ptr [rip + input_count], 0
+    je .Lshow_help
+    cmp eax, 2
+    jne .Lopen_input
+    cmp qword ptr [rip + input_count], 2
     jb .Lshow_help
-    mov dword ptr [rip + operation], 2
-    mov rax, [rip + argv]
-    mov ecx, [rip + argc]
-    mov rcx, [rax + rcx*8 - 8]          # the last argument
+    dec qword ptr [rip + input_count]
+    mov rax, [rip + input_list]
+    mov rcx, [rip + input_count]
+    mov rcx, [rax + rcx*8]              # the last argument
     mov edx, 0x40000000
     xor r8d, r8d
     xor r9d, r9d
@@ -388,20 +455,6 @@ FN start
     mov [rip + output_file], rax
     cmp rax, -1
     je .Lbad_output
-    mov rax, [rip + argv]
-    add rax, 16
-    mov [rip + input_list], rax
-    mov eax, [rip + argc]
-    sub eax, 3
-    mov [rip + input_count], rax
-    jmp .Lopen_input
-.Lplay_args:
-    mov rax, [rip + argv]
-    add rax, 8
-    mov [rip + input_list], rax
-    mov eax, [rip + argc]
-    dec eax
-    mov [rip + input_count], rax
 .Lopen_input:
     lea rax, [rip + engine_stop_requested]
     mov [rip + ogg_cancel_ptr], rax
@@ -415,11 +468,20 @@ FN start
     test eax, eax
     jz bad_input
     cmp dword ptr [rip + operation], 0
-    jne .Loffline_loop
+    jne .Loffline_start
     call print_tags
     lea rax, [rip + announce_next]
     mov [rip + queue_announce], rax
+    mov eax, [rip + cli_repeat]
+    mov [rip + queue_repeat], eax
+    mov rax, [rip + cli_start_ms]
+    mov [rip + engine_seek_ms], rax
+    call console_seek
     jmp start_playback
+.Loffline_start:
+    mov rcx, [rip + cli_start_ms]       # --start, read exactly
+    call queue_start
+    jmp .Loffline_loop
 .Ltags_only:
     cmp dword ptr [rip + operation], 4
     je .Lchapters_only
@@ -493,6 +555,8 @@ start_playback:
     jz .Lbad_audio
     cmp dword ptr [rip + engine_mode], 0
     jne .Lskip_console_handler
+    cmp dword ptr [rip + console_greeted], 0
+    jne .Lskip_console_handler          # registered on the first start
     lea rcx, [rip + ctrl_handler]
     mov edx, 1
     call SetConsoleCtrlHandler
@@ -619,8 +683,12 @@ start_playback:
     mov [rip + mmcss], rax
     cmp dword ptr [rip + engine_mode], 0
     jne .Lno_keyboard
+    cmp dword ptr [rip + console_greeted], 0
+    jne .Lconsole_greeted
+    mov dword ptr [rip + console_greeted], 1
     lea rcx, [rip + play_text]
     call print_text
+.Lconsole_greeted:
     # Keyboard thread waits on input or stop; no periodic polling.
     mov ecx, -10
     call GetStdHandle
@@ -631,7 +699,10 @@ start_playback:
     test eax, eax
     jz .Lno_keyboard
     mov eax, [rip + console_mode]
+    cmp dword ptr [rip + console_changed], 0
+    jne .Lconsole_mode_saved            # a restart: the original is kept
     mov [rip + console_original_mode], eax
+.Lconsole_mode_saved:
     and eax, 0xffffffbf       # disable QuickEdit so selecting console won't hang audio
     or eax, 0x80
     mov rcx, [rip + stdin]
@@ -720,8 +791,21 @@ start_playback:
     test eax, eax
     js .Lbad_audio
     cmp dword ptr [rip + padding], 0
-    je .Lplayback_stopped
+    je .Laudio_drained
     jmp .Laudio_wait
+.Laudio_drained:
+    # Repeat turned on after the producer read the last file: play the list
+    # again from its first file (when this run played anything).
+    cmp dword ptr [rip + engine_mode], 0
+    jne .Lplayback_stopped
+    cmp dword ptr [rip + queue_repeat], 0
+    je .Lplayback_stopped
+    cmp qword ptr [rip + read_count], 0
+    je .Lplayback_stopped
+    cmp dword ptr [rip + engine_command], 0
+    jne .Lplayback_stopped
+    mov dword ptr [rip + engine_command], 4
+    jmp .Lplayback_stopped
 .Laudio_more:
     call fill_render
     cmp dword ptr [rip + audio_hresult], 0
@@ -765,6 +849,16 @@ start_playback:
     call AvRevertMmThreadCharacteristics
 .Lno_mmcss:
     mov qword ptr [rip + mmcss], 0
+    cmp dword ptr [rip + engine_mode], 0
+    jne .Lstopped_report
+    cmp dword ptr [rip + exit_code], 3
+    je .Lstopped_report
+    cmp dword ptr [rip + engine_command], 0
+    je .Lstopped_report
+    call console_restart
+    test eax, eax
+    jnz start_playback
+.Lstopped_report:
     cmp dword ptr [rip + decode_error], 0
     je .Lreport_finish
     mov dword ptr [rip + exit_code], 2
@@ -847,9 +941,9 @@ LOCALFN producer
     push rbx
     push rsi
     sub rsp, 64
-    cmp dword ptr [rip + engine_mode], 0
-    je .Lproducer_loop
     mov rcx, [rip + engine_seek_frames]
+    test rcx, rcx
+    jz .Lproducer_loop
     call queue_seek
     mov [rip + decoded_count], rax
 .Lproducer_seek:
@@ -1064,6 +1158,9 @@ LOCALFN fill_render
     ret
 ENDFN fill_render
 
+# Console keys: Space pauses, Q stops, R toggles repeat; N or >, P or <
+# and the arrow keys stop playback with an engine_command, noting the file
+# heard and the position in it.
 LOCALFN keyboard
     push rbp
     mov rbp, rsp
@@ -1091,13 +1188,56 @@ LOCALFN keyboard
     jne .Lkeyboard_wait
     cmp dword ptr [rip + input_record + 4], 0
     je .Lkeyboard_wait
-    cmp word ptr [rip + input_record + 10], 0x20
+    movzx eax, word ptr [rip + input_record + 10]   # virtual key
+    movzx ecx, word ptr [rip + input_record + 14]   # character
+    cmp eax, 0x20
     je .Lkeyboard_pause
-    cmp word ptr [rip + input_record + 10], 0x51
+    cmp eax, 0x52                       # R
+    je .Lkeyboard_repeat
+    mov edx, 1
+    cmp eax, 0x4e                       # N
+    je .Lkeyboard_command
+    cmp ecx, '>'
+    je .Lkeyboard_command
+    mov edx, 2
+    cmp eax, 0x50                       # P
+    je .Lkeyboard_command
+    cmp ecx, '<'
+    je .Lkeyboard_command
+    mov edx, 3
+    mov r8d, 5
+    cmp eax, 0x27                       # right
+    je .Lkeyboard_seek
+    mov r8d, -5
+    cmp eax, 0x25                       # left
+    je .Lkeyboard_seek
+    mov r8d, 60
+    cmp eax, 0x26                       # up
+    je .Lkeyboard_seek
+    mov r8d, -60
+    cmp eax, 0x28                       # down
+    je .Lkeyboard_seek
+    cmp eax, 0x51                       # Q
     jne .Lkeyboard_wait
     mov rcx, [rip + stop_event]
     call SetEvent
     jmp .Lkeyboard_exit
+.Lkeyboard_seek:
+    mov [rip + engine_seek_delta], r8d
+.Lkeyboard_command:
+    mov [rip + engine_command], edx
+    call console_note_heard
+    mov rcx, [rip + stop_event]
+    call SetEvent
+    jmp .Lkeyboard_exit
+.Lkeyboard_repeat:
+    xor dword ptr [rip + queue_repeat], 1
+    lea rcx, [rip + repeat_on_text]
+    jnz .Lkeyboard_repeat_text
+    lea rcx, [rip + repeat_off_text]
+.Lkeyboard_repeat_text:
+    call print_text
+    jmp .Lkeyboard_wait
 .Lkeyboard_pause:
     xor dword ptr [rip + pause_requested], 1
     mov rcx, [rip + audio_event]
@@ -1108,6 +1248,126 @@ LOCALFN keyboard
     leave
     ret
 ENDFN keyboard
+
+# engine_heard_index and engine_heard_ms <- the file at engine_position.
+LOCALFN console_note_heard
+    sub rsp, 40
+    mov rcx, [rip + engine_position]
+    call queue_heard
+    cmp eax, -1
+    jne .Lheard_found
+    mov eax, [rip + queue_index]
+    xor edx, edx
+.Lheard_found:
+    mov [rip + engine_heard_index], eax
+    mov rax, [rip + engine_position]
+    sub rax, rdx
+    jae .Lheard_offset
+    xor eax, eax
+.Lheard_offset:
+    mov ecx, 1000
+    mul rcx
+    mov ecx, [rip + queue_rate]
+    test ecx, ecx
+    jz .Lheard_none
+    div rcx
+    jmp .Lheard_store
+.Lheard_none:
+    xor eax, eax
+.Lheard_store:
+    mov [rip + engine_heard_ms], rax
+    add rsp, 40
+    ret
+ENDFN console_note_heard
+
+# engine_seek_frames and engine_position <- engine_seek_ms at the session
+# rate, at most the current file's frames.
+LOCALFN console_seek
+    mov rax, [rip + engine_seek_ms]
+    mov ecx, [rip + queue_rate]
+    mul rcx
+    mov ecx, 1000
+    cmp rdx, rcx
+    jae .Lconsole_seek_far
+    div rcx
+    jmp .Lconsole_seek_frames
+.Lconsole_seek_far:
+    mov rax, -1
+.Lconsole_seek_frames:
+    mov rcx, [rip + output_frames]
+    test rcx, rcx
+    jz .Lconsole_seek_store
+    cmp rax, rcx
+    cmova rax, rcx
+.Lconsole_seek_store:
+    mov [rip + engine_seek_frames], rax
+    mov [rip + engine_position], rax
+    ret
+ENDFN console_seek
+
+# Console playback stopped with an engine_command: releases the stream, its
+# threads and events, reopens the queue there (queue_navigate) and resets
+# the engine for start_playback -> EAX=1 to play again, 0 to finish.
+LOCALFN console_restart
+    sub rsp, 40
+    lea rcx, [rip + render_obj]
+    call release_com
+    lea rcx, [rip + client_obj]
+    call release_com
+    lea rcx, [rip + device_obj]
+    call release_com
+    lea rcx, [rip + enum_obj]
+    call release_com
+    cmp dword ptr [rip + com_initialized], 0
+    je .Lrestart_threads
+    call CoUninitialize
+    mov dword ptr [rip + com_initialized], 0
+.Lrestart_threads:
+    lea rcx, [rip + producer_thread]
+    call close_pointer
+    lea rcx, [rip + control_thread]
+    call close_pointer
+    lea rcx, [rip + stop_event]
+    call close_pointer
+    lea rcx, [rip + data_event]
+    call close_pointer
+    lea rcx, [rip + space_event]
+    call close_pointer
+    lea rcx, [rip + audio_event]
+    call close_pointer
+    mov ecx, [rip + engine_command]
+    mov edx, [rip + engine_heard_index]
+    mov r8, [rip + engine_heard_ms]
+    mov r9d, [rip + engine_seek_delta]
+    cmp ecx, 4
+    jne .Lrestart_navigate
+    mov dword ptr [rip + engine_heard_index], -1   # the list again: its tags
+.Lrestart_navigate:
+    call queue_navigate
+    test eax, eax
+    jz .Lrestart_return
+    mov [rip + engine_seek_ms], rdx
+    mov eax, [rip + queue_index]
+    cmp eax, [rip + engine_heard_index]
+    je .Lrestart_reset
+    call announce_next                  # another file: its tags
+.Lrestart_reset:
+    xor eax, eax
+    mov [rip + write_count], rax
+    mov [rip + read_count], rax
+    mov [rip + decoded_count], rax
+    mov [rip + producer_done], eax
+    mov [rip + engine_ready], eax
+    mov [rip + engine_stop_requested], eax
+    mov [rip + was_paused], eax
+    mov [rip + audio_hresult], eax
+    mov [rip + engine_command], eax
+    call console_seek
+    mov eax, 1
+.Lrestart_return:
+    add rsp, 40
+    ret
+ENDFN console_restart
 
 LOCALFN ctrl_handler
     sub rsp, 40
