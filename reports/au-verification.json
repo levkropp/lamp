@@ -1,0 +1,237 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "pcm_s8-1.au",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=16 rate=22050 channels=1 bits=8 frames=15435 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=639 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_s8-2.au",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=16 rate=44100 channels=2 bits=8 frames=30870 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=923 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_s16be-1.au",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=16 rate=44100 channels=1 bits=16 frames=30870 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=691 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_s16be-2.au",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=16 rate=48000 channels=2 bits=16 frames=33600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=896 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_s24be-1.au",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=16 rate=48000 channels=1 bits=24 frames=33600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=661 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_s24be-2.au",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=16 rate=96000 channels=2 bits=24 frames=67200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=1470 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_s32be-1.au",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=16 rate=96000 channels=1 bits=32 frames=67200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=1054 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_s32be-2.au",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=16 rate=8000 channels=2 bits=32 frames=5600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=410 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_f32be-1.au",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=16 rate=8000 channels=1 bits=32 frames=5600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=418 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_f32be-2.au",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=16 rate=22050 channels=2 bits=32 frames=15435 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=498 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_f64be-1.au",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=16 rate=22050 channels=1 bits=64 frames=15435 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=479 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_f64be-2.au",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=16 rate=44100 channels=2 bits=64 frames=30870 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=991 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_alaw-1.au",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=16 rate=44100 channels=1 bits=8 frames=30870 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=676 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_alaw-2.au",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=16 rate=48000 channels=2 bits=8 frames=33600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1112 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_mulaw-1.au",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=16 rate=48000 channels=1 bits=8 frames=33600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=751 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_mulaw-2.au",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=16 rate=96000 channels=2 bits=8 frames=67200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1667 endpoint_dry=0"
+    },
+    {
+      "test": "pcm-5.1.au",
+      "result": "exact",
+      "comparator": "the same audio in WAVE (5.1)",
+      "note": "default layout",
+      "stats": "codec=16 rate=48000 channels=6 bits=16 frames=28800 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=1518 endpoint_dry=0"
+    },
+    {
+      "test": "unknown-size.au",
+      "result": "exact",
+      "comparator": "pcm_s24be-2.au",
+      "note": "data size 0xFFFFFFFF",
+      "stats": "codec=16 rate=96000 channels=2 bits=24 frames=67200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1471 endpoint_dry=0"
+    },
+    {
+      "test": "annotation.au",
+      "result": "exact",
+      "comparator": "pcm_s24be-2.au",
+      "note": "a 328-byte annotation",
+      "stats": "codec=16 rate=96000 channels=2 bits=24 frames=67200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1363 endpoint_dry=0"
+    },
+    {
+      "test": "trailing.au",
+      "result": "exact",
+      "comparator": "pcm_s24be-2.au",
+      "note": "bytes after the declared data",
+      "stats": "codec=16 rate=96000 channels=2 bits=24 frames=67200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1449 endpoint_dry=0"
+    },
+    {
+      "test": "minimal.au",
+      "result": "exact",
+      "comparator": "pcm_s24be-2.au",
+      "note": "no annotation",
+      "stats": "codec=16 rate=96000 channels=2 bits=24 frames=67200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1344 endpoint_dry=0"
+    },
+    {
+      "test": "cut.au",
+      "result": "exact",
+      "comparator": "the first 100 frames of pcm_s24be-2.au",
+      "note": "a file cut inside a frame",
+      "stats": "codec=16 rate=96000 channels=2 bits=24 frames=100 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=273 endpoint_dry=0"
+    },
+    {
+      "test": "cut-unknown.au",
+      "result": "exact",
+      "comparator": "the first 50 frames of pcm_s24be-2.au",
+      "note": "unknown size, cut inside a frame",
+      "stats": "codec=16 rate=96000 channels=2 bits=24 frames=50 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=294 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_s16be-2.au seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":14,\"discarded_frames\":0,\"maximum_discarded\":0,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "pcm_s8-1.au seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":14,\"discarded_frames\":0,\"maximum_discarded\":0,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "pcm_f64be-2.au seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":14,\"discarded_frames\":0,\"maximum_discarded\":0,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "pcm_alaw-1.au seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":14,\"discarded_frames\":0,\"maximum_discarded\":0,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "pcm-5.1.au seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":14,\"discarded_frames\":0,\"maximum_discarded\":0,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "unknown-size.au seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":14,\"discarded_frames\":0,\"maximum_discarded\":0,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "g721.au",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "g722.au",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "zero-channels.au",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":100}"
+    },
+    {
+      "test": "nine-channels.au",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "zero-rate.au",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":100}"
+    },
+    {
+      "test": "slow-rate.au",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "small-offset.au",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":100}"
+    },
+    {
+      "test": "offset-past-end.au",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":100}"
+    },
+    {
+      "test": "short-header.au",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":100}"
+    }
+  ],
+  "rejections": 9,
+  "scope": "Sun/NeXT AU (signed 8-32-bit, float32/64, G.711, mono to 5.1) against FFmpeg or the same audio in WAVE; rewritten headers, unknown sizes and truncation; seeks; malformed and unsupported headers."
+}

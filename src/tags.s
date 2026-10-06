@@ -13,7 +13,7 @@
 # - Vorbis comments in native FLAC and in Ogg Vorbis, Opus and FLAC (the
 #   first stream LAMP decodes); repeated keys join with ";".
 # - MP4/MOV ilst items, RIFF INFO (WAVE, AVI), AIFF NAME/AUTH/ANNO, CAF info
-#   and Matroska Info title and untargeted SimpleTags.
+#   Matroska Info title and untargeted SimpleTags, and AU annotations.
 # Key mappings and precedence follow FFmpeg's demuxers. Values are cut at
 # their first NUL and at TAG_VALUE_MAX bytes; empty values are not stored.
 .include "lamp.inc"
@@ -294,6 +294,18 @@ caf_keys:
     .ascii "COMMENT"
     .byte 8, TAG_COMPOSER
     .ascii "COMPOSER"
+    .byte 0
+au_keys:                            # the keys FFmpeg reads from AU annotations
+    .byte 5, TAG_TITLE
+    .ascii "TITLE"
+    .byte 6, TAG_ARTIST
+    .ascii "ARTIST"
+    .byte 5, TAG_ALBUM
+    .ascii "ALBUM"
+    .byte 5, TAG_TRACK
+    .ascii "TRACK"
+    .byte 5, TAG_GENRE
+    .ascii "GENRE"
     .byte 0
 mkv_keys:
     .byte 5, TAG_TITLE
@@ -2688,6 +2700,75 @@ LOCALFN mkv_targeted
     ret
 ENDFN mkv_targeted
 
+# RCX=AU file (".snd"), RDX=end: "Key=value" lines of the annotation between
+# the header and the data.
+LOCALFN au_tags
+    push rbx
+    push rsi
+    push rdi
+    push r12
+    sub rsp, 40
+    mov rax, rdx
+    sub rax, rcx
+    cmp rax, 24
+    jb .Lau_tags_return
+    mov eax, [rcx + 4]
+    bswap eax
+    lea rdi, [rcx + rax]                  # annotation end
+    cmp rdi, rdx
+    ja .Lau_tags_return
+    lea rsi, [rcx + 24]
+.Lau_tags_line:
+    cmp rsi, rdi
+    jae .Lau_tags_return
+    mov rbx, rsi                          # line start
+.Lau_tags_eol:
+    cmp rsi, rdi
+    jae .Lau_tags_have
+    movzx eax, byte ptr [rsi]
+    cmp eax, 10
+    je .Lau_tags_have
+    test eax, eax
+    je .Lau_tags_have
+    inc rsi
+    jmp .Lau_tags_eol
+.Lau_tags_have:
+    mov r12, rsi                          # line end
+    inc rsi
+    mov rdx, rbx
+.Lau_tags_equals:
+    cmp rdx, r12
+    jae .Lau_tags_line
+    cmp byte ptr [rdx], '='
+    je .Lau_tags_key
+    inc rdx
+    jmp .Lau_tags_equals
+.Lau_tags_key:
+    mov [rsp + 32], rdx
+    mov r8, rdx
+    sub r8, rbx
+    mov rdx, rbx
+    lea rcx, [rip + au_keys]
+    call tag_match
+    cmp eax, -1
+    je .Lau_tags_line
+    mov ecx, eax
+    mov rdx, [rsp + 32]
+    inc rdx
+    mov r8, r12
+    sub r8, rdx
+    mov r9d, TAG_KEEP
+    call tag_store
+    jmp .Lau_tags_line
+.Lau_tags_return:
+    add rsp, 40
+    pop r12
+    pop rdi
+    pop rsi
+    pop rbx
+    ret
+ENDFN au_tags
+
 # RCX=raw stream, RDX=end: ID3v2 tags at the start, an APEv2 tag at the end
 # (or before an ID3v1 tag), then ID3v1 when nothing was found.
 LOCALFN raw_tags
@@ -2777,8 +2858,13 @@ FN tags_read
     jmp .Ltags_read_return
 .Ltags_read_caf:
     cmp eax, 0x66666163                   # caff
-    jne .Ltags_read_flac
+    jne .Ltags_read_au
     call caf_tags
+    jmp .Ltags_read_return
+.Ltags_read_au:
+    cmp eax, 0x646e732e                   # .snd
+    jne .Ltags_read_flac
+    call au_tags
     jmp .Ltags_read_return
 .Ltags_read_flac:
     cmp eax, 0x43614c66                   # fLaC

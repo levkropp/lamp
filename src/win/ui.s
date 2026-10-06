@@ -31,7 +31,7 @@ ui_codec_aiff: .short 'A', 'I', 'F', 'F', '/', 'A', 'I', 'F', 'C', 0
 ui_codec_ogg_flac: .short 'F', 'L', 'A', 'C', '/', 'O', 'G', 'G', 0
 ui_codec_matroska: .short 'M', 'A', 'T', 'R', 'O', 'S', 'K', 'A', 0
 ui_codec_names: .quad 0, ui_codec_wav, ui_codec_flac, ui_codec_mp3, ui_codec_vorbis, ui_codec_opus, ui_codec_aiff
-    .quad ui_codec_ogg_flac, ui_codec_matroska, ui_codec_mp4, ui_codec_aac, ui_codec_ac3, ui_codec_wavpack, ui_codec_caf, ui_codec_avi, ui_codec_flv
+    .quad ui_codec_ogg_flac, ui_codec_matroska, ui_codec_mp4, ui_codec_aac, ui_codec_ac3, ui_codec_wavpack, ui_codec_caf, ui_codec_avi, ui_codec_flv, ui_codec_au
 ui_codec_mp4: .short 'M', 'P', '4', 0
 ui_codec_aac: .short 'A', 'A', 'C', 0
 ui_codec_ac3: .short 'A', 'C', '-', '3', 0
@@ -39,11 +39,12 @@ ui_codec_wavpack: .short 'W', 'A', 'V', 'P', 'A', 'C', 'K', 0
 ui_codec_caf: .short 'C', 'A', 'F', 0
 ui_codec_avi: .short 'A', 'V', 'I', 0
 ui_codec_flv: .short 'F', 'L', 'V', 0
+ui_codec_au: .short 'A', 'U', 0
 ui_font_name: .short 'C', 'o', 'n', 's', 'o', 'l', 'a', 's', 0
 ui_filter: .short 'A', 'u', 'd', 'i', 'o', ' ', 'f', 'i', 'l', 'e', 's', 0
     .short '*', '.', 'w', 'a', 'v', ';', '*', '.', 'a', 'i', 'f', ';', '*', '.', 'a', 'i', 'f', 'f', ';', '*', '.', 'a', 'i', 'f', 'c', ';'
     .short '*', '.', 'f', 'l', 'a', 'c', ';', '*', '.', 'm', 'p', '3', ';', '*', '.', 'o', 'g', 'g', ';', '*', '.', 'o', 'p', 'u', 's', ';', '*', '.', 'o', 'g', 'a', ';'
-    .short '*', '.', 'm', 'p', '2', ';', '*', '.', 'm', 'p', '1', ';', '*', '.', 'm', 'p', 'a', ';', '*', '.', 'm', 'k', 'a', ';', '*', '.', 'm', 'k', 'v', ';', '*', '.', 'w', 'e', 'b', 'm', ';', '*', '.', 'm', '4', 'a', ';', '*', '.', 'm', '4', 'b', ';', '*', '.', 'm', 'p', '4', ';', '*', '.', 'm', 'o', 'v', ';', '*', '.', 'a', 'a', 'c', ';', '*', '.', 'a', 'c', '3', ';', '*', '.', 'w', 'v', ';', '*', '.', 'c', 'a', 'f', ';', '*', '.', 'w', '6', '4', ';', '*', '.', 'a', 'v', 'i', ';', '*', '.', 'f', 'l', 'v', ';'
+    .short '*', '.', 'm', 'p', '2', ';', '*', '.', 'm', 'p', '1', ';', '*', '.', 'm', 'p', 'a', ';', '*', '.', 'm', 'k', 'a', ';', '*', '.', 'm', 'k', 'v', ';', '*', '.', 'w', 'e', 'b', 'm', ';', '*', '.', 'm', '4', 'a', ';', '*', '.', 'm', '4', 'b', ';', '*', '.', 'm', 'p', '4', ';', '*', '.', 'm', 'o', 'v', ';', '*', '.', 'a', 'a', 'c', ';', '*', '.', 'a', 'c', '3', ';', '*', '.', 'w', 'v', ';', '*', '.', 'c', 'a', 'f', ';', '*', '.', 'w', '6', '4', ';', '*', '.', 'a', 'v', 'i', ';', '*', '.', 'f', 'l', 'v', ';', '*', '.', 'a', 'u', ';', '*', '.', 's', 'n', 'd', ';'
     .short '*', '.', 't', 's', ';', '*', '.', 'm', '2', 't', 's', ';', '*', '.', 'm', 't', 's', ';', '*', '.', 'm', 'p', 'g', ';', '*', '.', 'm', 'p', 'e', 'g', ';', '*', '.', 'v', 'o', 'b', 0
     .short 'A', 'l', 'l', ' ', 'f', 'i', 'l', 'e', 's', 0, '*', '.', '*', 0, 0
 ui_instance: .quad 0

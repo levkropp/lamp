@@ -76,6 +76,7 @@ def main():
     step(TESTS / 'verify-caf-wave64.py', *playback)
     step(TESTS / 'verify-avi.py', *playback)
     step(TESTS / 'verify-flv.py', *playback)
+    step(TESTS / 'verify-au.py')
     step(TESTS / 'verify-tags.py')
     step(TESTS / 'verify-queue.py')
     if not WINDOWS and not playback:

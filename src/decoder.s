@@ -16,7 +16,7 @@ sample_rate: .long 0
 source_channels: .long 0
 source_bits: .long 0
 decode_error: .long 0
-codec_kind: .long 0                 #1 WAV,2 FLAC,3 MP3,4 Vorbis,5 Opus,6 AIFF/AIFC,...,11 AC-3,12 WavPack,13 CAF,14 AVI,15 FLV
+codec_kind: .long 0                 #1 WAV,2 FLAC,3 MP3,4 Vorbis,5 Opus,6 AIFF/AIFC,...,11 AC-3,12 WavPack,13 CAF,14 AVI,15 FLV,16 AU
 total_frames: .quad 0
 map_token: .quad 0
 map_base: .quad 0
@@ -143,6 +143,7 @@ fo_scan_checkpoint: .zero 2*8
 .text
 .include "aiff.inc"
 .include "caf.inc"
+.include "au.inc"
 # RCX=native path -> EAX=1. Publishes output_rate/output_frames, the rate and
 # length of the PCM that decoder_read returns; for a chained Ogg stream these
 # differ from the current link's sample_rate/total_frames.
@@ -234,6 +235,8 @@ LOCALFN decoder_open_format
     je .Lopen_aiff
     cmp dword ptr [rax], 0x66666163 # caff: Core Audio Format
     je .Lopen_caf
+    cmp dword ptr [rax], 0x646e732e # .snd: Sun/NeXT AU
+    je .Lopen_au
     cmp dword ptr [rax], 0x43614c66 # fLaC
     je .Lopen_flac
     cmp dword ptr [rax], 0x5367674f # OggS
@@ -332,6 +335,14 @@ LOCALFN decoder_open_format
     mov rcx, [rip + map_base]
     mov rdx, [rip + input_end]
     call caf_open
+    test eax, eax
+    jz .Lopen_bad
+    leave
+    ret
+.Lopen_au:
+    mov rcx, [rip + map_base]
+    mov rdx, [rip + input_end]
+    call au_open
     test eax, eax
     jz .Lopen_bad
     leave
@@ -2225,6 +2236,8 @@ FN decoder_seek
     je .Lseek_wav
     cmp dword ptr [rip + codec_kind], 15
     je .Lseek_wav
+    cmp dword ptr [rip + codec_kind], 16
+    je .Lseek_wav
     cmp dword ptr [rip + codec_kind], 3
     je .Lseek_mp3
     cmp dword ptr [rip + codec_kind], 2
@@ -3419,6 +3432,8 @@ FN decoder_read
     je .Lread_existing
     cmp dword ptr [rip + codec_kind], 15
     je .Lread_existing
+    cmp dword ptr [rip + codec_kind], 16  # AU
+    je .Lread_existing
     cmp dword ptr [rip + codec_kind], 1
     jb .Lread_done
     cmp dword ptr [rip + codec_kind], 6
@@ -3450,6 +3465,8 @@ FN decoder_read
     cmp dword ptr [rip + codec_kind], 14
     je .Lread_wav
     cmp dword ptr [rip + codec_kind], 15
+    je .Lread_wav
+    cmp dword ptr [rip + codec_kind], 16
     je .Lread_wav
 .Lread_flac:
     mov rcx, rdi

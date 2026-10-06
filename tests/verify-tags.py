@@ -283,7 +283,8 @@ def main():
                          ('pcm.caf', ['-c:a', 'pcm_s16le']),
                          ('wavpack.wv', ['-c:a', 'wavpack']),
                          ('id3.aiff', ['-c:a', 'pcm_s16be', '-write_id3v2', '1']),
-                         ('text.aiff', ['-c:a', 'pcm_s16be', '-metadata', 'author=Äuthor'])):
+                         ('text.aiff', ['-c:a', 'pcm_s16be', '-metadata', 'author=Äuthor']),
+                         ('annotation.au', ['-c:a', 'pcm_s16be'])):
         path = work / name
         values = options if name != 'id3v1.mp3' else [a for key in ('title', 'artist', 'album', 'date', 'comment',
                                                                      'track', 'genre')
