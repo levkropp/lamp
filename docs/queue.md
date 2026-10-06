@@ -89,6 +89,7 @@ The queue notes where each file starts in its output, to the frame, so a key act
 | Up / Down, M | Volume, mute |
 | R | Repeat on or off |
 | O | Open files |
+| Right click, Shift+F10, menu key | The context menu: Open files, Repeat, and Output (see [device notes](devices.md)) |
 | Q | Close |
 
 Files open before they are heard, so the window keeps what it shows per file:
@@ -142,6 +143,7 @@ Navigation starts a new playback thread at the target file and position (`engine
   - three files playing gaplessly, the title following each file as it is heard;
   - N, P twice, the media "next" command, the next button, Right, N on the last file, then R and N;
   - a folder and an M3U playlist playing in list order;
-  - a stream killed by the server reopening where it was heard.
+  - a stream killed by the server reopening where it was heard;
+  - the Output menu moving playback to another endpoint and back.
 
 `python3 tests/verify-playback.py` plays a four-file queue (a 0.3 s first file shorter than the prebuffer, a resampled 44.1 kHz MP3, Opus and WAV) through the private null sink: the captured stream equals the `--decode` output bit for bit, with no gap between files.

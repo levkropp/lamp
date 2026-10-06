@@ -38,7 +38,6 @@
       "test": "command-line list",
       "result": "in order, titled as heard",
       "titles": [
-        "LAMP - Lev's Assembly Media Player",
         "LAMP Test \u2013 First - LAMP",
         "LAMP Test \u2013 Second - LAMP",
         "LAMP Test \u2013 Third - LAMP"
@@ -46,7 +45,7 @@
       "segments": [
         [
           "First",
-          34,
+          190,
           120000
         ],
         [
@@ -80,46 +79,46 @@
         [
           "One",
           288,
-          114000
+          113040
         ],
         [
           "Two",
-          112,
+          89,
           71520
         ],
         [
           "One",
-          173,
+          94,
           191760
         ],
         [
           "One",
-          155,
-          71280
+          144,
+          71760
         ],
         [
           "Two",
-          153,
+          110,
           71280
         ],
         [
           "Three",
-          121,
+          126,
           71280
         ],
         [
           "Three",
-          311098,
+          311045,
           432000
         ],
         [
           "Four",
           0,
-          190560
+          188160
         ],
         [
           "One",
-          122,
+          153,
           71520
         ]
       ]
@@ -173,21 +172,44 @@
         ],
         [
           "Long",
-          23040,
-          54720
+          22560,
+          55200
         ],
         [
           "Long",
           77760,
-          106800
+          105840
         ],
         [
           "Long",
-          176305,
-          207695
+          175300,
+          208700
+        ]
+      ]
+    },
+    {
+      "test": "output menu",
+      "result": "continued on the chosen endpoint, then the default",
+      "default": [
+        [
+          "Output",
+          288,
+          153360
+        ],
+        [
+          "Output",
+          300675,
+          399840
+        ]
+      ],
+      "chosen": [
+        [
+          "Output",
+          153793,
+          300960
         ]
       ]
     }
   ],
-  "scope": "lamp.exe list building (folders, command line, drops, the open dialog), gapless list playback with the title following the file heard, N/P, the media next command, the next button, seeking, repeat, playlists and reopening a killed stream, under Wine on Xvfb."
+  "scope": "lamp.exe list building (folders, command line, drops, the open dialog), gapless list playback with the title following the file heard, N/P, the media next command, the next button, seeking, repeat, playlists, reopening a killed stream and choosing outputs, under Wine on Xvfb."
 }

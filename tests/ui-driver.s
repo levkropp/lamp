@@ -3,6 +3,8 @@
 #   w        wait for the player's window (up to 30 s)
 #   kXX      press the key with virtual-key code XX (hexadecimal)
 #   aN       send WM_APPCOMMAND N (11 next, 12 previous, 14 play/pause)
+#   oN       send WM_COMMAND N, as the context menu's item N does
+#   r        open the context menu as the keyboard does
 #   mX,Y     click the client area at X, Y pixels above its bottom
 #   sN       sleep N milliseconds
 #   t        print the window's title
@@ -54,6 +56,10 @@ FN driver_start
     je .Ldriver_key
     cmp eax, 'a'
     je .Ldriver_appcommand
+    cmp eax, 'o'
+    je .Ldriver_menu_command
+    cmp eax, 'r'
+    je .Ldriver_context
     cmp eax, 'm'
     je .Ldriver_click
     cmp eax, 't'
@@ -103,6 +109,23 @@ FN driver_start
     mov rcx, [rip + driver_hwnd]
     mov edx, 0x319                        # WM_APPCOMMAND
     mov r8, rcx
+    call PostMessageW
+    jmp .Ldriver_command
+.Ldriver_menu_command:
+    mov rcx, rsi
+    mov edx, 10
+    call driver_number
+    mov r8d, eax
+    mov rcx, [rip + driver_hwnd]
+    mov edx, 0x111                        # WM_COMMAND
+    xor r9d, r9d
+    call PostMessageW
+    jmp .Ldriver_command
+.Ldriver_context:
+    mov rcx, [rip + driver_hwnd]
+    mov edx, 0x7b                         # WM_CONTEXTMENU, from the keyboard
+    mov r8, rcx
+    mov r9, -1
     call PostMessageW
     jmp .Ldriver_command
 .Ldriver_click:

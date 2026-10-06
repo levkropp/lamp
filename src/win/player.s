@@ -6,7 +6,7 @@
 .globl engine_mode, engine_stop_requested
 .globl engine_position, engine_seek_seconds, engine_volume, pause_requested
 .globl engine_ready, engine_opened, engine_play_list, engine_command, engine_heard_index, engine_heard_ms
-.globl read_count, device_chosen
+.globl read_count, device_chosen, device_id, devices_callback
 .globl exit_code, underruns, endpoint_dry
 
 .equ RING_FRAMES, 262144
@@ -119,6 +119,8 @@ cli_modes: .quad check_arg, 1, decode_arg, 2, tags_arg, 3, chapters_arg, 4, cove
     .quad 0, 0
 cli_device: .quad 0                  # --device's argument (wide)
 device_chosen: .quad 0               # its endpoint ID (device_id), 0 for the default
+devices_enum: .quad 0                # audio_devices' enumerator
+devices_callback: .quad 0            # audio_devices' ECX=2 callback
 cli_start_ms: .quad 0
 engine_seek_ms: .quad 0              # console: where playback starts in the current file
 engine_heard_ms: .quad 0             # position in the heard file at a command
@@ -2150,8 +2152,11 @@ ENDFN absolute_utf8
 # Active render endpoints, in the enumerator's order. ECX=0 prints each as
 # "number<TAB>endpoint ID<TAB>friendly name" (UTF-8); ECX=1 finds the one
 # whose ID, friendly name or number equals cli_device and makes it
-# device_chosen. -> EAX=1; else reports the failure, exit code 3, EAX=0.
-LOCALFN audio_devices
+# device_chosen; ECX=2 calls devices_callback with ECX=number, RDX=endpoint
+# ID and R8=friendly name (or 0) for each. -> EAX=1; else reports the
+# failure, exit code 3, EAX=0. Its own enumerator leaves a playing stream's
+# alone.
+FN audio_devices
     push rbx
     push rsi
     push rdi
@@ -2166,12 +2171,12 @@ LOCALFN audio_devices
     xor edx, edx
     mov r8d, 1
     lea r9, [rip + iid_enumerator]
-    lea rax, [rip + enum_obj]
+    lea rax, [rip + devices_enum]
     mov [rsp + 32], rax
     call CoCreateInstance
     test eax, eax
     js .Ldevices_failed
-    mov rcx, [rip + enum_obj]
+    mov rcx, [rip + devices_enum]
     xor edx, edx                        # eRender
     mov r8d, 1                          # DEVICE_STATE_ACTIVE
     lea r9, [rip + device_collection]
@@ -2226,8 +2231,9 @@ LOCALFN audio_devices
     jne .Ldevices_named
     mov rdi, [rip + device_variant + 8]
 .Ldevices_named:
-    test r12d, r12d
-    jnz .Ldevices_match
+    cmp r12d, 1
+    je .Ldevices_match
+    ja .Ldevices_callback
     mov ecx, esi                        # print it
     call print_number
     lea rcx, [rip + tab_text]
@@ -2243,6 +2249,12 @@ LOCALFN audio_devices
 .Ldevices_printed:
     lea rcx, [rip + line_end]
     call print_text
+    jmp .Ldevices_close
+.Ldevices_callback:
+    mov ecx, esi
+    mov rdx, [rip + device_string]
+    mov r8, rdi
+    call qword ptr [rip + devices_callback]
     jmp .Ldevices_close
 .Ldevices_match:
     cmp qword ptr [rip + device_chosen], 0
@@ -2314,14 +2326,17 @@ LOCALFN audio_devices
     jmp .Ldevices_next
 .Ldevices_end:
     mov eax, 1
-    test r12d, r12d
-    jz .Ldevices_done
+    cmp r12d, 1
+    jne .Ldevices_done
     cmp qword ptr [rip + device_chosen], 0
     jne .Ldevices_done
     lea rcx, [rip + unknown_device]
     call print_text
     jmp .Ldevices_error
 .Ldevices_failed:
+    xor eax, eax
+    cmp r12d, 2
+    je .Ldevices_done                   # the window's menu: nothing to report
     lea rcx, [rip + devices_failed]
     call print_text
 .Ldevices_error:
@@ -2331,7 +2346,7 @@ LOCALFN audio_devices
     mov [rsp + 48], eax
     lea rcx, [rip + device_collection]
     call release_com
-    lea rcx, [rip + enum_obj]
+    lea rcx, [rip + devices_enum]
     call release_com
     test ebx, ebx
     js .Ldevices_return

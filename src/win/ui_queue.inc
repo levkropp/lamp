@@ -456,6 +456,7 @@ LOCALFN ui_request
     call engine_stop
     jmp .Lui_request_done
 .Lui_launch:
+    call ui_device_apply                  # an output chosen meanwhile
     cmp dword ptr [rip + ui_list_new], 0
     je .Lui_launch_file
     mov dword ptr [rip + ui_list_new], 0
