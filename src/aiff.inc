@@ -209,9 +209,25 @@ LOCALFN aiff_open
     cmp ecx, 0x32336e69 # in32
     je .Laiff_fixed32
     cmp ecx, 0x20776172 # raw (unsigned 8-bit)
-    jne .Laiff_try_float
+    jne .Laiff_try_g711
     mov dword ptr [rip + aiff_forced_bits], 8
     mov dword ptr [rip + pcm_signed8], 0
+    jmp .Laiff_next
+.Laiff_try_g711:
+    # G.711 codes in 8-bit containers; COMM gives the expanded size.
+    mov edx, 1
+    cmp ecx, 0x77616c61 # alaw
+    je .Laiff_g711
+    cmp ecx, 0x57414c41 # ALAW
+    je .Laiff_g711
+    mov edx, 2
+    cmp ecx, 0x77616c75 # ulaw
+    je .Laiff_g711
+    cmp ecx, 0x57414c55 # ULAW
+    jne .Laiff_try_float
+.Laiff_g711:
+    mov [rip + pcm_g711], edx
+    mov dword ptr [rip + aiff_forced_bits], 8
     jmp .Laiff_next
 .Laiff_fixed24:
     mov dword ptr [rip + aiff_forced_bits], 24
@@ -298,6 +314,14 @@ LOCALFN aiff_open
     mov [rip + source_bits], edx
     cmp dword ptr [rip + aiff_forced_bits], 0
     je .Laiff_natural_container
+    cmp dword ptr [rip + pcm_g711], 0
+    je .Laiff_forced_depth
+    cmp edx, 16
+    ja .Laiff_bad
+    mov dword ptr [rip + source_bits], 8
+    mov edx, 8
+    jmp .Laiff_container_width
+.Laiff_forced_depth:
     cmp edx, [rip + aiff_forced_bits]
     ja .Laiff_bad
     mov edx, [rip + aiff_forced_bits]
@@ -361,6 +385,10 @@ LOCALFN aiff_open
     jz .Laiff_bad
     mov eax, 128
     sub eax, [rip + wav_container_bits]
+    cmp dword ptr [rip + pcm_g711], 0
+    je .Laiff_scale
+    mov eax, 128 - 16                   # G.711 expands to 16 bits
+.Laiff_scale:
     shl eax, 23
     mov [rip + float_scale], eax
     mov eax, 1

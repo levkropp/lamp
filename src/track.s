@@ -20,6 +20,7 @@
 .equ TK_AAC, 7
 .equ TK_AC3, 8
 .equ TK_WAVPACK, 9
+.equ TK_ADPCM, 10
 .equ TK_ENTRY, 24                   # pointer, raw start sample, bytes, samples
 .equ TK_POINTER, 0
 .equ TK_START, 8
@@ -103,8 +104,12 @@ FN track_close
     call ac3_track_close
 .Ltk_close_wavpack:
     cmp dword ptr [rip + track_codec], TK_WAVPACK
-    jne .Ltk_close_done
+    jne .Ltk_close_adpcm
     call wv_track_close
+.Ltk_close_adpcm:
+    cmp dword ptr [rip + track_codec], TK_ADPCM
+    jne .Ltk_close_done
+    call adpcm_track_close
 .Ltk_close_done:
     mov dword ptr [rip + track_active], 0
     mov dword ptr [rip + track_codec], 0
@@ -228,6 +233,8 @@ LOCALFN track_samples
     je .Ltk_samples_ac3
     cmp eax, TK_WAVPACK
     je .Ltk_samples_wavpack
+    cmp eax, TK_ADPCM
+    je .Ltk_samples_adpcm
     call pcm_track_samples
     jmp .Ltk_samples_return
 .Ltk_samples_opus:
@@ -256,6 +263,9 @@ LOCALFN track_samples
     jmp .Ltk_samples_return
 .Ltk_samples_wavpack:
     call wv_track_samples
+    jmp .Ltk_samples_return
+.Ltk_samples_adpcm:
+    call adpcm_track_samples
 .Ltk_samples_return:
     add rsp, 40
     ret
@@ -285,6 +295,8 @@ LOCALFN track_decode
     je .Ltk_decode_ac3
     cmp eax, TK_WAVPACK
     je .Ltk_decode_wavpack
+    cmp eax, TK_ADPCM
+    je .Ltk_decode_adpcm
     call pcm_track_decode
     jmp .Ltk_decode_return
 .Ltk_decode_opus:
@@ -319,6 +331,9 @@ LOCALFN track_decode
     jmp .Ltk_decode_return
 .Ltk_decode_wavpack:
     call wv_track_decode
+    jmp .Ltk_decode_return
+.Ltk_decode_adpcm:
+    call adpcm_track_decode
 .Ltk_decode_return:
     add rsp, 40
     ret
@@ -396,6 +411,8 @@ FN track_finish
     je .Ltk_open_ac3
     cmp eax, TK_WAVPACK
     je .Ltk_open_wavpack
+    cmp eax, TK_ADPCM
+    je .Ltk_open_adpcm
     mov ecx, [rip + track_pcm_channels]
     mov edx, [rip + track_pcm_bits]
     mov r8d, [rip + track_pcm_flags]
@@ -415,6 +432,9 @@ FN track_finish
     mov r8, [rax + TK_POINTER]
     mov r9d, [rax + TK_BYTES]
     call ac3_track_open
+    jmp .Ltk_opened
+.Ltk_open_adpcm:
+    call adpcm_track_open                # RCX/EDX: the WAVE fmt chunk
     jmp .Ltk_opened
 .Ltk_open_wavpack:
     mov rax, [rip + track_packets]       # the first frame describes the stream
@@ -696,8 +716,8 @@ ENDFN track_read
 # before it. Restarts at the packet holding the target, moved back by the
 # codec's pre-roll: Opus 80 ms, MPEG audio two frames (Layer III also earlier
 # frames holding up to 2 KiB of reservoir data), Vorbis, AAC and AC-3 one
-# primer packet whose output is skipped, HE-AAC two. FLAC, ALAC, WavPack and
-# PCM packets decode independently.
+# primer packet whose output is skipped, HE-AAC two. FLAC, ALAC, WavPack,
+# ADPCM and PCM packets decode independently.
 FN track_seek
     push rbx
     push rsi

@@ -12,6 +12,7 @@ import os
 from pathlib import Path
 import re
 import shutil
+import struct
 import subprocess
 import sys
 import tarfile
@@ -231,6 +232,53 @@ def main_guard(function):
     except Failure as error:
         print(f'FAILED: {error}', file=sys.stderr)
         sys.exit(1)
+
+
+# ---------------------------------------------------------------- stereo mixing
+DEFAULT_MASKS = [4, 3, 7, 0x33, 0x37, 0x3f, 0x70f, 0x63f]      # decoder.s pcm_default_masks
+
+
+def speaker_weights():
+    """LAMP's stereo weights per WAVE speaker bit, read from decoder.s."""
+    text = (ROOT / 'src' / 'decoder.s').read_text()
+    block = text[text.index('pcm_speaker_weights:'):text.index('pcm_mix_one:')]
+    values = [float(v) for line in re.findall(r'\.double ([^\n#]+)', block) for v in line.split(',')]
+    return [(values[2 * i], values[2 * i + 1]) for i in range(18)]
+
+
+WEIGHTS = speaker_weights()
+
+
+def stereo_view(native, channels, mask):
+    """A reference decoder's interleaved float32 channels as LAMP outputs
+    them: mono doubled, stereo as is, other layouts (WAVE mask; 0 for the
+    default layout of the count) mixed with the speaker weights normalized as
+    pcm_build_mix does, each float sample times its coefficient summed in
+    double precision in channel order, as the track decoders mix."""
+    mask = mask or DEFAULT_MASKS[channels - 1]
+    count = len(native) // 4 // channels
+    if channels == 1 and mask == 4:
+        values = struct.unpack(f'<{count}I', native)
+        return struct.pack(f'<{2 * count}I', *[v for v in values for _ in (0, 1)])
+    if channels == 2 and mask == 3:
+        return native
+    bits = [b for b in range(18) if mask >> b & 1]
+    coeff = [WEIGHTS[b] for b in bits[:channels]] + [(0.0, 0.0)] * (channels - len(bits))
+    left = right = 0.0
+    for b in bits[:channels]:
+        left += WEIGHTS[b][0]
+        right += WEIGHTS[b][1]
+    scale = (1.0 if len(bits) <= 4 else 2.0) / max(left, right)
+    coeff = [(a * scale, b * scale) for a, b in coeff]
+    data = struct.unpack(f'<{count * channels}f', native)
+    out = []
+    for i in range(0, len(data), channels):
+        sl = sr = 0.0
+        for x, (a, b) in zip(data[i:i + channels], coeff):
+            sl += x * a
+            sr += x * b
+        out += (sl, sr)
+    return struct.pack(f'<{len(out)}f', *out)
 
 
 # ---------------------------------------------------------------- lamp-cli checks

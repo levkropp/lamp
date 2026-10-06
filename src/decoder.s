@@ -9,6 +9,8 @@
 .globl flac_channel_ptrs
 .globl pcm_speaker_weights, pcm_mix_coeff
 
+.equ TK_ADPCM, 10                   # track codec of WAVE ADPCM (src/track.s)
+
 .data
 sample_rate: .long 0
 source_channels: .long 0
@@ -47,6 +49,10 @@ wav_container_bits: .long 0
 wav_valid_bits: .long 0
 pcm_big_endian: .long 0
 pcm_signed8: .long 0
+pcm_g711: .long 0                   # 8-bit codes: 1 A-law, 2 mu-law (G.711)
+wav_codec: .long 0                  # compressed WAVE format tag, 0 for PCM/float
+wav_codec_fmt: .quad 0              # its fmt chunk
+wav_codec_fmt_bytes: .long 0
 bits_count: .long 0
 bits_buf: .quad 0
 frame_start: .quad 0
@@ -181,6 +187,8 @@ LOCALFN decoder_open_format
     mov dword ptr [rip + wav_valid_bits], 0
     mov dword ptr [rip + pcm_big_endian], 0
     mov dword ptr [rip + pcm_signed8], 0
+    mov dword ptr [rip + pcm_g711], 0
+    mov dword ptr [rip + wav_codec], 0
     mov dword ptr [rip + flac_packet_mode], 0
     call file_map               # read-only view; empty or unreadable files fail
     mov [rip + map_token], r8
@@ -525,7 +533,44 @@ LOCALFN decoder_open_format
     cmp ecx, 1
     je .Lwav_valid_type
     cmp ecx, 3
+    je .Lwav_valid_type
+    # G.711 reads as 8-bit PCM through its expansion tables.
+    cmp ecx, 6
+    je .Lwav_alaw
+    cmp ecx, 7
+    je .Lwav_ulaw
+    # Compressed audio (a basic tag or an extensible subformat): IMA and
+    # Microsoft ADPCM (track packets), MPEG audio and AC-3 (the data chunk
+    # opens as the raw stream).
+    cmp ecx, 2
+    je .Lwav_codec
+    cmp ecx, 0x11
+    je .Lwav_codec
+    cmp ecx, 0x50
+    je .Lwav_codec
+    cmp ecx, 0x55
+    je .Lwav_codec
+    cmp ecx, 0x2000
     jne .Lopen_bad
+.Lwav_codec:
+    cmp word ptr [rax + 2], 0
+    je .Lopen_bad
+    cmp word ptr [rax + 12], 0
+    je .Lopen_bad
+    mov [rip + wav_codec], ecx
+    mov [rip + wav_codec_fmt], rax
+    mov [rip + wav_codec_fmt_bytes], edx
+    mov r11d, 1
+    jmp .Lwav_next
+.Lwav_alaw:
+    mov dword ptr [rip + pcm_g711], 1
+    jmp .Lwav_g711
+.Lwav_ulaw:
+    mov dword ptr [rip + pcm_g711], 2
+.Lwav_g711:
+    cmp word ptr [rax + 14], 8
+    jne .Lopen_bad
+    mov ecx, 1
 .Lwav_valid_type:
     mov [rip + wav_format], ecx
     movzx ecx, word ptr [rax + 2]
@@ -591,6 +636,8 @@ LOCALFN decoder_open_format
     mov [rip + input_cursor], rax
     mov [rip + wav_begin], rax
     mov [rip + wav_end], r8
+    cmp dword ptr [rip + wav_codec], 0
+    jne .Lwav_next
     mov rax, rdx
     xor edx, edx
     mov ecx, [rip + wav_align]
@@ -621,6 +668,8 @@ LOCALFN decoder_open_format
     mov eax, [rip + wav_table_used]
     cmp eax, [rip + wav_table_count]
     jne .Lopen_bad
+    cmp dword ptr [rip + wav_codec], 0
+    jne .Lwav_compressed
     mov rax, [rip + wav_fact_frames]
     test rax, rax               # zero means unspecified for PCM/float
     jz .Lwav_frame_count_valid
@@ -632,10 +681,103 @@ LOCALFN decoder_open_format
     jz .Lopen_bad
     mov eax, 128
     sub eax, [rip + wav_container_bits]
+    cmp dword ptr [rip + pcm_g711], 0
+    je .Lwav_scale
+    mov eax, 128 - 16                   # G.711 expands to 16 bits
+.Lwav_scale:
     shl eax, 23
     mov [rip + float_scale], eax
     mov dword ptr [rip + codec_kind], 1
     mov eax, 1
+    leave
+    ret
+.Lwav_compressed:
+    mov dword ptr [rip + pcm_mask_seen], 0
+    mov dword ptr [rip + pcm_ignore_extra], 0
+    mov eax, [rip + wav_codec]
+    cmp eax, 0x2000
+    je .Lwav_ac3
+    cmp eax, 0x50
+    je .Lwav_mpeg
+    cmp eax, 0x55
+    je .Lwav_mpeg
+    # ADPCM blocks become track packets; a final block too short for its
+    # headers is dropped, and a fact count trims the padding of the last.
+    mov ecx, TK_ADPCM
+    call track_begin
+    test eax, eax
+    jz .Lopen_bad
+    mov r9, [rip + wav_codec_fmt]
+    movzx eax, word ptr [r9 + 2]
+    mov ecx, 4
+    cmp dword ptr [rip + wav_codec], 0x11
+    je .Lwav_adpcm_header
+    mov ecx, 7
+.Lwav_adpcm_header:
+    imul eax, ecx
+    mov [rbp - 8], rax                  # block header bytes
+    mov rax, [rip + wav_begin]
+    mov [rbp - 16], rax
+.Lwav_adpcm_block:
+    mov rax, [rip + ogg_cancel_ptr]
+    test rax, rax
+    jz .Lwav_adpcm_continue
+    cmp dword ptr [rax], 0
+    jne .Lwav_adpcm_bad
+.Lwav_adpcm_continue:
+    mov rcx, [rbp - 16]
+    mov rdx, [rip + wav_end]
+    sub rdx, rcx
+    jbe .Lwav_adpcm_done
+    mov r9, [rip + wav_codec_fmt]
+    movzx eax, word ptr [r9 + 12]
+    cmp rdx, rax
+    cmova rdx, rax
+    cmp rdx, [rbp - 8]
+    jb .Lwav_adpcm_done
+    add [rbp - 16], rdx
+    call track_add
+    test eax, eax
+    jz .Lwav_adpcm_bad
+    jmp .Lwav_adpcm_block
+.Lwav_adpcm_done:
+    mov rax, [rip + wav_codec_fmt]
+    mov [rip + track_config], rax
+    mov eax, [rip + wav_codec_fmt_bytes]
+    mov [rip + track_config_bytes], eax
+    mov rax, [rip + wav_fact_frames]
+    test rax, rax
+    jz .Lwav_adpcm_finish
+    mov [rip + track_end_units], rax    # in samples: units at the stream rate
+    mov r9, [rip + wav_codec_fmt]
+    mov eax, [r9 + 4]
+    mov [rip + track_unit_scale], eax
+.Lwav_adpcm_finish:
+    call track_finish
+    test eax, eax
+    jz .Lwav_adpcm_bad
+    mov dword ptr [rip + codec_kind], 1
+    mov eax, 1
+    leave
+    ret
+.Lwav_adpcm_bad:
+    call track_close
+    jmp .Lopen_bad
+.Lwav_mpeg:
+    mov rcx, [rip + wav_begin]
+    mov rdx, [rip + wav_end]
+    call mp3_open
+    test eax, eax
+    jz .Lopen_bad
+    mov dword ptr [rip + codec_kind], 3
+    leave
+    ret
+.Lwav_ac3:
+    mov rcx, [rip + wav_begin]
+    mov rdx, [rip + wav_end]
+    call ac3_open
+    test eax, eax
+    jz .Lopen_bad
     leave
     ret
 
@@ -1311,6 +1453,7 @@ FN pcm_track_open
     shr eax, 2
     and eax, 1
     mov [rip + pcm_signed8], eax
+    mov dword ptr [rip + pcm_g711], 0
     mov eax, edx
     shr eax, 3
     imul eax, ecx
@@ -3310,6 +3453,8 @@ LOCALFN wav_integer_sample
     add rsi, 4
     jmp .Lsample_padding
 .Lsample8:
+    cmp dword ptr [rip + pcm_g711], 0
+    jne .Lsample_g711
     cmp dword ptr [rip + pcm_signed8], 0
     jne .Lsample_signed8
     movzx eax, byte ptr [rsi]
@@ -3365,5 +3510,15 @@ LOCALFN wav_integer_sample
     sub ecx, [rip + source_bits]
     sar rax, cl
     shl rax, cl
+    ret
+.Lsample_g711:
+    movzx eax, byte ptr [rsi]
+    inc rsi
+    lea rdx, [rip + g711_alaw]
+    cmp dword ptr [rip + pcm_g711], 1
+    je .Lsample_g711_table
+    lea rdx, [rip + g711_ulaw]
+.Lsample_g711_table:
+    movsx rax, word ptr [rdx + rax*2]
     ret
 ENDFN wav_integer_sample

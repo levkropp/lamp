@@ -99,7 +99,9 @@ Ogg chaining: files are read as sequences of links, each playing its first Vorbi
 
 ## 3 — Broad audio and container coverage
 
-Current container progress: RIFF/RF64/BW64 audio framing now uses checked 64-bit lengths, occurrence-aware `ds64` tables and validation of chunks after audio. The suite passes 538 files, 16 sparse inputs up to 17,179,877,476 logical bytes, 8,950 exact seeks and 312 malformed-input rejections. It covers large data/metadata, more than `2^32` frames, bounded table state, cancellation and guarded output. RF64/BW64 WASAPI lifecycle checks pass. ADM rendering, segmented WAV data, RIFX/WAVE64, compressed WAV and the broader containers/codecs below remain unfinished.
+Current container progress: RIFF/RF64/BW64 audio framing now uses checked 64-bit lengths, occurrence-aware `ds64` tables and validation of chunks after audio. The suite passes 538 files, 16 sparse inputs up to 17,179,877,476 logical bytes, 8,950 exact seeks and 312 malformed-input rejections. It covers large data/metadata, more than `2^32` frames, bounded table state, cancellation and guarded output. RF64/BW64 WASAPI lifecycle checks pass. ADM rendering, segmented WAV data, RIFX/WAVE64 and the broader containers/codecs below remain unfinished.
+
+Compressed WAVE data now plays: G.711 A-law/µ-law (also in AIFF-C), IMA ADPCM (1–8 channels) and Microsoft ADPCM (mono/stereo) through a new assembly decoder and the track layer, and MPEG audio and AC-3 data chunks through the raw-stream decoders. 24 FFmpeg-encoded files match FFmpeg exactly (ADPCM up to the `fact` count, which LAMP honors), 30 random ADPCM streams covering every predictor and step index match the model and FFmpeg, MPEG/AC-3 copies equal the raw-stream decodes, 105 seeks are exact and 12 unsupported or invalid files reject. See [WAV notes](docs/wav.md#compressed-audio).
 
 Matroska/WebM audio tracks now play through a new container-neutral packet track layer: Opus, Vorbis, FLAC, MPEG Layers I–III and PCM, with Xiph/EBML/fixed lacing, unknown-size elements, default-track selection and final DiscardPadding. 24 FFmpeg-muxed files match FFmpeg (exact for FLAC/PCM) and LAMP's Ogg/native decodes; 42 re-muxed lacing/size/track variants decode identically; 90 seeks are exact and Opus seeks equal Ogg Opus seeks; nine malformed files reject. See [Matroska notes](docs/matroska.md).
 
@@ -127,7 +129,7 @@ AIFF/AIFC now adds signed 1–32-bit PCM, AIFC byte-order/fixed-container varian
 | --- | --- |
 | Mainstream lossy audio | AAC-LC, HE-AAC v1/v2, AC-3 and MPEG Layers I/II (implemented); E-AC-3; then DTS families, WMA variants and other relevant legacy formats |
 | Lossless and PCM | ALAC (implemented in MP4/Matroska), WavPack (implemented; DSD and correction files remain), APE, AIFF/AIFC, RF64, FLAC-in-Ogg, broader PCM/float and FLAC depths/layouts |
-| Other audio | Musepack, Speex, AMR and telephony ADPCM; further formats from the compatibility inventory as demand and feasibility justify |
+| Other audio | G.711 and IMA/Microsoft ADPCM in WAVE (implemented); Musepack, Speex, AMR and other telephony ADPCM; further formats from the compatibility inventory as demand and feasibility justify |
 | Common containers | MP4/M4A/MOV, Matroska/WebM and MPEG TS/PS (audio implemented), AVI, ASF; broader Ogg stream mappings |
 | Media structure | Track selection, timestamps, edit lists, duration/seeking, attachments, chapters, tags and large-file indexing |
 
