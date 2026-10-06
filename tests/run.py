@@ -81,6 +81,7 @@ def main():
     step(TESTS / 'verify-chapters.py')
     step(TESTS / 'verify-cover.py')
     step(TESTS / 'verify-queue.py')
+    step(TESTS / 'verify-navigation.py', *playback)
     if not WINDOWS and not playback:
         step(TESTS / 'verify-playback.py')
     if '--skip-network' not in arguments:

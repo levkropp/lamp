@@ -1,0 +1,220 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "start.flac --start",
+      "result": "exact",
+      "starts": 5
+    },
+    {
+      "test": "start.mp3 --start",
+      "result": "exact",
+      "starts": 5
+    },
+    {
+      "test": "start.ogg --start",
+      "result": "exact",
+      "starts": 5
+    },
+    {
+      "test": "start.opus --start",
+      "result": "exact after 24000 frames",
+      "starts": 5
+    },
+    {
+      "test": "start.m4a --start",
+      "result": "exact",
+      "starts": 5
+    },
+    {
+      "test": "start.wav --start",
+      "result": "exact",
+      "starts": 5
+    },
+    {
+      "test": "start.wv --start",
+      "result": "exact",
+      "starts": 5
+    },
+    {
+      "test": "start.mka --start",
+      "result": "exact",
+      "starts": 5
+    },
+    {
+      "test": "start.ac3 --start",
+      "result": "within the dither (50 dB or more)",
+      "starts": 5
+    },
+    {
+      "test": "start.mp2 --start",
+      "result": "exact",
+      "starts": 5
+    },
+    {
+      "test": "queue --start",
+      "result": "exact",
+      "note": "only the first file starts late"
+    },
+    {
+      "test": "option errors",
+      "result": "usage",
+      "cases": 9
+    },
+    {
+      "test": "start",
+      "result": "passed",
+      "runs": [
+        [
+          "a",
+          120480,
+          167520
+        ]
+      ]
+    },
+    {
+      "test": "next",
+      "result": "passed",
+      "runs": [
+        [
+          "a",
+          480,
+          49617
+        ],
+        [
+          "b",
+          356,
+          143644
+        ]
+      ]
+    },
+    {
+      "test": "next on the last file",
+      "result": "passed",
+      "runs": [
+        [
+          "a",
+          480,
+          49101
+        ]
+      ]
+    },
+    {
+      "test": "previous file",
+      "result": "passed",
+      "runs": [
+        [
+          "c",
+          480,
+          95520
+        ],
+        [
+          "a",
+          0,
+          6597
+        ],
+        [
+          "c",
+          368,
+          95632
+        ],
+        [
+          "a",
+          0,
+          288000
+        ]
+      ]
+    },
+    {
+      "test": "previous restarts",
+      "result": "passed",
+      "runs": [
+        [
+          "a",
+          480,
+          169585
+        ],
+        [
+          "a",
+          352,
+          287648
+        ]
+      ]
+    },
+    {
+      "test": "seek",
+      "result": "passed",
+      "runs": [
+        [
+          "d",
+          480,
+          73684
+        ],
+        [
+          "d",
+          324006,
+          120624
+        ],
+        [
+          "d",
+          319,
+          671681
+        ]
+      ]
+    },
+    {
+      "test": "--repeat",
+      "result": "passed",
+      "runs": [
+        [
+          "e",
+          480,
+          57120
+        ],
+        [
+          "e",
+          0,
+          57600
+        ],
+        [
+          "e",
+          0,
+          31427
+        ]
+      ]
+    },
+    {
+      "test": "R key",
+      "result": "passed",
+      "runs": [
+        [
+          "e",
+          480,
+          57120
+        ],
+        [
+          "e",
+          368,
+          57232
+        ],
+        [
+          "e",
+          0,
+          31009
+        ]
+      ]
+    },
+    {
+      "test": "R key twice",
+      "result": "passed",
+      "runs": [
+        [
+          "e",
+          480,
+          57120
+        ]
+      ]
+    }
+  ],
+  "scope": "--start against whole decodes in ten formats, queues and option errors; keys N/P, arrows, R and --repeat through the null sink."
+}

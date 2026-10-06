@@ -9,13 +9,18 @@
 # last; a decode error in the last file stays in decode_error, and skipped
 # files leave decode_error 6 at the end. A chained Ogg file whose own links
 # change rate cannot be resampled again and is skipped when its rate differs.
+# Navigation: queue_read notes where each file starts in its output
+# (queue_heard finds the file at an output frame), queue_goto reopens the
+# list at a file, and queue_repeat wraps the list around.
 .include "lamp.inc"
 .globl queue_begin, queue_read, queue_seek, queue_announce, queue_skipped
-.globl queue_count, queue_failures, queue_rate, queue_index
+.globl queue_count, queue_failures, queue_rate, queue_index, queue_repeat, queue_goto, queue_heard
+.globl queue_navigate
 
 .equ QUEUE_SKIPPED, 6               # decode_error after skipped files
 .equ CH_SIZE, 64                    # src/ogg_chain.s link entries
 .equ CH_RATE, 48
+.equ QUEUE_MARKS, 64                # files whose start in the output is kept
 
 .data
 queue_paths: .quad 0
@@ -31,6 +36,15 @@ queue_resampling: .long 0
 queue_failures: .long 0
 queue_playing: .long 0              # a file is open
 queue_open_error: .long 0           # decode_error of the last file that did not open
+queue_repeat: .long 0               # 1: after the last file, the first again
+queue_mark_count: .long 0           # marks written since queue_begin/queue_goto
+queue_idle: .long 0                 # files ended in a row without a frame
+.p2align 3
+queue_output: .quad 0               # frames queue_read returned, from the first file's start
+
+.bss
+.p2align 3
+queue_marks: .zero QUEUE_MARKS*16    # (output frame where a file starts, its index)
 
 .text
 # RCX=path pointers, EDX=count -> EAX=1 when a file opened (the first that
@@ -47,6 +61,9 @@ FN queue_begin
     mov [rip + queue_playing], eax
     mov dword ptr [rip + queue_open_error], 1  # an empty queue: decoder_open's generic error
     mov dword ptr [rip + queue_index], -1
+    mov [rip + queue_output], rax
+    mov [rip + queue_mark_count], eax
+    mov [rip + queue_idle], eax
     call queue_advance
     test eax, eax
     jz .Lqueue_begin_none
@@ -64,13 +81,24 @@ ENDFN queue_begin
 # Opens the next file that opens -> EAX=1, 0 when none is left.
 LOCALFN queue_advance
     push rbx
-    sub rsp, 32
+    push rsi
+    sub rsp, 40
+    xor esi, esi                          # files tried
 .Lqueue_advance_next:
     mov dword ptr [rip + queue_playing], 0
     mov dword ptr [rip + queue_resampling], 0
+    mov eax, [rip + queue_count]
+    cmp esi, eax
+    jae .Lqueue_advance_none              # every file failed (with repeat)
     mov eax, [rip + queue_next]
     cmp eax, [rip + queue_count]
-    jae .Lqueue_advance_none
+    jb .Lqueue_advance_try
+    cmp dword ptr [rip + queue_repeat], 0
+    je .Lqueue_advance_none
+    xor eax, eax                          # repeat: the first file again
+    mov [rip + queue_next], eax
+.Lqueue_advance_try:
+    inc esi
     inc dword ptr [rip + queue_next]
     mov rcx, [rip + queue_paths]
     mov rbx, [rcx + rax*8]
@@ -83,6 +111,14 @@ LOCALFN queue_advance
     mov eax, [rip + queue_next]
     dec eax
     mov [rip + queue_index], eax
+    mov ecx, [rip + queue_mark_count]     # where it starts in the output
+    and ecx, QUEUE_MARKS - 1
+    shl ecx, 4
+    lea rdx, [rip + queue_marks]
+    mov r8, [rip + queue_output]
+    mov [rdx + rcx], r8
+    mov [rdx + rcx + 8], eax
+    inc dword ptr [rip + queue_mark_count]
     mov qword ptr [rip + queue_file_frames], 0
     mov rax, [rip + output_frames]
     mov [rip + queue_file_total], rax
@@ -130,7 +166,8 @@ LOCALFN queue_advance
 .Lqueue_advance_none:
     xor eax, eax
 .Lqueue_advance_return:
-    add rsp, 32
+    add rsp, 40
+    pop rsi
     pop rbx
     ret
 ENDFN queue_advance
@@ -198,7 +235,10 @@ FN queue_read
 .Lqueue_read_count:
     add ebx, eax
     test eax, eax
-    jnz .Lqueue_read_next
+    jz .Lqueue_read_ended
+    mov dword ptr [rip + queue_idle], 0
+    jmp .Lqueue_read_next
+.Lqueue_read_ended:
     # The file ended: completely, or with an error.
     cmp dword ptr [rip + decode_error], 0
     jne .Lqueue_read_failed
@@ -209,12 +249,19 @@ FN queue_read
     je .Lqueue_read_advance
     mov dword ptr [rip + decode_error], 5   # it ended before its declared length
 .Lqueue_read_failed:
+    cmp dword ptr [rip + queue_repeat], 0
+    jne .Lqueue_read_skip                  # with repeat, no file is the last
     mov eax, [rip + queue_next]
     cmp eax, [rip + queue_count]
     jae .Lqueue_read_stop                  # the last file keeps its error
+.Lqueue_read_skip:
     inc dword ptr [rip + queue_failures]
     mov dword ptr [rip + decode_error], 0
 .Lqueue_read_advance:
+    inc dword ptr [rip + queue_idle]       # a whole round without a frame ends it
+    mov eax, [rip + queue_idle]
+    cmp eax, [rip + queue_count]
+    ja .Lqueue_read_stop
     call queue_advance
     test eax, eax
     jnz .Lqueue_read_next
@@ -227,6 +274,7 @@ FN queue_read
 .Lqueue_read_stop:
     mov dword ptr [rip + queue_playing], 0
 .Lqueue_read_done:
+    add [rip + queue_output], rbx
     mov eax, ebx
     add rsp, 32
     pop rdi
@@ -247,6 +295,135 @@ FN queue_seek
 .Lqueue_seek_none:
     mov rax, [rip + queue_file_frames]
 .Lqueue_seek_return:
+    mov [rip + queue_output], rax         # before any later file starts
     add rsp, 40
     ret
 ENDFN queue_seek
+
+# ECX=file index -> EAX=1 when that file, or a later one (or with repeat,
+# any), opened; output positions start again from it. The session rate
+# stays the first file's.
+FN queue_goto
+    sub rsp, 40
+    mov [rip + queue_next], ecx
+    xor eax, eax
+    mov [rip + queue_output], rax
+    mov [rip + queue_mark_count], eax
+    mov [rip + queue_idle], eax
+    mov [rip + decode_error], eax
+    call queue_advance
+    add rsp, 40
+    ret
+ENDFN queue_goto
+
+# RCX=output frame (counted as queue_output counts) -> EAX=the file playing
+# there, RDX=the output frame where it started; EAX=-1 when no mark is left.
+# Marks are written before the frames they describe are returned, so a
+# reader of returned frames sees them.
+FN queue_heard
+    mov r8d, [rip + queue_mark_count]
+    mov r9d, r8d
+    sub r9d, QUEUE_MARKS
+    jae .Lqueue_heard_oldest
+    xor r9d, r9d
+.Lqueue_heard_oldest:
+    lea r10, [rip + queue_marks]
+.Lqueue_heard_mark:
+    cmp r8d, r9d
+    jbe .Lqueue_heard_first
+    dec r8d
+    mov eax, r8d
+    and eax, QUEUE_MARKS - 1
+    shl eax, 4
+    mov rdx, [r10 + rax]
+    cmp rdx, rcx
+    ja .Lqueue_heard_mark
+    mov eax, [r10 + rax + 8]
+    ret
+.Lqueue_heard_first:
+    cmp r8d, [rip + queue_mark_count]     # no mark at all
+    je .Lqueue_heard_none
+    mov eax, r9d                          # the oldest kept: before it, unknown
+    and eax, QUEUE_MARKS - 1
+    shl eax, 4
+    mov rdx, [r10 + rax]
+    mov eax, [r10 + rax + 8]
+    ret
+.Lqueue_heard_none:
+    mov eax, -1
+    xor edx, edx
+    ret
+ENDFN queue_heard
+
+# A player's navigation. ECX=command (1 next, 2 previous, 3 seek, 4 the list
+# again), EDX=queue index heard, R8=milliseconds into it, R9D=seek seconds ->
+# EAX=1 with a file open (queue_goto), RDX=milliseconds to start it at; 0
+# when playback ends. Next: the file after the one heard (the first again
+# with repeat). Previous: the heard file from its start after 3 s of it,
+# else the one before. Seek: the heard file at the heard position plus R9D
+# seconds (from its start when that is before it). A later file opened in
+# place of the target starts at 0. queue_announce is not called.
+FN queue_navigate
+    push rbx
+    push rsi
+    push rdi
+    sub rsp, 32
+    mov ebx, edx                          # target
+    xor esi, esi                          # start, ms
+    cmp ecx, 4
+    jne .Lqueue_navigate_command
+    xor ebx, ebx
+    jmp .Lqueue_navigate_open
+.Lqueue_navigate_command:
+    cmp ecx, 1
+    je .Lqueue_navigate_next
+    cmp ecx, 2
+    je .Lqueue_navigate_previous
+    movsxd rax, r9d
+    imul rax, rax, 1000
+    add rax, r8
+    jns .Lqueue_navigate_seek
+    xor eax, eax
+.Lqueue_navigate_seek:
+    mov rsi, rax
+    jmp .Lqueue_navigate_open
+.Lqueue_navigate_next:
+    inc ebx
+    cmp ebx, [rip + queue_count]
+    jb .Lqueue_navigate_open
+    xor ebx, ebx
+    cmp dword ptr [rip + queue_repeat], 0
+    jne .Lqueue_navigate_open
+    xor eax, eax                          # past the last file: the end
+    jmp .Lqueue_navigate_return
+.Lqueue_navigate_previous:
+    cmp r8, 3000
+    ja .Lqueue_navigate_open              # its start again
+    dec ebx
+    jns .Lqueue_navigate_open
+    xor ebx, ebx
+    cmp dword ptr [rip + queue_repeat], 0
+    je .Lqueue_navigate_open
+    mov ebx, [rip + queue_count]
+    dec ebx
+.Lqueue_navigate_open:
+    mov rdi, [rip + queue_announce]
+    mov qword ptr [rip + queue_announce], 0
+    mov ecx, ebx
+    call queue_goto
+    mov [rip + queue_announce], rdi
+    test eax, eax
+    jz .Lqueue_navigate_return
+    cmp ebx, [rip + queue_index]
+    je .Lqueue_navigate_position
+    xor esi, esi                          # a later file opened instead
+.Lqueue_navigate_position:
+    mov eax, 1
+.Lqueue_navigate_return:
+    mov rdx, rsi
+    add rsp, 32
+    pop rdi
+    pop rsi
+    pop rbx
+    ret
+ENDFN queue_navigate
