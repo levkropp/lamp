@@ -14,6 +14,10 @@ usage: python3 tests/verify-navigation.py [--skip-playback] [--wine]
   from its start after 3 s), N on the last file, the arrow keys (+5 s,
   -60 s), --repeat and the R key. The captured audio is cut into runs of
   the files' own decodes, which must follow the expected order and starts.
+- --resume: Q keeps the list's heard file and position in the state file,
+  the next run starts there (in a later file of a list too), playing to the
+  end forgets the list, --start wins, other lists' lines stay, malformed
+  lines are dropped and at most 256 lines are kept.
 - --wine runs the same checks against bin/lamp-cli.exe under Wine: its
   decodes must equal the Linux build's whole decodes the same way, and its
   playback (through Wine's PulseAudio driver, which drops audio here) must
@@ -140,6 +144,26 @@ def interactive(arguments, env, actions):
     pump(0.1)
     os.close(fd)
     return os.WEXITSTATUS(status) if os.WIFEXITED(status) else -1, output.decode('utf-8', 'replace')
+
+
+def resume_state(env):
+    """The state file the player under test keeps."""
+    if WINE:
+        local = subprocess.run(['wine', 'cmd', '/c', 'echo %LOCALAPPDATA%'], stdout=subprocess.PIPE,
+                               stderr=subprocess.DEVNULL, env=WINE_ENV).stdout.decode().strip()
+        return Path(wine_unix(local)) / 'LAMP' / 'resume.txt'
+    return Path(env['HOME']) / '.local' / 'state' / 'lamp' / 'resume'
+
+
+def wine_unix(path):
+    return subprocess.run(['winepath', '-u', path], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
+                          env=WINE_ENV).stdout.decode().strip()
+
+
+def wine_path(path):
+    """A Unix path as the Windows player's absolute path for it."""
+    return subprocess.run(['winepath', '-w', str(path)], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
+                          env=WINE_ENV).stdout.decode().strip()
 
 
 def runs(capture, references):
@@ -340,6 +364,63 @@ def main():
         play('R key', [files['e']], [(1.0, b'r'), (3.5, b'q')], repeated, restarted)
         play('R key twice', [files['e']], [(0.9, b'r'), (0.2, b'R')],
              lambda r: None if len(r) == 1 and whole(r[0], 'e') else 'expected e once')
+
+        # --resume.
+        state = resume_state(env)
+        if state.exists():
+            state.unlink()
+
+        def lines():
+            return [line.split('\t') for line in state.read_text().splitlines()] if state.exists() else []
+
+        def absolute(path):
+            return wine_path(path) if WINE else str(path)
+
+        code, output = interactive(['--resume', files['a']], env, [(3.0, b'q')])
+        saved = lines()
+        if code or len(saved) != 1 or saved[0][1:] != [absolute(files['a'])] * 2 or not 0 < int(saved[0][0]) < 6000:
+            raise Failure(f'--resume did not keep a: {saved}')
+        position = int(saved[0][0]) * RATE // 1000
+        play('resume', ['--resume', files['a']], [],
+             lambda r: None if len(r) == 1 and whole(r[0], 'a', position) else f'expected a from {position}',
+             lambda r: None if r and r[0][0] == 'a' and position <= r[0][1] < position + RATE and ends(r[-1], 'a')
+             else f'expected a from {position}')
+        if lines():
+            raise Failure(f'playing to the end did not forget a: {lines()}')
+        code, output = interactive(['--resume', files['c'], files['a']], env, [(4.5, b'q')])
+        saved = lines()
+        if code or len(saved) != 1 or saved[0][1:] != [absolute(files['c']), absolute(files['a'])]:
+            raise Failure(f'--resume did not keep a in the list of c: {saved}')
+        position = int(saved[0][0]) * RATE // 1000
+        play('resume in a list', ['--resume', files['c'], files['a']], [],
+             lambda r: None if len(r) == 1 and whole(r[0], 'a', position) else f'expected a from {position}',
+             lambda r: None if r and r[0][0] == 'a' and position <= r[0][1] < position + RATE and ends(r[-1], 'a')
+             else f'expected a from {position}')
+        code, _ = interactive(['--resume', files['a']], env, [(2.5, b'q')])
+        code2, _ = interactive(['--resume', files['d']], env, [(2.5, b'q')])
+        saved = lines()
+        if code or code2 or [line[1] for line in saved] != [absolute(files['d']), absolute(files['a'])]:
+            raise Failure(f'two lists not kept newest first: {saved}')
+        play('--start wins', ['--start', '2', '--resume', files['a']], [],
+             lambda r: None if len(r) == 1 and whole(r[0], 'a', 2 * RATE) else 'expected a from 2 s',
+             lambda r: None if r and r[0][0] == 'a' and 2 * RATE <= r[0][1] < 3 * RATE else 'expected a from 2 s')
+        if [line[1] for line in lines()] != [absolute(files['d'])]:
+            raise Failure(f'the end of a did not forget only a: {lines()}')
+        others = ''.join(f'{n * 10}\t/other/list-{n}.flac\t/other/list-{n}.flac\n' for n in range(300))
+        state.write_text('garbage line\n12x\t/a\t/b\n\t\t\n' + others)
+        code, _ = interactive(['--resume', files['e']], env, [(1.5, b'q')])
+        saved = lines()
+        if code or len(saved) != 256 or saved[0][1] != absolute(files['e']) or \
+                saved[1] != ['0', '/other/list-0.flac', '/other/list-0.flac'] or \
+                saved[-1] != ['2540', '/other/list-254.flac', '/other/list-254.flac']:
+            raise Failure(f'the state file was not rewritten as expected: {saved[:3]} ... {saved[-1:]} ({len(saved)})')
+        checks.append({'test': 'resume lines', 'result': 'passed',
+                       'note': 'newest first, other lists kept, malformed lines dropped, 256 kept'})
+        print('resume lines: newest first, other lists kept, malformed lines dropped, 256 kept', flush=True)
+        result = subprocess.run(command('--check', '--resume', files['a']), stdout=subprocess.PIPE, env=WINE_ENV,
+                                stderr=subprocess.STDOUT, stdin=subprocess.DEVNULL, timeout=60)
+        if not result.stdout.startswith(b'LAMP '):
+            raise Failure('--resume with --check did not print the usage')
 
     write_report('navigation-wine' if WINE else 'navigation', {'result': 'passed', 'checks': checks,
                                 'scope': '--start against whole decodes in ten formats, queues and option errors; '

@@ -18,6 +18,9 @@
 .equ SYS_clone, 56
 .equ SYS_exit, 60
 .equ SYS_getuid, 102
+.equ SYS_getcwd, 79
+.equ SYS_rename, 82
+.equ SYS_mkdir, 83
 .equ SYS_futex, 202
 .equ SYS_clock_gettime, 228
 .equ SYS_exit_group, 231
@@ -30,6 +33,7 @@
 .equ O_RDWR, 2
 .equ O_CREAT, 0x40
 .equ O_EXCL, 0x80
+.equ O_TRUNC, 0x200
 .equ O_NONBLOCK, 0x800
 .equ O_CLOEXEC, 0x80000
 
