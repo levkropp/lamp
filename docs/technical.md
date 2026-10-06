@@ -195,6 +195,7 @@ Recorded snapshots are in `reports/` in a source checkout. The paths below descr
 | `vorbis-benchmark.json` | Five 30-second offline CPU measurements |
 | `vorbis-stress-verification.json` | Eight-second WASAPI silence under four bounded CPU workers |
 | `bin/opus-*-verification.json` | Exact primitive comparisons against the normative RFC source; not complete Opus audio validation |
+| `robustness-verification.json` | 27,000 mutated files: 500 each of 54 FFmpeg-written container/codec pairings (WAV PCM/float/ADPCM/G.711/MP3, RF64, W64, AIFF/AIFC, CAF PCM/ALAC/IMA4, AU, FLAC and Ogg FLAC, Vorbis, Opus, MP3, MP2, ADTS, M4A/MP4/MOV with AAC, ALAC, Opus, FLAC and PCM, fragmented MP4, AC-3, Matroska/WebM with seven codecs, WavPack, AVI, FLV, MPEG-TS/PS). Mutations are byte flips, zero/0xff runs, cuts, removed and duplicated spans and large length fields. Each file is decoded with `--check`, every fourth from a random `--start`, under a 2 GiB address-space limit: none crashed, hung (30 s) or ran out of memory. `robustness-wine-verification.json` repeats every tenth under Wine |
 
 Real Vorbis comparisons exceed 138 dB SNR, with peak error below 0.00000012. Synthetic lookup-2 fixtures use FFmpeg's libvorbis wrapper, which exposes signed 16-bit PCM; the threshold is 65 dB and two integer PCM LSBs. Recorded synthetic SNR exceeds 70 dB. Final counts follow the Ogg granule; the test handles FFmpeg's initial-delay/end-trim behavior explicitly.
 
