@@ -14,7 +14,7 @@ sample_rate: .long 0
 source_channels: .long 0
 source_bits: .long 0
 decode_error: .long 0
-codec_kind: .long 0                 #1 WAV,2 FLAC,3 MP3,4 Vorbis,5 Opus,6 AIFF/AIFC,...,11 AC-3
+codec_kind: .long 0                 #1 WAV,2 FLAC,3 MP3,4 Vorbis,5 Opus,6 AIFF/AIFC,...,11 AC-3,12 WavPack
 total_frames: .quad 0
 map_token: .quad 0
 map_base: .quad 0
@@ -224,6 +224,11 @@ LOCALFN decoder_open_format
     je .Lopen_mp4
     mov rcx, [rip + input_cursor]
     mov rdx, [rip + input_end]
+    call wv_probe                   # WavPack blocks ("wvpk")
+    test eax, eax
+    jnz .Lopen_wavpack
+    mov rcx, [rip + input_cursor]
+    mov rdx, [rip + input_end]
     call mps_probe                  # MPEG program stream (.mpg, .vob)
     test eax, eax
     jnz .Lopen_mps
@@ -262,6 +267,14 @@ LOCALFN decoder_open_format
     mov rcx, [rip + input_cursor]
     mov rdx, [rip + input_end]
     call ac3_open
+    test eax, eax
+    jz .Lopen_bad
+    leave
+    ret
+.Lopen_wavpack:
+    mov rcx, [rip + input_cursor]
+    mov rdx, [rip + input_end]
+    call wv_open
     test eax, eax
     jz .Lopen_bad
     leave

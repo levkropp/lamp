@@ -81,6 +81,9 @@ mkv_codecs:
     .byte 6
     .ascii "A_EAC3"
     .byte 8, 0                           # recognised; rejects as unsupported
+    .byte 10
+    .ascii "A_WAVPACK4"
+    .byte 9, 0
     .byte 0
 .p2align 3
 
@@ -933,6 +936,8 @@ FN mkv_open
     je .Lmkv_finish
     cmp eax, 8
     je .Lmkv_finish                      # AC-3 frames describe themselves
+    cmp eax, 9
+    je .Lmkv_finish                      # so do WavPack frames (CodecPrivate is the version)
     test rcx, rcx                        # Opus, FLAC, ALAC and AAC need CodecPrivate
     jz .Lmkv_open_bad
     jmp .Lmkv_finish

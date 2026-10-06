@@ -19,13 +19,14 @@
 .equ TK_ALAC, 6
 .equ TK_AAC, 7
 .equ TK_AC3, 8
+.equ TK_WAVPACK, 9
 .equ TK_ENTRY, 24                   # pointer, raw start sample, bytes, samples
 .equ TK_POINTER, 0
 .equ TK_START, 8
 .equ TK_BYTES, 16
 .equ TK_SAMPLES, 20
 .equ TK_CAP, 1 << 24                # packets
-.equ TK_BUFFER, 65536               # stereo frames decoded per packet at most
+.equ TK_BUFFER, 262144              # stereo frames decoded per packet at most
 .equ TK_OPUS_PREROLL, 3840          # 80 ms
 .equ TK_MPA_RESERVOIR, 2048         # bytes of earlier frames for main data
 
@@ -98,8 +99,12 @@ FN track_close
     call aac_track_close
 .Ltk_close_ac3:
     cmp dword ptr [rip + track_codec], TK_AC3
-    jne .Ltk_close_done
+    jne .Ltk_close_wavpack
     call ac3_track_close
+.Ltk_close_wavpack:
+    cmp dword ptr [rip + track_codec], TK_WAVPACK
+    jne .Ltk_close_done
+    call wv_track_close
 .Ltk_close_done:
     mov dword ptr [rip + track_active], 0
     mov dword ptr [rip + track_codec], 0
@@ -221,6 +226,8 @@ LOCALFN track_samples
     je .Ltk_samples_aac
     cmp eax, TK_AC3
     je .Ltk_samples_ac3
+    cmp eax, TK_WAVPACK
+    je .Ltk_samples_wavpack
     call pcm_track_samples
     jmp .Ltk_samples_return
 .Ltk_samples_opus:
@@ -246,6 +253,9 @@ LOCALFN track_samples
     jmp .Ltk_samples_return
 .Ltk_samples_ac3:
     call ac3_track_samples
+    jmp .Ltk_samples_return
+.Ltk_samples_wavpack:
+    call wv_track_samples
 .Ltk_samples_return:
     add rsp, 40
     ret
@@ -273,6 +283,8 @@ LOCALFN track_decode
     je .Ltk_decode_aac
     cmp eax, TK_AC3
     je .Ltk_decode_ac3
+    cmp eax, TK_WAVPACK
+    je .Ltk_decode_wavpack
     call pcm_track_decode
     jmp .Ltk_decode_return
 .Ltk_decode_opus:
@@ -304,6 +316,9 @@ LOCALFN track_decode
     test eax, eax
     jnz .Ltk_decode_return
     mov eax, -1
+    jmp .Ltk_decode_return
+.Ltk_decode_wavpack:
+    call wv_track_decode
 .Ltk_decode_return:
     add rsp, 40
     ret
@@ -379,6 +394,8 @@ FN track_finish
     je .Ltk_open_aac
     cmp eax, TK_AC3
     je .Ltk_open_ac3
+    cmp eax, TK_WAVPACK
+    je .Ltk_open_wavpack
     mov ecx, [rip + track_pcm_channels]
     mov edx, [rip + track_pcm_bits]
     mov r8d, [rip + track_pcm_flags]
@@ -398,6 +415,12 @@ FN track_finish
     mov r8, [rax + TK_POINTER]
     mov r9d, [rax + TK_BYTES]
     call ac3_track_open
+    jmp .Ltk_opened
+.Ltk_open_wavpack:
+    mov rax, [rip + track_packets]       # the first frame describes the stream
+    mov r8, [rax + TK_POINTER]
+    mov r9d, [rax + TK_BYTES]
+    call wv_track_open
     jmp .Ltk_opened
 .Ltk_open_opus:
     call opus_track_open
@@ -673,8 +696,8 @@ ENDFN track_read
 # before it. Restarts at the packet holding the target, moved back by the
 # codec's pre-roll: Opus 80 ms, MPEG audio two frames (Layer III also earlier
 # frames holding up to 2 KiB of reservoir data), Vorbis, AAC and AC-3 one
-# primer packet whose output is skipped, HE-AAC two. FLAC, ALAC and PCM packets
-# decode independently.
+# primer packet whose output is skipped, HE-AAC two. FLAC, ALAC, WavPack and
+# PCM packets decode independently.
 FN track_seek
     push rbx
     push rsi

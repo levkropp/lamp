@@ -115,6 +115,8 @@ AC-3 (Dolby Digital) now decodes in raw `.ac3`, Matroska and MP4 with a new asse
 
 MPEG transport streams (188/192/204-byte packets) and program streams (`.mpg`, `.vob`) now play their first supported audio stream: PES payloads of MPEG audio, ADTS AAC or AC-3 (stream types, DVB descriptors or content identification; VOB AC-3 substreams) open as the raw stream, so decoding and seeking are those of raw files. 31 FFmpeg-muxed variants with video and second audio streams equal the raw decodes exactly, seeks are exact, and E-AC-3, LATM and LPCM reject as unsupported. See [MPEG-TS/PS notes](docs/mpegts.md).
 
+WavPack 4/5 now decodes in native `.wv` files and Matroska with a new assembly decoder following FFmpeg's: lossless and hybrid (lossy, including the bit-rate mode) 8–32-bit integer and float audio, every decorrelation term, joint and false stereo, extra bits, INT32INFO shifts and float details, and frames of mono/stereo blocks for up to eight channels, with block and extra-bit CRC checks. 30 FFmpeg-encoded files decode exactly as FFmpeg (multichannel through LAMP's speaker weights) and their Matroska copies exactly as the `.wv` files; 37 streams written through a Python model cover everything FFmpeg's encoder never writes, including every wp_exp2 input, and the model, FFmpeg and LAMP agree exactly; 75 seeks are exact; DSD, other versions and unsupported layouts reject. See [WavPack notes](docs/wavpack.md).
+
 MPEG audio Layers I and II now share the Layer III framing, index and synthesis: MPEG-1 and MPEG-2 lower rates, every allocation table and quantizer, all stereo modes and CRC checks. 96 random valid streams and 34 FFmpeg/libtwolame encoder files match FFmpeg's float decoders at 108.7 dB SNR or better, three files pass exact seek checks and seven malformed streams reject. See [Layer I/II notes](docs/mp2.md).
 
 FLAC in Ogg (mapping 1.0) now uses the native FLAC decoder with frame-position checks at open and exact indexed seeks; eight files from 8 to 192 kHz, 16/24-bit and 1–8 channels match FFmpeg or native FLAC exactly. Chained and multiplexed Ogg files are supported as described above.
@@ -124,7 +126,7 @@ AIFF/AIFC now adds signed 1–32-bit PCM, AIFC byte-order/fixed-container varian
 | Area | Planned coverage, in approximate priority order |
 | --- | --- |
 | Mainstream lossy audio | AAC-LC, HE-AAC v1/v2, AC-3 and MPEG Layers I/II (implemented); E-AC-3; then DTS families, WMA variants and other relevant legacy formats |
-| Lossless and PCM | ALAC (implemented in MP4/Matroska), WavPack, APE, AIFF/AIFC, RF64, FLAC-in-Ogg, broader PCM/float and FLAC depths/layouts |
+| Lossless and PCM | ALAC (implemented in MP4/Matroska), WavPack (implemented; DSD and correction files remain), APE, AIFF/AIFC, RF64, FLAC-in-Ogg, broader PCM/float and FLAC depths/layouts |
 | Other audio | Musepack, Speex, AMR and telephony ADPCM; further formats from the compatibility inventory as demand and feasibility justify |
 | Common containers | MP4/M4A/MOV, Matroska/WebM and MPEG TS/PS (audio implemented), AVI, ASF; broader Ogg stream mappings |
 | Media structure | Track selection, timestamps, edit lists, duration/seeking, attachments, chapters, tags and large-file indexing |
