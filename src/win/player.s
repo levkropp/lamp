@@ -12,6 +12,7 @@
 .equ RING_FRAMES, 262144
 .equ RING_MASK, RING_FRAMES - 1
 .equ CHUNK_FRAMES, 2048
+.equ REFILL_FRAMES, RING_FRAMES*3/4    # a full ring refills once it holds no more
 .equ RESUME_PATH, 16384               # UTF-8 bytes of a path
 .equ RESUME_WIDE, 4096                # UTF-16 units of a path
 
@@ -1421,6 +1422,10 @@ LOCALFN keyboard
     mov r8d, -60
     cmp eax, 0x28                       # down
     je .Lkeyboard_seek
+    mov rax, [rip + write_count]     # wake the producer only once it can refill
+    sub rax, [rip + read_count]
+    cmp rax, REFILL_FRAMES
+    ja .Lfill_done
     cmp eax, 0x51                       # Q
     jne .Lkeyboard_wait
     mov dword ptr [rip + engine_quit], 1

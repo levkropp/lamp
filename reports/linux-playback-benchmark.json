@@ -1,0 +1,1677 @@
+{
+  "result": "recorded",
+  "machine": {
+    "processor": "Intel(R) Xeon(R) Processor @ 2.10GHz",
+    "logical_processors": 4,
+    "kernel": "6.18.44-fc-v70"
+  },
+  "versions": {
+    "lamp": "LAMP 0.4.0-dev - Lev's Assembly Media Player",
+    "mpv": "mpv 0.37.0 Copyright \u00a9 2000-2023 mpv/MPlayer/mplayer2 projects",
+    "vlc": "VLC version 3.0.20 Vetinari (3.0.20-0-g6f0d0ab126b)",
+    "pulseaudio": "pulseaudio 16.1"
+  },
+  "parameters": {
+    "runs": 5,
+    "seconds": 10,
+    "workers": 4,
+    "formats": [
+      "wav",
+      "flac",
+      "mp3",
+      "vorbis",
+      "opus",
+      "aac"
+    ]
+  },
+  "references": [
+    {
+      "player": "paplay",
+      "format": "wav",
+      "condition": "baseline",
+      "startup_ms": [
+        4.2,
+        4.0,
+        4.1,
+        4.2,
+        4.3
+      ],
+      "startup_median_ms": 4.2
+    },
+    {
+      "player": "paplay",
+      "format": "wav",
+      "condition": "loaded",
+      "startup_ms": [
+        25.0,
+        9.0,
+        22.4,
+        11.8,
+        9.5
+      ],
+      "startup_median_ms": 11.8
+    }
+  ],
+  "records": [
+    {
+      "player": "lamp",
+      "format": "wav",
+      "startup_ms": [
+        4.0,
+        5.3,
+        5.1,
+        5.0,
+        5.0
+      ],
+      "seek_ms": [
+        0.7,
+        0.7,
+        0.7,
+        0.8,
+        0.7
+      ],
+      "playing": {
+        "player_cpu_percent": 0.2,
+        "player_voluntary_per_s": 20.7,
+        "player_involuntary_per_s": 0.3,
+        "server_cpu_percent": 2.8,
+        "server_voluntary_per_s": 624.0,
+        "server_involuntary_per_s": 0.1,
+        "system_busy_percent": 2.6,
+        "rss_mib": 5.53,
+        "anon_mib": 2.05,
+        "peak_mib": 5.53
+      },
+      "paused": {
+        "player_cpu_percent": 0.0,
+        "player_voluntary_per_s": 0.0,
+        "player_involuntary_per_s": 0.0,
+        "server_cpu_percent": 2.4,
+        "server_voluntary_per_s": 600.3,
+        "server_involuntary_per_s": 0.0,
+        "system_busy_percent": 1.6,
+        "rss_mib": 5.53,
+        "anon_mib": 2.05,
+        "peak_mib": 5.53
+      },
+      "startup_median_ms": 5.0,
+      "seek_median_ms": 0.7,
+      "condition": "baseline"
+    },
+    {
+      "player": "mpv",
+      "format": "wav",
+      "startup_ms": [
+        99.9,
+        97.5,
+        97.8,
+        95.2,
+        113.0
+      ],
+      "seek_ms": [
+        1.2,
+        0.9,
+        0.7,
+        0.7,
+        0.8
+      ],
+      "playing": {
+        "player_cpu_percent": 2.6,
+        "player_voluntary_per_s": 410.4,
+        "player_involuntary_per_s": 15.7,
+        "server_cpu_percent": 3.1,
+        "server_voluntary_per_s": 696.1,
+        "server_involuntary_per_s": 12.0,
+        "system_busy_percent": 3.5,
+        "rss_mib": 60.48,
+        "anon_mib": 17.57,
+        "peak_mib": 66.1
+      },
+      "paused": {
+        "player_cpu_percent": 0.0,
+        "player_voluntary_per_s": 1.9,
+        "player_involuntary_per_s": 0.0,
+        "server_cpu_percent": 2.6,
+        "server_voluntary_per_s": 591.3,
+        "server_involuntary_per_s": 0.0,
+        "system_busy_percent": 3.2,
+        "rss_mib": 60.52,
+        "anon_mib": 17.61,
+        "peak_mib": 66.1
+      },
+      "startup_median_ms": 97.8,
+      "seek_median_ms": 0.8,
+      "condition": "baseline"
+    },
+    {
+      "player": "vlc",
+      "format": "wav",
+      "startup_ms": [
+        78.2,
+        84.1,
+        79.4,
+        79.3,
+        74.9
+      ],
+      "seek_ms": [
+        1.2,
+        1.2,
+        1.0,
+        1.6,
+        1.2
+      ],
+      "playing": {
+        "player_cpu_percent": 0.8,
+        "player_voluntary_per_s": 86.4,
+        "player_involuntary_per_s": 1.0,
+        "server_cpu_percent": 2.6,
+        "server_voluntary_per_s": 624.4,
+        "server_involuntary_per_s": 0.0,
+        "system_busy_percent": 1.3,
+        "rss_mib": 52.09,
+        "anon_mib": 13.55,
+        "peak_mib": 52.09
+      },
+      "paused": {
+        "player_cpu_percent": 0.0,
+        "player_voluntary_per_s": 1.6,
+        "player_involuntary_per_s": 0.0,
+        "server_cpu_percent": 2.5,
+        "server_voluntary_per_s": 602.5,
+        "server_involuntary_per_s": 0.1,
+        "system_busy_percent": 1.3,
+        "rss_mib": 52.09,
+        "anon_mib": 13.55,
+        "peak_mib": 52.09
+      },
+      "startup_median_ms": 79.3,
+      "seek_median_ms": 1.2,
+      "condition": "baseline"
+    },
+    {
+      "player": "lamp",
+      "format": "flac",
+      "startup_ms": [
+        9.6,
+        10.5,
+        5.6,
+        10.3,
+        5.8
+      ],
+      "seek_ms": [
+        0.7,
+        6.0,
+        6.1,
+        5.7,
+        0.9
+      ],
+      "playing": {
+        "player_cpu_percent": 0.3,
+        "player_voluntary_per_s": 20.7,
+        "player_involuntary_per_s": 0.0,
+        "server_cpu_percent": 2.6,
+        "server_voluntary_per_s": 623.8,
+        "server_involuntary_per_s": 0.0,
+        "system_busy_percent": 1.1,
+        "rss_mib": 3.87,
+        "anon_mib": 2.14,
+        "peak_mib": 3.87
+      },
+      "paused": {
+        "player_cpu_percent": 0.0,
+        "player_voluntary_per_s": 0.0,
+        "player_involuntary_per_s": 0.0,
+        "server_cpu_percent": 2.4,
+        "server_voluntary_per_s": 600.2,
+        "server_involuntary_per_s": 0.0,
+        "system_busy_percent": 1.1,
+        "rss_mib": 3.87,
+        "anon_mib": 2.14,
+        "peak_mib": 3.87
+      },
+      "startup_median_ms": 9.6,
+      "seek_median_ms": 5.7,
+      "condition": "baseline"
+    },
+    {
+      "player": "mpv",
+      "format": "flac",
+      "startup_ms": [
+        105.2,
+        87.5,
+        92.9,
+        88.2,
+        93.4
+      ],
+      "seek_ms": [
+        1.1,
+        0.9,
+        0.7,
+        0.8,
+        0.6
+      ],
+      "playing": {
+        "player_cpu_percent": 1.5,
+        "player_voluntary_per_s": 241.1,
+        "player_involuntary_per_s": 7.5,
+        "server_cpu_percent": 3.1,
+        "server_voluntary_per_s": 697.9,
+        "server_involuntary_per_s": 3.9,
+        "system_busy_percent": 6.5,
+        "rss_mib": 60.41,
+        "anon_mib": 17.57,
+        "peak_mib": 65.93
+      },
+      "paused": {
+        "player_cpu_percent": 0.0,
+        "player_voluntary_per_s": 1.9,
+        "player_involuntary_per_s": 0.0,
+        "server_cpu_percent": 2.5,
+        "server_voluntary_per_s": 602.5,
+        "server_involuntary_per_s": 0.2,
+        "system_busy_percent": 3.9,
+        "rss_mib": 60.45,
+        "anon_mib": 17.6,
+        "peak_mib": 65.93
+      },
+      "startup_median_ms": 92.9,
+      "seek_median_ms": 0.8,
+      "condition": "baseline"
+    },
+    {
+      "player": "vlc",
+      "format": "flac",
+      "startup_ms": [
+        90.4,
+        105.0,
+        87.4,
+        85.6,
+        95.2
+      ],
+      "seek_ms": [
+        3.7,
+        3.9,
+        2.0,
+        4.6,
+        1.6
+      ],
+      "playing": {
+        "player_cpu_percent": 1.2,
+        "player_voluntary_per_s": 57.7,
+        "player_involuntary_per_s": 0.8,
+        "server_cpu_percent": 2.7,
+        "server_voluntary_per_s": 618.6,
+        "server_involuntary_per_s": 0.2,
+        "system_busy_percent": 1.9,
+        "rss_mib": 51.32,
+        "anon_mib": 12.32,
+        "peak_mib": 51.32
+      },
+      "paused": {
+        "player_cpu_percent": 0.1,
+        "player_voluntary_per_s": 1.6,
+        "player_involuntary_per_s": 0.0,
+        "server_cpu_percent": 2.5,
+        "server_voluntary_per_s": 591.2,
+        "server_involuntary_per_s": 0.2,
+        "system_busy_percent": 4.4,
+        "rss_mib": 51.32,
+        "anon_mib": 12.32,
+        "peak_mib": 51.32
+      },
+      "startup_median_ms": 90.4,
+      "seek_median_ms": 3.7,
+      "condition": "baseline"
+    },
+    {
+      "player": "lamp",
+      "format": "mp3",
+      "startup_ms": [
+        14.4,
+        15.0,
+        15.2,
+        15.2,
+        15.0
+      ],
+      "seek_ms": [
+        5.9,
+        5.8,
+        5.8,
+        5.7,
+        5.8
+      ],
+      "playing": {
+        "player_cpu_percent": 0.3,
+        "player_voluntary_per_s": 20.7,
+        "player_involuntary_per_s": 0.5,
+        "server_cpu_percent": 2.8,
+        "server_voluntary_per_s": 623.1,
+        "server_involuntary_per_s": 0.1,
+        "system_busy_percent": 3.9,
+        "rss_mib": 7.04,
+        "anon_mib": 2.17,
+        "peak_mib": 7.04
+      },
+      "paused": {
+        "player_cpu_percent": 0.0,
+        "player_voluntary_per_s": 0.0,
+        "player_involuntary_per_s": 0.0,
+        "server_cpu_percent": 2.6,
+        "server_voluntary_per_s": 597.4,
+        "server_involuntary_per_s": 0.0,
+        "system_busy_percent": 5.5,
+        "rss_mib": 7.04,
+        "anon_mib": 2.17,
+        "peak_mib": 7.04
+      },
+      "startup_median_ms": 15.0,
+      "seek_median_ms": 5.8,
+      "condition": "baseline"
+    },
+    {
+      "player": "mpv",
+      "format": "mp3",
+      "startup_ms": [
+        100.1,
+        93.8,
+        108.5,
+        102.8,
+        93.8
+      ],
+      "seek_ms": [
+        15.4,
+        10.0,
+        8.8,
+        9.5,
+        8.5
+      ],
+      "playing": {
+        "player_cpu_percent": 2.4,
+        "player_voluntary_per_s": 375.9,
+        "player_involuntary_per_s": 18.7,
+        "server_cpu_percent": 2.9,
+        "server_voluntary_per_s": 697.5,
+        "server_involuntary_per_s": 12.7,
+        "system_busy_percent": 0.4,
+        "rss_mib": 61.2,
+        "anon_mib": 18.11,
+        "peak_mib": 66.36
+      },
+      "paused": {
+        "player_cpu_percent": 0.0,
+        "player_voluntary_per_s": 1.9,
+        "player_involuntary_per_s": 0.1,
+        "server_cpu_percent": 2.4,
+        "server_voluntary_per_s": 602.4,
+        "server_involuntary_per_s": 0.0,
+        "system_busy_percent": 2.6,
+        "rss_mib": 61.23,
+        "anon_mib": 18.14,
+        "peak_mib": 66.36
+      },
+      "startup_median_ms": 100.1,
+      "seek_median_ms": 9.5,
+      "condition": "baseline"
+    },
+    {
+      "player": "vlc",
+      "format": "mp3",
+      "startup_ms": [
+        83.7,
+        99.9,
+        80.3,
+        79.8,
+        99.9
+      ],
+      "seek_ms": [
+        29.4,
+        29.9,
+        28.6,
+        31.2,
+        30.5
+      ],
+      "playing": {
+        "player_cpu_percent": 2.2,
+        "player_voluntary_per_s": 146.2,
+        "player_involuntary_per_s": 0.8,
+        "server_cpu_percent": 3.0,
+        "server_voluntary_per_s": 677.5,
+        "server_involuntary_per_s": 1.3,
+        "system_busy_percent": 5.4,
+        "rss_mib": 50.87,
+        "anon_mib": 11.58,
+        "peak_mib": 50.87
+      },
+      "paused": {
+        "player_cpu_percent": 0.0,
+        "player_voluntary_per_s": 1.6,
+        "player_involuntary_per_s": 0.0,
+        "server_cpu_percent": 2.7,
+        "server_voluntary_per_s": 602.1,
+        "server_involuntary_per_s": 0.0,
+        "system_busy_percent": 2.3,
+        "rss_mib": 50.87,
+        "anon_mib": 11.58,
+        "peak_mib": 50.87
+      },
+      "startup_median_ms": 83.7,
+      "seek_median_ms": 29.9,
+      "condition": "baseline"
+    },
+    {
+      "player": "lamp",
+      "format": "vorbis",
+      "startup_ms": [
+        19.7,
+        20.1,
+        25.4,
+        25.0,
+        25.2
+      ],
+      "seek_ms": [
+        5.6,
+        10.7,
+        12.8,
+        10.5,
+        10.5
+      ],
+      "playing": {
+        "player_cpu_percent": 0.8,
+        "player_voluntary_per_s": 20.5,
+        "player_involuntary_per_s": 0.9,
+        "server_cpu_percent": 2.5,
+        "server_voluntary_per_s": 587.0,
+        "server_involuntary_per_s": 0.4,
+        "system_busy_percent": 3.3,
+        "rss_mib": 5.56,
+        "anon_mib": 2.61,
+        "peak_mib": 5.56
+      },
+      "paused": {
+        "player_cpu_percent": 0.0,
+        "player_voluntary_per_s": 0.0,
+        "player_involuntary_per_s": 0.0,
+        "server_cpu_percent": 2.5,
+        "server_voluntary_per_s": 600.0,
+        "server_involuntary_per_s": 0.0,
+        "system_busy_percent": 1.8,
+        "rss_mib": 5.56,
+        "anon_mib": 2.61,
+        "peak_mib": 5.56
+      },
+      "startup_median_ms": 25.0,
+      "seek_median_ms": 10.5,
+      "condition": "baseline"
+    },
+    {
+      "player": "mpv",
+      "format": "vorbis",
+      "startup_ms": [
+        115.0,
+        113.5,
+        98.4,
+        98.4,
+        107.7
+      ],
+      "seek_ms": [
+        1.7,
+        0.8,
+        0.9,
+        0.8,
+        0.6
+      ],
+      "playing": {
+        "player_cpu_percent": 2.4,
+        "player_voluntary_per_s": 389.8,
+        "player_involuntary_per_s": 19.8,
+        "server_cpu_percent": 2.8,
+        "server_voluntary_per_s": 698.5,
+        "server_involuntary_per_s": 11.1,
+        "system_busy_percent": 0.5,
+        "rss_mib": 61.75,
+        "anon_mib": 18.29,
+        "peak_mib": 66.29
+      },
+      "paused": {
+        "player_cpu_percent": 0.0,
+        "player_voluntary_per_s": 1.6,
+        "player_involuntary_per_s": 0.0,
+        "server_cpu_percent": 2.6,
+        "server_voluntary_per_s": 601.7,
+        "server_involuntary_per_s": 0.1,
+        "system_busy_percent": 2.4,
+        "rss_mib": 61.79,
+        "anon_mib": 18.32,
+        "peak_mib": 66.29
+      },
+      "startup_median_ms": 107.7,
+      "seek_median_ms": 0.8,
+      "condition": "baseline"
+    },
+    {
+      "player": "vlc",
+      "format": "vorbis",
+      "startup_ms": [
+        83.1,
+        79.5,
+        74.7,
+        79.7,
+        79.4
+      ],
+      "seek_ms": [
+        3.1,
+        4.1,
+        1.2,
+        3.6,
+        1.5
+      ],
+      "playing": {
+        "player_cpu_percent": 1.4,
+        "player_voluntary_per_s": 80.0,
+        "player_involuntary_per_s": 0.0,
+        "server_cpu_percent": 2.8,
+        "server_voluntary_per_s": 690.8,
+        "server_involuntary_per_s": 2.3,
+        "system_busy_percent": 1.6,
+        "rss_mib": 50.64,
+        "anon_mib": 11.57,
+        "peak_mib": 50.64
+      },
+      "paused": {
+        "player_cpu_percent": 0.0,
+        "player_voluntary_per_s": 1.6,
+        "player_involuntary_per_s": 0.0,
+        "server_cpu_percent": 2.3,
+        "server_voluntary_per_s": 602.2,
+        "server_involuntary_per_s": 0.0,
+        "system_busy_percent": 0.5,
+        "rss_mib": 50.64,
+        "anon_mib": 11.57,
+        "peak_mib": 50.64
+      },
+      "startup_median_ms": 79.5,
+      "seek_median_ms": 3.1,
+      "condition": "baseline"
+    },
+    {
+      "player": "lamp",
+      "format": "opus",
+      "startup_ms": [
+        19.5,
+        20.1,
+        20.1,
+        20.3,
+        19.1
+      ],
+      "seek_ms": [
+        5.6,
+        7.0,
+        5.7,
+        7.6,
+        6.9
+      ],
+      "playing": {
+        "player_cpu_percent": 0.6,
+        "player_voluntary_per_s": 20.7,
+        "player_involuntary_per_s": 0.0,
+        "server_cpu_percent": 2.5,
+        "server_voluntary_per_s": 621.5,
+        "server_involuntary_per_s": 0.0,
+        "system_busy_percent": 1.6,
+        "rss_mib": 3.75,
+        "anon_mib": 2.21,
+        "peak_mib": 3.75
+      },
+      "paused": {
+        "player_cpu_percent": 0.0,
+        "player_voluntary_per_s": 0.0,
+        "player_involuntary_per_s": 0.0,
+        "server_cpu_percent": 2.5,
+        "server_voluntary_per_s": 596.6,
+        "server_involuntary_per_s": 0.0,
+        "system_busy_percent": 0.4,
+        "rss_mib": 3.75,
+        "anon_mib": 2.21,
+        "peak_mib": 3.75
+      },
+      "startup_median_ms": 20.1,
+      "seek_median_ms": 6.9,
+      "condition": "baseline"
+    },
+    {
+      "player": "mpv",
+      "format": "opus",
+      "startup_ms": [
+        105.2,
+        92.7,
+        87.8,
+        97.8,
+        93.0
+      ],
+      "seek_ms": [
+        1.1,
+        0.8,
+        0.8,
+        0.8,
+        0.9
+      ],
+      "playing": {
+        "player_cpu_percent": 2.6,
+        "player_voluntary_per_s": 395.2,
+        "player_involuntary_per_s": 17.2,
+        "server_cpu_percent": 3.2,
+        "server_voluntary_per_s": 697.1,
+        "server_involuntary_per_s": 18.2,
+        "system_busy_percent": 2.4,
+        "rss_mib": 61.3,
+        "anon_mib": 18.3,
+        "peak_mib": 65.41
+      },
+      "paused": {
+        "player_cpu_percent": 0.0,
+        "player_voluntary_per_s": 1.7,
+        "player_involuntary_per_s": 0.0,
+        "server_cpu_percent": 2.5,
+        "server_voluntary_per_s": 602.4,
+        "server_involuntary_per_s": 0.2,
+        "system_busy_percent": 0.3,
+        "rss_mib": 61.32,
+        "anon_mib": 18.32,
+        "peak_mib": 65.41
+      },
+      "startup_median_ms": 93.0,
+      "seek_median_ms": 0.8,
+      "condition": "baseline"
+    },
+    {
+      "player": "vlc",
+      "format": "opus",
+      "startup_ms": [
+        78.2,
+        119.2,
+        79.6,
+        94.4,
+        79.4
+      ],
+      "seek_ms": [
+        12.1,
+        15.3,
+        9.3,
+        13.8,
+        10.9
+      ],
+      "playing": {
+        "player_cpu_percent": 1.7,
+        "player_voluntary_per_s": 81.3,
+        "player_involuntary_per_s": 29.1,
+        "server_cpu_percent": 2.9,
+        "server_voluntary_per_s": 696.5,
+        "server_involuntary_per_s": 0.0,
+        "system_busy_percent": 1.0,
+        "rss_mib": 50.54,
+        "anon_mib": 11.35,
+        "peak_mib": 50.54
+      },
+      "paused": {
+        "player_cpu_percent": 0.0,
+        "player_voluntary_per_s": 1.7,
+        "player_involuntary_per_s": 0.0,
+        "server_cpu_percent": 2.5,
+        "server_voluntary_per_s": 595.5,
+        "server_involuntary_per_s": 0.1,
+        "system_busy_percent": 0.4,
+        "rss_mib": 50.54,
+        "anon_mib": 11.35,
+        "peak_mib": 50.54
+      },
+      "startup_median_ms": 79.6,
+      "seek_median_ms": 12.1,
+      "condition": "baseline"
+    },
+    {
+      "player": "lamp",
+      "format": "aac",
+      "startup_ms": [
+        26.0,
+        21.8,
+        20.1,
+        22.3,
+        25.7
+      ],
+      "seek_ms": [
+        0.9,
+        0.7,
+        0.6,
+        0.8,
+        0.7
+      ],
+      "playing": {
+        "player_cpu_percent": 0.4,
+        "player_voluntary_per_s": 20.7,
+        "player_involuntary_per_s": 0.3,
+        "server_cpu_percent": 2.5,
+        "server_voluntary_per_s": 625.4,
+        "server_involuntary_per_s": 0.1,
+        "system_busy_percent": 1.2,
+        "rss_mib": 3.31,
+        "anon_mib": 2.36,
+        "peak_mib": 3.31
+      },
+      "paused": {
+        "player_cpu_percent": 0.0,
+        "player_voluntary_per_s": 0.0,
+        "player_involuntary_per_s": 0.0,
+        "server_cpu_percent": 2.3,
+        "server_voluntary_per_s": 600.0,
+        "server_involuntary_per_s": 0.0,
+        "system_busy_percent": 1.3,
+        "rss_mib": 3.31,
+        "anon_mib": 2.36,
+        "peak_mib": 3.31
+      },
+      "startup_median_ms": 22.3,
+      "seek_median_ms": 0.7,
+      "condition": "baseline"
+    },
+    {
+      "player": "mpv",
+      "format": "aac",
+      "startup_ms": [
+        100.1,
+        92.9,
+        87.5,
+        118.5,
+        99.8
+      ],
+      "seek_ms": [
+        1.1,
+        0.8,
+        0.7,
+        0.8,
+        0.9
+      ],
+      "playing": {
+        "player_cpu_percent": 2.8,
+        "player_voluntary_per_s": 394.2,
+        "player_involuntary_per_s": 25.7,
+        "server_cpu_percent": 2.8,
+        "server_voluntary_per_s": 673.5,
+        "server_involuntary_per_s": 13.0,
+        "system_busy_percent": 5.9,
+        "rss_mib": 61.87,
+        "anon_mib": 18.79,
+        "peak_mib": 66.22
+      },
+      "paused": {
+        "player_cpu_percent": 0.0,
+        "player_voluntary_per_s": 1.8,
+        "player_involuntary_per_s": 0.0,
+        "server_cpu_percent": 2.3,
+        "server_voluntary_per_s": 602.3,
+        "server_involuntary_per_s": 0.1,
+        "system_busy_percent": 0.3,
+        "rss_mib": 61.9,
+        "anon_mib": 18.82,
+        "peak_mib": 66.22
+      },
+      "startup_median_ms": 99.8,
+      "seek_median_ms": 0.8,
+      "condition": "baseline"
+    },
+    {
+      "player": "vlc",
+      "format": "aac",
+      "startup_ms": [
+        78.8,
+        99.9,
+        79.6,
+        81.2,
+        81.2
+      ],
+      "seek_ms": [
+        13.2,
+        10.6,
+        10.9,
+        12.4,
+        12.6
+      ],
+      "playing": {
+        "player_cpu_percent": 1.5,
+        "player_voluntary_per_s": 82.1,
+        "player_involuntary_per_s": 36.6,
+        "server_cpu_percent": 2.9,
+        "server_voluntary_per_s": 690.8,
+        "server_involuntary_per_s": 3.2,
+        "system_busy_percent": 1.8,
+        "rss_mib": 50.95,
+        "anon_mib": 11.69,
+        "peak_mib": 50.95
+      },
+      "paused": {
+        "player_cpu_percent": 0.0,
+        "player_voluntary_per_s": 1.6,
+        "player_involuntary_per_s": 0.0,
+        "server_cpu_percent": 2.6,
+        "server_voluntary_per_s": 599.3,
+        "server_involuntary_per_s": 0.0,
+        "system_busy_percent": 0.4,
+        "rss_mib": 50.95,
+        "anon_mib": 11.69,
+        "peak_mib": 50.95
+      },
+      "startup_median_ms": 81.2,
+      "seek_median_ms": 12.4,
+      "condition": "baseline"
+    },
+    {
+      "player": "lamp",
+      "format": "wav",
+      "startup_ms": [
+        33.8,
+        38.9,
+        25.5,
+        27.8,
+        31.0
+      ],
+      "seek_ms": [
+        4.1,
+        0.5,
+        0.4,
+        0.4,
+        3.5
+      ],
+      "playing": {
+        "player_cpu_percent": 0.2,
+        "player_voluntary_per_s": 20.7,
+        "player_involuntary_per_s": 0.0,
+        "server_cpu_percent": 1.2,
+        "server_voluntary_per_s": 622.4,
+        "server_involuntary_per_s": 24.1,
+        "system_busy_percent": 100.0,
+        "rss_mib": 5.54,
+        "anon_mib": 2.06,
+        "peak_mib": 5.54
+      },
+      "paused": {
+        "player_cpu_percent": 0.0,
+        "player_voluntary_per_s": 0.0,
+        "player_involuntary_per_s": 0.0,
+        "server_cpu_percent": 0.8,
+        "server_voluntary_per_s": 600.0,
+        "server_involuntary_per_s": 0.0,
+        "system_busy_percent": 100.0,
+        "rss_mib": 5.54,
+        "anon_mib": 2.06,
+        "peak_mib": 5.54
+      },
+      "startup_median_ms": 31.0,
+      "seek_median_ms": 0.5,
+      "condition": "loaded"
+    },
+    {
+      "player": "mpv",
+      "format": "wav",
+      "startup_ms": [
+        215.5,
+        197.2,
+        199.5,
+        198.8,
+        189.0
+      ],
+      "seek_ms": [
+        4.3,
+        4.4,
+        1.4,
+        1.2,
+        4.8
+      ],
+      "playing": {
+        "player_cpu_percent": 1.4,
+        "player_voluntary_per_s": 450.4,
+        "player_involuntary_per_s": 181.7,
+        "server_cpu_percent": 1.3,
+        "server_voluntary_per_s": 747.0,
+        "server_involuntary_per_s": 49.7,
+        "system_busy_percent": 100.0,
+        "rss_mib": 60.83,
+        "anon_mib": 17.85,
+        "peak_mib": 66.69
+      },
+      "paused": {
+        "player_cpu_percent": 0.0,
+        "player_voluntary_per_s": 1.1,
+        "player_involuntary_per_s": 0.9,
+        "server_cpu_percent": 0.8,
+        "server_voluntary_per_s": 601.6,
+        "server_involuntary_per_s": 0.8,
+        "system_busy_percent": 100.0,
+        "rss_mib": 60.86,
+        "anon_mib": 17.88,
+        "peak_mib": 66.69
+      },
+      "startup_median_ms": 198.8,
+      "seek_median_ms": 4.3,
+      "condition": "loaded"
+    },
+    {
+      "player": "vlc",
+      "format": "wav",
+      "startup_ms": [
+        165.9,
+        174.0,
+        155.9,
+        154.5,
+        106.1
+      ],
+      "seek_ms": [
+        4.4,
+        4.8,
+        2.3,
+        2.0,
+        7.1
+      ],
+      "playing": {
+        "player_cpu_percent": 0.3,
+        "player_voluntary_per_s": 104.0,
+        "player_involuntary_per_s": 89.7,
+        "server_cpu_percent": 1.5,
+        "server_voluntary_per_s": 660.1,
+        "server_involuntary_per_s": 21.2,
+        "system_busy_percent": 100.0,
+        "rss_mib": 52.36,
+        "anon_mib": 14.09,
+        "peak_mib": 52.36
+      },
+      "paused": {
+        "player_cpu_percent": 0.0,
+        "player_voluntary_per_s": 0.9,
+        "player_involuntary_per_s": 0.9,
+        "server_cpu_percent": 1.2,
+        "server_voluntary_per_s": 601.4,
+        "server_involuntary_per_s": 0.8,
+        "system_busy_percent": 100.0,
+        "rss_mib": 52.36,
+        "anon_mib": 14.09,
+        "peak_mib": 52.36
+      },
+      "startup_median_ms": 155.9,
+      "seek_median_ms": 4.4,
+      "condition": "loaded"
+    },
+    {
+      "player": "lamp",
+      "format": "flac",
+      "startup_ms": [
+        38.1,
+        31.2,
+        34.7,
+        38.9,
+        40.2
+      ],
+      "seek_ms": [
+        9.9,
+        5.3,
+        7.7,
+        7.1,
+        0.3
+      ],
+      "playing": {
+        "player_cpu_percent": 0.2,
+        "player_voluntary_per_s": 20.7,
+        "player_involuntary_per_s": 0.0,
+        "server_cpu_percent": 1.3,
+        "server_voluntary_per_s": 627.0,
+        "server_involuntary_per_s": 28.5,
+        "system_busy_percent": 100.0,
+        "rss_mib": 3.87,
+        "anon_mib": 2.14,
+        "peak_mib": 3.87
+      },
+      "paused": {
+        "player_cpu_percent": 0.0,
+        "player_voluntary_per_s": 0.0,
+        "player_involuntary_per_s": 0.0,
+        "server_cpu_percent": 1.0,
+        "server_voluntary_per_s": 599.8,
+        "server_involuntary_per_s": 0.0,
+        "system_busy_percent": 100.0,
+        "rss_mib": 3.87,
+        "anon_mib": 2.14,
+        "peak_mib": 3.87
+      },
+      "startup_median_ms": 38.1,
+      "seek_median_ms": 7.1,
+      "condition": "loaded"
+    },
+    {
+      "player": "mpv",
+      "format": "flac",
+      "startup_ms": [
+        193.9,
+        173.8,
+        163.8,
+        184.1,
+        240.7
+      ],
+      "seek_ms": [
+        4.1,
+        3.0,
+        1.8,
+        5.4,
+        5.8
+      ],
+      "playing": {
+        "player_cpu_percent": 0.9,
+        "player_voluntary_per_s": 263.1,
+        "player_involuntary_per_s": 147.9,
+        "server_cpu_percent": 1.0,
+        "server_voluntary_per_s": 751.1,
+        "server_involuntary_per_s": 50.7,
+        "system_busy_percent": 100.0,
+        "rss_mib": 60.74,
+        "anon_mib": 17.84,
+        "peak_mib": 66.83
+      },
+      "paused": {
+        "player_cpu_percent": 0.0,
+        "player_voluntary_per_s": 1.2,
+        "player_involuntary_per_s": 0.7,
+        "server_cpu_percent": 1.0,
+        "server_voluntary_per_s": 601.6,
+        "server_involuntary_per_s": 0.8,
+        "system_busy_percent": 100.0,
+        "rss_mib": 60.76,
+        "anon_mib": 17.86,
+        "peak_mib": 66.83
+      },
+      "startup_median_ms": 184.1,
+      "seek_median_ms": 4.1,
+      "condition": "loaded"
+    },
+    {
+      "player": "vlc",
+      "format": "flac",
+      "startup_ms": [
+        151.5,
+        158.9,
+        156.0,
+        168.7,
+        159.3
+      ],
+      "seek_ms": [
+        15.7,
+        11.7,
+        7.5,
+        16.1,
+        7.2
+      ],
+      "playing": {
+        "player_cpu_percent": 1.0,
+        "player_voluntary_per_s": 64.9,
+        "player_involuntary_per_s": 50.1,
+        "server_cpu_percent": 1.1,
+        "server_voluntary_per_s": 635.7,
+        "server_involuntary_per_s": 11.2,
+        "system_busy_percent": 100.0,
+        "rss_mib": 51.32,
+        "anon_mib": 12.45,
+        "peak_mib": 51.32
+      },
+      "paused": {
+        "player_cpu_percent": 0.0,
+        "player_voluntary_per_s": 0.9,
+        "player_involuntary_per_s": 0.8,
+        "server_cpu_percent": 0.6,
+        "server_voluntary_per_s": 601.6,
+        "server_involuntary_per_s": 0.8,
+        "system_busy_percent": 100.0,
+        "rss_mib": 51.32,
+        "anon_mib": 12.45,
+        "peak_mib": 51.32
+      },
+      "startup_median_ms": 158.9,
+      "seek_median_ms": 11.7,
+      "condition": "loaded"
+    },
+    {
+      "player": "lamp",
+      "format": "mp3",
+      "startup_ms": [
+        42.5,
+        40.6,
+        57.2,
+        40.3,
+        46.1
+      ],
+      "seek_ms": [
+        9.1,
+        10.3,
+        15.2,
+        6.3,
+        12.8
+      ],
+      "playing": {
+        "player_cpu_percent": 0.3,
+        "player_voluntary_per_s": 20.7,
+        "player_involuntary_per_s": 0.3,
+        "server_cpu_percent": 1.4,
+        "server_voluntary_per_s": 617.5,
+        "server_involuntary_per_s": 23.4,
+        "system_busy_percent": 100.0,
+        "rss_mib": 7.04,
+        "anon_mib": 2.17,
+        "peak_mib": 7.04
+      },
+      "paused": {
+        "player_cpu_percent": 0.0,
+        "player_voluntary_per_s": 0.0,
+        "player_involuntary_per_s": 0.0,
+        "server_cpu_percent": 1.0,
+        "server_voluntary_per_s": 599.9,
+        "server_involuntary_per_s": 0.1,
+        "system_busy_percent": 100.0,
+        "rss_mib": 7.04,
+        "anon_mib": 2.17,
+        "peak_mib": 7.04
+      },
+      "startup_median_ms": 42.5,
+      "seek_median_ms": 10.3,
+      "condition": "loaded"
+    },
+    {
+      "player": "mpv",
+      "format": "mp3",
+      "startup_ms": [
+        184.9,
+        178.0,
+        168.4,
+        178.7,
+        173.8
+      ],
+      "seek_ms": [
+        16.6,
+        6.5,
+        10.6,
+        18.4,
+        12.8
+      ],
+      "playing": {
+        "player_cpu_percent": 1.7,
+        "player_voluntary_per_s": 413.5,
+        "player_involuntary_per_s": 190.8,
+        "server_cpu_percent": 1.0,
+        "server_voluntary_per_s": 747.8,
+        "server_involuntary_per_s": 49.3,
+        "system_busy_percent": 100.0,
+        "rss_mib": 61.23,
+        "anon_mib": 18.22,
+        "peak_mib": 66.68
+      },
+      "paused": {
+        "player_cpu_percent": 0.0,
+        "player_voluntary_per_s": 1.1,
+        "player_involuntary_per_s": 0.9,
+        "server_cpu_percent": 0.9,
+        "server_voluntary_per_s": 601.6,
+        "server_involuntary_per_s": 0.8,
+        "system_busy_percent": 100.0,
+        "rss_mib": 61.26,
+        "anon_mib": 18.25,
+        "peak_mib": 66.68
+      },
+      "startup_median_ms": 178.0,
+      "seek_median_ms": 12.8,
+      "condition": "loaded"
+    },
+    {
+      "player": "vlc",
+      "format": "mp3",
+      "startup_ms": [
+        176.8,
+        158.0,
+        173.7,
+        160.2,
+        168.2
+      ],
+      "seek_ms": [
+        36.2,
+        30.4,
+        33.6,
+        29.8,
+        29.6
+      ],
+      "playing": {
+        "player_cpu_percent": 1.3,
+        "player_voluntary_per_s": 168.2,
+        "player_involuntary_per_s": 124.4,
+        "server_cpu_percent": 1.1,
+        "server_voluntary_per_s": 780.9,
+        "server_involuntary_per_s": 41.4,
+        "system_busy_percent": 100.0,
+        "rss_mib": 50.86,
+        "anon_mib": 11.57,
+        "peak_mib": 50.86
+      },
+      "paused": {
+        "player_cpu_percent": 0.0,
+        "player_voluntary_per_s": 0.8,
+        "player_involuntary_per_s": 0.8,
+        "server_cpu_percent": 1.3,
+        "server_voluntary_per_s": 601.5,
+        "server_involuntary_per_s": 0.9,
+        "system_busy_percent": 100.0,
+        "rss_mib": 50.86,
+        "anon_mib": 11.57,
+        "peak_mib": 50.86
+      },
+      "startup_median_ms": 168.2,
+      "seek_median_ms": 30.4,
+      "condition": "loaded"
+    },
+    {
+      "player": "lamp",
+      "format": "vorbis",
+      "startup_ms": [
+        64.5,
+        58.6,
+        45.0,
+        45.0,
+        50.0
+      ],
+      "seek_ms": [
+        10.8,
+        16.7,
+        14.7,
+        12.8,
+        16.7
+      ],
+      "playing": {
+        "player_cpu_percent": 0.6,
+        "player_voluntary_per_s": 20.7,
+        "player_involuntary_per_s": 1.8,
+        "server_cpu_percent": 1.0,
+        "server_voluntary_per_s": 624.9,
+        "server_involuntary_per_s": 24.4,
+        "system_busy_percent": 100.0,
+        "rss_mib": 5.56,
+        "anon_mib": 2.61,
+        "peak_mib": 5.56
+      },
+      "paused": {
+        "player_cpu_percent": 0.0,
+        "player_voluntary_per_s": 0.0,
+        "player_involuntary_per_s": 0.0,
+        "server_cpu_percent": 0.7,
+        "server_voluntary_per_s": 599.8,
+        "server_involuntary_per_s": 0.2,
+        "system_busy_percent": 100.0,
+        "rss_mib": 5.56,
+        "anon_mib": 2.61,
+        "peak_mib": 5.56
+      },
+      "startup_median_ms": 50.0,
+      "seek_median_ms": 14.7,
+      "condition": "loaded"
+    },
+    {
+      "player": "mpv",
+      "format": "vorbis",
+      "startup_ms": [
+        177.1,
+        193.5,
+        176.4,
+        183.7,
+        176.2
+      ],
+      "seek_ms": [
+        8.2,
+        9.9,
+        10.2,
+        6.2,
+        3.6
+      ],
+      "playing": {
+        "player_cpu_percent": 1.9,
+        "player_voluntary_per_s": 459.1,
+        "player_involuntary_per_s": 212.1,
+        "server_cpu_percent": 1.3,
+        "server_voluntary_per_s": 750.1,
+        "server_involuntary_per_s": 50.1,
+        "system_busy_percent": 100.0,
+        "rss_mib": 61.74,
+        "anon_mib": 18.38,
+        "peak_mib": 66.75
+      },
+      "paused": {
+        "player_cpu_percent": 0.0,
+        "player_voluntary_per_s": 0.8,
+        "player_involuntary_per_s": 0.8,
+        "server_cpu_percent": 0.8,
+        "server_voluntary_per_s": 601.2,
+        "server_involuntary_per_s": 1.1,
+        "system_busy_percent": 100.0,
+        "rss_mib": 61.77,
+        "anon_mib": 18.41,
+        "peak_mib": 66.75
+      },
+      "startup_median_ms": 177.1,
+      "seek_median_ms": 8.2,
+      "condition": "loaded"
+    },
+    {
+      "player": "vlc",
+      "format": "vorbis",
+      "startup_ms": [
+        160.9,
+        154.6,
+        167.2,
+        173.7,
+        183.1
+      ],
+      "seek_ms": [
+        4.1,
+        9.6,
+        1.2,
+        0.5,
+        0.7
+      ],
+      "playing": {
+        "player_cpu_percent": 1.1,
+        "player_voluntary_per_s": 80.8,
+        "player_involuntary_per_s": 83.3,
+        "server_cpu_percent": 1.6,
+        "server_voluntary_per_s": 713.9,
+        "server_involuntary_per_s": 48.1,
+        "system_busy_percent": 100.0,
+        "rss_mib": 50.77,
+        "anon_mib": 11.75,
+        "peak_mib": 50.77
+      },
+      "paused": {
+        "player_cpu_percent": 0.1,
+        "player_voluntary_per_s": 1.0,
+        "player_involuntary_per_s": 0.9,
+        "server_cpu_percent": 1.0,
+        "server_voluntary_per_s": 601.6,
+        "server_involuntary_per_s": 0.9,
+        "system_busy_percent": 100.0,
+        "rss_mib": 50.77,
+        "anon_mib": 11.75,
+        "peak_mib": 50.77
+      },
+      "startup_median_ms": 167.2,
+      "seek_median_ms": 1.2,
+      "condition": "loaded"
+    },
+    {
+      "player": "lamp",
+      "format": "opus",
+      "startup_ms": [
+        64.0,
+        50.0,
+        49.1,
+        49.9,
+        72.1
+      ],
+      "seek_ms": [
+        12.8,
+        6.4,
+        6.2,
+        12.9,
+        14.0
+      ],
+      "playing": {
+        "player_cpu_percent": 0.5,
+        "player_voluntary_per_s": 20.7,
+        "player_involuntary_per_s": 1.7,
+        "server_cpu_percent": 1.0,
+        "server_voluntary_per_s": 628.0,
+        "server_involuntary_per_s": 28.4,
+        "system_busy_percent": 100.0,
+        "rss_mib": 3.75,
+        "anon_mib": 2.21,
+        "peak_mib": 3.75
+      },
+      "paused": {
+        "player_cpu_percent": 0.0,
+        "player_voluntary_per_s": 0.0,
+        "player_involuntary_per_s": 0.0,
+        "server_cpu_percent": 1.2,
+        "server_voluntary_per_s": 599.9,
+        "server_involuntary_per_s": 0.3,
+        "system_busy_percent": 100.0,
+        "rss_mib": 3.75,
+        "anon_mib": 2.21,
+        "peak_mib": 3.75
+      },
+      "startup_median_ms": 50.0,
+      "seek_median_ms": 12.8,
+      "condition": "loaded"
+    },
+    {
+      "player": "mpv",
+      "format": "opus",
+      "startup_ms": [
+        169.7,
+        170.9,
+        176.9,
+        166.4,
+        178.8
+      ],
+      "seek_ms": [
+        14.1,
+        3.0,
+        2.0,
+        2.9,
+        4.2
+      ],
+      "playing": {
+        "player_cpu_percent": 1.6,
+        "player_voluntary_per_s": 456.7,
+        "player_involuntary_per_s": 169.6,
+        "server_cpu_percent": 1.0,
+        "server_voluntary_per_s": 746.1,
+        "server_involuntary_per_s": 50.2,
+        "system_busy_percent": 100.0,
+        "rss_mib": 61.27,
+        "anon_mib": 18.26,
+        "peak_mib": 66.59
+      },
+      "paused": {
+        "player_cpu_percent": 0.0,
+        "player_voluntary_per_s": 0.9,
+        "player_involuntary_per_s": 0.8,
+        "server_cpu_percent": 1.0,
+        "server_voluntary_per_s": 601.6,
+        "server_involuntary_per_s": 0.8,
+        "system_busy_percent": 100.0,
+        "rss_mib": 61.3,
+        "anon_mib": 18.29,
+        "peak_mib": 66.59
+      },
+      "startup_median_ms": 170.9,
+      "seek_median_ms": 3.0,
+      "condition": "loaded"
+    },
+    {
+      "player": "vlc",
+      "format": "opus",
+      "startup_ms": [
+        160.4,
+        150.3,
+        151.5,
+        143.8,
+        168.9
+      ],
+      "seek_ms": [
+        19.8,
+        16.3,
+        15.2,
+        16.3,
+        16.6
+      ],
+      "playing": {
+        "player_cpu_percent": 1.5,
+        "player_voluntary_per_s": 82.3,
+        "player_involuntary_per_s": 119.4,
+        "server_cpu_percent": 1.6,
+        "server_voluntary_per_s": 744.2,
+        "server_involuntary_per_s": 52.5,
+        "system_busy_percent": 100.0,
+        "rss_mib": 50.55,
+        "anon_mib": 11.38,
+        "peak_mib": 50.55
+      },
+      "paused": {
+        "player_cpu_percent": 0.0,
+        "player_voluntary_per_s": 1.0,
+        "player_involuntary_per_s": 0.8,
+        "server_cpu_percent": 1.1,
+        "server_voluntary_per_s": 601.5,
+        "server_involuntary_per_s": 0.9,
+        "system_busy_percent": 100.0,
+        "rss_mib": 50.55,
+        "anon_mib": 11.38,
+        "peak_mib": 50.55
+      },
+      "startup_median_ms": 151.5,
+      "seek_median_ms": 16.3,
+      "condition": "loaded"
+    },
+    {
+      "player": "lamp",
+      "format": "aac",
+      "startup_ms": [
+        64.6,
+        52.4,
+        50.6,
+        51.3,
+        46.1
+      ],
+      "seek_ms": [
+        16.2,
+        12.2,
+        0.2,
+        0.3,
+        0.7
+      ],
+      "playing": {
+        "player_cpu_percent": 0.3,
+        "player_voluntary_per_s": 20.7,
+        "player_involuntary_per_s": 0.2,
+        "server_cpu_percent": 1.2,
+        "server_voluntary_per_s": 618.5,
+        "server_involuntary_per_s": 23.2,
+        "system_busy_percent": 100.0,
+        "rss_mib": 3.3,
+        "anon_mib": 2.36,
+        "peak_mib": 3.3
+      },
+      "paused": {
+        "player_cpu_percent": 0.0,
+        "player_voluntary_per_s": 0.0,
+        "player_involuntary_per_s": 0.0,
+        "server_cpu_percent": 1.0,
+        "server_voluntary_per_s": 600.0,
+        "server_involuntary_per_s": 0.0,
+        "system_busy_percent": 100.0,
+        "rss_mib": 3.3,
+        "anon_mib": 2.36,
+        "peak_mib": 3.3
+      },
+      "startup_median_ms": 51.3,
+      "seek_median_ms": 0.7,
+      "condition": "loaded"
+    },
+    {
+      "player": "mpv",
+      "format": "aac",
+      "startup_ms": [
+        180.4,
+        218.3,
+        156.4,
+        177.9,
+        165.5
+      ],
+      "seek_ms": [
+        4.6,
+        3.1,
+        1.6,
+        1.9,
+        0.4
+      ],
+      "playing": {
+        "player_cpu_percent": 1.5,
+        "player_voluntary_per_s": 437.3,
+        "player_involuntary_per_s": 192.1,
+        "server_cpu_percent": 0.9,
+        "server_voluntary_per_s": 749.3,
+        "server_involuntary_per_s": 50.8,
+        "system_busy_percent": 100.0,
+        "rss_mib": 62.11,
+        "anon_mib": 19.1,
+        "peak_mib": 66.96
+      },
+      "paused": {
+        "player_cpu_percent": 0.0,
+        "player_voluntary_per_s": 1.0,
+        "player_involuntary_per_s": 0.8,
+        "server_cpu_percent": 0.8,
+        "server_voluntary_per_s": 601.6,
+        "server_involuntary_per_s": 0.8,
+        "system_busy_percent": 100.0,
+        "rss_mib": 62.14,
+        "anon_mib": 19.14,
+        "peak_mib": 66.96
+      },
+      "startup_median_ms": 177.9,
+      "seek_median_ms": 1.9,
+      "condition": "loaded"
+    },
+    {
+      "player": "vlc",
+      "format": "aac",
+      "startup_ms": [
+        174.7,
+        151.8,
+        160.4,
+        143.2,
+        162.7
+      ],
+      "seek_ms": [
+        32.6,
+        20.2,
+        18.7,
+        19.9,
+        26.3
+      ],
+      "playing": {
+        "player_cpu_percent": 1.3,
+        "player_voluntary_per_s": 84.1,
+        "player_involuntary_per_s": 54.2,
+        "server_cpu_percent": 1.1,
+        "server_voluntary_per_s": 719.9,
+        "server_involuntary_per_s": 48.4,
+        "system_busy_percent": 100.0,
+        "rss_mib": 50.76,
+        "anon_mib": 11.58,
+        "peak_mib": 50.76
+      },
+      "paused": {
+        "player_cpu_percent": 0.0,
+        "player_voluntary_per_s": 0.8,
+        "player_involuntary_per_s": 0.8,
+        "server_cpu_percent": 1.0,
+        "server_voluntary_per_s": 601.2,
+        "server_involuntary_per_s": 0.9,
+        "system_busy_percent": 100.0,
+        "rss_mib": 50.76,
+        "anon_mib": 11.58,
+        "peak_mib": 50.76
+      },
+      "startup_median_ms": 160.4,
+      "seek_median_ms": 20.2,
+      "condition": "loaded"
+    }
+  ]
+}

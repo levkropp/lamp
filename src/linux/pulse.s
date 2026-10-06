@@ -205,7 +205,13 @@ FN pulse_create_stream
     call pa_u32
     mov eax, -1                        # prebuf: default (start when tlength is queued)
     call pa_u32
-    mov eax, -1                        # minreq: default
+    mov eax, ebx                       # minreq: a quarter of tlength, so the server
+    imul eax, r12d                     # asks for audio about 20 times a second
+    shl rax, 3
+    xor edx, edx
+    mov ecx, 4000
+    div ecx
+    and eax, -8
     call pa_u32
     xor eax, eax                       # sync id
     call pa_u32

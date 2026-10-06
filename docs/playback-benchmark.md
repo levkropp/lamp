@@ -66,7 +66,58 @@ Install LLVM and Python (to build the players), Visual C++ (for the test-only be
 
 The decoder benchmark prepares the 600-second fixtures: 48 kHz stereo independent seeded noise, repeating 20 seconds of silence and 40 seconds of noise. Encodings are PCM16, native FLAC, MP3 320 kbps, Vorbis quality 8 and Opus 128 kbps. Playback benchmarking does no simultaneous encoding. Results go to `bin/verify-build/playback-benchmark.json`, updated after each completed check; failures retain an incomplete report and separate per-player logs. `-Runs`, `-SampleSeconds`, `-LoadWorkers`, `-Codecs` and `-Players` allow bounded diagnostic runs. `-VlcSeekMode seconds` reproduces the alternate HTTP seek path. Such runs must retain their actual parameters when published.
 
-The milestone comparison gate remains open pending wakeup measurements and shipping-GUI verification. Accurate audible latency needs additional endpoint/loopback instrumentation.
+On Windows, the milestone comparison gate remains open pending wakeup measurements and shipping-GUI verification; the [Linux comparison](#linux) measures wakeups. Accurate audible latency needs additional endpoint/loopback instrumentation.
+
+## Linux
+
+The [Linux comparison](../reports/linux-playback-benchmark.json) was recorded on 2026-10-06 in a cloud container: an Intel Xeon at 2.10 GHz with 4 logical processors and Linux 6.18. It measures the static `lamp-cli` 0.4.0-dev, mpv 0.37.0 and VLC 3.0.20 playing the same two-minute files through one private PulseAudio 16.1 server into a float32 48 kHz null sink. The files are seeded noise at 48 kHz: PCM16 WAV, FLAC, MP3 320 kb/s, Vorbis q8, Opus 128 kb/s and AAC 256 kb/s.
+
+- **Measuring at the sink:** the controller records the sink's monitor, so times are observed where the audio arrives, not taken from each player's clock. PulseAudio rewinds the null sink for new audio, so the monitor shows audio as soon as a client writes it. The times below are therefore times until the server has the player's audio, without any device latency. `paplay`, PulseAudio's own minimal client, needs 4.2 ms (11.8 ms under load), the floor of this method.
+- **The players:** all three run as the unprivileged user `nobody` (VLC refuses root), each separately.
+  - LAMP is driven by keys on a pseudo-terminal.
+  - mpv runs without configuration or video and is driven over JSON IPC.
+  - VLC runs its rc interface, driven on stdin.
+- **Startup:** the time from starting the process to the first sound at the sink, the median of five runs.
+- **Seek:** a file of 30 s of silence and then noise plays from its start. 3 s in, the player seeks 60 s on (LAMP's Up, mpv's relative seek, VLC's absolute seek), and the time is to the first sound, the median of five seeks in one process. LAMP restarts its stream for a seek; mpv and VLC flush theirs.
+- **Resources:** CPU time from `/proc`, over ten seconds playing and then ten seconds paused, as a percentage of one core. Wakeups are the voluntary context switches of all the process's threads, per second. Memory is resident and anonymous (private) memory at the end of the playing window.
+- **Load:** "four workers" adds four busy processes, which saturate all four logical processors.
+
+Medians, in ms, of startup and seek:
+
+| Codec | Condition | Startup: LAMP | mpv | VLC | Seek: LAMP | mpv | VLC |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| WAV | Baseline | 5.0 | 97.8 | 79.3 | 0.7 | 0.8 | 1.2 |
+| FLAC | Baseline | 9.6 | 92.9 | 90.4 | 5.7 | 0.8 | 3.7 |
+| MP3 | Baseline | 15.0 | 100.1 | 83.7 | 5.8 | 9.5 | 29.9 |
+| Vorbis | Baseline | 25.0 | 107.7 | 79.5 | 10.5 | 0.8 | 3.1 |
+| Opus | Baseline | 20.1 | 93.0 | 79.6 | 6.9 | 0.8 | 12.1 |
+| AAC | Baseline | 22.3 | 99.8 | 81.2 | 0.7 | 0.8 | 12.4 |
+| WAV | Four workers | 31.0 | 198.8 | 155.9 | 0.5 | 4.3 | 4.4 |
+| FLAC | Four workers | 38.1 | 184.1 | 158.9 | 7.1 | 4.1 | 11.7 |
+| MP3 | Four workers | 42.5 | 178.0 | 168.2 | 10.3 | 12.8 | 30.4 |
+| Vorbis | Four workers | 50.0 | 177.1 | 167.2 | 14.7 | 8.2 | 1.2 |
+| Opus | Four workers | 50.0 | 170.9 | 151.5 | 12.8 | 3.0 | 16.3 |
+| AAC | Four workers | 51.3 | 177.9 | 160.4 | 0.7 | 1.9 | 20.2 |
+
+Playing, per process: CPU (% of one core), wakeups per second and memory (MiB) at baseline:
+
+| Codec | CPU: LAMP | mpv | VLC | Wakeups: LAMP | mpv | VLC | Resident: LAMP | mpv | VLC | Private: LAMP | mpv | VLC |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| WAV | 0.2 | 2.6 | 0.8 | 20.7 | 410.4 | 86.4 | 5.5 | 60.5 | 52.1 | 2.0 | 17.6 | 13.6 |
+| FLAC | 0.3 | 1.5 | 1.2 | 20.7 | 241.1 | 57.7 | 3.9 | 60.4 | 51.3 | 2.1 | 17.6 | 12.3 |
+| MP3 | 0.3 | 2.4 | 2.2 | 20.7 | 375.9 | 146.2 | 7.0 | 61.2 | 50.9 | 2.2 | 18.1 | 11.6 |
+| Vorbis | 0.8 | 2.4 | 1.4 | 20.5 | 389.8 | 80.0 | 5.6 | 61.8 | 50.6 | 2.6 | 18.3 | 11.6 |
+| Opus | 0.6 | 2.6 | 1.7 | 20.7 | 395.2 | 81.3 | 3.8 | 61.3 | 50.5 | 2.2 | 18.3 | 11.3 |
+| AAC | 0.4 | 2.8 | 1.5 | 20.7 | 394.2 | 82.1 | 3.3 | 61.9 | 51.0 | 2.4 | 18.8 | 11.7 |
+
+Under load, CPU per player stays within 0.2–0.6% for LAMP, 0.9–1.9% for mpv and 0.3–1.5% for VLC. Wakeups rise to 263–459 per second for mpv and 65–168 for VLC; LAMP stays at 20.7. Paused, LAMP does not wake at all, against 0.8–1.9 wakeups per second for mpv and VLC. All three use 0.1% CPU or less while paused.
+
+The server's own CPU (0.9–3.2%) and wakeups (587–781 per second) barely differ between players. They are dominated by the null sink and the controller's 5 ms monitor capture. LAMP's resident memory includes the mapped input file.
+
+- **How LAMP's wakeups are low:** it asks the server for audio in quarters of its 200 ms buffer, and its decoder refills its 5.46 s ring only once a quarter has played. Before these settings, it woke 100 times a second while playing.
+- **What these results do not say:** they are single runs on one shared machine, CPU accounting is in 10 ms ticks, and startup and seek include no device latency. They do not establish audible latency, listening quality or a general ranking.
+
+Reproduce with `python3 tests/benchmark-linux.py`. It needs PulseAudio, `setpriv`, mpv and VLC (Ubuntu's `vlc-bin` and `vlc-plugin-base`). `--runs`, `--seconds`, `--formats`, `--players` and `--workers` bound a run, and results go to `build/linux-playback-benchmark.json`.
 
 ## Measurement references
 
