@@ -822,8 +822,8 @@ LOCALFN mkv_chapters
     ret
 ENDFN mkv_chapters
 
-# RSI=SeekHead payload, RDI=end: notes the position (in the Segment) of the
-# first Seek naming a Chapters element.
+# RSI=SeekHead payload, RDI=end: notes the positions (in the Segment) of the
+# first Seeks naming a Chapters and an Attachments element.
 LOCALFN mkv_seek_chapters
     push rbx
     push r12
@@ -839,7 +839,7 @@ LOCALFN mkv_seek_chapters
     push rdi
     mov rsi, rcx
     mov rdi, rax
-    xor ebx, ebx                          # its SeekID is Chapters'
+    xor ebx, ebx                          # its SeekID: 1 Chapters, 2 Attachments
     mov r12, -1                           # SeekPosition
 .Lmkv_seek_field:
     call mkv_element
@@ -854,8 +854,13 @@ LOCALFN mkv_seek_chapters
     xor ebx, ebx
     cmp rax, 4
     jne .Lmkv_seek_field
+    mov ebx, 1
     cmp dword ptr [rcx], 0x70a74310       # 10 43 A7 70
-    sete bl
+    je .Lmkv_seek_field
+    mov ebx, 2
+    cmp dword ptr [rcx], 0x69a44119       # 19 41 A4 69
+    je .Lmkv_seek_field
+    xor ebx, ebx
     jmp .Lmkv_seek_field
 .Lmkv_seek_position:
     mov r9, -1
@@ -866,11 +871,16 @@ LOCALFN mkv_seek_chapters
 .Lmkv_seek_done:
     pop rdi
     pop rsi
-    test ebx, ebx
-    jz .Lmkv_seek_entry
-    cmp qword ptr [rip + mkv_chapters_seek], -1
+    lea rax, [rip + mkv_chapters_seek]
+    cmp ebx, 1
+    je .Lmkv_seek_note
+    lea rax, [rip + mkv_attachments_seek]
+    cmp ebx, 2
     jne .Lmkv_seek_entry
-    mov [rip + mkv_chapters_seek], r12
+.Lmkv_seek_note:
+    cmp qword ptr [rax], -1
+    jne .Lmkv_seek_entry
+    mov [rax], r12
     jmp .Lmkv_seek_entry
 .Lmkv_seek_return:
     add rsp, 40

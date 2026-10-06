@@ -18,6 +18,7 @@
 # their first NUL and at TAG_VALUE_MAX bytes; empty values are not stored.
 .include "lamp.inc"
 .globl tags_read, tags_clear, tags_get, tag_names, chapters_count, chapters_get, chapter_line
+.globl cover_get, cover_mimes
 
 .equ TAG_KEYS, 10
 .equ TAG_TITLE, 0
@@ -36,6 +37,7 @@
 .equ TAG_DAY, 13
 .equ TAG_TIME, 14
 .equ TAG_CHAPTER, 15                # ID3 frame table: CHAP
+.equ TAG_PICTURE, 16                # ID3 frame table: APIC, PIC
 .equ TAG_ARENA, 1 << 17
 .equ TAG_VALUE_MAX, 4096
 .equ TAG_KEEP, 0                    # first value wins
@@ -62,6 +64,8 @@ tag_names: .quad tag_name_title, tag_name_artist, tag_name_album, tag_name_album
 # ID3v2.3/2.4 and ID3v2.2 frame IDs and their keys.
 .p2align 2
 id3_frames4:
+    .ascii "APIC"
+    .long TAG_PICTURE
     .ascii "TIT2"
     .long TAG_TITLE
     .ascii "TPE1"
@@ -94,6 +98,8 @@ id3_frames4:
     .long TAG_CHAPTER
     .long 0, 0
 id3_frames3:
+    .ascii "PIC\0"
+    .long TAG_PICTURE
     .ascii "TT2\0"
     .long TAG_TITLE
     .ascii "TP1\0"
@@ -362,6 +368,7 @@ tag_number: .zero 32
 .text
 FN tags_clear
     call chap_clear
+    call cover_clear
     xor eax, eax
     mov [rip + tag_used], eax
     mov [rip + tag_any], eax
@@ -1254,6 +1261,15 @@ LOCALFN id3_parse
     add rbx, 4
     sub eax, 4
 .Lid3_frame_read:
+    cmp r9d, TAG_PICTURE
+    jne .Lid3_frame_unsync
+    mov rcx, rbx
+    mov edx, eax
+    mov r8d, r10d
+    mov r9d, r12d
+    call id3_picture
+    jmp .Lid3_frame
+.Lid3_frame_unsync:
     mov rdx, rbx
     test r10d, r10d
     jz .Lid3_frame_text
@@ -1496,7 +1512,16 @@ LOCALFN ape_parse
     lea rsi, [r8 + r13]                   # next item
     shr ebx, 1
     and ebx, 3
-    jnz .Lape_item                        # binary or a link
+    jz .Lape_text
+    test ebx, 1                           # binary (FFmpeg's test)
+    jz .Lape_item
+    cmp dword ptr [rip + codec_kind], 12  # FFmpeg reads APEv2 pictures in WavPack
+    jne .Lape_item
+    mov r9d, r13d
+    sub rdx, rcx
+    call ape_picture
+    jmp .Lape_item
+.Lape_text:
     mov [rsp + 32], r8
     mov r8, rdx
     sub r8, rcx                           # key bytes
@@ -1565,6 +1590,15 @@ LOCALFN vc_parse
     jmp .Lvc_equals
 .Lvc_key:
     mov [rsp + 32], edx
+    mov rcx, rsi                          # METADATA_BLOCK_PICTURE: a picture
+    lea r8, [rsi + rdx + 1]
+    mov r9d, ebx
+    sub r9d, edx
+    dec r9d
+    call vc_picture
+    test eax, eax
+    jnz .Lvc_next
+    mov edx, [rsp + 32]
     mov rcx, rsi                          # CHAPTERnnn comments are chapters
     lea r8, [rsi + rdx + 1]
     mov r9d, ebx
@@ -1600,8 +1634,8 @@ LOCALFN vc_parse
     ret
 ENDFN vc_parse
 
-# RCX=native FLAC file ("fLaC"), RDX=end: the first VORBIS_COMMENT block and
-# CUESHEET chapters.
+# RCX=native FLAC file ("fLaC"), RDX=end: the first VORBIS_COMMENT block,
+# CUESHEET chapters and PICTURE blocks.
 LOCALFN flac_tags
     push rbx
     push rsi
@@ -1631,6 +1665,8 @@ LOCALFN flac_tags
     jz .Lflac_tags_info
     cmp ecx, 5
     je .Lflac_tags_cuesheet
+    cmp ecx, 6
+    je .Lflac_tags_picture
     cmp ecx, 4
     jne .Lflac_tags_next
     test r12d, r12d
@@ -1646,6 +1682,12 @@ LOCALFN flac_tags
     mov ebx, [rdx + 10]
     bswap ebx
     shr ebx, 12                           # 20-bit sample rate
+    jmp .Lflac_tags_next
+.Lflac_tags_picture:
+    mov rcx, rdx
+    mov rdx, rsi
+    xor r8d, r8d
+    call flac_picture
     jmp .Lflac_tags_next
 .Lflac_tags_cuesheet:
     test ebx, ebx
@@ -1975,6 +2017,11 @@ LOCALFN mp4_meta
     mov rsi, rax
     mov r12d, edx                         # item type
     mov rdx, rax
+    cmp r12d, 0x72766f63                  # covr: pictures
+    jne .Lmp4_meta_value
+    call mp4_covr
+    jmp .Lmp4_meta_item
+.Lmp4_meta_value:
     mov r8d, 0x61746164                   # data
     call mp4_find
     test rax, rax
@@ -2651,7 +2698,8 @@ LOCALFN mkv_simple
     ret
 ENDFN mkv_simple
 
-# RCX=EBML file, RDX=end: Segment Info Title, global Tags and Chapters.
+# RCX=EBML file, RDX=end: Segment Info Title, global Tags, Chapters and
+# Attachments.
 LOCALFN mkv_tags
     push rbx
     push rsi
@@ -2693,6 +2741,8 @@ LOCALFN mkv_tags
     je .Lmkv_tags_chapters
     cmp edx, 0x114d9b74                   # SeekHead
     je .Lmkv_tags_seekhead
+    cmp edx, 0x1941a469                   # Attachments
+    je .Lmkv_tags_attachments
     cmp edx, 0x1f43b675                   # Cluster
     je .Lmkv_tags_cluster
     cmp edx, 0x1254c367                   # Tags
@@ -2774,6 +2824,24 @@ LOCALFN mkv_tags
     mov rsi, rcx
     mov rdi, rax
     call mkv_chapters
+    mov rsi, r12
+    mov rdi, r13
+    jmp .Lmkv_tags_child
+.Lmkv_tags_attachments:
+    cmp dword ptr [rip + mkv_cluster_seen], 0
+    je .Lmkv_tags_attachments_read
+    cmp dword ptr [rip + mkv_attachments_seen], 0
+    jne .Lmkv_tags_child
+    mov r8, [rsp + 32]
+    sub r8, [rsp + 40]
+    cmp r8, [rip + mkv_attachments_seek]
+    jne .Lmkv_tags_child
+.Lmkv_tags_attachments_read:
+    mov r12, rsi
+    mov r13, rdi
+    mov rsi, rcx
+    mov rdi, rax
+    call mkv_attachments
     mov rsi, r12
     mov rdi, r13
     jmp .Lmkv_tags_child
@@ -2959,6 +3027,7 @@ LOCALFN raw_tags
     cmp eax, 10
     je .Lraw_tags_chapters
     call chap_clear
+    call cover_clear                      # pictures too
 .Lraw_tags_chapters:
     call id3_finish
     xor ebx, ebx                          # an ID3v1 tag at the end
@@ -3095,3 +3164,4 @@ FN tags_read
 ENDFN tags_read
 
 .include "chapters.inc"
+.include "cover.inc"
