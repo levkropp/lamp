@@ -1,6 +1,6 @@
 # RIFF/RF64/BW64 audio, precision and speaker layouts
 
-Current 0.4.0-dev source accepts little-endian RIFF/RF64/BW64 audio framing with 1–8 channels and rates from 8–192 kHz. PCM containers are unsigned 8-bit or signed 16/24/32-bit; IEEE input can be float32 or float64. Both basic and extensible headers are supported. The public v0.3.0 download retains its earlier mono/stereo RIFF PCM/float32 implementation.
+Current 0.4.0-dev source accepts little-endian RIFF/RF64/BW64 audio framing with 1–8 channels and rates from 8–192 kHz. PCM containers are unsigned 8-bit or signed 16/24/32-bit; IEEE input can be float32 or float64. Both basic and extensible headers are supported. G.711, IMA and Microsoft ADPCM, MPEG audio and AC-3 data also play; see [compressed audio](#compressed-audio). The public v0.3.0 download retains its earlier mono/stereo RIFF PCM/float32 implementation.
 
 ## Precision and numeric conversion
 
@@ -31,6 +31,22 @@ BW64 support covers audio framing and the existing WAVE speaker policy. ADM XML,
 Run `python3 tests/verify-containers.py rf64` for the [recorded report](../reports/rf64-verification.json): 538 files, 16 sparse large-file fixtures, 8,950 exact seeks and 312 malformed-input rejections, including 256 seeded size/table mutations. Tests cover basic/extensible PCM/float across all channel counts, every valid PCM precision with mono/eight-channel input, finite/sentinel precedence, `fact` replacement, repeated/reordered entries, the table limit, trailing chunks, future bytes and Unicode paths. NTFS sparse inputs reach 17,179,877,476 logical bytes with large data/metadata and more than `2^32` frames. Guarded reads around 4 GiB offsets, EOF clamping, cancellation and 64 open/close cycles per file operate on original inputs. Sparse files are flushed before measuring allocation and removed after verification. Actual WASAPI lifecycle checks also cover ordinary RF64 and BW64 silence, including a nonzero BW64 dummy.
 
 Independent FFmpeg comparisons use original containers where supported. FFmpeg n8.0.1's [WAV demuxer](https://github.com/FFmpeg/FFmpeg/blob/n8.0.1/libavformat/wavdec.c) skips the optional size table, reads BW64's dummy as a signed RF64 count, uses `ds64` data length even when the data header is finite, and omits odd `ds64` padding. Cases outside those limits use its raw physical-PCM reader at a known data offset. The large BW64 comparator pass zeros only the ignored dummy after LAMP verifies the original nonzero value. Reports identify each reference path; they do not claim complete independent container conformance. The precision suite below also records FFmpeg's valid-bit header limitation.
+
+## Compressed audio
+
+These WAVE format tags (in a basic fmt chunk, or as an extensible chunk's subformat) are decoded:
+
+| Tag | Audio |
+| --- | --- |
+| 6, 7 | G.711 A-law and mu-law: 8-bit codes expanded to 16 bits by ITU-T G.711's rules (tables in `src/adpcm_tables.inc`), then read as 16-bit PCM, with direct seeks; 1-8 channels |
+| 0x11 | IMA ADPCM with 4-bit samples, 1-8 channels (each channel's four-byte groups interleaved, as the IMA specification lays them out), decoding as FFmpeg's `adpcm_ima_wav` does |
+| 2 | Microsoft ADPCM, mono or stereo, with the standard seven predictors |
+| 0x50, 0x55 | MPEG audio Layers I-III: the data chunk opens as a raw [MPEG audio](mp2.md) stream |
+| 0x2000 | AC-3: the data chunk opens as a raw [AC-3](ac3.md) stream |
+
+ADPCM blocks (block_align bytes, each starting with its channels' predictor state) are packets of the shared [track layer](matroska.md#track-layer), so seeks restart at the block holding the target. A short final block decodes the whole sample groups it holds; one too short for its headers is dropped. A `fact` sample count trims the padding of the last block (FFmpeg ignores it and plays the padding). A step index above 88 or a predictor above 6 stops decoding with `decode_error` 100. IMA ADPCM with 2, 3 or 5-bit samples and Microsoft ADPCM with more than two channels reject as unsupported (101); FFmpeg decodes only one or two IMA channels and lays out Microsoft ADPCM beyond two channels its own way. GSM 6.10, other ADPCM variants and other compressed tags reject.
+
+`python3 tests/verify-wav-codecs.py` ([report](../reports/wav-codecs-verification.json)) checks 24 files from FFmpeg's encoders (G.711 in WAVE and AIFF-C, mono to 7.1; IMA and Microsoft ADPCM at 8-96 kHz with 32- to 8192-byte blocks, including an extensible header), exact against FFmpeg (ADPCM up to the `fact` count); 30 random valid ADPCM streams from `tests/adpcm_model.py` with every Microsoft predictor, every IMA step index, negative and large deltas, edge predictors, small blocks and short final blocks, exact against the model and FFmpeg (IMA with three to eight channels against the model); MPEG Layer II/III and AC-3 copied into WAVE files, exact against LAMP's raw-stream decodes and 124.8-139.6 dB against FFmpeg's float decoders; 105 exact seeks; and 12 unsupported, malformed or invalid files.
 
 ## Verification and reference limits
 

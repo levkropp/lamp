@@ -29,7 +29,6 @@ Writes <out>/wavpack-verification.json.
 import json
 from pathlib import Path
 import random
-import re
 import struct
 import subprocess
 import sys
@@ -37,57 +36,15 @@ import sys
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import wavpack_model as model
 import wavpack_vectors as vectors
-from lamp_test import (ROOT, Failure, build_lamp, build_oracles, check_file, decode_f32, exe, ffmpeg, main_guard,
-                       out_dir, play, playback_requested, run, scratch, write_report)
+from lamp_test import (Failure, build_lamp, build_oracles, check_file, decode_f32, exe, ffmpeg, main_guard, out_dir,
+                       play, playback_requested, run, scratch, stereo_view, write_report)
 
-DEFAULT_MASKS = [4, 3, 7, 0x33, 0x37, 0x3f, 0x70f, 0x63f]      # decoder.s pcm_default_masks
 REQUIRED = {'term 1', 'term 2', 'term 3', 'term 4', 'term 5', 'term 6', 'term 7', 'term 8', 'term 17', 'term 18',
             'term -1', 'term -2', 'term -3', 'zero run', 'escaped ones', 'error limit', 'hybrid', 'hybrid bitrate',
             'joint stereo', 'false stereo', 'extra bits', 'integer extra bits', 'shift with zeros',
             'shift with ones', 'shift duplicating the low bit', 'lossy 32-bit clipped as 24-bit', 'header shift',
             'float beyond 24 bits', 'float shift with ones', 'float shift with the same bits',
             'float shift with sent bits', 'float zeros sent', 'channel info', 'custom sample rate'}
-
-
-def speaker_weights():
-    """LAMP's stereo weights per WAVE speaker bit, read from decoder.s."""
-    text = (ROOT / 'src' / 'decoder.s').read_text()
-    block = text[text.index('pcm_speaker_weights:'):text.index('pcm_mix_one:')]
-    values = [float(v) for line in re.findall(r'\.double ([^\n#]+)', block) for v in line.split(',')]
-    return [(values[2 * i], values[2 * i + 1]) for i in range(18)]
-
-
-WEIGHTS = speaker_weights()
-
-
-def present(native, channels, mask):
-    """FFmpeg's interleaved float32 channels as LAMP outputs them: mono
-    doubled, stereo as is, other layouts mixed with the speaker weights in
-    double precision (pcm_build_mix, then wv_emit's order of operations)."""
-    mask = mask or DEFAULT_MASKS[channels - 1]
-    count = len(native) // 4 // channels
-    if channels == 1 and mask == 4:
-        values = struct.unpack(f'<{count}I', native)
-        return struct.pack(f'<{2 * count}I', *[v for v in values for _ in (0, 1)])
-    if channels == 2 and mask == 3:
-        return native
-    bits = [b for b in range(18) if mask >> b & 1]
-    coeff = [WEIGHTS[b] for b in bits[:channels]] + [(0.0, 0.0)] * (channels - len(bits))
-    left = right = 0.0
-    for b in bits[:channels]:
-        left += WEIGHTS[b][0]
-        right += WEIGHTS[b][1]
-    scale = (1.0 if len(bits) <= 4 else 2.0) / max(left, right)
-    coeff = [(a * scale, b * scale) for a, b in coeff]
-    data = struct.unpack(f'<{count * channels}f', native)
-    out = []
-    for i in range(0, len(data), channels):
-        sl = sr = 0.0
-        for x, (a, b) in zip(data[i:i + channels], coeff):
-            sl += x * a
-            sr += x * b
-        out += (sl, sr)
-    return struct.pack(f'<{len(out)}f', *out)
 
 
 def layout(data):
@@ -137,7 +94,7 @@ class Suite:
         channels, mask = layout(data)
         native = ffmpeg_native(path, Path(str(path) + '.ffmpeg.f32'), tolerated)
         ours, stats = self.lamp(path)
-        if ours != present(native, channels, mask):
+        if ours != stereo_view(native, channels, mask):
             raise Failure(f'{Path(path).name}: differs from FFmpeg')
         self.checks.append({'test': Path(path).name, 'result': 'exact', 'comparator': 'FFmpeg' if channels <= 2 else
                             'FFmpeg channels mixed with LAMP weights', 'channels': channels, 'layout': note,
@@ -166,7 +123,7 @@ class Suite:
             native = ffmpeg_native(path, Path(str(path) + '.ffmpeg.f32'))
             if native != pcm:
                 raise Failure(f'{name}: FFmpeg differs from the model')
-        if ours != present(pcm, channels, mask):
+        if ours != stereo_view(pcm, channels, mask):
             raise Failure(f'{name}: LAMP differs from the model')
         self.checks.append({'test': f'{name}.wv', 'result': 'exact',
                             'comparator': 'model and FFmpeg' if against_ffmpeg else 'model',

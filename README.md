@@ -57,8 +57,8 @@ The Linux desktop window is not available yet; see the [roadmap](ROADMAP.md).
 
 | Format | Current support |
 | --- | --- |
-| AIFF / AIFC | Signed PCM 1–32-bit, AIFC byte-order/fixed-container variants and float32/64; 1–8 channels, ordered Core Audio layouts, rounded 8–192 kHz output |
-| WAV | Little-endian RIFF/RF64/BW64 audio framing, PCM 8/16/24/32-bit or float32/64; 1–8 channels, extensible valid bits/layouts, 8–192 kHz |
+| AIFF / AIFC | Signed PCM 1–32-bit, AIFC byte-order/fixed-container variants, float32/64 and G.711; 1–8 channels, ordered Core Audio layouts, rounded 8–192 kHz output |
+| WAV | Little-endian RIFF/RF64/BW64 audio framing, PCM 8/16/24/32-bit or float32/64; 1–8 channels, extensible valid bits/layouts, 8–192 kHz; G.711 A-law/µ-law, IMA and Microsoft ADPCM, MPEG audio and AC-3 data; [details](docs/wav.md#compressed-audio) |
 | Native FLAC | 1–8 channels, 4–32-bit, 8–192 kHz; CRC checks; speaker-mask-aware stereo downmix |
 | MP3 | MPEG-1/2/2.5 Layer III, mono/stereo, CBR/VBR, encoder trimming when tagged |
 | MP2 / MP1 | MPEG-1 and MPEG-2 (16–24 kHz) Layers II and I: all allocation tables, stereo/joint/dual/mono, CRC checks; exact seeks |
