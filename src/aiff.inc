@@ -3,7 +3,7 @@
 .data
 aiff_kind: .long 0
 aiff_forced_bits: .long 0
-aiff_ima4: .long 0                  # AIFC ima4: COMM frames count 64-frame packets
+aiff_ima4: .long 0                  # AIFC packets: 1 ima4 (64-frame packets), 2 GSM (160)
 aiff_comm: .quad 0
 aiff_sound: .quad 0
 aiff_sound_end: .quad 0
@@ -227,9 +227,14 @@ LOCALFN aiff_open
     je .Laiff_g711
     cmp ecx, 0x57414c55 # ULAW
     je .Laiff_g711
+    cmp ecx, 0x204d5347 # "GSM ": GSM 06.10 frames
+    je .Laiff_gsm
     cmp ecx, 0x34616d69 # ima4: QuickTime IMA ADPCM packets
     jne .Laiff_try_float
     mov dword ptr [rip + aiff_ima4], 1
+    jmp .Laiff_next
+.Laiff_gsm:
+    mov dword ptr [rip + aiff_ima4], 2
     jmp .Laiff_next
 .Laiff_g711:
     mov [rip + pcm_g711], edx
@@ -344,11 +349,17 @@ LOCALFN aiff_open
     mov [rip + wav_align], edx
     jmp .Laiff_frames
 .Laiff_ima4_depth:
-    # 34 bytes per channel and packet; COMM gives the decoded size.
+    # 34 bytes per channel and packet; COMM gives the decoded size. GSM:
+    # mono 33-byte frames.
     cmp edx, 16
     ja .Laiff_bad
     imul edx, ecx, 34
     mov [rip + wav_align], edx
+    cmp dword ptr [rip + aiff_ima4], 2
+    jne .Laiff_frames
+    cmp ecx, 1
+    jne .Laiff_bad
+    mov dword ptr [rip + wav_align], 33
 .Laiff_frames:
     mov edx, [rax + 2]
     bswap edx
@@ -420,6 +431,10 @@ LOCALFN aiff_open
     jz .Laiff_bad
     lea rcx, [rip + caf_fmt]
     mov word ptr [rcx], 0x4d49              # ADPCM_QT in src/adpcm.s
+    cmp dword ptr [rip + aiff_ima4], 2
+    jne .Laiff_ima4_tag
+    mov word ptr [rcx], 0x5347              # ADPCM_GSM in src/adpcm.s
+.Laiff_ima4_tag:
     mov eax, [rip + source_channels]
     mov [rcx + 2], ax
     mov eax, [rip + sample_rate]
@@ -434,6 +449,16 @@ LOCALFN aiff_open
     cmp rcx, [rip + wav_end]
     jae .Laiff_ima4_done
     mov edx, [rip + wav_align]
+    cmp dword ptr [rip + aiff_ima4], 2
+    jne .Laiff_ima4_size
+    imul edx, edx, 20                       # GSM: 20 frames per packet,
+    mov rax, [rip + wav_end]                # the last whole frames
+    sub rax, rcx
+    cmp rdx, rax
+    cmova rdx, rax
+    cmp edx, 33
+    jb .Laiff_ima4_done
+.Laiff_ima4_size:
     lea rax, [rcx + rdx]
     mov [rsp + 32], rax
     call track_add

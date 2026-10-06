@@ -341,3 +341,30 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 
 The unchanged patch is applied to the test-only normative reference. Its decoder updates are adapted in handwritten runtime assembly.
+
+GSM 06.10 table constants and algorithm reference:
+libgsm 1.0.22 by Jutta Degener and Carsten Bormann, Technische Universitaet Berlin
+http://archive.ubuntu.com/ubuntu/pool/universe/libg/libgsm/libgsm_1.0.22.orig.tar.gz
+
+Copyright 1992, 1993, 1994 by Jutta Degener and Carsten Bormann,
+Technische Universitaet Berlin
+
+Any use of this software is permitted provided that this notice is not
+removed and that neither the authors nor the Technische Universitaet Berlin
+are deemed to have made any representations as to the suitability of this
+software for any purpose nor are held responsible for any defects of
+this software.  THERE IS ABSOLUTELY NO WARRANTY FOR THIS SOFTWARE.
+
+Permission to use, copy, modify, and distribute this software
+for any purpose with or without fee is hereby granted,
+provided that this notice is not removed and that neither
+the authors nor the Technische Universitaet Berlin are
+deemed to have made any representations as to the suitability
+of this software for any purpose nor are held responsible
+for any defects of this software.  THERE IS ABSOLUTELY NO
+WARRANTY FOR THIS SOFTWARE.
+
+The GSM 06.10 decoder (src/gsm.s) is handwritten x86-64 assembly following
+libgsm's fixed-point decoder; its tables (GSM 06.10 tables 4.1-4.6) are checked
+against libgsm's src/table.c by tests/check-gsm-tables.py. No libgsm code is
+linked into either player; FFmpeg's libgsm wrapper is a test oracle only.

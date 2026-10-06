@@ -15,9 +15,10 @@ AIFF uses signed big-endian PCM at every precision from 1 through 32 bits, store
 | `fl32`, `FL32` | Big-endian IEEE float32; COMM precision must be 32 |
 | `fl64`, `FL64` | Big-endian IEEE float64; COMM precision must be 64 |
 | `ima4` | QuickTime IMA ADPCM (34-byte blocks per channel of 64 frames, COMM counting blocks) through the [ADPCM decoder](caf.md), exact against FFmpeg; seeks restart one block early and stay within 127/32768 of continuous decoding |
+| `GSM ` | [GSM 06.10](wav.md#gsm-0610) frames (33 bytes each, mono), packets of 20 frames through the ADPCM decoder, exact against libgsm and FFmpeg |
 | `alaw`, `ALAW`, `ulaw`, `ULAW` | G.711 A-law and mu-law codes in an 8-bit container, expanded to 16 bits as in [WAVE](wav.md#compressed-audio); COMM precision up to 16 |
 
-The numerical policy matches [WAVE](wav.md): double conversion/mixing, one final float rounding, silence for NaN/Inf, and finite float64 inputs/outputs bounded to the float32 range. Native surround/float64 output, configurable limiting and compressed AIFC codecs such as MACE and GSM remain unfinished.
+The numerical policy matches [WAVE](wav.md): double conversion/mixing, one final float rounding, silence for NaN/Inf, and finite float64 inputs/outputs bounded to the float32 range. Native surround/float64 output, configurable limiting and compressed AIFC codecs such as MACE remain unfinished.
 
 ## Framing, rates and seeking
 

@@ -83,6 +83,8 @@ def main():
         print('JMAC (libjmac-java) is not installed; skipping the Monkey\'s Audio suite.', flush=True)
     step(TESTS / 'verify-wav-codecs.py', *playback)
     step(TESTS / 'verify-telephony.py', *playback)
+    step(TESTS / 'check-gsm-tables.py')
+    step(TESTS / 'verify-gsm.py', *playback)
     step(TESTS / 'verify-caf-wave64.py', *playback)
     step(TESTS / 'verify-avi.py', *playback)
     step(TESTS / 'verify-flv.py', *playback)

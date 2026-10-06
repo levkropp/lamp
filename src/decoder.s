@@ -312,6 +312,11 @@ LOCALFN decoder_open_format
     jnz .Lopen_ac3
     mov rcx, [rip + input_cursor]
     mov rdx, [rip + input_end]
+    call gsm_probe                  # raw GSM 06.10 frames (each a 0xD nibble)
+    test eax, eax
+    jnz .Lopen_gsm
+    mov rcx, [rip + input_cursor]
+    mov rdx, [rip + input_end]
     call mp3_open
     test eax, eax
     jz .Lopen_bad
@@ -338,6 +343,14 @@ LOCALFN decoder_open_format
     mov rcx, [rip + input_cursor]
     mov rdx, [rip + input_end]
     call ac3_open
+    test eax, eax
+    jz .Lopen_bad
+    leave
+    ret
+.Lopen_gsm:
+    mov rcx, [rip + input_cursor]
+    mov rdx, [rip + input_end]
+    call gsm_open
     test eax, eax
     jz .Lopen_bad
     leave
@@ -813,6 +826,8 @@ LOCALFN decoder_open_format
     cmp ecx, 0x64
     je .Lwav_codec
     cmp ecx, 0x28f                          # G.722
+    je .Lwav_codec
+    cmp ecx, 0x31                           # GSM 06.10 (Microsoft's blocks)
     je .Lwav_codec
     cmp ecx, 0x50
     je .Lwav_codec

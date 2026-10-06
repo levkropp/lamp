@@ -387,6 +387,20 @@
       "rejected_or_damaged": 32
     },
     {
+      "test": "gsm.wav",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 50,
+      "decoded": 28,
+      "rejected_or_damaged": 22
+    },
+    {
+      "test": "tone.gsm",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 50,
+      "decoded": 31,
+      "rejected_or_damaged": 19
+    },
+    {
       "test": "lpcm.vob",
       "result": "no crash, hang or runaway memory",
       "mutations": 50,
@@ -404,8 +418,8 @@
       "test": "ac3.ts",
       "result": "no crash, hang or runaway memory",
       "mutations": 50,
-      "decoded": 40,
-      "rejected_or_damaged": 10
+      "decoded": 41,
+      "rejected_or_damaged": 9
     },
     {
       "test": "mp2.mpg",
@@ -418,8 +432,8 @@
       "test": "ac3.vob",
       "result": "no crash, hang or runaway memory",
       "mutations": 50,
-      "decoded": 33,
-      "rejected_or_damaged": 17
+      "decoded": 30,
+      "rejected_or_damaged": 20
     },
     {
       "test": "tone.ape",
@@ -432,11 +446,11 @@
       "test": "old.ape",
       "result": "no crash, hang or runaway memory",
       "mutations": 50,
-      "decoded": 1,
-      "rejected_or_damaged": 49
+      "decoded": 2,
+      "rejected_or_damaged": 48
     }
   ],
-  "mutations": 3100,
-  "decoded": 1242,
-  "scope": "62 container/codec sources, 500 mutations each (every tenth under Wine), seed 20261006: byte flips, zero/0xff runs, cuts, removed and duplicated spans, large length fields; --check, every fourth from a random --start."
+  "mutations": 3200,
+  "decoded": 1300,
+  "scope": "64 container/codec sources, 500 mutations each (every tenth under Wine), seed 20261006: byte flips, zero/0xff runs, cuts, removed and duplicated spans, large length fields; --check, every fourth from a random --start."
 }

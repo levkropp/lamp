@@ -95,6 +95,8 @@ SOURCES = [
     ('mp2.ts', NOISE + ['-c:a', 'mp2']),
     ('aac.ts', NOISE + ['-c:a', 'aac']),
     ('latm.ts', NOISE + ['-c:a', 'aac', '-f', 'mpegts', '-mpegts_flags', 'latm']),
+    ('gsm.wav', PHONE + ['-c:a', 'libgsm_ms']),
+    ('tone.gsm', PHONE + ['-c:a', 'libgsm', '-f', 'gsm']),
     ('lpcm.vob', NOISE + ['-ar', '48000', '-c:a', 'pcm_dvd', '-sample_fmt', 's32', '-f', 'vob']),
     ('lpcm.m2ts', SURROUND + ['-c:a', 'pcm_bluray', '-sample_fmt', 's16', '-f', 'mpegts', '-mpegts_m2ts_mode', '1']),
     ('ac3.ts', SURROUND + ['-c:a', 'ac3']),
