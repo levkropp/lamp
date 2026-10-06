@@ -6,10 +6,12 @@ usage: python3 tests/run.py [--quick] [--skip-playback] [--skip-network]
 --quick runs the build, smoke checks, table provenance and the 35 Opus
 component suites, which need no FFmpeg fixtures. Without it, every FFmpeg-based
 suite also runs. On Linux, playback checks use a private PulseAudio null sink
-when PulseAudio is installed. Windows-only WASAPI/GUI checks stay in
+when PulseAudio is installed, and the Windows player runs under Wine on Xvfb
+when both are installed. Windows-only WASAPI/GUI checks stay in
 tests/verify-engine.ps1 and tests/render-ui.ps1.
 """
 from pathlib import Path
+import shutil
 import subprocess
 import sys
 
@@ -84,6 +86,11 @@ def main():
     step(TESTS / 'verify-navigation.py', *playback)
     if not WINDOWS and not playback:
         step(TESTS / 'verify-devices.py')
+    if not WINDOWS and not playback:
+        if shutil.which('wine') and shutil.which('Xvfb'):
+            step(TESTS / 'verify-player.py')
+        else:
+            print('Wine or Xvfb is not installed; skipping the Windows player checks.', flush=True)
     if not WINDOWS and not playback:
         step(TESTS / 'verify-playback.py')
     if '--skip-network' not in arguments:

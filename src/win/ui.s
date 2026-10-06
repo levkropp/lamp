@@ -2,8 +2,9 @@
 # Rhun reference: custom pixel buffer + Win32 presentation, compact monospace
 # chrome. mpv reference: uncluttered canvas and on-screen playback controls.
 .include "lamp.inc"
-.globl ui_width, ui_height, ui_pixels, ui_bmi, ui_state, ui_filename, ui_thread, ui_cover_take
+.globl ui_width, ui_height, ui_pixels, ui_bmi, ui_state, ui_filename, ui_thread, ui_count
 .equ WM_WORKER_DONE, 0x8001
+.equ WM_FILE_OPENED, 0x8002
 .data
 ui_class: .short 'L', 'a', 'm', 'p', 'W', 'i', 'n', 'd', 'o', 'w', 0
 ui_title: .short 'L', 'A', 'M', 'P', ' ', '-', ' ', 'L', 'e', 'v', 39, 's', ' ', 'A', 's', 's', 'e', 'm', 'b', 'l', 'y', ' ', 'M', 'e', 'd', 'i', 'a', ' ', 'P', 'l', 'a', 'y', 'e', 'r', 0
@@ -11,8 +12,12 @@ ui_brand: .short 'l', 'a', 'm', 'p', 0
 ui_assembly: .short 'x', '8', '6', '-', '6', '4', ' ', '/', ' ', 'a', 's', 's', 'e', 'm', 'b', 'l', 'y', 0
 ui_drop: .short 'D', 'r', 'o', 'p', ' ', 'a', 'n', ' ', 'a', 'u', 'd', 'i', 'o', ' ', 'f', 'i', 'l', 'e', 0
 ui_open: .short 'O', 'p', 'e', 'n', ' ', 'f', 'i', 'l', 'e', 0
-ui_hint: .short 'O', ' ', 'o', 'p', 'e', 'n', ' ', ' ', ' ', 'S', 'p', 'a', 'c', 'e', ' ', 'p', 'a', 'u', 's', 'e'
-    .short ' ', ' ', ' ', 'A', 'r', 'r', 'o', 'w', 's', ' ', 's', 'e', 'e', 'k', ' ', '/', ' ', 'v', 'o', 'l', 'u', 'm', 'e', 0
+ui_hint: .short 'O', ' ', 'o', 'p', 'e', 'n', ' ', ' ', ' ', 'S', 'p', 'a', 'c', 'e', ' ', 'p', 'a', 'u', 's', 'e', ' ', ' ', ' ', 'A', 'r', 'r', 'o', 'w', 's', ' '
+    .short 's', 'e', 'e', 'k', ' ', '/', ' ', 'v', 'o', 'l', 'u', 'm', 'e', ' ', ' ', ' ', 'R', ' ', 'r', 'e', 'p', 'e', 'a', 't', 0
+ui_hint_list: .short 'S', 'p', 'a', 'c', 'e', ' ', 'p', 'a', 'u', 's', 'e', ' ', ' ', ' ', 'A', 'r', 'r', 'o', 'w', 's', ' ', 's', 'e', 'e', 'k', ' ', '/', ' ', 'v', 'o'
+    .short 'l', 'u', 'm', 'e', ' ', ' ', ' ', 'N', ' ', '/', ' ', 'P', ' ', 't', 'r', 'a', 'c', 'k', ' ', ' ', ' ', 'R', ' ', 'r', 'e', 'p', 'e', 'a', 't', ' '
+    .short ' ', ' ', 'O', ' ', 'o', 'p', 'e', 'n', 0
+ui_repeat_text: .short 'R', 'E', 'P', 'E', 'A', 'T', 0
 ui_ready: .short 'R', 'E', 'A', 'D', 'Y', 0
 ui_playing: .short 'P', 'L', 'A', 'Y', 'I', 'N', 'G', 0
 ui_paused: .short 'P', 'A', 'U', 'S', 'E', 'D', 0
@@ -45,7 +50,8 @@ ui_filter: .short 'A', 'u', 'd', 'i', 'o', ' ', 'f', 'i', 'l', 'e', 's', 0
     .short '*', '.', 'w', 'a', 'v', ';', '*', '.', 'a', 'i', 'f', ';', '*', '.', 'a', 'i', 'f', 'f', ';', '*', '.', 'a', 'i', 'f', 'c', ';'
     .short '*', '.', 'f', 'l', 'a', 'c', ';', '*', '.', 'm', 'p', '3', ';', '*', '.', 'o', 'g', 'g', ';', '*', '.', 'o', 'p', 'u', 's', ';', '*', '.', 'o', 'g', 'a', ';'
     .short '*', '.', 'm', 'p', '2', ';', '*', '.', 'm', 'p', '1', ';', '*', '.', 'm', 'p', 'a', ';', '*', '.', 'm', 'k', 'a', ';', '*', '.', 'm', 'k', 'v', ';', '*', '.', 'w', 'e', 'b', 'm', ';', '*', '.', 'm', '4', 'a', ';', '*', '.', 'm', '4', 'b', ';', '*', '.', 'm', 'p', '4', ';', '*', '.', 'm', 'o', 'v', ';', '*', '.', 'a', 'a', 'c', ';', '*', '.', 'a', 'c', '3', ';', '*', '.', 'w', 'v', ';', '*', '.', 'c', 'a', 'f', ';', '*', '.', 'w', '6', '4', ';', '*', '.', 'a', 'v', 'i', ';', '*', '.', 'f', 'l', 'v', ';', '*', '.', 'a', 'u', ';', '*', '.', 's', 'n', 'd', ';'
-    .short '*', '.', 't', 's', ';', '*', '.', 'm', '2', 't', 's', ';', '*', '.', 'm', 't', 's', ';', '*', '.', 'm', 'p', 'g', ';', '*', '.', 'm', 'p', 'e', 'g', ';', '*', '.', 'v', 'o', 'b', 0
+    .short '*', '.', 't', 's', ';', '*', '.', 'm', '2', 't', 's', ';', '*', '.', 'm', 't', 's', ';', '*', '.', 'm', 'p', 'g', ';', '*', '.', 'm', 'p', 'e', 'g', ';', '*', '.', 'v', 'o', 'b', ';'
+    .short '*', '.', 'm', '3', 'u', ';', '*', '.', 'm', '3', 'u', '8', ';', '*', '.', 'p', 'l', 's', 0
     .short 'A', 'l', 'l', ' ', 'f', 'i', 'l', 'e', 's', 0, '*', '.', '*', 0, 0
 ui_instance: .quad 0
 ui_hwnd: .quad 0
@@ -82,17 +88,15 @@ ui_client: .zero 4*4
 ui_text_rect: .zero 4*4
 ui_bmi: .zero 40
 ui_ofn: .zero 152
-ui_pending: .zero 4096*2
-ui_path: .zero 4096*2
-ui_filename: .zero 8
-ui_tag_text: .zero 1040*2               # "Artist - Title" from the tags
+ui_filename: .zero 8                    # the name of the file opening
 ui_time_text: .zero 64*2
+ui_list_text: .zero 64*2
 ui_volume_text: .zero 32*2
 .text
 FN ui_start
     sub rsp, 136
     mov dword ptr [rip + engine_mode], 1
-    lea rax, [rip + ui_cover_take]
+    lea rax, [rip + ui_file_opened]
     mov [rip + engine_opened], rax
     mov rcx, -4
     call SetProcessDpiAwarenessContext
@@ -153,11 +157,23 @@ FN ui_start
     test rax, rax
     jz .Lui_message_loop
     cmp dword ptr [rip + ui_argc], 2
-    jne .Lui_free_args
-    mov rcx, [rax + 8]
-    lea rdx, [rip + ui_pending]
-    call ui_copy_path
-    mov dword ptr [rip + engine_seek_seconds], 0
+    jb .Lui_free_args
+    call ui_list_begin                    # the files and folders named: a list
+    test eax, eax
+    jz .Lui_free_args
+    mov dword ptr [rsp + 104], 1
+.Lui_argument:
+    mov eax, [rsp + 104]
+    cmp eax, [rip + ui_argc]
+    jae .Lui_arguments_listed
+    mov rcx, [rsp + 96]
+    mov rcx, [rcx + rax*8]
+    xor edx, edx
+    call ui_list_path
+    inc dword ptr [rsp + 104]
+    jmp .Lui_argument
+.Lui_arguments_listed:
+    call ui_list_end
     call ui_request
 .Lui_free_args:
     mov rcx, [rsp + 96]
@@ -180,22 +196,7 @@ FN ui_start
     call ExitProcess
 ENDFN ui_start
 
-# Bounded Unicode copy. RCX=source, RDX=destination.
-LOCALFN ui_copy_path
-    xor r8d, r8d
-.Lui_copy_char:
-    movzx eax, word ptr [rcx + r8*2]
-    mov [rdx + r8*2], ax
-    test eax, eax
-    jz .Lui_copy_done
-    inc r8d
-    cmp r8d, 4095
-    jb .Lui_copy_char
-    mov word ptr [rdx + r8*2], 0
-.Lui_copy_done:
-    ret
-ENDFN ui_copy_path
-
+# O: files chosen in the open dialog (several at once) become the list.
 LOCALFN ui_open_dialog
     sub rsp, 40
     mov dword ptr [rip + ui_ofn], 152
@@ -204,93 +205,21 @@ LOCALFN ui_open_dialog
     lea rax, [rip + ui_filter]
     mov qword ptr [rip + ui_ofn + 24], rax
     mov dword ptr [rip + ui_ofn + 44], 1
-    lea rax, [rip + ui_pending]
+    lea rax, [rip + ui_dialog_text]
     mov qword ptr [rip + ui_ofn + 48], rax
-    mov dword ptr [rip + ui_ofn + 56], 4096
-    mov dword ptr [rip + ui_ofn + 96], 0x0081008 # EXPLORER | FILEMUSTEXIST | NOCHANGEDIR
-    mov word ptr [rip + ui_pending], 0
+    mov dword ptr [rip + ui_ofn + 56], 65536
+    mov dword ptr [rip + ui_ofn + 96], 0x0081208 # EXPLORER | FILEMUSTEXIST | ALLOWMULTISELECT | NOCHANGEDIR
+    mov word ptr [rip + ui_dialog_text], 0
     lea rcx, [rip + ui_ofn]
     call GetOpenFileNameW
     test eax, eax
     jz .Lui_dialog_done
-    mov dword ptr [rip + engine_seek_seconds], 0
-    mov dword ptr [rip + pause_requested], 0
+    call ui_list_dialog
     call ui_request
 .Lui_dialog_done:
     add rsp, 40
     ret
 ENDFN ui_open_dialog
-
-LOCALFN ui_request
-    sub rsp, 56
-    cmp qword ptr [rip + ui_thread], 0
-    je .Lui_launch
-    mov dword ptr [rip + ui_restart], 1
-    call engine_stop
-    jmp .Lui_request_done
-.Lui_launch:
-    lea rcx, [rip + ui_pending]
-    lea rdx, [rip + ui_path]
-    call ui_copy_path
-    lea rax, [rip + ui_path]
-    mov [rip + ui_filename], rax
-.Lui_basename:
-    movzx ecx, word ptr [rax]
-    test ecx, ecx
-    jz .Lui_basename_done
-    add rax, 2
-    cmp ecx, 0x5c
-    je .Lui_basename_next
-    cmp ecx, 0x2f
-    jne .Lui_basename
-.Lui_basename_next:
-    mov [rip + ui_filename], rax
-    jmp .Lui_basename
-.Lui_basename_done:
-    mov dword ptr [rip + ui_state], 1
-    mov dword ptr [rip + ui_controls], 1
-    mov dword ptr [rip + engine_stop_requested], 0
-    mov dword ptr [rip + engine_ready], 0
-    mov qword ptr [rip + engine_position], 0
-    xor ecx, ecx
-    xor edx, edx
-    lea r8, [rip + ui_audio_thread]
-    xor r9d, r9d
-    mov qword ptr [rsp + 32], 0
-    mov qword ptr [rsp + 40], 0
-    call CreateThread
-    mov [rip + ui_thread], rax
-    test rax, rax
-    jnz .Lui_timer_start
-    mov dword ptr [rip + ui_state], 3
-    jmp .Lui_request_done
-.Lui_timer_start:
-    call GetTickCount64
-    mov [rip + ui_last_activity], rax
-    mov rcx, [rip + ui_hwnd]
-    mov edx, 1
-    mov r8d, 250
-    xor r9d, r9d
-    call SetTimer
-.Lui_request_done:
-    call ui_invalidate
-    add rsp, 56
-    ret
-ENDFN ui_request
-
-LOCALFN ui_audio_thread
-    sub rsp, 40
-    lea rcx, [rip + ui_path]
-    call engine_play
-    mov rcx, [rip + ui_hwnd]
-    mov edx, WM_WORKER_DONE
-    mov r8d, eax
-    xor r9d, r9d
-    call PostMessageW
-    xor eax, eax
-    add rsp, 40
-    ret
-ENDFN ui_audio_thread
 
 LOCALFN ui_invalidate
     sub rsp, 40
@@ -326,36 +255,41 @@ LOCALFN ui_activity
     ret
 ENDFN ui_activity
 
-# EAX=absolute seek seconds, clamped before requesting a decoder restart.
-LOCALFN ui_seek
+# Space: pauses or resumes; with nothing playing, plays the list again
+# from its first file (or opens files when there is none).
+LOCALFN ui_toggle
     sub rsp, 40
-    cmp word ptr [rip + ui_path], 0
-    je .Lui_seek_done
-    test eax, eax
-    jns .Lui_seek_nonnegative
-    xor eax, eax
-.Lui_seek_nonnegative:
-    mov [rsp + 32], eax
-    mov ecx, [rip + output_rate]
-    test ecx, ecx
-    jz .Lui_seek_done
-    mov rax, [rip + output_frames]
+    cmp qword ptr [rip + ui_thread], 0
+    je .Lui_toggle_replay
+    call engine_pause
+    cmp dword ptr [rip + pause_requested], 0
+    jne .Lui_toggle_paused
+    mov rcx, [rip + ui_hwnd]
+    mov edx, 1
+    mov r8d, 250
+    xor r9d, r9d
+    call SetTimer
+.Lui_toggle_paused:
+    call ui_schedule
+    mov dword ptr [rip + ui_controls], 1
+    call ui_invalidate
+    jmp .Lui_toggle_return
+.Lui_toggle_replay:
+    cmp dword ptr [rip + ui_count], 0
+    jne .Lui_toggle_list
+    cmp dword ptr [rip + ui_list_new], 0
+    jne .Lui_toggle_list
+    call ui_open_dialog
+    jmp .Lui_toggle_return
+.Lui_toggle_list:
+    mov dword ptr [rip + pause_requested], 0
+    xor ecx, ecx
     xor edx, edx
-    div rcx
-    test eax, eax
-    jz .Lui_seek_done
-    dec eax
-    cmp eax, [rsp + 32]
-    cmova eax, dword ptr [rsp + 32]
-    mov [rip + engine_seek_seconds], eax
-    lea rcx, [rip + ui_path]
-    lea rdx, [rip + ui_pending]
-    call ui_copy_path
-    call ui_request
-.Lui_seek_done:
+    call ui_play_at
+.Lui_toggle_return:
     add rsp, 40
     ret
-ENDFN ui_seek
+ENDFN ui_toggle
 
 LOCALFN ui_window_proc
     sub rsp, 136
@@ -386,6 +320,10 @@ LOCALFN ui_window_proc
     je .Lui_wm_drop
     cmp edx, WM_WORKER_DONE
     je .Lui_wm_done
+    cmp edx, WM_FILE_OPENED
+    je .Lui_wm_opened
+    cmp edx, 0x319
+    je .Lui_wm_command
     cmp edx, 0x10
     je .Lui_wm_close
     cmp edx, 2
@@ -423,6 +361,8 @@ LOCALFN ui_window_proc
     call ui_activity
     jmp .Lui_handled
 .Lui_wm_timer:
+    cmp r8d, 2
+    je .Lui_timer_heard
     cmp dword ptr [rip + ui_closing], 0
     jne .Lui_timer_quiet
     cmp dword ptr [rip + pause_requested], 0
@@ -449,11 +389,55 @@ LOCALFN ui_window_proc
     mov dword ptr [rip + ui_controls], 1
     call ui_invalidate
     jmp .Lui_handled
+.Lui_timer_heard:
+    call ui_invalidate                    # the next file is heard now
+    call ui_schedule
+    jmp .Lui_handled
+.Lui_wm_opened:
+    call ui_invalidate
+    call ui_schedule
+    jmp .Lui_handled
+.Lui_wm_command:
+    # WM_APPCOMMAND from media keys and remotes.
+    mov eax, r9d
+    shr eax, 16
+    and eax, 0x0fff
+    cmp eax, 11                           # APPCOMMAND_MEDIA_NEXTTRACK
+    je .Lui_command_next
+    cmp eax, 12                           # APPCOMMAND_MEDIA_PREVIOUSTRACK
+    je .Lui_command_previous
+    cmp eax, 14                           # APPCOMMAND_MEDIA_PLAY_PAUSE
+    je .Lui_command_pause
+    call DefWindowProcW
+    jmp .Lui_wm_return
+.Lui_command_next:
+    call ui_next
+    jmp .Lui_command_done
+.Lui_command_previous:
+    call ui_previous
+    jmp .Lui_command_done
+.Lui_command_pause:
+    call ui_toggle
+.Lui_command_done:
+    mov eax, 1
+    jmp .Lui_wm_return
 .Lui_wm_key:
     call ui_activity
     mov r8, [rsp + 112]
     cmp r8d, 0x20
     je .Lui_toggle_pause
+    cmp r8d, 0xb3                         # VK_MEDIA_PLAY_PAUSE
+    je .Lui_toggle_pause
+    cmp r8d, 0x4e                         # N
+    je .Lui_next_key
+    cmp r8d, 0xb0                         # VK_MEDIA_NEXT_TRACK
+    je .Lui_next_key
+    cmp r8d, 0x50                         # P
+    je .Lui_previous_key
+    cmp r8d, 0xb1                         # VK_MEDIA_PREV_TRACK
+    je .Lui_previous_key
+    cmp r8d, 0x52                         # R
+    je .Lui_repeat_key
     cmp r8d, 0x4f
     je .Lui_open_key
     cmp r8d, 0x27
@@ -474,24 +458,24 @@ LOCALFN ui_window_proc
 .Lui_open_key:
     call ui_open_dialog
     jmp .Lui_handled
+.Lui_next_key:
+    call ui_next
+    jmp .Lui_handled
+.Lui_previous_key:
+    call ui_previous
+    jmp .Lui_handled
+.Lui_repeat_key:
+    xor dword ptr [rip + queue_repeat], 1  # read by the queue at the list's end
+    call ui_invalidate
+    jmp .Lui_handled
 .Lui_seek_forward:
-    mov rax, [rip + engine_position]
-    xor edx, edx
-    mov ecx, [rip + output_rate]
-    test ecx, ecx
-    jz .Lui_handled
-    div rcx
-    add eax, 5
+    call ui_heard_position
+    lea rax, [rdx + 5000]
     call ui_seek
     jmp .Lui_handled
 .Lui_seek_backward:
-    mov rax, [rip + engine_position]
-    xor edx, edx
-    mov ecx, [rip + output_rate]
-    test ecx, ecx
-    jz .Lui_handled
-    div rcx
-    sub eax, 5
+    call ui_heard_position
+    lea rax, [rdx - 5000]
     call ui_seek
     jmp .Lui_handled
 .Lui_seek_home:
@@ -524,29 +508,7 @@ LOCALFN ui_window_proc
     call ui_invalidate
     jmp .Lui_handled
 .Lui_toggle_pause:
-    cmp qword ptr [rip + ui_thread], 0
-    je .Lui_replay
-    call engine_pause
-    cmp dword ptr [rip + pause_requested], 0
-    jne .Lui_pause_no_timer
-    mov rcx, [rip + ui_hwnd]
-    mov edx, 1
-    mov r8d, 250
-    xor r9d, r9d
-    call SetTimer
-.Lui_pause_no_timer:
-    mov dword ptr [rip + ui_controls], 1
-    call ui_invalidate
-    jmp .Lui_handled
-.Lui_replay:
-    cmp word ptr [rip + ui_path], 0
-    je .Lui_open_key
-    mov dword ptr [rip + engine_seek_seconds], 0
-    mov dword ptr [rip + pause_requested], 0
-    lea rcx, [rip + ui_path]
-    lea rdx, [rip + ui_pending]
-    call ui_copy_path
-    call ui_request
+    call ui_toggle
     jmp .Lui_handled
 .Lui_wm_click:
     call ui_activity
@@ -569,19 +531,31 @@ LOCALFN ui_window_proc
     sub ecx, 64
     cmp eax, ecx
     ja .Lui_handled
-    mov rdx, [rip + output_frames]
-    mul rdx
+    mov r8, [rip + ui_shown_frames]
+    test r8, r8
+    jz .Lui_handled
+    mul r8
     div rcx
-    mov ecx, [rip + output_rate]
+    mov ecx, [rip + queue_rate]
     test ecx, ecx
     jz .Lui_handled
-    xor edx, edx
+    mov edx, 1000
+    mul rdx
     div rcx
     call ui_seek
     jmp .Lui_handled
 .Lui_transport_click:
     mov eax, r9d
     and eax, 0xffff
+    cmp dword ptr [rip + ui_count], 2
+    jb .Lui_transport_single
+    cmp eax, 47
+    jb .Lui_previous_key
+    cmp eax, 79
+    jb .Lui_toggle_pause
+    cmp eax, 112
+    jb .Lui_next_key
+.Lui_transport_single:
     cmp eax, 95
     jb .Lui_toggle_pause
     mov ecx, [rip + ui_width]
@@ -601,14 +575,7 @@ LOCALFN ui_window_proc
     jmp .Lui_open_key
 .Lui_wm_drop:
     mov rcx, r8
-    xor edx, edx
-    lea r8, [rip + ui_pending]
-    mov r9d, 4096
-    call DragQueryFileW
-    mov rcx, [rsp + 112]
-    call DragFinish
-    mov dword ptr [rip + engine_seek_seconds], 0
-    mov dword ptr [rip + pause_requested], 0
+    call ui_list_drop                     # the dropped files become the list
     call ui_request
     jmp .Lui_handled
 .Lui_wm_done:
@@ -623,20 +590,51 @@ LOCALFN ui_window_proc
     call KillTimer
     cmp dword ptr [rip + ui_closing], 0
     jne .Lui_destroy_now
+    mov rcx, [rip + ui_hwnd]
+    mov edx, 2
+    call KillTimer
     cmp dword ptr [rip + ui_restart], 0
-    je .Lui_done_state
+    je .Lui_done_lost
     mov dword ptr [rip + ui_restart], 0
     call ui_request
     jmp .Lui_handled
+.Lui_done_lost:
+    cmp dword ptr [rip + engine_command], 5
+    jne .Lui_done_repeat
+    mov ecx, [rip + engine_heard_index]   # the endpoint was lost: reopen there
+    mov rdx, [rip + engine_heard_ms]
+    call ui_play_at
+    jmp .Lui_handled
+.Lui_done_repeat:
+    # Repeat turned on after the queue read the last file: the list again.
+    cmp dword ptr [rsp + 112], 0
+    jne .Lui_done_state
+    cmp dword ptr [rip + queue_repeat], 0
+    je .Lui_done_state
+    cmp qword ptr [rip + read_count], 0
+    je .Lui_done_state
+    xor ecx, ecx
+    xor edx, edx
+    call ui_play_at
+    jmp .Lui_handled
 .Lui_done_state:
+    call ui_heard_update
     mov dword ptr [rip + ui_controls], 1
     mov dword ptr [rip + ui_state], 2
     cmp dword ptr [rsp + 112], 0
     je .Lui_done_position
+    cmp dword ptr [rsp + 112], 2          # files skipped or failing in a list that played
+    jne .Lui_done_error
+    cmp qword ptr [rip + read_count], 0
+    jne .Lui_done_position
+.Lui_done_error:
     mov dword ptr [rip + ui_state], 3
     jmp .Lui_done_repaint
 .Lui_done_position:
-    mov rax, [rip + output_frames]
+    mov rax, [rip + ui_shown_frames]      # the last file shown at its end
+    test rax, rax
+    jz .Lui_done_repaint
+    add rax, [rip + ui_shown_start]
     mov [rip + engine_position], rax
 .Lui_done_repaint:
     call ui_invalidate
@@ -690,3 +688,4 @@ LOCALFN ui_window_proc
 ENDFN ui_window_proc
 .include "ui_draw.inc"
 .include "ui_cover.inc"
+.include "ui_queue.inc"

@@ -59,11 +59,14 @@ def resource(rc, out, cli):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--out', default=str(ROOT / 'bin'), help='output directory (default: bin)')
-    parser.add_argument('--tests', action='store_true', help='also build engine-probe.exe and ui-preview.exe')
+    parser.add_argument('--tests', action='store_true',
+                        help='also build engine-probe.exe, ui-preview.exe, ui-list.exe and ui-driver.exe')
     parser.add_argument('--preview-codec', type=int, default=None, help='codec kind shown by ui-preview.exe')
     parser.add_argument('--preview-tags', action='store_true', help='ui-preview.exe shows a tagged title')
     parser.add_argument('--preview-cover', action='store_true',
                         help='ui-preview.exe shows a tagged title with cover art (use --preview-codec 3)')
+    parser.add_argument('--preview-list', action='store_true',
+                        help='ui-preview.exe shows the second file of a list of three, repeating')
     parser.add_argument('--debug', action='store_true', help='emit a PDB')
     args = parser.parse_args()
     out = Path(args.out).resolve()
@@ -73,7 +76,8 @@ def main():
 
     shared = sorted((ROOT / 'src').glob('*.s'))
     windows = sorted((ROOT / 'src/win').glob('*.s'))
-    tests = [ROOT / 'tests/engine-probe.s', ROOT / 'tests/ui-preview.s'] if args.tests else []
+    tests = [ROOT / f'tests/{name}.s' for name in ('engine-probe', 'ui-preview', 'ui-list', 'ui-driver')] \
+        if args.tests else []
 
     def assemble(path):
         obj = obj_dir / (path.stem + '.obj')
@@ -84,6 +88,8 @@ def main():
             defines.append('-defsym=PREVIEW_TAGS=1')
         if path.stem == 'ui-preview' and args.preview_cover:
             defines.append('-defsym=PREVIEW_COVER=1')
+        if path.stem == 'ui-preview' and args.preview_list:
+            defines.append('-defsym=PREVIEW_LIST=1')
         run([mc, '-triple=x86_64-pc-windows-msvc', '-filetype=obj', *defines,
              '-I', ROOT / 'src', '-I', ROOT / 'src/win', '-I', ROOT / 'tests', path, '-o', obj])
         return obj
@@ -114,6 +120,9 @@ def main():
         executable('engine-probe.exe', 'probe_start', 'console', [objects[ROOT / 'tests/engine-probe.s']] + common)
         executable('ui-preview.exe', 'preview_start', 'console',
                    [objects[ROOT / 'tests/ui-preview.s']] + common + [objects[ROOT / 'src/win/ui.s']])
+        executable('ui-list.exe', 'list_start', 'console',
+                   [objects[ROOT / 'tests/ui-list.s']] + common + [objects[ROOT / 'src/win/ui.s']])
+        executable('ui-driver.exe', 'driver_start', 'console', [objects[ROOT / 'tests/ui-driver.s']] + common)
     for name in ('lamp.exe', 'lamp-cli.exe'):
         print(f'{name} {(out / name).stat().st_size}')
 

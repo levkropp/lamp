@@ -1,6 +1,6 @@
 # LAMP 0.4.0-dev technical details
 
-An audio player for Windows and Linux x86-64 and Apple Silicon macOS with handwritten assembly WAV, AIFF/AIFC, FLAC, MP3, Ogg/Vorbis and development Ogg/Opus decoders, plus native assembly interfaces on Windows and macOS. The current Windows console build is **198,656 bytes (194 KiB)**; the graphical build is **206,848 bytes (202 KiB)**. Both include LAMP's icon and version resources. The static Linux `lamp-cli` release build (`./build.sh release`) is **171,136 bytes**. The published v0.3.0 archive retains its earlier four-format build and manifest.
+An audio player for Windows and Linux x86-64 and Apple Silicon macOS with handwritten assembly WAV, AIFF/AIFC, FLAC, MP3, Ogg/Vorbis and development Ogg/Opus decoders, plus native assembly interfaces on Windows and macOS. The current Windows console build is **382,976 bytes (374 KiB)**; the graphical build is **398,336 bytes (389 KiB)**. Both include LAMP's icon and version resources. The static Linux `lamp-cli` release build (`./build.sh release`) is **359,608 bytes**. The published v0.3.0 archive retains its earlier four-format build and manifest.
 
 The dark canvas, compact playback controls and automatic hiding are inspired by mpv. The custom pixel buffer and Win32 presentation follow Rhun's documented assembly UI model. The Windows canvas uses Rhun as a design reference. The Mac build vendors its MIT translator/helper macros and adapts native helpers with attribution; no Rhun branding, fonts or icons are included.
 
@@ -27,20 +27,25 @@ Linux x86-64 builds the same command line with `./build.sh`; paths are UTF-8 byt
 
 | UI control | Action |
 | --- | --- |
-| O or Ctrl+O | Open a file |
-| Space or play/pause button | Pause/resume; replay after completion |
-| Left/Right | Seek backward/forward five seconds |
-| Home | Seek to the start |
+| O or Ctrl+O | Open files (several at once) as the list |
+| File or folder drop | Play the dropped files and folders as the list |
+| Space, play/pause button or media key | Pause/resume; play the list again after completion |
+| N, next button or media key | Next file (the first after the last with repeat) |
+| P, previous button or media key | The file again after 3 s of it, else the previous file |
+| R | Repeat the list on/off |
+| Left/Right | Seek backward/forward five seconds in the file heard |
+| Home | Seek to its start |
 | Timeline click | Seek to that position |
 | Up/Down | Adjust volume by five percentage points |
 | Volume bar click | Set volume |
 | M | Mute/unmute to 100% |
 | Q | Close |
-| File drop | Open the first dropped file |
+
+Files and folders on the command line, dropped or opened play as one gapless list, with playlists expanded and folders read in natural order; the title, picture, time and codec follow the file being heard, and the window's title names it; see [queue notes](queue.md#the-windows-player).
 
 Controls hide after 2.5 seconds of inactivity during playback, and reappear on mouse movement or keyboard input. Idle, paused, finished and hidden-control states stop redraw timers. Visible playback controls update at four frames per second. The window adopts Windows' suggested rectangle on a DPI change; typography and control dimensions currently use fixed pixels.
 
-Console controls are Space to pause/resume and Q/Ctrl+C to stop. QuickEdit is disabled during playback and restored on exit.
+Console controls are Space to pause/resume, N/P for the next/previous file, the arrows to seek, R for repeat and Q/Ctrl+C to stop. QuickEdit is disabled during playback and restored on exit.
 
 Seeking restarts the decoder on a worker. WAV and AIFF/AIFC seek directly by sample offset. Native FLAC selects a preceding seek-table point by binary search and decodes the remaining distance. Tables require bounded offsets, ordered unique sample numbers and valid frame sizes; placeholders are ignored. The selected frame's coded position, sample count and CRC must agree with the table. Fixed/variable frame numbers are decoded canonically and checked throughout playback.
 
@@ -81,7 +86,7 @@ Opus adds 6,768 sample-position/reference PCM seek checks across 141 files. A te
 | MPEG audio Layers I/II | MPEG-1 32/44.1/48 kHz and MPEG-2 16/22.05/24 kHz; Layer I and Layer II with every allocation table and quantizer (grouped 3/5/9-level and 2–16-bit samples), scalefactor selection, stereo/joint/dual/mono and CRC-16; shared index, two-frame pre-roll seeking and polyphase synthesis with Layer III; [details](mp2.md) |
 | MP3 Layer III | MPEG-1/2/2.5, all nine rates 8–48 kHz, mono/stereo, known bitrate CBR/ABR/VBR; reservoir, Huffman/linbits/count1, scalefactors, long/short/mixed blocks, MS/intensity stereo, hybrid/polyphase synthesis |
 | MP3 metadata | Leading ID3v2.2/2.3/2.4 tags (several in a row), a trailing APEv2 tag and a trailing ID3v1 tag skipped; Xing/Info frame counts and encoder delay/padding used for single-file trimming |
-| Queues | Several files as one gapless stream (`lamp-cli` playback, `--check`, `--decode`): the engines read `queue_read`, which opens the next file at each end; later files at another rate are resampled to the first file's rate; unplayable files are skipped (exit 2); M3U/M3U8/PLS playlists expand to their entries; output marks give the file being heard, so console keys move to the next/previous file, seek in it and toggle repeat by restarting the stream at `queue_navigate`'s target; `--start` reads the first file from a time exactly; `--resume` keeps the heard file and position of a stopped list in a state file (`src/resume.s`) and starts there next time; [details](queue.md) |
+| Queues | Several files as one gapless stream (`lamp-cli` playback, `--check`, `--decode`): the engines read `queue_read`, which opens the next file at each end; later files at another rate are resampled to the first file's rate; unplayable files are skipped (exit 2); M3U/M3U8/PLS playlists expand to their entries; output marks give the file being heard, so console keys move to the next/previous file, seek in it and toggle repeat by restarting the stream at `queue_navigate`'s target; the Windows player plays dropped, opened or named files and folders as a list, showing the heard file from a ring of per-file entries noted as files open (`src/win/ui_queue.inc`); `--start` reads the first file from a time exactly; `--resume` keeps the heard file and position of a stopped list in a state file (`src/resume.s`) and starts there next time; [details](queue.md) |
 | Output devices | `--list-devices` from the PulseAudio sink list (GET_SINK_INFO_LIST, read with a generic tagstruct skipper) or WASAPI's active render endpoints with their friendly names; `--device` by name, description or number; a stream killed or an endpoint invalidated during console playback reopens at the heard position, the default output replacing a vanished choice; [details](devices.md) |
 | Tags | Ten normalized keys from ID3v2.2–2.4, ID3v1/1.1, APEv2, Vorbis comments, MP4 `ilst`/QuickTime text atoms, Matroska, RIFF INFO, AIFF and CAF, read after open with FFmpeg's key names and precedence; `lamp-cli --tags`, the Windows title; [details](tags.md) |
 | Chapters | Start times and titles from Vorbis `CHAPTERnnn` comments, FLAC `CUESHEET` tracks, ID3v2.3/2.4 `CHAP` frames, Matroska ChapterAtoms and MP4 `chpl`/QuickTime chapter text tracks, numbered and merged as FFmpeg's `avpriv_new_chapter` does; `lamp-cli --chapters`; [details](chapters.md) |

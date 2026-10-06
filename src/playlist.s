@@ -50,7 +50,8 @@ pl_bytes: .zero PL_ENTRY_MAX
 
 .text
 # RCX=paths, EDX=count -> RAX=paths with playlists expanded, EDX=count. The
-# original list returns when memory is short.
+# original list returns when memory is short. Each call frees the list the
+# previous call returned.
 FN playlist_expand
     push rbx
     push rsi
@@ -59,6 +60,12 @@ FN playlist_expand
     sub rsp, 40
     mov rsi, rcx
     mov edi, edx
+    xor ecx, ecx                          # an earlier expansion's list
+    xchg rcx, [rip + pl_list]
+    call mem_free
+    xor ecx, ecx
+    xchg rcx, [rip + pl_arena]
+    call mem_free
     mov ecx, PL_ENTRIES*8
     call mem_alloc
     test rax, rax

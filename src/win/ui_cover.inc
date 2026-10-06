@@ -1,9 +1,10 @@
 # Cover art in the Windows player, included by src/win/ui.s. MIT, see LICENSE.
-# The playback thread copies the opened file's picture (cover_get) when the
-# file opens, since the mapped file closes with playback. The UI thread
-# decodes it once through the Windows Imaging Component to premultiplied
-# BGRA (at most 1024 pixels a side), box-filters it to the layout's size
-# and blends it into the pixel canvas above the title.
+# The playback or producer thread copies each file's picture (cover_get) as
+# the file opens, since the mapped file closes with playback; the window
+# takes it when that file is heard (ui_queue.inc). The UI thread decodes it
+# once through the Windows Imaging Component to premultiplied BGRA (at most
+# 1024 pixels a side), box-filters it to the layout's size and blends it
+# into the pixel canvas above the title.
 .equ COVER_SOURCE_MAX, 1024
 
 # R8D=source pixel, R10D=destination pixel, R9D=255 - alpha -> EAX=the
@@ -30,7 +31,7 @@
 
 .data
 .p2align 3
-ui_cover_pending: .quad 0            # handed over: an 8-byte size, then the bytes
+ui_cover_pending: .quad 0            # taken from the file heard: an 8-byte size, then the bytes
 ui_cover_block: .quad 0              # the picture shown, in that form
 ui_cover_source: .quad 0             # its decoded pixels
 ui_cover_scaled: .quad 0             # resampled to ui_cover_tw x ui_cover_th
@@ -51,8 +52,9 @@ guid_pbgra: .long 0x6fddc324
     .byte 0xb1, 0x85, 0x3d, 0x77, 0x76, 0x8d, 0xc9, 0x10
 
 .text
-# Engine hook on the playback thread once a file opens.
-FN ui_cover_take
+# The opened file's picture -> RAX=a copy (an 8-byte size, 0 without one,
+# then the bytes), or 0 when memory is short.
+LOCALFN ui_cover_copy
     push rbx
     push rsi
     push rdi
@@ -61,33 +63,24 @@ FN ui_cover_take
     mov rsi, rax
     mov rbx, rdx
     test rax, rax
-    jnz .Lui_cover_take_copy
+    jnz .Lui_cover_copy_block
     xor ebx, ebx                          # no picture: size 0
-.Lui_cover_take_copy:
+.Lui_cover_copy_block:
     lea rcx, [rbx + 8]
     call mem_alloc
     test rax, rax
-    jz .Lui_cover_take_return
+    jz .Lui_cover_copy_return
     mov [rax], rbx
     lea rdi, [rax + 8]
     mov rcx, rbx
     rep movsb
-    xchg [rip + ui_cover_pending], rax
-    test rax, rax
-    jz .Lui_cover_take_paint
-    mov rcx, rax                          # one the UI did not take yet
-    call mem_free
-.Lui_cover_take_paint:
-    cmp qword ptr [rip + ui_hwnd], 0
-    je .Lui_cover_take_return
-    call ui_invalidate
-.Lui_cover_take_return:
+.Lui_cover_copy_return:
     add rsp, 32
     pop rdi
     pop rsi
     pop rbx
     ret
-ENDFN ui_cover_take
+ENDFN ui_cover_copy
 
 # RCX=address of a block pointer: frees the block and clears the pointer.
 LOCALFN ui_cover_free
@@ -594,8 +587,6 @@ LOCALFN ui_cover_place
     sub rsp, 48
     call ui_cover_update
     cmp qword ptr [rip + ui_cover_source], 0
-    je .Lui_place_title
-    cmp dword ptr [rip + engine_ready], 0
     je .Lui_place_title
     mov eax, [rip + ui_state]
     dec eax

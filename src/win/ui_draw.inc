@@ -336,20 +336,22 @@ LOCALFN ui_wide_text
     ret
 ENDFN ui_wide_text
 
-# -> RAX=ui_tag_text holding "Artist - Title" (or the title alone) when the
-# opened file has a title tag, 0 otherwise.
+# RCX=destination of 1040 units -> RAX=it, holding "Artist - Title" (or the
+# title alone) when the opened file has a title tag; 0 otherwise.
 LOCALFN ui_tag_title
     push rsi
     push rdi
     push rbx
-    sub rsp, 32
+    push r12
+    sub rsp, 40
+    mov r12, rcx
     xor ecx, ecx                          # title
     call tags_get
     test rax, rax
     jz .Lui_tag_none
     mov rbx, rax
-    mov [rsp + 24], edx
-    lea rdi, [rip + ui_tag_text]
+    mov [rsp + 32], edx
+    mov rdi, r12
     mov ecx, 1                            # artist
     call tags_get
     test rax, rax
@@ -364,21 +366,125 @@ LOCALFN ui_tag_title
     add rdi, 6
 .Lui_tag_title:
     mov rsi, rbx
-    mov ecx, [rsp + 24]
+    mov ecx, [rsp + 32]
     mov edx, 512
     call ui_wide_text
     mov word ptr [rdi], 0
-    lea rax, [rip + ui_tag_text]
+    mov rax, r12
     jmp .Lui_tag_return
 .Lui_tag_none:
     xor eax, eax
 .Lui_tag_return:
-    add rsp, 32
+    add rsp, 40
+    pop r12
     pop rbx
     pop rdi
     pop rsi
     ret
 ENDFN ui_tag_title
+
+# RCX=wide text, EDX=x where it ends, R8D=y, R9D=RGB colour.
+LOCALFN ui_right_text
+    sub rsp, 56
+    mov [rsp + 40], rcx
+    mov dword ptr [rip + ui_text_rect], 0
+    mov [rip + ui_text_rect + 4], r8d
+    mov [rip + ui_text_rect + 8], edx
+    add r8d, 24
+    mov [rip + ui_text_rect + 12], r8d
+    mov eax, r9d
+    bswap eax
+    shr eax, 8
+    mov edx, eax
+    mov rcx, [rip + ui_dc]
+    call SetTextColor
+    mov rcx, [rip + ui_dc]
+    mov rdx, [rsp + 40]
+    mov r8d, -1
+    lea r9, [rip + ui_text_rect]
+    mov qword ptr [rsp + 32], 0x0000822   # RIGHT | SINGLELINE | NOPREFIX
+    call DrawTextW
+    add rsp, 56
+    ret
+ENDFN ui_right_text
+
+# RCX=wide text, R8D=y: muted, from x=32 to the right margin, ellipsized.
+LOCALFN ui_hint_text
+    sub rsp, 56
+    mov [rsp + 40], rcx
+    mov dword ptr [rip + ui_text_rect], 32
+    mov [rip + ui_text_rect + 4], r8d
+    mov eax, [rip + ui_width]
+    sub eax, 32
+    mov [rip + ui_text_rect + 8], eax
+    add r8d, 24
+    mov [rip + ui_text_rect + 12], r8d
+    mov eax, [rip + ui_muted_color]
+    bswap eax
+    shr eax, 8
+    mov edx, eax
+    mov rcx, [rip + ui_dc]
+    call SetTextColor
+    mov rcx, [rip + ui_dc]
+    mov rdx, [rsp + 40]
+    mov r8d, -1
+    lea r9, [rip + ui_text_rect]
+    mov qword ptr [rsp + 32], 0x0008820   # SINGLELINE | END_ELLIPSIS | NOPREFIX
+    call DrawTextW
+    add rsp, 56
+    ret
+ENDFN ui_hint_text
+
+# ECX=x, EDX=top, R8D=0 for next (a triangle, then a bar) or 1 for previous
+# (a bar, then a triangle): a 13 by 15 pixel button.
+LOCALFN ui_skip_icon
+    push rbx
+    push rsi
+    push rdi
+    push r12
+    sub rsp, 40
+    mov esi, ecx
+    mov edi, edx
+    mov r12d, r8d
+    mov ecx, esi                          # the bar
+    test r12d, r12d
+    jnz .Lui_skip_bar
+    add ecx, 10
+.Lui_skip_bar:
+    mov edx, edi
+    mov r8d, 3
+    mov r9d, 15
+    mov eax, [rip + ui_text_color]
+    call ui_rect
+    xor ebx, ebx
+.Lui_skip_row:
+    mov eax, ebx                          # width: 1 at the ends, 8 in the middle
+    sub eax, 7
+    jns .Lui_skip_width
+    neg eax
+.Lui_skip_width:
+    mov r8d, 8
+    sub r8d, eax
+    mov ecx, esi
+    test r12d, r12d
+    jz .Lui_skip_place
+    add ecx, 13                           # previous: the triangle ends at the right
+    sub ecx, r8d
+.Lui_skip_place:
+    lea edx, [rdi + rbx]
+    mov r9d, 1
+    mov eax, [rip + ui_text_color]
+    call ui_rect
+    inc ebx
+    cmp ebx, 15
+    jb .Lui_skip_row
+    add rsp, 40
+    pop r12
+    pop rdi
+    pop rsi
+    pop rbx
+    ret
+ENDFN ui_skip_icon
 
 FN ui_draw
     push rbx
@@ -390,6 +496,12 @@ FN ui_draw
     call ui_make_buffer
     cmp qword ptr [rip + ui_pixels], 0
     je .Lui_draw_done
+    call ui_heard_update                  # the file being heard
+    xor r12d, r12d                        # transport offset: 10 with a list
+    cmp dword ptr [rip + ui_count], 2
+    jb .Lui_draw_single
+    mov r12d, 10
+.Lui_draw_single:
     mov rdi, [rip + ui_pixels]
     mov eax, [rip + ui_background]
     mov ecx, [rip + ui_width]
@@ -426,20 +538,13 @@ FN ui_draw
     lea rcx, [rip + ui_drop]
     cmp dword ptr [rip + ui_state], 0
     je .Lui_draw_title
-    mov rcx, [rip + ui_filename]
-    cmp dword ptr [rip + ui_state], 3
-    jne .Lui_draw_tagged
     lea rcx, [rip + ui_error]
-    jmp .Lui_draw_title
-.Lui_draw_tagged:
-    cmp dword ptr [rip + engine_ready], 0
+    cmp dword ptr [rip + ui_state], 3
     je .Lui_draw_title
-    mov [rsp + 40], rcx
-    call ui_tag_title                     # the opened file's title, if tagged
-    mov rcx, [rsp + 40]
-    test rax, rax
-    jz .Lui_draw_title
-    mov rcx, rax
+    lea rcx, [rip + ui_shown_title]       # "Artist - Title" or its name
+    cmp word ptr [rcx], 0
+    jne .Lui_draw_title
+    mov rcx, [rip + ui_filename]          # opening
 .Lui_draw_title:
     mov [rsp + 40], rcx
     call ui_cover_place                   # the cover art, above the title
@@ -490,7 +595,52 @@ FN ui_draw
     sub r8d, 23
     mov r9d, [rip + ui_accent]
     call ui_text
-    mov eax, [rip + codec_kind]
+    # The list's state at the right: repeat, and the file heard among them.
+    lea rcx, [rip + ui_list_text]
+    cmp dword ptr [rip + queue_repeat], 0
+    je .Lui_status_position
+    lea rdx, [rip + ui_repeat_text]
+.Lui_status_repeat:
+    movzx eax, word ptr [rdx]
+    test eax, eax
+    jz .Lui_status_repeated
+    mov [rcx], ax
+    add rdx, 2
+    add rcx, 2
+    jmp .Lui_status_repeat
+.Lui_status_repeated:
+    cmp dword ptr [rip + ui_count], 2
+    jb .Lui_status_list
+    mov dword ptr [rcx], 0x00200020
+    mov word ptr [rcx + 4], 0x20
+    add rcx, 6
+.Lui_status_position:
+    cmp dword ptr [rip + ui_count], 2
+    jb .Lui_status_list
+    cmp dword ptr [rip + ui_state], 0
+    je .Lui_status_list
+    mov eax, [rip + ui_shown_index]
+    inc eax
+    call ui_number
+    mov word ptr [rcx], ' '
+    mov word ptr [rcx + 2], '/'
+    mov word ptr [rcx + 4], ' '
+    add rcx, 6
+    mov eax, [rip + ui_count]
+    call ui_number
+.Lui_status_list:
+    mov word ptr [rcx], 0
+    lea rcx, [rip + ui_list_text]
+    cmp word ptr [rcx], 0
+    je .Lui_status_codec
+    mov edx, [rip + ui_width]
+    sub edx, 24
+    mov r8d, [rip + ui_height]
+    sub r8d, 23
+    mov r9d, [rip + ui_muted_color]
+    call ui_right_text
+.Lui_status_codec:
+    mov eax, [rip + ui_shown_codec]
     test eax, eax
     jz .Lui_draw_hints
     cmp eax, 16
@@ -509,11 +659,13 @@ FN ui_draw
     je .Lui_draw_done
 .Lui_draw_controls:
     lea rcx, [rip + ui_hint]
-    mov edx, 32
+    test r12d, r12d
+    jz .Lui_draw_hint
+    lea rcx, [rip + ui_hint_list]
+.Lui_draw_hint:
     mov r8d, [rip + ui_height]
     sub r8d, 164
-    mov r9d, [rip + ui_muted_color]
-    call ui_text
+    call ui_hint_text
     # Timeline and current position.
     mov ecx, 32
     mov edx, [rip + ui_height]
@@ -523,17 +675,22 @@ FN ui_draw
     mov r9d, 4
     mov eax, [rip + ui_line]
     call ui_rect
-    mov rax, [rip + engine_position]
-    cmp qword ptr [rip + total_frames], 0
+    mov rax, [rip + engine_position]      # within the file heard
+    sub rax, [rip + ui_shown_start]
+    jae .Lui_draw_offset
+    xor eax, eax
+.Lui_draw_offset:
+    mov rbx, rax
+    cmp qword ptr [rip + ui_shown_frames], 0
     je .Lui_draw_time
-    cmp rax, [rip + total_frames]
+    cmp rax, [rip + ui_shown_frames]
     jbe .Lui_draw_progress
-    mov rax, [rip + total_frames]
+    mov rax, [rip + ui_shown_frames]
 .Lui_draw_progress:
     mov ecx, [rip + ui_width]
     sub ecx, 64
     mul rcx
-    div qword ptr [rip + total_frames]
+    div qword ptr [rip + ui_shown_frames]
     mov r8d, eax
     mov ecx, 32
     mov edx, [rip + ui_height]
@@ -544,10 +701,10 @@ FN ui_draw
 .Lui_draw_time:
     lea rcx, [rip + ui_time_text]
     xor eax, eax
-    mov r8d, [rip + sample_rate]
+    mov r8d, [rip + queue_rate]
     test r8d, r8d
     jz .Lui_draw_time_current
-    mov rax, [rip + engine_position]
+    mov rax, rbx
     xor edx, edx
     div r8
 .Lui_draw_time_current:
@@ -556,8 +713,8 @@ FN ui_draw
     mov word ptr [rcx + 2], '/'
     mov word ptr [rcx + 4], ' '
     add rcx, 6
-    mov rax, [rip + total_frames]
-    mov r8d, [rip + sample_rate]
+    mov rax, [rip + ui_shown_frames]
+    mov r8d, [rip + queue_rate]
     test r8d, r8d
     jz .Lui_draw_time_total_zero
     xor edx, edx
@@ -569,24 +726,37 @@ FN ui_draw
     call ui_format_time
     mov word ptr [rcx], 0
     lea rcx, [rip + ui_time_text]
-    mov edx, 96
+    lea edx, [r12*2 + 96]
     mov r8d, [rip + ui_height]
     sub r8d, 71
     mov r9d, [rip + ui_text_color]
     call ui_text
+    test r12d, r12d
+    jz .Lui_draw_pause
+    mov ecx, 24                           # previous and next around play/pause
+    mov edx, [rip + ui_height]
+    sub edx, 70
+    mov r8d, 1
+    call ui_skip_icon
+    mov ecx, 86
+    mov edx, [rip + ui_height]
+    sub edx, 70
+    xor r8d, r8d
+    call ui_skip_icon
+.Lui_draw_pause:
     # Play triangle or two pause bars, rasterized directly in assembly.
     cmp qword ptr [rip + ui_thread], 0
     je .Lui_draw_play
     cmp dword ptr [rip + pause_requested], 0
     jne .Lui_draw_play
-    mov ecx, 42
+    lea ecx, [r12 + 42]
     mov edx, [rip + ui_height]
     sub edx, 73
     mov r8d, 5
     mov r9d, 20
     mov eax, [rip + ui_text_color]
     call ui_rect
-    mov ecx, 54
+    lea ecx, [r12 + 54]
     mov edx, [rip + ui_height]
     sub edx, 73
     mov r8d, 5
@@ -604,7 +774,7 @@ FN ui_draw
 .Lui_triangle_width:
     mov r8d, 14
     sub r8d, eax
-    mov ecx, 44
+    lea ecx, [r12 + 44]
     mov edx, [rip + ui_height]
     sub edx, 73
     add edx, ebx

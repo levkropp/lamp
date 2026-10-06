@@ -9,6 +9,9 @@
 .ifndef PREVIEW_COVER
 .equ PREVIEW_COVER, 0
 .endif
+.ifndef PREVIEW_LIST
+.equ PREVIEW_LIST, 0
+.endif
 .data
 preview_name: .short 'l', 'a', 'm', 'p', '-', 'u', 'i', '-', 'p', 'r', 'e', 'v', 'i', 'e', 'w', '.', 'b', 'm', 'p', 0
 .if PREVIEW_CODEC == 6
@@ -21,6 +24,7 @@ preview_header: .byte 'B', 'M'
     .short 0, 0
     .long 54
 preview_file: .quad 0
+preview_paths: .quad preview_track, preview_track, preview_track
 preview_written: .long 0
 # An ID3v2.4 tag read as the opened file's: artist and title (UTF-8).
 preview_id3: .ascii "ID3"
@@ -62,20 +66,30 @@ FN preview_start
     lea rax, [rip + preview_track]
     mov [rip + ui_filename], rax
     mov qword ptr [rip + ui_thread], 1
+    # The file opens as the engine opens it: the ring entry the window shows.
     mov dword ptr [rip + output_rate], 48000
+    mov dword ptr [rip + queue_rate], 48000
     mov qword ptr [rip + output_frames], 5760000
     mov qword ptr [rip + engine_position], 1776000
     mov dword ptr [rip + codec_kind], PREVIEW_CODEC
+    lea rax, [rip + preview_paths]
+    mov [rip + queue_paths], rax
+    mov dword ptr [rip + ui_count], 1
+.if PREVIEW_LIST
+    mov dword ptr [rip + ui_count], 3     # the second of three, repeating
+    mov dword ptr [rip + queue_index], 1
+    mov dword ptr [rip + queue_repeat], 1
+.endif
 .if PREVIEW_COVER
     lea rcx, [rip + preview_id3]
     lea rdx, [rip + preview_apic_end]
     call tags_read
-    call ui_cover_take
 .elseif PREVIEW_TAGS
     lea rcx, [rip + preview_id3]
     lea rdx, [rip + preview_id3_end]
     call tags_read
 .endif
+    call ui_file_opened
     call ui_draw
     cmp qword ptr [rip + ui_pixels], 0
     je .Lpreview_bad
