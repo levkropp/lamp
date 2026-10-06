@@ -75,6 +75,12 @@ mkv_codecs:
     .byte 5
     .ascii "A_AAC"
     .byte 7, 0
+    .byte 5
+    .ascii "A_AC3"
+    .byte 8, 0
+    .byte 6
+    .ascii "A_EAC3"
+    .byte 8, 0                           # recognised; rejects as unsupported
     .byte 0
 .p2align 3
 
@@ -925,6 +931,8 @@ FN mkv_open
     je .Lmkv_config_pcm
     cmp eax, 3
     je .Lmkv_finish
+    cmp eax, 8
+    je .Lmkv_finish                      # AC-3 frames describe themselves
     test rcx, rcx                        # Opus, FLAC, ALAC and AAC need CodecPrivate
     jz .Lmkv_open_bad
     jmp .Lmkv_finish

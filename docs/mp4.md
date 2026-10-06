@@ -10,13 +10,14 @@ A file is recognised by a leading `ftyp`, `moov`, `mdat`, `wide`, `free` or `ski
 | --- | --- |
 | `alac` | Apple Lossless: 16/20/24/32-bit, 1–8 channels in ALAC channel order, 8–192 kHz, frames of up to 65,536 samples |
 | `mp4a` with `esds` object type 0x40 or 0x67 | [AAC-LC or HE-AAC (v1 and v2)](aac.md), configuration from the DecoderSpecificInfo |
+| `ac-3` | [AC-3](ac3.md); the sync frames describe the stream (`dac3` is not needed) |
 | `mp4a` with `esds` object type 0x6B or 0x69, `.mp3` | MPEG audio Layers I–III (MPEG-1 and MPEG-2 rates) |
 | `Opus` with `dOps` | Opus families 0/1 |
 | `fLaC` with `dfLa` | FLAC |
 | `twos`, `sowt`, `in24`, `in32`, `fl32`, `fl64`, `raw `, `lpcm` | QuickTime PCM: 8/16/24/32-bit integer and float32/64 in either byte order (`enda` inside `wave`), version 0/1/2 sound descriptions |
 | `ipcm`, `fpcm` with `pcmC` | ISO/IEC 23003-5 integer and float PCM |
 
-AAC object types other than LC, SBR and PS reject when the track is opened (see [AAC notes](aac.md)); other sample entries are skipped.
+AAC object types other than LC, SBR and PS, and E-AC-3 (`ec-3`), reject when the track is opened (see [AAC](aac.md) and [AC-3](ac3.md) notes); other sample entries are skipped.
 
 ## Samples and timing
 

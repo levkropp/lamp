@@ -12,7 +12,7 @@
 # parametric stereo (HE-AAC v2) makes mono SBR streams stereo. Coupling
 # channels, gain control, prediction and 960-sample frames reject.
 .include "lamp.inc"
-.globl aac_channels, aac_rate_index, aac_random, aac_features, sbr_active
+.globl aac_channels, aac_rate_index, aac_random, aac_features, sbr_active, adts_skip_id3
 
 # aac_features bits, set as decoding meets each tool (for test coverage).
 .equ AF_SHORT, 1                    # eight short windows
@@ -2962,7 +2962,7 @@ ENDFN aac_reverse_table
 # by a 128-byte ID3v1 tag. The CRC, when present, is skipped unchecked.
 
 # RCX=data, RDX=end -> RAX=data after a leading ID3v2 tag (or RCX).
-LOCALFN adts_skip_id3
+FN adts_skip_id3
     mov rax, rcx
     lea r8, [rcx + 10]
     cmp r8, rdx

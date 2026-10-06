@@ -15,9 +15,9 @@
 .data
 usage: .ascii "LAMP 0.4.0-dev - Lev's Assembly Media Player"
 .byte 13, 10
-      .ascii "Handwritten x86-64 assembly: PCM, FLAC, ALAC, MP1/MP2/MP3, AAC-LC/HE-AAC, Vorbis, Opus"
+      .ascii "Handwritten x86-64 assembly: PCM, FLAC, ALAC, MP1/MP2/MP3, AAC-LC/HE-AAC, AC-3, Vorbis, Opus"
       .byte 13, 10
-      .ascii "in WAV, AIFF/AIFC, FLAC, MP3, AAC (ADTS), Ogg, Matroska/WebM and MP4/MOV files."
+      .ascii "in WAV, AIFF/AIFC, FLAC, MP3, AAC (ADTS), AC-3, Ogg, Matroska/WebM and MP4/MOV files."
       .byte 13, 10
       .ascii "Usage: lamp-cli.exe file.mp3"
       .byte 13, 10
@@ -35,7 +35,7 @@ usage: .ascii "LAMP 0.4.0-dev - Lev's Assembly Media Player"
       .byte 13, 10
       .ascii "Opus families 0/1; playback and float export output stereo."
       .byte 13, 10, 0
-open_error: .ascii "Unsupported, malformed, or inaccessible file. Supports WAV, AIFF/AIFC, FLAC, MP1/MP2/MP3, AAC (LC, HE), Ogg (Vorbis, Opus, FLAC), Matroska/WebM and MP4/MOV audio."
+open_error: .ascii "Unsupported, malformed, or inaccessible file. Supports WAV, AIFF/AIFC, FLAC, MP1/MP2/MP3, AAC (LC, HE), AC-3, Ogg (Vorbis, Opus, FLAC), Matroska/WebM and MP4/MOV audio."
 .byte 13, 10, 0
 audio_error: .ascii "Audio endpoint unavailable or WASAPI failed. Try --check to verify decoding."
 .byte 13, 10, 0

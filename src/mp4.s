@@ -45,7 +45,7 @@
 
 RODATA
 # Sample entry FourCC -> track codec (1 PCM, 2 FLAC, 3 MPEG audio, 5 Opus,
-# 6 ALAC, 255 esds-dependent), PCM bits and flags (1 big-endian, 2 float,
+# 6 ALAC, 8 AC-3 (E-AC-3 rejects at open), 255 esds-dependent), PCM bits and flags (1 big-endian, 2 float,
 # 4 signed 8-bit; 8 = from the entry; 16 = from lpcm flags; 32 = pcmC).
 mp4_formats:
     .ascii "mp4a"
@@ -58,6 +58,10 @@ mp4_formats:
     .byte 2, 0, 0, 0
     .ascii "alac"
     .byte 6, 0, 0, 0
+    .ascii "ac-3"
+    .byte 8, 0, 0, 0
+    .ascii "ec-3"
+    .byte 8, 0, 0, 0
     .ascii "sowt"
     .byte 1, 16, 4, 8
     .ascii "twos"
