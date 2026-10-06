@@ -441,9 +441,10 @@ FN ui_draw
     jz .Lui_draw_title
     mov rcx, rax
 .Lui_draw_title:
-    mov edx, [rip + ui_height]
-    sub edx, 72
-    shr edx, 1
+    mov [rsp + 40], rcx
+    call ui_cover_place                   # the cover art, above the title
+    mov edx, eax
+    mov rcx, [rsp + 40]
     call ui_center_text
     mov rcx, [rip + ui_dc]
     mov rdx, [rip + ui_font]

@@ -2,7 +2,7 @@
 # Rhun reference: custom pixel buffer + Win32 presentation, compact monospace
 # chrome. mpv reference: uncluttered canvas and on-screen playback controls.
 .include "lamp.inc"
-.globl ui_width, ui_height, ui_pixels, ui_bmi, ui_state, ui_filename, ui_thread
+.globl ui_width, ui_height, ui_pixels, ui_bmi, ui_state, ui_filename, ui_thread, ui_cover_take
 .equ WM_WORKER_DONE, 0x8001
 .data
 ui_class: .short 'L', 'a', 'm', 'p', 'W', 'i', 'n', 'd', 'o', 'w', 0
@@ -92,6 +92,8 @@ ui_volume_text: .zero 32*2
 FN ui_start
     sub rsp, 136
     mov dword ptr [rip + engine_mode], 1
+    lea rax, [rip + ui_cover_take]
+    mov [rip + engine_opened], rax
     mov rcx, -4
     call SetProcessDpiAwarenessContext
     xor ecx, ecx
@@ -687,3 +689,4 @@ LOCALFN ui_window_proc
     ret
 ENDFN ui_window_proc
 .include "ui_draw.inc"
+.include "ui_cover.inc"
