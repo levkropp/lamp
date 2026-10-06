@@ -61,7 +61,7 @@ ring_pcm: .zero RING_FRAMES*8
 offline_pcm: .zero CHUNK_FRAMES*8
 
 .text
-# Plays the stream already opened with decoder_open. ECX=1 for the console
+# Plays the queue already opened with queue_begin. ECX=1 for the console
 # (messages, Space/Q and Ctrl+C), 0 for API callers. -> EAX=exit code:
 # 0 played, 2 decode error, 3 audio error.
 FN engine_start
@@ -92,7 +92,7 @@ FN engine_start
     mov [rip + terminal_changed], eax
     mov r13d, 0                        # exit code
     mov eax, [rip + engine_seek_seconds]
-    mul dword ptr [rip + output_rate]
+    mul dword ptr [rip + queue_rate]
     shl rdx, 32
     or rax, rdx
     mov rcx, [rip + output_frames]
@@ -141,7 +141,7 @@ FN engine_start
     test rax, rax
     jz .Leng_audio_error
     # Prebuffer three quarters of a second, or the whole stream if shorter.
-    mov eax, [rip + output_rate]
+    mov eax, [rip + queue_rate]
     imul eax, eax, 3
     shr eax, 2
     cmp eax, RING_FRAMES / 2
@@ -172,7 +172,7 @@ FN engine_start
     cmp qword ptr [rip + write_count], 0
     je .Leng_stopped
     mov dword ptr [rip + audio_status], 2
-    mov ecx, [rip + output_rate]
+    mov ecx, [rip + queue_rate]            # the session rate; later files may differ
     mov edx, BUFFER_MS
     call pulse_create_stream
     test eax, eax
@@ -591,7 +591,7 @@ LOCALFN producer
     mov rcx, [rip + engine_seek_frames]
     test rcx, rcx
     jz .Lprod_loop
-    call decoder_seek
+    call queue_seek
     mov [rip + decoded_count], rax
 .Lprod_seek:
     cmp dword ptr [rip + engine_stop_requested], 0
@@ -603,7 +603,7 @@ LOCALFN producer
     cmp rax, rdx
     cmovb edx, eax
     lea rcx, [rip + offline_pcm]
-    call decoder_read
+    call queue_read
     test eax, eax
     jz .Lprod_eof
     add [rip + decoded_count], rax
@@ -632,7 +632,7 @@ LOCALFN producer
 .Lprod_contiguous:
     lea rcx, [rip + ring_pcm]
     lea rcx, [rcx + rsi*8]
-    call decoder_read
+    call queue_read
     test eax, eax
     jz .Lprod_eof
     add [rip + decoded_count], rax
@@ -660,13 +660,7 @@ LOCALFN producer
     mov r8d, -1
     call poll_wait
     jmp .Lprod_loop
-.Lprod_eof:
-    mov rax, [rip + output_frames]
-    test rax, rax
-    jz .Lprod_exit
-    cmp rax, [rip + decoded_count]
-    je .Lprod_exit
-    mov dword ptr [rip + decode_error], 5
+.Lprod_eof:                             # the queue checked each file's length
 .Lprod_exit:
     mov dword ptr [rip + producer_done], 1
     mov ecx, [rip + data_event]

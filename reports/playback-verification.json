@@ -10,104 +10,111 @@
       "result": "bit-exact",
       "frames": 76800,
       "compared_frames": 76320,
-      "stats": "codec=1 rate=48000 channels=2 bits=24 frames=76800 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3055 cpu_us=5473 endpoint_dry=0"
+      "stats": "codec=1 rate=48000 channels=2 bits=24 frames=76800 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3038 cpu_us=5955 endpoint_dry=0"
     },
     {
       "test": "noise.aiff",
       "result": "bit-exact",
       "frames": 76800,
       "compared_frames": 76320,
-      "stats": "codec=6 rate=48000 channels=2 bits=16 frames=76800 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3053 cpu_us=5330 endpoint_dry=0"
+      "stats": "codec=6 rate=48000 channels=2 bits=16 frames=76800 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3050 cpu_us=5960 endpoint_dry=0"
     },
     {
       "test": "noise.flac",
       "result": "bit-exact",
       "frames": 76800,
       "compared_frames": 76320,
-      "stats": "codec=2 rate=48000 channels=2 bits=24 frames=76800 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3030 cpu_us=11053 endpoint_dry=0"
+      "stats": "codec=2 rate=48000 channels=2 bits=24 frames=76800 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3041 cpu_us=9171 endpoint_dry=0"
     },
     {
       "test": "noise.mp3",
       "result": "bit-exact",
       "frames": 76800,
       "compared_frames": 76320,
-      "stats": "codec=3 rate=48000 channels=2 bits=0 frames=76800 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3030 cpu_us=9380 endpoint_dry=0"
+      "stats": "codec=3 rate=48000 channels=2 bits=0 frames=76800 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3012 cpu_us=11207 endpoint_dry=0"
     },
     {
       "test": "noise.ogg",
       "result": "bit-exact",
       "frames": 76800,
       "compared_frames": 76320,
-      "stats": "codec=4 rate=48000 channels=2 bits=32 frames=76800 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2989 cpu_us=16565 endpoint_dry=0"
+      "stats": "codec=4 rate=48000 channels=2 bits=32 frames=76800 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3017 cpu_us=16284 endpoint_dry=0"
     },
     {
       "test": "noise.opus",
       "result": "bit-exact",
       "frames": 76800,
       "compared_frames": 76320,
-      "stats": "codec=5 rate=48000 channels=2 bits=32 frames=76800 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3024 cpu_us=12760 endpoint_dry=0"
+      "stats": "codec=5 rate=48000 channels=2 bits=32 frames=76800 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3022 cpu_us=14637 endpoint_dry=0"
     },
     {
       "test": "surround-5.1.flac",
       "result": "bit-exact",
       "frames": 76800,
       "compared_frames": 76320,
-      "stats": "codec=2 rate=48000 channels=6 bits=24 frames=76800 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3031 cpu_us=11316 endpoint_dry=0"
+      "stats": "codec=2 rate=48000 channels=6 bits=24 frames=76800 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3034 cpu_us=10366 endpoint_dry=0"
     },
     {
       "test": "surround-5.1.ogg",
       "result": "bit-exact",
       "frames": 76800,
       "compared_frames": 76320,
-      "stats": "codec=4 rate=48000 channels=6 bits=32 frames=76800 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2968 cpu_us=26557 endpoint_dry=0"
+      "stats": "codec=4 rate=48000 channels=6 bits=32 frames=76800 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2969 cpu_us=28546 endpoint_dry=0"
     },
     {
       "test": "surround-5.1.opus",
       "result": "bit-exact",
       "frames": 76800,
       "compared_frames": 76320,
-      "stats": "codec=5 rate=48000 channels=6 bits=32 frames=76800 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3006 cpu_us=20088 endpoint_dry=0"
+      "stats": "codec=5 rate=48000 channels=6 bits=32 frames=76800 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2994 cpu_us=22702 endpoint_dry=0"
     },
     {
       "test": "chain.ogg",
       "result": "bit-exact",
       "frames": 76800,
       "compared_frames": 76320,
-      "stats": "codec=5 rate=48000 channels=2 bits=32 frames=76800 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2930 cpu_us=21291 endpoint_dry=0"
+      "stats": "codec=5 rate=48000 channels=2 bits=32 frames=76800 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2887 cpu_us=20353 endpoint_dry=0"
+    },
+    {
+      "test": "gapless queue",
+      "result": "bit-exact",
+      "frames": 115200,
+      "compared_frames": 114720,
+      "stats": "codec=1 rate=48000 channels=2 bits=16 frames=115200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3672 cpu_us=19416 endpoint_dry=0"
     },
     {
       "test": "pause/resume continuity",
       "result": "passed",
       "pauses": 2,
-      "maximum_pause_boundary_frames": 114,
-      "stats": "codec=2 rate=48000 channels=2 bits=24 frames=336000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=9607 cpu_us=35675 endpoint_dry=0"
+      "maximum_pause_boundary_frames": 46,
+      "stats": "codec=2 rate=48000 channels=2 bits=24 frames=336000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=9585 cpu_us=35745 endpoint_dry=0"
     },
     {
       "test": "quit with Q",
       "result": "stopped",
       "seconds": 1.52,
-      "stats": "codec=2 rate=48000 channels=2 bits=16 frames=271744 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1514 cpu_us=11485 endpoint_dry=0"
+      "stats": "codec=2 rate=48000 channels=2 bits=16 frames=271744 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1515 cpu_us=11304 endpoint_dry=0"
     },
     {
       "test": "Ctrl+C",
       "result": "stopped",
       "seconds": 1.52,
-      "stats": "codec=2 rate=48000 channels=2 bits=16 frames=288000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1515 cpu_us=12893 endpoint_dry=0"
+      "stats": "codec=2 rate=48000 channels=2 bits=16 frames=288000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1517 cpu_us=12897 endpoint_dry=0"
     },
     {
       "test": "8000 Hz 1 channel(s), server resampling",
       "result": "played",
-      "stats": "codec=2 rate=8000 channels=1 bits=16 frames=6400 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2743 cpu_us=1341 endpoint_dry=0"
+      "stats": "codec=2 rate=8000 channels=1 bits=16 frames=6400 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2671 cpu_us=1514 endpoint_dry=0"
     },
     {
       "test": "44100 Hz 2 channel(s), server resampling",
       "result": "played",
-      "stats": "codec=2 rate=44100 channels=2 bits=16 frames=35280 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2740 cpu_us=2059 endpoint_dry=0"
+      "stats": "codec=2 rate=44100 channels=2 bits=16 frames=35280 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2736 cpu_us=3001 endpoint_dry=0"
     },
     {
       "test": "96000 Hz 2 channel(s), server resampling",
       "result": "played",
-      "stats": "codec=2 rate=96000 channels=2 bits=16 frames=76800 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2745 cpu_us=4656 endpoint_dry=0"
+      "stats": "codec=2 rate=96000 channels=2 bits=16 frames=76800 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2737 cpu_us=3826 endpoint_dry=0"
     },
     {
       "test": "missing server",

@@ -19,13 +19,15 @@ usage: .ascii "LAMP 0.4.0-dev - Lev's Assembly Media Player"
       .byte 13, 10
       .ascii "in WAV/W64, AIFF/AIFC, CAF, FLAC, WavPack, MP3, AAC (ADTS), AC-3, Ogg, Matroska/WebM, MP4/MOV, AVI, FLV and MPEG-TS/PS files."
       .byte 13, 10
-      .ascii "Usage: lamp-cli.exe file.mp3"
+      .ascii "Usage: lamp-cli.exe file.mp3 [more files...]"
       .byte 13, 10
-      .ascii "       lamp-cli.exe --check file.flac"
+      .ascii "       lamp-cli.exe --check file.flac [more files...]"
       .byte 13, 10
-      .ascii "       lamp-cli.exe --decode file.flac output.f32"
+      .ascii "       lamp-cli.exe --decode file.flac [more files...] output.f32"
       .byte 13, 10
       .ascii "       lamp-cli.exe --tags file.mp3"
+      .byte 13, 10
+      .ascii "Several files play one after another without a gap, at the first file's rate."
       .byte 13, 10
       .ascii "Playback: Space pauses/resumes; Q or Ctrl+C stops."
       .byte 13, 10
@@ -71,6 +73,12 @@ newline: .byte 13, 10, 0
 check_arg: .short '-', '-', 'c', 'h', 'e', 'c', 'k', 0
 decode_arg: .short '-', '-', 'd', 'e', 'c', 'o', 'd', 'e', 0
 tags_arg: .short '-', '-', 't', 'a', 'g', 's', 0
+skipped_text: .ascii "Skipped a file that is unsupported, malformed, or inaccessible."
+.byte 13, 10, 0
+.p2align 3
+input_list: .quad 0                  # the files to play, as argv pointers
+input_count: .quad 0
+engine_path: .quad 0                 # engine_play's file, a queue of one
 equals_text: .asciz "="
 line_end: .byte 13, 10, 0
 audio_task: .short 'A', 'u', 'd', 'i', 'o', 0
@@ -176,10 +184,15 @@ FN engine_play
     mov [rip + engine_seek_frames], rax
     lea rax, [rip + engine_stop_requested]
     mov [rip + ogg_cancel_ptr], rax
-    call decoder_open
+    mov [rip + engine_path], rcx
+    mov qword ptr [rip + queue_skipped], 0
+    mov qword ptr [rip + queue_announce], 0
+    lea rcx, [rip + engine_path]
+    mov edx, 1
+    call queue_begin
     test eax, eax
     jz bad_input
-    mov eax, [rip + output_rate]
+    mov eax, [rip + queue_rate]
     mul qword ptr [rip + engine_seek_frames]
     cmp qword ptr [rip + output_frames], 0
     je .Lengine_seek_limit_ready
@@ -236,10 +249,14 @@ FN start
     test eax, eax
     jz .Ltry_decode
     cmp dword ptr [rip + argc], 3
-    jne .Lshow_help
+    jb .Lshow_help
     mov dword ptr [rip + operation], 1
     mov rax, [rip + argv]
-    mov rcx, [rax + 16]
+    add rax, 16
+    mov [rip + input_list], rax
+    mov eax, [rip + argc]
+    sub eax, 2
+    mov [rip + input_count], rax
     jmp .Lopen_input
 .Ltry_decode:
     mov rax, [rip + argv]
@@ -251,9 +268,14 @@ FN start
     cmp dword ptr [rip + argc], 3
     jne .Lshow_help
     mov dword ptr [rip + operation], 3
+    lea rax, [rip + engine_stop_requested]
+    mov [rip + ogg_cancel_ptr], rax
     mov rax, [rip + argv]
     mov rcx, [rax + 16]
-    jmp .Lopen_input
+    call decoder_open
+    test eax, eax
+    jz bad_input
+    jmp .Ltags_only
 .Ltry_decode_arg:
     mov rax, [rip + argv]
     mov rcx, [rax + 8]
@@ -262,10 +284,11 @@ FN start
     test eax, eax
     jz .Lplay_args
     cmp dword ptr [rip + argc], 4
-    jne .Lshow_help
+    jb .Lshow_help
     mov dword ptr [rip + operation], 2
     mov rax, [rip + argv]
-    mov rcx, [rax + 24]
+    mov ecx, [rip + argc]
+    mov rcx, [rax + rcx*8 - 8]          # the last argument
     mov edx, 0x40000000
     xor r8d, r8d
     xor r9d, r9d
@@ -277,24 +300,34 @@ FN start
     cmp rax, -1
     je .Lbad_output
     mov rax, [rip + argv]
-    mov rcx, [rax + 16]
+    add rax, 16
+    mov [rip + input_list], rax
+    mov eax, [rip + argc]
+    sub eax, 3
+    mov [rip + input_count], rax
     jmp .Lopen_input
 .Lplay_args:
-    cmp dword ptr [rip + argc], 2
-    jne .Lshow_help
     mov rax, [rip + argv]
-    mov rcx, [rax + 8]
+    add rax, 8
+    mov [rip + input_list], rax
+    mov eax, [rip + argc]
+    dec eax
+    mov [rip + input_count], rax
 .Lopen_input:
     lea rax, [rip + engine_stop_requested]
     mov [rip + ogg_cancel_ptr], rax
-    call decoder_open
+    lea rax, [rip + report_skipped]
+    mov [rip + queue_skipped], rax
+    mov rcx, [rip + input_list]
+    mov edx, [rip + input_count]
+    call queue_begin                    # files play one after another
     test eax, eax
     jz bad_input
-    cmp dword ptr [rip + operation], 3
-    je .Ltags_only
     cmp dword ptr [rip + operation], 0
     jne .Loffline_loop
     call print_tags
+    lea rax, [rip + announce_next]
+    mov [rip + queue_announce], rax
     jmp start_playback
 .Ltags_only:
     call print_tags
@@ -302,7 +335,7 @@ FN start
 .Loffline_loop:
     lea rcx, [rip + offline_pcm]
     mov edx, CHUNK_FRAMES
-    call decoder_read
+    call queue_read
     test eax, eax
     jz .Loffline_finished
     add [rip + decoded_count], rax
@@ -323,12 +356,7 @@ FN start
     jne .Lbad_output
     jmp .Loffline_loop
 .Loffline_finished:
-    cmp dword ptr [rip + decode_error], 0
-    jne .Ldecoding_failed
-    mov rax, [rip + output_frames]
-    test rax, rax
-    jz .Lreport_finish
-    cmp rax, [rip + decoded_count]
+    cmp dword ptr [rip + decode_error], 0   # the queue checks each file's length
     jne .Ldecoding_failed
     jmp .Lreport_finish
 .Ldecoding_failed:
@@ -412,7 +440,7 @@ start_playback:
     call qword ptr [rax + 24]
     test eax, eax
     js .Lbad_audio
-    mov eax, [rip + output_rate]
+    mov eax, [rip + queue_rate]            # the session rate; later files may differ
     mov dword ptr [rip + wavefmt + 4], eax
     shl eax, 3
     mov dword ptr [rip + wavefmt + 8], eax
@@ -458,7 +486,7 @@ start_playback:
     mov [rip + producer_thread], rax
     test rax, rax
     jz .Lbad_audio
-    mov eax, [rip + output_rate]
+    mov eax, [rip + queue_rate]
     mov ecx, 3
     mul ecx
     shr eax, 2
@@ -726,7 +754,7 @@ LOCALFN producer
     cmp dword ptr [rip + engine_mode], 0
     je .Lproducer_loop
     mov rcx, [rip + engine_seek_frames]
-    call decoder_seek
+    call queue_seek
     mov [rip + decoded_count], rax
 .Lproducer_seek:
     mov rcx, [rip + stop_event]
@@ -741,7 +769,7 @@ LOCALFN producer
     cmp rax, rdx
     cmovb edx, eax
     lea rcx, [rip + offline_pcm]
-    call decoder_read
+    call queue_read
     test eax, eax
     jz .Lproducer_eof
     add [rip + decoded_count], rax
@@ -773,7 +801,7 @@ LOCALFN producer
 .Lproducer_contiguous:
     lea rcx, [rip + ring_pcm]
     lea rcx, [rcx + rsi*8]
-    call decoder_read
+    call queue_read
     test eax, eax
     jz .Lproducer_eof
     add [rip + decoded_count], rax
@@ -795,13 +823,7 @@ LOCALFN producer
     cmp eax, 1
     je .Lproducer_loop
     jmp .Lproducer_exit
-.Lproducer_eof:
-    mov rax, [rip + output_frames]
-    test rax, rax
-    jz .Lproducer_exit
-    cmp rax, [rip + decoded_count]
-    je .Lproducer_exit
-    mov dword ptr [rip + decode_error], 5
+.Lproducer_eof:                         # the queue checked each file's length
 .Lproducer_exit:
     mov dword ptr [rip + producer_done], 1
     mov rcx, [rip + data_event]
@@ -1041,6 +1063,25 @@ LOCALFN print_text
     ret
 ENDFN print_text
 
+# Queue hook: RCX=path (wide) of a file that does not play.
+LOCALFN report_skipped
+    sub rsp, 40
+    lea rcx, [rip + skipped_text]
+    call print_text
+    add rsp, 40
+    ret
+ENDFN report_skipped
+
+# Queue hook during playback: the next file's tags after a blank line.
+LOCALFN announce_next
+    sub rsp, 40
+    lea rcx, [rip + line_end]
+    call print_text
+    call print_tags
+    add rsp, 40
+    ret
+ENDFN announce_next
+
 # Writes the opened file's tags as "key=value" lines (UTF-8); control
 # characters in values print as spaces.
 LOCALFN print_tags
@@ -1140,7 +1181,7 @@ LOCALFN report_stats
     call print_number
     lea rcx, [rip + stats_b]
     call print_text
-    mov ecx, [rip + output_rate]
+    mov ecx, [rip + queue_rate]
     call print_number
     lea rcx, [rip + stats_c]
     call print_text
