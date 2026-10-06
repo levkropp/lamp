@@ -408,9 +408,9 @@ def main():
             raise Failure(f'the end of a did not forget only a: {lines()}')
         others = ''.join(f'{n * 10}\t/other/list-{n}.flac\t/other/list-{n}.flac\n' for n in range(300))
         state.write_text('garbage line\n12x\t/a\t/b\n\t\t\n' + others)
-        code, _ = interactive(['--resume', files['e']], env, [(1.5, b'q')])
+        code, _ = interactive(['--resume', files['d']], env, [(2.5, b'q')])
         saved = lines()
-        if code or len(saved) != 256 or saved[0][1] != absolute(files['e']) or \
+        if code or len(saved) != 256 or saved[0][1] != absolute(files['d']) or \
                 saved[1] != ['0', '/other/list-0.flac', '/other/list-0.flac'] or \
                 saved[-1] != ['2540', '/other/list-254.flac', '/other/list-254.flac']:
             raise Failure(f'the state file was not rewritten as expected: {saved[:3]} ... {saved[-1:]} ({len(saved)})')

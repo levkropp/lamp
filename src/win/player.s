@@ -11,6 +11,8 @@
 .equ RING_FRAMES, 262144
 .equ RING_MASK, RING_FRAMES - 1
 .equ CHUNK_FRAMES, 2048
+.equ RESUME_PATH, 16384               # UTF-8 bytes of a path
+.equ RESUME_WIDE, 4096                # UTF-16 units of a path
 
 .data
 usage: .ascii "LAMP 0.4.0-dev - Lev's Assembly Media Player"
@@ -19,7 +21,7 @@ usage: .ascii "LAMP 0.4.0-dev - Lev's Assembly Media Player"
       .byte 13, 10
       .ascii "in WAV/W64, AIFF/AIFC, CAF, AU, FLAC, WavPack, MP3, AAC (ADTS), AC-3, Ogg, Matroska/WebM, MP4/MOV, AVI, FLV and MPEG-TS/PS files."
       .byte 13, 10
-      .ascii "Usage: lamp-cli.exe [--start TIME] [--repeat] file.mp3 [more files...]"
+      .ascii "Usage: lamp-cli.exe [--start TIME] [--repeat] [--resume] file.mp3 [more files...]"
       .byte 13, 10
       .ascii "       lamp-cli.exe --check [--start TIME] file.flac [more files...]"
       .byte 13, 10
@@ -89,18 +91,31 @@ chapters_arg: .short '-', '-', 'c', 'h', 'a', 'p', 't', 'e', 'r', 's', 0
 cover_arg: .short '-', '-', 'c', 'o', 'v', 'e', 'r', 0
 repeat_arg: .short '-', '-', 'r', 'e', 'p', 'e', 'a', 't', 0
 start_arg: .short '-', '-', 's', 't', 'a', 'r', 't', 0
+resume_arg: .short '-', '-', 'r', 'e', 's', 'u', 'm', 'e', 0
+resume_local: .short 'L', 'O', 'C', 'A', 'L', 'A', 'P', 'P', 'D', 'A', 'T', 'A', 0
+resume_folder_tail: .short 92, 'L', 'A', 'M', 'P', 0
+resume_file_tail: .short 92, 'r', 'e', 's', 'u', 'm', 'e', '.', 't', 'x', 't', 0
+resume_temp_tail: .short '.', 't', 'm', 'p', 0
+resuming_text: .asciz "Resuming at "
 .p2align 3
 cli_modes: .quad check_arg, 1, decode_arg, 2, tags_arg, 3, chapters_arg, 4, cover_arg, 5, 0, 0
 cli_start_ms: .quad 0
 engine_seek_ms: .quad 0              # console: where playback starts in the current file
 engine_heard_ms: .quad 0             # position in the heard file at a command
 cli_repeat: .long 0
+cli_resume: .long 0
+cli_count: .long 0
+.p2align 3
+cli_paths: .quad 0                   # the expanded list
+resume_ms: .quad 0
 arg_index: .long 0
+engine_quit: .long 0                 # Q or Ctrl+C stopped console playback
 engine_command: .long 0              # set by a key: 1 next, 2 previous, 3 seek; 4 the list again
 engine_seek_delta: .long 0           # seconds
 engine_heard_index: .long 0
 console_greeted: .long 0
 time_text: .zero 64
+clock_text: .zero 32
 no_cover: .ascii "No embedded cover art."
 .byte 13, 10, 0
 bytes_text: .ascii " bytes"
@@ -190,6 +205,14 @@ engine_volume: .float 1.0
 
 .bss
 tag_line: .zero 4100
+.p2align 3
+resume_folder: .zero RESUME_WIDE*2
+resume_state: .zero RESUME_WIDE*2
+resume_temp: .zero RESUME_WIDE*2
+resume_wide: .zero RESUME_WIDE*2
+resume_key: .zero RESUME_PATH
+resume_heard: .zero RESUME_PATH
+resume_found: .zero RESUME_PATH
 ring_pcm: .zero RING_FRAMES*8
 offline_pcm: .zero CHUNK_FRAMES*8
 bytes_written: .zero 4
@@ -324,6 +347,14 @@ FN start
     jmp .Lopt_next
 .Lopt_start:
     mov rcx, [rsp + 64]
+    lea rdx, [rip + resume_arg]
+    call equal_wide
+    test eax, eax
+    jz .Lopt_start_name
+    mov dword ptr [rip + cli_resume], 1
+    jmp .Lopt_next
+.Lopt_start_name:
+    mov rcx, [rsp + 64]
     lea rdx, [rip + start_arg]
     call equal_wide
     test eax, eax
@@ -360,10 +391,11 @@ FN start
     lea rax, [rax + rcx*8]
     mov [rip + input_list], rax
     mov eax, [rip + operation]
-    cmp dword ptr [rip + cli_repeat], 0
-    je .Lopt_repeat_checked
+    mov ecx, [rip + cli_repeat]
+    or ecx, [rip + cli_resume]
+    jz .Lopt_repeat_checked
     test eax, eax
-    jnz .Lshow_help                     # --repeat plays
+    jnz .Lshow_help                     # --repeat and --resume play
 .Lopt_repeat_checked:
     cmp eax, 3
     jb .Lopt_queue_mode
@@ -463,19 +495,53 @@ FN start
     mov rcx, [rip + input_list]
     mov edx, [rip + input_count]
     call playlist_expand                # M3U and PLS playlists become their entries
+    mov [rip + cli_paths], rax
+    mov [rip + cli_count], edx
     mov rcx, rax
     call queue_begin                    # files play one after another
     test eax, eax
     jz bad_input
     cmp dword ptr [rip + operation], 0
     jne .Loffline_start
+    mov rax, [rip + cli_start_ms]
+    mov [rip + engine_seek_ms], rax
+    cmp dword ptr [rip + cli_resume], 0
+    je .Lconsole_tags
+    test rax, rax
+    jnz .Lconsole_tags                  # --start wins over --resume
+    mov rcx, [rip + cli_paths]
+    mov edx, [rip + cli_count]
+    call resume_lookup
+    test eax, eax
+    jz .Lconsole_tags
+    mov [rip + engine_seek_ms], rdx
+    cmp ecx, [rip + queue_index]
+    je .Lconsole_resuming
+    mov [rsp + 80], ecx
+    call queue_goto                     # a later file of the list
+    test eax, eax
+    jz bad_input
+    mov ecx, [rsp + 80]
+    cmp ecx, [rip + queue_index]
+    je .Lconsole_resuming
+    mov qword ptr [rip + engine_seek_ms], 0   # it did not open; the next did
+    jmp .Lconsole_tags
+.Lconsole_resuming:
+    lea rcx, [rip + resuming_text]
+    call print_text
+    mov rcx, [rip + engine_seek_ms]
+    lea rdx, [rip + clock_text]
+    call format_clock
+    mov rcx, rax
+    call print_text
+    lea rcx, [rip + line_end]
+    call print_text
+.Lconsole_tags:
     call print_tags
     lea rax, [rip + announce_next]
     mov [rip + queue_announce], rax
     mov eax, [rip + cli_repeat]
     mov [rip + queue_repeat], eax
-    mov rax, [rip + cli_start_ms]
-    mov [rip + engine_seek_ms], rax
     call console_seek
     jmp start_playback
 .Loffline_start:
@@ -859,6 +925,21 @@ start_playback:
     test eax, eax
     jnz start_playback
 .Lstopped_report:
+    cmp dword ptr [rip + engine_mode], 0
+    jne .Lstopped_decode
+    cmp dword ptr [rip + cli_resume], 0
+    je .Lstopped_decode
+    cmp dword ptr [rip + exit_code], 3
+    je .Lstopped_decode
+    xor edx, edx                        # the list ended: forget it
+    cmp dword ptr [rip + engine_quit], 0
+    je .Lstopped_resume
+    call console_note_heard             # stopped: keep where
+    mov edx, 1
+.Lstopped_resume:
+    mov rcx, [rip + cli_paths]
+    call resume_save
+.Lstopped_decode:
     cmp dword ptr [rip + decode_error], 0
     je .Lreport_finish
     mov dword ptr [rip + exit_code], 2
@@ -1219,6 +1300,7 @@ LOCALFN keyboard
     je .Lkeyboard_seek
     cmp eax, 0x51                       # Q
     jne .Lkeyboard_wait
+    mov dword ptr [rip + engine_quit], 1
     mov rcx, [rip + stop_event]
     call SetEvent
     jmp .Lkeyboard_exit
@@ -1371,6 +1453,7 @@ ENDFN console_restart
 
 LOCALFN ctrl_handler
     sub rsp, 40
+    mov dword ptr [rip + engine_quit], 1
     mov rcx, [rip + stop_event]
     test rcx, rcx
     jz .Lctrl_done
@@ -1634,3 +1717,305 @@ LOCALFN close_pointer
     add rsp, 40
     ret
 ENDFN close_pointer
+
+# --resume: RCX=address of the expanded list's paths, EDX=their count ->
+# EAX=1 when the list's key has a saved position in one of its files:
+# ECX=that file's index, RDX=milliseconds.
+LOCALFN resume_lookup
+    push rbx
+    push rsi
+    push rdi
+    push r12
+    sub rsp, 40
+    mov rsi, rcx
+    mov edi, edx
+    call resume_state_path
+    test eax, eax
+    jz .Lresume_lookup_none
+    mov rcx, [rsi]
+    lea rdx, [rip + resume_key]
+    call absolute_utf8
+    test eax, eax
+    jz .Lresume_lookup_none
+    lea rcx, [rip + resume_state]
+    call file_map
+    test rax, rax
+    jz .Lresume_lookup_none
+    mov [rsp + 32], rax                 # view, bytes, token
+    mov rbx, rdx
+    mov r12, r8
+    mov rcx, rax
+    lea rdx, [rax + rdx]
+    lea r8, [rip + resume_key]
+    call resume_find
+    test eax, eax
+    jz .Lresume_lookup_unmap
+    mov [rip + resume_ms], rdx
+    cmp r9d, RESUME_PATH - 1
+    jae .Lresume_lookup_unmap
+    lea r10, [rip + resume_found]      # the heard file, NUL-terminated
+    xor ecx, ecx
+.Lresume_lookup_copy:
+    cmp ecx, r9d
+    jae .Lresume_lookup_copied
+    mov al, [r8 + rcx]
+    mov [r10 + rcx], al
+    inc ecx
+    jmp .Lresume_lookup_copy
+.Lresume_lookup_copied:
+    mov byte ptr [r10 + rcx], 0
+    mov rcx, [rsp + 32]
+    mov rdx, rbx
+    mov r8, r12
+    call file_unmap
+    xor ebx, ebx                        # find it in the list
+.Lresume_lookup_file:
+    cmp ebx, edi
+    jae .Lresume_lookup_none
+    mov rcx, [rsi + rbx*8]
+    lea rdx, [rip + resume_heard]
+    call absolute_utf8
+    test eax, eax
+    jz .Lresume_lookup_next
+    lea rcx, [rip + resume_heard]
+    lea rdx, [rip + resume_found]
+.Lresume_lookup_compare:
+    mov al, [rcx]
+    cmp al, [rdx]
+    jne .Lresume_lookup_next
+    inc rcx
+    inc rdx
+    test al, al
+    jnz .Lresume_lookup_compare
+    mov ecx, ebx
+    mov rdx, [rip + resume_ms]
+    mov eax, 1
+    jmp .Lresume_lookup_return
+.Lresume_lookup_next:
+    inc ebx
+    jmp .Lresume_lookup_file
+.Lresume_lookup_unmap:
+    mov rcx, [rsp + 32]
+    mov rdx, rbx
+    mov r8, r12
+    call file_unmap
+.Lresume_lookup_none:
+    xor eax, eax
+.Lresume_lookup_return:
+    add rsp, 40
+    pop r12
+    pop rdi
+    pop rsi
+    pop rbx
+    ret
+ENDFN resume_lookup
+
+# --resume after playback: RCX=the list's paths, EDX=1 to save the heard
+# file (engine_heard_index, engine_heard_ms), 0 to forget the list. Rewrites
+# the state file through a temporary file; failures are silent.
+LOCALFN resume_save
+    push rbx
+    push rsi
+    push rdi
+    push r12
+    push r13
+    push r14
+    sub rsp, 72
+    mov rsi, rcx
+    mov r13d, edx
+    call resume_state_path
+    test eax, eax
+    jz .Lresume_save_return
+    mov rcx, [rsi]
+    lea rdx, [rip + resume_key]
+    call absolute_utf8
+    test eax, eax
+    jz .Lresume_save_return
+    xor r14d, r14d                      # the heard file, or 0 to forget
+    test r13d, r13d
+    jz .Lresume_save_old
+    mov eax, [rip + engine_heard_index]
+    test eax, eax
+    js .Lresume_save_return
+    mov rcx, [rsi + rax*8]
+    lea rdx, [rip + resume_heard]
+    call absolute_utf8
+    test eax, eax
+    jz .Lresume_save_return
+    lea r14, [rip + resume_heard]
+.Lresume_save_old:
+    xor ebx, ebx                        # the old file (none)
+    xor r12d, r12d
+    mov qword ptr [rsp + 64], 0
+    lea rcx, [rip + resume_state]
+    call file_map
+    test rax, rax
+    jz .Lresume_save_buffer
+    mov rbx, rax
+    mov r12, rdx
+    mov [rsp + 64], r8
+.Lresume_save_buffer:
+    lea rcx, [r12 + 2*RESUME_PATH + 64]
+    call mem_alloc
+    test rax, rax
+    jz .Lresume_save_unmap
+    mov rdi, rax
+    mov rcx, rbx
+    lea rdx, [rbx + r12]
+    lea r8, [rip + resume_key]
+    mov r9, r14
+    mov rax, [rip + engine_heard_ms]
+    mov [rsp + 32], rax
+    mov [rsp + 40], rdi
+    call resume_write
+    mov r13, rax                        # new bytes
+    test rbx, rbx
+    jz .Lresume_save_write
+    mov rcx, rbx
+    mov rdx, r12
+    mov r8, [rsp + 64]
+    call file_unmap
+    xor ebx, ebx
+.Lresume_save_write:
+    lea rcx, [rip + resume_folder]
+    xor edx, edx
+    call CreateDirectoryW               # it may exist
+    lea rcx, [rip + resume_temp]
+    mov edx, 0x40000000                 # GENERIC_WRITE
+    xor r8d, r8d
+    xor r9d, r9d
+    mov qword ptr [rsp + 32], 2         # CREATE_ALWAYS
+    mov qword ptr [rsp + 40], 0x80
+    mov qword ptr [rsp + 48], 0
+    call CreateFileW
+    cmp rax, -1
+    je .Lresume_save_free
+    mov [rsp + 64], rax
+    mov rcx, rax
+    mov rdx, rdi
+    mov r8d, r13d
+    lea r9, [rip + bytes_written]
+    mov qword ptr [rsp + 32], 0
+    call WriteFile
+    mov r12d, eax
+    mov eax, [rip + bytes_written]
+    cmp eax, r13d
+    je .Lresume_save_close
+    xor r12d, r12d
+.Lresume_save_close:
+    mov rcx, [rsp + 64]
+    call CloseHandle
+    test r12d, r12d
+    jz .Lresume_save_free
+    lea rcx, [rip + resume_temp]
+    lea rdx, [rip + resume_state]
+    mov r8d, 1                          # MOVEFILE_REPLACE_EXISTING
+    call MoveFileExW
+.Lresume_save_free:
+    mov rcx, rdi
+    call mem_free
+.Lresume_save_unmap:
+    test rbx, rbx
+    jz .Lresume_save_return
+    mov rcx, rbx
+    mov rdx, r12
+    mov r8, [rsp + 64]
+    call file_unmap
+.Lresume_save_return:
+    add rsp, 72
+    pop r14
+    pop r13
+    pop r12
+    pop rdi
+    pop rsi
+    pop rbx
+    ret
+ENDFN resume_save
+
+# -> EAX=1 with resume_folder = %LOCALAPPDATA%\LAMP, resume_state = its
+# resume.txt and resume_temp = resume.txt.tmp (wide).
+LOCALFN resume_state_path
+    push rsi
+    push rdi
+    sub rsp, 40
+    lea rcx, [rip + resume_local]
+    lea rdx, [rip + resume_folder]
+    mov r8d, RESUME_WIDE - 64
+    call GetEnvironmentVariableW
+    test eax, eax
+    jz .Lresume_state_none
+    cmp eax, RESUME_WIDE - 64
+    jae .Lresume_state_none
+    lea rdi, [rip + resume_folder]
+    lea rdi, [rdi + rax*2]
+    lea rsi, [rip + resume_folder_tail]
+    call resume_append                  # \LAMP
+    lea rsi, [rip + resume_folder]      # \LAMP\resume.txt and .tmp
+    lea rdi, [rip + resume_state]
+    call resume_append
+    lea rsi, [rip + resume_file_tail]
+    call resume_append
+    lea rsi, [rip + resume_state]
+    lea rdi, [rip + resume_temp]
+    call resume_append
+    lea rsi, [rip + resume_temp_tail]
+    call resume_append
+    mov eax, 1
+    jmp .Lresume_state_return
+.Lresume_state_none:
+    xor eax, eax
+.Lresume_state_return:
+    add rsp, 40
+    pop rdi
+    pop rsi
+    ret
+ENDFN resume_state_path
+
+# RSI=wide text, RDI=destination -> RDI at the copy's terminating zero.
+LOCALFN resume_append
+.Lresume_append_char:
+    movzx eax, word ptr [rsi]
+    mov [rdi], ax
+    test eax, eax
+    jz .Lresume_append_done
+    add rsi, 2
+    add rdi, 2
+    jmp .Lresume_append_char
+.Lresume_append_done:
+    ret
+ENDFN resume_append
+
+# RCX=wide path, RDX=destination of RESUME_PATH bytes -> EAX=1 with its
+# full path in UTF-8, 0 when it does not fit.
+LOCALFN absolute_utf8
+    push rbx
+    sub rsp, 64
+    mov rbx, rdx
+    mov edx, RESUME_WIDE
+    lea r8, [rip + resume_wide]
+    xor r9d, r9d
+    call GetFullPathNameW
+    test eax, eax
+    jz .Labsolute_fail
+    cmp eax, RESUME_WIDE
+    jae .Labsolute_fail
+    mov ecx, 65001                      # CP_UTF8
+    xor edx, edx
+    lea r8, [rip + resume_wide]
+    mov r9d, -1
+    mov [rsp + 32], rbx
+    mov qword ptr [rsp + 40], RESUME_PATH
+    mov qword ptr [rsp + 48], 0
+    mov qword ptr [rsp + 56], 0
+    call WideCharToMultiByte
+    test eax, eax
+    jz .Labsolute_fail
+    mov eax, 1
+    jmp .Labsolute_return
+.Labsolute_fail:
+    xor eax, eax
+.Labsolute_return:
+    add rsp, 64
+    pop rbx
+    ret
+ENDFN absolute_utf8

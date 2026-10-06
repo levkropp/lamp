@@ -6,7 +6,7 @@
 # it stopped. Paths are UTF-8; lines that do not have this form are dropped
 # when the file is rewritten. The platforms find, read and write the file.
 .include "lamp.inc"
-.globl resume_find, resume_write
+.globl resume_find, resume_write, format_clock
 
 .equ RESUME_MAX, 256                # lines kept
 
@@ -297,3 +297,61 @@ LOCALFN resume_copy
 .Lresume_copy_done:
     ret
 ENDFN resume_copy
+
+# RCX=milliseconds, RDX=buffer of 32 bytes -> RAX=the NUL-terminated text
+# "H:MM:SS.mmm" within it.
+FN format_clock
+    mov rax, rcx
+    lea r9, [rdx + 31]
+    mov byte ptr [r9], 0
+    xor edx, edx
+    mov ecx, 1000
+    div rcx
+    mov r11, rax                          # seconds
+    mov rax, rdx                          # milliseconds
+    mov r8d, 3
+    mov ecx, 10
+.Lclock_milliseconds:
+    xor edx, edx
+    div ecx
+    add dl, '0'
+    dec r9
+    mov [r9], dl
+    dec r8d
+    jnz .Lclock_milliseconds
+    dec r9
+    mov byte ptr [r9], '.'
+    mov rax, r11
+    mov r8d, 2                            # seconds, then minutes
+.Lclock_field:
+    xor edx, edx
+    mov ecx, 60
+    div rcx
+    mov r11, rax
+    mov eax, edx
+    xor edx, edx
+    mov ecx, 10
+    div ecx
+    add dl, '0'
+    dec r9
+    mov [r9], dl
+    add al, '0'
+    dec r9
+    mov [r9], al
+    dec r9
+    mov byte ptr [r9], ':'
+    mov rax, r11
+    dec r8d
+    jnz .Lclock_field
+    mov ecx, 10                           # hours
+.Lclock_hours:
+    xor edx, edx
+    div rcx
+    add dl, '0'
+    dec r9
+    mov [r9], dl
+    test rax, rax
+    jnz .Lclock_hours
+    mov rax, r9
+    ret
+ENDFN format_clock
