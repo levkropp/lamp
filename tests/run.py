@@ -67,6 +67,7 @@ def main():
     step(TESTS / 'verify-aac.py', *playback)
     step(TESTS / 'verify-heaac.py', *playback)
     step(TESTS / 'verify-ac3.py', *playback)
+    step(TESTS / 'verify-mpegts.py', *playback)
     if not WINDOWS and not playback:
         step(TESTS / 'verify-playback.py')
     if '--skip-network' not in arguments:
