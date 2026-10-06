@@ -5,7 +5,7 @@
 .include "lamp.inc"
 .globl engine_mode, engine_stop_requested
 .globl engine_position, engine_seek_seconds, engine_volume, pause_requested
-.globl engine_ready
+.globl engine_ready, engine_opened
 .globl exit_code, underruns, endpoint_dry
 
 .equ RING_FRAMES, 262144
@@ -89,6 +89,7 @@ space_text: .asciz " "
 skipped_text: .ascii "Skipped a file that is unsupported, malformed, or inaccessible."
 .byte 13, 10, 0
 .p2align 3
+engine_opened: .quad 0               # hook on the playback thread once engine_play opens its file
 input_list: .quad 0                  # the files to play, as argv pointers
 input_count: .quad 0
 engine_path: .quad 0                 # engine_play's file, a queue of one
@@ -205,6 +206,11 @@ FN engine_play
     call queue_begin
     test eax, eax
     jz bad_input
+    mov rax, [rip + engine_opened]
+    test rax, rax
+    jz .Lengine_opened
+    call rax
+.Lengine_opened:
     mov eax, [rip + queue_rate]
     mul qword ptr [rip + engine_seek_frames]
     cmp qword ptr [rip + output_frames], 0

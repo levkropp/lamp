@@ -6,6 +6,9 @@
 .ifndef PREVIEW_TAGS
 .equ PREVIEW_TAGS, 0
 .endif
+.ifndef PREVIEW_COVER
+.equ PREVIEW_COVER, 0
+.endif
 .data
 preview_name: .short 'l', 'a', 'm', 'p', '-', 'u', 'i', '-', 'p', 'r', 'e', 'v', 'i', 'e', 'w', '.', 'b', 'm', 'p', 0
 .if PREVIEW_CODEC == 6
@@ -31,6 +34,24 @@ preview_id3: .ascii "ID3"
     .ascii "Night Drive"
     .byte 0
 preview_id3_end:
+.if PREVIEW_COVER
+# A second, ID3v2.3, tag holding a JPEG front cover.
+preview_apic_tag: .ascii "ID3"
+    .byte 3, 0, 0
+    .byte ((preview_apic_end - preview_apic_frames) >> 21) & 0x7f, ((preview_apic_end - preview_apic_frames) >> 14) & 0x7f
+    .byte ((preview_apic_end - preview_apic_frames) >> 7) & 0x7f, (preview_apic_end - preview_apic_frames) & 0x7f
+preview_apic_frames:
+    .ascii "APIC"
+    .byte ((preview_apic_end - preview_apic_data) >> 24) & 0xff, ((preview_apic_end - preview_apic_data) >> 16) & 0xff
+    .byte ((preview_apic_end - preview_apic_data) >> 8) & 0xff, (preview_apic_end - preview_apic_data) & 0xff
+    .byte 0, 0
+preview_apic_data:
+    .byte 0
+    .asciz "image/jpeg"
+    .byte 3, 0
+    .incbin "ui-preview-cover.jpg"
+preview_apic_end:
+.endif
 .text
 FN preview_start
     sub rsp, 72
@@ -45,7 +66,12 @@ FN preview_start
     mov qword ptr [rip + output_frames], 5760000
     mov qword ptr [rip + engine_position], 1776000
     mov dword ptr [rip + codec_kind], PREVIEW_CODEC
-.if PREVIEW_TAGS
+.if PREVIEW_COVER
+    lea rcx, [rip + preview_id3]
+    lea rdx, [rip + preview_apic_end]
+    call tags_read
+    call ui_cover_take
+.elseif PREVIEW_TAGS
     lea rcx, [rip + preview_id3]
     lea rdx, [rip + preview_id3_end]
     call tags_read

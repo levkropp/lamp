@@ -62,6 +62,8 @@ def main():
     parser.add_argument('--tests', action='store_true', help='also build engine-probe.exe and ui-preview.exe')
     parser.add_argument('--preview-codec', type=int, default=None, help='codec kind shown by ui-preview.exe')
     parser.add_argument('--preview-tags', action='store_true', help='ui-preview.exe shows a tagged title')
+    parser.add_argument('--preview-cover', action='store_true',
+                        help='ui-preview.exe shows a tagged title with cover art (use --preview-codec 3)')
     parser.add_argument('--debug', action='store_true', help='emit a PDB')
     args = parser.parse_args()
     out = Path(args.out).resolve()
@@ -80,8 +82,10 @@ def main():
             defines.append(f'-defsym=PREVIEW_CODEC={args.preview_codec}')
         if path.stem == 'ui-preview' and args.preview_tags:
             defines.append('-defsym=PREVIEW_TAGS=1')
+        if path.stem == 'ui-preview' and args.preview_cover:
+            defines.append('-defsym=PREVIEW_COVER=1')
         run([mc, '-triple=x86_64-pc-windows-msvc', '-filetype=obj', *defines,
-             '-I', ROOT / 'src', '-I', ROOT / 'src/win', path, '-o', obj])
+             '-I', ROOT / 'src', '-I', ROOT / 'src/win', '-I', ROOT / 'tests', path, '-o', obj])
         return obj
 
     with concurrent.futures.ThreadPoolExecutor() as pool:
