@@ -175,27 +175,38 @@ def _packets(pid, payload, counter, start=True):
     return out
 
 
+def transport_pes(payloads, ticks, stream_type, stream_id=0xc0, program_info=b'', m2ts=False):
+    """A transport stream with one PES packet per payload on PID 0x100 as
+    stream_type, PTS advancing by ticks (90 kHz) per packet; program_info
+    holds the map's program descriptors. m2ts: 192-byte packets (a zero
+    four-byte time stamp before each)."""
+    pid, pmt_pid = 0x100, 0x1000
+    pat = b'\x00' + _section(0, 1, (1).to_bytes(2, 'big') + (0xe000 | pmt_pid).to_bytes(2, 'big'))
+    pmt = b'\x00' + _section(2, 1, (0xe000 | pid).to_bytes(2, 'big') + (0xf000 | len(program_info)).to_bytes(2, 'big') +
+                             program_info + bytes([stream_type]) + (0xe000 | pid).to_bytes(2, 'big') + b'\xf0\x00')
+    out = bytearray()
+    counters = {0: [0], pmt_pid: [0], pid: [0]}
+    for k, chunk in enumerate(payloads):
+        if k % 20 == 0:
+            out += _packets(0, pat, counters[0]) + _packets(pmt_pid, pmt, counters[pmt_pid])
+        pts = 90000 + k * ticks
+        stamp = bytes([0x21 | (pts >> 29) & 0x0e, (pts >> 22) & 0xff, 0x01 | (pts >> 14) & 0xfe,
+                       (pts >> 7) & 0xff, 0x01 | (pts << 1) & 0xfe])
+        pes = b'\x00\x00\x01' + bytes([stream_id]) + (len(chunk) + 8).to_bytes(2, 'big') + b'\x80\x80\x05' + stamp + chunk
+        out += _packets(pid, pes, counters[pid])
+    if m2ts:
+        out = b''.join(bytes(4) + out[i:i + 188] for i in range(0, len(out), 188))
+    return bytes(out)
+
+
 def transport(data, rate, per_pes=1, split=0, stream_type=0x11):
     """A transport stream carrying the LOAS stream data as stream_type on PID
     0x100: per_pes LOAS frames per PES packet, the boundary moved split bytes
     into the next frame (so frames straddle PES packets)."""
-    pid, pmt_pid = 0x100, 0x1000
-    pat = b'\x00' + _section(0, 1, (1).to_bytes(2, 'big') + (0xe000 | pmt_pid).to_bytes(2, 'big'))
-    pmt = b'\x00' + _section(2, 1, (0xe000 | pid).to_bytes(2, 'big') + b'\xf0\x00' + bytes([stream_type]) +
-                             (0xe000 | pid).to_bytes(2, 'big') + b'\xf0\x00')
-    units, out = frames(data), bytearray()
-    counters = {0: [0], pmt_pid: [0], pid: [0]}
+    units = frames(data)
     chunks, position = [], 0
     for i in range(0, len(units), per_pes):
         end = sum(len(u) for u in units[:i + per_pes]) + (split if i + per_pes < len(units) else 0)
         chunks.append(data[position:end])
         position = end
-    for k, chunk in enumerate(chunks):
-        if k % 20 == 0:
-            out += _packets(0, pat, counters[0]) + _packets(pmt_pid, pmt, counters[pmt_pid])
-        pts = 90000 + k * per_pes * 1024 * 90000 // rate
-        stamp = bytes([0x21 | (pts >> 29) & 0x0e, (pts >> 22) & 0xff, 0x01 | (pts >> 14) & 0xfe,
-                       (pts >> 7) & 0xff, 0x01 | (pts << 1) & 0xfe])
-        pes = b'\x00\x00\x01\xc0' + (len(chunk) + 8).to_bytes(2, 'big') + b'\x80\x80\x05' + stamp + chunk
-        out += _packets(pid, pes, counters[pid])
-    return bytes(out)
+    return transport_pes(chunks, per_pes * 1024 * 90000 // rate, stream_type)

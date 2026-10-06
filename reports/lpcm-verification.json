@@ -1,0 +1,558 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "dvd-mono-16-48k.vob",
+      "result": "exact",
+      "comparator": "dvd-mono-16-48k.vob.wav"
+    },
+    {
+      "test": "dvd-mono-16-96k.vob",
+      "result": "exact",
+      "comparator": "dvd-mono-16-96k.vob.wav"
+    },
+    {
+      "test": "dvd-mono-24-48k.vob",
+      "result": "exact",
+      "comparator": "dvd-mono-24-48k.vob.wav"
+    },
+    {
+      "test": "dvd-mono-24-96k.vob",
+      "result": "exact",
+      "comparator": "dvd-mono-24-96k.vob.wav"
+    },
+    {
+      "test": "dvd-stereo-16-48k.vob",
+      "result": "exact",
+      "comparator": "dvd-stereo-16-48k.vob.wav"
+    },
+    {
+      "test": "dvd-stereo-16-96k.vob",
+      "result": "exact",
+      "comparator": "dvd-stereo-16-96k.vob.wav"
+    },
+    {
+      "test": "dvd-stereo-24-48k.vob",
+      "result": "exact",
+      "comparator": "dvd-stereo-24-48k.vob.wav"
+    },
+    {
+      "test": "dvd-stereo-24-96k.vob",
+      "result": "exact",
+      "comparator": "dvd-stereo-24-96k.vob.wav"
+    },
+    {
+      "test": "dvd-5.1-16-48k.vob",
+      "result": "exact",
+      "comparator": "dvd-5.1-16-48k.vob.wav"
+    },
+    {
+      "test": "dvd-5.1-16-96k.vob",
+      "result": "exact",
+      "comparator": "dvd-5.1-16-96k.vob.wav"
+    },
+    {
+      "test": "dvd-5.1-24-48k.vob",
+      "result": "exact",
+      "comparator": "dvd-5.1-24-48k.vob.wav"
+    },
+    {
+      "test": "dvd-7.1-16-48k.vob",
+      "result": "exact",
+      "comparator": "dvd-7.1-16-48k.vob.wav"
+    },
+    {
+      "test": "dvd-7.1-24-48k.vob",
+      "result": "exact",
+      "comparator": "dvd-7.1-24-48k.vob.wav"
+    },
+    {
+      "test": "dvd-s16be-1ch-44k.vob",
+      "result": "exact",
+      "comparator": "dvd-s16be-1ch-44k.vob.wav"
+    },
+    {
+      "test": "dvd-s16be-2ch-44k.vob",
+      "result": "exact",
+      "comparator": "dvd-s16be-2ch-44k.vob.wav"
+    },
+    {
+      "test": "dvd-s16be-1ch-32k.vob",
+      "result": "exact",
+      "comparator": "dvd-s16be-1ch-32k.vob.wav"
+    },
+    {
+      "test": "dvd-s16be-2ch-32k.vob",
+      "result": "exact",
+      "comparator": "dvd-s16be-2ch-32k.vob.wav"
+    },
+    {
+      "test": "bd-mono-16-192k.m2ts",
+      "result": "exact",
+      "comparator": "bd-mono-16-192k.m2ts.wav"
+    },
+    {
+      "test": "bd-mono-24-96k.m2ts",
+      "result": "exact",
+      "comparator": "bd-mono-24-96k.m2ts.wav"
+    },
+    {
+      "test": "bd-stereo-16-96k.m2ts",
+      "result": "exact",
+      "comparator": "bd-stereo-16-96k.m2ts.wav"
+    },
+    {
+      "test": "bd-stereo-24-48k.m2ts",
+      "result": "exact",
+      "comparator": "bd-stereo-24-48k.m2ts.wav"
+    },
+    {
+      "test": "bd-3.0-16-192k.m2ts",
+      "result": "exact",
+      "comparator": "bd-3.0-16-192k.m2ts.wav"
+    },
+    {
+      "test": "bd-3.0-24-96k.m2ts",
+      "result": "exact",
+      "comparator": "bd-3.0-24-96k.m2ts.wav"
+    },
+    {
+      "test": "bd-3.0-back-16-48k.m2ts",
+      "result": "exact",
+      "comparator": "bd-3.0-back-16-48k.m2ts.wav"
+    },
+    {
+      "test": "bd-3.0-back-24-192k.m2ts",
+      "result": "exact",
+      "comparator": "bd-3.0-back-24-192k.m2ts.wav"
+    },
+    {
+      "test": "bd-4.0-16-96k.m2ts",
+      "result": "exact",
+      "comparator": "bd-4.0-16-96k.m2ts.wav"
+    },
+    {
+      "test": "bd-4.0-24-48k.m2ts",
+      "result": "exact",
+      "comparator": "bd-4.0-24-48k.m2ts.wav"
+    },
+    {
+      "test": "bd-quad-side-16-192k.m2ts",
+      "result": "exact",
+      "comparator": "bd-quad-side-16-192k.m2ts.wav"
+    },
+    {
+      "test": "bd-quad-side-24-96k.m2ts",
+      "result": "exact",
+      "comparator": "bd-quad-side-24-96k.m2ts.wav"
+    },
+    {
+      "test": "bd-5.0-side-16-48k.m2ts",
+      "result": "exact",
+      "comparator": "bd-5.0-side-16-48k.m2ts.wav"
+    },
+    {
+      "test": "bd-5.0-side-24-192k.m2ts",
+      "result": "exact",
+      "comparator": "bd-5.0-side-24-192k.m2ts.wav"
+    },
+    {
+      "test": "bd-5.1-side-16-96k.m2ts",
+      "result": "exact",
+      "comparator": "bd-5.1-side-16-96k.m2ts.wav"
+    },
+    {
+      "test": "bd-5.1-side-24-48k.m2ts",
+      "result": "exact",
+      "comparator": "bd-5.1-side-24-48k.m2ts.wav"
+    },
+    {
+      "test": "bd-7.0-16-192k.m2ts",
+      "result": "exact",
+      "comparator": "bd-7.0-16-192k.m2ts.wav"
+    },
+    {
+      "test": "bd-7.0-24-96k.m2ts",
+      "result": "exact",
+      "comparator": "bd-7.0-24-96k.m2ts.wav"
+    },
+    {
+      "test": "bd-7.1-16-48k.m2ts",
+      "result": "exact",
+      "comparator": "bd-7.1-16-48k.m2ts.wav"
+    },
+    {
+      "test": "bd-7.1-24-192k.m2ts",
+      "result": "exact",
+      "comparator": "bd-7.1-24-192k.m2ts.wav"
+    },
+    {
+      "test": "written-dvd-1ch-16.vob",
+      "result": "exact",
+      "comparator": "written-dvd-1ch-16.vob.wav",
+      "ffmpeg": "equal to the samples written"
+    },
+    {
+      "test": "written-dvd-1ch-20.vob",
+      "result": "exact",
+      "comparator": "written-dvd-1ch-20.vob.wav",
+      "ffmpeg": "equal to the samples written"
+    },
+    {
+      "test": "written-dvd-1ch-24.vob",
+      "result": "exact",
+      "comparator": "written-dvd-1ch-24.vob.wav",
+      "ffmpeg": "equal to the samples written"
+    },
+    {
+      "test": "written-dvd-2ch-16.vob",
+      "result": "exact",
+      "comparator": "written-dvd-2ch-16.vob.wav",
+      "ffmpeg": "equal to the samples written"
+    },
+    {
+      "test": "written-dvd-2ch-20.vob",
+      "result": "exact",
+      "comparator": "written-dvd-2ch-20.vob.wav",
+      "ffmpeg": "equal to the samples written"
+    },
+    {
+      "test": "written-dvd-2ch-24.vob",
+      "result": "exact",
+      "comparator": "written-dvd-2ch-24.vob.wav",
+      "ffmpeg": "equal to the samples written"
+    },
+    {
+      "test": "written-dvd-3ch-16.vob",
+      "result": "exact",
+      "comparator": "written-dvd-3ch-16.vob.wav",
+      "ffmpeg": "equal to the samples written"
+    },
+    {
+      "test": "written-dvd-3ch-20.vob",
+      "result": "exact",
+      "comparator": "written-dvd-3ch-20.vob.wav",
+      "ffmpeg": "equal to the samples written"
+    },
+    {
+      "test": "written-dvd-3ch-24.vob",
+      "result": "exact",
+      "comparator": "written-dvd-3ch-24.vob.wav",
+      "ffmpeg": "equal to the samples written"
+    },
+    {
+      "test": "written-dvd-4ch-16.vob",
+      "result": "exact",
+      "comparator": "written-dvd-4ch-16.vob.wav",
+      "ffmpeg": "equal to the samples written"
+    },
+    {
+      "test": "written-dvd-4ch-20.vob",
+      "result": "exact",
+      "comparator": "written-dvd-4ch-20.vob.wav",
+      "ffmpeg": "equal to the samples written"
+    },
+    {
+      "test": "written-dvd-4ch-24.vob",
+      "result": "exact",
+      "comparator": "written-dvd-4ch-24.vob.wav",
+      "ffmpeg": "equal to the samples written"
+    },
+    {
+      "test": "written-dvd-5ch-16.vob",
+      "result": "exact",
+      "comparator": "written-dvd-5ch-16.vob.wav",
+      "ffmpeg": "equal to the samples written"
+    },
+    {
+      "test": "written-dvd-5ch-20.vob",
+      "result": "exact",
+      "comparator": "written-dvd-5ch-20.vob.wav",
+      "ffmpeg": "equal to the samples written"
+    },
+    {
+      "test": "written-dvd-5ch-24.vob",
+      "result": "exact",
+      "comparator": "written-dvd-5ch-24.vob.wav",
+      "ffmpeg": "equal to the samples written"
+    },
+    {
+      "test": "written-dvd-6ch-16.vob",
+      "result": "exact",
+      "comparator": "written-dvd-6ch-16.vob.wav",
+      "ffmpeg": "equal to the samples written"
+    },
+    {
+      "test": "written-dvd-6ch-20.vob",
+      "result": "exact",
+      "comparator": "written-dvd-6ch-20.vob.wav",
+      "ffmpeg": "equal to the samples written"
+    },
+    {
+      "test": "written-dvd-6ch-24.vob",
+      "result": "exact",
+      "comparator": "written-dvd-6ch-24.vob.wav",
+      "ffmpeg": "equal to the samples written"
+    },
+    {
+      "test": "written-dvd-7ch-16.vob",
+      "result": "exact",
+      "comparator": "written-dvd-7ch-16.vob.wav",
+      "ffmpeg": "equal to the samples written"
+    },
+    {
+      "test": "written-dvd-7ch-20.vob",
+      "result": "exact",
+      "comparator": "written-dvd-7ch-20.vob.wav",
+      "ffmpeg": "equal to the samples written"
+    },
+    {
+      "test": "written-dvd-7ch-24.vob",
+      "result": "exact",
+      "comparator": "written-dvd-7ch-24.vob.wav",
+      "ffmpeg": "equal to the samples written"
+    },
+    {
+      "test": "written-dvd-8ch-16.vob",
+      "result": "exact",
+      "comparator": "written-dvd-8ch-16.vob.wav",
+      "ffmpeg": "equal to the samples written"
+    },
+    {
+      "test": "written-dvd-8ch-20.vob",
+      "result": "exact",
+      "comparator": "written-dvd-8ch-20.vob.wav",
+      "ffmpeg": "equal to the samples written"
+    },
+    {
+      "test": "written-dvd-8ch-24.vob",
+      "result": "exact",
+      "comparator": "written-dvd-8ch-24.vob.wav",
+      "ffmpeg": "equal to the samples written"
+    },
+    {
+      "test": "written-dvd-two-substreams.vob",
+      "result": "exact",
+      "comparator": "written-dvd-two-substreams.vob.wav",
+      "note": "the first substream (0xA0) plays",
+      "ffmpeg": "equal to the samples written"
+    },
+    {
+      "test": "written-bd-1-16.m2ts",
+      "result": "exact",
+      "comparator": "written-bd-1-16.m2ts.wav",
+      "ffmpeg": "equal to the samples written"
+    },
+    {
+      "test": "written-bd-1-24.m2ts",
+      "result": "exact",
+      "comparator": "written-bd-1-24.m2ts.wav",
+      "ffmpeg": "equal to the samples written"
+    },
+    {
+      "test": "written-bd-3-16.m2ts",
+      "result": "exact",
+      "comparator": "written-bd-3-16.m2ts.wav",
+      "ffmpeg": "equal to the samples written"
+    },
+    {
+      "test": "written-bd-3-24.m2ts",
+      "result": "exact",
+      "comparator": "written-bd-3-24.m2ts.wav",
+      "ffmpeg": "equal to the samples written"
+    },
+    {
+      "test": "written-bd-4-16.ts",
+      "result": "exact",
+      "comparator": "written-bd-4-16.ts.wav",
+      "ffmpeg": "equal to the samples written"
+    },
+    {
+      "test": "written-bd-4-24.ts",
+      "result": "exact",
+      "comparator": "written-bd-4-24.ts.wav",
+      "ffmpeg": "equal to the samples written"
+    },
+    {
+      "test": "written-bd-5-16.m2ts",
+      "result": "exact",
+      "comparator": "written-bd-5-16.m2ts.wav",
+      "ffmpeg": "equal to the samples written"
+    },
+    {
+      "test": "written-bd-5-24.m2ts",
+      "result": "exact",
+      "comparator": "written-bd-5-24.m2ts.wav",
+      "ffmpeg": "equal to the samples written"
+    },
+    {
+      "test": "written-bd-6-16.ts",
+      "result": "exact",
+      "comparator": "written-bd-6-16.ts.wav",
+      "ffmpeg": "equal to the samples written"
+    },
+    {
+      "test": "written-bd-6-24.ts",
+      "result": "exact",
+      "comparator": "written-bd-6-24.ts.wav",
+      "ffmpeg": "equal to the samples written"
+    },
+    {
+      "test": "written-bd-7-16.m2ts",
+      "result": "exact",
+      "comparator": "written-bd-7-16.m2ts.wav",
+      "ffmpeg": "equal to the samples written"
+    },
+    {
+      "test": "written-bd-7-24.m2ts",
+      "result": "exact",
+      "comparator": "written-bd-7-24.m2ts.wav",
+      "ffmpeg": "equal to the samples written"
+    },
+    {
+      "test": "written-bd-8-16.ts",
+      "result": "exact",
+      "comparator": "written-bd-8-16.ts.wav",
+      "ffmpeg": "equal to the samples written"
+    },
+    {
+      "test": "written-bd-8-24.ts",
+      "result": "exact",
+      "comparator": "written-bd-8-24.ts.wav",
+      "ffmpeg": "equal to the samples written"
+    },
+    {
+      "test": "written-bd-9-16.m2ts",
+      "result": "exact",
+      "comparator": "written-bd-9-16.m2ts.wav",
+      "ffmpeg": "equal to the samples written"
+    },
+    {
+      "test": "written-bd-9-24.m2ts",
+      "result": "exact",
+      "comparator": "written-bd-9-24.m2ts.wav",
+      "ffmpeg": "equal to the samples written"
+    },
+    {
+      "test": "written-bd-10-16.ts",
+      "result": "exact",
+      "comparator": "written-bd-10-16.ts.wav",
+      "ffmpeg": "equal to the samples written"
+    },
+    {
+      "test": "written-bd-10-24.ts",
+      "result": "exact",
+      "comparator": "written-bd-10-24.ts.wav",
+      "ffmpeg": "equal to the samples written"
+    },
+    {
+      "test": "written-bd-11-16.m2ts",
+      "result": "exact",
+      "comparator": "written-bd-11-16.m2ts.wav",
+      "ffmpeg": "equal to the samples written"
+    },
+    {
+      "test": "written-bd-11-24.m2ts",
+      "result": "exact",
+      "comparator": "written-bd-11-24.m2ts.wav",
+      "ffmpeg": "equal to the samples written"
+    },
+    {
+      "test": "written-bd-partial.m2ts",
+      "result": "exact",
+      "comparator": "written-bd-partial.m2ts.wav",
+      "note": "seven bytes of a cut frame end each packet; FFmpeg and LAMP drop them",
+      "ffmpeg": "equal to the samples written"
+    },
+    {
+      "test": "written-dvd-6ch-20.vob seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":14,\"discarded_frames\":0,\"maximum_discarded\":0,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "written-dvd-1ch-24.vob seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":14,\"discarded_frames\":0,\"maximum_discarded\":0,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "dvd-stereo-24-48k.vob seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":14,\"discarded_frames\":0,\"maximum_discarded\":0,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "written-bd-9-24.m2ts seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":14,\"discarded_frames\":0,\"maximum_discarded\":0,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "written-bd-partial.m2ts seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":14,\"discarded_frames\":0,\"maximum_discarded\":0,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "bd-stereo-16-96k.m2ts seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":14,\"discarded_frames\":0,\"maximum_discarded\":0,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "dvd-28-bit.vob",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "dvd-mlp.vob",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "dvd-change.vob",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "bd-20-bit.m2ts",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "bd-rate.m2ts",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "bd-assignment.m2ts",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "bd-change.m2ts",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "bd-no-hdmv.ts",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "bd-short.ts",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":100}"
+    },
+    {
+      "test": "bd-empty.m2ts",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":100}"
+    },
+    {
+      "test": "dvd-empty.vob",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":100}"
+    },
+    {
+      "test": "cancel-open written-dvd-6ch-20.vob",
+      "result": "{\"result\":\"cancelled\"}"
+    },
+    {
+      "test": "LPCM playback",
+      "result": "played",
+      "stats": "Playing. Space: pause / resume. N / P: next / previous file. Left / Right: -5 / +5 s. Down / Up: -60 / +60 s. R: repeat. Q or Ctrl+C: stop. codec=18 rate=48000 channels=6 bits=24 frames=2400 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2099 cpu_us=832 endpoint_dry=0"
+    }
+  ],
+  "rejections": 11,
+  "scope": "DVD LPCM in program streams (16/20/24-bit, 1-8 channels, four rates) and Blu-ray LPCM in transport streams (ten channel assignments, 16/24-bit, 48-192 kHz): FFmpeg-written files exact against FFmpeg WAVE copies, written streams exact against their samples in LAMP and FFmpeg; seeks; unsupported and malformed streams; cancellation."
+}

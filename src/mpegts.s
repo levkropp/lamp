@@ -21,6 +21,10 @@
 .equ KIND_PROBE, 5                  # private data without descriptors: by content
 .equ KIND_LATM, 6                   # AAC in LOAS/LATM
 .equ KIND_NONE, 7                   # private data that is not audio
+.equ KIND_DVD, 8                    # DVD LPCM (program streams)
+.equ KIND_BLURAY, 9                 # Blu-ray LPCM (transport streams)
+.equ LPCM_DVD, 1
+.equ LPCM_BLURAY, 2
 
 RODATA
 # Transport packet sizes and the sync byte's offset in each.
@@ -34,6 +38,7 @@ mts_capacity: .quad 0
 mts_packet: .long 0
 mts_offset: .long 0
 mts_unsupported: .long 0            # unsupported audio was seen
+mts_hdmv: .long 0                   # the program carries an HDMV registration
 
 .text
 FN mts_close
@@ -135,10 +140,17 @@ LOCALFN mts_open_stream
     je .Lmts_stream_adts
     cmp eax, KIND_LATM
     je .Lmts_stream_latm
+    cmp eax, KIND_DVD
+    je .Lmts_stream_lpcm
+    cmp eax, KIND_BLURAY
+    je .Lmts_stream_lpcm
     call ac3_open
     jmp .Lmts_stream_return
 .Lmts_stream_adts:
     call adts_open
+    jmp .Lmts_stream_return
+.Lmts_stream_lpcm:
+    call lpcm_image                       # EAX=2: a Wave64 image
     jmp .Lmts_stream_return
 .Lmts_stream_latm:
     call adts_probe                       # ADTS labelled LATM (FFmpeg's -c copy
@@ -156,6 +168,7 @@ LOCALFN mts_open_stream
     mov dword ptr [rip + codec_kind], 3
     jmp .Lmts_stream_return
 .Lmts_stream_bad:
+    mov dword ptr [rip + decode_error], MTS_MALFORMED   # no audio data
     xor eax, eax
 .Lmts_stream_return:
     add rsp, 40
@@ -305,8 +318,14 @@ LOCALFN mts_classify
     mov eax, KIND_LATM
     cmp ecx, 0x11                         # LATM AAC
     je .Lmts_classify_done
+    mov eax, KIND_BLURAY
+    cmp ecx, 0x80                         # Blu-ray LPCM, under an HDMV registration
+    jne .Lmts_classify_other_types
+    cmp dword ptr [rip + mts_hdmv], 0
+    jne .Lmts_classify_done
+.Lmts_classify_other_types:
     mov eax, KIND_OTHER
-    cmp ecx, 0x80                         # Blu-ray LPCM
+    cmp ecx, 0x80
     jb .Lmts_classify_private
     cmp ecx, 0x87                         # DTS, TrueHD, E-AC-3
     jbe .Lmts_classify_done
@@ -513,7 +532,33 @@ FN mts_open
     shl ecx, 8
     movzx edx, byte ptr [rax + 3]
     or ecx, edx                           # program info length
+    lea rdx, [rax + 4]
     lea rax, [rax + rcx + 4]
+    mov dword ptr [rip + mts_hdmv], 0
+.Lmts_open_program_info:
+    lea r8, [rdx + 2]                     # registration descriptors
+    cmp r8, rax
+    ja .Lmts_open_stream
+    movzx r8d, byte ptr [rdx + 1]
+    lea r9, [rdx + r8 + 2]
+    cmp r9, rax
+    ja .Lmts_open_stream
+    cmp r9, r15
+    ja .Lmts_open_stream
+    cmp byte ptr [rdx], 5
+    jne .Lmts_open_program_next
+    cmp r8d, 4
+    jb .Lmts_open_program_next
+    mov r10d, [rdx + 2]
+    cmp r10d, 0x564d4448                  # "HDMV"
+    je .Lmts_open_hdmv
+    cmp r10d, 0x52504448                  # "HDPR"
+    jne .Lmts_open_program_next
+.Lmts_open_hdmv:
+    mov dword ptr [rip + mts_hdmv], 1
+.Lmts_open_program_next:
+    mov rdx, r9
+    jmp .Lmts_open_program_info
 .Lmts_open_stream:
     lea rcx, [rax + 5]
     cmp rcx, r15
@@ -581,6 +626,8 @@ FN mts_open
     jmp .Lmts_open_bad
 .Lmts_open_gather:
     # Pass 2: the selected stream's PES payloads, headers removed.
+    mov ecx, LPCM_BLURAY
+    call lpcm_begin
     mov rbx, rsi
     xor r15d, r15d                        # inside a PES packet
 .Lmts_open_packet:
@@ -613,6 +660,17 @@ FN mts_open
     test rax, rax
     jz .Lmts_open_packet_next
     mov r15d, 1
+    cmp r14d, KIND_BLURAY
+    jne .Lmts_open_packet_probe
+    mov rcx, rax                          # each packet's LPCM header
+    call lpcm_bluray_packet
+    cmp eax, 1
+    je .Lmts_open_packet_next
+    test eax, eax
+    jz .Lmts_open_bad
+    mov dword ptr [rip + decode_error], MTS_UNSUPPORTED
+    jmp .Lmts_open_bad
+.Lmts_open_packet_probe:
     cmp r14d, KIND_PROBE
     jne .Lmts_open_packet_data
     call mts_identify
@@ -814,10 +872,36 @@ FN mps_open
     jb .Lmps_open_skip
     cmp r8d, 0x87
     jbe .Lmps_open_private_ac3
-    cmp r8d, 0xa0                         # DTS 0x88-0x8F, LPCM 0xA0-0xA7
+    cmp r8d, 0xa0                         # DTS 0x88-0x8F, SDDS 0x90-0x97
     jb .Lmps_open_private_other
     cmp r8d, 0xa7
+    jbe .Lmps_open_private_lpcm
+    jmp .Lmps_open_skip
+.Lmps_open_private_lpcm:
+    or r8d, 0xbd00
+    cmp r12d, -1
+    jne .Lmps_open_lpcm_selected
+    lea rcx, [rax + 7]
+    cmp rcx, rdx
     ja .Lmps_open_skip
+    cmp byte ptr [rax + 6], 0x80          # dynamic range control off: LPCM, as
+    jne .Lmps_open_private_other          # FFmpeg tells it from MLP
+    mov r12d, r8d
+    mov r13d, KIND_DVD
+    mov ecx, LPCM_DVD
+    call lpcm_begin
+.Lmps_open_lpcm_selected:
+    cmp r8d, r12d
+    jne .Lmps_open_skip
+    mov rcx, rax
+    mov rdx, [rsp + 40]
+    call lpcm_dvd_packet
+    cmp eax, 1
+    je .Lmps_open_skip
+    test eax, eax
+    jz .Lmps_open_bad
+    mov dword ptr [rip + decode_error], MTS_UNSUPPORTED
+    jmp .Lmps_open_bad
 .Lmps_open_private_other:
     mov dword ptr [rip + mts_unsupported], 1
     jmp .Lmps_open_skip
