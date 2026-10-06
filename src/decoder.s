@@ -224,6 +224,16 @@ LOCALFN decoder_open_format
     je .Lopen_mp4
     mov rcx, [rip + input_cursor]
     mov rdx, [rip + input_end]
+    call mps_probe                  # MPEG program stream (.mpg, .vob)
+    test eax, eax
+    jnz .Lopen_mps
+    mov rcx, [rip + input_cursor]
+    mov rdx, [rip + input_end]
+    call mts_probe                  # MPEG transport stream (.ts, .m2ts)
+    test eax, eax
+    jnz .Lopen_mts
+    mov rcx, [rip + input_cursor]
+    mov rdx, [rip + input_end]
     call adts_probe                 # ADTS AAC; MPEG audio never uses layer 0
     test eax, eax
     jnz .Lopen_adts
@@ -252,6 +262,22 @@ LOCALFN decoder_open_format
     mov rcx, [rip + input_cursor]
     mov rdx, [rip + input_end]
     call ac3_open
+    test eax, eax
+    jz .Lopen_bad
+    leave
+    ret
+.Lopen_mts:
+    mov rcx, [rip + input_cursor]
+    mov rdx, [rip + input_end]
+    call mts_open
+    test eax, eax
+    jz .Lopen_bad
+    leave
+    ret
+.Lopen_mps:
+    mov rcx, [rip + input_cursor]
+    mov rdx, [rip + input_end]
+    call mps_open
     test eax, eax
     jz .Lopen_bad
     leave
@@ -1768,6 +1794,7 @@ FN decoder_close
     call vorbis_close
     call flac_ogg_close
     call ogg_close
+    call mts_close                  # after the decoders reading its buffer
     mov rcx, [rip + flac_extra]
     test rcx, rcx
     jz .Lclose_flac_buffers

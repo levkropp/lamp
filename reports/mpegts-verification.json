@@ -1,0 +1,309 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "mp2.ts",
+      "result": "exact",
+      "comparator": "raw mp2",
+      "layout": "188-byte packets",
+      "stats": "codec=3 rate=48000 channels=2 bits=0 frames=144000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=4 cpu_us=3580 endpoint_dry=0"
+    },
+    {
+      "test": "mp2.m2ts",
+      "result": "exact",
+      "comparator": "raw mp2",
+      "layout": "192-byte M2TS packets",
+      "stats": "codec=3 rate=48000 channels=2 bits=0 frames=144000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=3400 endpoint_dry=0"
+    },
+    {
+      "test": "mp2-204.ts",
+      "result": "exact",
+      "comparator": "raw mp2",
+      "layout": "204-byte packets",
+      "stats": "codec=3 rate=48000 channels=2 bits=0 frames=144000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=3480 endpoint_dry=0"
+    },
+    {
+      "test": "mp2-video.ts",
+      "result": "exact",
+      "comparator": "raw mp2",
+      "layout": "with video",
+      "stats": "codec=3 rate=48000 channels=2 bits=0 frames=144000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=3265 endpoint_dry=0"
+    },
+    {
+      "test": "mp2.vob",
+      "result": "exact",
+      "comparator": "raw mp2",
+      "layout": "MPEG-2 program stream",
+      "stats": "codec=3 rate=48000 channels=2 bits=0 frames=144000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=3232 endpoint_dry=0"
+    },
+    {
+      "test": "mp2.mpg",
+      "result": "exact",
+      "comparator": "raw mp2",
+      "layout": "MPEG-1 system stream",
+      "stats": "codec=3 rate=48000 channels=2 bits=0 frames=144000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=3485 endpoint_dry=0"
+    },
+    {
+      "test": "mp2-video.vob",
+      "result": "exact",
+      "comparator": "raw mp2",
+      "layout": "program stream with video",
+      "stats": "codec=3 rate=48000 channels=2 bits=0 frames=144000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=3401 endpoint_dry=0"
+    },
+    {
+      "test": "mp3.ts",
+      "result": "exact",
+      "comparator": "raw mp3",
+      "layout": "188-byte packets",
+      "stats": "codec=3 rate=48000 channels=2 bits=0 frames=145152 underruns=0 decode_error=0 audio_error=0 elapsed_ms=6 cpu_us=6764 endpoint_dry=0"
+    },
+    {
+      "test": "mp3.m2ts",
+      "result": "exact",
+      "comparator": "raw mp3",
+      "layout": "192-byte M2TS packets",
+      "stats": "codec=3 rate=48000 channels=2 bits=0 frames=145152 underruns=0 decode_error=0 audio_error=0 elapsed_ms=6 cpu_us=6625 endpoint_dry=0"
+    },
+    {
+      "test": "mp3-204.ts",
+      "result": "exact",
+      "comparator": "raw mp3",
+      "layout": "204-byte packets",
+      "stats": "codec=3 rate=48000 channels=2 bits=0 frames=145152 underruns=0 decode_error=0 audio_error=0 elapsed_ms=7 cpu_us=7002 endpoint_dry=0"
+    },
+    {
+      "test": "mp3-video.ts",
+      "result": "exact",
+      "comparator": "raw mp3",
+      "layout": "with video",
+      "stats": "codec=3 rate=48000 channels=2 bits=0 frames=145152 underruns=0 decode_error=0 audio_error=0 elapsed_ms=7 cpu_us=7154 endpoint_dry=0"
+    },
+    {
+      "test": "mp3.vob",
+      "result": "exact",
+      "comparator": "raw mp3",
+      "layout": "MPEG-2 program stream",
+      "stats": "codec=3 rate=48000 channels=2 bits=0 frames=145152 underruns=0 decode_error=0 audio_error=0 elapsed_ms=7 cpu_us=8106 endpoint_dry=0"
+    },
+    {
+      "test": "mp3.mpg",
+      "result": "exact",
+      "comparator": "raw mp3",
+      "layout": "MPEG-1 system stream",
+      "stats": "codec=3 rate=48000 channels=2 bits=0 frames=145152 underruns=0 decode_error=0 audio_error=0 elapsed_ms=6 cpu_us=6246 endpoint_dry=0"
+    },
+    {
+      "test": "mp3-video.vob",
+      "result": "exact",
+      "comparator": "raw mp3",
+      "layout": "program stream with video",
+      "stats": "codec=3 rate=48000 channels=2 bits=0 frames=145152 underruns=0 decode_error=0 audio_error=0 elapsed_ms=6 cpu_us=6126 endpoint_dry=0"
+    },
+    {
+      "test": "aac.ts",
+      "result": "exact",
+      "comparator": "raw aac",
+      "layout": "188-byte packets",
+      "stats": "codec=10 rate=48000 channels=2 bits=0 frames=145408 underruns=0 decode_error=0 audio_error=0 elapsed_ms=7 cpu_us=7431 endpoint_dry=0"
+    },
+    {
+      "test": "aac.m2ts",
+      "result": "exact",
+      "comparator": "raw aac",
+      "layout": "192-byte M2TS packets",
+      "stats": "codec=10 rate=48000 channels=2 bits=0 frames=145408 underruns=0 decode_error=0 audio_error=0 elapsed_ms=7 cpu_us=7068 endpoint_dry=0"
+    },
+    {
+      "test": "aac-204.ts",
+      "result": "exact",
+      "comparator": "raw aac",
+      "layout": "204-byte packets",
+      "stats": "codec=10 rate=48000 channels=2 bits=0 frames=145408 underruns=0 decode_error=0 audio_error=0 elapsed_ms=7 cpu_us=8035 endpoint_dry=0"
+    },
+    {
+      "test": "aac-video.ts",
+      "result": "exact",
+      "comparator": "raw aac",
+      "layout": "with video",
+      "stats": "codec=10 rate=48000 channels=2 bits=0 frames=145408 underruns=0 decode_error=0 audio_error=0 elapsed_ms=7 cpu_us=6801 endpoint_dry=0"
+    },
+    {
+      "test": "ac3.ts",
+      "result": "exact",
+      "comparator": "raw ac3",
+      "layout": "188-byte packets",
+      "stats": "codec=11 rate=48000 channels=2 bits=0 frames=144384 underruns=0 decode_error=0 audio_error=0 elapsed_ms=5 cpu_us=5007 endpoint_dry=0"
+    },
+    {
+      "test": "ac3.m2ts",
+      "result": "exact",
+      "comparator": "raw ac3",
+      "layout": "192-byte M2TS packets",
+      "stats": "codec=11 rate=48000 channels=2 bits=0 frames=144384 underruns=0 decode_error=0 audio_error=0 elapsed_ms=5 cpu_us=4945 endpoint_dry=0"
+    },
+    {
+      "test": "ac3-204.ts",
+      "result": "exact",
+      "comparator": "raw ac3",
+      "layout": "204-byte packets",
+      "stats": "codec=11 rate=48000 channels=2 bits=0 frames=144384 underruns=0 decode_error=0 audio_error=0 elapsed_ms=5 cpu_us=5535 endpoint_dry=0"
+    },
+    {
+      "test": "ac3-video.ts",
+      "result": "exact",
+      "comparator": "raw ac3",
+      "layout": "with video",
+      "stats": "codec=11 rate=48000 channels=2 bits=0 frames=144384 underruns=0 decode_error=0 audio_error=0 elapsed_ms=5 cpu_us=5135 endpoint_dry=0"
+    },
+    {
+      "test": "ac3-dvb.ts",
+      "result": "exact",
+      "comparator": "raw ac3",
+      "layout": "stream type 0x06 with the DVB AC-3 descriptor",
+      "stats": "codec=11 rate=48000 channels=2 bits=0 frames=144384 underruns=0 decode_error=0 audio_error=0 elapsed_ms=5 cpu_us=5080 endpoint_dry=0"
+    },
+    {
+      "test": "ac3.vob",
+      "result": "exact",
+      "comparator": "raw ac3",
+      "layout": "MPEG-2 program stream",
+      "stats": "codec=11 rate=48000 channels=2 bits=0 frames=144384 underruns=0 decode_error=0 audio_error=0 elapsed_ms=5 cpu_us=5160 endpoint_dry=0"
+    },
+    {
+      "test": "ac3-video.vob",
+      "result": "exact",
+      "comparator": "raw ac3",
+      "layout": "program stream with video",
+      "stats": "codec=11 rate=48000 channels=2 bits=0 frames=144384 underruns=0 decode_error=0 audio_error=0 elapsed_ms=6 cpu_us=5606 endpoint_dry=0"
+    },
+    {
+      "test": "ac3-5.1.ts",
+      "result": "exact",
+      "comparator": "raw ac3-5.1",
+      "layout": "188-byte packets",
+      "stats": "codec=11 rate=48000 channels=6 bits=0 frames=144384 underruns=0 decode_error=0 audio_error=0 elapsed_ms=14 cpu_us=14158 endpoint_dry=0"
+    },
+    {
+      "test": "ac3-5.1.m2ts",
+      "result": "exact",
+      "comparator": "raw ac3-5.1",
+      "layout": "192-byte M2TS packets",
+      "stats": "codec=11 rate=48000 channels=6 bits=0 frames=144384 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=15235 endpoint_dry=0"
+    },
+    {
+      "test": "ac3-5.1-204.ts",
+      "result": "exact",
+      "comparator": "raw ac3-5.1",
+      "layout": "204-byte packets",
+      "stats": "codec=11 rate=48000 channels=6 bits=0 frames=144384 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=14761 endpoint_dry=0"
+    },
+    {
+      "test": "ac3-5.1-video.ts",
+      "result": "exact",
+      "comparator": "raw ac3-5.1",
+      "layout": "with video",
+      "stats": "codec=11 rate=48000 channels=6 bits=0 frames=144384 underruns=0 decode_error=0 audio_error=0 elapsed_ms=14 cpu_us=14148 endpoint_dry=0"
+    },
+    {
+      "test": "ac3-5.1-dvb.ts",
+      "result": "exact",
+      "comparator": "raw ac3-5.1",
+      "layout": "stream type 0x06 with the DVB AC-3 descriptor",
+      "stats": "codec=11 rate=48000 channels=6 bits=0 frames=144384 underruns=0 decode_error=0 audio_error=0 elapsed_ms=14 cpu_us=14502 endpoint_dry=0"
+    },
+    {
+      "test": "two-audio.ts",
+      "result": "exact",
+      "comparator": "raw ac3",
+      "layout": "two audio streams, the first selected",
+      "stats": "codec=11 rate=48000 channels=2 bits=0 frames=144384 underruns=0 decode_error=0 audio_error=0 elapsed_ms=5 cpu_us=5013 endpoint_dry=0"
+    },
+    {
+      "test": "container variants",
+      "result": "exact",
+      "files": 31
+    },
+    {
+      "test": "mp2.ts against FFmpeg",
+      "result": "matched",
+      "snr_db": 116.3
+    },
+    {
+      "test": "mp3.ts against FFmpeg",
+      "result": "matched",
+      "snr_db": 125.8
+    },
+    {
+      "test": "aac.ts against FFmpeg",
+      "result": "matched",
+      "snr_db": 137.8
+    },
+    {
+      "test": "ac3.ts against FFmpeg",
+      "result": "matched",
+      "snr_db": 138.7
+    },
+    {
+      "test": "written-ac3.ts seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":11517,\"maximum_discarded\":1536,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0}"
+    },
+    {
+      "test": "mp2.m2ts seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":30909,\"maximum_discarded\":3455,\"maximum_probes\":0,\"index_points\":4,\"maximum_skimmed_headers\":28,\"maximum_stride\":0,\"maximum_preroll\":0}"
+    },
+    {
+      "test": "mp3-video.ts seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":30333,\"maximum_discarded\":3455,\"maximum_probes\":0,\"index_points\":4,\"maximum_skimmed_headers\":29,\"maximum_stride\":0,\"maximum_preroll\":0}"
+    },
+    {
+      "test": "mp2.vob seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":30909,\"maximum_discarded\":3455,\"maximum_probes\":0,\"index_points\":4,\"maximum_skimmed_headers\":28,\"maximum_stride\":0,\"maximum_preroll\":0}"
+    },
+    {
+      "test": "eac3.ts",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "eac3-dvb.ts",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "latm.ts",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "lpcm.vob",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "video-only.ts",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":100}"
+    },
+    {
+      "test": "no-tables.ts",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":100}"
+    },
+    {
+      "test": "video-only.vob",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":100}"
+    },
+    {
+      "test": "cancel-open ac3-video.ts",
+      "result": "{\"result\":\"cancelled\"}"
+    },
+    {
+      "test": "transport stream playback",
+      "result": "played",
+      "stats": "Playing. Space: pause / resume. Q or Ctrl+C: stop. codec=11 rate=48000 channels=2 bits=0 frames=144384 underruns=0 decode_error=0 audio_error=0 elapsed_ms=5041 cpu_us=7003 endpoint_dry=0"
+    }
+  ],
+  "rejections": 7,
+  "scope": "MPEG transport streams (188/192/204-byte packets, stream type and DVB descriptor signalling, video and second audio streams) and program streams (MPEG-2 VOB, MPEG-1 system streams, video) carrying MPEG Layer II/III, ADTS AAC and AC-3, exact against the raw streams and close to FFmpeg; seeks; unsupported and malformed streams; cancellation."
+}
