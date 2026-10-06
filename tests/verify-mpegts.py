@@ -10,8 +10,9 @@ usage: python3 tests/verify-mpegts.py [--skip-playback]
   must equal LAMP's decode of the raw stream, and one of each codec is also
   compared with FFmpeg's decode of the container.
 - Seeks in transport and program streams equal continuous decoding.
-- E-AC-3, LATM AAC and DVD LPCM reject as unsupported; streams without audio
-  or tables reject as malformed; a cancelled open stops cleanly.
+- E-AC-3 and DVD LPCM reject as unsupported (LATM AAC is checked in
+  verify-latm.py); streams without audio or tables reject as malformed; a
+  cancelled open stops cleanly.
 Writes <out>/mpegts-verification.json.
 """
 import array
@@ -154,7 +155,6 @@ def main():
     unsupported = {
         'eac3.ts': ['-c:a', 'eac3', '-f', 'mpegts'],
         'eac3-dvb.ts': ['-c:a', 'eac3', '-f', 'mpegts', '-mpegts_flags', 'system_b'],
-        'latm.ts': ['-c:a', 'aac', '-f', 'mpegts', '-mpegts_flags', 'latm'],
         'lpcm.vob': ['-c:a', 'pcm_dvd', '-f', 'vob'],
     }
     for name, coding in unsupported.items():

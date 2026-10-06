@@ -1,10 +1,10 @@
 # AAC-LC and HE-AAC
 
-LAMP 0.4.0-dev decodes MPEG-4 AAC Low Complexity in MP4/M4A/MOV, Matroska and raw ADTS (`.aac`) files with a handwritten decoder (`src/aac.s`) following ISO/IEC 14496-3 subpart 4 and ISO/IEC 13818-7, and HE-AAC's spectral band replication and parametric stereo on top of it (`src/aac_sbr.inc`, [below](#he-aac-spectral-band-replication)). Packets pass through the shared [track layer](matroska.md#track-layer), so MP4 edit lists, sample durations and seeking work as for the other codecs.
+LAMP 0.4.0-dev decodes MPEG-4 AAC Low Complexity in MP4/M4A/MOV, Matroska, raw ADTS (`.aac`) and [LOAS/LATM](latm.md) (`.loas`, `.latm`, DVB transport streams) files with a handwritten decoder (`src/aac.s`) following ISO/IEC 14496-3 subpart 4 and ISO/IEC 13818-7, and HE-AAC's spectral band replication and parametric stereo on top of it (`src/aac_sbr.inc`, [below](#he-aac-spectral-band-replication)). Packets pass through the shared [track layer](matroska.md#track-layer), so MP4 edit lists, sample durations and seeking work as for the other codecs.
 
 ## Coverage
 
-- AudioSpecificConfig with object type 2 (LC) from an MP4 `esds` (object types 0x40 and 0x67), Matroska `A_AAC` CodecPrivate or the ADTS header; sampling-frequency indices 0–11 (8–96 kHz); channel configurations 1–7 (mono to 7.1). Configuration 7 is 7.1 front-wide as ISO defines it: C, Lc/Rc, L/R, Ls/Rs, LFE.
+- AudioSpecificConfig with object type 2 (LC) from an MP4 `esds` (object types 0x40 and 0x67), Matroska `A_AAC` CodecPrivate, a LATM StreamMuxConfig or the ADTS header; sampling-frequency indices 0–11 (8–96 kHz); channel configurations 1–7 (mono to 7.1). Configuration 7 is 7.1 front-wide as ISO defines it: C, Lc/Rc, L/R, Ls/Rs, LFE.
 - Raw data blocks with single-channel, channel-pair and LFE elements in the configured order; data stream, fill and program config elements are skipped.
 - Section data with all eleven spectral codebooks, zero, noise and intensity bands; scalefactors, noise energies and intensity positions; pulse data; escape values up to 8191; TNS with both resolutions, coefficient compression, either direction and orders up to 12 (7 for short windows).
 - Mid/side stereo with transmitted or all-band masks, intensity stereo, and perceptual noise substitution. A band that is noise in both channels of a pair with a transmitted M/S bit reuses the first channel's noise vector, as ISO specifies.
@@ -15,7 +15,7 @@ Unsupported streams reject with `decode_error` 101: other object types (Main, SS
 
 ## Containers and timing
 
-MP4 edit lists remove the encoder's priming samples (1024 for FFmpeg's encoder) and the end padding. ADTS and Matroska files carry no such information, so their output starts with the priming samples, as FFmpeg's does. ADTS files may start with an ID3v2 tag and end with an ID3v1 tag; every frame must repeat the first frame's profile, rate and channel configuration and hold one raw data block. ADTS CRCs are skipped unchecked.
+MP4 edit lists remove the encoder's priming samples (1024 for FFmpeg's encoder) and the end padding. ADTS, LOAS and Matroska files carry no such information, so their output starts with the priming samples, as FFmpeg's does. ADTS files may start with an ID3v2 tag and end with an ID3v1 tag; every frame must repeat the first frame's profile, rate and channel configuration and hold one raw data block. ADTS CRCs are skipped unchecked.
 
 Seeking restarts one packet before the target and discards that packet's output, which rebuilds the overlap and window shape. Without noise substitution, seeks equal continuous decoding. Noise substitution draws a pseudo-random generator that runs through the whole stream (the generator and constants match FFmpeg's, so continuous decodes compare closely), so after a seek those bands carry different noise of the same energy.
 

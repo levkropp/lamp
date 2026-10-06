@@ -191,11 +191,18 @@
       "rejected_or_damaged": 50
     },
     {
+      "test": "tone.loas",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 50,
+      "decoded": 9,
+      "rejected_or_damaged": 41
+    },
+    {
       "test": "low.m4a",
       "result": "no crash, hang or runaway memory",
       "mutations": 50,
-      "decoded": 2,
-      "rejected_or_damaged": 48
+      "decoded": 1,
+      "rejected_or_damaged": 49
     },
     {
       "test": "aac.m4a",
@@ -215,15 +222,15 @@
       "test": "alac.m4a",
       "result": "no crash, hang or runaway memory",
       "mutations": 50,
-      "decoded": 20,
-      "rejected_or_damaged": 30
+      "decoded": 15,
+      "rejected_or_damaged": 35
     },
     {
       "test": "opus.mp4",
       "result": "no crash, hang or runaway memory",
       "mutations": 50,
-      "decoded": 16,
-      "rejected_or_damaged": 34
+      "decoded": 15,
+      "rejected_or_damaged": 35
     },
     {
       "test": "flac.mp4",
@@ -236,29 +243,29 @@
       "test": "pcm.mov",
       "result": "no crash, hang or runaway memory",
       "mutations": 50,
-      "decoded": 24,
-      "rejected_or_damaged": 26
+      "decoded": 31,
+      "rejected_or_damaged": 19
     },
     {
       "test": "tone.ac3",
-      "result": "no crash, hang or runaway memory",
-      "mutations": 50,
-      "decoded": 34,
-      "rejected_or_damaged": 16
-    },
-    {
-      "test": "ac3.mka",
       "result": "no crash, hang or runaway memory",
       "mutations": 50,
       "decoded": 27,
       "rejected_or_damaged": 23
     },
     {
+      "test": "ac3.mka",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 50,
+      "decoded": 26,
+      "rejected_or_damaged": 24
+    },
+    {
       "test": "vorbis.mka",
       "result": "no crash, hang or runaway memory",
       "mutations": 50,
-      "decoded": 3,
-      "rejected_or_damaged": 47
+      "decoded": 4,
+      "rejected_or_damaged": 46
     },
     {
       "test": "flac.mka",
@@ -271,36 +278,36 @@
       "test": "aac.mka",
       "result": "no crash, hang or runaway memory",
       "mutations": 50,
-      "decoded": 2,
-      "rejected_or_damaged": 48
+      "decoded": 1,
+      "rejected_or_damaged": 49
     },
     {
       "test": "opus.webm",
       "result": "no crash, hang or runaway memory",
       "mutations": 50,
-      "decoded": 15,
-      "rejected_or_damaged": 35
+      "decoded": 13,
+      "rejected_or_damaged": 37
     },
     {
       "test": "mp3.mka",
       "result": "no crash, hang or runaway memory",
       "mutations": 50,
-      "decoded": 9,
-      "rejected_or_damaged": 41
+      "decoded": 5,
+      "rejected_or_damaged": 45
     },
     {
       "test": "pcm.mka",
       "result": "no crash, hang or runaway memory",
       "mutations": 50,
-      "decoded": 21,
-      "rejected_or_damaged": 29
+      "decoded": 25,
+      "rejected_or_damaged": 25
     },
     {
       "test": "tone.wv",
       "result": "no crash, hang or runaway memory",
       "mutations": 50,
-      "decoded": 2,
-      "rejected_or_damaged": 48
+      "decoded": 7,
+      "rejected_or_damaged": 43
     },
     {
       "test": "wv.mka",
@@ -313,22 +320,22 @@
       "test": "pcm.avi",
       "result": "no crash, hang or runaway memory",
       "mutations": 50,
-      "decoded": 49,
-      "rejected_or_damaged": 1
+      "decoded": 50,
+      "rejected_or_damaged": 0
     },
     {
       "test": "mp3.avi",
       "result": "no crash, hang or runaway memory",
       "mutations": 50,
-      "decoded": 29,
-      "rejected_or_damaged": 21
+      "decoded": 26,
+      "rejected_or_damaged": 24
     },
     {
       "test": "aac.avi",
       "result": "no crash, hang or runaway memory",
       "mutations": 50,
-      "decoded": 13,
-      "rejected_or_damaged": 37
+      "decoded": 11,
+      "rejected_or_damaged": 39
     },
     {
       "test": "pcm.flv",
@@ -341,8 +348,8 @@
       "test": "mp3.flv",
       "result": "no crash, hang or runaway memory",
       "mutations": 50,
-      "decoded": 24,
-      "rejected_or_damaged": 26
+      "decoded": 21,
+      "rejected_or_damaged": 29
     },
     {
       "test": "aac.flv",
@@ -362,36 +369,43 @@
       "test": "mp2.ts",
       "result": "no crash, hang or runaway memory",
       "mutations": 50,
-      "decoded": 22,
-      "rejected_or_damaged": 28
+      "decoded": 24,
+      "rejected_or_damaged": 26
     },
     {
       "test": "aac.ts",
       "result": "no crash, hang or runaway memory",
       "mutations": 50,
-      "decoded": 8,
-      "rejected_or_damaged": 42
+      "decoded": 10,
+      "rejected_or_damaged": 40
     },
     {
-      "test": "ac3.ts",
-      "result": "no crash, hang or runaway memory",
-      "mutations": 50,
-      "decoded": 41,
-      "rejected_or_damaged": 9
-    },
-    {
-      "test": "mp2.mpg",
+      "test": "latm.ts",
       "result": "no crash, hang or runaway memory",
       "mutations": 50,
       "decoded": 18,
       "rejected_or_damaged": 32
     },
     {
+      "test": "ac3.ts",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 50,
+      "decoded": 37,
+      "rejected_or_damaged": 13
+    },
+    {
+      "test": "mp2.mpg",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 50,
+      "decoded": 22,
+      "rejected_or_damaged": 28
+    },
+    {
       "test": "ac3.vob",
       "result": "no crash, hang or runaway memory",
       "mutations": 50,
-      "decoded": 36,
-      "rejected_or_damaged": 14
+      "decoded": 31,
+      "rejected_or_damaged": 19
     },
     {
       "test": "tone.ape",
@@ -408,7 +422,7 @@
       "rejected_or_damaged": 50
     }
   ],
-  "mutations": 2900,
-  "decoded": 1126,
-  "scope": "58 container/codec sources, 500 mutations each (every tenth under Wine), seed 20261006: byte flips, zero/0xff runs, cuts, removed and duplicated spans, large length fields; --check, every fourth from a random --start."
+  "mutations": 3000,
+  "decoded": 1140,
+  "scope": "60 container/codec sources, 500 mutations each (every tenth under Wine), seed 20261006: byte flips, zero/0xff runs, cuts, removed and duplicated spans, large length fields; --check, every fourth from a random --start."
 }

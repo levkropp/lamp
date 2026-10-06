@@ -280,6 +280,11 @@ LOCALFN decoder_open_format
     jnz .Lopen_mts
     mov rcx, [rip + input_cursor]
     mov rdx, [rip + input_end]
+    call loas_probe                 # AAC in LOAS/LATM (sync 0x2B7)
+    test eax, eax
+    jnz .Lopen_loas
+    mov rcx, [rip + input_cursor]
+    mov rdx, [rip + input_end]
     call adts_probe                 # ADTS AAC; MPEG audio never uses layer 0
     test eax, eax
     jnz .Lopen_adts
@@ -300,6 +305,14 @@ LOCALFN decoder_open_format
     mov rcx, [rip + input_cursor]
     mov rdx, [rip + input_end]
     call adts_open
+    test eax, eax
+    jz .Lopen_bad
+    leave
+    ret
+.Lopen_loas:
+    mov rcx, [rip + input_cursor]
+    mov rdx, [rip + input_end]
+    call loas_open
     test eax, eax
     jz .Lopen_bad
     leave
@@ -2198,6 +2211,7 @@ FN decoder_close
     sub rsp, 32
     call chain_close
     call track_close
+    call loas_close                 # after the track reading its packets
     call mp3_close
     call opus_close
     call vorbis_close
