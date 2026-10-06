@@ -18,7 +18,7 @@ A small media player for Windows and Linux x86-64 and Apple Silicon macOS with h
 - No codec DLL, C runtime, FFmpeg subprocess, or mpv engine in the player. Normal Windows system DLLs provide platform services; on Linux the player makes raw system calls. macOS uses libSystem, AppKit and AudioToolbox.
 - MIT project license, with preserved MIT/MIT-0/CC0/BSD notices for reference-derived algorithms and data.
 
-LAMP aims to reduce stutters. It cannot guarantee uninterrupted playback during arbitrary system or driver stalls. [Same-machine headless playback measurements](docs/playback-benchmark.md) compare its assembly engine with mpv and VLC; shipping-GUI, wakeup and audible-latency measurements remain pending.
+LAMP aims to reduce stutters. It cannot guarantee uninterrupted playback during arbitrary system or driver stalls. [Same-machine playback measurements](docs/playback-benchmark.md) compare its assembly engine with mpv and VLC: headless on Windows, and on Linux through one PulseAudio server with startup, seek, CPU, memory and wakeups, idle and under load. On Linux, LAMP starts in 5–25 ms against 79–108 ms, and wakes about 21 times a second playing against 58–410. It uses 3–7 MiB resident against 50–62 MiB, and does not wake at all while paused. Shipping-GUI and audible-latency measurements remain pending.
 
 ## Run
 

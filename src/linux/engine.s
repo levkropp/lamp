@@ -13,6 +13,7 @@
 .equ CHUNK_FRAMES, 2048
 .equ SEND_FRAMES, 8192                # 64 KiB per audio packet
 .equ BUFFER_MS, 200                   # server buffer target, as on Windows
+.equ REFILL_FRAMES, RING_FRAMES*3/4    # a full ring refills once it holds no more
 
 .globl engine_mode, engine_stop_requested, pause_requested, engine_ready, engine_volume
 .globl engine_position, engine_seek_ms, decoded_count, underruns, endpoint_dry, audio_status
@@ -293,8 +294,12 @@ FN engine_start
     add rbx, [rip + engine_seek_frames]
     mov [rip + engine_position], rbx
     mov ecx, [rip + space_event]
+    mov rax, [rip + write_count]       # wake the producer only once it can refill
+    sub rax, rbx
     call event_signal
     jmp .Leng_loop
+    cmp rax, REFILL_FRAMES
+    ja .Leng_loop
 .Leng_starved:
     cmp qword ptr [rip + pulse_requested], 8
     jb .Leng_wait
@@ -786,9 +791,11 @@ LOCALFN producer
     mov ecx, [rip + space_event]
     call event_clear
     mov rax, [rip + write_count]       # recheck after clearing to avoid a lost wakeup
+    # A full ring waits until a quarter of it has played, so the producer
+    # wakes about once a second rather than at every send.
     sub rax, [rip + read_count]
-    cmp rax, RING_FRAMES
-    jb .Lprod_loop
+    cmp rax, REFILL_FRAMES
+    jbe .Lprod_loop
     lea rdi, [rsp + 16]                # wait for space or stop
     mov eax, [rip + space_event]
     mov [rdi], eax
