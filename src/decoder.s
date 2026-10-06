@@ -150,9 +150,17 @@ FN decoder_open
     sub rsp, 40
     mov dword ptr [rip + output_rate], 0
     mov qword ptr [rip + output_frames], 0
+    mov [rsp + 32], rcx
+    call tags_clear
+    mov rcx, [rsp + 32]                 # the path
     call decoder_open_format
     test eax, eax
     jz .Lopen_published
+    mov rcx, [rip + map_base]           # metadata, from the whole file
+    mov rdx, rcx
+    add rdx, [rip + file_size]
+    call tags_read
+    mov eax, 1
     cmp dword ptr [rip + chain_active], 0
     jne .Lopen_published
     mov ecx, [rip + sample_rate]

@@ -7,7 +7,7 @@
       "comparator": "FFmpeg",
       "peak_error": 0.0,
       "snr_db": null,
-      "stats": "codec=9 rate=44100 channels=2 bits=16 frames=52920 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=3161 endpoint_dry=0"
+      "stats": "codec=9 rate=44100 channels=2 bits=16 frames=52920 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=3218 endpoint_dry=0"
     },
     {
       "test": "alac-16-frag.m4a",
@@ -15,7 +15,7 @@
       "comparator": "FFmpeg, progressive version",
       "peak_error": 0.0,
       "snr_db": null,
-      "stats": "codec=9 rate=44100 channels=2 bits=16 frames=52920 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2966 endpoint_dry=0"
+      "stats": "codec=9 rate=44100 channels=2 bits=16 frames=52920 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=3341 endpoint_dry=0"
     },
     {
       "test": "alac-16-dash.m4a",
@@ -23,7 +23,7 @@
       "comparator": "FFmpeg, progressive version",
       "peak_error": 0.0,
       "snr_db": null,
-      "stats": "codec=9 rate=44100 channels=2 bits=16 frames=52920 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=2966 endpoint_dry=0"
+      "stats": "codec=9 rate=44100 channels=2 bits=16 frames=52920 underruns=0 decode_error=0 audio_error=0 elapsed_ms=5 cpu_us=4547 endpoint_dry=0"
     },
     {
       "test": "alac-16 .m4a vs .mka",
@@ -35,7 +35,7 @@
       "comparator": "FFmpeg",
       "peak_error": 0.0,
       "snr_db": null,
-      "stats": "codec=9 rate=96000 channels=2 bits=24 frames=115200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=8 cpu_us=7743 endpoint_dry=0"
+      "stats": "codec=9 rate=96000 channels=2 bits=24 frames=115200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=8 cpu_us=8414 endpoint_dry=0"
     },
     {
       "test": "alac-24-96k-frag.m4a",
@@ -43,7 +43,7 @@
       "comparator": "FFmpeg, progressive version",
       "peak_error": 0.0,
       "snr_db": null,
-      "stats": "codec=9 rate=96000 channels=2 bits=24 frames=115200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=7 cpu_us=7473 endpoint_dry=0"
+      "stats": "codec=9 rate=96000 channels=2 bits=24 frames=115200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=8 cpu_us=8318 endpoint_dry=0"
     },
     {
       "test": "alac-24-96k-dash.m4a",
@@ -51,7 +51,7 @@
       "comparator": "FFmpeg, progressive version",
       "peak_error": 0.0,
       "snr_db": null,
-      "stats": "codec=9 rate=96000 channels=2 bits=24 frames=115200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=8 cpu_us=7760 endpoint_dry=0"
+      "stats": "codec=9 rate=96000 channels=2 bits=24 frames=115200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=8 cpu_us=8388 endpoint_dry=0"
     },
     {
       "test": "alac-24-96k .m4a vs .mka",
@@ -63,7 +63,7 @@
       "comparator": "FFmpeg",
       "peak_error": 0.0,
       "snr_db": null,
-      "stats": "codec=9 rate=22050 channels=1 bits=16 frames=26460 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1292 endpoint_dry=0"
+      "stats": "codec=9 rate=22050 channels=1 bits=16 frames=26460 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=1558 endpoint_dry=0"
     },
     {
       "test": "alac-mono-frag.m4a",
@@ -71,7 +71,7 @@
       "comparator": "FFmpeg, progressive version",
       "peak_error": 0.0,
       "snr_db": null,
-      "stats": "codec=9 rate=22050 channels=1 bits=16 frames=26460 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=1332 endpoint_dry=0"
+      "stats": "codec=9 rate=22050 channels=1 bits=16 frames=26460 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1607 endpoint_dry=0"
     },
     {
       "test": "alac-mono-dash.m4a",
@@ -79,7 +79,7 @@
       "comparator": "FFmpeg, progressive version",
       "peak_error": 0.0,
       "snr_db": null,
-      "stats": "codec=9 rate=22050 channels=1 bits=16 frames=26460 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1475 endpoint_dry=0"
+      "stats": "codec=9 rate=22050 channels=1 bits=16 frames=26460 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=1565 endpoint_dry=0"
     },
     {
       "test": "alac-mono .m4a vs .mka",
@@ -91,7 +91,7 @@
       "comparator": "multichannel: LAMP decode of the same stream below",
       "peak_error": null,
       "snr_db": null,
-      "stats": "codec=9 rate=48000 channels=6 bits=24 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=10 cpu_us=10062 endpoint_dry=0"
+      "stats": "codec=9 rate=48000 channels=6 bits=24 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=8 cpu_us=8070 endpoint_dry=0"
     },
     {
       "test": "alac-5.1-frag.m4a",
@@ -99,7 +99,7 @@
       "comparator": "multichannel: LAMP decode of the same stream below, progressive version",
       "peak_error": null,
       "snr_db": null,
-      "stats": "codec=9 rate=48000 channels=6 bits=24 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=6 cpu_us=6657 endpoint_dry=0"
+      "stats": "codec=9 rate=48000 channels=6 bits=24 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=7 cpu_us=7894 endpoint_dry=0"
     },
     {
       "test": "alac-5.1-dash.m4a",
@@ -107,7 +107,7 @@
       "comparator": "multichannel: LAMP decode of the same stream below, progressive version",
       "peak_error": null,
       "snr_db": null,
-      "stats": "codec=9 rate=48000 channels=6 bits=24 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=6 cpu_us=6679 endpoint_dry=0"
+      "stats": "codec=9 rate=48000 channels=6 bits=24 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=8 cpu_us=7961 endpoint_dry=0"
     },
     {
       "test": "alac-5.1 .m4a vs .mka",
@@ -119,7 +119,7 @@
       "comparator": "FFmpeg",
       "peak_error": 0.0,
       "snr_db": null,
-      "stats": "codec=9 rate=48000 channels=2 bits=16 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=3279 endpoint_dry=0"
+      "stats": "codec=9 rate=48000 channels=2 bits=16 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=4 cpu_us=3605 endpoint_dry=0"
     },
     {
       "test": "alac-small-frames-frag.m4a",
@@ -127,7 +127,7 @@
       "comparator": "FFmpeg, progressive version",
       "peak_error": 0.0,
       "snr_db": null,
-      "stats": "codec=9 rate=48000 channels=2 bits=16 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=4 cpu_us=3770 endpoint_dry=0"
+      "stats": "codec=9 rate=48000 channels=2 bits=16 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=4 cpu_us=3611 endpoint_dry=0"
     },
     {
       "test": "alac-small-frames-dash.m4a",
@@ -135,10 +135,34 @@
       "comparator": "FFmpeg, progressive version",
       "peak_error": 0.0,
       "snr_db": null,
-      "stats": "codec=9 rate=48000 channels=2 bits=16 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=4 cpu_us=3771 endpoint_dry=0"
+      "stats": "codec=9 rate=48000 channels=2 bits=16 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=4 cpu_us=3665 endpoint_dry=0"
     },
     {
       "test": "alac-small-frames .m4a vs .mka",
+      "result": "exact"
+    },
+    {
+      "test": "alac-qt.mov",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "peak_error": 0.0,
+      "snr_db": null,
+      "stats": "codec=9 rate=44100 channels=2 bits=16 frames=52920 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=3333 endpoint_dry=0"
+    },
+    {
+      "test": "alac-qt .mov vs .mka",
+      "result": "exact"
+    },
+    {
+      "test": "alac-qt-24-mono.mov",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "peak_error": 0.0,
+      "snr_db": null,
+      "stats": "codec=9 rate=48000 channels=1 bits=24 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=4 cpu_us=3396 endpoint_dry=0"
+    },
+    {
+      "test": "alac-qt-24-mono .mov vs .mka",
       "result": "exact"
     },
     {
@@ -147,7 +171,7 @@
       "comparator": "FFmpeg",
       "peak_error": 1.1622905731201172e-06,
       "snr_db": 120.6,
-      "stats": "codec=9 rate=44100 channels=2 bits=0 frames=66150 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=2878 endpoint_dry=0"
+      "stats": "codec=9 rate=44100 channels=2 bits=0 frames=66150 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=3236 endpoint_dry=0"
     },
     {
       "test": "mp2.mp4",
@@ -155,31 +179,31 @@
       "comparator": "FFmpeg",
       "peak_error": 8.344650268554688e-07,
       "snr_db": 120.4,
-      "stats": "codec=9 rate=48000 channels=2 bits=0 frames=71472 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=1764 endpoint_dry=0"
+      "stats": "codec=9 rate=48000 channels=2 bits=0 frames=71472 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2070 endpoint_dry=0"
     },
     {
       "test": "opus.mp4",
       "result": "matched",
       "comparator": "FFmpeg",
-      "peak_error": 2.5033950805664062e-06,
+      "peak_error": 2.7418136596679688e-06,
       "snr_db": 116.7,
-      "stats": "codec=9 rate=48000 channels=2 bits=32 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=5 cpu_us=6025 endpoint_dry=0"
+      "stats": "codec=9 rate=48000 channels=2 bits=32 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=6 cpu_us=6480 endpoint_dry=0"
     },
     {
       "test": "opus-frag.mp4",
       "result": "matched",
       "comparator": "FFmpeg, progressive version",
-      "peak_error": 2.5033950805664062e-06,
+      "peak_error": 2.7418136596679688e-06,
       "snr_db": 116.7,
-      "stats": "codec=9 rate=48000 channels=2 bits=32 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=6 cpu_us=5887 endpoint_dry=0"
+      "stats": "codec=9 rate=48000 channels=2 bits=32 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=5 cpu_us=6096 endpoint_dry=0"
     },
     {
       "test": "opus-dash.mp4",
       "result": "matched",
       "comparator": "FFmpeg, progressive version",
-      "peak_error": 2.5033950805664062e-06,
+      "peak_error": 2.7418136596679688e-06,
       "snr_db": 116.7,
-      "stats": "codec=9 rate=48000 channels=2 bits=32 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=5 cpu_us=5361 endpoint_dry=0"
+      "stats": "codec=9 rate=48000 channels=2 bits=32 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=7 cpu_us=6541 endpoint_dry=0"
     },
     {
       "test": "opus .mp4 vs .opus",
@@ -191,7 +215,7 @@
       "comparator": "multichannel: LAMP decode of the same stream below",
       "peak_error": null,
       "snr_db": null,
-      "stats": "codec=9 rate=48000 channels=6 bits=32 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=17 cpu_us=16628 endpoint_dry=0"
+      "stats": "codec=9 rate=48000 channels=6 bits=32 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=14 cpu_us=13762 endpoint_dry=0"
     },
     {
       "test": "opus-5.1-frag.mp4",
@@ -199,7 +223,7 @@
       "comparator": "multichannel: LAMP decode of the same stream below, progressive version",
       "peak_error": null,
       "snr_db": null,
-      "stats": "codec=9 rate=48000 channels=6 bits=32 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=11 cpu_us=11813 endpoint_dry=0"
+      "stats": "codec=9 rate=48000 channels=6 bits=32 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=14 cpu_us=14155 endpoint_dry=0"
     },
     {
       "test": "opus-5.1-dash.mp4",
@@ -207,7 +231,7 @@
       "comparator": "multichannel: LAMP decode of the same stream below, progressive version",
       "peak_error": null,
       "snr_db": null,
-      "stats": "codec=9 rate=48000 channels=6 bits=32 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=13 cpu_us=12775 endpoint_dry=0"
+      "stats": "codec=9 rate=48000 channels=6 bits=32 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=14 cpu_us=13749 endpoint_dry=0"
     },
     {
       "test": "opus-5.1 .mp4 vs .opus",
@@ -219,7 +243,7 @@
       "comparator": "FFmpeg",
       "peak_error": 0.0,
       "snr_db": null,
-      "stats": "codec=9 rate=44100 channels=2 bits=16 frames=52920 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2113 endpoint_dry=0"
+      "stats": "codec=9 rate=44100 channels=2 bits=16 frames=52920 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2318 endpoint_dry=0"
     },
     {
       "test": "flac-frag.mp4",
@@ -227,7 +251,7 @@
       "comparator": "FFmpeg, progressive version",
       "peak_error": 0.0,
       "snr_db": null,
-      "stats": "codec=9 rate=44100 channels=2 bits=16 frames=52920 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2151 endpoint_dry=0"
+      "stats": "codec=9 rate=44100 channels=2 bits=16 frames=52920 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=2426 endpoint_dry=0"
     },
     {
       "test": "flac-dash.mp4",
@@ -235,7 +259,7 @@
       "comparator": "FFmpeg, progressive version",
       "peak_error": 0.0,
       "snr_db": null,
-      "stats": "codec=9 rate=44100 channels=2 bits=16 frames=52920 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2012 endpoint_dry=0"
+      "stats": "codec=9 rate=44100 channels=2 bits=16 frames=52920 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2341 endpoint_dry=0"
     },
     {
       "test": "flac .mp4 vs .flac",
@@ -247,7 +271,7 @@
       "comparator": "FFmpeg",
       "peak_error": 0.0,
       "snr_db": null,
-      "stats": "codec=9 rate=48000 channels=2 bits=24 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=2411 endpoint_dry=0"
+      "stats": "codec=9 rate=48000 channels=2 bits=24 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2739 endpoint_dry=0"
     },
     {
       "test": "flac-24-frag.mp4",
@@ -255,7 +279,7 @@
       "comparator": "FFmpeg, progressive version",
       "peak_error": 0.0,
       "snr_db": null,
-      "stats": "codec=9 rate=48000 channels=2 bits=24 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=2977 endpoint_dry=0"
+      "stats": "codec=9 rate=48000 channels=2 bits=24 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=2719 endpoint_dry=0"
     },
     {
       "test": "flac-24-dash.mp4",
@@ -263,7 +287,7 @@
       "comparator": "FFmpeg, progressive version",
       "peak_error": 0.0,
       "snr_db": null,
-      "stats": "codec=9 rate=48000 channels=2 bits=24 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=3114 endpoint_dry=0"
+      "stats": "codec=9 rate=48000 channels=2 bits=24 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2816 endpoint_dry=0"
     },
     {
       "test": "flac-24 .mp4 vs .flac",
@@ -275,7 +299,7 @@
       "comparator": "FFmpeg",
       "peak_error": 0.0,
       "snr_db": null,
-      "stats": "codec=9 rate=44100 channels=2 bits=16 frames=66150 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1224 endpoint_dry=0"
+      "stats": "codec=9 rate=44100 channels=2 bits=16 frames=66150 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=1573 endpoint_dry=0"
     },
     {
       "test": "pcm-s16be.mov",
@@ -283,7 +307,7 @@
       "comparator": "FFmpeg",
       "peak_error": 0.0,
       "snr_db": null,
-      "stats": "codec=9 rate=48000 channels=2 bits=16 frames=72000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1229 endpoint_dry=0"
+      "stats": "codec=9 rate=48000 channels=2 bits=16 frames=72000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=1908 endpoint_dry=0"
     },
     {
       "test": "pcm-s24be.mov",
@@ -291,7 +315,7 @@
       "comparator": "FFmpeg",
       "peak_error": 0.0,
       "snr_db": null,
-      "stats": "codec=9 rate=48000 channels=2 bits=24 frames=72000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1342 endpoint_dry=0"
+      "stats": "codec=9 rate=48000 channels=2 bits=24 frames=72000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=1713 endpoint_dry=0"
     },
     {
       "test": "pcm-s24le.mov",
@@ -299,7 +323,7 @@
       "comparator": "FFmpeg",
       "peak_error": 0.0,
       "snr_db": null,
-      "stats": "codec=9 rate=48000 channels=2 bits=24 frames=72000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1271 endpoint_dry=0"
+      "stats": "codec=9 rate=48000 channels=2 bits=24 frames=72000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=1761 endpoint_dry=0"
     },
     {
       "test": "pcm-s32be.mov",
@@ -307,7 +331,7 @@
       "comparator": "FFmpeg",
       "peak_error": 0.0,
       "snr_db": null,
-      "stats": "codec=9 rate=32000 channels=2 bits=32 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=869 endpoint_dry=0"
+      "stats": "codec=9 rate=32000 channels=2 bits=32 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1215 endpoint_dry=0"
     },
     {
       "test": "pcm-f32be.mov",
@@ -315,7 +339,7 @@
       "comparator": "FFmpeg",
       "peak_error": 0.0,
       "snr_db": null,
-      "stats": "codec=9 rate=48000 channels=1 bits=32 frames=72000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=836 endpoint_dry=0"
+      "stats": "codec=9 rate=48000 channels=1 bits=32 frames=72000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1064 endpoint_dry=0"
     },
     {
       "test": "pcm-f64le.mov",
@@ -323,7 +347,7 @@
       "comparator": "FFmpeg",
       "peak_error": 0.0,
       "snr_db": null,
-      "stats": "codec=9 rate=48000 channels=2 bits=64 frames=72000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1244 endpoint_dry=0"
+      "stats": "codec=9 rate=48000 channels=2 bits=64 frames=72000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1300 endpoint_dry=0"
     },
     {
       "test": "pcm-u8.mov",
@@ -331,7 +355,7 @@
       "comparator": "FFmpeg",
       "peak_error": 0.0,
       "snr_db": null,
-      "stats": "codec=9 rate=8000 channels=1 bits=8 frames=12000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=403 endpoint_dry=0"
+      "stats": "codec=9 rate=8000 channels=1 bits=8 frames=12000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=485 endpoint_dry=0"
     },
     {
       "test": "pcm-s8.mov",
@@ -339,39 +363,39 @@
       "comparator": "FFmpeg",
       "peak_error": 0.0,
       "snr_db": null,
-      "stats": "codec=9 rate=8000 channels=1 bits=8 frames=12000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=371 endpoint_dry=0"
+      "stats": "codec=9 rate=8000 channels=1 bits=8 frames=12000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=453 endpoint_dry=0"
     },
     {
       "test": "alac-16.m4a seeks",
-      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":10,\"discarded_frames\":24377,\"maximum_discarded\":4095,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0}"
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":10,\"discarded_frames\":24377,\"maximum_discarded\":4095,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
     },
     {
       "test": "alac-5.1.m4a seeks",
-      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":10,\"discarded_frames\":8573,\"maximum_discarded\":4095,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0}"
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":10,\"discarded_frames\":8573,\"maximum_discarded\":4095,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
     },
     {
       "test": "alac-small-frames-dash.m4a seeks",
-      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":10,\"discarded_frames\":8573,\"maximum_discarded\":4095,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0}"
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":10,\"discarded_frames\":8573,\"maximum_discarded\":4095,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
     },
     {
       "test": "flac.mp4 seeks",
-      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":8,\"discarded_frames\":30009,\"maximum_discarded\":4607,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0}"
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":8,\"discarded_frames\":30009,\"maximum_discarded\":4607,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
     },
     {
       "test": "mp3.mp4 seeks",
-      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":7,\"discarded_frames\":70783,\"maximum_discarded\":8017,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0}"
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":7,\"discarded_frames\":70783,\"maximum_discarded\":8017,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
     },
     {
       "test": "mp2.mp4 seeks",
-      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":32384,\"maximum_discarded\":3425,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0}"
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":32384,\"maximum_discarded\":3425,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
     },
     {
       "test": "pcm-s24be.mov seeks",
-      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":10,\"discarded_frames\":20125,\"maximum_discarded\":4095,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0}"
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":10,\"discarded_frames\":20125,\"maximum_discarded\":4095,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
     },
     {
       "test": "pcm-s16le.mov seeks",
-      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":10,\"discarded_frames\":10184,\"maximum_discarded\":4095,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0}"
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":10,\"discarded_frames\":10184,\"maximum_discarded\":4095,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
     },
     {
       "test": "opus.mp4 seeks equal Ogg Opus seeks",
@@ -435,11 +459,6 @@
     {
       "test": "cancel-read alac-16.m4a",
       "result": "{\"result\":\"cancelled\",\"frames_before_cancel\":28672}"
-    },
-    {
-      "test": "ALAC playback",
-      "result": "played",
-      "stats": "Playing. Space: pause / resume. Q or Ctrl+C: stop. codec=9 rate=44100 channels=2 bits=16 frames=52920 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3280 cpu_us=3824 endpoint_dry=0"
     }
   ],
   "rejections": 10,

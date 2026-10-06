@@ -16,6 +16,7 @@ usage:
     .ascii "Usage: lamp-cli file.mp3\n"
     .ascii "       lamp-cli --check file.flac\n"
     .ascii "       lamp-cli --decode file.flac output.f32\n"
+    .ascii "       lamp-cli --tags file.mp3\n"
     .ascii "Playback: Space pauses/resumes; Q or Ctrl+C stops.\n"
     .ascii "RIFF/RIFX/RF64/BW64/W64 WAV: 1..8 channels, PCM 8/16/24/32 or float32/64.\n"
     .ascii "AIFF/AIFC: signed PCM 1..32 bits or float32/64, 1..8 channels.\n"
@@ -37,17 +38,20 @@ stats_k: .asciz " endpoint_dry="
 newline: .asciz "\n"
 check_arg: .asciz "--check"
 decode_arg: .asciz "--decode"
+tags_arg: .asciz "--tags"
+equals_text: .asciz "="
 output_fd: .quad -1
 
 .bss
 .p2align 4
 offline_pcm: .zero CHUNK_FRAMES*8
 number_buffer: .zero 32
+tag_line: .zero 4100
 timespec: .zero 16
 argc: .quad 0
 argv: .quad 0
 start_ms: .quad 0
-operation: .long 0             # 0 play, 1 check, 2 decode
+operation: .long 0             # 0 play, 1 check, 2 decode, 3 tags
 exit_code: .long 0
 
 .text
@@ -89,6 +93,17 @@ LOCALFN cli_main
     jmp .Lopen_input
 .Ltry_decode:
     mov rcx, [rbx + 8]
+    lea rdx, [rip + tags_arg]
+    call equal_text
+    test eax, eax
+    jz .Ltry_decode_arg
+    cmp qword ptr [rip + argc], 3
+    jne .Lshow_help
+    mov dword ptr [rip + operation], 3
+    mov r12, [rbx + 16]
+    jmp .Lopen_input
+.Ltry_decode_arg:
+    mov rcx, [rbx + 8]
     lea rdx, [rip + decode_arg]
     call equal_text
     test eax, eax
@@ -117,6 +132,8 @@ LOCALFN cli_main
     call decoder_open
     test eax, eax
     jz .Lbad_input
+    cmp dword ptr [rip + operation], 3
+    je .Ltags_only
     cmp dword ptr [rip + operation], 0
     je .Lplayback
 .Loffline_loop:
@@ -148,7 +165,11 @@ LOCALFN cli_main
 .Ldecoding_failed:
     mov dword ptr [rip + exit_code], 2
     jmp .Lreport_finish
+.Ltags_only:
+    call print_tags
+    jmp .Lcleanup
 .Lplayback:
+    call print_tags
     mov ecx, 1                         # console: messages, Space/Q, Ctrl+C
     call engine_start
     mov [rip + exit_code], eax
@@ -255,6 +276,57 @@ FN print_text
     add rsp, 40
     ret
 ENDFN print_text
+
+# Writes the opened file's tags as "key=value" lines; control characters
+# in values print as spaces.
+LOCALFN print_tags
+    push rbx
+    push rsi
+    push rdi
+    sub rsp, 32
+    xor ebx, ebx
+.Ltags_key:
+    mov ecx, ebx
+    call tags_get
+    test rax, rax
+    jz .Ltags_next
+    mov rsi, rax
+    mov edi, edx
+    lea rax, [rip + tag_names]
+    mov rcx, [rax + rbx*8]
+    call print_text
+    lea rcx, [rip + equals_text]
+    call print_text
+    lea rdx, [rip + tag_line]
+    xor ecx, ecx
+.Ltags_char:
+    cmp ecx, edi
+    jae .Ltags_write
+    cmp ecx, 4096
+    jae .Ltags_write
+    movzx eax, byte ptr [rsi + rcx]
+    cmp eax, 0x20
+    jae .Ltags_store
+    mov eax, 0x20
+.Ltags_store:
+    mov [rdx + rcx], al
+    inc ecx
+    jmp .Ltags_char
+.Ltags_write:
+    mov byte ptr [rdx + rcx], 10
+    lea r8d, [rcx + 1]
+    mov ecx, 1
+    call write_all
+.Ltags_next:
+    inc ebx
+    cmp ebx, 10
+    jb .Ltags_key
+    add rsp, 32
+    pop rdi
+    pop rsi
+    pop rbx
+    ret
+ENDFN print_tags
 
 # RCX=unsigned value, written in decimal.
 FN print_number

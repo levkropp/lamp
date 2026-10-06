@@ -514,7 +514,19 @@ LOCALFN mp4_sample_entry
     mov r8d, BOX_ALAC
     call mp4_child
     test rax, rax
+    jnz .Lmp4_entry_alac_found
+    mov rcx, [rsp + 24]                   # QuickTime: inside 'wave'
+    mov rdx, rdi
+    mov r8d, BOX_WAVE
+    call mp4_child
+    test rax, rax
     jz .Lmp4_entry_none
+    mov rcx, rax
+    mov r8d, BOX_ALAC
+    call mp4_child
+    test rax, rax
+    jz .Lmp4_entry_none
+.Lmp4_entry_alac_found:
     mov [rip + mp4_config], rax
     sub rdx, rax
     mov [rip + mp4_config_bytes], edx

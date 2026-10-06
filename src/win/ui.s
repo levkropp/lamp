@@ -84,6 +84,7 @@ ui_ofn: .zero 152
 ui_pending: .zero 4096*2
 ui_path: .zero 4096*2
 ui_filename: .zero 8
+ui_tag_text: .zero 1040*2               # "Artist - Title" from the tags
 ui_time_text: .zero 64*2
 ui_volume_text: .zero 32*2
 .text
