@@ -31,3 +31,9 @@ EXPORTS
     GetFullPathNameW
     MoveFileExW
     WideCharToMultiByte
+    GetFileAttributesW
+    FindFirstFileW
+    FindNextFileW
+    FindClose
+    Sleep
+    GlobalAlloc

@@ -21,3 +21,7 @@ EXPORTS
     ShowWindow
     TranslateMessage
     UpdateWindow
+    SetWindowTextW
+    FindWindowW
+    GetWindowTextW
+    GetClientRect

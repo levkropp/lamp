@@ -15,7 +15,7 @@
 .include "lamp.inc"
 .globl queue_begin, queue_read, queue_seek, queue_announce, queue_skipped
 .globl queue_count, queue_failures, queue_rate, queue_index, queue_repeat, queue_goto, queue_heard
-.globl queue_navigate, parse_time, queue_start
+.globl queue_navigate, parse_time, queue_start, queue_open, queue_paths, queue_output
 
 .equ QUEUE_SKIPPED, 6               # decode_error after skipped files
 .equ CH_SIZE, 64                    # src/ogg_chain.s link entries
@@ -51,11 +51,18 @@ queue_skip_pcm: .zero 2048*8         # frames read and dropped by queue_start
 # RCX=path pointers, EDX=count -> EAX=1 when a file opened (the first that
 # opens); queue_rate is then its output rate.
 FN queue_begin
+    xor r8d, r8d
+    jmp queue_open
+ENDFN queue_begin
+
+# RCX=path pointers, EDX=count, R8D=index of the first file to try -> as
+# queue_begin, the list starting there (with repeat, wrapping around).
+FN queue_open
     sub rsp, 40
     mov [rip + queue_paths], rcx
     mov [rip + queue_count], edx
+    mov [rip + queue_next], r8d
     xor eax, eax
-    mov [rip + queue_next], eax
     mov [rip + queue_rate], eax
     mov [rip + queue_failures], eax
     mov [rip + queue_resampling], eax
@@ -77,7 +84,7 @@ FN queue_begin
 .Lqueue_begin_return:
     add rsp, 40
     ret
-ENDFN queue_begin
+ENDFN queue_open
 
 # Opens the next file that opens -> EAX=1, 0 when none is left.
 LOCALFN queue_advance
@@ -234,7 +241,9 @@ FN queue_read
 .Lqueue_read_resampled:
     call resample_read
 .Lqueue_read_count:
+    mov eax, eax
     add ebx, eax
+    add [rip + queue_output], rax         # before a later file's mark is taken
     test eax, eax
     jz .Lqueue_read_ended
     mov dword ptr [rip + queue_idle], 0
@@ -275,7 +284,6 @@ FN queue_read
 .Lqueue_read_stop:
     mov dword ptr [rip + queue_playing], 0
 .Lqueue_read_done:
-    add [rip + queue_output], rbx
     mov eax, ebx
     add rsp, 32
     pop rdi

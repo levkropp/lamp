@@ -11,7 +11,7 @@ The bytes are the embedded image as stored; LAMP neither decodes nor converts th
 
 The Windows player shows the picture above the title while a file plays (`src/win/ui_cover.inc`):
 
-- When a file opens, the playback thread copies the picture, since the mapped file closes with playback.
+- When a file opens, the playback or decoding thread copies the picture, since the mapped file closes with playback. In a list, files open before they are heard, so the window takes the picture when its file is heard (see [queue notes](queue.md)).
 - The window thread decodes it once through the Windows Imaging Component, scaling it to fit 1024 pixels a side, into premultiplied BGRA. A picture equal to the one shown, as after a seek, is not decoded again.
 - The window thread then box-filters it in assembly to fit a square of up to 360 pixels, blends it into the window's pixel canvas over the background and centres it with the title between the header and the controls.
 - Windows too small for a 48-pixel picture, and pictures WIC cannot decode, show the title alone.

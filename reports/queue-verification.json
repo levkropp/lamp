@@ -6,99 +6,99 @@
       "result": "exact",
       "frames": 264600,
       "note": "eight formats at 44.1 kHz",
-      "stats": "codec=1 rate=44100 channels=1 bits=8 frames=264600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=17 cpu_us=17262 endpoint_dry=0"
+      "stats": "codec=1 rate=44100 channels=1 bits=8 frames=264600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=17 cpu_us=17280 endpoint_dry=0"
     },
     {
       "test": "--check same rate",
       "result": "frames match",
-      "stats": "codec=1 rate=44100 channels=1 bits=8 frames=264600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=18 cpu_us=17857 endpoint_dry=0"
+      "stats": "codec=1 rate=44100 channels=1 bits=8 frames=264600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=21 cpu_us=21202 endpoint_dry=0"
     },
     {
       "test": "mixed-rates",
       "result": "exact",
       "frames": 176400,
       "note": "Opus 48, MP3 22.05, FLAC 96, WAV 8 and Vorbis 32 kHz resampled to 44.1",
-      "stats": "codec=3 rate=44100 channels=2 bits=0 frames=176400 underruns=0 decode_error=0 audio_error=0 elapsed_ms=66 cpu_us=65949 endpoint_dry=0"
+      "stats": "codec=3 rate=44100 channels=2 bits=0 frames=176400 underruns=0 decode_error=0 audio_error=0 elapsed_ms=64 cpu_us=64547 endpoint_dry=0"
     },
     {
       "test": "from-48k",
       "result": "exact",
       "frames": 67200,
       "note": "a 48 kHz session",
-      "stats": "codec=1 rate=48000 channels=2 bits=16 frames=67200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=12 cpu_us=12903 endpoint_dry=0"
+      "stats": "codec=1 rate=48000 channels=2 bits=16 frames=67200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=11 cpu_us=11278 endpoint_dry=0"
     },
     {
       "test": "chain-resampled",
       "result": "exact",
       "frames": 52920,
       "note": "a 48 kHz chain resampled to 44.1 kHz",
-      "stats": "codec=5 rate=44100 channels=2 bits=32 frames=52920 underruns=0 decode_error=0 audio_error=0 elapsed_ms=14 cpu_us=14114 endpoint_dry=0"
+      "stats": "codec=5 rate=44100 channels=2 bits=32 frames=52920 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=14993 endpoint_dry=0"
     },
     {
       "test": "chain-own-rate",
       "result": "exact",
       "frames": 62400,
       "note": "a chain resampling its own links at the session's rate",
-      "stats": "codec=7 rate=48000 channels=2 bits=24 frames=62400 underruns=0 decode_error=0 audio_error=0 elapsed_ms=7 cpu_us=7869 endpoint_dry=0"
+      "stats": "codec=7 rate=48000 channels=2 bits=24 frames=62400 underruns=0 decode_error=0 audio_error=0 elapsed_ms=8 cpu_us=7570 endpoint_dry=0"
     },
     {
       "test": "chain-skipped",
       "result": "exact",
       "frames": 39690,
       "note": "a chain whose links change rate, at another rate",
-      "stats": "codec=1 rate=44100 channels=2 bits=24 frames=39690 underruns=0 decode_error=6 audio_error=0 elapsed_ms=2 cpu_us=3083 endpoint_dry=0"
+      "stats": "codec=1 rate=44100 channels=2 bits=24 frames=39690 underruns=0 decode_error=6 audio_error=0 elapsed_ms=3 cpu_us=3364 endpoint_dry=0"
     },
     {
       "test": "unopenable",
       "result": "exact",
       "frames": 39690,
       "note": "two files skipped, exit 2",
-      "stats": "codec=1 rate=44100 channels=2 bits=24 frames=39690 underruns=0 decode_error=6 audio_error=0 elapsed_ms=1 cpu_us=1375 endpoint_dry=0"
+      "stats": "codec=1 rate=44100 channels=2 bits=24 frames=39690 underruns=0 decode_error=6 audio_error=0 elapsed_ms=1 cpu_us=1365 endpoint_dry=0"
     },
     {
       "test": "broken-middle",
       "result": "exact",
       "frames": 53118,
       "note": "a truncated file in the middle",
-      "stats": "codec=3 rate=44100 channels=2 bits=0 frames=53118 underruns=0 decode_error=6 audio_error=0 elapsed_ms=2 cpu_us=2049 endpoint_dry=0"
+      "stats": "codec=3 rate=44100 channels=2 bits=0 frames=53118 underruns=0 decode_error=6 audio_error=0 elapsed_ms=2 cpu_us=2232 endpoint_dry=0"
     },
     {
       "test": "broken-last",
       "result": "exact",
       "frames": 26658,
       "note": "the last file's own error kept",
-      "stats": "codec=2 rate=44100 channels=2 bits=24 frames=26658 underruns=0 decode_error=3 audio_error=0 elapsed_ms=0 cpu_us=815 endpoint_dry=0"
+      "stats": "codec=2 rate=44100 channels=2 bits=24 frames=26658 underruns=0 decode_error=3 audio_error=0 elapsed_ms=0 cpu_us=851 endpoint_dry=0"
     },
     {
       "test": "nothing opens",
       "result": "rejected",
-      "output": "Unsupported, malformed, or inaccessible file. Supports WAV/W64, AIFF/AIFC, CAF, FLAC, WavPack, MP1/MP2/MP3, AAC (LC, HE), AC-3, Ogg (Vorbis, Opus, FLAC), Matroska/WebM, MP4/MOV, AVI, FLV and MPEG-TS/PS audio."
+      "output": "Unsupported, malformed, or inaccessible file. Supports WAV/W64, AIFF/AIFC, CAF, AU, FLAC, WavPack, MP1/MP2/MP3, AAC (LC, HE), AC-3, Ogg (Vorbis, Opus, FLAC), Matroska/WebM, MP4/MOV, AVI, FLV and MPEG-TS/PS audio."
     },
     {
       "test": "--check with a skipped file",
       "result": "exit 2",
-      "stats": "codec=2 rate=44100 channels=2 bits=24 frames=17640 underruns=0 decode_error=6 audio_error=0 elapsed_ms=0 cpu_us=1115 endpoint_dry=0"
+      "stats": "codec=2 rate=44100 channels=2 bits=24 frames=17640 underruns=0 decode_error=6 audio_error=0 elapsed_ms=0 cpu_us=871 endpoint_dry=0"
     },
     {
       "test": "playlists",
       "result": "exact",
       "frames": 167580,
       "note": "PLS with a file:// URI, a nested M3U8 (BOM, CRLF, comments, a missing entry and a URL) and a Latin-1 M3U",
-      "stats": "codec=12 rate=44100 channels=2 bits=32 frames=167580 underruns=0 decode_error=6 audio_error=0 elapsed_ms=9 cpu_us=9375 endpoint_dry=0"
+      "stats": "codec=12 rate=44100 channels=2 bits=32 frames=167580 underruns=0 decode_error=6 audio_error=0 elapsed_ms=9 cpu_us=9209 endpoint_dry=0"
     },
     {
       "test": "loop",
       "result": "exact",
       "frames": 158760,
       "note": "a playlist naming itself expands to a depth of four",
-      "stats": "codec=4 rate=44100 channels=2 bits=32 frames=158760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=23 cpu_us=23019 endpoint_dry=0"
+      "stats": "codec=4 rate=44100 channels=2 bits=32 frames=158760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=22 cpu_us=21953 endpoint_dry=0"
     },
     {
       "test": "unreadable-playlist",
       "result": "exact",
       "frames": 44100,
       "note": "a playlist that does not exist is skipped",
-      "stats": "codec=9 rate=44100 channels=2 bits=24 frames=44100 underruns=0 decode_error=6 audio_error=0 elapsed_ms=3 cpu_us=3338 endpoint_dry=0"
+      "stats": "codec=9 rate=44100 channels=2 bits=24 frames=44100 underruns=0 decode_error=6 audio_error=0 elapsed_ms=3 cpu_us=3227 endpoint_dry=0"
     }
   ],
   "scope": "Gapless queues of several files: exact concatenation at one rate, resampling to the first file's rate against the resampler oracle, chained Ogg files, skipped and failing files, M3U/M3U8/PLS playlists."

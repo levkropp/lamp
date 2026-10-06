@@ -127,7 +127,7 @@ def build_lamp():
         python = sys.executable or 'python'
         run([python, ROOT / 'tools/build-windows.py', '--out', out, '--tests'], capture=False)
         objects = sorted((out / 'obj').glob('*.obj'))
-        skip = {'player.obj', 'ui.obj', 'engine-probe.obj', 'ui-preview.obj'}
+        skip = {'player.obj', 'ui.obj', 'engine-probe.obj', 'ui-preview.obj', 'ui-list.obj', 'ui-driver.obj'}
         library = out / 'obj' / 'lamp-test.lib'
         lib = shutil.which('llvm-lib') or shutil.which('lib')
         run([lib, '/nologo', f'/out:{library}', *[o for o in objects if o.name not in skip]])

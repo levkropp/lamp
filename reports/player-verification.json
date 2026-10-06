@@ -1,0 +1,193 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "folder",
+      "result": "natural order, folders in place, others left out",
+      "list": [
+        "Z:\\home\\user\\lamp\\tests\\generated\\player\\tree\\Album\\1 one.flac",
+        "Z:\\home\\user\\lamp\\tests\\generated\\player\\tree\\Album\\2 two.MP3",
+        "Z:\\home\\user\\lamp\\tests\\generated\\player\\tree\\Album\\10 ten.flac",
+        "Z:\\home\\user\\lamp\\tests\\generated\\player\\tree\\Album\\disc 1\\z.wav",
+        "Z:\\home\\user\\lamp\\tests\\generated\\player\\tree\\Album\\Disc 2\\a.wv",
+        "Z:\\home\\user\\lamp\\tests\\generated\\player\\tree\\Album\\Disc 2\\b.ogg",
+        "Z:\\home\\user\\lamp\\tests\\generated\\player\\tree\\Album\\\u00dcn\u00efcode.opus"
+      ]
+    },
+    {
+      "test": "command line and drop",
+      "result": "files as named, folders expanded",
+      "list": [
+        "Z:\\home\\user\\lamp\\tests\\generated\\player\\tree\\Album\\notes.txt",
+        "Z:\\no such file.flac",
+        "Z:\\home\\user\\lamp\\tests\\generated\\player\\tree\\Album\\Disc 2\\a.wv",
+        "Z:\\home\\user\\lamp\\tests\\generated\\player\\tree\\Album\\Disc 2\\b.ogg"
+      ]
+    },
+    {
+      "test": "open dialog",
+      "result": "folder and names joined; one path whole",
+      "list": [
+        "Z:\\music\\a.flac",
+        "Z:\\music\\b c.mp3",
+        "Z:\\top.flac",
+        "Z:\\music\\one.flac"
+      ]
+    },
+    {
+      "test": "command-line list",
+      "result": "in order, titled as heard",
+      "titles": [
+        "LAMP - Lev's Assembly Media Player",
+        "LAMP Test \u2013 First - LAMP",
+        "LAMP Test \u2013 Second - LAMP",
+        "LAMP Test \u2013 Third - LAMP"
+      ],
+      "segments": [
+        [
+          "First",
+          34,
+          120000
+        ],
+        [
+          "Second",
+          0,
+          120000
+        ],
+        [
+          "Third",
+          0,
+          120000
+        ]
+      ]
+    },
+    {
+      "test": "keys",
+      "result": "N, P twice, media next, next button, Right, N at the end, R and N",
+      "titles": [
+        "LAMP Test \u2013 One - LAMP",
+        "LAMP Test \u2013 Two - LAMP",
+        "LAMP Test \u2013 One - LAMP",
+        "LAMP Test \u2013 One - LAMP",
+        "LAMP Test \u2013 Two - LAMP",
+        "LAMP Test \u2013 Three - LAMP",
+        "LAMP Test \u2013 Three - LAMP",
+        "LAMP Test \u2013 Four - LAMP",
+        "LAMP Test \u2013 Four - LAMP",
+        "LAMP Test \u2013 One - LAMP"
+      ],
+      "segments": [
+        [
+          "One",
+          288,
+          114000
+        ],
+        [
+          "Two",
+          112,
+          71520
+        ],
+        [
+          "One",
+          173,
+          191760
+        ],
+        [
+          "One",
+          155,
+          71280
+        ],
+        [
+          "Two",
+          153,
+          71280
+        ],
+        [
+          "Three",
+          121,
+          71280
+        ],
+        [
+          "Three",
+          311098,
+          432000
+        ],
+        [
+          "Four",
+          0,
+          190560
+        ],
+        [
+          "One",
+          122,
+          71520
+        ]
+      ]
+    },
+    {
+      "test": "folder and playlist",
+      "result": "list order",
+      "titles": [
+        "LAMP Test \u2013 Track 1 - LAMP",
+        "LAMP Test \u2013 Track 2 - LAMP",
+        "LAMP Test \u2013 Track 10 - LAMP",
+        "LAMP Test \u2013 Inner - LAMP",
+        "LAMP Test \u2013 Listed - LAMP"
+      ],
+      "segments": [
+        [
+          "Track 1",
+          288,
+          72000
+        ],
+        [
+          "Track 2",
+          0,
+          72000
+        ],
+        [
+          "Track 10",
+          0,
+          72000
+        ],
+        [
+          "Inner",
+          0,
+          72000
+        ],
+        [
+          "Listed",
+          0,
+          72000
+        ]
+      ]
+    },
+    {
+      "test": "killed stream reopens",
+      "result": "continued to the end",
+      "runs": [
+        [
+          "Long",
+          288,
+          912
+        ],
+        [
+          "Long",
+          23040,
+          54720
+        ],
+        [
+          "Long",
+          77760,
+          106800
+        ],
+        [
+          "Long",
+          176305,
+          207695
+        ]
+      ]
+    }
+  ],
+  "scope": "lamp.exe list building (folders, command line, drops, the open dialog), gapless list playback with the title following the file heard, N/P, the media next command, the next button, seeking, repeat, playlists and reopening a killed stream, under Wine on Xvfb."
+}

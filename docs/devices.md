@@ -36,7 +36,7 @@ LAMP reopens the output when it fails during console playback:
 - **When the chosen output is gone:** a `--device` output that can no longer be activated is replaced by the default output from then on.
 - **When nothing can be reopened:** when no output opens at all, playback ends with the usual audio error (exit code 3).
 
-Removing a PulseAudio sink normally moves its streams to another sink, and playback simply continues there. The Windows player (`lamp.exe`) still uses the default endpoint and does not reopen yet.
+Removing a PulseAudio sink normally moves its streams to another sink, and playback simply continues there. The Windows player (`lamp.exe`) reopens a lost endpoint the same way, in the file heard at the heard position ([player check](../reports/player-verification.json)). It plays on the default endpoint; choosing another one there remains open.
 
 ## Verification
 

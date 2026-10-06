@@ -5,7 +5,8 @@
 .include "lamp.inc"
 .globl engine_mode, engine_stop_requested
 .globl engine_position, engine_seek_seconds, engine_volume, pause_requested
-.globl engine_ready, engine_opened
+.globl engine_ready, engine_opened, engine_play_list, engine_command, engine_heard_index, engine_heard_ms
+.globl read_count, device_chosen
 .globl exit_code, underruns, endpoint_dry
 
 .equ RING_FRAMES, 262144
@@ -246,53 +247,69 @@ input_record: .zero 20
 number_buffer: .zero 32
 
 .text
-# Called on a dedicated rendering thread by the native UI.
-# The same producer/WASAPI engine backs the CLI and window.
+# Called on a dedicated rendering thread by the native UI: RCX=path, played
+# from engine_seek_seconds -> EAX=exit code.
 FN engine_play
-    sub rsp, 136
-    mov dword ptr [rip + engine_mode], 1
-    mov dword ptr [rip + operation], 0
-    mov dword ptr [rip + exit_code], 0
-    mov dword ptr [rip + producer_done], 0
-    mov dword ptr [rip + engine_ready], 0
-    mov dword ptr [rip + was_paused], 0
-    mov dword ptr [rip + audio_hresult], 0
-    mov qword ptr [rip + write_count], 0
-    mov qword ptr [rip + read_count], 0
-    mov qword ptr [rip + decoded_count], 0
-    mov qword ptr [rip + underruns], 0
-    mov qword ptr [rip + endpoint_dry], 0
-    mov qword ptr [rip + engine_position], 0
-    mov eax, [rip + engine_seek_seconds]
-    mov [rip + engine_seek_frames], rax
-    lea rax, [rip + engine_stop_requested]
-    mov [rip + ogg_cancel_ptr], rax
     mov [rip + engine_path], rcx
-    mov qword ptr [rip + queue_skipped], 0
-    mov qword ptr [rip + queue_announce], 0
     lea rcx, [rip + engine_path]
     mov edx, 1
-    call queue_begin
+    xor r8d, r8d
+    mov eax, [rip + engine_seek_seconds]
+    imul r9, rax, 1000
+    jmp engine_play_list
+ENDFN engine_play
+
+# RCX=path pointers, EDX=count, R8D=index of the first file to play, R9=
+# milliseconds into it -> EAX=exit code. The same producer/WASAPI engine
+# backs the CLI and window; the files play as one gapless queue.
+# engine_opened is called on this thread once the first file opens and on
+# the producer thread as each later file opens. A stream that played and
+# then lost its endpoint returns with engine_command 5 and the heard file
+# and position in engine_heard_index and engine_heard_ms.
+FN engine_play_list
+    sub rsp, 136
+    mov [rsp + 96], r8
+    mov [rsp + 104], r9
+    mov dword ptr [rip + engine_mode], 1
+    xor eax, eax
+    mov [rip + operation], eax
+    mov [rip + exit_code], eax
+    mov [rip + producer_done], eax
+    mov [rip + engine_ready], eax
+    mov [rip + was_paused], eax
+    mov [rip + audio_hresult], eax
+    mov [rip + engine_command], eax
+    mov [rip + write_count], rax
+    mov [rip + read_count], rax
+    mov [rip + decoded_count], rax
+    mov [rip + underruns], rax
+    mov [rip + endpoint_dry], rax
+    mov [rip + engine_position], rax
+    mov [rip + queue_skipped], rax
+    lea rax, [rip + engine_stop_requested]
+    mov [rip + ogg_cancel_ptr], rax
+    mov rax, [rip + engine_opened]
+    mov [rip + queue_announce], rax
+    call queue_open
     test eax, eax
     jz bad_input
+    mov rax, [rsp + 104]
+    mov ecx, [rsp + 96]
+    cmp ecx, [rip + queue_index]
+    je .Lengine_list_start
+    xor eax, eax                        # a later file opened instead
+.Lengine_list_start:
+    mov [rip + engine_seek_ms], rax
     mov rax, [rip + engine_opened]
     test rax, rax
     jz .Lengine_opened
     call rax
 .Lengine_opened:
-    mov eax, [rip + queue_rate]
-    mul qword ptr [rip + engine_seek_frames]
-    cmp qword ptr [rip + output_frames], 0
-    je .Lengine_seek_limit_ready
-    cmp rax, [rip + output_frames]
-    cmova rax, [rip + output_frames]
-.Lengine_seek_limit_ready:
-    mov [rip + engine_seek_frames], rax
-    mov [rip + engine_position], rax
+    call console_seek
     cmp dword ptr [rip + engine_stop_requested], 0
     jne cleanup
     jmp start_playback
-ENDFN engine_play
+ENDFN engine_play_list
 FN engine_stop
     sub rsp, 40
     mov dword ptr [rip + engine_stop_requested], 1
@@ -964,10 +981,9 @@ start_playback:
 .Lbad_audio:
     mov [rip + audio_hresult], eax
 .Lbad_audio_saved:
-    # A console stream that played and then lost its endpoint (invalidated,
-    # or silent past the timeout): reopen the heard file where it was.
-    cmp dword ptr [rip + engine_mode], 0
-    jne .Lbad_audio_report
+    # A stream that played and then lost its endpoint (invalidated, or
+    # silent past the timeout): reopen the heard file where it was (the
+    # console here, the window on return).
     cmp dword ptr [rip + engine_ready], 0
     je .Lbad_audio_report
     cmp qword ptr [rip + read_count], 0

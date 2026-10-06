@@ -27,8 +27,6 @@ M3U, M3U8 and PLS playlists on the command line are replaced by their entries (`
 - Playlists inside playlists expand too, to a depth of four, so a playlist that names itself ends.
 - A playlist that cannot be read is skipped like a file that does not open. Up to 65,536 entries and 4 MiB of paths are kept; longer playlists are cut.
 
-The Windows player still opens one file at a time; its drag-and-drop queue remains on the [roadmap](../ROADMAP.md).
-
 ## Starting later, navigation and repeat
 
 Options come before the files, and `--` ends them:
@@ -64,7 +62,42 @@ During console playback (Linux and Windows):
 - The state is a UTF-8 text file of `milliseconds<TAB>key<TAB>heard file` lines, newest first, at most 256 (`src/resume.s`). It lives at `$XDG_STATE_HOME/lamp/resume` or `~/.local/state/lamp/resume` on Linux, and at `%LOCALAPPDATA%\LAMP\resume.txt` on Windows. Other lists' lines stay and malformed lines are dropped.
 - It is rewritten through a temporary file and a rename, so an interrupted write leaves the old file. Failures to read or write it are silent.
 
-The queue notes where each file starts in its output, so a key acts on the file being heard rather than on one the decoder already reads ahead. A key stops the stream with a command; the CLI then reopens the queue at the target (`queue_navigate`, `queue_goto`) and starts a new stream, as the Windows player restarts for its seeks. Natural transitions stay gapless; a key's transition is a new stream. Seeks keep the session rate and work in resampled files too, which read up to the target.
+The queue notes where each file starts in its output, to the frame, so a key acts on the file being heard rather than on one the decoder already reads ahead. A key stops the stream with a command; the CLI then reopens the queue at the target (`queue_navigate`, `queue_goto`) and starts a new stream, as the Windows player restarts for its seeks. Natural transitions stay gapless; a key's transition is a new stream. Seeks keep the session rate and work in resampled files too, which read up to the target.
+
+## The Windows player
+
+`lamp.exe` plays a list the same way, as one gapless queue:
+
+- **Building the list:**
+  - Files and folders named on its command line, dropped on the window, or chosen in the open dialog (O; several at once) replace the list. It plays from its first file.
+  - M3U, M3U8 and PLS playlists in the list expand as above.
+  - A folder adds its audio files (the open dialog's types, without playlists) and those of its folders, up to eight folders deep. Names are in natural order, as Explorer sorts them (`StrCmpLogicalW`: `2` before `10`), with files and folders together.
+  - Hidden and system entries are left out. Files named directly are kept whatever their type; they are skipped at playback when they do not open.
+  - A list holds up to 32,768 files.
+- **Controls:**
+  - With more than one file, previous and next buttons sit beside play/pause.
+  - The status strip shows `REPEAT` and the number of the file heard (`2 / 5`).
+  - The window's title becomes `Artist – Title - LAMP`, or the file name.
+
+| Key | Action |
+| --- | --- |
+| Space, media play/pause | Pause or resume; with nothing playing, the list again from its first file |
+| N, media next | The next file (with repeat, the first after the last; without, nothing after the last) |
+| P, media previous | The heard file from its start when more than 3 s of it played, else the previous file |
+| Right / Left, a click on the timeline | 5 s forward / back, or the clicked point, in the heard file |
+| Home | The heard file from its start |
+| Up / Down, M | Volume, mute |
+| R | Repeat on or off |
+| O | Open files |
+| Q | Close |
+
+Files open before they are heard, so the window keeps what it shows per file:
+
+- As each file opens, the playback thread (for the first file) or the decoding thread (for later ones) notes it in a ring of 64 entries (`src/win/ui_queue.inc`): where it starts in the output, its length, codec, title and picture.
+- The window shows the entry whose start the heard position has reached: the title, picture, time, timeline and codec.
+- A timer set for the next entry's start changes them on time, even while the controls are hidden.
+
+Navigation starts a new playback thread at the target file and position (`engine_play_list`), as seeks always did. Natural transitions stay gapless. When the endpoint is lost after playback started, the window reopens the heard file at the heard position, as the console does (see [device notes](devices.md)).
 
 ## Verification
 
@@ -98,5 +131,17 @@ The queue notes where each file starts in its output, so a key acts on the file 
 - `--wine` runs the same checks with the Windows `lamp-cli.exe` ([report](../reports/navigation-wine-verification.json)):
   - Its decodes equal the Linux build's.
   - Its playback goes through Wine's PulseAudio driver, which drops audio here. The order of files, the jumps and the restarts must still match.
+
+`python3 tests/verify-player.py` ([report](../reports/player-verification.json)) runs `lamp.exe` under Wine on a virtual X display (Xvfb), with the private null sink:
+
+- **List building:** `ui-list.exe` runs the player's own list code. It checks:
+  - a folder's natural order, its inner folders and the entries left out;
+  - files and folders named on the command line or dropped (an HDROP built by the test);
+  - the open dialog's results, for one file and for several.
+- **Playback:** `ui-driver.exe` sends the window keys, media commands and clicks, and reads its title. The captured audio is matched against each file's decode by order and position, as Wine's driver drops audio. It checks:
+  - three files playing gaplessly, the title following each file as it is heard;
+  - N, P twice, the media "next" command, the next button, Right, N on the last file, then R and N;
+  - a folder and an M3U playlist playing in list order;
+  - a stream killed by the server reopening where it was heard.
 
 `python3 tests/verify-playback.py` plays a four-file queue (a 0.3 s first file shorter than the prebuffer, a resampled 44.1 kHz MP3, Opus and WAV) through the private null sink: the captured stream equals the `--decode` output bit for bit, with no gap between files.
