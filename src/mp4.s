@@ -7,7 +7,7 @@
 # stsc, stco/co64) or from movie fragments (moof/traf/tfhd/trun). The
 # first non-empty edit trims the start and limits the presented duration.
 .include "lamp.inc"
-.globl mp4_track_id
+.globl mp4_track_id, mp4_config, mp4_config_bytes
 
 .equ BOX_MOOV, 0x766f6f6d
 .equ BOX_TRAK, 0x6b617274
@@ -228,11 +228,16 @@ ENDFN mp4_descriptor_length
 
 # esds payload (RCX, end RDX) -> EAX=track codec: 3 for MPEG-1/2 audio
 # object types, 7 for MPEG-4 audio and MPEG-2 AAC LC (configuration from the
-# DecoderSpecificInfo); 0 otherwise.
+# DecoderSpecificInfo in mp4_config); 0 otherwise.
 LOCALFN mp4_esds
+    add rcx, 4                            # FullBox version and flags
+    jmp mp4_es_descriptor
+ENDFN mp4_esds
+
+# ES_Descriptor (RCX, end RDX) -> EAX as mp4_esds (CAF kuki chunks hold one).
+FN mp4_es_descriptor
     push rbx
     sub rsp, 32
-    add rcx, 4                            # FullBox version and flags
     cmp rcx, rdx
     jae .Lmp4_esds_none
     cmp byte ptr [rcx], 3                 # ES_Descriptor
@@ -307,7 +312,7 @@ LOCALFN mp4_esds
     add rsp, 32
     pop rbx
     ret
-ENDFN mp4_esds
+ENDFN mp4_es_descriptor
 
 # The first sample entry of stsd (RCX payload, RDX end) -> EAX=1 when it is
 # a supported audio format; sets the codec, configuration and PCM layout.

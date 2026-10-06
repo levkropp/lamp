@@ -1,6 +1,6 @@
-# RIFF/RF64/BW64 audio, precision and speaker layouts
+# RIFF/RF64/BW64, Wave64 and RIFX audio, precision and speaker layouts
 
-Current 0.4.0-dev source accepts little-endian RIFF/RF64/BW64 audio framing with 1–8 channels and rates from 8–192 kHz. PCM containers are unsigned 8-bit or signed 16/24/32-bit; IEEE input can be float32 or float64. Both basic and extensible headers are supported. G.711, IMA and Microsoft ADPCM, MPEG audio and AC-3 data also play; see [compressed audio](#compressed-audio). The public v0.3.0 download retains its earlier mono/stereo RIFF PCM/float32 implementation.
+Current 0.4.0-dev source accepts little-endian RIFF/RF64/BW64 audio framing with 1–8 channels and rates from 8–192 kHz. PCM containers are unsigned 8-bit or signed 16/24/32-bit; IEEE input can be float32 or float64. Both basic and extensible headers are supported. G.711, IMA and Microsoft ADPCM, MPEG audio and AC-3 data also play; see [compressed audio](#compressed-audio). Sony Wave64 and big-endian RIFX files use the same fmt and data rules; see [Wave64 and RIFX](#wave64-and-rifx). The public v0.3.0 download retains its earlier mono/stereo RIFF PCM/float32 implementation.
 
 ## Precision and numeric conversion
 
@@ -31,6 +31,14 @@ BW64 support covers audio framing and the existing WAVE speaker policy. ADM XML,
 Run `python3 tests/verify-containers.py rf64` for the [recorded report](../reports/rf64-verification.json): 538 files, 16 sparse large-file fixtures, 8,950 exact seeks and 312 malformed-input rejections, including 256 seeded size/table mutations. Tests cover basic/extensible PCM/float across all channel counts, every valid PCM precision with mono/eight-channel input, finite/sentinel precedence, `fact` replacement, repeated/reordered entries, the table limit, trailing chunks, future bytes and Unicode paths. NTFS sparse inputs reach 17,179,877,476 logical bytes with large data/metadata and more than `2^32` frames. Guarded reads around 4 GiB offsets, EOF clamping, cancellation and 64 open/close cycles per file operate on original inputs. Sparse files are flushed before measuring allocation and removed after verification. Actual WASAPI lifecycle checks also cover ordinary RF64 and BW64 silence, including a nonzero BW64 dummy.
 
 Independent FFmpeg comparisons use original containers where supported. FFmpeg n8.0.1's [WAV demuxer](https://github.com/FFmpeg/FFmpeg/blob/n8.0.1/libavformat/wavdec.c) skips the optional size table, reads BW64's dummy as a signed RF64 count, uses `ds64` data length even when the data header is finite, and omits odd `ds64` padding. Cases outside those limits use its raw physical-PCM reader at a known data offset. The large BW64 comparator pass zeros only the ignored dummy after LAMP verifies the original nonzero value. Reports identify each reference path; they do not claim complete independent container conformance. The precision suite below also records FFmpeg's valid-bit header limitation.
+
+## Wave64 and RIFX
+
+Sony Wave64 (`.w64`) replaces RIFF's FourCCs with GUIDs and its sizes with 64-bit ones that count each chunk's 24-byte header, and pads chunks to 8 bytes. Standard chunk GUIDs (a FourCC followed by `F3AC-D311-8CD1-00C04F8EDB8A`) are matched by their FourCC; others are skipped, and the last chunk may end the file unpadded. Its fmt, fact and data chunks then follow the WAVE rules above, compressed tags included, except that a fact count below the data's frames trims them (FFmpeg's Wave64 muxer counts the padding as data and FFmpeg plays it).
+
+RIFX is RIFF with every integer big-endian: chunk sizes, fmt fields (basic or extensible) and the PCM and float samples, as the RIFF specification and libsndfile define it. G.711 is byte-sized; compressed tags reject in RIFX. FFmpeg 6.1 reads RIFX sample data as little-endian and accepts only 16-byte fmt chunks, so RIFX is checked against the WAVE files it was converted from.
+
+`python3 tests/verify-caf-wave64.py` ([report](../reports/caf-wave64-verification.json)) checks 11 Wave64 files from FFmpeg's muxer (8-32-bit PCM, float32/64, G.711, IMA and Microsoft ADPCM, mono to 5.1), exact against FFmpeg up to the fact count; a Wave64 file with an unknown chunk and an unpadded last chunk; eight RIFX files converted from FFmpeg's WAVE files (8-32-bit PCM, float32/64, G.711, mono to 5.1, extensible headers) decoding exactly as the originals; seeks; and malformed GUIDs, sizes and truncation.
 
 ## Compressed audio
 
