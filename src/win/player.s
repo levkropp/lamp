@@ -23,11 +23,13 @@ usage: .ascii "LAMP 0.4.0-dev - Lev's Assembly Media Player"
       .byte 13, 10
       .ascii "in WAV/W64, AIFF/AIFC, CAF, AU, FLAC, WavPack, MP3, AAC (ADTS), AC-3, Ogg, Matroska/WebM, MP4/MOV, AVI, FLV and MPEG-TS/PS files."
       .byte 13, 10
-      .ascii "Usage: lamp-cli.exe [--start TIME] [--repeat] [--resume] [--device NAME] file.mp3 [more files...]"
+      .ascii "Usage: lamp-cli.exe [--start TIME] [--repeat] [--resume] [--device NAME] [--rate HZ|device]"
       .byte 13, 10
-      .ascii "       lamp-cli.exe --check [--start TIME] file.flac [more files...]"
+      .ascii "                    file.mp3 [more files...]"
       .byte 13, 10
-      .ascii "       lamp-cli.exe --decode [--start TIME] file.flac [more files...] output.f32"
+      .ascii "       lamp-cli.exe --check [--start TIME] [--rate HZ] file.flac [more files...]"
+      .byte 13, 10
+      .ascii "       lamp-cli.exe --decode [--start TIME] [--rate HZ] file.flac [more files...] output.f32"
       .byte 13, 10
       .ascii "       lamp-cli.exe --tags file.mp3"
       .byte 13, 10
@@ -39,7 +41,9 @@ usage: .ascii "LAMP 0.4.0-dev - Lev's Assembly Media Player"
       .byte 13, 10
       .ascii "Several files play one after another without a gap, at the first file's rate;"
       .byte 13, 10
-      .ascii "M3U/M3U8 and PLS playlists add their entries."
+      .ascii "M3U/M3U8 and PLS playlists add their entries. --rate resamples every file to HZ, or to the"
+      .byte 13, 10
+      .ascii "output's mix rate, with LAMP's own filter."
       .byte 13, 10
       .ascii "Playback: Space pauses/resumes; Q or Ctrl+C stops."
       .byte 13, 10
@@ -100,6 +104,8 @@ start_arg: .short '-', '-', 's', 't', 'a', 'r', 't', 0
 resume_arg: .short '-', '-', 'r', 'e', 's', 'u', 'm', 'e', 0
 device_arg: .short '-', '-', 'd', 'e', 'v', 'i', 'c', 'e', 0
 list_devices_arg: .short '-', '-', 'l', 'i', 's', 't', '-', 'd', 'e', 'v', 'i', 'c', 'e', 's', 0
+rate_arg: .short '-', '-', 'r', 'a', 't', 'e', 0
+rate_device: .short 'd', 'e', 'v', 'i', 'c', 'e', 0
 unknown_device: .ascii "Unknown audio device."
 .byte 13, 10, 0
 devices_failed: .ascii "Audio devices unavailable."
@@ -123,6 +129,7 @@ device_chosen: .quad 0               # its endpoint ID (device_id), 0 for the de
 devices_enum: .quad 0                # audio_devices' enumerator
 devices_callback: .quad 0            # audio_devices' ECX=2 callback
 cli_start_ms: .quad 0
+cli_rate: .long 0                    # --rate: Hz, -1 for the output's, 0 for the first file's
 engine_seek_ms: .quad 0              # console: where playback starts in the current file
 engine_heard_ms: .quad 0             # position in the heard file at a command
 cli_repeat: .long 0
@@ -418,7 +425,7 @@ FN start
     lea rdx, [rip + start_arg]
     call equal_wide
     test eax, eax
-    jz .Lshow_help
+    jz .Lopt_rate
     mov eax, [rip + arg_index]
     cmp eax, [rip + argc]
     jae .Lshow_help
@@ -442,6 +449,49 @@ FN start
     jc .Lshow_help
     mov [rip + cli_start_ms], rax
     jmp .Lopt_next
+.Lopt_rate:
+    mov rcx, [rsp + 64]
+    lea rdx, [rip + rate_arg]
+    call equal_wide
+    test eax, eax
+    jz .Lshow_help
+    mov eax, [rip + arg_index]
+    cmp eax, [rip + argc]
+    jae .Lshow_help
+    inc dword ptr [rip + arg_index]
+    mov rcx, [rip + argv]
+    mov rcx, [rcx + rax*8]
+    mov [rsp + 64], rcx
+    lea rdx, [rip + rate_device]
+    call equal_wide
+    mov edx, -1
+    test eax, eax
+    jnz .Lopt_rate_set
+    mov rcx, [rsp + 64]
+    xor edx, edx
+    xor r8d, r8d                        # digits
+.Lopt_rate_digit:
+    movzx eax, word ptr [rcx]
+    test eax, eax
+    jz .Lopt_rate_end
+    sub eax, '0'
+    cmp eax, 9
+    ja .Lshow_help
+    cmp r8d, 7
+    jae .Lshow_help
+    imul edx, edx, 10
+    add edx, eax
+    inc r8d
+    add rcx, 2
+    jmp .Lopt_rate_digit
+.Lopt_rate_end:
+    cmp edx, 1000
+    jb .Lshow_help
+    cmp edx, 768000
+    ja .Lshow_help
+.Lopt_rate_set:
+    mov [rip + cli_rate], edx
+    jmp .Lopt_next
 .Lopt_files:
     mov eax, [rip + argc]
     sub eax, [rip + arg_index]
@@ -458,6 +508,15 @@ FN start
     test eax, eax
     jnz .Lshow_help                     # --repeat, --resume and --device play
 .Lopt_repeat_checked:
+    cmp dword ptr [rip + cli_rate], 0
+    je .Lopt_rate_checked
+    cmp eax, 3
+    jae .Lshow_help                     # --rate decodes or plays
+    test eax, eax
+    jz .Lopt_rate_checked
+    cmp dword ptr [rip + cli_rate], -1
+    je .Lshow_help                      # the output's rate is playback's
+.Lopt_rate_checked:
     cmp eax, 6
     jne .Lopt_not_list
     cmp qword ptr [rip + input_count], 0
@@ -568,18 +627,33 @@ FN start
     call playlist_expand                # M3U and PLS playlists become their entries
     mov [rip + cli_paths], rax
     mov [rip + cli_count], edx
-    mov rcx, rax
+    mov eax, [rip + cli_rate]           # --rate HZ: the session rate
+    cmp eax, -1
+    jne .Lopen_rate
+    xor eax, eax
+.Lopen_rate:
+    mov [rip + queue_target], eax
+    cmp dword ptr [rip + operation], 0
+    jne .Lopen_queue
+    cmp qword ptr [rip + cli_device], 0
+    je .Lopen_device_rate
+    mov ecx, 1
+    call audio_devices                  # find --device
+    test eax, eax
+    jz cleanup                          # exit code 3, reported
+.Lopen_device_rate:
+    cmp dword ptr [rip + cli_rate], -1
+    jne .Lopen_queue
+    call audio_mix_rate                 # --rate device: the endpoint's mix rate
+    mov [rip + queue_target], eax       # (0, the first file's, when unknown)
+.Lopen_queue:
+    mov rcx, [rip + cli_paths]
+    mov edx, [rip + cli_count]
     call queue_begin                    # files play one after another
     test eax, eax
     jz bad_input
     cmp dword ptr [rip + operation], 0
     jne .Loffline_start
-    cmp qword ptr [rip + cli_device], 0
-    je .Lconsole_device
-    mov ecx, 1
-    call audio_devices                  # find --device
-    test eax, eax
-    jz cleanup                          # exit code 3, reported
 .Lconsole_device:
     mov rax, [rip + cli_start_ms]
     mov [rip + engine_seek_ms], rax
@@ -1504,7 +1578,10 @@ LOCALFN console_seek
 .Lconsole_seek_far:
     mov rax, -1
 .Lconsole_seek_frames:
-    mov rcx, [rip + output_frames]
+    mov r8, rax
+    call queue_frames                  # the file's length at the session rate
+    mov rcx, rax
+    mov rax, r8
     test rcx, rcx
     jz .Lconsole_seek_store
     cmp rax, rcx
@@ -2153,6 +2230,87 @@ LOCALFN absolute_utf8
     pop rbx
     ret
 ENDFN absolute_utf8
+
+# -> EAX=the shared-mode mix rate of the endpoint playback opens
+# (device_chosen or the default), 0 when it cannot be read.
+LOCALFN audio_mix_rate
+    push rbx
+    push rsi
+    push rdi
+    sub rsp, 48
+    xor esi, esi                        # the rate
+    xor ecx, ecx
+    mov edx, 2                          # COINIT_APARTMENTTHREADED
+    call CoInitializeEx
+    mov ebx, eax
+    lea rcx, [rip + clsid_enumerator]
+    xor edx, edx
+    mov r8d, 1
+    lea r9, [rip + iid_enumerator]
+    lea rax, [rip + devices_enum]
+    mov [rsp + 32], rax
+    call CoCreateInstance
+    test eax, eax
+    js .Lmix_release
+    mov rcx, [rip + devices_enum]
+    mov rdx, [rip + device_chosen]
+    lea r8, [rip + device_item]
+    test rdx, rdx
+    jz .Lmix_default
+    mov rax, [rcx]
+    call qword ptr [rax + 40]           # GetDevice
+    test eax, eax
+    jns .Lmix_device
+    mov rcx, [rip + devices_enum]
+.Lmix_default:
+    xor edx, edx
+    xor r8d, r8d
+    lea r9, [rip + device_item]
+    mov rax, [rcx]
+    call qword ptr [rax + 32]           # GetDefaultAudioEndpoint
+    test eax, eax
+    js .Lmix_release
+.Lmix_device:
+    mov rcx, [rip + device_item]
+    lea rdx, [rip + iid_client]
+    mov r8d, 1
+    xor r9d, r9d
+    lea rax, [rsp + 40]
+    mov qword ptr [rax], 0
+    mov [rsp + 32], rax
+    mov rax, [rcx]
+    call qword ptr [rax + 24]           # Activate an IAudioClient
+    test eax, eax
+    js .Lmix_release
+    mov rcx, [rsp + 40]                 # the client
+    lea rdx, [rsp + 32]                 # its mix format
+    mov qword ptr [rdx], 0
+    mov rax, [rcx]
+    call qword ptr [rax + 64]           # GetMixFormat
+    test eax, eax
+    js .Lmix_client
+    mov rcx, [rsp + 32]
+    mov esi, [rcx + 4]                  # nSamplesPerSec
+    call CoTaskMemFree
+.Lmix_client:
+    lea rcx, [rsp + 40]
+    call release_com
+.Lmix_release:
+    lea rcx, [rip + device_item]
+    call release_com
+    lea rcx, [rip + devices_enum]
+    call release_com
+    test ebx, ebx
+    js .Lmix_return
+    call CoUninitialize
+.Lmix_return:
+    mov eax, esi
+    add rsp, 48
+    pop rdi
+    pop rsi
+    pop rbx
+    ret
+ENDFN audio_mix_rate
 
 # Active render endpoints, in the enumerator's order. ECX=0 prints each as
 # "number<TAB>endpoint ID<TAB>friendly name" (UTF-8); ECX=1 finds the one

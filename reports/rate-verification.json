@@ -1,0 +1,86 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "--rate 48000 flac",
+      "result": "exact",
+      "frames": 288000
+    },
+    {
+      "test": "--rate 48000 wav",
+      "result": "exact",
+      "frames": 288000
+    },
+    {
+      "test": "--rate 48000 mp3",
+      "result": "exact",
+      "frames": 288000
+    },
+    {
+      "test": "--rate 48000 ogg",
+      "result": "exact",
+      "frames": 288000
+    },
+    {
+      "test": "--rate 48000 m4a",
+      "result": "exact",
+      "frames": 288000
+    },
+    {
+      "test": "own rate and a list",
+      "result": "exact"
+    },
+    {
+      "test": "--start in a resampled flac",
+      "result": "exact from 0.5 s and 3.7 s"
+    },
+    {
+      "test": "--start in a resampled mp3",
+      "result": "exact from 0.5 s and 3.7 s"
+    },
+    {
+      "test": "--start in a resampled ogg",
+      "result": "exact from 0.5 s and 3.7 s"
+    },
+    {
+      "test": "--start in a resampled m4a",
+      "result": "exact from 0.5 s and 3.7 s"
+    },
+    {
+      "test": "--check and usage",
+      "result": "frames counted; 8 misuses print the usage"
+    },
+    {
+      "test": "--rate device playback",
+      "result": "the resampled decode, unresampled by the server",
+      "runs": [
+        [
+          "tone",
+          480,
+          287520
+        ]
+      ]
+    },
+    {
+      "test": "seek in a resampled file",
+      "result": "jumped 5 s and played to the end",
+      "runs": [
+        [
+          "tone",
+          480,
+          81144
+        ],
+        [
+          "tone",
+          331546,
+          244454
+        ]
+      ]
+    },
+    {
+      "test": "--rate device on a 44.1 kHz sink",
+      "result": "rate=44100"
+    }
+  ],
+  "scope": "--rate decodes of five formats against the resampler oracle, lists, --start in resampled files, --check, misuse, and --rate device playback on the private null sink."
+}

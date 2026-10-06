@@ -14,9 +14,10 @@ usage:
     .ascii "Handwritten x86-64 assembly: PCM, G.711, IMA/MS/Flash ADPCM, FLAC, ALAC, WavPack, MP1/MP2/MP3, AAC-LC/HE-AAC, AC-3,\n"
     .ascii "Vorbis, Opus "
     .ascii "in WAV/W64, AIFF/AIFC, CAF, AU, FLAC, WavPack, MP3, AAC (ADTS), AC-3, Ogg, Matroska/WebM, MP4/MOV, AVI, FLV and MPEG-TS/PS files.\n"
-    .ascii "Usage: lamp-cli [--start TIME] [--repeat] [--resume] [--device NAME] file.mp3 [more files...]\n"
-    .ascii "       lamp-cli --check [--start TIME] file.flac [more files...]\n"
-    .ascii "       lamp-cli --decode [--start TIME] file.flac [more files...] output.f32\n"
+    .ascii "Usage: lamp-cli [--start TIME] [--repeat] [--resume] [--device NAME] [--rate HZ|device]\n"
+    .ascii "                file.mp3 [more files...]\n"
+    .ascii "       lamp-cli --check [--start TIME] [--rate HZ] file.flac [more files...]\n"
+    .ascii "       lamp-cli --decode [--start TIME] [--rate HZ] file.flac [more files...] output.f32\n"
     .ascii "       lamp-cli --tags file.mp3\n"
     .ascii "       lamp-cli --chapters file.m4b\n"
     .ascii "       lamp-cli --cover file.mp3 cover-image\n"
@@ -25,7 +26,8 @@ usage:
     .ascii "M3U/M3U8 and PLS playlists add their entries. --start begins the first file at TIME\n"
     .ascii "(seconds, M:S or H:M:S, with an optional fraction); --repeat plays the list again and again;\n"
     .ascii "--resume starts where Q stopped the same list and keeps where it stops; --device plays\n"
-    .ascii "on an output from --list-devices (by name, description or number).\n"
+    .ascii "on an output from --list-devices (by name, description or number); --rate resamples\n"
+    .ascii "every file to HZ, or to the output's rate, with LAMP's own filter.\n"
     .ascii "Playback: Space pauses/resumes; N/P next/previous file; arrows seek 5 s or 60 s;\n"
     .ascii "R toggles repeat; Q or Ctrl+C stops.\n"
     .ascii "RIFF/RIFX/RF64/BW64/W64 WAV: 1..8 channels, PCM 8/16/24/32 or float32/64.\n"
@@ -57,6 +59,8 @@ start_arg: .asciz "--start"
 resume_arg: .asciz "--resume"
 device_arg: .asciz "--device"
 list_devices_arg: .asciz "--list-devices"
+rate_arg: .asciz "--rate"
+rate_device: .asciz "device"
 unknown_device: .asciz "Unknown audio device: "
 tab_text: .asciz "\t"
 resume_xdg: .asciz "XDG_STATE_HOME"
@@ -69,6 +73,7 @@ cli_modes: .quad check_arg, 1, decode_arg, 2, tags_arg, 3, chapters_arg, 4, cove
     .quad 0, 0
 cli_device: .quad 0                    # --device's argument
 cli_start_ms: .quad 0
+cli_rate: .long 0                      # --rate: Hz, -1 for the output's, 0 for the first file's
 cli_repeat: .long 0
 cli_resume: .long 0
 device_found: .long 0
@@ -187,7 +192,7 @@ LOCALFN cli_main
     lea rdx, [rip + start_arg]
     call equal_text
     test eax, eax
-    jz .Lshow_help
+    jz .Lcli_rate_option
     cmp r12, [rip + argc]
     jae .Lshow_help
     mov rcx, [rbx + r12*8]
@@ -195,6 +200,20 @@ LOCALFN cli_main
     call parse_time
     jc .Lshow_help
     mov [rip + cli_start_ms], rax
+    jmp .Lcli_option
+.Lcli_rate_option:
+    mov rcx, rsi
+    lea rdx, [rip + rate_arg]
+    call equal_text
+    test eax, eax
+    jz .Lshow_help
+    cmp r12, [rip + argc]
+    jae .Lshow_help
+    mov rcx, [rbx + r12*8]
+    inc r12
+    call parse_rate
+    jc .Lshow_help
+    mov [rip + cli_rate], eax
     jmp .Lcli_option
 .Lcli_files:
     mov rsi, [rip + argc]
@@ -208,6 +227,15 @@ LOCALFN cli_main
     test eax, eax
     jnz .Lshow_help                    # --repeat, --resume and --device play
 .Lcli_repeat_checked:
+    cmp dword ptr [rip + cli_rate], 0
+    je .Lcli_rate_checked
+    cmp eax, 3
+    jae .Lshow_help                    # --rate decodes or plays
+    test eax, eax
+    jz .Lcli_rate_checked
+    cmp dword ptr [rip + cli_rate], -1
+    je .Lshow_help                     # the output's rate is playback's
+.Lcli_rate_checked:
     cmp eax, 6
     jne .Lcli_not_list
     test rsi, rsi
@@ -270,7 +298,27 @@ LOCALFN cli_main
     call playlist_expand               # M3U and PLS playlists become their entries
     mov [rip + cli_paths], rax
     mov [rip + cli_count], edx
-    mov rcx, rax
+    mov eax, [rip + cli_rate]          # --rate HZ: the session rate
+    cmp eax, -1
+    jne .Lopen_rate
+    xor eax, eax
+.Lopen_rate:
+    mov [rip + queue_target], eax
+    cmp dword ptr [rip + operation], 0
+    jne .Lopen_queue
+    cmp qword ptr [rip + cli_device], 0
+    je .Lopen_device_rate
+    call find_device
+    test eax, eax
+    jz .Lcleanup                       # exit code 3, reported
+.Lopen_device_rate:
+    cmp dword ptr [rip + cli_rate], -1
+    jne .Lopen_queue
+    call device_rate                   # --rate device: the output's rate
+    mov [rip + queue_target], eax      # (0, the first file's, when unknown)
+.Lopen_queue:
+    mov rcx, [rip + cli_paths]
+    mov edx, [rip + cli_count]
     call queue_begin                   # files play one after another
     test eax, eax
     jz .Lbad_input
@@ -311,12 +359,6 @@ LOCALFN cli_main
     call print_chapters
     jmp .Lcleanup
 .Lplayback:
-    cmp qword ptr [rip + cli_device], 0
-    je .Lplayback_device
-    call find_device
-    test eax, eax
-    jz .Lcleanup                       # exit code 3, reported
-.Lplayback_device:
     mov rax, [rip + cli_start_ms]
     mov [rip + engine_seek_ms], rax
     cmp dword ptr [rip + cli_resume], 0
@@ -727,6 +769,72 @@ LOCALFN print_device
     pop rbx
     ret
 ENDFN print_device
+
+# -> EAX=the sample rate of the output playback opens (pulse_device or the
+# default sink), 0 when the server cannot tell.
+LOCALFN device_rate
+    sub rsp, 40
+    call pulse_connect
+    test eax, eax
+    jz .Ldevice_rate_none
+    mov rcx, [rip + pulse_device]
+    call pulse_sink_rate
+    mov [rsp + 32], eax
+    call pulse_close
+    mov eax, [rsp + 32]
+    jmp .Ldevice_rate_return
+.Ldevice_rate_none:
+    call pulse_close
+    xor eax, eax
+.Ldevice_rate_return:
+    add rsp, 40
+    ret
+ENDFN device_rate
+
+# RCX=--rate's argument -> EAX=Hz (1000 to 768000), or -1 for "device"; CF
+# when it is neither.
+LOCALFN parse_rate
+    push rsi
+    sub rsp, 32
+    mov rsi, rcx
+    lea rdx, [rip + rate_device]
+    call equal_text
+    test eax, eax
+    jz .Lparse_rate_digits
+    mov eax, -1
+    jmp .Lparse_rate_good
+.Lparse_rate_digits:
+    xor eax, eax
+    xor ecx, ecx                       # digits
+.Lparse_rate_digit:
+    movzx edx, byte ptr [rsi]
+    test edx, edx
+    jz .Lparse_rate_end
+    sub edx, '0'
+    cmp edx, 9
+    ja .Lparse_rate_bad
+    cmp ecx, 7
+    jae .Lparse_rate_bad
+    imul eax, eax, 10
+    add eax, edx
+    inc ecx
+    inc rsi
+    jmp .Lparse_rate_digit
+.Lparse_rate_end:
+    cmp eax, 1000
+    jb .Lparse_rate_bad
+    cmp eax, 768000
+    ja .Lparse_rate_bad
+.Lparse_rate_good:
+    clc
+    jmp .Lparse_rate_return
+.Lparse_rate_bad:
+    stc
+.Lparse_rate_return:
+    lea rsp, [rsp + 32]                # keeps CF
+    pop rsi
+    ret
+ENDFN parse_rate
 
 # --device: finds the sink named, described or numbered by cli_device and
 # makes it pulse_device -> EAX=1; else reports it, exit code 3, EAX=0.
