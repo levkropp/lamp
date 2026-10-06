@@ -144,6 +144,7 @@ Navigation starts a new playback thread at the target file and position (`engine
   - N, P twice, the media "next" command, the next button, Right, N on the last file, then R and N;
   - a folder and an M3U playlist playing in list order;
   - a stream killed by the server reopening where it was heard;
-  - the Output menu moving playback to another endpoint and back.
+  - the Output menu moving playback to another endpoint and back;
+  - at 144 DPI, a window 1.5 times as large whose scaled next button works.
 
 `python3 tests/verify-playback.py` plays a four-file queue (a 0.3 s first file shorter than the prebuffer, a resampled 44.1 kHz MP3, Opus and WAV) through the private null sink: the captured stream equals the `--decode` output bit for bit, with no gap between files.

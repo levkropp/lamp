@@ -2,7 +2,7 @@
 # Rhun reference: custom pixel buffer + Win32 presentation, compact monospace
 # chrome. mpv reference: uncluttered canvas and on-screen playback controls.
 .include "lamp.inc"
-.globl ui_width, ui_height, ui_pixels, ui_bmi, ui_state, ui_filename, ui_thread, ui_count
+.globl ui_width, ui_height, ui_pixels, ui_bmi, ui_state, ui_filename, ui_thread, ui_count, ui_layout
 .equ WM_WORKER_DONE, 0x8001
 .equ WM_FILE_OPENED, 0x8002
 .data
@@ -53,6 +53,58 @@ ui_filter: .short 'A', 'u', 'd', 'i', 'o', ' ', 'f', 'i', 'l', 'e', 's', 0
     .short '*', '.', 't', 's', ';', '*', '.', 'm', '2', 't', 's', ';', '*', '.', 'm', 't', 's', ';', '*', '.', 'm', 'p', 'g', ';', '*', '.', 'm', 'p', 'e', 'g', ';', '*', '.', 'v', 'o', 'b', ';'
     .short '*', '.', 'm', '3', 'u', ';', '*', '.', 'm', '3', 'u', '8', ';', '*', '.', 'p', 'l', 's', 0
     .short 'A', 'l', 'l', ' ', 'f', 'i', 'l', 'e', 's', 0, '*', '.', '*', 0, 0
+# Layout in pixels: at the window's DPI, then at 96 DPI (ui_layout scales
+# the first from the second).
+.p2align 2
+ui_layout_start:
+px_header: .long 52, 52             # header height
+px_strip: .long 30, 30              # status strip height
+px_margin: .long 24, 24             # left and right text margin; the previous button
+px_brand_y: .long 17, 17            # header text
+px_assembly: .long 210, 210         # the assembly label, from the right
+px_status_y: .long 23, 23           # status text, from the bottom
+px_codec: .long 134, 134            # codec label
+px_hint_y: .long 164, 164           # hints, from the bottom
+px_side: .long 32, 32               # timeline, hint and title margins
+px_timeline_y: .long 106, 106       # timeline, from the bottom
+px_timeline_h: .long 4, 4
+px_time_x: .long 96, 96             # position text
+px_time_y: .long 71, 71             # position text, from the bottom
+px_list_shift: .long 10, 10         # play/pause moves right with a list
+px_next_x: .long 86, 86             # the next button
+px_icon_y: .long 70, 70             # previous/next buttons, from the bottom
+px_pause_x: .long 42, 42            # pause bars
+px_pause_x2: .long 54, 54
+px_bar_w: .long 5, 5
+px_bar_h: .long 20, 20
+px_play_y: .long 73, 73             # play/pause, from the bottom
+px_triangle_x: .long 44, 44         # play triangle
+px_volume_text_x: .long 178, 178    # volume text, from the right
+px_volume_text_y: .long 78, 78      # volume text, from the bottom
+px_volume_x: .long 180, 180         # volume bar, from the right
+px_volume_y: .long 49, 49           # volume bar, from the bottom
+px_volume_w: .long 148, 148
+px_volume_h: .long 3, 3
+px_title_h: .long 42, 42            # title line
+px_text_h: .long 24, 24             # other lines
+px_title_y: .long 36, 36            # title without a picture: above the middle by this
+px_cover_max: .long 360, 360        # cover art side
+px_cover_min: .long 48, 48
+px_cover_gap: .long 12, 12          # between the picture and the title
+px_controls: .long 130, 130         # clicks: the controls, from the bottom
+px_row: .long 42, 42                # clicks: the timeline row
+px_click_play: .long 95, 95         # clicks: play/pause without a list
+px_click_previous: .long 47, 47     # clicks with a list
+px_click_pause: .long 79, 79
+px_click_next: .long 112, 112
+px_window_w: .long 820, 820         # the window
+px_window_h: .long 510, 510
+px_min_w: .long 480, 480
+px_min_h: .long 330, 330
+px_font: .long 17, 17               # font heights
+px_big_font: .long 30, 30
+ui_layout_end:
+ui_dpi: .long 96
 ui_instance: .quad 0
 ui_hwnd: .quad 0
 ui_thread: .quad 0
@@ -98,7 +150,7 @@ FN ui_start
     mov dword ptr [rip + engine_mode], 1
     lea rax, [rip + ui_file_opened]
     mov [rip + engine_opened], rax
-    mov rcx, -4
+    mov rcx, -4                           # per-monitor DPI awareness, version 2
     call SetProcessDpiAwarenessContext
     xor ecx, ecx
     call GetModuleHandleW
@@ -142,6 +194,23 @@ FN ui_start
     jz .Lui_exit
     mov [rip + ui_hwnd], rax
     mov rcx, rax
+    call GetDpiForWindow                  # the layout, and the window, at its DPI
+    mov ecx, eax
+    call ui_layout
+    cmp dword ptr [rip + ui_dpi], 96
+    je .Lui_sized
+    mov rcx, [rip + ui_hwnd]
+    xor edx, edx
+    xor r8d, r8d
+    xor r9d, r9d
+    mov eax, [rip + px_window_w]
+    mov [rsp + 32], rax
+    mov eax, [rip + px_window_h]
+    mov [rsp + 40], rax
+    mov qword ptr [rsp + 48], 0x16        # NOMOVE | NOZORDER | NOACTIVATE
+    call SetWindowPos
+.Lui_sized:
+    mov rcx, [rip + ui_hwnd]
     mov edx, 1
     call DragAcceptFiles
     mov rcx, [rip + ui_hwnd]
@@ -255,6 +324,48 @@ LOCALFN ui_activity
     ret
 ENDFN ui_activity
 
+# ECX=DPI: the layout at it; the fonts are made again at the next paint.
+FN ui_layout
+    sub rsp, 40
+    test ecx, ecx
+    jnz .Lui_layout_dpi
+    mov ecx, 96
+.Lui_layout_dpi:
+    mov [rip + ui_dpi], ecx
+    lea r8, [rip + ui_layout_start]
+    lea r9, [rip + ui_layout_end]
+.Lui_layout_entry:
+    cmp r8, r9
+    jae .Lui_layout_fonts
+    mov ecx, [r8 + 4]
+    call ui_px
+    mov [r8], eax
+    add r8, 8
+    jmp .Lui_layout_entry
+.Lui_layout_fonts:
+    call ui_release_buffer                # fonts and canvas again
+    mov dword ptr [rip + ui_buffer_width], 0
+    xor ecx, ecx
+    xchg rcx, [rip + ui_font]
+    call DeleteObject
+    xor ecx, ecx
+    xchg rcx, [rip + ui_big_font]
+    call DeleteObject
+    add rsp, 40
+    ret
+ENDFN ui_layout
+
+# ECX=pixels at 96 DPI -> EAX=at the window's DPI, rounded.
+LOCALFN ui_px
+    mov eax, ecx
+    imul eax, [rip + ui_dpi]
+    add eax, 48
+    cdq
+    mov ecx, 96
+    idiv ecx
+    ret
+ENDFN ui_px
+
 # Space: pauses or resumes; with nothing playing, plays the list again
 # from its first file (or opens files when there is none).
 LOCALFN ui_toggle
@@ -335,12 +446,18 @@ LOCALFN ui_window_proc
     call DefWindowProcW
     jmp .Lui_wm_return
 .Lui_wm_minmax:
-    mov dword ptr [r9 + 24], 480
-    mov dword ptr [r9 + 28], 330
+    mov eax, [rip + px_min_w]
+    mov [r9 + 24], eax
+    mov eax, [rip + px_min_h]
+    mov [r9 + 28], eax
     jmp .Lui_handled
 .Lui_wm_dpi:
-    # Adopt Windows' recommended rectangle when moving between DPI domains.
-    mov rax, r9
+    # Another DPI: the layout and fonts at it, and Windows' recommended
+    # rectangle.
+    movzx ecx, r8w
+    call ui_layout
+    mov rcx, [rip + ui_hwnd]
+    mov rax, [rsp + 120]
     xor edx, edx
     mov r8d, [rax]
     mov r9d, [rax + 4]
@@ -528,19 +645,20 @@ LOCALFN ui_window_proc
     mov eax, r9d
     shr eax, 16
     mov ecx, [rip + ui_height]
-    sub ecx, 130
+    sub ecx, [rip + px_controls]
     cmp eax, ecx
     jb .Lui_canvas_click
-    add ecx, 42
+    add ecx, [rip + px_row]
     cmp eax, ecx
     ja .Lui_transport_click
-    # Seek bar extends from x=32 to width-32.
+    # The timeline spans the width but its side margins.
     mov eax, r9d
     and eax, 0xffff
-    sub eax, 32
+    sub eax, [rip + px_side]
     js .Lui_handled
     mov ecx, [rip + ui_width]
-    sub ecx, 64
+    sub ecx, [rip + px_side]
+    sub ecx, [rip + px_side]
     cmp eax, ecx
     ja .Lui_handled
     mov r8, [rip + ui_shown_frames]
@@ -561,24 +679,24 @@ LOCALFN ui_window_proc
     and eax, 0xffff
     cmp dword ptr [rip + ui_count], 2
     jb .Lui_transport_single
-    cmp eax, 47
+    cmp eax, [rip + px_click_previous]
     jb .Lui_previous_key
-    cmp eax, 79
+    cmp eax, [rip + px_click_pause]
     jb .Lui_toggle_pause
-    cmp eax, 112
+    cmp eax, [rip + px_click_next]
     jb .Lui_next_key
 .Lui_transport_single:
-    cmp eax, 95
+    cmp eax, [rip + px_click_play]
     jb .Lui_toggle_pause
     mov ecx, [rip + ui_width]
-    sub ecx, 180
+    sub ecx, [rip + px_volume_x]
     sub eax, ecx
     js .Lui_handled
-    cmp eax, 148
+    mov ecx, [rip + px_volume_w]
+    cmp eax, ecx
     ja .Lui_handled
     imul eax, 100
     xor edx, edx
-    mov ecx, 148
     div ecx
     jmp .Lui_set_volume
 .Lui_canvas_click:

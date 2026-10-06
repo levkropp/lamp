@@ -44,7 +44,7 @@ Linux x86-64 builds the same command line with `./build.sh`; paths are UTF-8 byt
 
 Files and folders on the command line, dropped or opened play as one gapless list, with playlists expanded and folders read in natural order; the title, picture, time and codec follow the file being heard, and the window's title names it; see [queue notes](queue.md#the-windows-player).
 
-Controls hide after 2.5 seconds of inactivity during playback, and reappear on mouse movement or keyboard input. Idle, paused, finished and hidden-control states stop redraw timers. Visible playback controls update at four frames per second. The window adopts Windows' suggested rectangle on a DPI change; typography and control dimensions currently use fixed pixels.
+Controls hide after 2.5 seconds of inactivity during playback, and reappear on mouse movement or keyboard input. Idle, paused, finished and hidden-control states stop redraw timers. Visible playback controls update at four frames per second. Layout, fonts, controls, hit tests and the picture's size are defined at 96 DPI and scaled to the window's DPI (`GetDpiForWindow`, per-monitor aware). On a DPI change the layout and fonts are made again at the new DPI and the window adopts Windows' suggested rectangle; the initial window is 820 by 510 pixels at 96 DPI, scaled likewise.
 
 Console controls are Space to pause/resume, N/P for the next/previous file, the arrows to seek, R for repeat and Q/Ctrl+C to stop. QuickEdit is disabled during playback and restored on exit.
 
@@ -238,7 +238,13 @@ Family 1 adds 86 generated multistream files, 4,465,524 stereo value comparisons
 
 Official RFC 8251 conformance adds all 12 vectors at five output rates in mono/stereo, for 120 checks. Every output passes the unmodified normative `opus_compare`. The same run checks exact final ranges, PCM/history at scaled tolerance 0.00004, immutable input, canaries and distinct-scratch determinism for 200,750 packets. Zero observed reference error is recorded across 798,079,240 PCM/history values. All 36 downloaded vector hashes match RFC 8251 section 11.
 
-The UI preview uses the actual assembly renderer with synthetic playback state. **Desktop window interaction, open-dialog/drop behavior and monitor-DPI changes remain unverified** because the permitted desktop automation runtime was unavailable. Audio controls are tested separately by a native assembly harness.
+The UI preview uses the actual assembly renderer with synthetic playback state; `tools/build-windows.py --tests --preview-dpi 144` renders it at another DPI. `tests/verify-player.py` runs the real window under Wine on Xvfb, with these checks:
+
+- It sends keys, media commands, clicks and menu commands, and reads the title and client size. The audio is matched by file order and position.
+- It covers list playback, navigation, repeat, the Output menu, reopening, and 144 DPI (the window is 1.5 times as large, and the scaled next button works).
+- `ui-list.exe` builds lists from folders, an HDROP and dialog results through the player's own code.
+
+**Real Explorer drops, the open dialog's own window and moves between monitors of different DPI remain unverified** on Windows itself. Audio controls are tested separately by a native assembly harness.
 
 FFmpeg and Node.js are needed only for test fixture generation/comparison. Opus oracle tests also compile the bundled BSD reference into test executables; neither player calls them or links their objects.
 

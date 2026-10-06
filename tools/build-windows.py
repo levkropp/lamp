@@ -67,6 +67,7 @@ def main():
                         help='ui-preview.exe shows a tagged title with cover art (use --preview-codec 3)')
     parser.add_argument('--preview-list', action='store_true',
                         help='ui-preview.exe shows the second file of a list of three, repeating')
+    parser.add_argument('--preview-dpi', type=int, default=None, help='DPI ui-preview.exe renders at (default 96)')
     parser.add_argument('--debug', action='store_true', help='emit a PDB')
     args = parser.parse_args()
     out = Path(args.out).resolve()
@@ -90,6 +91,8 @@ def main():
             defines.append('-defsym=PREVIEW_COVER=1')
         if path.stem == 'ui-preview' and args.preview_list:
             defines.append('-defsym=PREVIEW_LIST=1')
+        if path.stem == 'ui-preview' and args.preview_dpi is not None:
+            defines.append(f'-defsym=PREVIEW_DPI={args.preview_dpi}')
         run([mc, '-triple=x86_64-pc-windows-msvc', '-filetype=obj', *defines,
              '-I', ROOT / 'src', '-I', ROOT / 'src/win', '-I', ROOT / 'tests', path, '-o', obj])
         return obj
