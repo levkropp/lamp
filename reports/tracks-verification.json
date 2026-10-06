@@ -1,0 +1,81 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "three.mkv",
+      "result": "exact",
+      "tracks": 3,
+      "automatic": 2,
+      "comparator": "FFmpeg -map 0:a:N -c copy"
+    },
+    {
+      "test": "three.mp4",
+      "result": "exact",
+      "tracks": 3,
+      "automatic": 1,
+      "comparator": "FFmpeg -map 0:a:N -c copy"
+    },
+    {
+      "test": "three.ts",
+      "result": "exact",
+      "tracks": 3,
+      "automatic": 1,
+      "comparator": "FFmpeg -map 0:a:N -c copy"
+    },
+    {
+      "test": "two.vob",
+      "result": "exact",
+      "tracks": 2,
+      "automatic": 1,
+      "comparator": "FFmpeg -map 0:a:N -c copy"
+    },
+    {
+      "test": "two.avi",
+      "result": "exact",
+      "tracks": 2,
+      "automatic": 1,
+      "comparator": "FFmpeg -map 0:a:N -c copy"
+    },
+    {
+      "test": "three.ogg",
+      "result": "exact",
+      "tracks": 3,
+      "automatic": 1,
+      "comparator": "FFmpeg -map 0:a:N -c copy"
+    },
+    {
+      "test": "chained.ogg --track 2",
+      "result": "exact",
+      "note": "track 2 of each link"
+    },
+    {
+      "test": "speex-opus.ogg",
+      "result": "exact",
+      "automatic": 2,
+      "note": "Speex (track 1) is counted and rejects; Opus begins on the second BOS page"
+    },
+    {
+      "test": "queue --track 3",
+      "result": "exact",
+      "files": 2
+    },
+    {
+      "test": "unsupported and missing tracks",
+      "result": "rejected",
+      "files": [
+        "wma.mkv track 2",
+        "eac3.ts track 2",
+        "one.wav track 2",
+        "one.mp3 track 2",
+        "one.flv track 2",
+        "three.mkv track 4",
+        "three.mp4 track 4",
+        "three.ts track 4",
+        "two.vob track 3",
+        "two.avi track 3",
+        "three.ogg track 4"
+      ]
+    }
+  ],
+  "scope": "lamp-cli --track N in Matroska, MP4, MPEG-TS/PS, AVI and Ogg (multiplexed and chained) against FFmpeg -map 0:a:N copies; queues; unsupported, missing and single tracks."
+}

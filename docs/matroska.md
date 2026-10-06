@@ -4,7 +4,7 @@ LAMP 0.4.0-dev plays the audio track of Matroska (`.mka`, `.mkv`) and WebM (`.we
 
 ## Track selection
 
-The demuxer selects one audio track: the first enabled audio track with a supported codec whose FlagDefault is set, or else the first enabled audio track with a supported codec. Video, subtitle and other tracks, unsupported audio tracks, and tracks with ContentEncodings (header stripping, compression or encryption) are skipped. A file without a usable audio track rejects. Manual track selection is not available yet.
+The demuxer selects one audio track: the first enabled audio track with a supported codec whose FlagDefault is set, or else the first enabled audio track with a supported codec. Video, subtitle and other tracks, unsupported audio tracks, and tracks with ContentEncodings (header stripping, compression or encryption) are skipped. A file without a usable audio track rejects. `--track N` plays the Nth audio TrackEntry instead ([track selection](tracks.md)).
 
 | CodecID | Decoder |
 | --- | --- |

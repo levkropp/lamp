@@ -1,7 +1,7 @@
 # Original AVI audio demuxer in x86-64 assembly. MIT, see LICENSE.
 # Microsoft's AVI RIFF format with the OpenDML extensions: hdrl's stream
 # lists (strh, strf) choose the first audio stream whose WAVE format LAMP
-# decodes, and its "NNwb" chunks are read from LIST movi (and LIST rec
+# decodes (or the audio stream that track_choice numbers), and its "NNwb" chunks are read from LIST movi (and LIST rec
 # groups) in the first RIFF AVI and the RIFF AVIX lists after it. The
 # indexes (idx1, indx, ix##) are not needed. AVI audio is a byte stream cut
 # into chunks, so the chunks are gathered behind a Wave64 header holding the
@@ -43,6 +43,7 @@ avi_riffs: .long 0                  # RIFF AVI/AVIX lists read
 avi_movis: .long 0                  # movi lists read
 avi_stream: .long 0                 # selected stream number, -1 = none
 avi_streams: .long 0                # stream lists seen
+avi_audio_index: .long 0            # audio stream lists seen
 avi_tag: .long 0                    # selected format tag (extensible: its subformat)
 avi_mode: .long 0
 avi_fmt: .quad 0                    # its strf payload
@@ -148,7 +149,7 @@ LOCALFN avi_format
 ENDFN avi_format
 
 # RCX=strl payload, RDX=end: one stream's header and format; selects it
-# when it is the first decodable audio stream.
+# when it is the first decodable audio stream, or the chosen one.
 LOCALFN avi_strl
     push rbx
     push rsi
@@ -193,8 +194,18 @@ LOCALFN avi_strl
     jz .Lavi_strl_return
     cmp dword ptr [r12], 0x73647561       # auds
     jne .Lavi_strl_return
+    inc dword ptr [rip + avi_audio_index]
+    mov ecx, [rip + track_choice]
+    test ecx, ecx
+    jz .Lavi_strl_first
+    cmp ecx, [rip + avi_audio_index]
+    jne .Lavi_strl_return
+    mov dword ptr [rip + track_choice_used], 1
+    jmp .Lavi_strl_take
+.Lavi_strl_first:
     cmp dword ptr [rip + avi_stream], -1
     jne .Lavi_strl_return                 # the first decodable one wins
+.Lavi_strl_take:
     test r13, r13
     jz .Lavi_strl_return
     cmp eax, 99                           # two-digit chunk ids
@@ -545,6 +556,7 @@ FN avi_open
     mov [rip + avi_riffs], eax
     mov [rip + avi_movis], eax
     mov [rip + avi_streams], eax
+    mov [rip + avi_audio_index], eax
     mov [rip + avi_id], eax
     mov dword ptr [rip + avi_stream], -1
 .Lavi_open_chunk:

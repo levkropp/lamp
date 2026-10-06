@@ -454,8 +454,9 @@ FN opus_headers
     call ogg_next
     test rax, rax
     jz .Lopus_header_bad
-    cmp [rip + ogg_packet_page], rbx
-    jne .Lopus_header_bad
+    mov rcx, [rip + ogg_packet_page]      # alone on its stream's BOS page, which
+    test byte ptr [rcx + 5], 2            # need not be the link's first page when
+    jz .Lopus_header_bad                  # streams are multiplexed
     cmp dword ptr [rip + ogg_packet_page_end], 1
     jne .Lopus_header_bad
     cmp qword ptr [rip + ogg_granule], 0

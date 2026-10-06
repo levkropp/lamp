@@ -1,6 +1,6 @@
 # MPEG transport and program streams
 
-LAMP 0.4.0-dev plays the audio of MPEG-2 transport streams (`.ts`, `.m2ts`, `.mts`) and MPEG-1/MPEG-2 program streams (`.mpg`, `.mpeg`, `.vob`) with a handwritten demuxer (`src/mpegts.s`) following ISO/IEC 13818-1. The first supported audio stream is gathered from its PES packets into one buffer, which then opens as the raw stream it carries, so decoding, timing and seeking are those of `.mp3`, `.aac`, [`.loas`](latm.md) and [`.ac3`](ac3.md) files. DVD and Blu-ray LPCM become a Wave64 image of little-endian PCM for the WAV reader ([below](#lpcm)). Video, subtitles and other streams are skipped.
+LAMP 0.4.0-dev plays the audio of MPEG-2 transport streams (`.ts`, `.m2ts`, `.mts`) and MPEG-1/MPEG-2 program streams (`.mpg`, `.mpeg`, `.vob`) with a handwritten demuxer (`src/mpegts.s`) following ISO/IEC 13818-1. The first supported audio stream is gathered from its PES packets into one buffer, which then opens as the raw stream it carries, so decoding, timing and seeking are those of `.mp3`, `.aac`, [`.loas`](latm.md) and [`.ac3`](ac3.md) files. DVD and Blu-ray LPCM become a Wave64 image of little-endian PCM for the WAV reader ([below](#lpcm)). Video, subtitles and other streams are skipped. `--track N` plays the Nth audio stream instead ([track selection](tracks.md)).
 
 ## Transport streams
 

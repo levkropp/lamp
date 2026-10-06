@@ -16,9 +16,9 @@ usage:
     .ascii "Vorbis, Opus "
     .ascii "in WAV/W64, AIFF/AIFC, CAF, AU, FLAC, WavPack, APE, MP3, AAC (ADTS, LOAS), AC-3, Ogg, Matroska/WebM, MP4/MOV, AVI, FLV and MPEG-TS/PS files.\n"
     .ascii "Usage: lamp-cli [--start TIME] [--repeat] [--resume] [--device NAME] [--rate HZ|device]\n"
-    .ascii "                file.mp3 [more files...]\n"
-    .ascii "       lamp-cli --check [--start TIME] [--rate HZ] file.flac [more files...]\n"
-    .ascii "       lamp-cli --decode [--start TIME] [--rate HZ] file.flac [more files...] output.f32\n"
+    .ascii "                [--track N] file.mp3 [more files...]\n"
+    .ascii "       lamp-cli --check [--start TIME] [--rate HZ] [--track N] file.flac [more files...]\n"
+    .ascii "       lamp-cli --decode [--start TIME] [--rate HZ] [--track N] file.flac [more files...] output.f32\n"
     .ascii "       lamp-cli --tags file.mp3\n"
     .ascii "       lamp-cli --chapters file.m4b\n"
     .ascii "       lamp-cli --cover file.mp3 cover-image\n"
@@ -28,7 +28,8 @@ usage:
     .ascii "(seconds, M:S or H:M:S, with an optional fraction); --repeat plays the list again and again;\n"
     .ascii "--resume starts where Q stopped the same list and keeps where it stops; --device plays\n"
     .ascii "on an output from --list-devices (by name, description or number); --rate resamples\n"
-    .ascii "every file to HZ, or to the output's rate, with LAMP's own filter.\n"
+    .ascii "every file to HZ, or to the output's rate, with LAMP's own filter; --track plays each file's\n"
+    .ascii "Nth audio track, counted in the container's order.\n"
     .ascii "Playback: Space pauses/resumes; N/P next/previous file; arrows seek 5 s or 60 s;\n"
     .ascii "R toggles repeat; Q or Ctrl+C stops.\n"
     .ascii "RIFF/RIFX/RF64/BW64/W64 WAV: 1..8 channels, PCM 8/16/24/32 or float32/64.\n"
@@ -62,6 +63,7 @@ device_arg: .asciz "--device"
 list_devices_arg: .asciz "--list-devices"
 rate_arg: .asciz "--rate"
 rate_device: .asciz "device"
+track_arg: .asciz "--track"
 unknown_device: .asciz "Unknown audio device: "
 tab_text: .asciz "\t"
 resume_xdg: .asciz "XDG_STATE_HOME"
@@ -207,7 +209,7 @@ LOCALFN cli_main
     lea rdx, [rip + rate_arg]
     call equal_text
     test eax, eax
-    jz .Lshow_help
+    jz .Lcli_track_option
     cmp r12, [rip + argc]
     jae .Lshow_help
     mov rcx, [rbx + r12*8]
@@ -215,6 +217,20 @@ LOCALFN cli_main
     call parse_rate
     jc .Lshow_help
     mov [rip + cli_rate], eax
+    jmp .Lcli_option
+.Lcli_track_option:
+    mov rcx, rsi
+    lea rdx, [rip + track_arg]
+    call equal_text
+    test eax, eax
+    jz .Lshow_help
+    cmp r12, [rip + argc]
+    jae .Lshow_help
+    mov rcx, [rbx + r12*8]
+    inc r12
+    call parse_track
+    jc .Lshow_help
+    mov [rip + track_choice], eax
     jmp .Lcli_option
 .Lcli_files:
     mov rsi, [rip + argc]
@@ -791,6 +807,34 @@ LOCALFN device_rate
     add rsp, 40
     ret
 ENDFN device_rate
+
+# RCX=--track's argument -> EAX=1 to 9999; CF otherwise.
+LOCALFN parse_track
+    xor eax, eax
+    xor r8d, r8d                       # digits
+.Lparse_track_digit:
+    movzx edx, byte ptr [rcx]
+    test edx, edx
+    jz .Lparse_track_end
+    sub edx, '0'
+    cmp edx, 9
+    ja .Lparse_track_bad
+    cmp r8d, 4
+    jae .Lparse_track_bad
+    imul eax, eax, 10
+    add eax, edx
+    inc r8d
+    inc rcx
+    jmp .Lparse_track_digit
+.Lparse_track_end:
+    test eax, eax
+    jz .Lparse_track_bad
+    clc
+    ret
+.Lparse_track_bad:
+    stc
+    ret
+ENDFN parse_track
 
 # RCX=--rate's argument -> EAX=Hz (1000 to 768000), or -1 for "device"; CF
 # when it is neither.

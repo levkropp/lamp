@@ -75,6 +75,7 @@ def main():
     step(TESTS / 'verify-ac3.py', *playback)
     step(TESTS / 'verify-mpegts.py', *playback)
     step(TESTS / 'verify-lpcm.py', *playback)
+    step(TESTS / 'verify-tracks.py')
     step(TESTS / 'verify-wavpack.py', *playback)
     if shutil.which('java') and Path('/usr/share/java/jmac.jar').exists():
         step(TESTS / 'verify-ape.py', *playback)

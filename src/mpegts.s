@@ -39,6 +39,11 @@ mts_packet: .long 0
 mts_offset: .long 0
 mts_unsupported: .long 0            # unsupported audio was seen
 mts_hdmv: .long 0                   # the program carries an HDMV registration
+mts_audio_index: .long -1           # audio streams of the map read (track_choice); -1: no map
+mps_audio_count: .long 0            # program stream audio ids, by first appearance
+.bss
+mps_audio_ids: .zero 64*4
+.data
 
 .text
 FN mts_close
@@ -476,6 +481,7 @@ FN mts_open
     mov r13d, -1                          # selected PID
     xor r14d, r14d                        # kind
     mov dword ptr [rsp + 48], -1          # private stream to identify by content
+    mov dword ptr [rip + mts_audio_index], -1
     mov rbx, rsi
 .Lmts_open_tables:
     mov eax, [rip + mts_packet]
@@ -535,6 +541,7 @@ FN mts_open
     lea rdx, [rax + 4]
     lea rax, [rax + rcx + 4]
     mov dword ptr [rip + mts_hdmv], 0
+    mov dword ptr [rip + mts_audio_index], 0
 .Lmts_open_program_info:
     lea r8, [rdx + 2]                     # registration descriptors
     cmp r8, rax
@@ -577,6 +584,21 @@ FN mts_open
     lea rdx, [rax + 5]
     call mts_classify
     mov rcx, [rsp + 32]
+    cmp dword ptr [rip + track_choice], 0
+    je .Lmts_open_stream_automatic
+    # A chosen track: the Nth audio stream of the map.
+    test eax, eax
+    jz .Lmts_open_stream_next
+    inc dword ptr [rip + mts_audio_index]
+    mov edx, [rip + mts_audio_index]
+    cmp edx, [rip + track_choice]
+    jne .Lmts_open_stream_next
+    mov dword ptr [rip + track_choice_used], 1
+    cmp eax, KIND_OTHER
+    jne .Lmts_open_stream_select
+    mov dword ptr [rip + decode_error], MTS_UNSUPPORTED
+    jmp .Lmts_open_bad
+.Lmts_open_stream_automatic:
     cmp eax, KIND_OTHER
     jne .Lmts_open_stream_kind
     mov dword ptr [rip + mts_unsupported], 1
@@ -620,6 +642,13 @@ FN mts_open
 .Lmts_open_tables_done:
     cmp r13d, -1
     jne .Lmts_open_gather
+    cmp dword ptr [rip + track_choice], 0
+    je .Lmts_open_tables_none
+    cmp dword ptr [rip + mts_audio_index], -1
+    je .Lmts_open_tables_none             # no map: malformed
+    mov dword ptr [rip + decode_error], MTS_UNSUPPORTED   # no such track
+    jmp .Lmts_open_bad
+.Lmts_open_tables_none:
     cmp dword ptr [rip + mts_unsupported], 0
     je .Lmts_open_bad
     mov dword ptr [rip + decode_error], MTS_UNSUPPORTED
@@ -794,8 +823,35 @@ LOCALFN mps_pes_data
     ret
 ENDFN mps_pes_data
 
-# RCX=mapped start, RDX=end -> EAX=1 with the first audio stream open: an
-# MPEG audio stream id, or 0xBD00 | an AC-3 substream of private stream 1.
+# ECX=a program stream's audio stream id -> R10D=its number (from 1) in
+# order of first appearance, 0 once 64 are listed. Keeps RAX, R8 and R9.
+LOCALFN mps_audio_seen
+    lea r11, [rip + mps_audio_ids]
+    xor r10d, r10d
+.Lmps_seen_entry:
+    cmp r10d, [rip + mps_audio_count]
+    jae .Lmps_seen_new
+    cmp [r11 + r10*4], ecx
+    je .Lmps_seen_found
+    inc r10d
+    jmp .Lmps_seen_entry
+.Lmps_seen_new:
+    cmp r10d, 64
+    jae .Lmps_seen_full
+    mov [r11 + r10*4], ecx
+    inc dword ptr [rip + mps_audio_count]
+.Lmps_seen_found:
+    inc r10d
+    ret
+.Lmps_seen_full:
+    xor r10d, r10d
+    ret
+ENDFN mps_audio_seen
+
+# RCX=mapped start, RDX=end -> EAX=1 with the first audio stream open (or
+# EAX=2 with a Wave64 image of LPCM): an MPEG audio stream id, or 0xBD00 |
+# an AC-3 or LPCM substream of private stream 1; track_choice picks the Nth
+# audio stream to appear instead.
 # Locals: 32 stream id, 40 PES packet end.
 FN mps_open
     push rbx
@@ -813,6 +869,7 @@ FN mps_open
     jz .Lmps_open_bad
     mov r12d, -1                          # selected stream
     xor r13d, r13d                        # kind
+    mov dword ptr [rip + mps_audio_count], 0
     mov rbx, rsi
 .Lmps_open_code:
     lea rax, [rbx + 4]
@@ -867,32 +924,74 @@ FN mps_open
     mov rdx, [rsp + 40]
     cmp rax, rdx
     jae .Lmps_open_skip
+    # Private stream 1 audio substreams, as FFmpeg lists them.
     movzx r8d, byte ptr [rax]             # substream
     cmp r8d, 0x80
     jb .Lmps_open_skip
     cmp r8d, 0x87
     jbe .Lmps_open_private_ac3
-    cmp r8d, 0xa0                         # DTS 0x88-0x8F, SDDS 0x90-0x97
-    jb .Lmps_open_private_other
+    mov r9d, KIND_OTHER
+    cmp r8d, 0x90                         # DTS 0x88-0x8F
+    jb .Lmps_open_private_audio
+    cmp r8d, 0x98                         # SDDS 0x90-0x97: no stream
+    jb .Lmps_open_skip
+    cmp r8d, 0xa0                         # DTS 0x98-0x9F
+    jb .Lmps_open_private_audio
     cmp r8d, 0xa7
     jbe .Lmps_open_private_lpcm
+    cmp r8d, 0xcf                         # MLP, TrueHD, EVOB AC-3 and E-AC-3
+    jbe .Lmps_open_private_audio
     jmp .Lmps_open_skip
 .Lmps_open_private_lpcm:
-    or r8d, 0xbd00
-    cmp r12d, -1
-    jne .Lmps_open_lpcm_selected
     lea rcx, [rax + 7]
     cmp rcx, rdx
     ja .Lmps_open_skip
+    cmp r12d, -1
+    jne .Lmps_open_private_dvd            # a selected stream's packets as they come
     cmp byte ptr [rax + 6], 0x80          # dynamic range control off: LPCM, as
-    jne .Lmps_open_private_other          # FFmpeg tells it from MLP
+    jne .Lmps_open_private_audio          # FFmpeg tells it from MLP
+.Lmps_open_private_dvd:
+    mov r9d, KIND_DVD
+    jmp .Lmps_open_private_audio
+.Lmps_open_private_ac3:
+    mov r9d, KIND_AC3
+    add rax, 4                            # substream, frame count, first access unit
+    cmp rax, rdx
+    ja .Lmps_open_skip
+.Lmps_open_private_audio:
+    or r8d, 0xbd00
+.Lmps_open_select:
+    # R8D=stream id, R9D=kind, RAX=its data.
+    cmp r12d, -1
+    jne .Lmps_open_selected
+    cmp dword ptr [rip + track_choice], 0
+    jne .Lmps_open_choice
+    cmp r9d, KIND_OTHER                   # the first supported audio stream
+    jne .Lmps_open_take
+    mov dword ptr [rip + mts_unsupported], 1
+    jmp .Lmps_open_skip
+.Lmps_open_choice:
+    mov ecx, r8d                          # the Nth audio stream to appear
+    call mps_audio_seen
+    cmp r10d, [rip + track_choice]
+    jne .Lmps_open_skip
+    mov dword ptr [rip + track_choice_used], 1
+    cmp r9d, KIND_OTHER
+    jne .Lmps_open_take
+    mov dword ptr [rip + decode_error], MTS_UNSUPPORTED
+    jmp .Lmps_open_bad
+.Lmps_open_take:
     mov r12d, r8d
-    mov r13d, KIND_DVD
+    mov r13d, r9d
+    cmp r9d, KIND_DVD
+    jne .Lmps_open_selected
     mov ecx, LPCM_DVD
     call lpcm_begin
-.Lmps_open_lpcm_selected:
+.Lmps_open_selected:
     cmp r8d, r12d
     jne .Lmps_open_skip
+    cmp r13d, KIND_DVD
+    jne .Lmps_open_append
     mov rcx, rax
     mov rdx, [rsp + 40]
     call lpcm_dvd_packet
@@ -902,23 +1001,7 @@ FN mps_open
     jz .Lmps_open_bad
     mov dword ptr [rip + decode_error], MTS_UNSUPPORTED
     jmp .Lmps_open_bad
-.Lmps_open_private_other:
-    mov dword ptr [rip + mts_unsupported], 1
-    jmp .Lmps_open_skip
-.Lmps_open_private_ac3:
-    or r8d, 0xbd00
-    mov r9d, KIND_AC3
-    add rax, 4                            # substream, frame count, first access unit
-    cmp rax, rdx
-    ja .Lmps_open_skip
-.Lmps_open_select:
-    cmp r12d, -1
-    jne .Lmps_open_selected
-    mov r12d, r8d
-    mov r13d, r9d
-.Lmps_open_selected:
-    cmp r8d, r12d
-    jne .Lmps_open_skip
+.Lmps_open_append:
     mov rcx, rax
     mov rdx, [rsp + 40]
     sub rdx, rax
@@ -956,6 +1039,11 @@ FN mps_open
 .Lmps_open_done:
     cmp r12d, -1
     jne .Lmps_open_stream
+    cmp dword ptr [rip + track_choice], 0
+    je .Lmps_open_none
+    mov dword ptr [rip + decode_error], MTS_UNSUPPORTED   # no such track
+    jmp .Lmps_open_bad
+.Lmps_open_none:
     cmp dword ptr [rip + mts_unsupported], 0
     je .Lmps_open_bad
     mov dword ptr [rip + decode_error], MTS_UNSUPPORTED

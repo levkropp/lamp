@@ -25,11 +25,11 @@ usage: .ascii "LAMP 0.4.0-dev - Lev's Assembly Media Player"
       .byte 13, 10
       .ascii "Usage: lamp-cli.exe [--start TIME] [--repeat] [--resume] [--device NAME] [--rate HZ|device]"
       .byte 13, 10
-      .ascii "                    file.mp3 [more files...]"
+      .ascii "                    [--track N] file.mp3 [more files...]"
       .byte 13, 10
-      .ascii "       lamp-cli.exe --check [--start TIME] [--rate HZ] file.flac [more files...]"
+      .ascii "       lamp-cli.exe --check [--start TIME] [--rate HZ] [--track N] file.flac [more files...]"
       .byte 13, 10
-      .ascii "       lamp-cli.exe --decode [--start TIME] [--rate HZ] file.flac [more files...] output.f32"
+      .ascii "       lamp-cli.exe --decode [--start TIME] [--rate HZ] [--track N] file.flac [more files...] output.f32"
       .byte 13, 10
       .ascii "       lamp-cli.exe --tags file.mp3"
       .byte 13, 10
@@ -43,7 +43,9 @@ usage: .ascii "LAMP 0.4.0-dev - Lev's Assembly Media Player"
       .byte 13, 10
       .ascii "M3U/M3U8 and PLS playlists add their entries. --rate resamples every file to HZ, or to the"
       .byte 13, 10
-      .ascii "output's mix rate, with LAMP's own filter."
+      .ascii "output's mix rate, with LAMP's own filter. --track plays each file's Nth audio track, counted"
+      .byte 13, 10
+      .ascii "in the container's order."
       .byte 13, 10
       .ascii "Playback: Space pauses/resumes; Q or Ctrl+C stops."
       .byte 13, 10
@@ -106,6 +108,7 @@ device_arg: .short '-', '-', 'd', 'e', 'v', 'i', 'c', 'e', 0
 list_devices_arg: .short '-', '-', 'l', 'i', 's', 't', '-', 'd', 'e', 'v', 'i', 'c', 'e', 's', 0
 rate_arg: .short '-', '-', 'r', 'a', 't', 'e', 0
 rate_device: .short 'd', 'e', 'v', 'i', 'c', 'e', 0
+track_arg: .short '-', '-', 't', 'r', 'a', 'c', 'k', 0
 unknown_device: .ascii "Unknown audio device."
 .byte 13, 10, 0
 devices_failed: .ascii "Audio devices unavailable."
@@ -454,7 +457,7 @@ FN start
     lea rdx, [rip + rate_arg]
     call equal_wide
     test eax, eax
-    jz .Lshow_help
+    jz .Lopt_track
     mov eax, [rip + arg_index]
     cmp eax, [rip + argc]
     jae .Lshow_help
@@ -491,6 +494,39 @@ FN start
     ja .Lshow_help
 .Lopt_rate_set:
     mov [rip + cli_rate], edx
+    jmp .Lopt_next
+.Lopt_track:
+    mov rcx, [rsp + 64]
+    lea rdx, [rip + track_arg]
+    call equal_wide
+    test eax, eax
+    jz .Lshow_help
+    mov eax, [rip + arg_index]
+    cmp eax, [rip + argc]
+    jae .Lshow_help
+    inc dword ptr [rip + arg_index]
+    mov rcx, [rip + argv]
+    mov rcx, [rcx + rax*8]
+    xor edx, edx
+    xor r8d, r8d                        # digits
+.Lopt_track_digit:
+    movzx eax, word ptr [rcx]
+    test eax, eax
+    jz .Lopt_track_end
+    sub eax, '0'
+    cmp eax, 9
+    ja .Lshow_help
+    cmp r8d, 4
+    jae .Lshow_help
+    imul edx, edx, 10
+    add edx, eax
+    inc r8d
+    add rcx, 2
+    jmp .Lopt_track_digit
+.Lopt_track_end:
+    test edx, edx
+    jz .Lshow_help                      # tracks count from 1
+    mov [rip + track_choice], edx
     jmp .Lopt_next
 .Lopt_files:
     mov eax, [rip + argc]
