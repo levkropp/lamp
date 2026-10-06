@@ -123,6 +123,39 @@ groupings and tables derived from them. The spectral band replication and
 parametric stereo decoder in src/aac_sbr.inc is handwritten x86-64 assembly;
 no JAADec code is included in or linked into either player.
 
+AC-3 frame size and bit allocation table data:
+codec-ac3, Copyright (c) 2026 Phil Schatzmann
+https://github.com/pschatzmann/codec-ac3 (commit b0fc07e0acf674f38d3d90accd1089c6b19b5e32,
+src/decoder/AC3Tables.h and src/decoder/AC3BitAllocation.h)
+License: MIT.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+tests/generate-ac3-tables.py fetches the pinned files, checks their hashes
+and converts the ATSC A/52 hearing threshold, log-addition, band, bap, frame
+size and bit allocation parameter values from codec-ac3's representation back
+to the standard's, writing them to src/ac3_tables.inc. The AC-3 decoder in
+src/ac3.s is handwritten x86-64 assembly; no codec-ac3 code is included in or
+linked into either player. Its dither generator reproduces the sequence of
+FFmpeg's lagged Fibonacci generator (libavutil lfg.c, seed 0) so decodes
+compare closely; no FFmpeg code is included.
+
 Apple Lossless (ALAC) algorithm reference:
 Apple Lossless Audio Codec, Copyright (c) 2011 Apple Inc.
 https://github.com/macosforge/alac

@@ -14,7 +14,7 @@ sample_rate: .long 0
 source_channels: .long 0
 source_bits: .long 0
 decode_error: .long 0
-codec_kind: .long 0                 #1 WAV,2 FLAC,3 MP3,4 Vorbis,5 Opus,6 AIFF/AIFC
+codec_kind: .long 0                 #1 WAV,2 FLAC,3 MP3,4 Vorbis,5 Opus,6 AIFF/AIFC,...,11 AC-3
 total_frames: .quad 0
 map_token: .quad 0
 map_base: .quad 0
@@ -229,6 +229,11 @@ LOCALFN decoder_open_format
     jnz .Lopen_adts
     mov rcx, [rip + input_cursor]
     mov rdx, [rip + input_end]
+    call ac3_probe                  # AC-3 sync frames (0x0B77)
+    test eax, eax
+    jnz .Lopen_ac3
+    mov rcx, [rip + input_cursor]
+    mov rdx, [rip + input_end]
     call mp3_open
     test eax, eax
     jz .Lopen_bad
@@ -239,6 +244,14 @@ LOCALFN decoder_open_format
     mov rcx, [rip + input_cursor]
     mov rdx, [rip + input_end]
     call adts_open
+    test eax, eax
+    jz .Lopen_bad
+    leave
+    ret
+.Lopen_ac3:
+    mov rcx, [rip + input_cursor]
+    mov rdx, [rip + input_end]
+    call ac3_open
     test eax, eax
     jz .Lopen_bad
     leave

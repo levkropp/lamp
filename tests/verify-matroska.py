@@ -299,7 +299,7 @@ def main():
                                                                       element(0x86, b'A_OPUS') +
                                                                       element(0x63A2, b'OpusHead\x01\x02\x00\x00\x80\xbb\x00\x00\x00\x00\x00')])),
                  ('unsupported-first', dict(number=3, selected_default=0,
-                                            extra_tracks=[uint(0xD7, 1) + uint(0x83, 2) + element(0x86, b'A_AC3'),
+                                            extra_tracks=[uint(0xD7, 1) + uint(0x83, 2) + element(0x86, b'A_DTS'),
                                                           uint(0xD7, 2) + uint(0x83, 1) + element(0x86, b'V_VP9')]))]
         for label, options in cases:
             variant = work / f'{Path(name).stem}-{label}.mka'
@@ -344,7 +344,7 @@ def main():
         checks.append({'test': target.name, 'result': 'rejected', 'oracle': line})
     reject('truncated', good[:len(good) - 1000])
     reject('doctype', good.replace(b'matroska', b'matrosky', 1))
-    reject('no-audio', mux(dict(track, codec='A_AC3')))
+    reject('no-audio', mux(dict(track, codec='A_DTS')))
     encodings = element(0x6D80, element(0x6240, uint(0x5034, 1) + element(0x5035, uint(0x4254, 3))))
     reject('encoded', rebuild_with(track, encodings))
     opus = parse(work / 'opus-stereo.mka')

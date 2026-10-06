@@ -1,0 +1,772 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "mono-48k.ac3",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "acmod": 1,
+      "lfe": 0,
+      "peak_error": 8.940696716308594e-08,
+      "snr_db": 138.7,
+      "stats": "codec=11 rate=48000 channels=1 bits=0 frames=72192 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1503 endpoint_dry=0"
+    },
+    {
+      "test": "stereo-48k.ac3",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "acmod": 2,
+      "lfe": 0,
+      "peak_error": 1.1920928955078125e-07,
+      "snr_db": 139.0,
+      "stats": "codec=11 rate=48000 channels=2 bits=0 frames=72192 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=2753 endpoint_dry=0"
+    },
+    {
+      "test": "stereo-44k.ac3",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "acmod": 2,
+      "lfe": 0,
+      "peak_error": 5.960464477539063e-08,
+      "snr_db": 138.7,
+      "stats": "codec=11 rate=44100 channels=2 bits=0 frames=67584 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=2401 endpoint_dry=0"
+    },
+    {
+      "test": "stereo-32k.ac3",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "acmod": 2,
+      "lfe": 0,
+      "peak_error": 4.470348358154297e-08,
+      "snr_db": 139.1,
+      "stats": "codec=11 rate=32000 channels=2 bits=0 frames=49152 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1716 endpoint_dry=0"
+    },
+    {
+      "test": "rematrix.ac3",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "acmod": 2,
+      "lfe": 0,
+      "peak_error": 1.7881393432617188e-07,
+      "snr_db": 139.4,
+      "stats": "codec=11 rate=48000 channels=2 bits=0 frames=72192 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=2803 endpoint_dry=0"
+    },
+    {
+      "test": "no-coupling.ac3",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "acmod": 2,
+      "lfe": 0,
+      "peak_error": 4.470348358154297e-08,
+      "snr_db": 139.2,
+      "stats": "codec=11 rate=48000 channels=2 bits=0 frames=72192 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2586 endpoint_dry=0"
+    },
+    {
+      "test": "early-coupling.ac3",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "acmod": 2,
+      "lfe": 0,
+      "peak_error": 4.470348358154297e-08,
+      "snr_db": 139.1,
+      "stats": "codec=11 rate=48000 channels=2 bits=0 frames=72192 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2324 endpoint_dry=0"
+    },
+    {
+      "test": "32k-bitrate.ac3",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "acmod": 2,
+      "lfe": 0,
+      "peak_error": 5.960464477539063e-08,
+      "snr_db": 139.1,
+      "stats": "codec=11 rate=48000 channels=2 bits=0 frames=72192 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=2387 endpoint_dry=0"
+    },
+    {
+      "test": "640k-bitrate.ac3",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "acmod": 2,
+      "lfe": 0,
+      "peak_error": 1.1920928955078125e-07,
+      "snr_db": 139.0,
+      "stats": "codec=11 rate=48000 channels=2 bits=0 frames=72192 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=2775 endpoint_dry=0"
+    },
+    {
+      "test": "transients.ac3",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "acmod": 2,
+      "lfe": 0,
+      "peak_error": 1.7881393432617188e-07,
+      "snr_db": 139.7,
+      "stats": "codec=11 rate=48000 channels=2 bits=0 frames=72192 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=2933 endpoint_dry=0"
+    },
+    {
+      "test": "alternate-syntax.ac3",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "acmod": 2,
+      "lfe": 0,
+      "peak_error": 8.940696716308594e-08,
+      "snr_db": 138.7,
+      "stats": "codec=11 rate=48000 channels=2 bits=0 frames=72192 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=3142 endpoint_dry=0"
+    },
+    {
+      "test": "2.1.ac3",
+      "result": "matched",
+      "comparator": "FFmpeg channels mixed with LAMP weights",
+      "acmod": 2,
+      "lfe": 1,
+      "peak_error": 4.470348358154297e-08,
+      "snr_db": 138.4,
+      "stats": "codec=11 rate=48000 channels=3 bits=0 frames=72192 underruns=0 decode_error=0 audio_error=0 elapsed_ms=5 cpu_us=5057 endpoint_dry=0"
+    },
+    {
+      "test": "3.0.ac3",
+      "result": "matched",
+      "comparator": "FFmpeg channels mixed with LAMP weights",
+      "acmod": 3,
+      "lfe": 0,
+      "peak_error": 4.470348358154297e-08,
+      "snr_db": 138.4,
+      "stats": "codec=11 rate=48000 channels=3 bits=0 frames=72192 underruns=0 decode_error=0 audio_error=0 elapsed_ms=4 cpu_us=4647 endpoint_dry=0"
+    },
+    {
+      "test": "3.0-back.ac3",
+      "result": "matched",
+      "comparator": "FFmpeg channels mixed with LAMP weights",
+      "acmod": 4,
+      "lfe": 0,
+      "peak_error": 4.470348358154297e-08,
+      "snr_db": 138.4,
+      "stats": "codec=11 rate=48000 channels=3 bits=0 frames=72192 underruns=0 decode_error=0 audio_error=0 elapsed_ms=4 cpu_us=4532 endpoint_dry=0"
+    },
+    {
+      "test": "4.0.ac3",
+      "result": "matched",
+      "comparator": "FFmpeg channels mixed with LAMP weights",
+      "acmod": 5,
+      "lfe": 0,
+      "peak_error": 3.725290298461914e-08,
+      "snr_db": 138.3,
+      "stats": "codec=11 rate=48000 channels=4 bits=0 frames=72192 underruns=0 decode_error=0 audio_error=0 elapsed_ms=7 cpu_us=7898 endpoint_dry=0"
+    },
+    {
+      "test": "quad-side.ac3",
+      "result": "matched",
+      "comparator": "FFmpeg channels mixed with LAMP weights",
+      "acmod": 6,
+      "lfe": 0,
+      "peak_error": 3.725290298461914e-08,
+      "snr_db": 138.4,
+      "stats": "codec=11 rate=48000 channels=4 bits=0 frames=72192 underruns=0 decode_error=0 audio_error=0 elapsed_ms=6 cpu_us=6001 endpoint_dry=0"
+    },
+    {
+      "test": "5.0-side.ac3",
+      "result": "matched",
+      "comparator": "FFmpeg channels mixed with LAMP weights",
+      "acmod": 7,
+      "lfe": 0,
+      "peak_error": 4.470348358154297e-08,
+      "snr_db": 138.4,
+      "stats": "codec=11 rate=48000 channels=5 bits=0 frames=72192 underruns=0 decode_error=0 audio_error=0 elapsed_ms=7 cpu_us=6925 endpoint_dry=0"
+    },
+    {
+      "test": "5.1-side.ac3",
+      "result": "matched",
+      "comparator": "FFmpeg channels mixed with LAMP weights",
+      "acmod": 7,
+      "lfe": 1,
+      "peak_error": 4.470348358154297e-08,
+      "snr_db": 138.2,
+      "stats": "codec=11 rate=48000 channels=6 bits=0 frames=72192 underruns=0 decode_error=0 audio_error=0 elapsed_ms=7 cpu_us=7506 endpoint_dry=0"
+    },
+    {
+      "test": "5.1-44k.ac3",
+      "result": "matched",
+      "comparator": "FFmpeg channels mixed with LAMP weights",
+      "acmod": 7,
+      "lfe": 1,
+      "peak_error": 4.470348358154297e-08,
+      "snr_db": 138.3,
+      "stats": "codec=11 rate=44100 channels=6 bits=0 frames=67584 underruns=0 decode_error=0 audio_error=0 elapsed_ms=7 cpu_us=6941 endpoint_dry=0"
+    },
+    {
+      "test": "4.1-32k.ac3",
+      "result": "matched",
+      "comparator": "FFmpeg channels mixed with LAMP weights",
+      "acmod": 5,
+      "lfe": 1,
+      "peak_error": 4.470348358154297e-08,
+      "snr_db": 138.4,
+      "stats": "codec=11 rate=32000 channels=5 bits=0 frames=49152 underruns=0 decode_error=0 audio_error=0 elapsed_ms=4 cpu_us=4253 endpoint_dry=0"
+    },
+    {
+      "test": "model on rematrix.ac3",
+      "result": "matched",
+      "comparator": "FFmpeg channels",
+      "minimum_snr_db": 139.6
+    },
+    {
+      "test": "model on 5.1-side.ac3",
+      "result": "matched",
+      "comparator": "FFmpeg channels",
+      "minimum_snr_db": 138.8
+    },
+    {
+      "test": "stereo-48k.mka",
+      "result": "exact",
+      "comparator": "stereo-48k.ac3"
+    },
+    {
+      "test": "stereo-48k.mp4",
+      "result": "exact",
+      "comparator": "stereo-48k.ac3"
+    },
+    {
+      "test": "stereo-48k.frag.mp4",
+      "result": "exact",
+      "comparator": "stereo-48k.ac3"
+    },
+    {
+      "test": "5.1-side.mka",
+      "result": "exact",
+      "comparator": "5.1-side.ac3"
+    },
+    {
+      "test": "5.1-side.mp4",
+      "result": "exact",
+      "comparator": "5.1-side.ac3"
+    },
+    {
+      "test": "5.1-side.frag.mp4",
+      "result": "exact",
+      "comparator": "5.1-side.ac3"
+    },
+    {
+      "test": "mono-48k.mka",
+      "result": "exact",
+      "comparator": "mono-48k.ac3"
+    },
+    {
+      "test": "mono-48k.mp4",
+      "result": "exact",
+      "comparator": "mono-48k.ac3"
+    },
+    {
+      "test": "mono-48k.frag.mp4",
+      "result": "exact",
+      "comparator": "mono-48k.ac3"
+    },
+    {
+      "test": "direct-44k.mp4 (priming edit)",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "acmod": 2,
+      "lfe": 0,
+      "peak_error": 8.940696716308594e-08,
+      "snr_db": 138.7,
+      "stats": "codec=9 rate=44100 channels=2 bits=0 frames=65885 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=2783 endpoint_dry=0"
+    },
+    {
+      "test": "tagged.ac3",
+      "result": "exact",
+      "comparator": "stereo-48k.ac3"
+    },
+    {
+      "test": "truncated.ac3",
+      "result": "exact",
+      "comparator": "stereo-48k.ac3"
+    },
+    {
+      "test": "written-0.ac3",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "acmod": 2,
+      "lfe": 0,
+      "peak_error": 3.0517578125e-05,
+      "snr_db": 138.9,
+      "stats": "codec=11 rate=48000 channels=2 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1475 endpoint_dry=0"
+    },
+    {
+      "test": "written-1.ac3",
+      "result": "matched",
+      "comparator": "FFmpeg channels mixed with LAMP weights",
+      "acmod": 2,
+      "lfe": 1,
+      "peak_error": 1.1444091796875e-05,
+      "snr_db": 138.8,
+      "stats": "codec=11 rate=48000 channels=3 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2140 endpoint_dry=0"
+    },
+    {
+      "test": "written-2.ac3",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "acmod": 1,
+      "lfe": 0,
+      "peak_error": 1.52587890625e-05,
+      "snr_db": 139.0,
+      "stats": "codec=11 rate=48000 channels=1 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=956 endpoint_dry=0"
+    },
+    {
+      "test": "written-3.ac3",
+      "result": "matched",
+      "comparator": "FFmpeg channels mixed with LAMP weights",
+      "acmod": 1,
+      "lfe": 1,
+      "peak_error": 1.1444091796875e-05,
+      "snr_db": 139.0,
+      "stats": "codec=11 rate=44100 channels=2 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1312 endpoint_dry=0"
+    },
+    {
+      "test": "written-4.ac3",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "acmod": 0,
+      "lfe": 0,
+      "peak_error": 3.0517578125e-05,
+      "snr_db": 138.9,
+      "stats": "codec=11 rate=48000 channels=2 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=20539 endpoint_dry=0"
+    },
+    {
+      "test": "written-5.ac3",
+      "result": "matched",
+      "comparator": "FFmpeg channels mixed with LAMP weights",
+      "acmod": 0,
+      "lfe": 1,
+      "peak_error": 7.62939453125e-06,
+      "snr_db": 139.0,
+      "stats": "codec=11 rate=32000 channels=3 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=1953 endpoint_dry=0"
+    },
+    {
+      "test": "written-6.ac3",
+      "result": "matched",
+      "comparator": "FFmpeg channels mixed with LAMP weights",
+      "acmod": 3,
+      "lfe": 0,
+      "peak_error": 1.1444091796875e-05,
+      "snr_db": 138.4,
+      "stats": "codec=11 rate=48000 channels=3 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1907 endpoint_dry=0"
+    },
+    {
+      "test": "written-7.ac3",
+      "result": "matched",
+      "comparator": "FFmpeg channels mixed with LAMP weights",
+      "acmod": 3,
+      "lfe": 1,
+      "peak_error": 7.62939453125e-06,
+      "snr_db": 138.6,
+      "stats": "codec=11 rate=44100 channels=4 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2468 endpoint_dry=0"
+    },
+    {
+      "test": "written-8.ac3",
+      "result": "matched",
+      "comparator": "FFmpeg channels mixed with LAMP weights",
+      "acmod": 4,
+      "lfe": 0,
+      "peak_error": 2.288818359375e-05,
+      "snr_db": 138.5,
+      "stats": "codec=11 rate=48000 channels=3 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2046 endpoint_dry=0"
+    },
+    {
+      "test": "written-9.ac3",
+      "result": "matched",
+      "comparator": "FFmpeg channels mixed with LAMP weights",
+      "acmod": 4,
+      "lfe": 1,
+      "peak_error": 8.58306884765625e-06,
+      "snr_db": 138.6,
+      "stats": "codec=11 rate=32000 channels=4 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=2445 endpoint_dry=0"
+    },
+    {
+      "test": "written-10.ac3",
+      "result": "matched",
+      "comparator": "FFmpeg channels mixed with LAMP weights",
+      "acmod": 5,
+      "lfe": 0,
+      "peak_error": 1.1444091796875e-05,
+      "snr_db": 138.5,
+      "stats": "codec=11 rate=48000 channels=4 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2471 endpoint_dry=0"
+    },
+    {
+      "test": "written-11.ac3",
+      "result": "matched",
+      "comparator": "FFmpeg channels mixed with LAMP weights",
+      "acmod": 5,
+      "lfe": 1,
+      "peak_error": 1.9073486328125e-05,
+      "snr_db": 138.6,
+      "stats": "codec=11 rate=48000 channels=5 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=2850 endpoint_dry=0"
+    },
+    {
+      "test": "written-12.ac3",
+      "result": "matched",
+      "comparator": "FFmpeg channels mixed with LAMP weights",
+      "acmod": 6,
+      "lfe": 0,
+      "peak_error": 1.52587890625e-05,
+      "snr_db": 139.3,
+      "stats": "codec=11 rate=44100 channels=4 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=2498 endpoint_dry=0"
+    },
+    {
+      "test": "written-13.ac3",
+      "result": "matched",
+      "comparator": "FFmpeg channels mixed with LAMP weights",
+      "acmod": 6,
+      "lfe": 1,
+      "peak_error": 1.52587890625e-05,
+      "snr_db": 138.9,
+      "stats": "codec=11 rate=48000 channels=5 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=3085 endpoint_dry=0"
+    },
+    {
+      "test": "written-14.ac3",
+      "result": "matched",
+      "comparator": "FFmpeg channels mixed with LAMP weights",
+      "acmod": 7,
+      "lfe": 0,
+      "peak_error": 1.71661376953125e-05,
+      "snr_db": 138.8,
+      "stats": "codec=11 rate=32000 channels=5 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=2922 endpoint_dry=0"
+    },
+    {
+      "test": "written-15.ac3",
+      "result": "matched",
+      "comparator": "FFmpeg channels mixed with LAMP weights",
+      "acmod": 7,
+      "lfe": 1,
+      "peak_error": 1.1444091796875e-05,
+      "snr_db": 138.7,
+      "stats": "codec=11 rate=48000 channels=6 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=3630 endpoint_dry=0"
+    },
+    {
+      "test": "written-16.ac3",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "acmod": 2,
+      "lfe": 0,
+      "peak_error": 1.52587890625e-05,
+      "snr_db": 138.7,
+      "stats": "codec=11 rate=24000 channels=2 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1455 endpoint_dry=0"
+    },
+    {
+      "test": "written-17.ac3",
+      "result": "matched",
+      "comparator": "FFmpeg channels mixed with LAMP weights",
+      "acmod": 7,
+      "lfe": 1,
+      "peak_error": 2.002716064453125e-05,
+      "snr_db": 138.5,
+      "stats": "codec=11 rate=22050 channels=6 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=5 cpu_us=4548 endpoint_dry=0"
+    },
+    {
+      "test": "written-18.ac3",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "acmod": 2,
+      "lfe": 0,
+      "peak_error": 1.52587890625e-05,
+      "snr_db": 139.0,
+      "stats": "codec=11 rate=8000 channels=2 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1516 endpoint_dry=0"
+    },
+    {
+      "test": "written-19.ac3",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "acmod": 1,
+      "lfe": 0,
+      "peak_error": 2.288818359375e-05,
+      "snr_db": 138.8,
+      "stats": "codec=11 rate=12000 channels=1 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=890 endpoint_dry=0"
+    },
+    {
+      "test": "written-20.ac3",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "acmod": 2,
+      "lfe": 0,
+      "peak_error": 2.288818359375e-05,
+      "snr_db": 138.8,
+      "stats": "codec=11 rate=44100 channels=2 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1556 endpoint_dry=0"
+    },
+    {
+      "test": "written-21.ac3",
+      "result": "matched",
+      "comparator": "FFmpeg channels mixed with LAMP weights",
+      "acmod": 6,
+      "lfe": 1,
+      "peak_error": 2.288818359375e-05,
+      "snr_db": 138.7,
+      "stats": "codec=11 rate=48000 channels=5 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=2818 endpoint_dry=0"
+    },
+    {
+      "test": "written-22.ac3",
+      "result": "matched",
+      "comparator": "FFmpeg channels mixed with LAMP weights",
+      "acmod": 7,
+      "lfe": 1,
+      "peak_error": 7.62939453125e-06,
+      "snr_db": 138.9,
+      "stats": "codec=11 rate=48000 channels=6 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=4 cpu_us=3715 endpoint_dry=0"
+    },
+    {
+      "test": "written-23.ac3",
+      "result": "matched",
+      "comparator": "FFmpeg channels mixed with LAMP weights",
+      "acmod": 2,
+      "lfe": 1,
+      "peak_error": 1.9073486328125e-05,
+      "snr_db": 138.5,
+      "stats": "codec=11 rate=48000 channels=3 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2166 endpoint_dry=0"
+    },
+    {
+      "test": "coverage",
+      "result": "complete",
+      "tools": [
+        "acmod 0",
+        "acmod 0 with LFE",
+        "acmod 1",
+        "acmod 1 with LFE",
+        "acmod 2",
+        "acmod 2 with LFE",
+        "acmod 3",
+        "acmod 3 with LFE",
+        "acmod 4",
+        "acmod 4 with LFE",
+        "acmod 5",
+        "acmod 5 with LFE",
+        "acmod 6",
+        "acmod 6 with LFE",
+        "acmod 7",
+        "acmod 7 with LFE",
+        "additional bit stream information",
+        "alternate bit stream syntax",
+        "bandwidth change",
+        "bap 0",
+        "bap 1",
+        "bap 10",
+        "bap 11",
+        "bap 12",
+        "bap 13",
+        "bap 14",
+        "bap 15",
+        "bap 2",
+        "bap 3",
+        "bap 4",
+        "bap 5",
+        "bap 6",
+        "bap 7",
+        "bap 8",
+        "bap 9",
+        "bsid 10",
+        "bsid 9",
+        "coupling",
+        "coupling band structure",
+        "delta bit allocation",
+        "delta bit allocation coupling",
+        "delta bit allocation reuse",
+        "dither 0",
+        "dither 1",
+        "dynamic range",
+        "dynamic range dual mono",
+        "exponent strategy 0",
+        "exponent strategy 1",
+        "exponent strategy 2",
+        "exponent strategy 3",
+        "mixed transforms",
+        "partial coupling",
+        "phase flags",
+        "rematrixing 2 bands",
+        "rematrixing 3 bands",
+        "rematrixing 4 bands",
+        "short blocks",
+        "skip field",
+        "snr offset -960"
+      ]
+    },
+    {
+      "test": "corrupt-0.ac3",
+      "result": "matched",
+      "comparator": "FFmpeg channels mixed with LAMP weights",
+      "acmod": 2,
+      "lfe": 1,
+      "peak_error": 5.7220458984375e-06,
+      "snr_db": 138.9,
+      "stats": "codec=11 rate=48000 channels=3 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1206 endpoint_dry=0"
+    },
+    {
+      "test": "corrupt-1.ac3",
+      "result": "matched",
+      "comparator": "FFmpeg channels mixed with LAMP weights",
+      "acmod": 7,
+      "lfe": 1,
+      "peak_error": 1.1444091796875e-05,
+      "snr_db": 138.5,
+      "stats": "codec=11 rate=48000 channels=6 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=2304 endpoint_dry=0"
+    },
+    {
+      "test": "corrupt-2.ac3",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "acmod": 0,
+      "lfe": 0,
+      "peak_error": 3.0517578125e-05,
+      "snr_db": 138.1,
+      "stats": "codec=11 rate=48000 channels=2 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1007 endpoint_dry=0"
+    },
+    {
+      "test": "corrupt-3.ac3",
+      "result": "matched",
+      "comparator": "FFmpeg channels mixed with LAMP weights",
+      "acmod": 3,
+      "lfe": 0,
+      "peak_error": 7.62939453125e-06,
+      "snr_db": 138.8,
+      "stats": "codec=11 rate=48000 channels=3 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=1356 endpoint_dry=0"
+    },
+    {
+      "test": "corrupt-4.ac3",
+      "result": "matched",
+      "comparator": "FFmpeg channels mixed with LAMP weights",
+      "acmod": 2,
+      "lfe": 1,
+      "peak_error": 1.1444091796875e-05,
+      "snr_db": 138.5,
+      "stats": "codec=11 rate=48000 channels=3 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=1549 endpoint_dry=0"
+    },
+    {
+      "test": "corrupt-5.ac3",
+      "result": "matched",
+      "comparator": "FFmpeg channels mixed with LAMP weights",
+      "acmod": 7,
+      "lfe": 1,
+      "peak_error": 7.62939453125e-06,
+      "snr_db": 138.9,
+      "stats": "codec=11 rate=48000 channels=6 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2416 endpoint_dry=0"
+    },
+    {
+      "test": "corrupt-6.ac3",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "acmod": 0,
+      "lfe": 0,
+      "peak_error": 3.0517578125e-05,
+      "snr_db": 138.9,
+      "stats": "codec=11 rate=48000 channels=2 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=1422 endpoint_dry=0"
+    },
+    {
+      "test": "corrupt-7.ac3",
+      "result": "matched",
+      "comparator": "FFmpeg channels mixed with LAMP weights",
+      "acmod": 3,
+      "lfe": 0,
+      "peak_error": 1.1444091796875e-05,
+      "snr_db": 138.4,
+      "stats": "codec=11 rate=48000 channels=3 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1994 endpoint_dry=0"
+    },
+    {
+      "test": "corrupt-8.ac3",
+      "result": "matched",
+      "comparator": "FFmpeg channels mixed with LAMP weights",
+      "acmod": 2,
+      "lfe": 1,
+      "peak_error": 9.5367431640625e-06,
+      "snr_db": 138.8,
+      "stats": "codec=11 rate=48000 channels=3 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2193 endpoint_dry=0"
+    },
+    {
+      "test": "corrupt-9.ac3",
+      "result": "matched",
+      "comparator": "FFmpeg channels mixed with LAMP weights",
+      "acmod": 7,
+      "lfe": 1,
+      "peak_error": 1.1444091796875e-05,
+      "snr_db": 138.6,
+      "stats": "codec=11 rate=48000 channels=6 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=3140 endpoint_dry=0"
+    },
+    {
+      "test": "corrupt-10.ac3",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "acmod": 0,
+      "lfe": 0,
+      "peak_error": 3.0517578125e-05,
+      "snr_db": 138.9,
+      "stats": "codec=11 rate=48000 channels=2 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1379 endpoint_dry=0"
+    },
+    {
+      "test": "corrupt-11.ac3",
+      "result": "matched",
+      "comparator": "FFmpeg channels mixed with LAMP weights",
+      "acmod": 3,
+      "lfe": 0,
+      "peak_error": 1.1444091796875e-05,
+      "snr_db": 138.4,
+      "stats": "codec=11 rate=48000 channels=3 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=1979 endpoint_dry=0"
+    },
+    {
+      "test": "60 heavily corrupted streams",
+      "result": "decoded"
+    },
+    {
+      "test": "seek-stereo.ac3 seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":11517,\"maximum_discarded\":1536,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0}"
+    },
+    {
+      "test": "seek-5.1.ac3 seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":11517,\"maximum_discarded\":1536,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0}"
+    },
+    {
+      "test": "seek-mono.ac3 seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":11517,\"maximum_discarded\":1536,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0}"
+    },
+    {
+      "test": "seek-5.1.mka seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":11517,\"maximum_discarded\":1536,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0}"
+    },
+    {
+      "test": "eac3.ec3",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "eac3.mka",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "eac3.mp4",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "bad-layout-change.ac3",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":100}"
+    },
+    {
+      "test": "bad-garbage.ac3",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":100}"
+    },
+    {
+      "test": "bad-bad-frame-size.ac3",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":100}"
+    },
+    {
+      "test": "cancel-open 5.1-side.ac3",
+      "result": "{\"result\":\"cancelled\"}"
+    },
+    {
+      "test": "cancel-read 5.1-side.ac3",
+      "result": "{\"result\":\"cancelled\",\"frames_before_cancel\":36864}"
+    },
+    {
+      "test": "AC-3 playback",
+      "result": "played",
+      "stats": "Playing. Space: pause / resume. Q or Ctrl+C: stop. codec=11 rate=48000 channels=6 bits=0 frames=72192 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3599 cpu_us=9490 endpoint_dry=0"
+    }
+  ],
+  "rejections": 6,
+  "scope": "AC-3 in raw .ac3, Matroska and MP4: FFmpeg-encoded fixtures at 32, 44.1 and 48 kHz, mono to 5.1, against FFmpeg (multichannel via LAMP mix weights); the model against FFmpeg; written streams covering every tool and bap; container exactness, tags and truncation; corrupted frames against FFmpeg's concealment; fuzzing; exact seeks; E-AC-3 and malformed rejections; cancellation."
+}

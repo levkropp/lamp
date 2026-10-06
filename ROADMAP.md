@@ -111,6 +111,8 @@ HE-AAC spectral band replication now runs on that core (signalled explicitly, by
 
 HE-AAC v2 parametric stereo now turns mono SBR streams into stereo (object type 29, the backward-compatible PS flag or implicit), with 10/20/34-band IID and ICC in every mode, IPD/OPD, hybrid filter banks, decorrelation and both mixing procedures. A Python PS model writes its data into the same generated streams: 12 streams at core rates 11.025–24 kHz match FFmpeg's stereo decode at 128 dB or better with every PS tool covered, MP4 copies with all three signalling forms are exact, corrupted PS data falls back as in FFmpeg, and seeks match continuous decoding up to the SBR noise phase.
 
+AC-3 (Dolby Digital) now decodes in raw `.ac3`, Matroska and MP4 with a new assembly decoder following FFmpeg's structure: bsid 0–10 including half and quarter rates, every channel mode with LFE, block switching, coupling, rematrixing, all exponent strategies, delta bit allocation, dynamic range and FFmpeg's dither sequence, with CRC checks and FFmpeg-style concealment. 20 FFmpeg-encoded files and 24 streams written through a Python model (covering every tool and bit allocation pointer FFmpeg's encoder never uses) match FFmpeg at 138 dB or better; container copies are exact; corrupted frames match FFmpeg's concealment; seeks in dither-free streams are exact. E-AC-3 is the next step. See [AC-3 notes](docs/ac3.md).
+
 MPEG audio Layers I and II now share the Layer III framing, index and synthesis: MPEG-1 and MPEG-2 lower rates, every allocation table and quantizer, all stereo modes and CRC checks. 96 random valid streams and 34 FFmpeg/libtwolame encoder files match FFmpeg's float decoders at 108.7 dB SNR or better, three files pass exact seek checks and seven malformed streams reject. See [Layer I/II notes](docs/mp2.md).
 
 FLAC in Ogg (mapping 1.0) now uses the native FLAC decoder with frame-position checks at open and exact indexed seeks; eight files from 8 to 192 kHz, 16/24-bit and 1–8 channels match FFmpeg or native FLAC exactly. Chained and multiplexed Ogg files are supported as described above.
@@ -119,7 +121,7 @@ AIFF/AIFC now adds signed 1–32-bit PCM, AIFC byte-order/fixed-container varian
 
 | Area | Planned coverage, in approximate priority order |
 | --- | --- |
-| Mainstream lossy audio | AAC-LC, HE-AAC v1/v2 and MPEG Layers I/II (implemented); AC-3/E-AC-3; then DTS families, WMA variants and other relevant legacy formats |
+| Mainstream lossy audio | AAC-LC, HE-AAC v1/v2, AC-3 and MPEG Layers I/II (implemented); E-AC-3; then DTS families, WMA variants and other relevant legacy formats |
 | Lossless and PCM | ALAC (implemented in MP4/Matroska), WavPack, APE, AIFF/AIFC, RF64, FLAC-in-Ogg, broader PCM/float and FLAC depths/layouts |
 | Other audio | Musepack, Speex, AMR and telephony ADPCM; further formats from the compatibility inventory as demand and feasibility justify |
 | Common containers | MP4/M4A/MOV and Matroska/WebM (audio tracks implemented), MPEG TS/PS, AVI, ASF; broader Ogg stream mappings |

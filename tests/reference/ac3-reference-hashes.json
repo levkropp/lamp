@@ -1,0 +1,16 @@
+{
+  "reference": "AC-3 bit allocation tables for tests/generate-ac3-tables.py; test-only extraction, no code linked",
+  "sources": [
+    {
+      "name": "codec-ac3 (MIT License), Phil Schatzmann",
+      "directory": "codec-ac3",
+      "url": "https://raw.githubusercontent.com/pschatzmann/codec-ac3/{commit}/{file}",
+      "commit": "b0fc07e0acf674f38d3d90accd1089c6b19b5e32",
+      "files": {
+        "LICENSE": "18c3f8d3c4bf84aa4c13221e75f087539684d9ab05cc846c22aeeaaa4ffa3f49",
+        "src/decoder/AC3Tables.h": "74116a109b243a2ca18aaa55f15ba6468a86a12782ca7fce9a6f7dcf13506077",
+        "src/decoder/AC3BitAllocation.h": "a38a17151fc9e8a9cd0c27d9be972ef46e24782fb511a9f28ac9a69a9dfe8b11"
+      }
+    }
+  ]
+}
