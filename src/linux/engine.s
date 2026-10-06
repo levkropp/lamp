@@ -16,7 +16,7 @@
 
 .globl engine_mode, engine_stop_requested, pause_requested, engine_ready, engine_volume
 .globl engine_position, engine_seek_ms, decoded_count, underruns, endpoint_dry, audio_status
-.globl engine_command, engine_seek_delta, engine_heard_index, engine_heard_ms
+.globl engine_command, engine_seek_delta, engine_heard_index, engine_heard_ms, engine_quit, engine_note_heard
 
 .data
 playing_text: .ascii "Playing. Space: pause / resume. N / P: next / previous file. Left / Right: -5 / +5 s.\n"
@@ -55,6 +55,7 @@ engine_command: .long 0                # set by a key: 1 next, 2 previous, 3 see
 engine_seek_delta: .long 0             # seconds
 engine_heard_index: .long 0            # queue index heard at the command
 engine_greeted: .long 0
+engine_quit: .long 0                   # Q or a signal stopped the last run
 producer_done: .long 0
 corked: .long 0
 waiting_data: .long 0
@@ -102,6 +103,7 @@ FN engine_start
     mov [rip + terminal_changed], eax
     mov r13d, 0                        # exit code
     mov [rip + engine_command], eax
+    mov [rip + engine_quit], eax
     mov rax, [rip + engine_seek_ms]    # milliseconds to frames
     mov ecx, [rip + queue_rate]
     mul rcx
@@ -553,6 +555,7 @@ LOCALFN engine_read_keys
     je .Leng_keys_repeat
     cmp al, 'q'
     jne .Leng_keys_advance
+    mov dword ptr [rip + engine_quit], 1
     mov dword ptr [rip + engine_stop_requested], 1
     jmp .Leng_keys_advance
 .Leng_keys_repeat:
@@ -582,7 +585,7 @@ LOCALFN engine_read_keys
 ENDFN engine_read_keys
 
 # engine_heard_index and engine_heard_ms <- the file at engine_position.
-LOCALFN engine_note_heard
+FN engine_note_heard
     sub rsp, 40
     mov rcx, [rip + engine_position]
     call queue_heard
@@ -663,6 +666,7 @@ ENDFN terminal_restore
 
 # SIGINT/SIGTERM handler (System V entry; the kernel restores all registers).
 LOCALFN engine_signal
+    mov dword ptr [rip + engine_quit], 1
     mov dword ptr [rip + engine_stop_requested], 1
     mov ecx, [rip + stop_event]
     test ecx, ecx

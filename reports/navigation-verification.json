@@ -79,12 +79,12 @@
         [
           "a",
           480,
-          48709
+          49570
         ],
         [
           "b",
-          370,
-          143630
+          345,
+          143655
         ]
       ]
     },
@@ -95,7 +95,7 @@
         [
           "a",
           480,
-          49580
+          49149
         ]
       ]
     },
@@ -111,7 +111,7 @@
         [
           "a",
           0,
-          5682
+          5690
         ],
         [
           "c",
@@ -132,12 +132,12 @@
         [
           "a",
           480,
-          169696
+          169603
         ],
         [
           "a",
-          369,
-          287631
+          371,
+          287629
         ]
       ]
     },
@@ -148,17 +148,17 @@
         [
           "d",
           480,
-          74190
+          73211
         ],
         [
           "d",
-          324003,
-          119773
+          322989,
+          120711
         ],
         [
           "d",
-          375,
-          671625
+          370,
+          671630
         ]
       ]
     },
@@ -179,7 +179,7 @@
         [
           "e",
           0,
-          31772
+          32223
         ]
       ]
     },
@@ -194,13 +194,13 @@
         ],
         [
           "e",
-          358,
-          57242
+          356,
+          57244
         ],
         [
           "e",
           0,
-          31043
+          31008
         ]
       ]
     },
@@ -214,6 +214,44 @@
           57120
         ]
       ]
+    },
+    {
+      "test": "resume",
+      "result": "passed",
+      "runs": [
+        [
+          "a",
+          71520,
+          216480
+        ]
+      ]
+    },
+    {
+      "test": "resume in a list",
+      "result": "passed",
+      "runs": [
+        [
+          "a",
+          46512,
+          241488
+        ]
+      ]
+    },
+    {
+      "test": "--start wins",
+      "result": "passed",
+      "runs": [
+        [
+          "a",
+          96480,
+          191520
+        ]
+      ]
+    },
+    {
+      "test": "resume lines",
+      "result": "passed",
+      "note": "newest first, other lists kept, malformed lines dropped, 256 kept"
     }
   ],
   "scope": "--start against whole decodes in ten formats, queues and option errors; keys N/P, arrows, R and --repeat through the null sink."
