@@ -387,25 +387,39 @@
       "rejected_or_damaged": 32
     },
     {
+      "test": "lpcm.vob",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 50,
+      "decoded": 50,
+      "rejected_or_damaged": 0
+    },
+    {
+      "test": "lpcm.m2ts",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 50,
+      "decoded": 50,
+      "rejected_or_damaged": 0
+    },
+    {
       "test": "ac3.ts",
       "result": "no crash, hang or runaway memory",
       "mutations": 50,
-      "decoded": 37,
-      "rejected_or_damaged": 13
+      "decoded": 40,
+      "rejected_or_damaged": 10
     },
     {
       "test": "mp2.mpg",
       "result": "no crash, hang or runaway memory",
       "mutations": 50,
-      "decoded": 22,
-      "rejected_or_damaged": 28
+      "decoded": 18,
+      "rejected_or_damaged": 32
     },
     {
       "test": "ac3.vob",
       "result": "no crash, hang or runaway memory",
       "mutations": 50,
-      "decoded": 31,
-      "rejected_or_damaged": 19
+      "decoded": 33,
+      "rejected_or_damaged": 17
     },
     {
       "test": "tone.ape",
@@ -418,11 +432,11 @@
       "test": "old.ape",
       "result": "no crash, hang or runaway memory",
       "mutations": 50,
-      "decoded": 0,
-      "rejected_or_damaged": 50
+      "decoded": 1,
+      "rejected_or_damaged": 49
     }
   ],
-  "mutations": 3000,
-  "decoded": 1140,
-  "scope": "60 container/codec sources, 500 mutations each (every tenth under Wine), seed 20261006: byte flips, zero/0xff runs, cuts, removed and duplicated spans, large length fields; --check, every fourth from a random --start."
+  "mutations": 3100,
+  "decoded": 1242,
+  "scope": "62 container/codec sources, 500 mutations each (every tenth under Wine), seed 20261006: byte flips, zero/0xff runs, cuts, removed and duplicated spans, large length fields; --check, every fourth from a random --start."
 }

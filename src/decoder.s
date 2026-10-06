@@ -27,7 +27,7 @@ wav_end: .quad 0
 wav_begin: .quad 0
 wav_kind: .long 0                  # 0 RIFF, 1 RF64, 2 BW64
 wav_layout: .long 0                # chunks: 0 RIFF family, 1 RIFX (big-endian), 2 Wave64 (GUIDs)
-wav_codec_kind: .long 1            # codec_kind of an opened WAV reader: 1, or 14 AVI, 15 FLV
+wav_codec_kind: .long 1            # codec_kind of an opened WAV reader: 1, or 14 AVI, 15 FLV, 18 LPCM in MPEG-TS/PS
 wav_ds64: .quad 0
 wav_size_table: .quad 0
 wav_table_count: .long 0
@@ -345,18 +345,26 @@ LOCALFN decoder_open_format
     mov rcx, [rip + input_cursor]
     mov rdx, [rip + input_end]
     call mts_open
-    test eax, eax
-    jz .Lopen_bad
+    cmp eax, 1
+    jb .Lopen_bad
+    ja .Lopen_lpcm_image
     leave
     ret
 .Lopen_mps:
     mov rcx, [rip + input_cursor]
     mov rdx, [rip + input_end]
     call mps_open
-    test eax, eax
-    jz .Lopen_bad
+    cmp eax, 1
+    jb .Lopen_bad
+    ja .Lopen_lpcm_image
     leave
     ret
+.Lopen_lpcm_image:
+    # DVD and Blu-ray LPCM, converted into a Wave64 image.
+    mov dword ptr [rip + wav_codec_kind], 18
+    mov [rip + input_end], rdx
+    mov rax, rcx
+    jmp .Lopen_w64
 .Lopen_caf:
     mov rcx, [rip + map_base]
     mov rdx, [rip + input_end]
@@ -2273,6 +2281,8 @@ FN decoder_seek
     je .Lseek_wav
     cmp dword ptr [rip + codec_kind], 16
     je .Lseek_wav
+    cmp dword ptr [rip + codec_kind], 18
+    je .Lseek_wav
     cmp dword ptr [rip + codec_kind], 3
     je .Lseek_mp3
     cmp dword ptr [rip + codec_kind], 17
@@ -3482,6 +3492,8 @@ FN decoder_read
     je .Lread_existing
     cmp dword ptr [rip + codec_kind], 16  # AU
     je .Lread_existing
+    cmp dword ptr [rip + codec_kind], 18  # LPCM in MPEG-TS/PS
+    je .Lread_existing
     cmp dword ptr [rip + codec_kind], 1
     jb .Lread_done
     cmp dword ptr [rip + codec_kind], 6
@@ -3515,6 +3527,8 @@ FN decoder_read
     cmp dword ptr [rip + codec_kind], 15
     je .Lread_wav
     cmp dword ptr [rip + codec_kind], 16
+    je .Lread_wav
+    cmp dword ptr [rip + codec_kind], 18
     je .Lread_wav
 .Lread_flac:
     mov rcx, rdi

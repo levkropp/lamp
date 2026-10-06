@@ -387,42 +387,56 @@
       "rejected_or_damaged": 255
     },
     {
+      "test": "lpcm.vob",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 500,
+      "decoded": 500,
+      "rejected_or_damaged": 0
+    },
+    {
+      "test": "lpcm.m2ts",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 500,
+      "decoded": 493,
+      "rejected_or_damaged": 7
+    },
+    {
       "test": "ac3.ts",
       "result": "no crash, hang or runaway memory",
       "mutations": 500,
-      "decoded": 385,
-      "rejected_or_damaged": 115
+      "decoded": 393,
+      "rejected_or_damaged": 107
     },
     {
       "test": "mp2.mpg",
       "result": "no crash, hang or runaway memory",
       "mutations": 500,
-      "decoded": 246,
-      "rejected_or_damaged": 254
+      "decoded": 220,
+      "rejected_or_damaged": 280
     },
     {
       "test": "ac3.vob",
       "result": "no crash, hang or runaway memory",
       "mutations": 500,
-      "decoded": 355,
-      "rejected_or_damaged": 145
+      "decoded": 344,
+      "rejected_or_damaged": 156
     },
     {
       "test": "tone.ape",
       "result": "no crash, hang or runaway memory",
       "mutations": 500,
-      "decoded": 46,
-      "rejected_or_damaged": 454
+      "decoded": 50,
+      "rejected_or_damaged": 450
     },
     {
       "test": "old.ape",
       "result": "no crash, hang or runaway memory",
       "mutations": 500,
-      "decoded": 11,
-      "rejected_or_damaged": 489
+      "decoded": 4,
+      "rejected_or_damaged": 496
     }
   ],
-  "mutations": 30000,
-  "decoded": 12280,
-  "scope": "60 container/codec sources, 500 mutations each (Linux, 2 GiB address space), seed 20261006: byte flips, zero/0xff runs, cuts, removed and duplicated spans, large length fields; --check, every fourth from a random --start."
+  "mutations": 31000,
+  "decoded": 13241,
+  "scope": "62 container/codec sources, 500 mutations each (Linux, 2 GiB address space), seed 20261006: byte flips, zero/0xff runs, cuts, removed and duplicated spans, large length fields; --check, every fourth from a random --start."
 }
