@@ -110,8 +110,8 @@ def main():
     # Rejections.
     pcm = b'\0' * 400
     bad = {
-        'g721.au': (header(24, 400, 23, 8000, 1) + pcm, 101),
-        'g722.au': (header(24, 400, 24, 16000, 1) + pcm, 101),
+        'fixed-point.au': (header(24, 400, 11, 8000, 1) + pcm, 101),
+        'dsp-commands.au': (header(24, 400, 21, 16000, 1) + pcm, 101),
         'zero-channels.au': (header(24, 400, 3, 44100, 0) + pcm, 100),
         'nine-channels.au': (header(24, 400, 3, 44100, 9) + pcm, 101),
         'zero-rate.au': (header(24, 400, 3, 0, 2) + pcm, 100),

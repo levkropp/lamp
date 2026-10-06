@@ -816,7 +816,13 @@ FN track_seek
 .Ltk_seek_primer:
     # Primer packets rebuild the overlap; their output is skipped. HE-AAC
     # needs two: SBR filters the previous frame's core output as well.
+    # ADPCM names its count (IMA4 one, G.726 and G.722 more).
     mov esi, 1
+    cmp dword ptr [rip + track_codec], TK_ADPCM
+    jne .Ltk_seek_primer_aac
+    mov esi, [rip + adpcm_primer]
+    jmp .Ltk_seek_primer_count
+.Ltk_seek_primer_aac:
     cmp dword ptr [rip + track_codec], TK_AAC
     jne .Ltk_seek_primer_count
     add esi, [rip + sbr_active]

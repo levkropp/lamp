@@ -4,12 +4,19 @@
 # to the data offset, then interleaved samples read directly by the PCM
 # reader: encodings 1 (µ-law), 27 (A-law), 2-5 (signed 8-32-bit
 # big-endian), 6 and 7 (big-endian float32/64). Channels mix to stereo with
-# the default WAVE layout of their count.
+# the default WAVE layout of their count. G.726 (encodings 23, 25 and 26 for
+# 4-, 3- and 5-bit codes, "7262" for 2-bit, packed from the low bit) and
+# G.722 (24) open through the WAVE reader's ADPCM packets, described by a
+# WAVE-style fmt.
 .equ AU_MALFORMED, 100
 .equ AU_UNSUPPORTED, 101
 
+.bss
+au_fmt: .zero 16
+
 .text
-# RCX=file (".snd"), RDX=end -> EAX=1 with the PCM reader set up.
+# RCX=file (".snd"), RDX=end -> EAX=1 with the PCM reader set up, or 2 with
+# wav_codec, its fmt and the data bounds set for the ADPCM packets.
 LOCALFN au_open
     push rbx
     push rsi
@@ -69,7 +76,59 @@ LOCALFN au_open
     je .Lau_float
     mov edx, 64
     cmp eax, 7
-    jne .Lau_bad                            # ADPCM and other encodings
+    je .Lau_float
+    mov edx, 4                              # G.726 code size
+    cmp eax, 23
+    je .Lau_g726
+    mov edx, 3
+    cmp eax, 25
+    je .Lau_g726
+    mov edx, 5
+    cmp eax, 26
+    je .Lau_g726
+    mov edx, 2
+    cmp eax, 0x37323632                     # "7262"
+    je .Lau_g726
+    cmp eax, 24
+    jne .Lau_bad                            # other encodings
+    mov eax, 0x28f                          # G.722
+    mov edx, 4
+    jmp .Lau_codec
+.Lau_g726:
+    mov eax, 0x4c47                         # ADPCM_G726LE in src/adpcm.s
+.Lau_codec:
+    lea rcx, [rip + au_fmt]
+    mov [rcx], ax
+    mov r8d, [rip + source_channels]
+    mov [rcx + 2], r8w
+    mov r8d, [rip + sample_rate]
+    mov [rcx + 4], r8d
+    mov word ptr [rcx + 12], 1
+    mov [rcx + 14], dx
+    mov [rip + wav_codec], eax
+    mov [rip + wav_codec_fmt], rcx
+    mov dword ptr [rip + wav_codec_fmt_bytes], 16
+    mov dword ptr [rip + wav_codec_kind], 16
+    lea r8, [rsi + rbx]                     # data
+    mov eax, [rsi + 8]
+    bswap eax                               # data bytes
+    mov r9, rdi
+    cmp eax, 0xffffffff
+    je .Lau_codec_sized
+    lea r10, [r8 + rax]
+    cmp r10, r9
+    cmovb r9, r10
+.Lau_codec_sized:
+    cmp r9, r8
+    jbe .Lau_malformed
+    mov [rip + wav_begin], r8
+    mov [rip + wav_end], r9
+    mov dword ptr [rip + decode_error], 0
+    mov eax, 2
+    jmp .Lau_return
+.Lau_malformed:
+    mov dword ptr [rip + decode_error], AU_MALFORMED
+    jmp .Lau_bad
 .Lau_float:
     mov dword ptr [rip + wav_format], 3
     jmp .Lau_bits

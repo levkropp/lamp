@@ -107,18 +107,32 @@
       "rejected_or_damaged": 2
     },
     {
+      "test": "g726.wav",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 50,
+      "decoded": 29,
+      "rejected_or_damaged": 21
+    },
+    {
+      "test": "g722.au",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 50,
+      "decoded": 49,
+      "rejected_or_damaged": 1
+    },
+    {
       "test": "tone.flac",
       "result": "no crash, hang or runaway memory",
       "mutations": 50,
-      "decoded": 15,
-      "rejected_or_damaged": 35
+      "decoded": 14,
+      "rejected_or_damaged": 36
     },
     {
       "test": "surround.flac",
       "result": "no crash, hang or runaway memory",
       "mutations": 50,
-      "decoded": 19,
-      "rejected_or_damaged": 31
+      "decoded": 21,
+      "rejected_or_damaged": 29
     },
     {
       "test": "flac.oga",
@@ -378,9 +392,23 @@
       "mutations": 50,
       "decoded": 36,
       "rejected_or_damaged": 14
+    },
+    {
+      "test": "tone.ape",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 50,
+      "decoded": 0,
+      "rejected_or_damaged": 50
+    },
+    {
+      "test": "old.ape",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 50,
+      "decoded": 0,
+      "rejected_or_damaged": 50
     }
   ],
-  "mutations": 2700,
-  "decoded": 1047,
-  "scope": "54 container/codec sources, 500 mutations each (every tenth under Wine), seed 20261006: byte flips, zero/0xff runs, cuts, removed and duplicated spans, large length fields; --check, every fourth from a random --start."
+  "mutations": 2900,
+  "decoded": 1126,
+  "scope": "58 container/codec sources, 500 mutations each (every tenth under Wine), seed 20261006: byte flips, zero/0xff runs, cuts, removed and duplicated spans, large length fields; --check, every fourth from a random --start."
 }

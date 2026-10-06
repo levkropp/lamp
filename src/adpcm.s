@@ -13,10 +13,14 @@
 # interleaved codes, with the SWF specification's step index tables.
 # Decoding follows FFmpeg's adpcm_ima_wav, adpcm_ms, adpcm_ima_qt and
 # adpcm_swf; the tables are src/adpcm_tables.inc (with the G.711 expansions
-# used by the PCM reader).
+# used by the PCM reader). G.726 (WAVE tags 0x45, 0x14, 0x40 and 0x64, codes
+# packed from the most significant bit; AU, the private tag ADPCM_G726LE,
+# from the least) and G.722 (0x28f) are mono bitstreams whose state runs on
+# across packets of about 4 KiB (src/g72x.s): a seek decodes one primer
+# packet from a reset state.
 .include "lamp.inc"
 .globl adpcm_track_open, adpcm_track_samples, adpcm_track_decode, adpcm_track_close, adpcm_track_reset
-.globl adpcm_primer, g711_alaw, g711_ulaw
+.globl adpcm_primer, g711_alaw, g711_ulaw, adpcm_packet_layout
 
 .equ ADPCM_MALFORMED, 100
 .equ ADPCM_UNSUPPORTED, 101
@@ -24,6 +28,11 @@
 .equ ADPCM_MS, 2
 .equ ADPCM_QT, 0x4d49               # LAMP's tag for QuickTime IMA4 (not a WAVE tag)
 .equ ADPCM_SWF, 0x5346              # LAMP's tag for Flash ADPCM (not a WAVE tag)
+.equ ADPCM_G726, 0x45
+.equ ADPCM_G726LE, 0x4c47           # LAMP's tag for AU's G.726 (codes from the low bit)
+.equ ADPCM_G722, 0x28f
+.equ G72X_PACKET, 4096              # bytes per packet at most
+.equ G72X_PRIMER, 3                 # packets decoded before a seek target
 .equ MS_C1, 0                       # Microsoft channel state
 .equ MS_C2, 4
 .equ MS_DELTA, 8
@@ -50,7 +59,7 @@ adpcm_channels: .long 0
 adpcm_align: .long 0
 adpcm_stride: .long 0                    # bytes per channel plane
 adpcm_planes: .quad 0                    # int16 channel planes of one block
-adpcm_primer: .long 0                    # packets decoded before a seek target
+adpcm_primer: .long 0                    # packets decoded before a seek target (0: none)
 adpcm_bits: .long 0                      # Flash ADPCM code size of the packet
 
 .bss
@@ -63,6 +72,12 @@ ms_state: .zero 2*MS_SIZE
 # (FFmpeg: IMA 1 + whole 8-sample groups, Microsoft 2 + two per byte).
 LOCALFN adpcm_block_samples
     mov r8d, [rip + adpcm_channels]
+    cmp dword ptr [rip + adpcm_tag], ADPCM_G722
+    je .Ladpcm_samples_g722
+    cmp dword ptr [rip + adpcm_tag], ADPCM_G726
+    je .Ladpcm_samples_g726
+    cmp dword ptr [rip + adpcm_tag], ADPCM_G726LE
+    je .Ladpcm_samples_g726
     cmp dword ptr [rip + adpcm_tag], ADPCM_SWF
     je .Ladpcm_samples_swf
     cmp dword ptr [rip + adpcm_tag], ADPCM_QT
@@ -119,10 +134,78 @@ LOCALFN adpcm_block_samples
 .Ladpcm_samples_swf_done:
     mov eax, ecx
     ret
+.Ladpcm_samples_g722:
+    lea eax, [rcx*2]                      # two samples per codeword
+    ret
+.Ladpcm_samples_g726:
+    lea eax, [rcx*8]                      # whole codes
+    xor edx, edx
+    div dword ptr [rip + adpcm_bits]
+    ret
 .Ladpcm_samples_none:
     xor eax, eax
     ret
 ENDFN adpcm_block_samples
+
+# RCX=WAVE fmt chunk (16 bytes or more) -> EAX=bytes per packet, EDX=the
+# fewest bytes a packet decodes from. Blocks for IMA and Microsoft ADPCM
+# (their headers); for G.726 and G.722 runs of whole codes as FFmpeg's WAVE
+# demuxer reads them (4096 bytes, or 4095 for 3- and 5-bit codes).
+FN adpcm_packet_layout
+    movzx eax, word ptr [rcx]
+    cmp eax, 0xfffe
+    jne .Ladpcm_layout_tag
+    movzx eax, word ptr [rcx + 24]
+.Ladpcm_layout_tag:
+    mov r9d, eax
+    call adpcm_g72x_tag
+    test eax, eax
+    jnz .Ladpcm_layout_g72x
+    movzx edx, word ptr [rcx + 2]
+    imul edx, edx, 7
+    cmp r9d, ADPCM_IMA
+    jne .Ladpcm_layout_block
+    movzx edx, word ptr [rcx + 2]
+    shl edx, 2
+.Ladpcm_layout_block:
+    movzx eax, word ptr [rcx + 12]
+    ret
+.Ladpcm_layout_g72x:
+    mov eax, G72X_PACKET
+    mov edx, 1
+    cmp r9d, ADPCM_G722
+    je .Ladpcm_layout_return
+    movzx r8d, word ptr [rcx + 14]
+    cmp r8d, 3
+    je .Ladpcm_layout_odd
+    cmp r8d, 5
+    jne .Ladpcm_layout_return
+.Ladpcm_layout_odd:
+    dec eax                               # 4095: whole 3- or 5-bit codes
+.Ladpcm_layout_return:
+    ret
+ENDFN adpcm_packet_layout
+
+# EAX=format tag -> EAX=1 for G.726 (any of its tags) or G.722.
+LOCALFN adpcm_g72x_tag
+    cmp eax, ADPCM_G726
+    je .Ladpcm_g72x_yes
+    cmp eax, 0x14
+    je .Ladpcm_g72x_yes
+    cmp eax, 0x40
+    je .Ladpcm_g72x_yes
+    cmp eax, 0x64
+    je .Ladpcm_g72x_yes
+    cmp eax, ADPCM_G726LE
+    je .Ladpcm_g72x_yes
+    cmp eax, ADPCM_G722
+    je .Ladpcm_g72x_yes
+    xor eax, eax
+    ret
+.Ladpcm_g72x_yes:
+    mov eax, 1
+    ret
+ENDFN adpcm_g72x_tag
 
 # RCX=WAVE fmt chunk, EDX=its bytes, R8/R9D=first packet (unused) -> EAX=1
 # with the format published and the channel planes allocated.
@@ -150,14 +233,18 @@ FN adpcm_track_open
     test esi, esi
     jz .Ladpcm_open_fail
     mov dword ptr [rip + decode_error], ADPCM_UNSUPPORTED
-    cmp word ptr [rcx + 14], 4             # 4-bit samples only
-    jne .Ladpcm_open_fail
     mov eax, [rcx + 4]
     cmp eax, 8000
     jb .Ladpcm_open_fail
     cmp eax, 192000
     ja .Ladpcm_open_fail
     mov [rip + sample_rate], eax
+    mov eax, ebx
+    call adpcm_g72x_tag
+    test eax, eax
+    jnz .Ladpcm_open_g72x
+    cmp word ptr [rcx + 14], 4             # 4-bit samples only
+    jne .Ladpcm_open_fail
     cmp esi, 8
     ja .Ladpcm_open_fail
     cmp ebx, ADPCM_IMA
@@ -171,9 +258,36 @@ FN adpcm_track_open
 .Ladpcm_open_two:
     cmp esi, 2
     ja .Ladpcm_open_fail
+    jmp .Ladpcm_open_layout
+.Ladpcm_open_g72x:
+    # G.726 and G.722: one channel; G.726 codes of 2-5 bits. Every tag
+    # of G.726 in WAVE decodes as 0x45.
+    cmp esi, 1
+    jne .Ladpcm_open_fail
+    mov dword ptr [rip + adpcm_align], G72X_PACKET
+    movzx eax, word ptr [rcx + 14]
+    cmp ebx, ADPCM_G722
+    je .Ladpcm_open_g722
+    cmp ebx, ADPCM_G726LE
+    je .Ladpcm_open_g726
+    mov ebx, ADPCM_G726
+    mov [rip + adpcm_tag], ebx
+.Ladpcm_open_g726:
+    cmp eax, 2
+    jb .Ladpcm_open_fail
+    cmp eax, 5
+    ja .Ladpcm_open_fail
+    mov [rip + adpcm_bits], eax
+    jmp .Ladpcm_open_g72x_layout
+.Ladpcm_open_g722:
+    mov dword ptr [rip + adpcm_bits], 4
+.Ladpcm_open_g72x_layout:
+    mov dword ptr [rip + decode_error], ADPCM_MALFORMED
+    jmp .Ladpcm_open_samples
 .Ladpcm_open_layout:
     mov dword ptr [rip + decode_error], ADPCM_MALFORMED
     mov dword ptr [rip + adpcm_bits], 2   # Flash: the most samples per byte
+.Ladpcm_open_samples:
     mov [rsp + 32], r10d
     mov ecx, [rip + adpcm_align]
     call adpcm_block_samples
@@ -184,7 +298,14 @@ FN adpcm_track_open
     and eax, -64
     mov [rip + adpcm_stride], eax
     mov [rip + source_channels], esi
-    mov dword ptr [rip + source_bits], 4
+    mov eax, [rip + adpcm_bits]           # G.726: its code size; others 4
+    cmp dword ptr [rip + adpcm_tag], ADPCM_G726
+    je .Ladpcm_open_bits
+    cmp dword ptr [rip + adpcm_tag], ADPCM_G726LE
+    je .Ladpcm_open_bits
+    mov eax, 4
+.Ladpcm_open_bits:
+    mov [rip + source_bits], eax
     mov [rip + pcm_channel_mask], r10d
     xor eax, eax
     test r10d, r10d
@@ -204,6 +325,13 @@ FN adpcm_track_open
     xor eax, eax
     cmp dword ptr [rip + adpcm_tag], ADPCM_QT
     sete al
+    mov ecx, G72X_PRIMER
+    cmp dword ptr [rip + adpcm_tag], ADPCM_G726
+    cmove eax, ecx
+    cmp dword ptr [rip + adpcm_tag], ADPCM_G726LE
+    cmove eax, ecx
+    cmp dword ptr [rip + adpcm_tag], ADPCM_G722
+    cmove eax, ecx
     mov [rip + adpcm_primer], eax
     call adpcm_track_reset
     mov dword ptr [rip + decode_error], 0
@@ -218,8 +346,9 @@ FN adpcm_track_open
     ret
 ENDFN adpcm_track_open
 
-# Clears the IMA4 running state (stream start, seeks).
+# Clears the IMA4 and G.726/G.722 running state (stream start, seeks).
 FN adpcm_track_reset
+    sub rsp, 40
     lea rcx, [rip + adpcm_state]
     xor eax, eax
 .Ladpcm_reset_word:
@@ -227,6 +356,20 @@ FN adpcm_track_reset
     inc eax
     cmp eax, 8
     jb .Ladpcm_reset_word
+    cmp dword ptr [rip + adpcm_tag], ADPCM_G722
+    je .Ladpcm_reset_g722
+    cmp dword ptr [rip + adpcm_tag], ADPCM_G726
+    je .Ladpcm_reset_g726
+    cmp dword ptr [rip + adpcm_tag], ADPCM_G726LE
+    jne .Ladpcm_reset_return
+.Ladpcm_reset_g726:
+    mov ecx, [rip + adpcm_bits]
+    call g726_reset
+    jmp .Ladpcm_reset_return
+.Ladpcm_reset_g722:
+    call g722_reset
+.Ladpcm_reset_return:
+    add rsp, 40
     ret
 ENDFN adpcm_track_reset
 
@@ -297,6 +440,15 @@ FN adpcm_track_decode
     ja .Ladpcm_decode_bad
     mov rcx, rsi
     mov edx, ebx
+    mov r8, [rip + adpcm_planes]
+    cmp dword ptr [rip + adpcm_tag], ADPCM_G722
+    je .Ladpcm_decode_g722
+    cmp dword ptr [rip + adpcm_tag], ADPCM_G726
+    je .Ladpcm_decode_g726
+    xor r9d, r9d
+    inc r9d
+    cmp dword ptr [rip + adpcm_tag], ADPCM_G726LE
+    je .Ladpcm_decode_g726_codes
     cmp dword ptr [rip + adpcm_tag], ADPCM_SWF
     je .Ladpcm_decode_swf
     cmp dword ptr [rip + adpcm_tag], ADPCM_QT
@@ -311,6 +463,17 @@ FN adpcm_track_decode
 .Ladpcm_decode_swf:
     mov edx, r13d
     call swf_block
+    jmp .Ladpcm_decode_check
+.Ladpcm_decode_g726:
+    xor r9d, r9d                          # codes from the high bit
+.Ladpcm_decode_g726_codes:
+    call g726_block
+    mov eax, 1
+    jmp .Ladpcm_decode_check
+.Ladpcm_decode_g722:
+    mov edx, r13d                         # bytes
+    call g722_block
+    mov eax, 1
     jmp .Ladpcm_decode_check
 .Ladpcm_decode_ms:
     call ms_block
