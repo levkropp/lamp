@@ -44,6 +44,7 @@ def main():
     step(TESTS / 'generate-aac-tables.py', '--check')
     step(TESTS / 'generate-sbr-tables.py', '--check')
     step(TESTS / 'generate-ac3-tables.py', '--check')
+    step(TESTS / 'generate-wavpack-tables.py', '--check')
     for generator in ('celt-tables', 'celt-spectral-tables', 'celt-transform-tables', 'silk-stereo-tables',
                       'silk-resampler-tables', 'silk-lpc-tables', 'silk-nlsf-tables', 'silk-indices-tables',
                       'silk-parameters-tables'):
@@ -68,6 +69,7 @@ def main():
     step(TESTS / 'verify-heaac.py', *playback)
     step(TESTS / 'verify-ac3.py', *playback)
     step(TESTS / 'verify-mpegts.py', *playback)
+    step(TESTS / 'verify-wavpack.py', *playback)
     if not WINDOWS and not playback:
         step(TESTS / 'verify-playback.py')
     if '--skip-network' not in arguments:

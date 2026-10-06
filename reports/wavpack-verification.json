@@ -1,0 +1,1457 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "c0.wv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "channels": 2,
+      "layout": "44100 Hz, stereo, -sample_fmt s16p -compression_level 0",
+      "stats": "codec=12 rate=44100 channels=2 bits=16 frames=88200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=8 cpu_us=7860 endpoint_dry=0"
+    },
+    {
+      "test": "c1.wv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "channels": 2,
+      "layout": "44100 Hz, stereo, -sample_fmt s16p -compression_level 1",
+      "stats": "codec=12 rate=44100 channels=2 bits=16 frames=88200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=9 cpu_us=9819 endpoint_dry=0"
+    },
+    {
+      "test": "c2.wv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "channels": 2,
+      "layout": "44100 Hz, stereo, -sample_fmt s16p -compression_level 2",
+      "stats": "codec=12 rate=44100 channels=2 bits=16 frames=88200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=12 cpu_us=11895 endpoint_dry=0"
+    },
+    {
+      "test": "c3.wv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "channels": 2,
+      "layout": "44100 Hz, stereo, -sample_fmt s16p -compression_level 3",
+      "stats": "codec=12 rate=44100 channels=2 bits=16 frames=88200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=17 cpu_us=17205 endpoint_dry=0"
+    },
+    {
+      "test": "c4.wv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "channels": 2,
+      "layout": "44100 Hz, stereo, -sample_fmt s16p -compression_level 4",
+      "stats": "codec=12 rate=44100 channels=2 bits=16 frames=88200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=21 cpu_us=21192 endpoint_dry=0"
+    },
+    {
+      "test": "c5.wv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "channels": 2,
+      "layout": "44100 Hz, stereo, -sample_fmt s16p -compression_level 5",
+      "stats": "codec=12 rate=44100 channels=2 bits=16 frames=88200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=18 cpu_us=18448 endpoint_dry=0"
+    },
+    {
+      "test": "c6.wv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "channels": 2,
+      "layout": "44100 Hz, stereo, -sample_fmt s16p -compression_level 6",
+      "stats": "codec=12 rate=44100 channels=2 bits=16 frames=88200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=16771 endpoint_dry=0"
+    },
+    {
+      "test": "c7.wv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "channels": 2,
+      "layout": "44100 Hz, stereo, -sample_fmt s16p -compression_level 7",
+      "stats": "codec=12 rate=44100 channels=2 bits=16 frames=88200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=11 cpu_us=11188 endpoint_dry=0"
+    },
+    {
+      "test": "c8.wv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "channels": 2,
+      "layout": "44100 Hz, stereo, -sample_fmt s16p -compression_level 8",
+      "stats": "codec=12 rate=44100 channels=2 bits=16 frames=88200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=11 cpu_us=11216 endpoint_dry=0"
+    },
+    {
+      "test": "joint-off.wv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "channels": 2,
+      "layout": "44100 Hz, stereo, -sample_fmt s16p -joint_stereo 0",
+      "stats": "codec=12 rate=44100 channels=2 bits=16 frames=88200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=6 cpu_us=6736 endpoint_dry=0"
+    },
+    {
+      "test": "joint-on.wv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "channels": 2,
+      "layout": "44100 Hz, stereo, -sample_fmt s16p -joint_stereo 1",
+      "stats": "codec=12 rate=44100 channels=2 bits=16 frames=88200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=6 cpu_us=6818 endpoint_dry=0"
+    },
+    {
+      "test": "u8.wv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "channels": 2,
+      "layout": "44100 Hz, stereo, -sample_fmt u8p",
+      "stats": "codec=12 rate=44100 channels=2 bits=8 frames=88200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=7 cpu_us=7017 endpoint_dry=0"
+    },
+    {
+      "test": "s32.wv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "channels": 2,
+      "layout": "48000 Hz, stereo, -sample_fmt s32p",
+      "stats": "codec=12 rate=48000 channels=2 bits=32 frames=96000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=11 cpu_us=11106 endpoint_dry=0"
+    },
+    {
+      "test": "float.wv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "channels": 2,
+      "layout": "48000 Hz, stereo, -sample_fmt fltp",
+      "stats": "codec=12 rate=48000 channels=2 bits=32 frames=96000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=9 cpu_us=9262 endpoint_dry=0"
+    },
+    {
+      "test": "mono-s16.wv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "channels": 1,
+      "layout": "44100 Hz, mono, -sample_fmt s16p",
+      "stats": "codec=12 rate=44100 channels=1 bits=16 frames=88200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=4 cpu_us=3994 endpoint_dry=0"
+    },
+    {
+      "test": "mono-float.wv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "channels": 1,
+      "layout": "44100 Hz, mono, -sample_fmt fltp",
+      "stats": "codec=12 rate=44100 channels=1 bits=32 frames=88200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=5 cpu_us=4968 endpoint_dry=0"
+    },
+    {
+      "test": "3.0.wv",
+      "result": "exact",
+      "comparator": "FFmpeg channels mixed with LAMP weights",
+      "channels": 3,
+      "layout": "48000 Hz, 3.0, -sample_fmt s16p",
+      "stats": "codec=12 rate=48000 channels=3 bits=16 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=5 cpu_us=5115 endpoint_dry=0"
+    },
+    {
+      "test": "quad.wv",
+      "result": "exact",
+      "comparator": "FFmpeg channels mixed with LAMP weights",
+      "channels": 4,
+      "layout": "48000 Hz, quad, -sample_fmt s16p",
+      "stats": "codec=12 rate=48000 channels=4 bits=16 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=9 cpu_us=8919 endpoint_dry=0"
+    },
+    {
+      "test": "5.1.wv",
+      "result": "exact",
+      "comparator": "FFmpeg channels mixed with LAMP weights",
+      "channels": 6,
+      "layout": "48000 Hz, 5.1, -sample_fmt s16p",
+      "stats": "codec=12 rate=48000 channels=6 bits=16 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=14 cpu_us=13490 endpoint_dry=0"
+    },
+    {
+      "test": "5.1-float.wv",
+      "result": "exact",
+      "comparator": "FFmpeg channels mixed with LAMP weights",
+      "channels": 6,
+      "layout": "48000 Hz, 5.1, -sample_fmt fltp",
+      "stats": "codec=12 rate=48000 channels=6 bits=32 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=15129 endpoint_dry=0"
+    },
+    {
+      "test": "7.1.wv",
+      "result": "exact",
+      "comparator": "FFmpeg channels mixed with LAMP weights",
+      "channels": 8,
+      "layout": "48000 Hz, 7.1, -sample_fmt s32p",
+      "stats": "codec=12 rate=48000 channels=8 bits=32 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=20 cpu_us=19989 endpoint_dry=0"
+    },
+    {
+      "test": "mono-8k.wv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "channels": 1,
+      "layout": "8000 Hz, mono, -sample_fmt s16p",
+      "stats": "codec=12 rate=8000 channels=1 bits=16 frames=24000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=1800 endpoint_dry=0"
+    },
+    {
+      "test": "r22050.wv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "channels": 2,
+      "layout": "22050 Hz, stereo, -sample_fmt s16p",
+      "stats": "codec=12 rate=22050 channels=2 bits=16 frames=44100 underruns=0 decode_error=0 audio_error=0 elapsed_ms=4 cpu_us=3764 endpoint_dry=0"
+    },
+    {
+      "test": "r96k.wv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "channels": 2,
+      "layout": "96000 Hz, stereo, -sample_fmt s32p",
+      "stats": "codec=12 rate=96000 channels=2 bits=32 frames=96000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=9 cpu_us=8977 endpoint_dry=0"
+    },
+    {
+      "test": "mono-192k.wv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "channels": 1,
+      "layout": "192000 Hz, mono, -sample_fmt s16p",
+      "stats": "codec=12 rate=192000 channels=1 bits=16 frames=192000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=9 cpu_us=9589 endpoint_dry=0"
+    },
+    {
+      "test": "r37800.wv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "channels": 2,
+      "layout": "37800 Hz, stereo, -sample_fmt s16p",
+      "stats": "codec=12 rate=37800 channels=2 bits=16 frames=75600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=7 cpu_us=6863 endpoint_dry=0"
+    },
+    {
+      "test": "r11025.wv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "channels": 2,
+      "layout": "11025 Hz, stereo, -sample_fmt fltp",
+      "stats": "codec=12 rate=11025 channels=2 bits=32 frames=22050 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2408 endpoint_dry=0"
+    },
+    {
+      "test": "long.wv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "channels": 2,
+      "layout": "48000 Hz, stereo, -sample_fmt s16p",
+      "stats": "codec=12 rate=48000 channels=2 bits=16 frames=960000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=73 cpu_us=73659 endpoint_dry=0"
+    },
+    {
+      "test": "s24.wv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "channels": 2,
+      "layout": "24-bit source, 32-bit blocks with INT32INFO",
+      "stats": "codec=12 rate=44100 channels=2 bits=32 frames=88200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=6 cpu_us=6846 endpoint_dry=0"
+    },
+    {
+      "test": "false-stereo.wv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "channels": 2,
+      "layout": "equal channels as false stereo",
+      "stats": "codec=12 rate=44100 channels=2 bits=16 frames=88200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=4 cpu_us=4168 endpoint_dry=0"
+    },
+    {
+      "test": "model on c8.wv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "features": [
+        "escaped ones",
+        "joint stereo",
+        "term 1",
+        "term 17",
+        "term 18",
+        "term 2",
+        "term 3",
+        "term 5",
+        "term 6",
+        "term 7",
+        "term 8"
+      ]
+    },
+    {
+      "test": "model on float.wv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "features": [
+        "escaped ones",
+        "extra bits",
+        "float shift with sent bits",
+        "joint stereo",
+        "term 17",
+        "term 18"
+      ]
+    },
+    {
+      "test": "model on s24.wv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "features": [
+        "escaped ones",
+        "int32 info",
+        "joint stereo",
+        "shift",
+        "shift with zeros",
+        "term 17",
+        "term 18"
+      ]
+    },
+    {
+      "test": "model on false-stereo.wv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "features": [
+        "false stereo",
+        "term 17",
+        "term 18"
+      ]
+    },
+    {
+      "test": "model on r37800.wv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "features": [
+        "custom sample rate",
+        "escaped ones",
+        "joint stereo",
+        "term 17",
+        "term 18"
+      ]
+    },
+    {
+      "test": "model on 5.1-float.wv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "features": [
+        "channel info",
+        "escaped ones",
+        "extra bits",
+        "float shift with sent bits",
+        "joint stereo",
+        "term 17",
+        "term 18"
+      ]
+    },
+    {
+      "test": "model on u8.wv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "features": [
+        "escaped ones",
+        "joint stereo",
+        "term 17",
+        "term 18"
+      ]
+    },
+    {
+      "test": "c8.mka",
+      "result": "exact",
+      "comparator": "c8.wv",
+      "stats": "codec=8 rate=44100 channels=2 bits=16 frames=88200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=11 cpu_us=11749 endpoint_dry=0"
+    },
+    {
+      "test": "mono-s16.mka",
+      "result": "exact",
+      "comparator": "mono-s16.wv",
+      "stats": "codec=8 rate=44100 channels=1 bits=16 frames=88200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=4 cpu_us=4047 endpoint_dry=0"
+    },
+    {
+      "test": "float.mka",
+      "result": "exact",
+      "comparator": "float.wv",
+      "stats": "codec=8 rate=48000 channels=2 bits=32 frames=96000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=13 cpu_us=13540 endpoint_dry=0"
+    },
+    {
+      "test": "5.1.mka",
+      "result": "exact",
+      "comparator": "5.1.wv",
+      "stats": "codec=8 rate=48000 channels=6 bits=16 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=12 cpu_us=11778 endpoint_dry=0"
+    },
+    {
+      "test": "7.1.mka",
+      "result": "exact",
+      "comparator": "7.1.wv",
+      "stats": "codec=8 rate=48000 channels=8 bits=32 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=17 cpu_us=16774 endpoint_dry=0"
+    },
+    {
+      "test": "false-stereo.mka",
+      "result": "exact",
+      "comparator": "false-stereo.wv",
+      "stats": "codec=8 rate=44100 channels=2 bits=16 frames=88200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=4 cpu_us=4493 endpoint_dry=0"
+    },
+    {
+      "test": "r37800.mka",
+      "result": "exact",
+      "comparator": "r37800.wv",
+      "stats": "codec=8 rate=37800 channels=2 bits=16 frames=75600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=7 cpu_us=6895 endpoint_dry=0"
+    },
+    {
+      "test": "mono-192k.mka",
+      "result": "exact",
+      "comparator": "mono-192k.wv",
+      "stats": "codec=8 rate=192000 channels=1 bits=16 frames=192000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=9 cpu_us=9240 endpoint_dry=0"
+    },
+    {
+      "test": "long.mka",
+      "result": "exact",
+      "comparator": "long.wv",
+      "stats": "codec=8 rate=48000 channels=2 bits=16 frames=960000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=69 cpu_us=69391 endpoint_dry=0"
+    },
+    {
+      "test": "hybrid-stereo.wv",
+      "result": "exact",
+      "comparator": "model and FFmpeg",
+      "channels": 2,
+      "features": [
+        "error limit",
+        "escaped ones",
+        "hybrid",
+        "joint stereo",
+        "term -1",
+        "term -2",
+        "term -3",
+        "term 1",
+        "term 17",
+        "term 2",
+        "term 3",
+        "term 4",
+        "term 5",
+        "term 6",
+        "term 7",
+        "term 8",
+        "zero run"
+      ],
+      "stats": "codec=12 rate=44100 channels=2 bits=16 frames=12000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=2664 endpoint_dry=0"
+    },
+    {
+      "test": "hybrid-mono.wv",
+      "result": "exact",
+      "comparator": "model and FFmpeg",
+      "channels": 1,
+      "features": [
+        "error limit",
+        "escaped ones",
+        "hybrid",
+        "joint stereo",
+        "term 1",
+        "term 17",
+        "term 18",
+        "term 2",
+        "term 3",
+        "term 4",
+        "term 5",
+        "term 6",
+        "term 7",
+        "term 8",
+        "zero run"
+      ],
+      "stats": "codec=12 rate=44100 channels=1 bits=16 frames=9000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=1956 endpoint_dry=0"
+    },
+    {
+      "test": "hybrid-bitrate.wv",
+      "result": "exact",
+      "comparator": "model and FFmpeg",
+      "channels": 2,
+      "features": [
+        "error limit",
+        "escaped ones",
+        "hybrid",
+        "hybrid bitrate",
+        "joint stereo",
+        "term -2",
+        "term -3",
+        "term 1",
+        "term 17",
+        "term 18",
+        "term 2",
+        "term 3",
+        "term 4",
+        "term 5",
+        "term 6",
+        "term 7",
+        "term 8",
+        "zero run"
+      ],
+      "stats": "codec=12 rate=44100 channels=2 bits=16 frames=12000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=3180 endpoint_dry=0"
+    },
+    {
+      "test": "hybrid-bitrate-mono.wv",
+      "result": "exact",
+      "comparator": "model and FFmpeg",
+      "channels": 1,
+      "features": [
+        "error limit",
+        "escaped ones",
+        "hybrid",
+        "hybrid bitrate",
+        "joint stereo",
+        "term 1",
+        "term 17",
+        "term 18",
+        "term 2",
+        "term 3",
+        "term 4",
+        "term 5",
+        "term 8",
+        "zero run"
+      ],
+      "stats": "codec=12 rate=44100 channels=1 bits=16 frames=9000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1122 endpoint_dry=0"
+    },
+    {
+      "test": "hybrid-24.wv",
+      "result": "exact",
+      "comparator": "model and FFmpeg",
+      "channels": 2,
+      "features": [
+        "error limit",
+        "escaped ones",
+        "hybrid",
+        "hybrid bitrate",
+        "joint stereo",
+        "term -2",
+        "term -3",
+        "term 1",
+        "term 17",
+        "term 18",
+        "term 2",
+        "term 3",
+        "term 5",
+        "term 6",
+        "term 7",
+        "term 8",
+        "zero run"
+      ],
+      "stats": "codec=12 rate=44100 channels=2 bits=24 frames=6000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=1841 endpoint_dry=0"
+    },
+    {
+      "test": "hybrid-32-shift.wv",
+      "result": "exact",
+      "comparator": "model and FFmpeg",
+      "channels": 2,
+      "features": [
+        "error limit",
+        "escaped ones",
+        "hybrid",
+        "hybrid bitrate",
+        "int32 info",
+        "joint stereo",
+        "lossy 32-bit clipped as 24-bit",
+        "shift",
+        "shift with zeros",
+        "term -1",
+        "term -2",
+        "term -3",
+        "term 1",
+        "term 17",
+        "term 18",
+        "term 2",
+        "term 3",
+        "term 4",
+        "term 5",
+        "term 6",
+        "term 7",
+        "term 8",
+        "zero run"
+      ],
+      "stats": "codec=12 rate=44100 channels=2 bits=32 frames=8000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2250 endpoint_dry=0"
+    },
+    {
+      "test": "hybrid-float.wv",
+      "result": "exact",
+      "comparator": "model and FFmpeg",
+      "channels": 2,
+      "features": [
+        "error limit",
+        "escaped ones",
+        "extra bits",
+        "hybrid",
+        "joint stereo",
+        "term -1",
+        "term -2",
+        "term -3",
+        "term 1",
+        "term 17",
+        "term 2",
+        "term 3",
+        "term 4",
+        "term 7",
+        "term 8"
+      ],
+      "stats": "codec=12 rate=44100 channels=2 bits=32 frames=4000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1905 endpoint_dry=0"
+    },
+    {
+      "test": "int32-shifts.wv",
+      "result": "exact",
+      "comparator": "model and FFmpeg",
+      "channels": 2,
+      "features": [
+        "escaped ones",
+        "int32 info",
+        "joint stereo",
+        "shift",
+        "shift duplicating the low bit",
+        "shift with ones",
+        "shift with zeros",
+        "term -1",
+        "term -2",
+        "term -3",
+        "term 1",
+        "term 17",
+        "term 18",
+        "term 2",
+        "term 3",
+        "term 4",
+        "term 5",
+        "term 6",
+        "term 7",
+        "term 8",
+        "zero run"
+      ],
+      "stats": "codec=12 rate=44100 channels=2 bits=32 frames=9000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1932 endpoint_dry=0"
+    },
+    {
+      "test": "int32-shifts-16.wv",
+      "result": "exact",
+      "comparator": "model and FFmpeg",
+      "channels": 2,
+      "features": [
+        "escaped ones",
+        "int32 info",
+        "shift",
+        "shift duplicating the low bit",
+        "shift with ones",
+        "term -1",
+        "term -2",
+        "term -3",
+        "term 18",
+        "term 2",
+        "term 3",
+        "term 4",
+        "term 6",
+        "term 7",
+        "term 8",
+        "zero run"
+      ],
+      "stats": "codec=12 rate=44100 channels=2 bits=16 frames=3000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=1121 endpoint_dry=0"
+    },
+    {
+      "test": "extra-bits.wv",
+      "result": "exact",
+      "comparator": "model and FFmpeg",
+      "channels": 2,
+      "features": [
+        "escaped ones",
+        "extra bits",
+        "int32 info",
+        "integer extra bits",
+        "joint stereo",
+        "term -1",
+        "term -2",
+        "term -3",
+        "term 1",
+        "term 17",
+        "term 18",
+        "term 3",
+        "term 4",
+        "term 5",
+        "term 6",
+        "term 7",
+        "term 8",
+        "zero run"
+      ],
+      "stats": "codec=12 rate=44100 channels=2 bits=32 frames=6000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1369 endpoint_dry=0"
+    },
+    {
+      "test": "extra-bits-24.wv",
+      "result": "exact",
+      "comparator": "model and FFmpeg",
+      "channels": 2,
+      "features": [
+        "escaped ones",
+        "extra bits",
+        "int32 info",
+        "integer extra bits",
+        "joint stereo",
+        "term -1",
+        "term -2",
+        "term -3",
+        "term 1",
+        "term 17",
+        "term 18",
+        "term 2",
+        "term 3",
+        "term 4",
+        "term 5",
+        "term 6",
+        "term 7",
+        "term 8"
+      ],
+      "stats": "codec=12 rate=44100 channels=2 bits=24 frames=3000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=772 endpoint_dry=0"
+    },
+    {
+      "test": "extra-bits-16.wv",
+      "result": "exact",
+      "comparator": "model and FFmpeg",
+      "channels": 2,
+      "features": [
+        "escaped ones",
+        "extra bits",
+        "int32 info",
+        "integer extra bits",
+        "joint stereo",
+        "term -1",
+        "term -2",
+        "term 1",
+        "term 2",
+        "term 4",
+        "term 5",
+        "term 6",
+        "term 7",
+        "zero run"
+      ],
+      "stats": "codec=12 rate=44100 channels=2 bits=16 frames=1500 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=607 endpoint_dry=0"
+    },
+    {
+      "test": "extra-bits-mono.wv",
+      "result": "exact",
+      "comparator": "model and FFmpeg",
+      "channels": 1,
+      "features": [
+        "escaped ones",
+        "extra bits",
+        "int32 info",
+        "integer extra bits",
+        "term 1",
+        "term 18",
+        "term 3",
+        "term 4",
+        "term 5",
+        "term 6",
+        "term 7"
+      ],
+      "stats": "codec=12 rate=44100 channels=1 bits=32 frames=1500 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=444 endpoint_dry=0"
+    },
+    {
+      "test": "float-extras.wv",
+      "result": "exact",
+      "comparator": "model and FFmpeg",
+      "channels": 2,
+      "features": [
+        "escaped ones",
+        "extra bits",
+        "float beyond 24 bits",
+        "float shift with ones",
+        "float shift with sent bits",
+        "float shift with the same bits",
+        "float zeros sent",
+        "joint stereo",
+        "term -1",
+        "term -2",
+        "term -3",
+        "term 1",
+        "term 17",
+        "term 18",
+        "term 2",
+        "term 3",
+        "term 4",
+        "term 5",
+        "term 6",
+        "term 7",
+        "term 8",
+        "zero run"
+      ],
+      "stats": "codec=12 rate=44100 channels=2 bits=32 frames=13200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=1726 endpoint_dry=0"
+    },
+    {
+      "test": "float-plain.wv",
+      "result": "exact",
+      "comparator": "model and FFmpeg",
+      "channels": 2,
+      "features": [
+        "escaped ones",
+        "float beyond 24 bits",
+        "float shift with ones",
+        "joint stereo",
+        "term -1",
+        "term -2",
+        "term -3",
+        "term 1",
+        "term 18",
+        "term 2",
+        "term 3",
+        "term 4",
+        "term 5",
+        "term 6",
+        "term 7",
+        "term 8",
+        "zero run"
+      ],
+      "stats": "codec=12 rate=44100 channels=2 bits=32 frames=7200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1094 endpoint_dry=0"
+    },
+    {
+      "test": "float-plain-mono.wv",
+      "result": "exact",
+      "comparator": "model and FFmpeg",
+      "channels": 1,
+      "features": [
+        "escaped ones",
+        "float beyond 24 bits",
+        "joint stereo",
+        "term 1",
+        "term 17",
+        "term 18",
+        "term 2",
+        "term 3",
+        "term 4",
+        "term 5",
+        "term 6",
+        "term 7",
+        "term 8",
+        "zero run"
+      ],
+      "stats": "codec=12 rate=44100 channels=1 bits=32 frames=6000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1064 endpoint_dry=0"
+    },
+    {
+      "test": "terms-stereo.wv",
+      "result": "exact",
+      "comparator": "model and FFmpeg",
+      "channels": 2,
+      "features": [
+        "escaped ones",
+        "joint stereo",
+        "term -1",
+        "term -2",
+        "term -3",
+        "term 1",
+        "term 17",
+        "term 18",
+        "term 2",
+        "term 3",
+        "term 4",
+        "term 5",
+        "term 6",
+        "term 7",
+        "term 8",
+        "zero run"
+      ],
+      "stats": "codec=12 rate=44100 channels=2 bits=16 frames=6400 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1096 endpoint_dry=0"
+    },
+    {
+      "test": "terms-mono.wv",
+      "result": "exact",
+      "comparator": "model and FFmpeg",
+      "channels": 1,
+      "features": [
+        "escaped ones",
+        "joint stereo",
+        "term 1",
+        "term 17",
+        "term 18",
+        "term 2",
+        "term 3",
+        "term 4",
+        "term 5",
+        "term 6",
+        "term 7",
+        "term 8",
+        "zero run"
+      ],
+      "stats": "codec=12 rate=44100 channels=1 bits=16 frames=6400 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=725 endpoint_dry=0"
+    },
+    {
+      "test": "no-terms-stereo.wv",
+      "result": "exact",
+      "comparator": "model and FFmpeg",
+      "channels": 2,
+      "features": [
+        "escaped ones",
+        "joint stereo",
+        "zero run"
+      ],
+      "stats": "codec=12 rate=44100 channels=2 bits=16 frames=3000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=677 endpoint_dry=0"
+    },
+    {
+      "test": "no-terms-mono.wv",
+      "result": "exact",
+      "comparator": "model",
+      "channels": 1,
+      "features": [
+        "escaped ones",
+        "joint stereo",
+        "zero run"
+      ],
+      "stats": "codec=12 rate=44100 channels=1 bits=16 frames=3000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=394 endpoint_dry=0"
+    },
+    {
+      "test": "false-stereo-written.wv",
+      "result": "exact",
+      "comparator": "model and FFmpeg",
+      "channels": 2,
+      "features": [
+        "error limit",
+        "escaped ones",
+        "false stereo",
+        "hybrid",
+        "joint stereo",
+        "term 1",
+        "term 17",
+        "term 2",
+        "term 3",
+        "term 4",
+        "term 5",
+        "term 7",
+        "zero run"
+      ],
+      "stats": "codec=12 rate=44100 channels=2 bits=16 frames=4000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=564 endpoint_dry=0"
+    },
+    {
+      "test": "header-shift-8.wv",
+      "result": "exact",
+      "comparator": "model and FFmpeg",
+      "channels": 2,
+      "features": [
+        "escaped ones",
+        "header shift",
+        "joint stereo",
+        "term -1",
+        "term -2",
+        "term 1",
+        "term 17",
+        "term 18",
+        "term 4",
+        "term 5",
+        "term 6",
+        "term 7",
+        "term 8",
+        "zero run"
+      ],
+      "stats": "codec=12 rate=44100 channels=2 bits=8 frames=3000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=716 endpoint_dry=0"
+    },
+    {
+      "test": "header-shift-16.wv",
+      "result": "exact",
+      "comparator": "model and FFmpeg",
+      "channels": 2,
+      "features": [
+        "escaped ones",
+        "header shift",
+        "joint stereo",
+        "term -1",
+        "term -3",
+        "term 1",
+        "term 17",
+        "term 18",
+        "term 2",
+        "term 3",
+        "term 4",
+        "term 5",
+        "term 6",
+        "term 7",
+        "zero run"
+      ],
+      "stats": "codec=12 rate=44100 channels=2 bits=16 frames=3000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=791 endpoint_dry=0"
+    },
+    {
+      "test": "header-shift-24.wv",
+      "result": "exact",
+      "comparator": "model and FFmpeg",
+      "channels": 2,
+      "features": [
+        "escaped ones",
+        "header shift",
+        "term -2",
+        "term -3",
+        "term 1",
+        "term 17",
+        "term 18",
+        "term 3",
+        "term 4",
+        "term 5",
+        "term 7",
+        "term 8"
+      ],
+      "stats": "codec=12 rate=44100 channels=2 bits=24 frames=3000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=893 endpoint_dry=0"
+    },
+    {
+      "test": "quiet.wv",
+      "result": "exact",
+      "comparator": "model and FFmpeg",
+      "channels": 2,
+      "features": [
+        "escaped ones",
+        "joint stereo",
+        "term -2",
+        "term -3",
+        "term 17",
+        "term 18",
+        "term 2",
+        "term 4",
+        "term 5",
+        "term 6",
+        "term 8",
+        "zero run"
+      ],
+      "stats": "codec=12 rate=44100 channels=2 bits=16 frames=12000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1324 endpoint_dry=0"
+    },
+    {
+      "test": "quiet-mono.wv",
+      "result": "exact",
+      "comparator": "model and FFmpeg",
+      "channels": 1,
+      "features": [
+        "escaped ones",
+        "joint stereo",
+        "term 1",
+        "term 17",
+        "term 2",
+        "term 3",
+        "term 4",
+        "term 6",
+        "term 7",
+        "term 8",
+        "zero run"
+      ],
+      "stats": "codec=12 rate=44100 channels=1 bits=16 frames=8000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=972 endpoint_dry=0"
+    },
+    {
+      "test": "5.1-written.wv",
+      "result": "exact",
+      "comparator": "model and FFmpeg",
+      "channels": 6,
+      "features": [
+        "channel info",
+        "escaped ones",
+        "joint stereo",
+        "term -1",
+        "term -2",
+        "term -3",
+        "term 1",
+        "term 17",
+        "term 18",
+        "term 2",
+        "term 3",
+        "term 4",
+        "term 5",
+        "term 6",
+        "term 7",
+        "term 8",
+        "zero run"
+      ],
+      "stats": "codec=12 rate=44100 channels=6 bits=16 frames=3000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1541 endpoint_dry=0"
+    },
+    {
+      "test": "quad-1-byte-mask.wv",
+      "result": "exact",
+      "comparator": "model and FFmpeg",
+      "channels": 4,
+      "features": [
+        "channel info",
+        "escaped ones",
+        "joint stereo",
+        "term -1",
+        "term -2",
+        "term -3",
+        "term 1",
+        "term 17",
+        "term 18",
+        "term 2",
+        "term 3",
+        "term 4",
+        "term 5",
+        "term 6",
+        "term 7",
+        "term 8",
+        "zero run"
+      ],
+      "stats": "codec=12 rate=44100 channels=4 bits=16 frames=3000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=982 endpoint_dry=0"
+    },
+    {
+      "test": "3.0-2-byte-mask.wv",
+      "result": "exact",
+      "comparator": "model and FFmpeg",
+      "channels": 3,
+      "features": [
+        "channel info",
+        "escaped ones",
+        "joint stereo",
+        "term -1",
+        "term -2",
+        "term -3",
+        "term 1",
+        "term 17",
+        "term 18",
+        "term 2",
+        "term 3",
+        "term 4",
+        "term 5",
+        "term 6",
+        "term 7",
+        "term 8",
+        "zero run"
+      ],
+      "stats": "codec=12 rate=44100 channels=3 bits=16 frames=3000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=832 endpoint_dry=0"
+    },
+    {
+      "test": "7.1-3-byte-mask.wv",
+      "result": "exact",
+      "comparator": "model and FFmpeg",
+      "channels": 8,
+      "features": [
+        "channel info",
+        "error limit",
+        "escaped ones",
+        "hybrid",
+        "joint stereo",
+        "term -1",
+        "term -2",
+        "term -3",
+        "term 1",
+        "term 17",
+        "term 18",
+        "term 2",
+        "term 3",
+        "term 4",
+        "term 5",
+        "term 6",
+        "term 7",
+        "term 8",
+        "zero run"
+      ],
+      "stats": "codec=12 rate=44100 channels=8 bits=16 frames=2400 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=2330 endpoint_dry=0"
+    },
+    {
+      "test": "6-default-layout.wv",
+      "result": "exact",
+      "comparator": "model and FFmpeg",
+      "channels": 6,
+      "features": [
+        "channel info",
+        "escaped ones",
+        "joint stereo",
+        "term -1",
+        "term -2",
+        "term -3",
+        "term 1",
+        "term 17",
+        "term 18",
+        "term 2",
+        "term 3",
+        "term 4",
+        "term 5",
+        "term 6",
+        "term 7",
+        "term 8",
+        "zero run"
+      ],
+      "stats": "codec=12 rate=44100 channels=6 bits=16 frames=2400 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1187 endpoint_dry=0"
+    },
+    {
+      "test": "5.1-extended-info.wv",
+      "result": "exact",
+      "comparator": "model and FFmpeg",
+      "channels": 6,
+      "features": [
+        "channel info",
+        "escaped ones",
+        "joint stereo",
+        "term -1",
+        "term -3",
+        "term 1",
+        "term 17",
+        "term 18",
+        "term 2",
+        "term 3",
+        "term 4",
+        "term 5",
+        "term 6",
+        "term 7",
+        "term 8",
+        "zero run"
+      ],
+      "stats": "codec=12 rate=44100 channels=6 bits=16 frames=2400 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1164 endpoint_dry=0"
+    },
+    {
+      "test": "surplus-block.wv",
+      "result": "exact",
+      "comparator": "model and FFmpeg",
+      "channels": 3,
+      "features": [
+        "channel info",
+        "escaped ones",
+        "joint stereo",
+        "term -1",
+        "term -2",
+        "term -3",
+        "term 1",
+        "term 17",
+        "term 18",
+        "term 2",
+        "term 3",
+        "term 4",
+        "term 5",
+        "term 6",
+        "term 7",
+        "term 8",
+        "zero run"
+      ],
+      "stats": "codec=12 rate=44100 channels=3 bits=16 frames=2400 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=928 endpoint_dry=0"
+    },
+    {
+      "test": "side-pair.wv",
+      "result": "exact",
+      "comparator": "model and FFmpeg",
+      "channels": 2,
+      "features": [
+        "channel info",
+        "escaped ones",
+        "joint stereo",
+        "term 1",
+        "term 17",
+        "term 18",
+        "term 2",
+        "term 3",
+        "term 4",
+        "term 5",
+        "term 6",
+        "term 7",
+        "term 8",
+        "zero run"
+      ],
+      "stats": "codec=12 rate=44100 channels=2 bits=16 frames=2400 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=791 endpoint_dry=0"
+    },
+    {
+      "test": "custom-rate.wv",
+      "result": "exact",
+      "comparator": "model and FFmpeg",
+      "channels": 2,
+      "features": [
+        "custom sample rate",
+        "escaped ones",
+        "joint stereo",
+        "term -3",
+        "term 1",
+        "term 18",
+        "term 2",
+        "term 3",
+        "term 5",
+        "term 7",
+        "term 8",
+        "zero run"
+      ],
+      "stats": "codec=12 rate=37800 channels=2 bits=16 frames=1500 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=619 endpoint_dry=0"
+    },
+    {
+      "test": "long-sizes.wv",
+      "result": "exact",
+      "comparator": "model and FFmpeg",
+      "channels": 2,
+      "features": [
+        "escaped ones",
+        "extra bits",
+        "int32 info",
+        "integer extra bits",
+        "term -1",
+        "term -2",
+        "term -3",
+        "term 1",
+        "term 17",
+        "term 18",
+        "term 2",
+        "term 3",
+        "term 4",
+        "term 5",
+        "term 6",
+        "term 7",
+        "term 8",
+        "zero run"
+      ],
+      "stats": "codec=12 rate=44100 channels=2 bits=32 frames=3000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=738 endpoint_dry=0"
+    },
+    {
+      "test": "exp2-sweep.wv",
+      "result": "exact",
+      "comparator": "model and FFmpeg",
+      "channels": 2,
+      "features": [
+        "escaped ones",
+        "joint stereo",
+        "term 17",
+        "term 18"
+      ],
+      "stats": "codec=12 rate=44100 channels=2 bits=24 frames=16384 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=3610 endpoint_dry=0"
+    },
+    {
+      "test": "coverage",
+      "result": "passed",
+      "features": [
+        "channel info",
+        "custom sample rate",
+        "error limit",
+        "escaped ones",
+        "extra bits",
+        "false stereo",
+        "float beyond 24 bits",
+        "float shift with ones",
+        "float shift with sent bits",
+        "float shift with the same bits",
+        "float zeros sent",
+        "header shift",
+        "hybrid",
+        "hybrid bitrate",
+        "int32 info",
+        "integer extra bits",
+        "joint stereo",
+        "lossy 32-bit clipped as 24-bit",
+        "shift",
+        "shift duplicating the low bit",
+        "shift with ones",
+        "shift with zeros",
+        "term -1",
+        "term -2",
+        "term -3",
+        "term 1",
+        "term 17",
+        "term 18",
+        "term 2",
+        "term 3",
+        "term 4",
+        "term 5",
+        "term 6",
+        "term 7",
+        "term 8",
+        "zero run"
+      ]
+    },
+    {
+      "test": "long.wv seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":5,\"discarded_frames\":132093,\"maximum_discarded\":24000,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0}"
+    },
+    {
+      "test": "long.mka seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":5,\"discarded_frames\":132093,\"maximum_discarded\":24000,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0}"
+    },
+    {
+      "test": "hybrid-stereo.wv seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":18093,\"maximum_discarded\":3000,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0}"
+    },
+    {
+      "test": "5.1.wv seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":5,\"discarded_frames\":132093,\"maximum_discarded\":24000,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0}"
+    },
+    {
+      "test": "mono-192k.wv seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":5,\"discarded_frames\":420093,\"maximum_discarded\":96000,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0}"
+    },
+    {
+      "test": "tagged.wv",
+      "result": "exact",
+      "comparator": "long.wv",
+      "stats": "codec=12 rate=48000 channels=2 bits=16 frames=960000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=68 cpu_us=67837 endpoint_dry=0"
+    },
+    {
+      "test": "id3.wv",
+      "result": "exact",
+      "comparator": "long.wv",
+      "stats": "codec=12 rate=48000 channels=2 bits=16 frames=960000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=67 cpu_us=67064 endpoint_dry=0"
+    },
+    {
+      "test": "truncated.wv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "channels": 2,
+      "layout": "cut inside a frame: the complete frames play",
+      "stats": "codec=12 rate=48000 channels=2 bits=16 frames=624000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=48 cpu_us=47617 endpoint_dry=0"
+    },
+    {
+      "test": "dsd.wv",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "version-401.wv",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "version-411.wv",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "nine-channels.wv",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "rate-6000.wv",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "garbage.wv",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":100}"
+    },
+    {
+      "test": "no-audio.wv",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":100}"
+    },
+    {
+      "test": "short-header.wv",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":100}"
+    },
+    {
+      "test": "damaged.wv",
+      "result": "stopped",
+      "stats": "codec=12 rate=48000 channels=2 bits=16 frames=72000 underruns=0 decode_error=100 audio_error=0 elapsed_ms=5 cpu_us=5381 endpoint_dry=0"
+    },
+    {
+      "test": "missing-channels.wv",
+      "result": "stopped",
+      "stats": "codec=12 rate=44100 channels=6 bits=16 frames=0 underruns=0 decode_error=100 audio_error=0 elapsed_ms=0 cpu_us=534 endpoint_dry=0"
+    },
+    {
+      "test": "damaged.wv in FFmpeg",
+      "result": "error reported",
+      "message": "FFmpeg on damaged.wv: [wavpack @ 0x55715e7e9c40] sample -569 -536462 too large"
+    },
+    {
+      "test": "cancel-open long.wv",
+      "result": "{\"result\":\"cancelled\"}"
+    }
+  ],
+  "fixtures": 30,
+  "written_streams": 37,
+  "rejections": 10,
+  "features": [
+    "channel info",
+    "custom sample rate",
+    "error limit",
+    "escaped ones",
+    "extra bits",
+    "false stereo",
+    "float beyond 24 bits",
+    "float shift with ones",
+    "float shift with sent bits",
+    "float shift with the same bits",
+    "float zeros sent",
+    "header shift",
+    "hybrid",
+    "hybrid bitrate",
+    "int32 info",
+    "integer extra bits",
+    "joint stereo",
+    "lossy 32-bit clipped as 24-bit",
+    "shift",
+    "shift duplicating the low bit",
+    "shift with ones",
+    "shift with zeros",
+    "term -1",
+    "term -2",
+    "term -3",
+    "term 1",
+    "term 17",
+    "term 18",
+    "term 2",
+    "term 3",
+    "term 4",
+    "term 5",
+    "term 6",
+    "term 7",
+    "term 8",
+    "zero run"
+  ],
+  "scope": "WavPack 4/5 lossless and hybrid integer and float audio in .wv files and Matroska, exact against FFmpeg (and the model for written streams); seeks; tags, truncation, unsupported and damaged streams; cancellation."
+}
