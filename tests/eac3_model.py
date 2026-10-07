@@ -1,8 +1,8 @@
-"""Test-only E-AC-3 conventional-mantissa parser atop the AC-3 DSP model.
+"""Test-only E-AC-3 parser atop the AC-3 DSP model.
 
 ATSC A/52:2018 Annex E syntax. Labels allow eac3_vectors to generate independent
-coverage of fields that FFmpeg's encoder does not exercise. Unsupported AHT
-and enhanced coupling are rejected; metadata does not override LAMP's
+coverage of fields that FFmpeg's encoder does not exercise. Enhanced
+coupling is rejected; metadata does not override LAMP's
 shared speaker weights. No reference decoder is linked into the player.
 """
 import importlib.util
@@ -14,6 +14,24 @@ _spec = importlib.util.spec_from_file_location('generate_eac3', Path(__file__).w
 _gen = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(_gen)
 EXPSTR, DEFAULT_CPL, DEFAULT_SPX, SPX_ATTEN = _gen.tables()
+_spec = importlib.util.spec_from_file_location('generate_aht',Path(__file__).with_name('generate-eac3-aht-tables.py'))
+_aht = importlib.util.module_from_spec(_spec);_spec.loader.exec_module(_aht)
+HEBAP, AHT_BITS, AHT_VQ, AHT_REMAP, AHT_COS = _aht.tables()
+
+
+def idct6(values):
+    # Symmetric six-point factorization in Q23. Keep each multiplication's
+    # arithmetic shift before the final sums, matching integer reconstruction.
+    x0,x1,x2,x3,x4,x5=values
+    c0,c1,c2=AHT_COS
+    middle=(x4*c1)>>23
+    centre=x0-middle
+    side=x0+(middle>>1)
+    spread=(x2*c0)>>23
+    edge=((x1+x5)*c2)>>23
+    odd=[edge+x1+x3,x1-x3-x5,edge+x5-x3]
+    even=[side+spread,centre,side-spread]
+    return [ac3._i32(even[i]+odd[i]) for i in range(3)]+[ac3._i32(even[i]-odd[i]) for i in (2,1,0)]
 
 
 def header(data):
@@ -39,10 +57,15 @@ def frames(data):
 
 class Decoder(ac3.Decoder):
     default_cpl_bands = DEFAULT_CPL
+    aht_bap_table = HEBAP
 
-    def __init__(self, check_crc=True):
+    def __init__(self, check_crc=True, ffmpeg_vq4=False):
         super().__init__(check_crc)
         self.enhanced = True
+        # FFmpeg 5.1/6.1/9.0 omit Table E4.4 row zero, shifting indices
+        # 0..30 and zero-initializing index 31. Only the test comparator
+        # enables this known deviation; normative output keeps all 32 rows.
+        self.ffmpeg_vq4 = ffmpeg_vq4
         self.spx_noise, self.spx_signal = [[0.0]*17 for _ in range(7)], [[0.0]*17 for _ in range(7)]
 
     def frame(self, data):
@@ -152,11 +175,13 @@ class Decoder(ac3.Decoder):
                 self.frame_expstr[blk][self.lfe_ch] = g.get(1, 'frame_lfe_expstr', blk)
         if self.typ == 0 and (blocks == 6 or g.get(1, 'convexpstre')):
             g.get(5 * nf, 'convexpstr')
+        self.channel_in_aht=[0]*7
+        self.aht_pre=[[[0]*6 for _ in range(256)] for _ in range(7)]
         if ahte:
             for ch in range(sum(self.cplinu) != 6, self.channels + 1):
                 if all(self.frame_expstr[b][ch] == 0 and (ch or not self.cplstre[b]) for b in range(1, 6)):
-                    if g.get(1, 'ahtinu'):
-                        raise ac3.DecodeError('AHT unsupported')
+                    self.channel_in_aht[ch]=g.get(1,'ahtinu',ch)
+                    if self.channel_in_aht[ch]:self.used.add(f'AHT channel {ch}')
         if self.snr_strategy == 0:
             snr = ((g.get(6, 'frmcsnroffst') - 15)*16 + g.get(4, 'frmfsnroffst'))*4
             self.snr_offset = [snr]*7
@@ -203,6 +228,59 @@ class Decoder(ac3.Decoder):
             self.last = block
         g.mark('end')
         return out
+
+    def aht_mantissas(self,g,ch,coeffs):
+        begin,end=self.start_freq[ch],self.end_freq[ch]
+        if self.current_block==0:
+            mode=g.get(2,'gaqmod',ch)
+            self.used.add(f'GAQ mode {mode}')
+            upper=12 if mode<2 else 17
+            gains=[]
+            count=sum(8<=self.bap[ch][b]<upper for b in range(begin,end))
+            if mode in (1,2):gains=[g.get(1,'gaqgain')<<(mode-1) for _ in range(count)]
+            elif mode==3:
+                for i in range(0,count,3):
+                    code=g.get(5,'gaqgroup')
+                    if code>26:self.used.add('GAQ clamped group')
+                    code=min(code,26)
+                    gains.extend([code//9,(code//3)%3,code%3])
+            gain_index=0
+            for b in range(begin,end):
+                bap=self.bap[ch][b]
+                self.used.add(f'hebap {bap}')
+                bits=AHT_BITS[bap]
+                if bap==0:
+                    mant=[(self.random_word()&0x7fffff)-0x400000 for _ in range(6)]
+                    self.used.add('AHT dither')
+                elif bap<8:
+                    code=g.get(bits,'ahtvq',bap)
+                    self.used.add(f'AHT VQ {bap} index {code}')
+                    row = AHT_VQ[bap-1][code]
+                    if self.ffmpeg_vq4 and bap==4:
+                        row=AHT_VQ[3][code+1] if code<31 else [0]*6
+                    mant=[v*256 for v in row]
+                else:
+                    gain=gains[gain_index] if mode and bap<upper else 0
+                    if mode and bap<upper:gain_index+=1
+                    self.used.add(f'GAQ gain {gain}')
+                    small=bits-gain
+                    mant=[]
+                    for blk in range(6):
+                        value=g.signed(small,'ahtmant',bap,gain)
+                        if gain and value==-(1<<(small-1)):
+                            width=bits-2+gain
+                            value=g.signed(width,'ahtlarge',bap,gain)<<(24-width)
+                            a=AHT_REMAP[bap-8][gain]
+                            bias=1<<(23-gain) if value>=0 else AHT_REMAP[bap-8][gain+2]*256
+                            value+=((a*value)>>15)+bias
+                            self.used.add(f'GAQ large gain {gain} '+('negative' if value<0 else 'positive'))
+                        else:
+                            value*=1<<(24-bits)
+                            if not gain:value+=(AHT_REMAP[bap-8][0]*value)>>15
+                            self.used.add('GAQ small')
+                        mant.append(ac3._i32(value))
+                self.aht_pre[ch][b]=idct6(mant)
+        for b in range(begin,end):coeffs[b]=self.aht_pre[ch][b][self.current_block]>>self.dexps[ch][b]
 
     def spx_block(self, g, blk):
         f = ac3.f32
@@ -308,8 +386,8 @@ class Decoder(ac3.Decoder):
             g.get(10, 'convsnroffst')
 
 
-def decode(data):
-    decoder = Decoder()
+def decode(data, ffmpeg_vq4=False):
+    decoder = Decoder(ffmpeg_vq4=ffmpeg_vq4)
     out = None
     for frame in frames(data):
         channels = decoder.frame(frame)

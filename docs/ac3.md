@@ -12,7 +12,7 @@ LAMP 0.4.0-dev decodes AC-3 (ATSC A/52) in raw `.ac3` files, Matroska (`A_AC3`) 
 
 Frames pass a CRC check over the whole frame. A frame whose CRC fails, and a block that does not decode (an exponent outside 0-24, a bandwidth code above 60, an invalid coupling range, a reserved delta strategy, missing block-0 information), repeat the last good block for the rest of the frame, as FFmpeg's concealment does.
 
-A partial [E-AC-3 conventional-mantissa profile](eac3.md) now shares this decoder; spectral extension is supported, while AHT, enhanced coupling and dependent channel substreams remain unsupported. Reserved ids and malformed streams reject.
+A partial [E-AC-3 profile](eac3.md) now shares this decoder; spectral extension and AHT are supported, while enhanced coupling and dependent channel substreams remain unsupported. Reserved ids and malformed streams reject.
 
 ## Containers and timing
 

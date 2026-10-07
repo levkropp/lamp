@@ -1,11 +1,11 @@
-# AC-3 and conventional E-AC-3 (ATSC A/52) decoder in x86-64 assembly. MIT, see LICENSE.
+# AC-3 and partial E-AC-3 (ATSC A/52) decoder in x86-64 assembly. MIT, see LICENSE.
 # Reference: ATSC A/52 (Digital Audio Compression Standard). The structure,
 # fixed-point mantissa path and error concealment follow FFmpeg's decoder,
 # which the tests compare against. Tables: src/ac3_tables.inc
 # (tests/generate-ac3-tables.py). Track mode: Matroska, MP4 and raw .ac3
 # streams supply one or more sync frames per packet. bsid 0-10 (the
 # alternate syntax of bsid 6, the half- and quarter-rate ids 9 and 10), plus
-# E-AC-3 conventional mantissas (see eac3.inc and docs/eac3.md), all
+# E-AC-3 conventional/AHT mantissas (see eac3.inc and docs/eac3.md), all
 # channel modes with LFE, block switching, coupling with phase flags,
 # rematrixing, delta bit allocation, dynamic range and dither. The output
 # mixes to stereo with the shared WAVE speaker weights. A frame whose CRC
@@ -79,6 +79,8 @@ ac3_last: .zero 6*AC3_BLOCK*4       # previous block's output, for concealment
 ac3_lfg: .zero 64*4                 # dither generator state
 ac3_stages: .zero 8                 # bit allocation stages to run, per channel
 ac3_mant: .zero 32                  # grouped mantissas: counts and pending values
+eac3_aht_pre: .zero 7*256*6*4       # six reconstructed blocks, written in block 0
+eac3_aht_gains: .zero 256+3         # final ternary group may have two spare gains
 .p2align 6
 ac3_state:                          # decoder state cleared by ac3_track_reset
 ac3_delay: .zero 6*128*8            # overlap halves (doubles)
@@ -119,6 +121,8 @@ ac3_dyn: .zero 8                    # two floats (dual mono: second channel's fi
 ac3_blksw: .zero 8*4
 ac3_dith: .zero 8*4
 ac3_has_last: .zero 4
+eac3_aht_ch: .zero 8*4
+eac3_current_block: .zero 4
 eac3_spx_active: .zero 4
 eac3_spx_ch: .zero 8*4
 eac3_spx_first: .zero 8*4
@@ -943,3 +947,4 @@ ENDFN ac3_bsi
 
 .include "eac3.inc"
 .include "eac3_spx.inc"
+.include "eac3_aht.inc"

@@ -55,8 +55,8 @@ class Reader:
             self.pos += 1
         return value
 
-    def signed(self, n, label=None):
-        v = self.get(n, label)
+    def signed(self, n, label=None, *context):
+        v = self.get(n, label, *context)
         return v - (1 << n) if v >> (n - 1) else v
 
     def mark(self, event, *context):
@@ -185,7 +185,8 @@ def calc_mask(p, band_psd, start, end, fast_gain, is_lfe, dba_mode, dba):
     return mask
 
 
-def calc_bap(mask, psd, start, end, snr_offset, floor):
+def calc_bap(mask, psd, start, end, snr_offset, floor, bap_table=None):
+    if bap_table is None:bap_table = T['baptab']
     bap = [0] * 256
     if snr_offset == -960:
         return bap
@@ -197,7 +198,7 @@ def calc_bap(mask, psd, start, end, snr_offset, floor):
         band_end = min(T['band_start'][band], end)
         while b < band_end:
             address = min(max((psd[b] - m) >> 5, 0), 63)
-            bap[b] = T['baptab'][address]
+            bap[b] = bap_table[address]
             b += 1
         if end <= band_end:
             break
@@ -633,13 +634,15 @@ class Decoder:
                                           self.fast_gain[ch], ch == self.lfe_ch, self.dba_mode[ch], self.dba[ch])
             if stages[ch] > 0:
                 self.bap[ch] = calc_bap(self.mask[ch], self.psd[ch], self.start_freq[ch], self.end_freq[ch],
-                                        self.snr_offset[ch], p['floor'])
+                                        self.snr_offset[ch], p['floor'],
+                                        self.aht_bap_table if self.enhanced and self.channel_in_aht[ch] else None)
         g.mark('mantissas', blk)
         if (not self.enhanced or self.skip_syntax) and g.get(1, 'skiple'):
             n = g.get(9, 'skipl')
             g.get(8 * n, 'skip')
             self.used.add('skip field')
         # Mantissas.
+        self.current_block = blk
         fixed = [[0] * 256 for _ in range(7)]
         groups = {'b1': [], 'b2': [], 'b4': []}
         got_cpl = False
@@ -688,6 +691,9 @@ class Decoder:
         return output
 
     def mantissas(self, g, ch, coeffs, groups):
+        if self.enhanced and self.channel_in_aht[ch]:
+            self.aht_mantissas(g,ch,coeffs)
+            return
         exps, baps = self.dexps[ch], self.bap[ch]
         dither = ch == CPL or self.dither_flag[ch]
         for b in range(self.start_freq[ch], self.end_freq[ch]):

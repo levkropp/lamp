@@ -2,12 +2,12 @@
 """Conventional E-AC-3 substream 0: PCM, containers, timing and parser bounds.
 
 FFmpeg encoder fixtures plus model-written fields/frames it does not produce.
-AHT, enhanced coupling, dependent/additional substreams and reduced rates
+Enhanced coupling, dependent/additional substreams and reduced rates
 have explicit unsupported checks. This is a partial E-AC-3 profile, not Atmos
 rendering. Linux or native Windows; --skip-playback omits sink capture.
 --wine-only checks the Windows CLI against a completed Linux run; provide a
 display (for example, xvfb-run -a python3 tests/verify-eac3.py --wine-only).
-Spectral extension is covered separately by verify-eac3-spx.py.
+Spectral extension and AHT have separate suites.
 """
 import importlib.util
 import json
@@ -41,8 +41,8 @@ def against(path, checks, crc=False):
     return pcm
 
 
-def model_check(path, checks):
-    channels, decoder = model.decode(path.read_bytes())
+def model_check(path, checks, ffmpeg_vq4=False):
+    channels, decoder = model.decode(path.read_bytes(), ffmpeg_vq4=ffmpeg_vq4)
     native = Path(str(path)+'.native')
     ffmpeg('-cpuflags', '0', '-i', path, '-f', 'f32le', native)
     theirs = ac3.floats(native)
@@ -57,7 +57,8 @@ def model_check(path, checks):
         worst = min(worst, math.inf if not error else 10*math.log10(signal/error))
     if worst < 130 or 'block error' in decoder.used:
         raise Failure(f'{path.name}: model {worst:.1f} dB, coverage {decoder.used}')
-    checks.append({'test': 'model '+path.name, 'result': 'matched', 'snr_db': round(worst, 1)})
+    checks.append({'test': 'model '+path.name, 'result': 'matched', 'snr_db': round(worst, 1),
+                   **({'comparator':'stock FFmpeg; test model emulates its omitted VQ4 row zero'} if ffmpeg_vq4 else {})})
     return decoder.used
 
 
@@ -163,7 +164,7 @@ def windows_checks():
                 if output.read_bytes()!=Path(str(path)+'.f32').read_bytes()[ms*48*8:]:
                     raise Failure('Windows '+path.name+' --start '+str(ms)+' differs')
                 checks.append({'test':f'{path.name} --start {ms} ms','result':'exact'})
-    for name in ('dependent','substream1','reduced-rate','reserved-type','ahtinu','ecplinu',
+    for name in ('dependent','substream1','reduced-rate','reserved-type','ecplinu',
                  'late_coupling','snr_reuse','appended-dependent','appended-substream1','layout-change','garbage','bad-size'):
         path=work/(name+'.ec3')
         result=subprocess.run([*command,'--check',str(path)],env=env,timeout=120,
@@ -294,7 +295,7 @@ def main():
         if label in ('dependent','substream1'):
             path=work/('appended-'+label+'.ec3');path.write_bytes(data+vectors.recrc(modified))
             reject(chain,path,checks)
-    for tool in ('ahtinu', 'ecplinu', 'late_coupling', 'snr_reuse'):
+    for tool in ('ecplinu', 'late_coupling', 'snr_reuse'):
         path = work/(tool+'.ec3');path.write_bytes(vectors.unsupported(tool))
         reject(chain,path,checks)
     changed=(work/'stereo44.ec3').read_bytes()
@@ -341,7 +342,7 @@ def main():
     if missing:raise Failure('missing E-AC-3 coverage: '+', '.join(sorted(missing)))
     write_report('eac3',{'result':'passed','profile':'E-AC-3 conventional mantissas; independent/converted substream 0',
                          'checks':checks,'coverage':sorted(used),
-                         'unsupported':['AHT','enhanced coupling','dependent/additional substreams','reduced rates','coupling first activated after block 0','older-frame SNR reuse'],
+                         'unsupported':['enhanced coupling','dependent/additional substreams','reduced rates','coupling first activated after block 0','older-frame SNR reuse'],
                          'specification_sha256':model._gen.SHA256,
                          'limitations':['block-0 SNR packing compatible with FFmpeg; per-block updates outside profile',
                                         'transient processing and object rendering not applied']})
