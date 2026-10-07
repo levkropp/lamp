@@ -2,6 +2,8 @@
 .include "win/ui.s"
 .globl ui_test_count, ui_test_ring, ui_snapshot_probe, ui_seek_probe
 .globl ui_test_start_index, ui_test_start_ms, ui_test_shown_index, ui_test_shown_frames
+.globl ui_chapter_probe
+.set ui_chapter_probe, ui_chapter
 .set ui_test_count, ui_heard_count
 .set ui_test_ring, ui_ring
 .set ui_test_start_index, ui_start_index

@@ -551,6 +551,11 @@ FN queue_chapter_target
     jae .Lqueue_chapter_select          # unrepresentable duration: unknown
     div rcx
     mov r8, rax
+    test r8, r8
+    jnz .Lqueue_chapter_select
+    cmp qword ptr [rip + output_frames], 0
+    je .Lqueue_chapter_select
+    mov r8d, 1                        # a positive sub-ms duration must not become unknown
 .Lqueue_chapter_select:
     mov ecx, [rsp + 32]
     mov rdx, r10

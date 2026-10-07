@@ -64,20 +64,30 @@
     {
       "test": "concurrent history overwrite",
       "result": {
-        "concurrent_history_queries": 33594580,
+        "concurrent_history_queries": 32702137,
         "real_overwrites": 4095,
         "final_retention_queries": 8192,
         "mixed_start_index_records": 0
       }
     },
     {
+      "test": "known submillisecond chapter duration",
+      "result": {
+        "known_submillisecond_files": 2,
+        "ignored_future_chapter_seeks": 4,
+        "frames_per_open": 1,
+        "session_rate": 48000
+      }
+    },
+    {
       "test": "Windows producer/UI snapshot handoff",
       "result": {
         "real_metadata_publications": 2000,
-        "coherent_snapshots": 581985,
+        "coherent_snapshots": 596355,
         "owned_covers_freed": 2000,
         "seeded_64bit_queries": 130,
         "paired_seek_checks": 4,
+        "submillisecond_checks": 2,
         "expired_snapshots": "unavailable"
       }
     }
@@ -86,12 +96,16 @@
     "forty-44100.wav.f32": "65ebdcdae6b056f36569ddd08054703d46cd4879f6dac1ea5c7ff46cb49bba13",
     "empty.wav.f32": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "one-frame.wav": "c028c334aa068e90330e052cead1b689c56dba1299737f1936cb49ff170577c2",
+    "submillisecond-resampled.wav": "3475d2104cc6f455afb8404e32ca88adeb49f456263780534c6f35952e0fff20",
+    "submillisecond.wav": "fd9ca9dca3f55d087456d156c90bac72553c8e429f7cd232a04cf1d740b53177",
     "forty-48000.wav.f32": "39f3e75fb22bc15b7dbf7ee808d5e5f2bdc4e37e3b07f76333a11fc058495601",
     "forty-44100.wav": "86cfb5f0b4e7e165d5e82102eb83f9fc5738886736ef3eff5f8eb1ed1c582519",
     "forty-96000.wav.f32": "4a46819512e912bd598d02ff9a946959741b20c90fa70740a60ee1e3f661267d",
     "one-frame.wav.f32": "c901cb43cf845d388bfdae357b09f560915b207e20f07f9a06db1200c32b1b63",
     "forty-96000.wav": "d051d435f6afc165cf60246fdbe4217d91da366edcc06c2c7422bf0345495886",
+    "submillisecond-resampled.wav.f32": "398b6091337fd4c019e2143ffb356ce55158394d5910055945be2dd2fcccf002",
     "empty.wav": "531cd597b25052b4845ef2f3887dec2183240802a93b6e044960de8ba017caa0",
+    "submillisecond.wav.f32": "c901cb43cf845d388bfdae357b09f560915b207e20f07f9a06db1200c32b1b63",
     "forty-48000.wav": "cc96a7b0702b13fc372ffd95ba70e4d3821ed31dd66980537c54492963693679"
   },
   "reference_pcm_hashes": {
@@ -100,14 +114,14 @@
     "forty-96000.wav.48000.f32": "d5d33cf6d79e60a9f0dfe77457ebc1b3dca4b7880a8d1ca69b0026d51715b70b"
   },
   "sources": {
-    "src/queue.s": "4a561b73f4973159156114511c819a1b55f9a7a421b5610a055a2df3fe3e2b27",
+    "src/queue.s": "532af12a6c41624d5571e0845d11643da349d892bc312e4da4f6630d2878f762",
     "tests/queue-timeline-probe.s": "06414297bd57d79a67c5a3967bc62708c1de4fb169fe11daa778d59bd3716b00",
-    "tests/queue-timeline-oracle.c": "386daae78eee20871191b38e2a35e256cf8cee7464eb7d326aced492f838b89c",
+    "tests/queue-timeline-oracle.c": "94b2c775acfd7dadc2774b31db61127e695d9aaf5f433d7246ab5e140cc6f743",
     "src/win/ui.s": "1867e56f24d7c3ba5f1e5d7241d2e5901d87f348308896ca2cb565b43a5f994d",
-    "src/win/ui_queue.inc": "f4e312348f7cd2be4c259879247893f5e9dc33023fd9d7ca2eb9e295130d9863",
+    "src/win/ui_queue.inc": "f13dc815cd6c15471799347b4fa6683f1f4cf4a9c740057a257bea6af5a6f40d",
     "src/win/kernel32.def": "d3b93c1a54c07bdbb30ea043ee5176a848ed5ade1c10d67230d7121a09f1fd6c",
-    "tests/ui-queue-snapshot-probe.s": "b427f6a20084e921cc9b48a2c4e27c142a1e5ca9d0842cb65c88520e4ac7746b",
-    "tests/ui-queue-snapshot-oracle.c": "41518a586daf7b3b53448907c60bd61e32da28351dbaeb660fc67cb3730ab8d5"
+    "tests/ui-queue-snapshot-probe.s": "1b6a315f34837c700a7cd9d2d778ebf314c87240ebb0367d9487711aa99dcb7e",
+    "tests/ui-queue-snapshot-oracle.c": "af14961a6dd28a122ca758bd5bc677df71a8abe37f27b88fd2a0b7d94c86f477"
   },
   "environment": {
     "platform": "Linux-6.1.0-53-amd64-x86_64-with-glibc2.36",

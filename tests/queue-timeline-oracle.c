@@ -220,6 +220,26 @@ static int concurrent(const lamp_char *path) {
     return 1;
 }
 
+static int tiny(const lamp_char *first, const lamp_char *resampled) {
+    const lamp_char *paths[] = {first, resampled};
+    float pcm[4];
+    for (unsigned file = 0; file < 2; file++) {
+        queue_target = 48000;
+        if (!queue_begin(paths + file, 1)) return 0;
+        for (unsigned command = 6; command <= 7; command++) {
+            uint64_t target = queue_navigate_probe(command, 0, 0, 0);
+            if (target != 0 || queue_index != 0 || decode_error) return 0;
+            queue_start(target);
+            if (queue_read(pcm, 2) != 1 || decode_error) return 0;
+        }
+        decoder_close();
+    }
+    queue_target = 0;
+    printf("{\"known_submillisecond_files\":2,\"ignored_future_chapter_seeks\":4,"
+           "\"frames_per_open\":1,\"session_rate\":48000}\n");
+    return 1;
+}
+
 int lamp_main(int argc, lamp_char **argv) {
     if (argc == 1) {
         unsigned queries = seeded(); if (!queries) return 1;
@@ -231,5 +251,6 @@ int lamp_main(int argc, lamp_char **argv) {
     if (argc == 4 && !lamp_strcmp(argv[1], LT("empty"))) return empty_files(argv[2], argv[3]) ? 0 : 1;
     if (argc == 3 && !lamp_strcmp(argv[1], LT("repeat"))) return repeated(argv[2]) ? 0 : 1;
     if (argc == 3 && !lamp_strcmp(argv[1], LT("concurrent"))) return concurrent(argv[2]) ? 0 : 1;
+    if (argc == 4 && !lamp_strcmp(argv[1], LT("tiny"))) return tiny(argv[2], argv[3]) ? 0 : 1;
     return 2;
 }

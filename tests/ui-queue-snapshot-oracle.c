@@ -10,6 +10,7 @@ typedef struct {
 typedef char snapshot_size_check[sizeof(snapshot) == 10312 ? 1 : -1];
 LAMP_ABI snapshot *ui_snapshot_probe(unsigned, uint64_t *);
 LAMP_ABI void ui_seek_probe(int, uint64_t);
+LAMP_ABI void ui_chapter_probe(unsigned);
 LAMP_ABI void ui_file_opened(void);
 LAMP_ABI int decoder_open(const lamp_char *);
 LAMP_ABI void decoder_close(void);
@@ -49,8 +50,15 @@ static DWORD WINAPI producer(void *unused) {
     decoder_close(); InterlockedExchange(&finished, 1); return 0;
 }
 
+static void release_covers(void) {
+    for (unsigned i = 0; i < 64; i++) {
+        if (ui_test_ring[i].cover) mem_free((void *)(uintptr_t)ui_test_ring[i].cover);
+        ui_test_ring[i].cover = 0;
+    }
+}
+
 int lamp_main(int argc, lamp_char **argv) {
-    if (argc != 3) return 2;
+    if (argc != 4) return 2;
     for (unsigned i = 0; i < 2; i++) { paths[i] = argv[i + 1]; names[i] = basename_of(paths[i]); }
     queue_paths = paths; queue_rate = 48000; engine_position = UINT64_MAX;
     HANDLE thread = CreateThread(NULL, 0, producer, NULL, 0, NULL);
@@ -76,10 +84,20 @@ int lamp_main(int argc, lamp_char **argv) {
     if (WaitForSingleObject(thread, 10000) != WAIT_OBJECT_0 || previous != 1999 || !claimed) return 1;
     CloseHandle(thread);
     /* Remove unclaimed real covers before controlled, post-thread seeding. */
-    for (unsigned i = 0; i < 64; i++) {
-        if (ui_test_ring[i].cover) mem_free((void *)(uintptr_t)ui_test_ring[i].cover);
-        ui_test_ring[i].cover = 0;
-    }
+    release_covers();
+    /* One 192 kHz frame resamples to one 48 kHz frame. Its positive length
+       must remain known, so a 10 ms chapter cannot restart past its end. */
+    paths[0] = argv[3]; names[0] = basename_of(paths[0]);
+    ui_test_count = 0; queue_index = 0; queue_output = 0; engine_position = 0;
+    if (!decoder_open(paths[0])) return 1;
+    ui_file_opened();
+    uint64_t sequence; snapshot *s = ui_snapshot_probe(0, &sequence);
+    if (!s || sequence != 0 || s->frames != 1 || s->chapter_count != 4) return 1;
+    ui_count = 1; ui_thread = 1; ui_test_start_index = 0; ui_test_start_ms = 0; pause_requested = 1;
+    ui_chapter_probe(6);
+    if (ui_test_start_index || ui_test_start_ms || pause_requested != 1) return 1;
+    ui_thread = 0; decoder_close(); release_covers();
+    paths[0] = argv[1]; names[0] = basename_of(paths[0]);
     unsigned seeded = 0;
     for (unsigned variant = 0; variant < 2; variant++) {
         uint64_t count = (1ULL << 32) + variant * 17;
@@ -116,6 +134,7 @@ int lamp_main(int argc, lamp_char **argv) {
     if (ui_test_start_index != 35 || ui_test_start_ms != 99000 || pause_requested != 1) return 1;
     ui_thread = 0;
     printf("{\"real_metadata_publications\":2000,\"coherent_snapshots\":%u,\"owned_covers_freed\":%u,"
-           "\"seeded_64bit_queries\":%u,\"paired_seek_checks\":4,\"expired_snapshots\":\"unavailable\"}\n", reads, claimed, seeded);
+           "\"seeded_64bit_queries\":%u,\"paired_seek_checks\":4,\"submillisecond_checks\":2,"
+           "\"expired_snapshots\":\"unavailable\"}\n", reads, claimed, seeded);
     return 0;
 }
