@@ -25,12 +25,15 @@ The Windows player shows the picture above the title while a file plays (`src/wi
 | MP4/M4A/M4B/MOV | `covr` items |
 | Matroska/WebM | Image attachments |
 | WavPack, Monkey's Audio | APEv2 binary items |
+| ASF | Binary `WM/Picture` attributes in Extended Content Description, Metadata or Metadata Library; selected-stream art overrides global art; [scope and bounds](asf.md#tags-and-pictures) |
 
 LAMP does not read pictures from CAF, AVI, FLV, AU, AC-3, MPEG-TS/PS, RIFX, RF64/BW64 or Wave64 files. FFmpeg reads no ID3v2 pictures before AC-3 data either. Separate `cover.jpg` files are not read.
 
 ## Reading rules
 
 The rules follow FFmpeg's demuxers. Pictures may be JPEG, PNG, GIF, BMP, TIFF or WebP.
+
+- ASF: `WM/Picture` uses case-sensitive MIME names and keeps the declared image type. A valid picture belonging to the chosen audio stream replaces global artwork; within either scope, the first front cover or otherwise the first picture wins. Nonzero language indices, unknown MIME types, missing string terminators, empty images and sizes outside the descriptor are skipped. See [ASF metadata limits](asf.md#tags-and-pictures).
 
 - ID3v2:
   - MIME types: `image/jpeg`, `image/jpg`, `image/png`, `image/gif`, `image/bmp`, `image/tiff` and `image/webp` in any case; ID3v2.2 uses `JPG` and `PNG`.

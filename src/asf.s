@@ -6,7 +6,7 @@
 # No timestamps are synthesized: the presented audio is consecutive decoded
 # samples. Network chunk framing, DVR-MS and scrambled audio stay unsupported.
 .include "lamp.inc"
-.globl asf_open
+.globl asf_open, asf_stream
 .equ ASF_MALFORMED, 100
 .equ ASF_UNSUPPORTED, 101
 .equ ASF_LIMIT, 1 << 24

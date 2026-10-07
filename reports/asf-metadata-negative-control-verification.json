@@ -1,0 +1,65 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "basic.asf",
+      "choice": 0,
+      "before_tags": "",
+      "after_tags": "title=T\u00eftle \u6f22\u5b57 \ud83c\udfb5\nartist=\u00c4rtist\ncomment=C\u00f6mment",
+      "unchanged_pcm_sha256": "fc11f65f28c450e3e3ef8b382715595b6f85b8abe6d8c6dbbd317fdb8cbd0ad7",
+      "picture": null,
+      "fixture_sha256": "6d1932a8240fc5d80cd29b3f3e5f02233cde4fd707ede2b166db8bb1ea76a96e"
+    },
+    {
+      "test": "cover-library.asf",
+      "choice": 0,
+      "before_tags": "",
+      "after_tags": "",
+      "unchanged_pcm_sha256": "fc11f65f28c450e3e3ef8b382715595b6f85b8abe6d8c6dbbd317fdb8cbd0ad7",
+      "picture": {
+        "before_exit": 2,
+        "before": "No embedded cover art.",
+        "after": "image/png 101 bytes",
+        "sha256": "e6aeb8688de618cf3c8d49d4c0798db5eb5e6fd9cd58e63b38b5f348f743d014"
+      },
+      "fixture_sha256": "1c1bc1da5973bbff6ed4ed96104a94dd9131799f40ec47ae436bb47d46d7e814"
+    },
+    {
+      "test": "selected-stream-2.asf",
+      "choice": 2,
+      "before_tags": "",
+      "after_tags": "title=Other stream\nartist=Global artist",
+      "unchanged_pcm_sha256": "999435832c21893571df5ffaa248fe6b8425bf8468cceb2383e6dd02b1e1bf46",
+      "picture": null,
+      "fixture_sha256": "5c8eb8723eae9dd1bd49a0a9ccf20628bf0518b3a1f457e46c5cc5da223e0a70"
+    }
+  ],
+  "baseline_commit": "8303b30e5eb281b250c6ef604e3e6bf0f5357f48",
+  "baseline_cli_sha256": "66b93efe8812a4d30044e4a22a8106d43c2d77b1b5c3db35c5508c61ec7e10f3",
+  "baseline_report_sha256": "9c408e6eafd409ad6e4dbbc547d4a708195d6739466a9a5ce64e40ac7fbfcb82",
+  "baseline_runtime_sources": {
+    "src/asf.s": "39777838f1ea373cbb7f4a99803d6559e306565402a881c4bd18e2d217c7f775",
+    "src/avi.s": "56f1336d789997c4e4d2d11946129f8f2a1d22ee46c653cd40dacacb4ebeac59",
+    "src/decoder.s": "44e88449c121f6d67f1805555f15663fe2d3883531fce2dbf5a8587e58f1d8f8",
+    "src/mpegts.s": "5dafcb58db5d634684462207d45e55ff088d5bf032f62d8302adc39be6ef125e",
+    "src/track.s": "a0ab0586b55a7ca052e9d457733eb6bdb160f90c04b9e5359b76e401a85ae91d",
+    "tests/verify-asf.py": "58767cd614fdc166538826e54c03ed80faf35c9c695fd8e80fa3d54859bf50dc",
+    "tests/seek-oracle.c": "3354db980a9957d61d5d9d054110faacb0159e25640fbc42905edd254517f148",
+    "tests/track-catalog-oracle.c": "93175cde74b34ab85aeb8838c5a428cd39955adf45fdd6407229ad45488e652f",
+    "tests/asf-boundary-oracle.c": "39da9b58a61fcaa0dda90bd53818f429548fee2081989734b64c61aa614c7881",
+    "tests/asf-seek-oracle.c": "67fd0e72951d7cb8683e7c8885fd0e5cbbf19b62662e56bc0bb20e104eb2da9f"
+  },
+  "current_cli_sha256": "ec8198be7ca301cb0d2b00d51ad96b62aa7d4655966251c559f60c3cb8b15271",
+  "current_report_sha256": "e830fa30786ae76a3ab6a423ebb9de844ae781ccc9f5a13febf96e3b75ce8839",
+  "current_runtime_sources": {
+    "src/tags.s": "c3826724e4e67d7b840b6bbb38d7af4b60e370ad2a354a78cc85551ea5224de1",
+    "src/tags_asf.inc": "b8853df37d51c988c9f847372930ca22b9102c5655427ad0874ee6727109e726",
+    "src/cover.inc": "4c6a2398bdd6d9dab885f7b01ac37e7bce6c1979f8de99ca9fd450ad6f0b4a71",
+    "src/asf.s": "268009deee398b1336c51da80983a345ce897acb9f5da9b884582613315406e6",
+    "src/decoder.s": "44e88449c121f6d67f1805555f15663fe2d3883531fce2dbf5a8587e58f1d8f8",
+    "tests/verify-asf-metadata.py": "3db9d546449303bd07b2744784185805526b375e5b76d0033229644752de78ac",
+    "tests/asf-metadata-oracle.c": "057b7e3ae0f5aedf77401e8509f76daf942dfae33008220311717cdcfb005af3",
+    "tests/verify-asf.py": "58767cd614fdc166538826e54c03ed80faf35c9c695fd8e80fa3d54859bf50dc"
+  },
+  "runner_sha256": "c9a010f07d4a1531902ce805d81ec4a4d3541790a1c791e7f6b335f557422f54"
+}
