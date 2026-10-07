@@ -1,0 +1,633 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "pcm_s8-1.caf",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=13 rate=22050 channels=1 bits=8 frames=22050 underruns=0 decode_error=0 audio_error=0 elapsed_ms=61 cpu_us=91502 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_s8-2.caf",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=13 rate=44100 channels=2 bits=8 frames=44100 underruns=0 decode_error=0 audio_error=0 elapsed_ms=44 cpu_us=56010 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_s16be-1.caf",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=13 rate=22050 channels=1 bits=16 frames=22050 underruns=0 decode_error=0 audio_error=0 elapsed_ms=48 cpu_us=60342 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_s16be-2.caf",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=13 rate=44100 channels=2 bits=16 frames=44100 underruns=0 decode_error=0 audio_error=0 elapsed_ms=44 cpu_us=74107 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_s16le-1.caf",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=13 rate=22050 channels=1 bits=16 frames=22050 underruns=0 decode_error=0 audio_error=0 elapsed_ms=32 cpu_us=57158 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_s16le-2.caf",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=13 rate=44100 channels=2 bits=16 frames=44100 underruns=0 decode_error=0 audio_error=0 elapsed_ms=60 cpu_us=74303 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_s24be-1.caf",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=13 rate=22050 channels=1 bits=24 frames=22050 underruns=0 decode_error=0 audio_error=0 elapsed_ms=34 cpu_us=53728 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_s24be-2.caf",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=13 rate=44100 channels=2 bits=24 frames=44100 underruns=0 decode_error=0 audio_error=0 elapsed_ms=78 cpu_us=90197 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_s24le-1.caf",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=13 rate=22050 channels=1 bits=24 frames=22050 underruns=0 decode_error=0 audio_error=0 elapsed_ms=29 cpu_us=44990 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_s24le-2.caf",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=13 rate=44100 channels=2 bits=24 frames=44100 underruns=0 decode_error=0 audio_error=0 elapsed_ms=59 cpu_us=83639 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_s32be-1.caf",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=13 rate=22050 channels=1 bits=32 frames=22050 underruns=0 decode_error=0 audio_error=0 elapsed_ms=23 cpu_us=38273 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_s32be-2.caf",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=13 rate=44100 channels=2 bits=32 frames=44100 underruns=0 decode_error=0 audio_error=0 elapsed_ms=46 cpu_us=55411 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_s32le-1.caf",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=13 rate=22050 channels=1 bits=32 frames=22050 underruns=0 decode_error=0 audio_error=0 elapsed_ms=20 cpu_us=30001 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_s32le-2.caf",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=13 rate=44100 channels=2 bits=32 frames=44100 underruns=0 decode_error=0 audio_error=0 elapsed_ms=36 cpu_us=48980 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_f32be-1.caf",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=13 rate=22050 channels=1 bits=32 frames=22050 underruns=0 decode_error=0 audio_error=0 elapsed_ms=22 cpu_us=33628 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_f32be-2.caf",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=13 rate=44100 channels=2 bits=32 frames=44100 underruns=0 decode_error=0 audio_error=0 elapsed_ms=26 cpu_us=39025 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_f32le-1.caf",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=13 rate=22050 channels=1 bits=32 frames=22050 underruns=0 decode_error=0 audio_error=0 elapsed_ms=20 cpu_us=33560 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_f32le-2.caf",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=13 rate=44100 channels=2 bits=32 frames=44100 underruns=0 decode_error=0 audio_error=0 elapsed_ms=28 cpu_us=38870 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_f64be-1.caf",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=13 rate=22050 channels=1 bits=64 frames=22050 underruns=0 decode_error=0 audio_error=0 elapsed_ms=18 cpu_us=28539 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_f64be-2.caf",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=13 rate=44100 channels=2 bits=64 frames=44100 underruns=0 decode_error=0 audio_error=0 elapsed_ms=32 cpu_us=45096 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_f64le-1.caf",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=13 rate=22050 channels=1 bits=64 frames=22050 underruns=0 decode_error=0 audio_error=0 elapsed_ms=20 cpu_us=29388 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_f64le-2.caf",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=13 rate=44100 channels=2 bits=64 frames=44100 underruns=0 decode_error=0 audio_error=0 elapsed_ms=30 cpu_us=46393 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_alaw-1.caf",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=13 rate=22050 channels=1 bits=8 frames=22050 underruns=0 decode_error=0 audio_error=0 elapsed_ms=21 cpu_us=26979 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_alaw-2.caf",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=13 rate=44100 channels=2 bits=8 frames=44100 underruns=0 decode_error=0 audio_error=0 elapsed_ms=33 cpu_us=39166 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_mulaw-1.caf",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=13 rate=22050 channels=1 bits=8 frames=22050 underruns=0 decode_error=0 audio_error=0 elapsed_ms=19 cpu_us=27016 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_mulaw-2.caf",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=13 rate=44100 channels=2 bits=8 frames=44100 underruns=0 decode_error=0 audio_error=0 elapsed_ms=32 cpu_us=43055 endpoint_dry=0"
+    },
+    {
+      "test": "adpcm_ima_qt-1.caf",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=13 rate=22050 channels=1 bits=4 frames=22080 underruns=0 decode_error=0 audio_error=0 elapsed_ms=18 cpu_us=29601 endpoint_dry=0"
+    },
+    {
+      "test": "adpcm_ima_qt-2.caf",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=13 rate=44100 channels=2 bits=4 frames=44160 underruns=0 decode_error=0 audio_error=0 elapsed_ms=24 cpu_us=33492 endpoint_dry=0"
+    },
+    {
+      "test": "lpcm-3.0.caf",
+      "result": "exact",
+      "comparator": "the same audio in WAVE (3.0)",
+      "note": "chan layout tag",
+      "stats": "codec=13 rate=48000 channels=3 bits=24 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=36 cpu_us=47215 endpoint_dry=0"
+    },
+    {
+      "test": "lpcm-quad.caf",
+      "result": "exact",
+      "comparator": "the same audio in WAVE (quad)",
+      "note": "chan layout tag",
+      "stats": "codec=13 rate=48000 channels=4 bits=24 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=34 cpu_us=45042 endpoint_dry=0"
+    },
+    {
+      "test": "lpcm-5.1.caf",
+      "result": "exact",
+      "comparator": "the same audio in WAVE (5.1)",
+      "note": "chan layout tag",
+      "stats": "codec=13 rate=48000 channels=6 bits=24 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=41 cpu_us=52292 endpoint_dry=0"
+    },
+    {
+      "test": "lpcm-7.1.caf",
+      "result": "exact",
+      "comparator": "the same audio in WAVE (7.1)",
+      "note": "chan layout tag",
+      "stats": "codec=13 rate=48000 channels=8 bits=24 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=47 cpu_us=58858 endpoint_dry=0"
+    },
+    {
+      "test": "alac-16.caf",
+      "result": "exact",
+      "comparator": "its Matroska copy",
+      "note": "frma/alac cookie, packet table",
+      "stats": "codec=13 rate=44100 channels=2 bits=16 frames=66150 underruns=0 decode_error=0 audio_error=0 elapsed_ms=61 cpu_us=70104 endpoint_dry=0"
+    },
+    {
+      "test": "alac-16.caf against FFmpeg",
+      "result": "exact"
+    },
+    {
+      "test": "alac-24-mono.caf",
+      "result": "exact",
+      "comparator": "its Matroska copy",
+      "note": "frma/alac cookie, packet table",
+      "stats": "codec=13 rate=44100 channels=1 bits=24 frames=66150 underruns=0 decode_error=0 audio_error=0 elapsed_ms=46 cpu_us=57334 endpoint_dry=0"
+    },
+    {
+      "test": "alac-24-mono.caf against FFmpeg",
+      "result": "exact"
+    },
+    {
+      "test": "alac-5.1.caf",
+      "result": "exact",
+      "comparator": "its Matroska copy",
+      "note": "frma/alac cookie, packet table",
+      "stats": "codec=13 rate=44100 channels=6 bits=16 frames=66150 underruns=0 decode_error=0 audio_error=0 elapsed_ms=150 cpu_us=158516 endpoint_dry=0"
+    },
+    {
+      "test": "mp2.caf",
+      "result": "exact",
+      "comparator": "the raw .mp2 stream",
+      "note": "",
+      "stats": "codec=13 rate=44100 channels=2 bits=0 frames=88704 underruns=0 decode_error=0 audio_error=0 elapsed_ms=65 cpu_us=74342 endpoint_dry=0"
+    },
+    {
+      "test": "mp2.caf against FFmpeg",
+      "result": "matched",
+      "snr_db": 124.1
+    },
+    {
+      "test": "mp3.caf",
+      "result": "exact",
+      "comparator": "the raw .mp3 stream",
+      "note": "",
+      "stats": "codec=13 rate=44100 channels=2 bits=0 frames=89856 underruns=0 decode_error=0 audio_error=0 elapsed_ms=109 cpu_us=119495 endpoint_dry=0"
+    },
+    {
+      "test": "mp3.caf against FFmpeg",
+      "result": "matched",
+      "snr_db": 128.7
+    },
+    {
+      "test": "ac3.caf",
+      "result": "exact",
+      "comparator": "the raw .ac3 stream",
+      "note": "",
+      "stats": "codec=13 rate=44100 channels=2 bits=0 frames=89088 underruns=0 decode_error=0 audio_error=0 elapsed_ms=64 cpu_us=72099 endpoint_dry=0"
+    },
+    {
+      "test": "ac3.caf against FFmpeg",
+      "result": "matched",
+      "snr_db": 139.8
+    },
+    {
+      "test": "opus.caf",
+      "result": "exact",
+      "comparator": "its Ogg copy after 312 pre-skip frames",
+      "stats": "codec=13 rate=48000 channels=2 bits=32 frames=96960 underruns=0 decode_error=0 audio_error=0 elapsed_ms=219 cpu_us=229068 endpoint_dry=0"
+    },
+    {
+      "test": "aac-pakt.caf",
+      "result": "exact",
+      "comparator": "the ADTS stream, priming and remainder trimmed",
+      "note": "ES descriptor cookie",
+      "stats": "codec=13 rate=44100 channels=2 bits=0 frames=87300 underruns=0 decode_error=0 audio_error=0 elapsed_ms=77 cpu_us=88210 endpoint_dry=0"
+    },
+    {
+      "test": "alac-new-cookie.caf",
+      "result": "exact",
+      "comparator": "the FFmpeg file",
+      "note": "new-style cookie, data sized -1, uuid chunk",
+      "stats": "codec=13 rate=44100 channels=2 bits=16 frames=66150 underruns=0 decode_error=0 audio_error=0 elapsed_ms=57 cpu_us=68901 endpoint_dry=0"
+    },
+    {
+      "test": "lpcm-bitmap.caf",
+      "result": "exact",
+      "comparator": "WAVE with the same mask",
+      "note": "chan bitmap 0x3f",
+      "stats": "codec=13 rate=48000 channels=6 bits=24 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=40 cpu_us=50861 endpoint_dry=0"
+    },
+    {
+      "test": "lpcm-no-chan.caf",
+      "result": "exact",
+      "comparator": "WAVE with the default 5.1 mask",
+      "note": "no chan chunk",
+      "stats": "codec=13 rate=48000 channels=6 bits=24 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=38 cpu_us=48661 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_u8-2.w64",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=1 rate=44100 channels=2 bits=8 frames=44100 underruns=0 decode_error=0 audio_error=0 elapsed_ms=34 cpu_us=46743 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_s16le-1.w64",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=1 rate=44100 channels=1 bits=16 frames=44100 underruns=0 decode_error=0 audio_error=0 elapsed_ms=21 cpu_us=33317 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_s16le-2.w64",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=1 rate=44100 channels=2 bits=16 frames=44100 underruns=0 decode_error=0 audio_error=0 elapsed_ms=25 cpu_us=34504 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_s24le-6.w64",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=1 rate=44100 channels=6 bits=24 frames=44100 underruns=0 decode_error=0 audio_error=0 elapsed_ms=27 cpu_us=35192 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_s32le-2.w64",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=1 rate=44100 channels=2 bits=32 frames=44100 underruns=0 decode_error=0 audio_error=0 elapsed_ms=21 cpu_us=28475 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_f32le-2.w64",
+      "result": "exact",
+      "comparator": "FFmpeg up to the fact count",
+      "note": "",
+      "stats": "codec=1 rate=44100 channels=2 bits=32 frames=44100 underruns=0 decode_error=0 audio_error=0 elapsed_ms=17 cpu_us=24047 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_f64le-1.w64",
+      "result": "exact",
+      "comparator": "FFmpeg up to the fact count",
+      "note": "",
+      "stats": "codec=1 rate=44100 channels=1 bits=64 frames=44100 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=23637 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_alaw-2.w64",
+      "result": "exact",
+      "comparator": "FFmpeg up to the fact count",
+      "note": "",
+      "stats": "codec=1 rate=44100 channels=2 bits=8 frames=44100 underruns=0 decode_error=0 audio_error=0 elapsed_ms=24 cpu_us=31984 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_mulaw-1.w64",
+      "result": "exact",
+      "comparator": "FFmpeg up to the fact count",
+      "note": "",
+      "stats": "codec=1 rate=44100 channels=1 bits=8 frames=44100 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=23461 endpoint_dry=0"
+    },
+    {
+      "test": "adpcm_ima_wav-2.w64",
+      "result": "exact",
+      "comparator": "FFmpeg up to the fact count",
+      "note": "",
+      "stats": "codec=1 rate=44100 channels=2 bits=4 frames=44748 underruns=0 decode_error=0 audio_error=0 elapsed_ms=17 cpu_us=24838 endpoint_dry=0"
+    },
+    {
+      "test": "adpcm_ms-1.w64",
+      "result": "exact",
+      "comparator": "FFmpeg up to the fact count",
+      "note": "",
+      "stats": "codec=1 rate=44100 channels=1 bits=4 frames=44792 underruns=0 decode_error=0 audio_error=0 elapsed_ms=14 cpu_us=22262 endpoint_dry=0"
+    },
+    {
+      "test": "w64-unpadded.w64",
+      "result": "exact",
+      "comparator": "the FFmpeg file less its last frame",
+      "note": "unknown chunk, unpadded last chunk",
+      "stats": "codec=1 rate=44100 channels=2 bits=16 frames=44099 underruns=0 decode_error=0 audio_error=0 elapsed_ms=21 cpu_us=29040 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_u8-1.rifx.wav",
+      "result": "exact",
+      "comparator": "the original WAVE file",
+      "note": "",
+      "stats": "codec=1 rate=48000 channels=1 bits=8 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=23808 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_s16le-2.rifx.wav",
+      "result": "exact",
+      "comparator": "the original WAVE file",
+      "note": "",
+      "stats": "codec=1 rate=48000 channels=2 bits=16 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=22 cpu_us=29927 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_s24le-2.rifx.wav",
+      "result": "exact",
+      "comparator": "the original WAVE file",
+      "note": "",
+      "stats": "codec=1 rate=48000 channels=2 bits=24 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=20 cpu_us=27507 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_s32le-6.rifx.wav",
+      "result": "exact",
+      "comparator": "the original WAVE file",
+      "note": "",
+      "stats": "codec=1 rate=48000 channels=6 bits=32 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=29 cpu_us=36617 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_f32le-2.rifx.wav",
+      "result": "exact",
+      "comparator": "the original WAVE file",
+      "note": "",
+      "stats": "codec=1 rate=48000 channels=2 bits=32 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=23840 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_f64le-1.rifx.wav",
+      "result": "exact",
+      "comparator": "the original WAVE file",
+      "note": "",
+      "stats": "codec=1 rate=48000 channels=1 bits=64 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=23794 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_alaw-2.rifx.wav",
+      "result": "exact",
+      "comparator": "the original WAVE file",
+      "note": "",
+      "stats": "codec=1 rate=48000 channels=2 bits=8 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=21 cpu_us=29358 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_mulaw-2.rifx.wav",
+      "result": "exact",
+      "comparator": "the original WAVE file",
+      "note": "",
+      "stats": "codec=1 rate=48000 channels=2 bits=8 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=22 cpu_us=30337 endpoint_dry=0"
+    },
+    {
+      "test": "ima4-1.aiff",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=6 rate=32000 channels=1 bits=4 frames=32000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=12 cpu_us=20345 endpoint_dry=0"
+    },
+    {
+      "test": "ima4-2.aiff",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=6 rate=32000 channels=2 bits=4 frames=32000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=27 cpu_us=40813 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_s24be-2.caf seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":14,\"discarded_frames\":0,\"maximum_discarded\":0,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}",
+      "tolerance": "exact"
+    },
+    {
+      "test": "pcm_alaw-1.caf seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":14,\"discarded_frames\":0,\"maximum_discarded\":0,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}",
+      "tolerance": "exact"
+    },
+    {
+      "test": "alac-16.caf seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":10,\"discarded_frames\":10184,\"maximum_discarded\":4095,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}",
+      "tolerance": "exact"
+    },
+    {
+      "test": "mp3.caf seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":7,\"discarded_frames\":71805,\"maximum_discarded\":8064,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}",
+      "tolerance": "exact"
+    },
+    {
+      "test": "aac-pakt.caf seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":3663,\"maximum_discarded\":723,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}",
+      "tolerance": "exact"
+    },
+    {
+      "test": "lpcm-5.1.caf seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":14,\"discarded_frames\":0,\"maximum_discarded\":0,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}",
+      "tolerance": "exact"
+    },
+    {
+      "test": "pcm_s24le-6.w64 seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":14,\"discarded_frames\":0,\"maximum_discarded\":0,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}",
+      "tolerance": "exact"
+    },
+    {
+      "test": "adpcm_ima_wav-2.w64 seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":5583,\"maximum_discarded\":1017,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}",
+      "tolerance": "exact"
+    },
+    {
+      "test": "pcm_s24le-2.rifx.wav seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":14,\"discarded_frames\":0,\"maximum_discarded\":0,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}",
+      "tolerance": "exact"
+    },
+    {
+      "test": "adpcm_ima_qt-2.caf seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":13,\"discarded_frames\":573,\"maximum_discarded\":64,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0.00378417969}",
+      "tolerance": "128/32768"
+    },
+    {
+      "test": "ima4-2.aiff seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":13,\"discarded_frames\":573,\"maximum_discarded\":64,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0.00369262695}",
+      "tolerance": "128/32768"
+    },
+    {
+      "test": "caf-data-first.caf",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":100}"
+    },
+    {
+      "test": "caf-version-2.caf",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":100}"
+    },
+    {
+      "test": "caf-no-data.caf",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":100}"
+    },
+    {
+      "test": "caf-chunk-overrun.caf",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":100}"
+    },
+    {
+      "test": "caf-free-unsized.caf",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":100}"
+    },
+    {
+      "test": "caf-mace.caf",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "caf-20-bit.caf",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "caf-9-channels.caf",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "caf-4-khz.caf",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "caf-variable-frames.caf",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "caf-pakt-overrun.caf",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":100}"
+    },
+    {
+      "test": "caf-pakt-truncated.caf",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":100}"
+    },
+    {
+      "test": "caf-alac-no-cookie.caf",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":100}"
+    },
+    {
+      "test": "w64-wave-guid.w64",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":1}"
+    },
+    {
+      "test": "w64-chunk-small.w64",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":1}"
+    },
+    {
+      "test": "w64-truncated.w64",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":1}"
+    },
+    {
+      "test": "rifx-adpcm.wav",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":1}"
+    },
+    {
+      "test": "cancel-open alac-5.1.caf",
+      "result": "{\"result\":\"cancelled\"}"
+    },
+    {
+      "test": "CAF playback",
+      "result": "played",
+      "stats": "Playing. Space: pause / resume. N / P: next / previous file. Left / Right: -5 / +5 s. Down / Up: -60 / +60 s. [ / ]: previous / next chapter. R: repeat. Q or Ctrl+C: stop. codec=13 rate=44100 channels=2 bits=16 frames=66150 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3512 cpu_us=79256 endpoint_dry=0"
+    }
+  ],
+  "rejections": 17,
+  "scope": "CAF (linear PCM, G.711, IMA4, ALAC, AAC, MPEG audio, AC-3, Opus), Wave64 (PCM, float, G.711, ADPCM), RIFX and AIFF-C ima4 against FFmpeg or equivalent files; seeks; malformed and unsupported files; cancellation."
+}

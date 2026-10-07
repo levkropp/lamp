@@ -67,7 +67,7 @@ Several files play, check or export as one gapless stream at the first file's ra
 | Format | Current support |
 | --- | --- |
 | AIFF / AIFC | Signed PCM 1–32-bit, AIFC byte-order/fixed-container variants, float32/64, G.711, IMA4 and GSM 06.10; 1–8 channels, ordered Core Audio layouts, rounded 8–192 kHz output |
-| WAV | Little-endian RIFF/RF64/BW64, Sony Wave64 and big-endian RIFX audio framing, PCM 8/16/24/32-bit or float32/64; 1–8 channels, extensible valid bits/layouts, 8–192 kHz; G.711 A-law/µ-law, IMA and Microsoft ADPCM, G.726, G.722 and GSM 06.10, MPEG audio and AC-3 data; [details](docs/wav.md#compressed-audio) |
+| WAV | Little-endian RIFF/RF64/BW64, Sony Wave64 and big-endian RIFX audio framing, PCM 8/16/24/32-bit or float32/64; 1–8 channels, extensible valid bits/layouts, 8–192 kHz; G.711 A-law/µ-law, 2–5-bit IMA and Microsoft ADPCM, G.726, G.722 and GSM 06.10, MPEG audio and AC-3 data; [details](docs/wav.md#compressed-audio) |
 | GSM 06.10 | Full-rate speech in WAVE (Microsoft's blocks), AIFF-C, QuickTime MOV and raw `.gsm`, bit-exact with libgsm; exact seeks; [details](docs/wav.md#gsm-0610) |
 | Native FLAC | 1–8 channels, 4–32-bit, 8–192 kHz; CRC checks; speaker-mask-aware stereo downmix |
 | MP3 | MPEG-1/2/2.5 Layer III, mono/stereo, CBR/VBR, encoder trimming when tagged |

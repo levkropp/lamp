@@ -48,6 +48,9 @@ SOURCES = [
     ('rf64.wav', NOISE + ['-c:a', 'pcm_s16le', '-rf64', 'always']),
     ('alaw.wav', MONO + ['-c:a', 'pcm_alaw']),
     ('ima.wav', NOISE + ['-c:a', 'adpcm_ima_wav']),
+    ('ima-2bit.wav', None),
+    ('ima-3bit.wav', None),
+    ('ima-5bit.wav', None),
     ('ms.wav', NOISE + ['-c:a', 'adpcm_ms']),
     ('mp3.wav', NOISE + ['-c:a', 'libmp3lame']),
     ('pcm.w64', NOISE + ['-c:a', 'pcm_s16le']),
@@ -262,6 +265,12 @@ def main():
                 import eac3_vectors
                 data, _ = eac3_vectors.stream(20261007, 12, 7, 1, blocks=[1,2,3,6], short=0.25)
                 source.write_bytes(data)
+            elif name.startswith('ima-') and name.endswith('bit.wav'):
+                import adpcm_model
+                bits=int(name[4]);channels={2:1,3:2,5:8}[bits]
+                align=channels*(4+adpcm_model.IMA_GROUP_BYTES[bits]*12)
+                body=adpcm_model.random_ima(random.Random(name),channels,align,24)
+                source.write_bytes(adpcm_model.wave(0x11,channels,48000,align,body,bits=bits))
             elif options is None:
                 monkeys_audio(name, source)
             else:

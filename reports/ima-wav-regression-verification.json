@@ -1,0 +1,573 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "pcm_alaw-1ch-8000.wav",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "format_tag": 6,
+      "stats": "codec=1 rate=8000 channels=1 bits=8 frames=16000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=20 cpu_us=29699 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_alaw-2ch-44100.wav",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "format_tag": 6,
+      "stats": "codec=1 rate=44100 channels=2 bits=8 frames=88200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=38 cpu_us=46043 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_alaw-6ch-48000.wav",
+      "result": "exact",
+      "comparator": "FFmpeg channels mixed with LAMP weights",
+      "format_tag": 6,
+      "stats": "codec=1 rate=48000 channels=6 bits=8 frames=96000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=51 cpu_us=59153 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_alaw-8ch-22050.wav",
+      "result": "exact",
+      "comparator": "FFmpeg channels mixed with LAMP weights",
+      "format_tag": 6,
+      "stats": "codec=1 rate=22050 channels=8 bits=8 frames=44100 underruns=0 decode_error=0 audio_error=0 elapsed_ms=31 cpu_us=39595 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_alaw-1ch-8000.aiff",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "format_tag": "aiff",
+      "stats": "codec=6 rate=8000 channels=1 bits=8 frames=16000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=12 cpu_us=20492 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_alaw-2ch-44100.aiff",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "format_tag": "aiff",
+      "stats": "codec=6 rate=44100 channels=2 bits=8 frames=88200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=31 cpu_us=39404 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_mulaw-1ch-8000.wav",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "format_tag": 7,
+      "stats": "codec=1 rate=8000 channels=1 bits=8 frames=16000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=10 cpu_us=18233 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_mulaw-2ch-44100.wav",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "format_tag": 7,
+      "stats": "codec=1 rate=44100 channels=2 bits=8 frames=88200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=31 cpu_us=36421 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_mulaw-6ch-48000.wav",
+      "result": "exact",
+      "comparator": "FFmpeg channels mixed with LAMP weights",
+      "format_tag": 7,
+      "stats": "codec=1 rate=48000 channels=6 bits=8 frames=96000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=49 cpu_us=56647 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_mulaw-8ch-22050.wav",
+      "result": "exact",
+      "comparator": "FFmpeg channels mixed with LAMP weights",
+      "format_tag": 7,
+      "stats": "codec=1 rate=22050 channels=8 bits=8 frames=44100 underruns=0 decode_error=0 audio_error=0 elapsed_ms=33 cpu_us=38465 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_mulaw-1ch-8000.aiff",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "format_tag": "aiff",
+      "stats": "codec=6 rate=8000 channels=1 bits=8 frames=16000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=10 cpu_us=18795 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_mulaw-2ch-44100.aiff",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "format_tag": "aiff",
+      "stats": "codec=6 rate=44100 channels=2 bits=8 frames=88200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=47 cpu_us=57637 endpoint_dry=0"
+    },
+    {
+      "test": "adpcm_ima_wav-1ch-8000-256.wav",
+      "result": "exact",
+      "comparator": "FFmpeg up to the fact count",
+      "format_tag": 17,
+      "stats": "codec=1 rate=8000 channels=1 bits=4 frames=16160 underruns=0 decode_error=0 audio_error=0 elapsed_ms=13 cpu_us=20527 endpoint_dry=0"
+    },
+    {
+      "test": "adpcm_ima_wav-1ch-22050-512.wav",
+      "result": "exact",
+      "comparator": "FFmpeg up to the fact count",
+      "format_tag": 17,
+      "stats": "codec=1 rate=22050 channels=1 bits=4 frames=44748 underruns=0 decode_error=0 audio_error=0 elapsed_ms=13 cpu_us=17770 endpoint_dry=0"
+    },
+    {
+      "test": "adpcm_ima_wav-2ch-44100-1024.wav",
+      "result": "exact",
+      "comparator": "FFmpeg up to the fact count",
+      "format_tag": 17,
+      "stats": "codec=1 rate=44100 channels=2 bits=4 frames=88479 underruns=0 decode_error=0 audio_error=0 elapsed_ms=22 cpu_us=27160 endpoint_dry=0"
+    },
+    {
+      "test": "adpcm_ima_wav-2ch-48000-2048.wav",
+      "result": "exact",
+      "comparator": "FFmpeg up to the fact count",
+      "format_tag": 17,
+      "stats": "codec=1 rate=48000 channels=2 bits=4 frames=97968 underruns=0 decode_error=0 audio_error=0 elapsed_ms=23 cpu_us=31185 endpoint_dry=0"
+    },
+    {
+      "test": "adpcm_ima_wav-2ch-11025-32.wav",
+      "result": "exact",
+      "comparator": "FFmpeg up to the fact count",
+      "format_tag": 17,
+      "stats": "codec=1 rate=11025 channels=2 bits=4 frames=22050 underruns=0 decode_error=0 audio_error=0 elapsed_ms=13 cpu_us=19957 endpoint_dry=0"
+    },
+    {
+      "test": "adpcm_ima_wav-1ch-96000-8192.wav",
+      "result": "exact",
+      "comparator": "FFmpeg up to the fact count",
+      "format_tag": 17,
+      "stats": "codec=1 rate=96000 channels=1 bits=4 frames=196524 underruns=0 decode_error=0 audio_error=0 elapsed_ms=26 cpu_us=33811 endpoint_dry=0"
+    },
+    {
+      "test": "adpcm_ms-1ch-8000-256.wav",
+      "result": "exact",
+      "comparator": "FFmpeg up to the fact count",
+      "format_tag": 2,
+      "stats": "codec=1 rate=8000 channels=1 bits=4 frames=16000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=10 cpu_us=18574 endpoint_dry=0"
+    },
+    {
+      "test": "adpcm_ms-1ch-22050-512.wav",
+      "result": "exact",
+      "comparator": "FFmpeg up to the fact count",
+      "format_tag": 2,
+      "stats": "codec=1 rate=22050 channels=1 bits=4 frames=44528 underruns=0 decode_error=0 audio_error=0 elapsed_ms=14 cpu_us=21046 endpoint_dry=0"
+    },
+    {
+      "test": "adpcm_ms-2ch-44100-1024.wav",
+      "result": "exact",
+      "comparator": "FFmpeg up to the fact count",
+      "format_tag": 2,
+      "stats": "codec=1 rate=44100 channels=2 bits=4 frames=89056 underruns=0 decode_error=0 audio_error=0 elapsed_ms=28 cpu_us=35650 endpoint_dry=0"
+    },
+    {
+      "test": "adpcm_ms-2ch-48000-2048.wav",
+      "result": "exact",
+      "comparator": "FFmpeg up to the fact count",
+      "format_tag": 2,
+      "stats": "codec=1 rate=48000 channels=2 bits=4 frames=97728 underruns=0 decode_error=0 audio_error=0 elapsed_ms=26 cpu_us=34561 endpoint_dry=0"
+    },
+    {
+      "test": "adpcm_ms-2ch-11025-32.wav",
+      "result": "exact",
+      "comparator": "FFmpeg up to the fact count",
+      "format_tag": 2,
+      "stats": "codec=1 rate=11025 channels=2 bits=4 frames=22060 underruns=0 decode_error=0 audio_error=0 elapsed_ms=12 cpu_us=18195 endpoint_dry=0"
+    },
+    {
+      "test": "adpcm_ms-1ch-96000-8192.wav",
+      "result": "exact",
+      "comparator": "FFmpeg up to the fact count",
+      "format_tag": 2,
+      "stats": "codec=1 rate=96000 channels=1 bits=4 frames=196464 underruns=0 decode_error=0 audio_error=0 elapsed_ms=32 cpu_us=40038 endpoint_dry=0"
+    },
+    {
+      "test": "ima-3ch.wav",
+      "result": "exact",
+      "channels": 3,
+      "comparator": "model (channels mixed with LAMP weights)",
+      "block_align": 588,
+      "stats": "codec=1 rate=32000 channels=3 bits=4 frames=2310 underruns=0 decode_error=0 audio_error=0 elapsed_ms=9 cpu_us=16622 endpoint_dry=0",
+      "step_indexes": 87
+    },
+    {
+      "test": "ima-3ch-fact.wav",
+      "result": "exact",
+      "channels": 3,
+      "comparator": "model (channels mixed with LAMP weights)",
+      "block_align": 588,
+      "stats": "codec=1 rate=32000 channels=3 bits=4 frames=2300 underruns=0 decode_error=0 audio_error=0 elapsed_ms=8 cpu_us=16680 endpoint_dry=0",
+      "step_indexes": 87
+    },
+    {
+      "test": "ima-4ch.wav",
+      "result": "exact",
+      "channels": 4,
+      "comparator": "model (channels mixed with LAMP weights)",
+      "block_align": 528,
+      "stats": "codec=1 rate=44100 channels=4 bits=4 frames=1285 underruns=0 decode_error=0 audio_error=0 elapsed_ms=9 cpu_us=18945 endpoint_dry=0",
+      "step_indexes": 89
+    },
+    {
+      "test": "ima-4ch-fact.wav",
+      "result": "exact",
+      "channels": 4,
+      "comparator": "model (channels mixed with LAMP weights)",
+      "block_align": 528,
+      "stats": "codec=1 rate=44100 channels=4 bits=4 frames=1279 underruns=0 decode_error=0 audio_error=0 elapsed_ms=8 cpu_us=15469 endpoint_dry=0",
+      "step_indexes": 89
+    },
+    {
+      "test": "ima-5ch.wav",
+      "result": "exact",
+      "channels": 5,
+      "comparator": "model (channels mixed with LAMP weights)",
+      "block_align": 180,
+      "stats": "codec=1 rate=48000 channels=5 bits=4 frames=455 underruns=0 decode_error=0 audio_error=0 elapsed_ms=8 cpu_us=16107 endpoint_dry=0",
+      "step_indexes": 89
+    },
+    {
+      "test": "ima-5ch-fact.wav",
+      "result": "exact",
+      "channels": 5,
+      "comparator": "model (channels mixed with LAMP weights)",
+      "block_align": 180,
+      "stats": "codec=1 rate=48000 channels=5 bits=4 frames=453 underruns=0 decode_error=0 audio_error=0 elapsed_ms=7 cpu_us=15622 endpoint_dry=0",
+      "step_indexes": 89
+    },
+    {
+      "test": "ima-6ch.wav",
+      "result": "exact",
+      "channels": 6,
+      "comparator": "model (channels mixed with LAMP weights)",
+      "block_align": 504,
+      "stats": "codec=1 rate=48000 channels=6 bits=4 frames=644 underruns=0 decode_error=0 audio_error=0 elapsed_ms=8 cpu_us=15712 endpoint_dry=0",
+      "step_indexes": 89
+    },
+    {
+      "test": "ima-6ch-fact.wav",
+      "result": "exact",
+      "channels": 6,
+      "comparator": "model (channels mixed with LAMP weights)",
+      "block_align": 504,
+      "stats": "codec=1 rate=48000 channels=6 bits=4 frames=612 underruns=0 decode_error=0 audio_error=0 elapsed_ms=7 cpu_us=14843 endpoint_dry=0",
+      "step_indexes": 89
+    },
+    {
+      "test": "ima-7ch.wav",
+      "result": "exact",
+      "channels": 7,
+      "comparator": "model (channels mixed with LAMP weights)",
+      "block_align": 280,
+      "stats": "codec=1 rate=44100 channels=7 bits=4 frames=292 underruns=0 decode_error=0 audio_error=0 elapsed_ms=8 cpu_us=13431 endpoint_dry=0",
+      "step_indexes": 89
+    },
+    {
+      "test": "ima-7ch-fact.wav",
+      "result": "exact",
+      "channels": 7,
+      "comparator": "model (channels mixed with LAMP weights)",
+      "block_align": 280,
+      "stats": "codec=1 rate=44100 channels=7 bits=4 frames=283 underruns=0 decode_error=0 audio_error=0 elapsed_ms=9 cpu_us=16752 endpoint_dry=0",
+      "step_indexes": 89
+    },
+    {
+      "test": "ima-8ch.wav",
+      "result": "exact",
+      "channels": 8,
+      "comparator": "model (channels mixed with LAMP weights)",
+      "block_align": 992,
+      "stats": "codec=1 rate=96000 channels=8 bits=4 frames=723 underruns=0 decode_error=0 audio_error=0 elapsed_ms=8 cpu_us=16742 endpoint_dry=0",
+      "step_indexes": 89
+    },
+    {
+      "test": "ima-8ch-fact.wav",
+      "result": "exact",
+      "channels": 8,
+      "comparator": "model (channels mixed with LAMP weights)",
+      "block_align": 992,
+      "stats": "codec=1 rate=96000 channels=8 bits=4 frames=713 underruns=0 decode_error=0 audio_error=0 elapsed_ms=9 cpu_us=16573 endpoint_dry=0",
+      "step_indexes": 89
+    },
+    {
+      "test": "ima-mono-small-block.wav",
+      "result": "exact",
+      "channels": 1,
+      "comparator": "model and FFmpeg",
+      "block_align": 16,
+      "stats": "codec=1 rate=8000 channels=1 bits=4 frames=1000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=8 cpu_us=17608 endpoint_dry=0",
+      "step_indexes": 88
+    },
+    {
+      "test": "ima-mono-small-block-fact.wav",
+      "result": "exact",
+      "channels": 1,
+      "comparator": "model and FFmpeg",
+      "block_align": 16,
+      "stats": "codec=1 rate=8000 channels=1 bits=4 frames=962 underruns=0 decode_error=0 audio_error=0 elapsed_ms=9 cpu_us=16953 endpoint_dry=0",
+      "step_indexes": 88
+    },
+    {
+      "test": "ima-stereo-short-final.wav",
+      "result": "exact",
+      "channels": 2,
+      "comparator": "model and FFmpeg",
+      "block_align": 488,
+      "stats": "codec=1 rate=22050 channels=2 bits=4 frames=2462 underruns=0 decode_error=0 audio_error=0 elapsed_ms=9 cpu_us=13320 endpoint_dry=0",
+      "step_indexes": 87
+    },
+    {
+      "test": "ima-stereo-short-final-fact.wav",
+      "result": "exact",
+      "channels": 2,
+      "comparator": "model and FFmpeg",
+      "block_align": 488,
+      "stats": "codec=1 rate=22050 channels=2 bits=4 frames=2461 underruns=0 decode_error=0 audio_error=0 elapsed_ms=9 cpu_us=14749 endpoint_dry=0",
+      "step_indexes": 87
+    },
+    {
+      "test": "ima-stereo-header-only-final.wav",
+      "result": "exact",
+      "channels": 2,
+      "comparator": "model and FFmpeg",
+      "block_align": 488,
+      "stats": "codec=1 rate=22050 channels=2 bits=4 frames=2405 underruns=0 decode_error=0 audio_error=0 elapsed_ms=8 cpu_us=15690 endpoint_dry=0",
+      "step_indexes": 82
+    },
+    {
+      "test": "ima-stereo-header-only-final-fact.wav",
+      "result": "exact",
+      "channels": 2,
+      "comparator": "model and FFmpeg",
+      "block_align": 488,
+      "stats": "codec=1 rate=22050 channels=2 bits=4 frames=2401 underruns=0 decode_error=0 audio_error=0 elapsed_ms=8 cpu_us=15854 endpoint_dry=0",
+      "step_indexes": 82
+    },
+    {
+      "test": "ima-edges.wav",
+      "result": "exact",
+      "channels": 1,
+      "comparator": "model and FFmpeg",
+      "block_align": 804,
+      "stats": "codec=1 rate=44100 channels=1 bits=4 frames=19212 underruns=0 decode_error=0 audio_error=0 elapsed_ms=9 cpu_us=17702 endpoint_dry=0",
+      "step_indexes": 79
+    },
+    {
+      "test": "ima-edges-fact.wav",
+      "result": "exact",
+      "channels": 1,
+      "comparator": "model and FFmpeg",
+      "block_align": 804,
+      "stats": "codec=1 rate=44100 channels=1 bits=4 frames=19204 underruns=0 decode_error=0 audio_error=0 elapsed_ms=9 cpu_us=16213 endpoint_dry=0",
+      "step_indexes": 79
+    },
+    {
+      "test": "ms-mono.wav",
+      "result": "exact",
+      "channels": 1,
+      "comparator": "model and FFmpeg",
+      "block_align": 256,
+      "stats": "codec=1 rate=8000 channels=1 bits=4 frames=7000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=9 cpu_us=15676 endpoint_dry=0",
+      "predictors": 7
+    },
+    {
+      "test": "ms-mono-fact.wav",
+      "result": "exact",
+      "channels": 1,
+      "comparator": "model and FFmpeg",
+      "block_align": 256,
+      "stats": "codec=1 rate=8000 channels=1 bits=4 frames=6964 underruns=0 decode_error=0 audio_error=0 elapsed_ms=9 cpu_us=17296 endpoint_dry=0",
+      "predictors": 7
+    },
+    {
+      "test": "ms-stereo.wav",
+      "result": "exact",
+      "channels": 2,
+      "comparator": "model and FFmpeg",
+      "block_align": 1024,
+      "stats": "codec=1 rate=44100 channels=2 bits=4 frames=14168 underruns=0 decode_error=0 audio_error=0 elapsed_ms=12 cpu_us=19541 endpoint_dry=0",
+      "predictors": 7
+    },
+    {
+      "test": "ms-stereo-fact.wav",
+      "result": "exact",
+      "channels": 2,
+      "comparator": "model and FFmpeg",
+      "block_align": 1024,
+      "stats": "codec=1 rate=44100 channels=2 bits=4 frames=14152 underruns=0 decode_error=0 audio_error=0 elapsed_ms=11 cpu_us=18731 endpoint_dry=0",
+      "predictors": 7
+    },
+    {
+      "test": "ms-mono-short-final.wav",
+      "result": "exact",
+      "channels": 1,
+      "comparator": "model and FFmpeg",
+      "block_align": 507,
+      "stats": "codec=1 rate=22050 channels=1 bits=4 frames=7082 underruns=0 decode_error=0 audio_error=0 elapsed_ms=10 cpu_us=17186 endpoint_dry=0",
+      "predictors": 7
+    },
+    {
+      "test": "ms-mono-short-final-fact.wav",
+      "result": "exact",
+      "channels": 1,
+      "comparator": "model and FFmpeg",
+      "block_align": 507,
+      "stats": "codec=1 rate=22050 channels=1 bits=4 frames=7044 underruns=0 decode_error=0 audio_error=0 elapsed_ms=8 cpu_us=15533 endpoint_dry=0",
+      "predictors": 7
+    },
+    {
+      "test": "ms-stereo-short-final.wav",
+      "result": "exact",
+      "channels": 2,
+      "comparator": "model and FFmpeg",
+      "block_align": 2048,
+      "stats": "codec=1 rate=48000 channels=2 bits=4 frames=14261 underruns=0 decode_error=0 audio_error=0 elapsed_ms=10 cpu_us=16050 endpoint_dry=0",
+      "predictors": 7
+    },
+    {
+      "test": "ms-stereo-short-final-fact.wav",
+      "result": "exact",
+      "channels": 2,
+      "comparator": "model and FFmpeg",
+      "block_align": 2048,
+      "stats": "codec=1 rate=48000 channels=2 bits=4 frames=14225 underruns=0 decode_error=0 audio_error=0 elapsed_ms=11 cpu_us=18896 endpoint_dry=0",
+      "predictors": 7
+    },
+    {
+      "test": "ms-stereo-header-only-final.wav",
+      "result": "exact",
+      "channels": 2,
+      "comparator": "model and FFmpeg",
+      "block_align": 214,
+      "stats": "codec=1 rate=48000 channels=2 bits=4 frames=1414 underruns=0 decode_error=0 audio_error=0 elapsed_ms=8 cpu_us=14786 endpoint_dry=0",
+      "predictors": 7
+    },
+    {
+      "test": "ms-stereo-header-only-final-fact.wav",
+      "result": "exact",
+      "channels": 2,
+      "comparator": "model and FFmpeg",
+      "block_align": 214,
+      "stats": "codec=1 rate=48000 channels=2 bits=4 frames=1413 underruns=0 decode_error=0 audio_error=0 elapsed_ms=8 cpu_us=14731 endpoint_dry=0",
+      "predictors": 7
+    },
+    {
+      "test": "IMA step coverage",
+      "result": "passed",
+      "step_indexes": 89
+    },
+    {
+      "test": "mp2-in-wav.wav",
+      "result": "exact",
+      "comparator": "raw .mp2 stream",
+      "format_tag": 80,
+      "ffmpeg_snr_db": 124.8,
+      "stats": "codec=3 rate=44100 channels=2 bits=0 frames=132480 underruns=0 decode_error=0 audio_error=0 elapsed_ms=67 cpu_us=75356 endpoint_dry=0"
+    },
+    {
+      "test": "mp3-in-wav.wav",
+      "result": "exact",
+      "comparator": "raw .mp3 stream",
+      "format_tag": 85,
+      "ffmpeg_snr_db": 128.7,
+      "stats": "codec=3 rate=44100 channels=2 bits=0 frames=133632 underruns=0 decode_error=0 audio_error=0 elapsed_ms=129 cpu_us=136644 endpoint_dry=0"
+    },
+    {
+      "test": "ac3-in-wav.wav",
+      "result": "exact",
+      "comparator": "raw .ac3 stream",
+      "format_tag": 8192,
+      "ffmpeg_snr_db": 139.6,
+      "stats": "codec=11 rate=44100 channels=2 bits=0 frames=133632 underruns=0 decode_error=0 audio_error=0 elapsed_ms=71 cpu_us=80462 endpoint_dry=0"
+    },
+    {
+      "test": "adpcm_ima_wav-2ch-44100-1024.wav seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":6091,\"maximum_discarded\":1017,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "adpcm_ms-1ch-22050-512.wav seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":5733,\"maximum_discarded\":1012,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "ima-6ch-fact.wav seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":1530,\"maximum_discarded\":129,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "pcm_alaw-2ch-44100.wav seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":14,\"discarded_frames\":0,\"maximum_discarded\":0,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "pcm_mulaw-1ch-8000.aiff seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":14,\"discarded_frames\":0,\"maximum_discarded\":0,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "mp3-in-wav.wav seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":30333,\"maximum_discarded\":3455,\"maximum_probes\":0,\"index_points\":4,\"maximum_skimmed_headers\":24,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "written-ac3-in-wav.wav seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":11517,\"maximum_discarded\":1536,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "ima-1-bit.wav",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "ms-3-channels.wav",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "ima-6-bit.wav",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "ima-no-channels.wav",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":1}"
+    },
+    {
+      "test": "ima-no-block.wav",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":1}"
+    },
+    {
+      "test": "ima-extensible.wav",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":1}"
+    },
+    {
+      "test": "alaw-16-bit.wav",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":1}"
+    },
+    {
+      "test": "ima-header-only.wav",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":60}"
+    },
+    {
+      "test": "mp3-garbage.wav",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":1}"
+    },
+    {
+      "test": "ima-step-index.wav",
+      "result": "stopped",
+      "stats": "codec=1 rate=44100 channels=2 bits=4 frames=3051 underruns=0 decode_error=100 audio_error=0 elapsed_ms=12 cpu_us=22253 endpoint_dry=0"
+    },
+    {
+      "test": "ms-predictor.wav",
+      "result": "stopped",
+      "stats": "codec=1 rate=22050 channels=1 bits=4 frames=2024 underruns=0 decode_error=100 audio_error=0 elapsed_ms=13 cpu_us=22503 endpoint_dry=0"
+    },
+    {
+      "test": "ms-stereo-predictor.wav",
+      "result": "stopped",
+      "stats": "codec=1 rate=44100 channels=2 bits=4 frames=1012 underruns=0 decode_error=100 audio_error=0 elapsed_ms=14 cpu_us=25182 endpoint_dry=0"
+    },
+    {
+      "test": "cancel-open adpcm_ms-1ch-96000-8192.wav",
+      "result": "{\"result\":\"cancelled\"}"
+    },
+    {
+      "test": "IMA ADPCM playback",
+      "result": "played",
+      "stats": "Playing. Space: pause / resume. N / P: next / previous file. Left / Right: -5 / +5 s. Down / Up: -60 / +60 s. [ / ]: previous / next chapter. R: repeat. Q or Ctrl+C: stop. codec=1 rate=44100 channels=2 bits=4 frames=88479 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3992 cpu_us=53150 endpoint_dry=0"
+    }
+  ],
+  "encoder_files": 24,
+  "written_streams": 30,
+  "rejections": 12,
+  "scope": "G.711 A-law/mu-law in WAVE and AIFF-C, IMA and Microsoft ADPCM in WAVE, MPEG audio and AC-3 in WAVE: exact against FFmpeg (ADPCM up to the fact count) and the ADPCM model; seeks; unsupported and malformed files; cancellation."
+}

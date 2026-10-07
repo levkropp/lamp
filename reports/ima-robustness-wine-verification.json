@@ -1,0 +1,30 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "ima-2bit.wav",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 30,
+      "decoded": 11,
+      "rejected_or_damaged": 19
+    },
+    {
+      "test": "ima-3bit.wav",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 30,
+      "decoded": 13,
+      "rejected_or_damaged": 17
+    },
+    {
+      "test": "ima-5bit.wav",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 30,
+      "decoded": 19,
+      "rejected_or_damaged": 11
+    }
+  ],
+  "mutations": 90,
+  "decoded": 43,
+  "wine_debug": "err+all",
+  "scope": "3 container/codec sources, 300 mutations each (every tenth under Wine), seed 20261006: byte flips, zero/0xff runs, cuts, removed and duplicated spans, large length fields; --check, every fourth from a random --start."
+}
