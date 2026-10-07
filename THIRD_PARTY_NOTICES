@@ -368,3 +368,14 @@ The GSM 06.10 decoder (src/gsm.s) is handwritten x86-64 assembly following
 libgsm's fixed-point decoder; its tables (GSM 06.10 tables 4.1-4.6) are checked
 against libgsm's src/table.c by tests/check-gsm-tables.py. No libgsm code is
 linked into either player; FFmpeg's libgsm wrapper is a test oracle only.
+
+IMA WAVE 2/3/5-bit interoperability reference:
+FFmpeg n9.0.1 libavcodec/adpcm.c and libavcodec/adpcm_data.h,
+https://github.com/FFmpeg/FFmpeg/tree/n9.0.1/libavcodec
+The width-specific index changes, byte grouping and integer reconstruction
+rules are recorded as format/math facts in the test model and generated
+constants. Runtime packing/reconstruction is original x86-64 assembly; no
+FFmpeg source code or library is linked or distributed. FFmpeg 9.0.1 is a
+separately installed PCM comparator during fixture preparation. Its 3/5-bit
+shift/add reconstruction differs from the combined multiplication in 5.1/6.1;
+the existing 4-bit WAVE path keeps its validated multiply/shift behavior.

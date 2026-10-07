@@ -1,0 +1,29 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "ima-2bit.wav",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 300,
+      "decoded": 142,
+      "rejected_or_damaged": 158
+    },
+    {
+      "test": "ima-3bit.wav",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 300,
+      "decoded": 152,
+      "rejected_or_damaged": 148
+    },
+    {
+      "test": "ima-5bit.wav",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 300,
+      "decoded": 165,
+      "rejected_or_damaged": 135
+    }
+  ],
+  "mutations": 900,
+  "decoded": 459,
+  "scope": "3 container/codec sources, 300 mutations each (Linux, 2 GiB address space), seed 20261006: byte flips, zero/0xff runs, cuts, removed and duplicated spans, large length fields; --check, every fourth from a random --start."
+}

@@ -1,5 +1,5 @@
 # Original IMA and Microsoft ADPCM decoders in x86-64 assembly. MIT, see LICENSE.
-# WAVE format tags 0x11 (IMA ADPCM, 4-bit samples, 1-8 channels) and 2
+# WAVE format tags 0x11 (IMA ADPCM, 2-5-bit samples, 1-8 channels) and 2
 # (Microsoft ADPCM, mono or stereo). Every block starts with its channels'
 # predictor state, so blocks are track packets that decode independently; a
 # short final block decodes the whole sample groups it holds. QuickTime IMA4
@@ -65,7 +65,7 @@ adpcm_align: .long 0
 adpcm_stride: .long 0                    # bytes per channel plane
 adpcm_planes: .quad 0                    # int16 channel planes of one block
 adpcm_primer: .long 0                    # packets decoded before a seek target (0: none)
-adpcm_bits: .long 0                      # Flash ADPCM code size of the packet
+adpcm_bits: .long 0                      # IMA/G.726 code size, or Flash packet code size
 
 .bss
 .p2align 3
@@ -98,9 +98,16 @@ LOCALFN adpcm_block_samples
     jb .Ladpcm_samples_none
     mov eax, ecx
     xor edx, edx
-    lea ecx, [r8*4]
+    mov r9d, [rip + adpcm_bits]
+    sub r9d, 2
+    lea r10, [rip + ima_group_bytes]
+    movzx ecx, byte ptr [r10 + r9]
+    imul ecx, r8d
     div ecx
-    lea eax, [rax*8 + 1]
+    lea r10, [rip + ima_group_samples]
+    movzx ecx, byte ptr [r10 + r9]
+    imul eax, ecx
+    inc eax
     ret
 .Ladpcm_samples_ms:
     imul eax, r8d, 7
@@ -285,8 +292,19 @@ FN adpcm_track_open
     je .Ladpcm_open_gsm
     test eax, eax
     jnz .Ladpcm_open_g72x
-    cmp word ptr [rcx + 14], 4             # 4-bit samples only
+    movzx eax, word ptr [rcx + 14]
+    cmp ebx, ADPCM_IMA
+    jne .Ladpcm_open_four_bits
+    cmp eax, 2
+    jb .Ladpcm_open_fail
+    cmp eax, 5
+    ja .Ladpcm_open_fail
+    mov [rip + adpcm_bits], eax
+    jmp .Ladpcm_open_channels
+.Ladpcm_open_four_bits:
+    cmp eax, 4
     jne .Ladpcm_open_fail
+.Ladpcm_open_channels:
     cmp esi, 8
     ja .Ladpcm_open_fail
     cmp ebx, ADPCM_IMA
@@ -340,6 +358,8 @@ FN adpcm_track_open
     jmp .Ladpcm_open_samples
 .Ladpcm_open_layout:
     mov dword ptr [rip + decode_error], ADPCM_MALFORMED
+    cmp ebx, ADPCM_IMA
+    je .Ladpcm_open_samples
     mov dword ptr [rip + adpcm_bits], 2   # Flash: the most samples per byte
 .Ladpcm_open_samples:
     mov [rsp + 32], r10d
@@ -352,7 +372,9 @@ FN adpcm_track_open
     and eax, -64
     mov [rip + adpcm_stride], eax
     mov [rip + source_channels], esi
-    mov eax, [rip + adpcm_bits]           # G.726: its code size; GSM 0; others 4
+    mov eax, [rip + adpcm_bits]           # IMA/G.726 code size; GSM 0; others 4
+    cmp dword ptr [rip + adpcm_tag], ADPCM_IMA
+    je .Ladpcm_open_bits
     cmp dword ptr [rip + adpcm_tag], ADPCM_G726
     je .Ladpcm_open_bits
     cmp dword ptr [rip + adpcm_tag], ADPCM_G726LE
@@ -500,6 +522,8 @@ FN adpcm_track_decode
     mov rdi, r8
     mov r12d, r9d
     mov r13d, edx
+    cmp r13d, [rip + adpcm_align]          # planes were sized for this block
+    ja .Ladpcm_decode_bad
     call adpcm_packet_bits
     mov ecx, r13d
     call adpcm_block_samples
@@ -746,7 +770,7 @@ LOCALFN ima_block
     push r13
     push r14
     push r15
-    sub rsp, 32
+    sub rsp, 80
     mov rsi, rcx
     mov r12d, edx
     mov r13d, [rip + adpcm_channels]
@@ -771,6 +795,8 @@ LOCALFN ima_block
     mov r14d, 1                           # output sample
     lea r15, [rip + ima_steps]
     lea rbx, [rip + ima_index]
+    cmp dword ptr [rip + adpcm_bits], 4
+    jne .Lima_width_setup
 .Lima_group:
     lea eax, [r14 + 7]
     cmp eax, r12d
@@ -835,13 +861,133 @@ LOCALFN ima_block
     jb .Lima_channel
     add r14d, 8
     jmp .Lima_group
+# The 2/3/5-bit WAVE extensions use whole 4/12/20-byte groups per
+# channel, still striped in four-byte words. The cache holds at most 36
+# valid bits; every load stays inside the whole groups counted earlier.
+.Lima_width_setup:
+    mov ecx, [rip + adpcm_bits]
+    mov [rsp + 32], ecx
+    mov eax, 1
+    shl eax, cl
+    dec eax
+    mov [rsp + 40], eax                   # code mask
+    inc eax
+    shr eax, 1
+    mov [rsp + 36], eax                   # sign bit
+    sub ecx, 2
+    lea rax, [rip + ima_group_bytes]
+    movzx eax, byte ptr [rax + rcx]
+    mov [rsp + 48], eax
+    lea rax, [rip + ima_group_samples]
+    movzx eax, byte ptr [rax + rcx]
+    mov [rsp + 44], eax
+    lea rbx, [rip + ima_index2]
+    test ecx, ecx
+    jz .Lima_width_group
+    lea rbx, [rip + ima_index3]
+    cmp ecx, 1
+    je .Lima_width_group
+    lea rbx, [rip + ima_index5]
+.Lima_width_group:
+    cmp r14d, r12d
+    jae .Lima_done
+    mov dword ptr [rsp + 52], 0          # channel
+.Lima_width_channel:
+    mov ecx, [rsp + 52]
+    lea r8, [rip + adpcm_state]
+    mov r10d, [r8 + rcx*8]
+    mov r11d, [r8 + rcx*8 + 4]
+    mov eax, [rip + adpcm_stride]
+    imul eax, ecx
+    lea rdi, [rax + r14*2]
+    add rdi, [rip + adpcm_planes]
+    lea rax, [rsi + rcx*4]
+    mov [rsp + 56], rax                  # next striped word for this channel
+    mov eax, [rsp + 44]
+    mov [rsp + 64], eax                  # codes left in this group
+    xor r8d, r8d                        # cached bits
+    xor r9d, r9d                        # low-bit-first code cache
+.Lima_width_code:
+    cmp r8d, [rsp + 32]
+    jae .Lima_width_cached
+    mov rcx, [rsp + 56]
+    mov eax, [rcx]
+    lea rcx, [rcx + r13*4]
+    mov [rsp + 56], rcx
+    mov ecx, r8d
+    shl rax, cl
+    or r9, rax
+    add r8d, 32
+.Lima_width_cached:
+    mov edx, r9d
+    and edx, [rsp + 40]
+    mov ecx, [rsp + 32]
+    shr r9, cl
+    sub r8d, ecx
+    movzx eax, word ptr [r15 + r11*2]
+    dec ecx
+    shr eax, cl
+    mov [rsp + 68], eax                  # separately truncated half-step
+    movzx eax, word ptr [r15 + r11*2]
+    mov ecx, [rsp + 36]
+    shr ecx, 1                          # highest magnitude bit weighs one step
+.Lima_width_delta:
+    test edx, ecx
+    jz .Lima_width_delta_next
+    add [rsp + 68], eax
+.Lima_width_delta_next:
+    shr eax, 1
+    shr ecx, 1
+    jnz .Lima_width_delta
+    mov eax, [rsp + 68]
+    test edx, [rsp + 36]
+    jz .Lima_width_add
+    sub r10d, eax
+    jmp .Lima_width_clip
+.Lima_width_add:
+    add r10d, eax
+.Lima_width_clip:
+    cmp r10d, -32768
+    jge .Lima_width_clip_high
+    mov r10d, -32768
+.Lima_width_clip_high:
+    cmp r10d, 32767
+    jle .Lima_width_index
+    mov r10d, 32767
+.Lima_width_index:
+    movsx eax, byte ptr [rbx + rdx]
+    add r11d, eax
+    jns .Lima_width_index_high
+    xor r11d, r11d
+.Lima_width_index_high:
+    cmp r11d, 88
+    jbe .Lima_width_store
+    mov r11d, 88
+.Lima_width_store:
+    mov [rdi], r10w
+    add rdi, 2
+    dec dword ptr [rsp + 64]
+    jnz .Lima_width_code
+    mov ecx, [rsp + 52]
+    lea r8, [rip + adpcm_state]
+    mov [r8 + rcx*8], r10d
+    mov [r8 + rcx*8 + 4], r11d
+    inc ecx
+    mov [rsp + 52], ecx
+    cmp ecx, r13d
+    jb .Lima_width_channel
+    mov eax, [rsp + 48]
+    imul eax, r13d
+    add rsi, rax
+    add r14d, [rsp + 44]
+    jmp .Lima_width_group
 .Lima_done:
     mov eax, 1
     jmp .Lima_return
 .Lima_bad:
     xor eax, eax
 .Lima_return:
-    add rsp, 32
+    add rsp, 80
     pop r15
     pop r14
     pop r13

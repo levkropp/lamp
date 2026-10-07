@@ -16,7 +16,7 @@ usage: python3 tests/verify-wav-codecs.py [--skip-playback]
 - MPEG Layer II and III (tags 0x50 and 0x55) and AC-3 (0x2000) copied into
   WAVE files decode exactly as LAMP decodes the raw streams, and close to
   FFmpeg's float decoders.
-- Seeks equal continuous decoding; unsupported variants (3-bit IMA, more than
+- Seeks equal continuous decoding; unsupported variants (1/6-bit IMA, more than
   two Microsoft ADPCM channels) and malformed files reject; invalid step
   indexes and predictors stop decoding; a cancelled open stops cleanly.
 Writes <out>/wav-codecs-verification.json.
@@ -262,8 +262,8 @@ def main():
     struct.pack_into('<H', three_ms, three_ms.index(b'fmt ') + 10, 3)
     extensible = bytearray(base)
     struct.pack_into('<H', extensible, fmt_at, 0xfffe)
-    unsupported = {'ima-3-bit.wav': patch(base, fmt_at + 14, '<H', 3), 'ms-3-channels.wav': bytes(three_ms),
-                   'ima-5-bit.wav': patch(base, fmt_at + 14, '<H', 5)}
+    unsupported = {'ima-1-bit.wav': patch(base, fmt_at + 14, '<H', 1), 'ms-3-channels.wav': bytes(three_ms),
+                   'ima-6-bit.wav': patch(base, fmt_at + 14, '<H', 6)}
     malformed = {'ima-no-channels.wav': patch(base, fmt_at + 2, '<H', 0),
                  'ima-no-block.wav': patch(base, fmt_at + 12, '<H', 0),
                  'ima-extensible.wav': bytes(extensible),

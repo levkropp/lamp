@@ -1,0 +1,427 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "pcm_s16le-11025-1.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=15 rate=11025 channels=1 bits=16 frames=11025 underruns=0 decode_error=0 audio_error=0 elapsed_ms=37 cpu_us=58644 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_s16le-11025-2.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=15 rate=11025 channels=2 bits=16 frames=11025 underruns=0 decode_error=0 audio_error=0 elapsed_ms=31 cpu_us=47465 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_s16le-22050-1.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=15 rate=22050 channels=1 bits=16 frames=22050 underruns=0 decode_error=0 audio_error=0 elapsed_ms=29 cpu_us=39039 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_s16le-22050-2.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=15 rate=22050 channels=2 bits=16 frames=22050 underruns=0 decode_error=0 audio_error=0 elapsed_ms=36 cpu_us=51393 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_s16le-44100-1.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=15 rate=44100 channels=1 bits=16 frames=44100 underruns=0 decode_error=0 audio_error=0 elapsed_ms=53 cpu_us=70283 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_s16le-44100-2.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=15 rate=44100 channels=2 bits=16 frames=44100 underruns=0 decode_error=0 audio_error=0 elapsed_ms=47 cpu_us=63434 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_u8-11025-1.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=15 rate=11025 channels=1 bits=8 frames=11025 underruns=0 decode_error=0 audio_error=0 elapsed_ms=30 cpu_us=45583 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_u8-11025-2.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=15 rate=11025 channels=2 bits=8 frames=11025 underruns=0 decode_error=0 audio_error=0 elapsed_ms=27 cpu_us=42534 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_u8-22050-1.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=15 rate=22050 channels=1 bits=8 frames=22050 underruns=0 decode_error=0 audio_error=0 elapsed_ms=32 cpu_us=50442 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_u8-22050-2.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=15 rate=22050 channels=2 bits=8 frames=22050 underruns=0 decode_error=0 audio_error=0 elapsed_ms=39 cpu_us=58368 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_u8-44100-1.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=15 rate=44100 channels=1 bits=8 frames=44100 underruns=0 decode_error=0 audio_error=0 elapsed_ms=30 cpu_us=44177 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_u8-44100-2.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=15 rate=44100 channels=2 bits=8 frames=44100 underruns=0 decode_error=0 audio_error=0 elapsed_ms=38 cpu_us=50365 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_alaw-8000-1.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=15 rate=8000 channels=1 bits=8 frames=8000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=20 cpu_us=27803 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_alaw-8000-2.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "stereo flag set by the test",
+      "stats": "codec=15 rate=8000 channels=2 bits=8 frames=8000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=19 cpu_us=33042 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_mulaw-8000-1.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=15 rate=8000 channels=1 bits=8 frames=8000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=18 cpu_us=30185 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_mulaw-8000-2.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "stereo flag set by the test",
+      "stats": "codec=15 rate=8000 channels=2 bits=8 frames=8000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=30999 endpoint_dry=0"
+    },
+    {
+      "test": "adpcm_swf-11025-1.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=15 rate=11025 channels=1 bits=4 frames=12288 underruns=0 decode_error=0 audio_error=0 elapsed_ms=19 cpu_us=32173 endpoint_dry=0"
+    },
+    {
+      "test": "adpcm_swf-11025-2.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=15 rate=11025 channels=2 bits=4 frames=12288 underruns=0 decode_error=0 audio_error=0 elapsed_ms=19 cpu_us=29244 endpoint_dry=0"
+    },
+    {
+      "test": "adpcm_swf-22050-1.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=15 rate=22050 channels=1 bits=4 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=21 cpu_us=27035 endpoint_dry=0"
+    },
+    {
+      "test": "adpcm_swf-22050-2.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=15 rate=22050 channels=2 bits=4 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=22 cpu_us=31373 endpoint_dry=0"
+    },
+    {
+      "test": "adpcm_swf-44100-1.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=15 rate=44100 channels=1 bits=4 frames=45056 underruns=0 decode_error=0 audio_error=0 elapsed_ms=22 cpu_us=33660 endpoint_dry=0"
+    },
+    {
+      "test": "adpcm_swf-44100-2.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=15 rate=44100 channels=2 bits=4 frames=45056 underruns=0 decode_error=0 audio_error=0 elapsed_ms=32 cpu_us=46580 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_s16le-video.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "with video",
+      "stats": "codec=15 rate=22050 channels=2 bits=16 frames=44100 underruns=0 decode_error=0 audio_error=0 elapsed_ms=30 cpu_us=41864 endpoint_dry=0"
+    },
+    {
+      "test": "adpcm_swf-video.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "with video",
+      "stats": "codec=15 rate=22050 channels=2 bits=4 frames=45056 underruns=0 decode_error=0 audio_error=0 elapsed_ms=29 cpu_us=37509 endpoint_dry=0"
+    },
+    {
+      "test": "mp3.flv",
+      "result": "exact",
+      "comparator": "the raw mp3 stream",
+      "note": "",
+      "stats": "codec=3 rate=44100 channels=2 bits=0 frames=89856 underruns=0 decode_error=0 audio_error=0 elapsed_ms=138 cpu_us=149648 endpoint_dry=0"
+    },
+    {
+      "test": "mp3.flv against FFmpeg",
+      "result": "matched",
+      "snr_db": 128.6
+    },
+    {
+      "test": "mp3-vbr.flv",
+      "result": "exact",
+      "comparator": "the raw mp3 stream",
+      "note": "",
+      "stats": "codec=3 rate=44100 channels=2 bits=0 frames=89856 underruns=0 decode_error=0 audio_error=0 elapsed_ms=139 cpu_us=148616 endpoint_dry=0"
+    },
+    {
+      "test": "mp3-vbr.flv against FFmpeg",
+      "result": "matched",
+      "snr_db": 128.5
+    },
+    {
+      "test": "mp3-22050.flv",
+      "result": "exact",
+      "comparator": "the raw mp3 stream",
+      "note": "",
+      "stats": "codec=3 rate=22050 channels=2 bits=0 frames=45504 underruns=0 decode_error=0 audio_error=0 elapsed_ms=65 cpu_us=76642 endpoint_dry=0"
+    },
+    {
+      "test": "mp3-22050.flv against FFmpeg",
+      "result": "matched",
+      "snr_db": 129.4
+    },
+    {
+      "test": "aac.flv",
+      "result": "exact",
+      "comparator": "the raw adts stream",
+      "note": "",
+      "stats": "codec=10 rate=44100 channels=2 bits=0 frames=90112 underruns=0 decode_error=0 audio_error=0 elapsed_ms=79 cpu_us=87535 endpoint_dry=0"
+    },
+    {
+      "test": "aac.flv against FFmpeg",
+      "result": "matched",
+      "snr_db": 138.4
+    },
+    {
+      "test": "aac-mono.flv",
+      "result": "exact",
+      "comparator": "the raw adts stream",
+      "note": "",
+      "stats": "codec=10 rate=32000 channels=1 bits=0 frames=65536 underruns=0 decode_error=0 audio_error=0 elapsed_ms=46 cpu_us=55552 endpoint_dry=0"
+    },
+    {
+      "test": "aac-mono.flv against FFmpeg",
+      "result": "matched",
+      "snr_db": 138.3
+    },
+    {
+      "test": "swf-2bit-1.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "2-bit codes",
+      "stats": "codec=15 rate=11025 channels=1 bits=4 frames=37604 underruns=0 decode_error=0 audio_error=0 elapsed_ms=17 cpu_us=28339 endpoint_dry=0"
+    },
+    {
+      "test": "swf-2bit-2.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "2-bit codes",
+      "stats": "codec=15 rate=22050 channels=2 bits=4 frames=64173 underruns=0 decode_error=0 audio_error=0 elapsed_ms=30 cpu_us=40250 endpoint_dry=0"
+    },
+    {
+      "test": "swf-3bit-1.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "3-bit codes",
+      "stats": "codec=15 rate=22050 channels=1 bits=4 frames=67830 underruns=0 decode_error=0 audio_error=0 elapsed_ms=24 cpu_us=33113 endpoint_dry=0"
+    },
+    {
+      "test": "swf-3bit-2.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "3-bit codes",
+      "stats": "codec=15 rate=44100 channels=2 bits=4 frames=58915 underruns=0 decode_error=0 audio_error=0 elapsed_ms=30 cpu_us=38691 endpoint_dry=0"
+    },
+    {
+      "test": "swf-4bit-1.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "4-bit codes",
+      "stats": "codec=15 rate=44100 channels=1 bits=4 frames=51728 underruns=0 decode_error=0 audio_error=0 elapsed_ms=23 cpu_us=33780 endpoint_dry=0"
+    },
+    {
+      "test": "swf-4bit-2.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "4-bit codes",
+      "stats": "codec=15 rate=11025 channels=2 bits=4 frames=48462 underruns=0 decode_error=0 audio_error=0 elapsed_ms=28 cpu_us=38073 endpoint_dry=0"
+    },
+    {
+      "test": "swf-5bit-1.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "5-bit codes",
+      "stats": "codec=15 rate=11025 channels=1 bits=4 frames=54043 underruns=0 decode_error=0 audio_error=0 elapsed_ms=22 cpu_us=33009 endpoint_dry=0"
+    },
+    {
+      "test": "swf-5bit-2.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "5-bit codes",
+      "stats": "codec=15 rate=22050 channels=2 bits=4 frames=60706 underruns=0 decode_error=0 audio_error=0 elapsed_ms=37 cpu_us=48275 endpoint_dry=0"
+    },
+    {
+      "test": "mp3-8000.flv",
+      "result": "exact",
+      "comparator": "mp3-8000.mp3",
+      "note": "sound format 14, tags cutting frames",
+      "stats": "codec=3 rate=8000 channels=1 bits=0 frames=17280 underruns=0 decode_error=0 audio_error=0 elapsed_ms=26 cpu_us=37088 endpoint_dry=0"
+    },
+    {
+      "test": "skipped-tags.flv",
+      "result": "exact",
+      "comparator": "pcm_s16le-video.flv",
+      "note": "other sound formats, encryption, script data",
+      "stats": "codec=15 rate=22050 channels=2 bits=16 frames=44100 underruns=0 decode_error=0 audio_error=0 elapsed_ms=29 cpu_us=40688 endpoint_dry=0"
+    },
+    {
+      "test": "long-header.flv",
+      "result": "exact",
+      "comparator": "pcm_s16le-video.flv",
+      "note": "32-byte header",
+      "stats": "codec=15 rate=22050 channels=2 bits=16 frames=44100 underruns=0 decode_error=0 audio_error=0 elapsed_ms=29 cpu_us=39753 endpoint_dry=0"
+    },
+    {
+      "test": "aac-repeated-header.flv",
+      "result": "exact",
+      "comparator": "aac.adts",
+      "note": "a second sequence header",
+      "stats": "codec=10 rate=44100 channels=2 bits=0 frames=90112 underruns=0 decode_error=0 audio_error=0 elapsed_ms=82 cpu_us=92952 endpoint_dry=0"
+    },
+    {
+      "test": "pcm-truncated.flv",
+      "result": "exact",
+      "comparator": "the first 44282 frames of pcm_s16le-44100-2.flv",
+      "note": "cut inside the last tag",
+      "stats": "codec=15 rate=44100 channels=2 bits=16 frames=44100 underruns=0 decode_error=0 audio_error=0 elapsed_ms=27 cpu_us=37199 endpoint_dry=0"
+    },
+    {
+      "test": "aac-truncated.flv",
+      "result": "exact",
+      "comparator": "aac-shorter.adts",
+      "note": "the last frame cut",
+      "stats": "codec=10 rate=44100 channels=2 bits=0 frames=89088 underruns=0 decode_error=0 audio_error=0 elapsed_ms=79 cpu_us=89195 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_s16le-video.flv seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":14,\"discarded_frames\":0,\"maximum_discarded\":0,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "pcm_u8-11025-1.flv seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":14,\"discarded_frames\":0,\"maximum_discarded\":0,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "pcm_alaw-8000-2.flv seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":14,\"discarded_frames\":0,\"maximum_discarded\":0,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "adpcm_swf-44100-2.flv seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":10,\"discarded_frames\":25853,\"maximum_discarded\":4096,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "swf-5bit-2.flv seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":7,\"discarded_frames\":36699,\"maximum_discarded\":4608,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "swf-2bit-1.flv seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":32761,\"maximum_discarded\":4096,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "mp3.flv seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":30333,\"maximum_discarded\":3455,\"maximum_probes\":0,\"index_points\":3,\"maximum_skimmed_headers\":12,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "mp3-vbr.flv seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":30333,\"maximum_discarded\":3455,\"maximum_probes\":0,\"index_points\":3,\"maximum_skimmed_headers\":12,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "aac.flv seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":7421,\"maximum_discarded\":1024,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "mp3-8000.flv seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":14781,\"maximum_discarded\":1727,\"maximum_probes\":0,\"index_points\":1,\"maximum_skimmed_headers\":28,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "flv-nellymoser.flv",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "flv-libspeex.flv",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "flv-video-only.flv",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "flv-5512.flv",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "flv-encrypted.flv",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "flv-aac-no-header.flv",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":100}"
+    },
+    {
+      "test": "flv-short.flv",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":100}"
+    },
+    {
+      "test": "flv-small-offset.flv",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":100}"
+    },
+    {
+      "test": "flv-adpcm-oversized.flv",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "cancel-open swf-4bit-2.flv",
+      "result": "{\"result\":\"cancelled\"}"
+    },
+    {
+      "test": "FLV playback",
+      "result": "played",
+      "stats": "Playing. Space: pause / resume. N / P: next / previous file. Left / Right: -5 / +5 s. Down / Up: -60 / +60 s. [ / ]: previous / next chapter. R: repeat. Q or Ctrl+C: stop. codec=10 rate=44100 channels=2 bits=0 frames=90112 underruns=0 decode_error=0 audio_error=0 elapsed_ms=4085 cpu_us=102339 endpoint_dry=0"
+    }
+  ],
+  "rejections": 9,
+  "scope": "FLV audio (PCM, G.711, Flash ADPCM, MP3, AAC) from FFmpeg's muxer and written (Flash ADPCM at every code size, MP3 at 8 kHz, skipped tags, truncation) against FFmpeg or equivalent files; seeks; malformed and unsupported files; cancellation."
+}
