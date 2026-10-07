@@ -1,0 +1,93 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "spx-clean.ec3",
+      "result": "byte-exact sequential model PCM",
+      "failed_block": null,
+      "stats": "codec=20 rate=48000 channels=6 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=54 cpu_us=72894 endpoint_dry=0"
+    },
+    {
+      "test": "spx-bad-block-0.ec3",
+      "result": "byte-exact sequential model PCM",
+      "failed_block": 0,
+      "stats": "codec=20 rate=48000 channels=6 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=35 cpu_us=47581 endpoint_dry=0"
+    },
+    {
+      "test": "spx-bad-block-1.ec3",
+      "result": "byte-exact sequential model PCM",
+      "failed_block": 1,
+      "stats": "codec=20 rate=48000 channels=6 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=29 cpu_us=44414 endpoint_dry=0"
+    },
+    {
+      "test": "spx-bad-block-2.ec3",
+      "result": "byte-exact sequential model PCM",
+      "failed_block": 2,
+      "stats": "codec=20 rate=48000 channels=6 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=33 cpu_us=49942 endpoint_dry=0"
+    },
+    {
+      "test": "spx-bad-block-3.ec3",
+      "result": "byte-exact sequential model PCM",
+      "failed_block": 3,
+      "stats": "codec=20 rate=48000 channels=6 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=34 cpu_us=48734 endpoint_dry=0"
+    },
+    {
+      "test": "spx-bad-block-4.ec3",
+      "result": "byte-exact sequential model PCM",
+      "failed_block": 4,
+      "stats": "codec=20 rate=48000 channels=6 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=34 cpu_us=48653 endpoint_dry=0"
+    },
+    {
+      "test": "spx-bad-block-5.ec3",
+      "result": "byte-exact sequential model PCM",
+      "failed_block": 5,
+      "stats": "codec=20 rate=48000 channels=6 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=34 cpu_us=45300 endpoint_dry=0"
+    },
+    {
+      "test": "aht-spx-clean.ec3",
+      "result": "byte-exact sequential model PCM",
+      "failed_block": null,
+      "stats": "codec=20 rate=48000 channels=6 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=36 cpu_us=51077 endpoint_dry=0"
+    },
+    {
+      "test": "aht-spx-bad-block-0.ec3",
+      "result": "byte-exact sequential model PCM",
+      "failed_block": 0,
+      "stats": "codec=20 rate=48000 channels=6 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=31 cpu_us=43195 endpoint_dry=0"
+    },
+    {
+      "test": "aht-spx-bad-block-1.ec3",
+      "result": "byte-exact sequential model PCM",
+      "failed_block": 1,
+      "stats": "codec=20 rate=48000 channels=6 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=30 cpu_us=42939 endpoint_dry=0"
+    },
+    {
+      "test": "aht-spx-bad-block-2.ec3",
+      "result": "byte-exact sequential model PCM",
+      "failed_block": 2,
+      "stats": "codec=20 rate=48000 channels=6 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=33 cpu_us=48493 endpoint_dry=0"
+    },
+    {
+      "test": "aht-spx-bad-block-3.ec3",
+      "result": "byte-exact sequential model PCM",
+      "failed_block": 3,
+      "stats": "codec=20 rate=48000 channels=6 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=34 cpu_us=47658 endpoint_dry=0"
+    },
+    {
+      "test": "aht-spx-bad-block-4.ec3",
+      "result": "byte-exact sequential model PCM",
+      "failed_block": 4,
+      "stats": "codec=20 rate=48000 channels=6 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=40 cpu_us=56794 endpoint_dry=0"
+    },
+    {
+      "test": "aht-spx-bad-block-5.ec3",
+      "result": "byte-exact sequential model PCM",
+      "failed_block": 5,
+      "stats": "codec=20 rate=48000 channels=6 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=39 cpu_us=55890 endpoint_dry=0"
+    }
+  ],
+  "scope": "Sequential normative model; CRC-valid bad SPX ranges in each of six blocks, AHT/SPX dither and recovery",
+  "fixture_model_environment": {
+    "python": "3.14.7 (main, Aug  5 2026, 10:29:49) [Clang 21.0.0 (clang-2100.1.1.101)]"
+  }
+}
