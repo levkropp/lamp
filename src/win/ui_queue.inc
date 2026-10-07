@@ -76,6 +76,7 @@ ui_open_entry: .zero UE_SIZE        # producer prepares metadata before taking t
 ui_heard_copy: .zero UE_SIZE        # UI-owned snapshot, never borrowed from the producer
 ui_shown_title: .zero UI_TITLE_UNITS*2
 ui_window_text: .zero (UI_TITLE_UNITS + 16)*2
+ui_full_path: .zero UI_PATH_UNITS*2      # freeze local paths before a dialog can change CWD
 ui_join_text: .zero UI_PATH_UNITS*2
 ui_drop_text: .zero UI_PATH_UNITS*2
 ui_dialog_text: .zero 65536*2
@@ -459,6 +460,13 @@ LOCALFN ui_heard_position
     sub rsp, 40
     cmp dword ptr [rip + ui_restart], 0
     jne .Lui_position_start
+    jmp .Lui_actual_position
+ENDFN ui_heard_position
+
+# Actual heard position, even while a different launch is pending.
+LOCALFN ui_actual_position
+    sub rsp, 40
+.Lui_actual_position:
     call ui_heard
     test rax, rax
     jz .Lui_position_fallback
@@ -503,7 +511,7 @@ LOCALFN ui_heard_position
 .Lui_position_return:
     add rsp, 40
     ret
-ENDFN ui_heard_position
+ENDFN ui_actual_position
 
 # ECX=index, RDX=milliseconds: plays the list from there.
 LOCALFN ui_play_at
@@ -708,6 +716,7 @@ LOCALFN ui_request
     call engine_stop
     jmp .Lui_request_done
 .Lui_launch:
+    call ui_resume_commit
     call ui_device_apply                  # an output chosen meanwhile
     cmp dword ptr [rip + ui_list_new], 0
     je .Lui_launch_file
@@ -722,6 +731,7 @@ LOCALFN ui_request
     call playlist_expand                  # M3U and PLS playlists become their entries
     mov [rip + ui_paths], rax
     mov [rip + ui_count], edx
+    call ui_resume_lookup
     mov dword ptr [rip + ui_shown_index], -1
 .Lui_launch_file:
     mov eax, [rip + ui_start_index]
@@ -748,11 +758,9 @@ LOCALFN ui_request
     mov qword ptr [rip + ui_shown], -1
     mov qword ptr [rip + ui_heard_count], 0
     mov qword ptr [rip + ui_shown_start], 0
-    mov rax, [rip + ui_start_ms]          # shown until the file opens
-    mov ecx, [rip + queue_rate]
-    mul rcx
-    mov ecx, 1000
-    div rcx
+    mov rcx, [rip + ui_start_ms]          # shown until the file opens
+    mov edx, [rip + queue_rate]
+    call ui_time_frames
     mov [rip + engine_position], rax
     mov dword ptr [rip + ui_state], 1
     mov dword ptr [rip + ui_controls], 1
@@ -784,6 +792,23 @@ LOCALFN ui_request
     add rsp, 56
     ret
 ENDFN ui_request
+
+# RCX=milliseconds, EDX=rate -> RAX=frames, saturating at UINT64_MAX.
+# Resume records can contain an 18-digit time. Match console_seek's policy
+# before the worker clamps the seek to the file's actual frame count.
+LOCALFN ui_time_frames
+    mov rax, rcx
+    mov ecx, edx
+    mul rcx
+    mov ecx, 1000
+    cmp rdx, rcx
+    jae .Lui_time_frames_far
+    div rcx
+    ret
+.Lui_time_frames_far:
+    mov rax, -1
+    ret
+ENDFN ui_time_frames
 
 LOCALFN ui_audio_thread
     sub rsp, 40
@@ -858,6 +883,8 @@ ENDFN ui_list_begin
 
 # The pending list plays next, from its first file, unpaused.
 FN ui_list_end
+    sub rsp, 40
+    call ui_resume_capture
     mov dword ptr [rip + ui_track_pending], -1
     mov dword ptr [rip + ui_chapter_pending], 0
     mov dword ptr [rip + ui_list_new], 1
@@ -865,11 +892,16 @@ FN ui_list_end
     xor eax, eax
     mov [rip + ui_start_index], eax
     mov [rip + ui_start_ms], rax
+    add rsp, 40
     ret
 ENDFN ui_list_end
 
-# RCX=wide path: appended to the pending list (left out when it is full).
+# RCX=wide path: append its absolute local spelling to the pending list.
+# GetOpenFileName may change process CWD even with OFN_NOCHANGEDIR. Freeze
+# paths here so active queues, relative playlists and resume keys keep their
+# original directory throughout a later dialog. URL spellings stay intact.
 LOCALFN ui_list_file
+    sub rsp, 40
     mov r8, [rip + ui_list_pending]
     cmp qword ptr [r8 + LIST_PATHS], 0
     je .Lui_list_file_return
@@ -880,10 +912,35 @@ LOCALFN ui_list_file
     inc edx
     cmp edx, UI_PATH_UNITS
     jb .Lui_list_file_length
-    ret
+    jmp .Lui_list_file_return
 .Lui_list_file_measured:
     test edx, edx
     jz .Lui_list_file_return
+    xor r10d, r10d
+.Lui_list_file_scheme:
+    lea eax, [r10 + 2]
+    cmp eax, edx
+    jae .Lui_list_file_absolute
+    cmp word ptr [rcx + r10*2], ':'
+    jne .Lui_list_file_scheme_next
+    cmp dword ptr [rcx + r10*2 + 2], 0x002f002f
+    je .Lui_list_file_append
+.Lui_list_file_scheme_next:
+    inc r10d
+    jmp .Lui_list_file_scheme
+.Lui_list_file_absolute:
+    mov edx, UI_PATH_UNITS
+    lea r8, [rip + ui_full_path]
+    xor r9d, r9d
+    call GetFullPathNameW
+    test eax, eax
+    jz .Lui_list_file_return
+    cmp eax, UI_PATH_UNITS
+    jae .Lui_list_file_return
+    mov edx, eax
+    lea rcx, [rip + ui_full_path]
+.Lui_list_file_append:
+    mov r8, [rip + ui_list_pending]
     mov eax, [r8 + LIST_COUNT]
     cmp eax, UI_LIST_MAX
     jae .Lui_list_file_return
@@ -893,7 +950,7 @@ LOCALFN ui_list_file
     ja .Lui_list_file_return
     mov [r8 + LIST_USED], r10d
     mov r10, [r8 + LIST_TEXT]
-    lea r10, [r10 + r9*2]                 # its copy
+    lea r10, [r10 + r9*2]
     mov r11, [r8 + LIST_PATHS]
     mov [r11 + rax*8], r10
     inc eax
@@ -906,11 +963,12 @@ LOCALFN ui_list_file
     test eax, eax
     jnz .Lui_list_file_copy
 .Lui_list_file_return:
+    add rsp, 40
     ret
 ENDFN ui_list_file
 
 # RCX=wide path, EDX=folders it is in (0 for one given): a folder adds its
-# audio files, anything else is added as named.
+# audio files; other local paths are stored absolute.
 FN ui_list_path
     push rbx
     push rsi

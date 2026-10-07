@@ -328,11 +328,11 @@ def main():
         references = {name: decode(work, [path])[0] for name, path in files.items()}
         frames = {name: len(data) // FRAME for name, data in references.items()}
 
-        def play(label, arguments, actions, expect, loose=None):
+        def play(label, arguments, actions, expect, loose=None, ready_text=None):
             if WINE and loose is None:
                 return
             recorder = Recorder(env, work / f'{label}.capture.f32')
-            code, output = interactive(arguments, env, actions)
+            code, output = interactive(arguments, env, actions, ready_text=ready_text)
             capture = recorder.stop()
             if code:
                 raise Failure(f'{label}: exit {code}: {output[-300:]}')
@@ -412,7 +412,11 @@ def main():
                 return 'expected e to start again at least twice'
             return None
         play('--repeat', ['--repeat', files['e']], [(4.5, b'q')], repeated, restarted)
-        play('R key', [files['e']], [(1.0, b'r'), (3.5, b'q')], repeated, restarted)
+        # This 1.2s file can finish before Wine's fixed startup allowance.
+        # Wait for the actual prebuffer-ready greeting, then press R early
+        # enough to require two real restarted PCM spans under the same check.
+        play('R key', [files['e']], [(0.3 if WINE else 1.0, b'r'), (3.5, b'q')], repeated, restarted,
+             ready_text=b'Playing.' if WINE else None)
         play('R key twice', [files['e']], [(0.9, b'r'), (0.2, b'R')],
              lambda r: None if len(r) == 1 and whole(r[0], 'e') else 'expected e once')
 

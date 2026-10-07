@@ -6,6 +6,8 @@
 #   oN       send WM_COMMAND N, as the context menu's item N does
 #   r        open the context menu as the keyboard does
 #   eXX      inject native key XX through SendInput (including an active menu)
+#   lXX      press Alt + virtual-key XX through the native input queue
+#   xTEXT    type UTF-16 text into the foreground window (native input)
 #   z        print the client area's width and height
 #   mX,Y     click the client area at X, Y pixels above its bottom
 #   sN       sleep N milliseconds
@@ -48,6 +50,23 @@ driver_shift_tab:
     .quad 0,0
     .long 1,0
     .short 0x10,0
+    .long 2,0,0
+    .quad 0,0
+driver_alt_input:
+    .long 1,0
+    .short 0x12,0
+    .long 0,0,0
+    .quad 0,0
+    .long 1,0
+    .short 0,0
+    .long 0,0,0
+    .quad 0,0
+    .long 1,0
+    .short 0,0
+    .long 2,0,0
+    .quad 0,0
+    .long 1,0
+    .short 0x12,0
     .long 2,0,0
     .quad 0,0
 .bss
@@ -103,6 +122,10 @@ FN driver_start
     je .Ldriver_context
     cmp eax, 'e'
     je .Ldriver_native_key
+    cmp eax, 'l'
+    je .Ldriver_alt_key
+    cmp eax, 'x'
+    je .Ldriver_text
     cmp eax, 'z'
     je .Ldriver_size
     cmp eax, 'm'
@@ -352,15 +375,58 @@ FN driver_start
     lea rdx, [rip + driver_menu_input]
     mov dword ptr [rdx], 1
     mov word ptr [rdx + 8], ax
+    mov word ptr [rdx + 10], 0
+    mov dword ptr [rdx + 12], 0
+    mov dword ptr [rdx + 16], 0
     mov dword ptr [rdx + 40], 1
     mov word ptr [rdx + 48], ax
-    mov dword ptr [rdx + 56], 2         # KEYEVENTF_KEYUP
+    mov word ptr [rdx + 50], 0
+    mov dword ptr [rdx + 52], 2         # KEYEVENTF_KEYUP
+    mov dword ptr [rdx + 56], 0
     mov ecx, 2
     mov r8d, 40
     call SendInput
     cmp eax, 2
     jne .Ldriver_bad
     jmp .Ldriver_command
+.Ldriver_alt_key:
+    mov rcx, rsi
+    mov edx, 16
+    call driver_number
+    lea rdx, [rip + driver_alt_input]
+    mov word ptr [rdx + 48], ax
+    mov word ptr [rdx + 88], ax
+    mov ecx, 4
+    mov r8d, 40
+    call SendInput
+    cmp eax, 4
+    jne .Ldriver_bad
+    jmp .Ldriver_command
+# KEYEVENTF_UNICODE uses wVk=0 and the UTF-16 unit in wScan. This only
+# drives test dialogs; no text-injection code is linked into the player.
+# https://learn.microsoft.com/en-us/windows/win32/api/winuser/ns-winuser-keybdinput
+.Ldriver_text:
+    movzx eax, word ptr [rsi]
+    test eax, eax
+    jz .Ldriver_command
+    add rsi, 2
+    lea rdx, [rip + driver_menu_input]
+    mov dword ptr [rdx], 1
+    mov word ptr [rdx + 8], 0
+    mov word ptr [rdx + 10], ax
+    mov dword ptr [rdx + 12], 4         # KEYEVENTF_UNICODE
+    mov dword ptr [rdx + 16], 0
+    mov dword ptr [rdx + 40], 1
+    mov word ptr [rdx + 48], 0
+    mov word ptr [rdx + 50], ax
+    mov dword ptr [rdx + 52], 6         # UNICODE | KEYUP
+    mov dword ptr [rdx + 56], 0
+    mov ecx, 2
+    mov r8d, 40
+    call SendInput
+    cmp eax, 2
+    jne .Ldriver_bad
+    jmp .Ldriver_text
 .Ldriver_size:
     mov r13d, edi                         # the next argument's index
     mov rcx, [rip + driver_hwnd]

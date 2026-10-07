@@ -90,7 +90,7 @@ def merge(found):
 def main():
     scenarios = [list_checks, list_playback, keys, folder_playback, killed_stream, output_menu, dpi,
                  modes, accessibility, eac3_playback, chapter_navigation, dense_queue, track_switching, track_queue,
-                 asf_metadata, asf_chapter_navigation, asf_spread, asf_extended]
+                 asf_metadata, asf_chapter_navigation, asf_spread, asf_extended, resume]
     only = sys.argv[sys.argv.index('--only') + 1].split(',') if '--only' in sys.argv else None
     if only is not None:
         unknown = set(only) - {scenario.__name__ for scenario in scenarios}
@@ -120,7 +120,7 @@ def main():
         display.stop()
     source_hashes = {name: hashlib.sha256((ROOT / name).read_bytes()).hexdigest() for name in
         ('src/queue.s', 'src/win/player.s', 'src/win/ui.s', 'src/win/ui_queue.inc',
-         'src/win/ui_menu.inc', 'src/win/kernel32.def', 'tests/verify-player.py')}
+         'src/win/ui_menu.inc', 'src/win/ui_resume.inc', 'src/win/resume_state.inc', 'src/resume.s', 'src/win/kernel32.def', 'tests/verify-player.py')}
     source_hashes.update({name: hashlib.sha256((ROOT / name).read_bytes()).hexdigest() for name in
         ('src/decoder.s', 'src/mp4.s', 'src/mkv.s', 'src/avi.s', 'src/mpegts.s', 'src/ogg_chain.s',
          'src/win/ui_tracks.inc', 'src/win/ui_draw.inc', 'tests/ui-driver.s')})
@@ -130,14 +130,16 @@ def main():
          'src/asf_spread.inc', 'tests/verify-asf-spread.py',
          'src/asf_extended.inc', 'tests/verify-asf-extended.py',
          'tests/asf-metadata-player-oracle.c', 'tests/verify-asf-metadata.py')})
+    binary_hashes = {name: hashlib.sha256((BIN / name).read_bytes()).hexdigest()
+                     for name in ('lamp.exe', 'lamp-cli.exe', 'ui-driver.exe')}
     if only is not None:
         write_report('player-selected', {'result': 'passed', 'checks': checks,
-            'source_hashes': source_hashes,
+            'source_hashes': source_hashes, 'binary_hashes': binary_hashes,
             'selected_scenarios': only, 'scope': 'Selected Windows player scenarios under Wine on Xvfb'})
         print(f'Passed {len(checks)} player checks (only {", ".join(only)}).')
         return
     write_report('player', {'result': 'passed', 'checks': checks,
-                            'source_hashes': source_hashes,
+                            'source_hashes': source_hashes, 'binary_hashes': binary_hashes,
                             'scope': 'lamp.exe list building (folders, command line, drops, the open dialog), '
                                      'gapless list playback with the title following the file heard, N/P, the '
                                      'media next command, the next button, seeking, repeat, playlists, '
@@ -189,6 +191,15 @@ def list_checks(work, env, wine, checks):
     checks.append({'test': 'command line and drop', 'result': 'files as named, folders expanded', 'list': got})
     print('the command line and a drop: files as named, folders expanded', flush=True)
 
+    relative = os.path.relpath(album / 'Disc 2' / 'a.wv').replace('/', '\\')
+    dotted = os.path.relpath(album).replace('/', '\\') + '\\Disc 2\\..\\1 one.flac'
+    urls = ['https://example.invalid/list.m3u8', 'file:///Z:/music/one.flac']
+    got = ui_list(wine, 'paths', relative, dotted, *urls)
+    want = [root + '\\Disc 2\\a.wv', root + '\\1 one.flac', *urls]
+    if got != want:
+        raise Failure(f'local paths were not frozen to absolute names: {got}')
+    checks.append({'test': 'absolute queue paths', 'result': 'relative and dotted local names frozen; URL spellings retained', 'list': got})
+
     got = ui_list(wine, 'dialog', 'Z:\\music', 'a.flac', 'b c.mp3', 'voice.GSM')
     got += ui_list(wine, 'dialog', 'Z:\\', 'top.flac')
     got += ui_list(wine, 'dialog', 'Z:\\music\\one.flac')
@@ -222,8 +233,26 @@ class Session:
                                           '--channels=2', '--raw', '--latency-msec=10'],
                                          stdout=open(self.capture, 'wb'), env=env)
         time.sleep(0.5)
-        self.player = subprocess.Popen(['wine', BIN / 'lamp.exe', *arguments], stdout=subprocess.DEVNULL,
-                                       stderr=subprocess.DEVNULL, env=wine)
+        command = ['wine', BIN / 'lamp.exe', *arguments]
+        if wine.get('LAMP_TEST_LOCALAPPDATA'):
+            # Wine reconstructs standard Windows environment variables at entry.
+            # Set the directory inside cmd before starting the shipping binary.
+            quoted = [windows_path(BIN / 'lamp.exe'), *arguments]
+            if any('"' in str(value) for value in quoted + [wine['LAMP_TEST_LOCALAPPDATA']]):
+                raise Failure('Unexpected quote in isolated test path')
+            launcher = work / (label + '-launch.cmd')
+            launcher.write_text('@echo off\nset "LOCALAPPDATA=%LAMP_TEST_LOCALAPPDATA%"\n'
+                                '"%LAMP_TEST_PLAYER%" %LAMP_TEST_ARGUMENTS%\n', encoding='ascii')
+            wine = {**wine, 'LAMP_TEST_PLAYER': quoted[0],
+                    'LAMP_TEST_ARGUMENTS': ' '.join('"' + str(value) + '"' for value in arguments)}
+            command = ['wine', 'cmd', '/c', windows_path(launcher)]
+        launch_output = subprocess.DEVNULL
+        if wine.get('LAMP_TEST_LOCALAPPDATA'):
+            launch_output = open(work / (label + '-launch.log'), 'wb')
+        self.player = subprocess.Popen(command, stdout=launch_output,
+                                       stderr=launch_output, env=wine)
+        if launch_output != subprocess.DEVNULL:
+            launch_output.close()
 
     def drive(self, *commands, timeout=180):
         """Runs ui-driver.exe with COMMANDS once the window is there -> the titles printed."""
@@ -245,6 +274,163 @@ class Session:
         self.recorder.send_signal(signal.SIGINT)
         self.recorder.wait(timeout=10)
         return self.capture.read_bytes()
+
+
+def resume(work, env, wine, checks):
+    """Opt-in resume: actual windows, persistent files, paused snapshots and PCM."""
+    state_home = work / 'resume-local'
+    shutil.rmtree(state_home, ignore_errors=True)
+    state_home.mkdir()
+    wine = {**wine, 'LAMP_TEST_LOCALAPPDATA': windows_path(state_home)}
+    folder = state_home / 'LAMP'
+    folder.mkdir()
+    state, preference = folder / 'resume.txt', folder / 'player-resume.txt'
+    paths = [tagged(work, 'resume/Ünïcode-first.flac', 'Resume first', 9, 81),
+             tagged(work, 'resume/第二.flac', 'Resume second', 9, 82)]
+    references = {name: _nav.linux_decode(work, path) for name, path in
+                  zip(('first', 'second'), paths)}
+    arguments = list(map(windows_path, paths))
+    relative_arguments = [os.path.relpath(path).replace('/', '\\') for path in paths]
+    other = '37\tZ:\\other.flac\tZ:\\other.flac\n'
+    saved = '5000\t' + arguments[0] + '\t' + arguments[1] + '\n'
+
+    def rows():
+        return state.read_text(encoding='utf-8').splitlines() if state.exists() else []
+
+    def playing(label, *args):
+        return Session(work, env, wine, 'resume-' + label, *(args or arguments))
+
+    def heard(label, pcm, name, ms=0):
+        segments = merge(_nav.runs(pcm, references))
+        if not segments or segments[0][0] != name or not ms * 48 <= segments[0][1] < (ms + 750) * 48:
+            raise Failure(label + ': resumed wrong file/time: ' + str(segments))
+        return segments
+
+    state.write_text(saved + other, encoding='utf-8')
+    session = playing('default-off')
+    session.drive('s2500', 'c')
+    first = heard('default off', session.finish(), 'first')
+    if state.read_text(encoding='utf-8') != saved + other or preference.exists():
+        raise Failure('Default-off GUI changed persistent state')
+    checks.append(dict(test='GUI resume defaults off', result='saved position ignored and state untouched', segments=first))
+
+    # Real popup P mnemonic selects Remember playback position; chapter items
+    # are later in the menu and have no explicit P mnemonic.
+    session = playing('enable')
+    session.drive('s2000', 'r', 'e50', 'e0d', 's200', 'k4e', 's1800',
+                  'k20', 's700', 'k24', 's1100', 'k27', 's1100', 'n111', 't', 'c')
+    session.finish()
+    expected = ['5000\t' + arguments[0] + '\t' + arguments[1], other.strip()]
+    if preference.read_bytes() != b'1\n' or rows() != expected:
+        raise Failure('Remember/pause/close did not save paired second-file 5s: ' + str(rows()))
+    checks.append(dict(test='GUI remembers opt-in and paused heard position', result='real menu preference and exact second-file 5000ms persisted', rows=rows()))
+
+    playlist = work / 'resume' / 'list.m3u8'
+    playlist.write_text('#EXTM3U\n' + paths[0].name + '\n' + paths[1].name + '\n', encoding='utf-8')
+    session = playing('reopen-playlist', windows_path(playlist))
+    titles = session.drive('s2400', 't', 'c')
+    segments = heard('expanded playlist', session.finish(), 'second', 5000)
+    if titles != [title('Resume second')] or not rows()[0].endswith('\t' + arguments[0] + '\t' + arguments[1]):
+        raise Failure('Expanded playlist did not retain its first-file key: ' + str(rows()))
+    checks.append(dict(test='GUI reopens expanded Unicode playlist', result='same first-file key; second-file resumed PCM', segments=segments, titles=titles))
+
+    replacement = tagged(work, 'resume/another/替換.flac', 'Resume replacement', 9, 83)
+    references['replacement'] = _nav.linux_decode(work, replacement)
+    state.write_text(saved + other, encoding='utf-8')
+    session = playing('replace-queue', *relative_arguments)
+    session.drive('s2200', 'k20', 's500', 'k24', 's1100', 'k27', 's1100')
+    state.write_text(other, encoding='utf-8')  # prove replacement writes a new old-queue record
+    session.drive('r', 's300', 'e1b', 's300', 'o100', 's2500', 'l4e', 's250', 'x' + windows_path(replacement), 'e0d', 's2600')
+    titles = session.drive('t')
+    if titles != [title('Resume replacement')] or rows() != expected:
+        session.drive('e1b', 'c'); session.finish()
+        raise Failure('Open-dialog replacement saved a different old queue/time: ' + str((titles, rows())))
+    session.drive('k20', 's400', 'k24', 's1100', 'k27', 's1100', 'c')
+    capture = session.finish()
+    replacement_row = '5000\t' + windows_path(replacement) + '\t' + windows_path(replacement)
+    if rows() != [replacement_row, *expected] or not any(name == 'replacement' for name, _, _ in _nav.runs(capture, references)):
+        raise Failure('Replacement queue lost either saved position: ' + str(rows()))
+    checks.append(dict(test='GUI saves replaced queue through real Open dialog', result='relative input paths remain absolute across a dialog in another folder; old paired second-file 5000ms saved before replacement; closing new list keeps both keys', rows=rows(), titles=titles))
+
+    # Unlike startup (rate initially zero), replacing a running list converts
+    # the saved time using its already-known rate on the UI thread. This value
+    # exceeds the 64-bit frame range; the loading display must saturate, then
+    # the worker clamps to EOF and the completed list forgets its record.
+    state.write_text(saved + other, encoding='utf-8')
+    session = playing('huge-time-replacement')
+    session.drive('s2200', 'k20', 's400', 'k24', 's1100')
+    huge = '999999999999999999\t' + windows_path(replacement) + '\t' + windows_path(replacement) + '\n'
+    state.write_text(huge + saved + other, encoding='utf-8')
+    sequence = session.drive('r', 's300', 'e1b', 's300', 'o100', 's2500', 'l4e', 's250',
+                             'x' + windows_path(replacement), 'e0d', 's2500', 't', 'n111')
+    old_row = '0\t' + arguments[0] + '\t' + arguments[1]
+    if sequence[0] != title('Resume replacement') or sequence[1] != 'Play' or rows() != [old_row, other.strip()]:
+        session.drive('e1b', 'c'); session.finish()
+        raise Failure('Extreme saved time failed to finish and forget only the replaced list: ' + str((sequence, rows())))
+    session.drive('k20', 's2200', 'c')
+    pcm = session.finish()
+    runs = merge(_nav.runs(pcm, references))
+    if not any(name == 'replacement' and start < 750 * 48 for name, start, _ in runs):
+        raise Failure('GUI did not remain usable after extreme saved-time replacement: ' + str(runs))
+    checks.append(dict(test='GUI extreme saved time after queue replacement', result='18-digit time saturates loading frames, worker finishes at EOF, own record forgotten and explicit replay remains usable', controls=sequence, segments=runs))
+
+    # Natural completion removes only this list's record; closing a finished
+    # window must not recreate it. Space replays explicitly from the start.
+    state.write_text(saved + other, encoding='utf-8')
+    session = playing('completion')
+    session.drive('s7000')
+    if rows() != [other.strip()]:
+        session.drive('c'); session.finish()
+        raise Failure('Natural GUI completion did not forget only its own key: ' + str(rows()))
+    session.drive('k20', 's2200', 'c')
+    pcm = session.finish()
+    runs = merge(_nav.runs(pcm, references))
+    if not runs or runs[0][0] != 'second' or not any(name == 'first' and start < 750 * 48 for name, start, _ in runs):
+        raise Failure('Space after completion did not replay from the first file: ' + str(runs))
+    checks.append(dict(test='GUI completion and explicit replay', result='completion deletes only own record; Space starts the first file', segments=runs))
+
+    # A saved filename absent from the newly expanded list is ignored. Disabling
+    # persists and leaves existing positions available to the console opt-in.
+    state.write_text('5000\t' + arguments[0] + '\tZ:\\missing.flac\n' + other, encoding='utf-8')
+    session = playing('missing-and-disable')
+    session.drive('s2400', 'o106', 'c')
+    segments = heard('missing file', session.finish(), 'first')
+    if preference.read_bytes() != b'0\n':
+        raise Failure('GUI disable preference was not persisted')
+    state.write_text(saved + other, encoding='utf-8')
+    session = playing('disabled-reopen')
+    session.drive('s2200', 'c')
+    segments2 = heard('disabled reopen', session.finish(), 'first')
+    if state.read_text(encoding='utf-8') != saved + other:
+        raise Failure('Disabled GUI changed position records')
+    checks.append(dict(test='GUI missing file and persistent disable', result='missing file starts first; disable survives reopen and preserves records', segments=segments, disabled_segments=segments2))
+
+    # Strict preference parser: all malformed/suffixed/oversized settings default
+    # off; an oversized position file is ignored and replaced by a bounded save.
+    for value in (b'1', b'1\nextra', b'garbage\n'):
+        preference.write_bytes(value)
+        session = playing('corrupt-' + value.hex())
+        session.drive('s2200', 'c')
+        heard('corrupt preference', session.finish(), 'first')
+        if state.read_text(encoding='utf-8') != saved + other:
+            raise Failure('Malformed preference enabled GUI resume')
+    preference.write_bytes(b'1\n')
+    with state.open('wb') as handle:
+        handle.write(saved.encode('utf-8'))
+        handle.truncate((16 << 20) + 1)
+    session = playing('oversized-state')
+    session.drive('s2200', 'k20', 's400', 'k24', 's1000', 'c')
+    pcm = session.finish()
+    heard('oversized state', pcm, 'first')
+    if rows() != ['0\t' + arguments[0] + '\t' + arguments[0]] or state.stat().st_size > 32768:
+        raise Failure('Oversized state was not replaced by the exact paused first-file record: ' + str(rows()[:3]))
+    checks.append(dict(test='GUI malformed settings and oversized state', result='three malformed preferences default off; 16MiB+1 state ignored and replaced by bounded paired record'))
+    checks[-1].update(fixture_sha256={path.name: hashlib.sha256(path.read_bytes()).hexdigest()
+                                     for path in [*paths, replacement, playlist]},
+                      reference_pcm_sha256={name: hashlib.sha256(pcm).hexdigest()
+                                            for name, pcm in references.items()},
+                      limit='Wine 8 on Xvfb and a private PulseAudio sink; native Windows remains unverified')
+    print('GUI resume: default off, real menu opt-in, paused Unicode queue, playlist reopen, completion/replay, missing/disabled/corrupt state and size cap pass', flush=True)
 
 
 def expect_segments(label, segments, expected):

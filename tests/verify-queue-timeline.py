@@ -123,7 +123,8 @@ def main():
     source_names = ['src/queue.s', 'src/decoder.s', 'tests/queue-timeline-probe.s',
                     'tests/queue-timeline-oracle.c', 'tests/verify-queue-timeline.py']
     if wine:
-        source_names += ['src/win/ui.s', 'src/win/ui_queue.inc', 'src/win/ui_tracks.inc',
+        source_names += ['src/win/ui.s', 'src/win/ui_queue.inc', 'src/win/ui_resume.inc',
+                         'src/win/player.s', 'src/win/resume_state.inc', 'src/win/ui_tracks.inc',
                          'src/win/ui_menu.inc', 'src/win/kernel32.def',
                          'tests/ui-queue-snapshot-probe.s', 'tests/ui-queue-snapshot-oracle.c']
     write_report('queue-timeline-wine' if wine else 'queue-timeline', dict(result='passed', checks=checks,
