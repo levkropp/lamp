@@ -1,0 +1,1318 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "basic.asf",
+      "result": "exact",
+      "chapters": 4,
+      "note": "",
+      "runtime_ffprobe": null,
+      "fixture_ffprobe": [
+        [
+          0,
+          "Opening"
+        ],
+        [
+          1250,
+          "Part \u6f22\u5b57 \ud83c\udfb5"
+        ],
+        [
+          3250,
+          ""
+        ],
+        [
+          6500,
+          "Caf\u00e9"
+        ]
+      ],
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 1718,
+        "unchanged_audio_state": true,
+        "clear": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "declared_header_objects": null,
+      "actual_header_objects": null,
+      "audio_rejected": false,
+      "exact_pcm": true
+    },
+    {
+      "test": "Unicode markers \u00dc.asf",
+      "result": "exact",
+      "chapters": 4,
+      "note": "",
+      "runtime_ffprobe": null,
+      "fixture_ffprobe": [
+        [
+          0,
+          "Opening"
+        ],
+        [
+          1250,
+          "Part \u6f22\u5b57 \ud83c\udfb5"
+        ],
+        [
+          3250,
+          ""
+        ],
+        [
+          6500,
+          "Caf\u00e9"
+        ]
+      ],
+      "protected_input": null,
+      "declared_header_objects": null,
+      "actual_header_objects": null,
+      "audio_rejected": false,
+      "exact_pcm": true
+    },
+    {
+      "test": "unordered-duplicate.asf",
+      "result": "exact",
+      "chapters": 5,
+      "note": "",
+      "runtime_ffprobe": null,
+      "fixture_ffprobe": [
+        [
+          6500,
+          "Later"
+        ],
+        [
+          0,
+          "Start"
+        ],
+        [
+          3250,
+          "Middle"
+        ],
+        [
+          1250,
+          "Early"
+        ],
+        [
+          3250,
+          "Same"
+        ]
+      ],
+      "protected_input": null,
+      "declared_header_objects": null,
+      "actual_header_objects": null,
+      "audio_rejected": false,
+      "exact_pcm": true
+    },
+    {
+      "test": "fractional-ticks.asf",
+      "result": "exact",
+      "chapters": 5,
+      "note": "",
+      "runtime_ffprobe": null,
+      "fixture_ffprobe": [
+        [
+          0,
+          "0"
+        ],
+        [
+          0,
+          "1"
+        ],
+        [
+          0,
+          "9999"
+        ],
+        [
+          1,
+          "10000"
+        ],
+        [
+          12345,
+          "123456789"
+        ]
+      ],
+      "protected_input": null,
+      "declared_header_objects": null,
+      "actual_header_objects": null,
+      "audio_rejected": false,
+      "exact_pcm": true
+    },
+    {
+      "test": "preroll-before.asf",
+      "result": "exact",
+      "chapters": 4,
+      "note": "",
+      "runtime_ffprobe": null,
+      "fixture_ffprobe": [
+        [
+          0,
+          "Opening"
+        ],
+        [
+          1250,
+          "Part \u6f22\u5b57 \ud83c\udfb5"
+        ],
+        [
+          3250,
+          ""
+        ],
+        [
+          6500,
+          "Caf\u00e9"
+        ]
+      ],
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 1718,
+        "unchanged_audio_state": true,
+        "clear": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "declared_header_objects": null,
+      "actual_header_objects": null,
+      "audio_rejected": false,
+      "exact_pcm": true
+    },
+    {
+      "test": "preroll-after.asf",
+      "result": "exact",
+      "chapters": 4,
+      "note": "Marker precedes File Properties; timing is header-order independent",
+      "runtime_ffprobe": null,
+      "fixture_ffprobe": null,
+      "protected_input": null,
+      "declared_header_objects": null,
+      "actual_header_objects": null,
+      "audio_rejected": false,
+      "exact_pcm": true
+    },
+    {
+      "test": "negative-times.asf",
+      "result": "exact",
+      "chapters": 2,
+      "note": "Before-preroll marker cannot be represented on the nonnegative playback timeline",
+      "runtime_ffprobe": null,
+      "fixture_ffprobe": null,
+      "protected_input": null,
+      "declared_header_objects": null,
+      "actual_header_objects": null,
+      "audio_rejected": false,
+      "exact_pcm": true
+    },
+    {
+      "test": "time-overflow.asf",
+      "result": "exact",
+      "chapters": 2,
+      "note": "",
+      "runtime_ffprobe": null,
+      "fixture_ffprobe": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 1732,
+        "unchanged_audio_state": true,
+        "clear": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "declared_header_objects": null,
+      "actual_header_objects": null,
+      "audio_rejected": false,
+      "exact_pcm": true
+    },
+    {
+      "test": "preroll-overflow.asf",
+      "result": "exact",
+      "chapters": 0,
+      "note": "",
+      "runtime_ffprobe": null,
+      "fixture_ffprobe": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 1718,
+        "unchanged_audio_state": true,
+        "clear": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "declared_header_objects": null,
+      "actual_header_objects": null,
+      "audio_rejected": false,
+      "exact_pcm": true
+    },
+    {
+      "test": "zero-markers.asf",
+      "result": "exact",
+      "chapters": 0,
+      "note": "",
+      "runtime_ffprobe": null,
+      "fixture_ffprobe": [],
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 1548,
+        "unchanged_audio_state": true,
+        "clear": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "declared_header_objects": null,
+      "actual_header_objects": null,
+      "audio_rejected": false,
+      "exact_pcm": true
+    },
+    {
+      "test": "unterminated.asf",
+      "result": "exact",
+      "chapters": 2,
+      "note": "",
+      "runtime_ffprobe": null,
+      "fixture_ffprobe": [
+        [
+          0,
+          "No terminator"
+        ],
+        [
+          0,
+          ""
+        ]
+      ],
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 1634,
+        "unchanged_audio_state": true,
+        "clear": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "declared_header_objects": null,
+      "actual_header_objects": null,
+      "audio_rejected": false,
+      "exact_pcm": true
+    },
+    {
+      "test": "embedded-nul.asf",
+      "result": "exact",
+      "chapters": 2,
+      "note": "",
+      "runtime_ffprobe": null,
+      "fixture_ffprobe": null,
+      "protected_input": null,
+      "declared_header_objects": null,
+      "actual_header_objects": null,
+      "audio_rejected": false,
+      "exact_pcm": true
+    },
+    {
+      "test": "high-surrogate.asf",
+      "result": "exact",
+      "chapters": 2,
+      "note": "",
+      "runtime_ffprobe": null,
+      "fixture_ffprobe": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 1624,
+        "unchanged_audio_state": true,
+        "clear": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "declared_header_objects": null,
+      "actual_header_objects": null,
+      "audio_rejected": false,
+      "exact_pcm": true
+    },
+    {
+      "test": "low-surrogate.asf",
+      "result": "exact",
+      "chapters": 2,
+      "note": "",
+      "runtime_ffprobe": null,
+      "fixture_ffprobe": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 1624,
+        "unchanged_audio_state": true,
+        "clear": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "declared_header_objects": null,
+      "actual_header_objects": null,
+      "audio_rejected": false,
+      "exact_pcm": true
+    },
+    {
+      "test": "surrogate-at-end.asf",
+      "result": "exact",
+      "chapters": 2,
+      "note": "",
+      "runtime_ffprobe": null,
+      "fixture_ffprobe": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 1622,
+        "unchanged_audio_state": true,
+        "clear": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "declared_header_objects": null,
+      "actual_header_objects": null,
+      "audio_rejected": false,
+      "exact_pcm": true
+    },
+    {
+      "test": "utf8-title-boundary.asf",
+      "result": "exact",
+      "chapters": 2,
+      "note": "",
+      "runtime_ffprobe": null,
+      "fixture_ffprobe": null,
+      "protected_input": null,
+      "declared_header_objects": null,
+      "actual_header_objects": null,
+      "audio_rejected": false,
+      "exact_pcm": true
+    },
+    {
+      "test": "long-title-cursor.asf",
+      "result": "exact",
+      "chapters": 2,
+      "note": "",
+      "runtime_ffprobe": null,
+      "fixture_ffprobe": null,
+      "protected_input": null,
+      "declared_header_objects": null,
+      "actual_header_objects": null,
+      "audio_rejected": false,
+      "exact_pcm": true
+    },
+    {
+      "test": "maximum-description.asf",
+      "result": "exact",
+      "chapters": 2,
+      "note": "",
+      "runtime_ffprobe": null,
+      "fixture_ffprobe": null,
+      "protected_input": null,
+      "declared_header_objects": null,
+      "actual_header_objects": null,
+      "audio_rejected": false,
+      "exact_pcm": true
+    },
+    {
+      "test": "maximum-object-name.asf",
+      "result": "exact",
+      "chapters": 4,
+      "note": "",
+      "runtime_ffprobe": null,
+      "fixture_ffprobe": null,
+      "protected_input": null,
+      "declared_header_objects": null,
+      "actual_header_objects": null,
+      "audio_rejected": false,
+      "exact_pcm": true
+    },
+    {
+      "test": "chapter-title-capacity.asf",
+      "result": "exact",
+      "chapters": 1024,
+      "note": "",
+      "runtime_ffprobe": null,
+      "fixture_ffprobe": null,
+      "protected_input": null,
+      "declared_header_objects": null,
+      "actual_header_objects": null,
+      "audio_rejected": false,
+      "exact_pcm": true
+    },
+    {
+      "test": "chapter-capacity.asf",
+      "result": "exact",
+      "chapters": 1024,
+      "note": "",
+      "runtime_ffprobe": null,
+      "fixture_ffprobe": null,
+      "protected_input": null,
+      "declared_header_objects": null,
+      "actual_header_objects": null,
+      "audio_rejected": false,
+      "exact_pcm": true
+    },
+    {
+      "test": "negative-before-capacity.asf",
+      "result": "exact",
+      "chapters": 1,
+      "note": "",
+      "runtime_ffprobe": null,
+      "fixture_ffprobe": null,
+      "protected_input": null,
+      "declared_header_objects": null,
+      "actual_header_objects": null,
+      "audio_rejected": false,
+      "exact_pcm": true
+    },
+    {
+      "test": "record-budget.asf",
+      "result": "exact",
+      "chapters": 1024,
+      "note": "",
+      "runtime_ffprobe": null,
+      "fixture_ffprobe": null,
+      "protected_input": null,
+      "declared_header_objects": null,
+      "actual_header_objects": null,
+      "audio_rejected": false,
+      "exact_pcm": true
+    },
+    {
+      "test": "record-over-budget.asf",
+      "result": "exact",
+      "chapters": 0,
+      "note": "",
+      "runtime_ffprobe": null,
+      "fixture_ffprobe": null,
+      "protected_input": null,
+      "declared_header_objects": null,
+      "actual_header_objects": null,
+      "audio_rejected": false,
+      "exact_pcm": true
+    },
+    {
+      "test": "independent-record-budget.asf",
+      "result": "exact",
+      "chapters": 2,
+      "note": "",
+      "runtime_ffprobe": null,
+      "fixture_ffprobe": null,
+      "protected_input": null,
+      "declared_header_objects": null,
+      "actual_header_objects": null,
+      "audio_rejected": false,
+      "exact_pcm": true
+    },
+    {
+      "test": "first-marker-object.asf",
+      "result": "exact",
+      "chapters": 1,
+      "note": "The specification allows one Marker Object; first valid object wins",
+      "runtime_ffprobe": null,
+      "fixture_ffprobe": null,
+      "protected_input": null,
+      "declared_header_objects": null,
+      "actual_header_objects": null,
+      "audio_rejected": false,
+      "exact_pcm": true
+    },
+    {
+      "test": "invalid-then-valid.asf",
+      "result": "exact",
+      "chapters": 1,
+      "note": "",
+      "runtime_ffprobe": null,
+      "fixture_ffprobe": null,
+      "protected_input": null,
+      "declared_header_objects": null,
+      "actual_header_objects": null,
+      "audio_rejected": false,
+      "exact_pcm": true
+    },
+    {
+      "test": "empty-then-valid.asf",
+      "result": "exact",
+      "chapters": 0,
+      "note": "",
+      "runtime_ffprobe": null,
+      "fixture_ffprobe": null,
+      "protected_input": null,
+      "declared_header_objects": null,
+      "actual_header_objects": null,
+      "audio_rejected": false,
+      "exact_pcm": true
+    },
+    {
+      "test": "nested-depth-four.asf",
+      "result": "exact",
+      "chapters": 4,
+      "note": "",
+      "runtime_ffprobe": null,
+      "fixture_ffprobe": null,
+      "protected_input": null,
+      "declared_header_objects": null,
+      "actual_header_objects": null,
+      "audio_rejected": false,
+      "exact_pcm": true
+    },
+    {
+      "test": "nested-depth-five.asf",
+      "result": "exact",
+      "chapters": 0,
+      "note": "Standalone optional reader skips depth five; the audio opener rejects this header nesting",
+      "runtime_ffprobe": null,
+      "fixture_ffprobe": null,
+      "protected_input": null,
+      "declared_header_objects": null,
+      "actual_header_objects": null,
+      "audio_rejected": false,
+      "exact_pcm": false
+    },
+    {
+      "test": "wrong-full-guid.asf",
+      "result": "exact",
+      "chapters": 0,
+      "note": "",
+      "runtime_ffprobe": null,
+      "fixture_ffprobe": [],
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 1718,
+        "unchanged_audio_state": true,
+        "clear": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "declared_header_objects": null,
+      "actual_header_objects": null,
+      "audio_rejected": false,
+      "exact_pcm": true
+    },
+    {
+      "test": "bad-entry-length-0.asf",
+      "result": "exact",
+      "chapters": 0,
+      "note": "A malformed trailing entry must not publish earlier chapters",
+      "runtime_ffprobe": null,
+      "fixture_ffprobe": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 1624,
+        "unchanged_audio_state": true,
+        "clear": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "declared_header_objects": null,
+      "actual_header_objects": null,
+      "audio_rejected": false,
+      "exact_pcm": true
+    },
+    {
+      "test": "bad-entry-length-11.asf",
+      "result": "exact",
+      "chapters": 0,
+      "note": "A malformed trailing entry must not publish earlier chapters",
+      "runtime_ffprobe": null,
+      "fixture_ffprobe": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 1624,
+        "unchanged_audio_state": true,
+        "clear": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "declared_header_objects": null,
+      "actual_header_objects": null,
+      "audio_rejected": false,
+      "exact_pcm": true
+    },
+    {
+      "test": "bad-entry-length-13.asf",
+      "result": "exact",
+      "chapters": 0,
+      "note": "A malformed trailing entry must not publish earlier chapters",
+      "runtime_ffprobe": null,
+      "fixture_ffprobe": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 1624,
+        "unchanged_audio_state": true,
+        "clear": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "declared_header_objects": null,
+      "actual_header_objects": null,
+      "audio_rejected": false,
+      "exact_pcm": true
+    },
+    {
+      "test": "bad-entry-length-65535.asf",
+      "result": "exact",
+      "chapters": 0,
+      "note": "A malformed trailing entry must not publish earlier chapters",
+      "runtime_ffprobe": null,
+      "fixture_ffprobe": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 1624,
+        "unchanged_audio_state": true,
+        "clear": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "declared_header_objects": null,
+      "actual_header_objects": null,
+      "audio_rejected": false,
+      "exact_pcm": true
+    },
+    {
+      "test": "bad-units.asf",
+      "result": "exact",
+      "chapters": 0,
+      "note": "",
+      "runtime_ffprobe": null,
+      "fixture_ffprobe": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 1624,
+        "unchanged_audio_state": true,
+        "clear": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "declared_header_objects": null,
+      "actual_header_objects": null,
+      "audio_rejected": false,
+      "exact_pcm": true
+    },
+    {
+      "test": "bad-count.asf",
+      "result": "exact",
+      "chapters": 0,
+      "note": "",
+      "runtime_ffprobe": null,
+      "fixture_ffprobe": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 1718,
+        "unchanged_audio_state": true,
+        "clear": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "declared_header_objects": null,
+      "actual_header_objects": null,
+      "audio_rejected": false,
+      "exact_pcm": true
+    },
+    {
+      "test": "hidden-tail.asf",
+      "result": "exact",
+      "chapters": 0,
+      "note": "",
+      "runtime_ffprobe": null,
+      "fixture_ffprobe": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 1719,
+        "unchanged_audio_state": true,
+        "clear": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "declared_header_objects": null,
+      "actual_header_objects": null,
+      "audio_rejected": false,
+      "exact_pcm": true
+    },
+    {
+      "test": "odd-object-name.asf",
+      "result": "exact",
+      "chapters": 0,
+      "note": "",
+      "runtime_ffprobe": null,
+      "fixture_ffprobe": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 1549,
+        "unchanged_audio_state": true,
+        "clear": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "declared_header_objects": null,
+      "actual_header_objects": null,
+      "audio_rejected": false,
+      "exact_pcm": true
+    },
+    {
+      "test": "truncated-fixed.asf",
+      "result": "exact",
+      "chapters": 0,
+      "note": "",
+      "runtime_ffprobe": null,
+      "fixture_ffprobe": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 1547,
+        "unchanged_audio_state": true,
+        "clear": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "declared_header_objects": null,
+      "actual_header_objects": null,
+      "audio_rejected": false,
+      "exact_pcm": true
+    },
+    {
+      "test": "isolated-object.asf",
+      "result": "exact",
+      "chapters": 4,
+      "note": "",
+      "runtime_ffprobe": null,
+      "fixture_ffprobe": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 354,
+        "unchanged_audio_state": true,
+        "clear": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "declared_header_objects": null,
+      "actual_header_objects": null,
+      "audio_rejected": false,
+      "exact_pcm": false
+    },
+    {
+      "test": "isolated-bad-tail.asf",
+      "result": "exact",
+      "chapters": 0,
+      "note": "",
+      "runtime_ffprobe": null,
+      "fixture_ffprobe": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 260,
+        "unchanged_audio_state": true,
+        "clear": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "declared_header_objects": null,
+      "actual_header_objects": null,
+      "audio_rejected": false,
+      "exact_pcm": false
+    },
+    {
+      "test": "no-markers.asf",
+      "result": "exact",
+      "chapters": 0,
+      "note": "",
+      "runtime_ffprobe": null,
+      "fixture_ffprobe": [],
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 1500,
+        "unchanged_audio_state": true,
+        "clear": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "declared_header_objects": null,
+      "actual_header_objects": null,
+      "audio_rejected": false,
+      "exact_pcm": true
+    },
+    {
+      "test": "count-one-marker.asf",
+      "result": "exact",
+      "chapters": 4,
+      "note": "Only one-marker undercount is accepted; unrelated count mismatches reject",
+      "runtime_ffprobe": null,
+      "fixture_ffprobe": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 1718,
+        "unchanged_audio_state": true,
+        "clear": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "declared_header_objects": null,
+      "actual_header_objects": null,
+      "audio_rejected": false,
+      "exact_pcm": true
+    },
+    {
+      "test": "count-no-marker.asf",
+      "result": "exact",
+      "chapters": 0,
+      "note": "Only one-marker undercount is accepted; unrelated count mismatches reject",
+      "runtime_ffprobe": null,
+      "fixture_ffprobe": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 1500,
+        "unchanged_audio_state": true,
+        "clear": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "declared_header_objects": null,
+      "actual_header_objects": null,
+      "audio_rejected": true,
+      "exact_pcm": false
+    },
+    {
+      "test": "count-two-markers.asf",
+      "result": "exact",
+      "chapters": 1,
+      "note": "Only one-marker undercount is accepted; unrelated count mismatches reject",
+      "runtime_ffprobe": null,
+      "fixture_ffprobe": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 1682,
+        "unchanged_audio_state": true,
+        "clear": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "declared_header_objects": null,
+      "actual_header_objects": null,
+      "audio_rejected": true,
+      "exact_pcm": false
+    },
+    {
+      "test": "count-marker-overcount.asf",
+      "result": "exact",
+      "chapters": 4,
+      "note": "Only one-marker undercount is accepted; unrelated count mismatches reject",
+      "runtime_ffprobe": null,
+      "fixture_ffprobe": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 1718,
+        "unchanged_audio_state": true,
+        "clear": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "declared_header_objects": null,
+      "actual_header_objects": null,
+      "audio_rejected": true,
+      "exact_pcm": false
+    },
+    {
+      "test": "count-marker-undercount-two.asf",
+      "result": "exact",
+      "chapters": 4,
+      "note": "Only one-marker undercount is accepted; unrelated count mismatches reject",
+      "runtime_ffprobe": null,
+      "fixture_ffprobe": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 1718,
+        "unchanged_audio_state": true,
+        "clear": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "declared_header_objects": null,
+      "actual_header_objects": null,
+      "audio_rejected": true,
+      "exact_pcm": false
+    },
+    {
+      "test": "count-short-marker.asf",
+      "result": "exact",
+      "chapters": 0,
+      "note": "Only one-marker undercount is accepted; unrelated count mismatches reject",
+      "runtime_ffprobe": null,
+      "fixture_ffprobe": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 1547,
+        "unchanged_audio_state": true,
+        "clear": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "declared_header_objects": null,
+      "actual_header_objects": null,
+      "audio_rejected": true,
+      "exact_pcm": false
+    },
+    {
+      "test": "cover-marker.asf",
+      "result": "exact",
+      "chapters": 4,
+      "note": "",
+      "runtime_ffprobe": null,
+      "fixture_ffprobe": null,
+      "protected_input": null,
+      "declared_header_objects": null,
+      "actual_header_objects": null,
+      "audio_rejected": false,
+      "exact_pcm": true
+    },
+    {
+      "test": "cover-invalid-marker.asf",
+      "result": "exact",
+      "chapters": 0,
+      "note": "",
+      "runtime_ffprobe": null,
+      "fixture_ffprobe": null,
+      "protected_input": null,
+      "declared_header_objects": null,
+      "actual_header_objects": null,
+      "audio_rejected": false,
+      "exact_pcm": true
+    },
+    {
+      "test": "pcm_s16le-chapters.asf",
+      "result": "exact",
+      "chapters": 5,
+      "note": "FFmpeg ASF muxer; navigation/reference decode is also checked",
+      "runtime_ffprobe": null,
+      "fixture_ffprobe": [
+        [
+          0,
+          "Part 0 \u6f22\u5b57 \ud83c\udfb5"
+        ],
+        [
+          1250,
+          "Part 1 \u6f22\u5b57 \ud83c\udfb5"
+        ],
+        [
+          3250,
+          "Part 2 \u6f22\u5b57 \ud83c\udfb5"
+        ],
+        [
+          6500,
+          "Part 3 \u6f22\u5b57 \ud83c\udfb5"
+        ],
+        [
+          12000,
+          "Part 4 \u6f22\u5b57 \ud83c\udfb5"
+        ]
+      ],
+      "protected_input": null,
+      "declared_header_objects": 6,
+      "actual_header_objects": 7,
+      "audio_rejected": false,
+      "exact_pcm": false
+    },
+    {
+      "test": "libmp3lame-chapters.asf",
+      "result": "exact",
+      "chapters": 5,
+      "note": "FFmpeg ASF muxer; navigation/reference decode is also checked",
+      "runtime_ffprobe": null,
+      "fixture_ffprobe": [
+        [
+          0,
+          "Part 0 \u6f22\u5b57 \ud83c\udfb5"
+        ],
+        [
+          1250,
+          "Part 1 \u6f22\u5b57 \ud83c\udfb5"
+        ],
+        [
+          3250,
+          "Part 2 \u6f22\u5b57 \ud83c\udfb5"
+        ],
+        [
+          6500,
+          "Part 3 \u6f22\u5b57 \ud83c\udfb5"
+        ],
+        [
+          12000,
+          "Part 4 \u6f22\u5b57 \ud83c\udfb5"
+        ]
+      ],
+      "protected_input": null,
+      "declared_header_objects": 6,
+      "actual_header_objects": 7,
+      "audio_rejected": false,
+      "exact_pcm": false
+    },
+    {
+      "test": "aac-chapters.asf",
+      "result": "exact",
+      "chapters": 5,
+      "note": "FFmpeg ASF muxer; navigation/reference decode is also checked",
+      "runtime_ffprobe": null,
+      "fixture_ffprobe": [
+        [
+          0,
+          "Part 0 \u6f22\u5b57 \ud83c\udfb5"
+        ],
+        [
+          1250,
+          "Part 1 \u6f22\u5b57 \ud83c\udfb5"
+        ],
+        [
+          3250,
+          "Part 2 \u6f22\u5b57 \ud83c\udfb5"
+        ],
+        [
+          6500,
+          "Part 3 \u6f22\u5b57 \ud83c\udfb5"
+        ],
+        [
+          12000,
+          "Part 4 \u6f22\u5b57 \ud83c\udfb5"
+        ]
+      ],
+      "protected_input": null,
+      "declared_header_objects": 6,
+      "actual_header_objects": 7,
+      "audio_rejected": false,
+      "exact_pcm": false
+    },
+    {
+      "test": "play.asf",
+      "result": "exact",
+      "chapters": 6,
+      "note": "",
+      "runtime_ffprobe": null,
+      "fixture_ffprobe": null,
+      "protected_input": null,
+      "declared_header_objects": null,
+      "actual_header_objects": null,
+      "audio_rejected": false,
+      "exact_pcm": false
+    },
+    {
+      "test": "pcm_s16le-chapters.asf native/Wine continuous PCM",
+      "result": "exact",
+      "lamp_pcm_sha256": "d933e8f1da1006ed0b13525d7dd27b2d7806ec40a2be4f58704c33c2eee2ebd8"
+    },
+    {
+      "test": "pcm_s16le-chapters.asf heard-file navigation at 44100 Hz",
+      "result": {
+        "boundaries": 24,
+        "heard_file_seeks": 8,
+        "result": "exact PCM after decode ahead",
+        "rate": 44100
+      },
+      "reference_pcm_sha256": "d933e8f1da1006ed0b13525d7dd27b2d7806ec40a2be4f58704c33c2eee2ebd8"
+    },
+    {
+      "test": "pcm_s16le-chapters.asf heard-file navigation at 48000 Hz",
+      "result": {
+        "boundaries": 24,
+        "heard_file_seeks": 8,
+        "result": "exact PCM after decode ahead",
+        "rate": 48000
+      },
+      "reference_pcm_sha256": "623a3f1d6e4ae610d0773f80b9e27383879cfc632f9f319baa79e8a08163723c"
+    },
+    {
+      "test": "libmp3lame-chapters.asf native/Wine continuous PCM",
+      "result": "exact",
+      "lamp_pcm_sha256": "7d5de3f4ddf1fdd4825aae7442d74617ab76f8a037bab0da1f1d35ac986783de"
+    },
+    {
+      "test": "libmp3lame-chapters.asf heard-file navigation at 44100 Hz",
+      "result": {
+        "boundaries": 24,
+        "heard_file_seeks": 8,
+        "result": "exact PCM after decode ahead",
+        "rate": 44100
+      },
+      "reference_pcm_sha256": "7d5de3f4ddf1fdd4825aae7442d74617ab76f8a037bab0da1f1d35ac986783de"
+    },
+    {
+      "test": "libmp3lame-chapters.asf heard-file navigation at 48000 Hz",
+      "result": {
+        "boundaries": 24,
+        "heard_file_seeks": 8,
+        "result": "exact PCM after decode ahead",
+        "rate": 48000
+      },
+      "reference_pcm_sha256": "5524c66148a0603b0273a27c06506ec0f570a25cc65238dbfa3ef111569fa18c"
+    },
+    {
+      "test": "aac-chapters.asf native/Wine continuous PCM",
+      "result": "exact",
+      "lamp_pcm_sha256": "feddd5923086d4ee72adb3a03eb6df20fd15e4463cfebf1c194ff5103cfdbc3d"
+    },
+    {
+      "test": "aac-chapters.asf heard-file navigation at 44100 Hz",
+      "result": {
+        "boundaries": 24,
+        "heard_file_seeks": 8,
+        "result": "exact PCM after decode ahead",
+        "rate": 44100
+      },
+      "reference_pcm_sha256": "feddd5923086d4ee72adb3a03eb6df20fd15e4463cfebf1c194ff5103cfdbc3d"
+    },
+    {
+      "test": "aac-chapters.asf heard-file navigation at 48000 Hz",
+      "result": {
+        "boundaries": 24,
+        "heard_file_seeks": 8,
+        "result": "exact PCM after decode ahead",
+        "rate": 48000
+      },
+      "reference_pcm_sha256": "383b39f9623aa2aaaafab991e60e4c40bd020c612ac88f3cdbfb91318d700d29"
+    },
+    {
+      "test": "play.asf native/Wine continuous PCM",
+      "result": "exact",
+      "lamp_pcm_sha256": "16027af1597912f4707cbf3ad4b1c4db83bde3ab64e5c18c0d12b174021cf8c7"
+    },
+    {
+      "test": "play.asf heard-file navigation at 44100 Hz",
+      "result": {
+        "boundaries": 24,
+        "heard_file_seeks": 8,
+        "result": "exact PCM after decode ahead",
+        "rate": 44100
+      },
+      "reference_pcm_sha256": "2b91c5f26ad6179a58d25a86fe1902d1ea11a1bd01ab6e4cc7c7874e405433ed"
+    },
+    {
+      "test": "play.asf heard-file navigation at 48000 Hz",
+      "result": {
+        "boundaries": 24,
+        "heard_file_seeks": 8,
+        "result": "exact PCM after decode ahead",
+        "rate": 48000
+      },
+      "reference_pcm_sha256": "16027af1597912f4707cbf3ad4b1c4db83bde3ab64e5c18c0d12b174021cf8c7"
+    },
+    {
+      "test": "mutated markers at protected mapped end",
+      "result": "passed",
+      "inputs": 120,
+      "seed": 1028
+    },
+    {
+      "test": "console ] then [",
+      "result": "heard chapter starts",
+      "starts": [
+        72288,
+        156000,
+        60035
+      ],
+      "runs": [
+        [
+          "book",
+          72288,
+          12672
+        ],
+        [
+          "book",
+          156000,
+          4320
+        ],
+        [
+          "book",
+          60035,
+          4765
+        ]
+      ]
+    },
+    {
+      "test": "console paused chapter seek",
+      "result": "silent until resume, then chapter PCM",
+      "silent_window_frames": 24000,
+      "resumed_runs": [
+        [
+          "book",
+          156205,
+          14195
+        ]
+      ]
+    }
+  ],
+  "fixture_hashes": {
+    "Unicode markers \u00dc.asf": "a29f633a8504a7d55ff4c070ad66d999ddafbf0ab7286e1a4818ddedef651ce8",
+    "aac-chapters.asf": "a189c7b05a91508f862a40053ab65222d34871c466a44fbe6ba03adb599c451a",
+    "bad-count.asf": "2e8d52beb1e3f09c5612863fbad62da80a646507d335c0279888b4c41e2d2474",
+    "bad-entry-length-0.asf": "c5b44d95e13d83a381930663e7eadcd6ad5f3a4dcd5592ab4925018c1d660ab3",
+    "bad-entry-length-11.asf": "97e7638df770326c8ef66c50f867f5ade95b3a6d030c6a363994829540cc2cd3",
+    "bad-entry-length-13.asf": "1826187a626d4d0827ed467ebd78557d97f8027eb4684907405a8c110396f786",
+    "bad-entry-length-65535.asf": "15b372dd3cfc7baf8d9b0b6b7cfadce75e9917695782c77429446ece86193a80",
+    "bad-units.asf": "b0250b7d922b6689f8a60c5ef460f564906ebd46ade5a2b9b4d0f1a178bfcca0",
+    "basic.asf": "e5bc719fe47e34362104ebbfcea91ece3419db595ed6228cffcc9dc4ca4578ea",
+    "chapter-capacity.asf": "021c6d3843365ccbae279d18fba8771a66ea9581fc0bbef082523eaac4ba2b9c",
+    "chapter-title-capacity.asf": "cf34a3e96654d427e46f50845c6f940402783482b76ecd86becad548e9529403",
+    "chapters.txt": "e7a5d5110b7931430c331d6bf52c67db1df407f940420b7039f2c7cdf6c58b84",
+    "count-marker-overcount.asf": "5977fe4134030fbd52a1f40f1efda4d8d4b1e13b566c1d3ba06e9c6707904054",
+    "count-marker-undercount-two.asf": "cdf19d6d933630260b01a685b2ee7ba889a03adb52890418ac6332f2a4e16bcd",
+    "count-no-marker.asf": "243ba2401989683e114326ca52a4f4ca31b184c29b32c511d3766d813346e36d",
+    "count-one-marker.asf": "5018651e86857002c69cff4c965d08dd1a2767ec31a1d6f48c4d99e63ac9f58e",
+    "count-short-marker.asf": "ffb16d763567c785615476811faa1d73383252445006f1b2ca060fd37b97e40d",
+    "count-two-markers.asf": "23f4f337e921d876230f386e90fe6be1c86dc5e57a9bd9015cd9625d60dda3cc",
+    "cover-invalid-marker.asf": "1a1050b481e01130fe6606feac248e18b96deee6b5ee72de10dcfd7faf843f42",
+    "cover-marker.asf": "292c4e68d412f2d57c278ad43fd310e79571d361a395449f2272077fb205fa53",
+    "embedded-nul.asf": "1e28f9da2f5b9afb0f72481eeeba42bd475110c62bdfd7071b1cc4adfa5faadf",
+    "empty-then-valid.asf": "3f03890c7a507ec26354e93ae5a67dd2481ee8033b1bac22797508d6c97f20e8",
+    "first-marker-object.asf": "a1c438f96644b5fd2b58850fb74b75cee823ad2f52cc249ca9eaf0bef614bf21",
+    "fractional-ticks.asf": "4a4f6c1bd3e9478e4bd2dabfc05ba88dd7aaed60a71a033cf3dac9e7d2544570",
+    "front.png": "e6aeb8688de618cf3c8d49d4c0798db5eb5e6fd9cd58e63b38b5f348f743d014",
+    "hidden-tail.asf": "b165eae3bcc4fcb99304a5b558fb69d123e5ce06d7d1c335d35c5f2418c8f069",
+    "high-surrogate.asf": "e3eca9177f358ea6859674b0cd0a31cbd2695ccce9afb1bff4e83295d8e12212",
+    "independent-record-budget.asf": "6148357293dc2f5738c02d0ee25456d32042d3036089b2387e33ac95c837d188",
+    "invalid-then-valid.asf": "7cf83ad1e7b740e45bc32e8f12ab01c3e7ed4150c41a17be0a3cf598dd9069ba",
+    "isolated-bad-tail.asf": "43de12ea265e5f9c6b79f0d3d2ae09c3fc2f155a754dd6309a802eb693e9b999",
+    "isolated-object.asf": "259d3f62d444b97eca5090dba595bb44e30fa7267ede960715552608332c223d",
+    "later.flac": "69c0dc83c107d0c617710404aa8cbc8ab515e3807de053befcf898252aa5306d",
+    "libmp3lame-chapters.asf": "f952cf52f006be5e668e1047b4aaf94352beb200c0be846574c7ab1a5196a789",
+    "long-title-cursor.asf": "2e83d552edd2ada3edae7554c1a0c4b64fbbe3568261d632616820c37538646f",
+    "low-surrogate.asf": "67bdd49c9a2818ce0a4630fc4e4fe191ff18660bde700c74cad362693b67c703",
+    "maximum-description.asf": "029f7c28102cfa1369c793886fa98c2d44b6a3f9d6ec59d2d715323ded9bf960",
+    "maximum-object-name.asf": "b88554d534c6414e1dfbe2ec6c537db984d72e9259cc408ba84ce3cf48af6be0",
+    "negative-before-capacity.asf": "dffd8ad567e17ac908722b42382b3580568fb2cb4d1282fe0b1c798642a61f60",
+    "negative-times.asf": "6b3da82648cc8ff198e4e1021eab7e8cbbcdee63ea690c59107f41a446cccb5a",
+    "nested-depth-five.asf": "1a63ae455304b7ca716f68edeb378a4b52017403bf3395f7427d48def0e92747",
+    "nested-depth-four.asf": "c3abadc9f47cc214f373ac60b2c9698de0c05fdd57b33eebc134b7562da81faa",
+    "no-markers.asf": "b90b4eeef49ee5fc58b5f9e37af46afc7aea4377cfad86d1bbcf0c3af89e7624",
+    "odd-object-name.asf": "563388f274680d6a1922f7b8fa80271c7f5ba0590791beffb42d1a0fc87d3b2e",
+    "pcm_s16le-chapters.asf": "c1898f2983474f3eb412e64ee54e222daed50e63eb91739c6774e934866b1f93",
+    "play.asf": "6eb1a646ad3935205b0d75eb06557088b75698611c0a20eb4dc2a853f66a68ed",
+    "preroll-after.asf": "c7cd996bcb13ac2d75327f0cd4255ee76269a280690b14fbb68074cf29cbc715",
+    "preroll-before.asf": "27c5ec7791a3f2dde6ef9b37650708e851868d1e7fd0fa3dc0a2366fcd86c2b8",
+    "preroll-overflow.asf": "ba8cb53519fa62c01e1ca4ed1c28d705b56cdbd078b1451873fa9d0cb50c7513",
+    "record-budget.asf": "4a2f66470c97d421100d0f2dcc2938112dbc565ffcb00d88bf72552aed54796f",
+    "record-over-budget.asf": "984bd4d6147f20dda9a36b8e2addfedef412197ca124fdb891e197aa25e6eb3d",
+    "surrogate-at-end.asf": "7db2f2c1d93bde9074e26d6d98c649aed2b17c5692788694bbf404db8e899df4",
+    "time-overflow.asf": "03dadfc3b5ff2c8f162ac52f1a21f850277d2f2cd9db078dd4a7bf49ed529cad",
+    "truncated-fixed.asf": "e34c36a007550e8ed6f1e452481c9f1295f89507304067d217737862b385e20e",
+    "unordered-duplicate.asf": "ad5182d8679962b90c267e006c2f1e3006e7b0c74b56ed17ead22e3a2cb37eee",
+    "unterminated.asf": "6e64f1699d2e7d141f1684ba638801cea07fde52688b794ca6e610f655f70f95",
+    "utf8-title-boundary.asf": "d0e935947d4b1e52ad3df1c44cec97485c2e6831b4863253862d0b122a097392",
+    "wrong-full-guid.asf": "6f58576364b90f0da0f03974c49c668e50c400a029a5b626cefadbde0218ef46",
+    "zero-markers.asf": "12426f3eb447b5c861c569b0248b3a0a22c0ba6566ffe2f871f0cd2e1eb3db61"
+  },
+  "fixture_writer_sha256": "3e80a8ad6fd8c98ec19531771932ca2fcad7b53bf8e50643e3b339b3a92d53b1",
+  "fixture_ffmpeg": "ffmpeg version 9.0.1 Copyright (c) 2000-2026 the FFmpeg developers",
+  "runtime_platform": "Linux-6.1.0-53-amd64-x86_64-with-glibc2.36",
+  "runtime_ffmpeg": null,
+  "runtime_sources": {
+    "src/tags.s": "c3826724e4e67d7b840b6bbb38d7af4b60e370ad2a354a78cc85551ea5224de1",
+    "src/tags_asf.inc": "179a413a2fae216f5448953f2457e17bbf631203a3e2a10d45f2a86ba4d203a0",
+    "src/chapters_asf.inc": "ec504ed49f0f9eb72b4cd2398c36a4bfdd1acc710061188c24b1b35da3d6b651",
+    "src/chapters.inc": "d1c07f752c20f3772c737d2959e3a94525d582efb0807a8d9921cd234db2dc59",
+    "src/asf.s": "bd086a94a63fa76e3309e8081a3288f6780bb99916012621e57c3a9b1f690997",
+    "src/decoder.s": "44e88449c121f6d67f1805555f15663fe2d3883531fce2dbf5a8587e58f1d8f8",
+    "tests/verify-asf-chapters.py": "006d96022c3b0756af839d2593a70d2fc9f8ec3abd69bc49c138a947dfac0489",
+    "tests/asf-chapters-oracle.c": "d9811df01a465eb46589302e9eb3fadc614e44bff3bce30d99d0de8bb1589332",
+    "tests/verify-asf.py": "58767cd614fdc166538826e54c03ed80faf35c9c695fd8e80fa3d54859bf50dc",
+    "tests/verify-asf-metadata.py": "3db9d546449303bd07b2744784185805526b375e5b76d0033229644752de78ac",
+    "tests/chapter-navigation-oracle.c": "dc4284becd2a6bd394e3ce77922cd0b93ff02fb9f369a33a3dbd36e7860d2b9b",
+    "tests/chapter-navigation-probe.s": "df9c4ff10f74716617c1ae4f13f4d3d4efb55f2fe24ef85f9f8fc68e2f6e568a",
+    "tests/verify-chapter-navigation.py": "df8233ca358962ac322a5f22d871044583a26e1dd85cbcb95a94cdc01987623f"
+  },
+  "cli_sha256": "3ed8f8b79a0b57d23129eca930ff770435e5b3815fde00dec20c350110abd50c",
+  "oracle_sha256": "d48a61e0ad8079e8feb248066fe745a7f3c4ec977ef04cc69703c729cc6dca88",
+  "navigation_oracle_sha256": "908923da17cbfbe8e46c385525878232675d43d928925adc0ba954eac4dbf02f",
+  "playback_skipped": false,
+  "wine_address_randomization": "Disabled per process with setarch x86_64 -R to avoid Wine 8 shared-user-data startup mapping failures",
+  "cli_relink_identity": {
+    "tested_artifact": "build-asf-chapters/lamp-cli-wine-tested.exe",
+    "tested_timestamp": 1791402772,
+    "later_timestamp": 1791402912,
+    "later_cli_sha256": "b3f1295fd656e810c6c211afedce80f0fd7d7b2bffc05adf149507ce128714e3",
+    "normalized_later_cli_sha256": "3ed8f8b79a0b57d23129eca930ff770435e5b3815fde00dec20c350110abd50c",
+    "explanation": "GUI verification rebuilds the CLI; all bytes except the PE linker timestamp match the retained tested binary"
+  },
+  "playback_environment": "Private PulseAudio sink inside dbus-run-session; avoids the shared org.PulseAudio1 name conflict"
+}

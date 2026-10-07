@@ -1,0 +1,1359 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "pcm_s16le.asf",
+      "result": "exact",
+      "keys": [
+        "album",
+        "album_artist",
+        "artist",
+        "comment",
+        "composer",
+        "date",
+        "disc",
+        "genre",
+        "title",
+        "track"
+      ],
+      "picture_sha256": null,
+      "note": "FFmpeg muxer: basic and extended metadata, all ten normalized keys",
+      "fixture_ffprobe": {
+        "title": "T\u00eftle \u6f22\u5b57 \ud83c\udfb5",
+        "artist": "\u00c4rtist",
+        "album": "Alb\u00fcm",
+        "album_artist": "Album \u00c4rtist",
+        "date": "2026-10-07",
+        "track": "3/12",
+        "disc": "1/2",
+        "genre": "Rock",
+        "comment": "C\u00f6mment",
+        "composer": "C\u00f6mposer"
+      },
+      "runtime_ffprobe": {
+        "title": "T\u00eftle \u6f22\u5b57 \ud83c\udfb5",
+        "artist": "\u00c4rtist",
+        "album": "Alb\u00fcm",
+        "album_artist": "Album \u00c4rtist",
+        "date": "2026-10-07",
+        "track": "3/12",
+        "disc": "1/2",
+        "genre": "Rock",
+        "comment": "C\u00f6mment",
+        "composer": "C\u00f6mposer"
+      },
+      "runtime_ffprobe_note": null,
+      "protected_input": null,
+      "exact_pcm": false
+    },
+    {
+      "test": "libmp3lame.asf",
+      "result": "exact",
+      "keys": [
+        "album",
+        "album_artist",
+        "artist",
+        "comment",
+        "composer",
+        "date",
+        "disc",
+        "genre",
+        "title",
+        "track"
+      ],
+      "picture_sha256": null,
+      "note": "FFmpeg muxer: basic and extended metadata, all ten normalized keys",
+      "fixture_ffprobe": {
+        "title": "T\u00eftle \u6f22\u5b57 \ud83c\udfb5",
+        "artist": "\u00c4rtist",
+        "album": "Alb\u00fcm",
+        "album_artist": "Album \u00c4rtist",
+        "date": "2026-10-07",
+        "track": "3/12",
+        "disc": "1/2",
+        "genre": "Rock",
+        "comment": "C\u00f6mment",
+        "composer": "C\u00f6mposer"
+      },
+      "runtime_ffprobe": {
+        "title": "T\u00eftle \u6f22\u5b57 \ud83c\udfb5",
+        "artist": "\u00c4rtist",
+        "album": "Alb\u00fcm",
+        "album_artist": "Album \u00c4rtist",
+        "date": "2026-10-07",
+        "track": "3/12",
+        "disc": "1/2",
+        "genre": "Rock",
+        "comment": "C\u00f6mment",
+        "composer": "C\u00f6mposer"
+      },
+      "runtime_ffprobe_note": null,
+      "protected_input": null,
+      "exact_pcm": false
+    },
+    {
+      "test": "aac.asf",
+      "result": "exact",
+      "keys": [
+        "album",
+        "album_artist",
+        "artist",
+        "comment",
+        "composer",
+        "date",
+        "disc",
+        "genre",
+        "title",
+        "track"
+      ],
+      "picture_sha256": null,
+      "note": "FFmpeg muxer: basic and extended metadata, all ten normalized keys",
+      "fixture_ffprobe": {
+        "title": "T\u00eftle \u6f22\u5b57 \ud83c\udfb5",
+        "artist": "\u00c4rtist",
+        "album": "Alb\u00fcm",
+        "album_artist": "Album \u00c4rtist",
+        "date": "2026-10-07",
+        "track": "3/12",
+        "disc": "1/2",
+        "genre": "Rock",
+        "comment": "C\u00f6mment",
+        "composer": "C\u00f6mposer"
+      },
+      "runtime_ffprobe": {
+        "title": "T\u00eftle \u6f22\u5b57 \ud83c\udfb5",
+        "artist": "\u00c4rtist",
+        "album": "Alb\u00fcm",
+        "album_artist": "Album \u00c4rtist",
+        "date": "2026-10-07",
+        "track": "3/12",
+        "disc": "1/2",
+        "genre": "Rock",
+        "comment": "C\u00f6mment",
+        "composer": "C\u00f6mposer"
+      },
+      "runtime_ffprobe_note": null,
+      "protected_input": null,
+      "exact_pcm": false
+    },
+    {
+      "test": "basic.asf",
+      "result": "exact",
+      "keys": [
+        "artist",
+        "comment",
+        "title"
+      ],
+      "picture_sha256": null,
+      "note": "",
+      "fixture_ffprobe": {
+        "title": "T\u00eftle \u6f22\u5b57 \ud83c\udfb5",
+        "artist": "\u00c4rtist",
+        "comment": "C\u00f6mment"
+      },
+      "runtime_ffprobe": {
+        "title": "T\u00eftle \u6f22\u5b57 \ud83c\udfb5",
+        "artist": "\u00c4rtist",
+        "comment": "C\u00f6mment"
+      },
+      "runtime_ffprobe_note": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 1514,
+        "unchanged_audio_state": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "exact_pcm": true
+    },
+    {
+      "test": "extended.asf",
+      "result": "exact",
+      "keys": [
+        "album",
+        "album_artist",
+        "artist",
+        "comment",
+        "composer",
+        "date",
+        "disc",
+        "genre",
+        "title",
+        "track"
+      ],
+      "picture_sha256": null,
+      "note": "",
+      "fixture_ffprobe": {
+        "title": "T\u00eftle \u6f22\u5b57 \ud83c\udfb5",
+        "artist": "\u00c4rtist",
+        "album": "Alb\u00fcm",
+        "album_artist": "Album \u00c4rtist",
+        "date": "2026-10-07",
+        "track": "3/12",
+        "disc": "1/2",
+        "genre": "Rock",
+        "comment": "C\u00f6mment",
+        "composer": "C\u00f6mposer"
+      },
+      "runtime_ffprobe": {
+        "title": "T\u00eftle \u6f22\u5b57 \ud83c\udfb5",
+        "artist": "\u00c4rtist",
+        "album": "Alb\u00fcm",
+        "album_artist": "Album \u00c4rtist",
+        "date": "2026-10-07",
+        "track": "3/12",
+        "disc": "1/2",
+        "genre": "Rock",
+        "comment": "C\u00f6mment",
+        "composer": "C\u00f6mposer"
+      },
+      "runtime_ffprobe_note": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 1828,
+        "unchanged_audio_state": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "exact_pcm": true
+    },
+    {
+      "test": "metadata.asf",
+      "result": "exact",
+      "keys": [
+        "album",
+        "album_artist",
+        "artist",
+        "comment",
+        "composer",
+        "date",
+        "disc",
+        "genre",
+        "title",
+        "track"
+      ],
+      "picture_sha256": null,
+      "note": "",
+      "fixture_ffprobe": {
+        "title": "T\u00eftle \u6f22\u5b57 \ud83c\udfb5",
+        "artist": "\u00c4rtist",
+        "album": "Alb\u00fcm",
+        "album_artist": "Album \u00c4rtist",
+        "date": "2026-10-07",
+        "track": "3/12",
+        "disc": "1/2",
+        "genre": "Rock",
+        "comment": "C\u00f6mment",
+        "composer": "C\u00f6mposer"
+      },
+      "runtime_ffprobe": {
+        "title": "T\u00eftle \u6f22\u5b57 \ud83c\udfb5",
+        "artist": "\u00c4rtist",
+        "album": "Alb\u00fcm",
+        "album_artist": "Album \u00c4rtist",
+        "date": "2026-10-07",
+        "track": "3/12",
+        "disc": "1/2",
+        "genre": "Rock",
+        "comment": "C\u00f6mment",
+        "composer": "C\u00f6mposer"
+      },
+      "runtime_ffprobe_note": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 1934,
+        "unchanged_audio_state": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "exact_pcm": true
+    },
+    {
+      "test": "library.asf",
+      "result": "exact",
+      "keys": [
+        "album",
+        "album_artist",
+        "artist",
+        "comment",
+        "composer",
+        "date",
+        "disc",
+        "genre",
+        "title",
+        "track"
+      ],
+      "picture_sha256": null,
+      "note": "",
+      "fixture_ffprobe": {
+        "title": "T\u00eftle \u6f22\u5b57 \ud83c\udfb5",
+        "artist": "\u00c4rtist",
+        "album": "Alb\u00fcm",
+        "album_artist": "Album \u00c4rtist",
+        "date": "2026-10-07",
+        "track": "3/12",
+        "disc": "1/2",
+        "genre": "Rock",
+        "comment": "C\u00f6mment",
+        "composer": "C\u00f6mposer"
+      },
+      "runtime_ffprobe": {
+        "title": "T\u00eftle \u6f22\u5b57 \ud83c\udfb5",
+        "artist": "\u00c4rtist",
+        "album": "Alb\u00fcm",
+        "album_artist": "Album \u00c4rtist",
+        "date": "2026-10-07",
+        "track": "3/12",
+        "disc": "1/2",
+        "genre": "Rock",
+        "comment": "C\u00f6mment",
+        "composer": "C\u00f6mposer"
+      },
+      "runtime_ffprobe_note": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 1934,
+        "unchanged_audio_state": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "exact_pcm": true
+    },
+    {
+      "test": "nested-four.asf",
+      "result": "exact",
+      "keys": [
+        "title"
+      ],
+      "picture_sha256": null,
+      "note": "",
+      "fixture_ffprobe": null,
+      "runtime_ffprobe": null,
+      "runtime_ffprobe_note": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 1616,
+        "unchanged_audio_state": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "exact_pcm": true
+    },
+    {
+      "test": "global-language.asf",
+      "result": "exact",
+      "keys": [
+        "title"
+      ],
+      "picture_sha256": null,
+      "note": "",
+      "fixture_ffprobe": null,
+      "runtime_ffprobe": null,
+      "runtime_ffprobe_note": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 1624,
+        "unchanged_audio_state": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "exact_pcm": true
+    },
+    {
+      "test": "unsigned-extended.asf",
+      "result": "exact",
+      "keys": [
+        "comment",
+        "date",
+        "disc",
+        "track"
+      ],
+      "picture_sha256": null,
+      "note": "",
+      "fixture_ffprobe": {
+        "track": "65535",
+        "disc": "4294967295",
+        "date": "18446744073709551615",
+        "comment": "1"
+      },
+      "runtime_ffprobe": {
+        "track": "65535",
+        "disc": "18446744073709551615",
+        "date": "18446744073709551615",
+        "comment": "1"
+      },
+      "runtime_ffprobe_note": "FFmpeg 5 sign-extends DWORD 0xffffffff; LAMP and FFmpeg 9 preserve unsigned 4294967295",
+      "protected_input": null,
+      "exact_pcm": true
+    },
+    {
+      "test": "unsigned-metadata.asf",
+      "result": "exact",
+      "keys": [
+        "comment",
+        "date",
+        "disc",
+        "track"
+      ],
+      "picture_sha256": null,
+      "note": "",
+      "fixture_ffprobe": {
+        "track": "65535",
+        "disc": "4294967295",
+        "date": "18446744073709551615",
+        "comment": "1"
+      },
+      "runtime_ffprobe": {
+        "track": "65535",
+        "disc": "18446744073709551615",
+        "date": "18446744073709551615",
+        "comment": "1"
+      },
+      "runtime_ffprobe_note": "FFmpeg 5 sign-extends DWORD 0xffffffff; LAMP and FFmpeg 9 preserve unsigned 4294967295",
+      "protected_input": null,
+      "exact_pcm": true
+    },
+    {
+      "test": "unsigned-library.asf",
+      "result": "exact",
+      "keys": [
+        "comment",
+        "date",
+        "disc",
+        "track"
+      ],
+      "picture_sha256": null,
+      "note": "",
+      "fixture_ffprobe": {
+        "track": "65535",
+        "disc": "4294967295",
+        "date": "18446744073709551615",
+        "comment": "1"
+      },
+      "runtime_ffprobe": {
+        "track": "65535",
+        "disc": "18446744073709551615",
+        "date": "18446744073709551615",
+        "comment": "1"
+      },
+      "runtime_ffprobe_note": "FFmpeg 5 sign-extends DWORD 0xffffffff; LAMP and FFmpeg 9 preserve unsigned 4294967295",
+      "protected_input": null,
+      "exact_pcm": true
+    },
+    {
+      "test": "selected-stream.asf",
+      "result": "exact",
+      "keys": [
+        "artist",
+        "genre",
+        "title"
+      ],
+      "picture_sha256": null,
+      "note": "Metadata precedes stream discovery; selected stream overrides global regardless of header order",
+      "fixture_ffprobe": null,
+      "runtime_ffprobe": null,
+      "runtime_ffprobe_note": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 1894,
+        "unchanged_audio_state": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "exact_pcm": true
+    },
+    {
+      "test": "selected-stream-2.asf",
+      "result": "exact",
+      "keys": [
+        "artist",
+        "title"
+      ],
+      "picture_sha256": null,
+      "note": "Metadata precedes stream discovery; selected stream overrides global regardless of header order",
+      "fixture_ffprobe": null,
+      "runtime_ffprobe": null,
+      "runtime_ffprobe_note": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 1894,
+        "unchanged_audio_state": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "exact_pcm": true
+    },
+    {
+      "test": "aliases-and-empty.asf",
+      "result": "exact",
+      "keys": [
+        "album",
+        "comment",
+        "title"
+      ],
+      "picture_sha256": null,
+      "note": "",
+      "fixture_ffprobe": null,
+      "runtime_ffprobe": null,
+      "runtime_ffprobe_note": null,
+      "protected_input": null,
+      "exact_pcm": true
+    },
+    {
+      "test": "duplicates.asf",
+      "result": "exact",
+      "keys": [
+        "title"
+      ],
+      "picture_sha256": null,
+      "note": "More duplicate text than the shared 128 KiB arena",
+      "fixture_ffprobe": null,
+      "runtime_ffprobe": null,
+      "runtime_ffprobe_note": null,
+      "protected_input": null,
+      "exact_pcm": true
+    },
+    {
+      "test": "record-budget.asf",
+      "result": "exact",
+      "keys": [
+        "artist",
+        "title"
+      ],
+      "picture_sha256": null,
+      "note": "65536 descriptor budget per pass; a group exceeding the remainder is skipped",
+      "fixture_ffprobe": null,
+      "runtime_ffprobe": null,
+      "runtime_ffprobe_note": null,
+      "protected_input": null,
+      "exact_pcm": true
+    },
+    {
+      "test": "value-boundary.asf",
+      "result": "exact",
+      "keys": [
+        "title"
+      ],
+      "picture_sha256": null,
+      "note": "UTF-8 cut never splits a supplementary character",
+      "fixture_ffprobe": null,
+      "runtime_ffprobe": null,
+      "runtime_ffprobe_note": null,
+      "protected_input": null,
+      "exact_pcm": true
+    },
+    {
+      "test": "\u00dcn\u00efcode \u6f22\u5b57 \ud83c\udfb5.asf",
+      "result": "exact",
+      "keys": [
+        "artist",
+        "title"
+      ],
+      "picture_sha256": null,
+      "note": "",
+      "fixture_ffprobe": null,
+      "runtime_ffprobe": null,
+      "runtime_ffprobe_note": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 1492,
+        "unchanged_audio_state": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "exact_pcm": true
+    },
+    {
+      "test": "nul-surrogate.asf",
+      "result": "exact",
+      "keys": [
+        "artist",
+        "title"
+      ],
+      "picture_sha256": null,
+      "note": "Values stop at NUL/unpaired surrogate; names must be complete ASCII",
+      "fixture_ffprobe": null,
+      "runtime_ffprobe": null,
+      "runtime_ffprobe_note": null,
+      "protected_input": null,
+      "exact_pcm": true
+    },
+    {
+      "test": "cover-extended.asf",
+      "result": "exact",
+      "keys": [],
+      "picture_sha256": "e6aeb8688de618cf3c8d49d4c0798db5eb5e6fd9cd58e63b38b5f348f743d014",
+      "note": "",
+      "fixture_ffprobe": {},
+      "runtime_ffprobe": {},
+      "runtime_ffprobe_note": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 2027,
+        "unchanged_audio_state": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "exact_pcm": true
+    },
+    {
+      "test": "cover-library.asf",
+      "result": "exact",
+      "keys": [],
+      "picture_sha256": "e6aeb8688de618cf3c8d49d4c0798db5eb5e6fd9cd58e63b38b5f348f743d014",
+      "note": "",
+      "fixture_ffprobe": {},
+      "runtime_ffprobe": {},
+      "runtime_ffprobe_note": null,
+      "protected_input": null,
+      "exact_pcm": true
+    },
+    {
+      "test": "cover-local.asf",
+      "result": "exact",
+      "keys": [],
+      "picture_sha256": "385a92647193b6011c5e5e5260d7b7014351c56cabb30add4d458ae6efc49557",
+      "note": "A valid local back cover overrides global front cover; other stream/language cannot replace it",
+      "fixture_ffprobe": null,
+      "runtime_ffprobe": null,
+      "runtime_ffprobe_note": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 2516,
+        "unchanged_audio_state": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "exact_pcm": true
+    },
+    {
+      "test": "cover-local-2.asf",
+      "result": "exact",
+      "keys": [],
+      "picture_sha256": "e695ba041a6934649337a93f3a3f261e970582fa63da5f73d9b138941efe5174",
+      "note": "A valid local back cover overrides global front cover; other stream/language cannot replace it",
+      "fixture_ffprobe": null,
+      "runtime_ffprobe": null,
+      "runtime_ffprobe_note": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 2516,
+        "unchanged_audio_state": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "exact_pcm": true
+    },
+    {
+      "test": "cover-case.asf",
+      "result": "exact",
+      "keys": [],
+      "picture_sha256": null,
+      "note": "ASF MIME comparison is case sensitive",
+      "fixture_ffprobe": null,
+      "runtime_ffprobe": null,
+      "runtime_ffprobe_note": null,
+      "protected_input": null,
+      "exact_pcm": true
+    },
+    {
+      "test": "cover-local-invalid.asf",
+      "result": "exact",
+      "keys": [],
+      "picture_sha256": "e6aeb8688de618cf3c8d49d4c0798db5eb5e6fd9cd58e63b38b5f348f743d014",
+      "note": "An invalid local picture cannot clear a valid global cover",
+      "fixture_ffprobe": null,
+      "runtime_ffprobe": null,
+      "runtime_ffprobe_note": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 1669,
+        "unchanged_audio_state": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "exact_pcm": true
+    },
+    {
+      "test": "cover-declared-jpeg.asf",
+      "result": "exact",
+      "keys": [],
+      "picture_sha256": "e6aeb8688de618cf3c8d49d4c0798db5eb5e6fd9cd58e63b38b5f348f743d014",
+      "note": "ASF keeps declared image codec; bytes are not rewritten",
+      "fixture_ffprobe": null,
+      "runtime_ffprobe": null,
+      "runtime_ffprobe_note": null,
+      "protected_input": null,
+      "exact_pcm": true
+    },
+    {
+      "test": "cover-large.asf",
+      "result": "exact",
+      "keys": [],
+      "picture_sha256": "2f5bdad3ac2dc6406eb4d65e50151f977a130fe2914c27e11608ce055a6e4632",
+      "note": "DWORD library data length exceeds Extended Content WORD capacity",
+      "fixture_ffprobe": null,
+      "runtime_ffprobe": null,
+      "runtime_ffprobe_note": null,
+      "protected_input": null,
+      "exact_pcm": true
+    },
+    {
+      "test": "bad-basic-short.asf",
+      "result": "exact",
+      "keys": [
+        "artist",
+        "title"
+      ],
+      "picture_sha256": null,
+      "note": "Malformed optional object/value skipped; later metadata/audio survive",
+      "fixture_ffprobe": null,
+      "runtime_ffprobe": null,
+      "runtime_ffprobe_note": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 1575,
+        "unchanged_audio_state": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "exact_pcm": true
+    },
+    {
+      "test": "bad-basic-overflow.asf",
+      "result": "exact",
+      "keys": [
+        "artist",
+        "title"
+      ],
+      "picture_sha256": null,
+      "note": "Malformed optional object/value skipped; later metadata/audio survive",
+      "fixture_ffprobe": null,
+      "runtime_ffprobe": null,
+      "runtime_ffprobe_note": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 1576,
+        "unchanged_audio_state": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "exact_pcm": true
+    },
+    {
+      "test": "bad-basic-odd.asf",
+      "result": "exact",
+      "keys": [
+        "artist",
+        "title"
+      ],
+      "picture_sha256": null,
+      "note": "Malformed optional object/value skipped; later metadata/audio survive",
+      "fixture_ffprobe": null,
+      "runtime_ffprobe": null,
+      "runtime_ffprobe_note": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 1579,
+        "unchanged_audio_state": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "exact_pcm": true
+    },
+    {
+      "test": "bad-extended-count.asf",
+      "result": "exact",
+      "keys": [
+        "artist",
+        "title"
+      ],
+      "picture_sha256": null,
+      "note": "Malformed optional object/value skipped; later metadata/audio survive",
+      "fixture_ffprobe": null,
+      "runtime_ffprobe": null,
+      "runtime_ffprobe_note": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 1568,
+        "unchanged_audio_state": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "exact_pcm": true
+    },
+    {
+      "test": "bad-extended-name.asf",
+      "result": "exact",
+      "keys": [
+        "artist",
+        "title"
+      ],
+      "picture_sha256": null,
+      "note": "Malformed optional object/value skipped; later metadata/audio survive",
+      "fixture_ffprobe": null,
+      "runtime_ffprobe": null,
+      "runtime_ffprobe_note": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 1570,
+        "unchanged_audio_state": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "exact_pcm": true
+    },
+    {
+      "test": "bad-extended-value.asf",
+      "result": "exact",
+      "keys": [
+        "artist",
+        "title"
+      ],
+      "picture_sha256": null,
+      "note": "Malformed optional object/value skipped; later metadata/audio survive",
+      "fixture_ffprobe": null,
+      "runtime_ffprobe": null,
+      "runtime_ffprobe_note": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 1586,
+        "unchanged_audio_state": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "exact_pcm": true
+    },
+    {
+      "test": "bad-metadata-value.asf",
+      "result": "exact",
+      "keys": [
+        "artist",
+        "title"
+      ],
+      "picture_sha256": null,
+      "note": "Malformed optional object/value skipped; later metadata/audio survive",
+      "fixture_ffprobe": null,
+      "runtime_ffprobe": null,
+      "runtime_ffprobe_note": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 1592,
+        "unchanged_audio_state": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "exact_pcm": true
+    },
+    {
+      "test": "bad-library-name.asf",
+      "result": "exact",
+      "keys": [
+        "artist",
+        "title"
+      ],
+      "picture_sha256": null,
+      "note": "Malformed optional object/value skipped; later metadata/audio survive",
+      "fixture_ffprobe": null,
+      "runtime_ffprobe": null,
+      "runtime_ffprobe_note": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 1580,
+        "unchanged_audio_state": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "exact_pcm": true
+    },
+    {
+      "test": "bad-partial-descriptors.asf",
+      "result": "exact",
+      "keys": [
+        "artist",
+        "title"
+      ],
+      "picture_sha256": null,
+      "note": "Malformed optional object/value skipped; later metadata/audio survive",
+      "fixture_ffprobe": null,
+      "runtime_ffprobe": null,
+      "runtime_ffprobe_note": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 1615,
+        "unchanged_audio_state": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "exact_pcm": true
+    },
+    {
+      "test": "bad-word-width.asf",
+      "result": "exact",
+      "keys": [
+        "artist",
+        "title"
+      ],
+      "picture_sha256": null,
+      "note": "Malformed optional object/value skipped; later metadata/audio survive",
+      "fixture_ffprobe": null,
+      "runtime_ffprobe": null,
+      "runtime_ffprobe_note": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 1587,
+        "unchanged_audio_state": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "exact_pcm": true
+    },
+    {
+      "test": "bad-dword-width.asf",
+      "result": "exact",
+      "keys": [
+        "artist",
+        "title"
+      ],
+      "picture_sha256": null,
+      "note": "Malformed optional object/value skipped; later metadata/audio survive",
+      "fixture_ffprobe": null,
+      "runtime_ffprobe": null,
+      "runtime_ffprobe_note": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 1594,
+        "unchanged_audio_state": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "exact_pcm": true
+    },
+    {
+      "test": "bad-qword-width.asf",
+      "result": "exact",
+      "keys": [
+        "artist",
+        "title"
+      ],
+      "picture_sha256": null,
+      "note": "Malformed optional object/value skipped; later metadata/audio survive",
+      "fixture_ffprobe": null,
+      "runtime_ffprobe": null,
+      "runtime_ffprobe_note": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 1590,
+        "unchanged_audio_state": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "exact_pcm": true
+    },
+    {
+      "test": "bad-bool-width.asf",
+      "result": "exact",
+      "keys": [
+        "artist",
+        "title"
+      ],
+      "picture_sha256": null,
+      "note": "Malformed optional object/value skipped; later metadata/audio survive",
+      "fixture_ffprobe": null,
+      "runtime_ffprobe": null,
+      "runtime_ffprobe_note": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 1588,
+        "unchanged_audio_state": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "exact_pcm": true
+    },
+    {
+      "test": "bad-text-odd.asf",
+      "result": "exact",
+      "keys": [
+        "artist",
+        "title"
+      ],
+      "picture_sha256": null,
+      "note": "Malformed optional object/value skipped; later metadata/audio survive",
+      "fixture_ffprobe": null,
+      "runtime_ffprobe": null,
+      "runtime_ffprobe_note": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 1589,
+        "unchanged_audio_state": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "exact_pcm": true
+    },
+    {
+      "test": "bad-name-odd.asf",
+      "result": "exact",
+      "keys": [
+        "artist",
+        "title"
+      ],
+      "picture_sha256": null,
+      "note": "Malformed optional object/value skipped; later metadata/audio survive",
+      "fixture_ffprobe": null,
+      "runtime_ffprobe": null,
+      "runtime_ffprobe_note": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 1593,
+        "unchanged_audio_state": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "exact_pcm": true
+    },
+    {
+      "test": "bad-picture-size.asf",
+      "result": "exact",
+      "keys": [
+        "artist",
+        "title"
+      ],
+      "picture_sha256": null,
+      "note": "Malformed optional object/value skipped; later metadata/audio survive",
+      "fixture_ffprobe": null,
+      "runtime_ffprobe": null,
+      "runtime_ffprobe_note": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 1623,
+        "unchanged_audio_state": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "exact_pcm": true
+    },
+    {
+      "test": "bad-picture-mime.asf",
+      "result": "exact",
+      "keys": [
+        "artist",
+        "title"
+      ],
+      "picture_sha256": null,
+      "note": "Malformed optional object/value skipped; later metadata/audio survive",
+      "fixture_ffprobe": null,
+      "runtime_ffprobe": null,
+      "runtime_ffprobe_note": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 1727,
+        "unchanged_audio_state": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "exact_pcm": true
+    },
+    {
+      "test": "bad-picture-mime-surrogate.asf",
+      "result": "exact",
+      "keys": [
+        "artist",
+        "title"
+      ],
+      "picture_sha256": null,
+      "note": "Malformed optional object/value skipped; later metadata/audio survive",
+      "fixture_ffprobe": null,
+      "runtime_ffprobe": null,
+      "runtime_ffprobe_note": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 1726,
+        "unchanged_audio_state": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "exact_pcm": true
+    },
+    {
+      "test": "bad-picture-description.asf",
+      "result": "exact",
+      "keys": [
+        "artist",
+        "title"
+      ],
+      "picture_sha256": null,
+      "note": "Malformed optional object/value skipped; later metadata/audio survive",
+      "fixture_ffprobe": null,
+      "runtime_ffprobe": null,
+      "runtime_ffprobe_note": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 1637,
+        "unchanged_audio_state": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "exact_pcm": true
+    },
+    {
+      "test": "bad-picture-empty.asf",
+      "result": "exact",
+      "keys": [
+        "artist",
+        "title"
+      ],
+      "picture_sha256": null,
+      "note": "Malformed optional object/value skipped; later metadata/audio survive",
+      "fixture_ffprobe": null,
+      "runtime_ffprobe": null,
+      "runtime_ffprobe_note": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 1639,
+        "unchanged_audio_state": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "exact_pcm": true
+    },
+    {
+      "test": "bad-picture-long-description.asf",
+      "result": "exact",
+      "keys": [
+        "artist",
+        "title"
+      ],
+      "picture_sha256": null,
+      "note": "Malformed optional object/value skipped; later metadata/audio survive",
+      "fixture_ffprobe": null,
+      "runtime_ffprobe": null,
+      "runtime_ffprobe_note": null,
+      "protected_input": null,
+      "exact_pcm": true
+    },
+    {
+      "test": "after-data.asf",
+      "result": "exact",
+      "keys": [],
+      "picture_sha256": null,
+      "note": "Metadata is read only from the Header Object",
+      "fixture_ffprobe": null,
+      "runtime_ffprobe": null,
+      "runtime_ffprobe_note": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 1512,
+        "unchanged_audio_state": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "exact_pcm": true
+    },
+    {
+      "test": "bare-header.asf",
+      "result": "exact",
+      "keys": [],
+      "picture_sha256": null,
+      "note": "",
+      "fixture_ffprobe": null,
+      "runtime_ffprobe": null,
+      "runtime_ffprobe_note": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 32,
+        "unchanged_audio_state": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "exact_pcm": false
+    },
+    {
+      "test": "protected-basic-short.asf",
+      "result": "exact",
+      "keys": [],
+      "picture_sha256": null,
+      "note": "Short optional object ends exactly at PAGE_NOACCESS without audio/data padding",
+      "fixture_ffprobe": null,
+      "runtime_ffprobe": null,
+      "runtime_ffprobe_note": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 65,
+        "unchanged_audio_state": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "exact_pcm": false
+    },
+    {
+      "test": "protected-extended-name.asf",
+      "result": "exact",
+      "keys": [],
+      "picture_sha256": null,
+      "note": "Short optional object ends exactly at PAGE_NOACCESS without audio/data padding",
+      "fixture_ffprobe": null,
+      "runtime_ffprobe": null,
+      "runtime_ffprobe_note": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 60,
+        "unchanged_audio_state": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "exact_pcm": false
+    },
+    {
+      "test": "protected-metadata-value.asf",
+      "result": "exact",
+      "keys": [],
+      "picture_sha256": null,
+      "note": "Short optional object ends exactly at PAGE_NOACCESS without audio/data padding",
+      "fixture_ffprobe": null,
+      "runtime_ffprobe": null,
+      "runtime_ffprobe_note": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 82,
+        "unchanged_audio_state": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "exact_pcm": false
+    },
+    {
+      "test": "protected-library-name.asf",
+      "result": "exact",
+      "keys": [],
+      "picture_sha256": null,
+      "note": "Short optional object ends exactly at PAGE_NOACCESS without audio/data padding",
+      "fixture_ffprobe": null,
+      "runtime_ffprobe": null,
+      "runtime_ffprobe_note": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 70,
+        "unchanged_audio_state": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "exact_pcm": false
+    },
+    {
+      "test": "protected-picture-size.asf",
+      "result": "exact",
+      "keys": [],
+      "picture_sha256": null,
+      "note": "Short optional object ends exactly at PAGE_NOACCESS without audio/data padding",
+      "fixture_ffprobe": null,
+      "runtime_ffprobe": null,
+      "runtime_ffprobe_note": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 113,
+        "unchanged_audio_state": true,
+        "cancellation": true,
+        "no_input_padding": true
+      },
+      "exact_pcm": false
+    },
+    {
+      "test": "mutated metadata at a protected mapped end",
+      "result": "passed",
+      "inputs": 1200,
+      "seed": 1027
+    }
+  ],
+  "fixture_hashes": {
+    "bad-metadata-value.asf": "9e52f48a3fb01a2dbe9d77c11a8cf67675acdfecef737b883cc8ef62db74566b",
+    "bad-extended-value.asf": "de11a16774318e377401146df9e89032ed717dcd955890a1c32c82ee4aba35cf",
+    "protected-picture-size.asf": "adf59591335d37c39f03a08441552f759d713d82e0cf19ee04f82079dd80c323",
+    "extended.asf": "ce1483bae201dde8c44e0b50ef0e87838cf2b9bfa2638069b024611ff7c35a64",
+    "aliases-and-empty.asf": "607911a06cc8a2ee541b1a7f3bed5c7dfbff2b5d9bc408f5d103e44ebd5a43fc",
+    "basic.asf": "6d1932a8240fc5d80cd29b3f3e5f02233cde4fd707ede2b166db8bb1ea76a96e",
+    "duplicates.asf": "a7b845316fa6d65aa94af464a663927d26a96fad1347bdb768575c1b9a56a9a8",
+    "bad-bool-width.asf": "41103554eaffdcf9956aa89ce8465acea1da323ca6f3c00f794632450cc0f600",
+    "protected-extended-name.asf": "5a63b97c9a5513e992598745ef54fab3c6a1472694bba9ce431e9b3005ce602d",
+    "bad-basic-overflow.asf": "f790f2e786bf295001af8959e0855256547fbc0d819a76c90a97af6545cea4fb",
+    "bad-extended-name.asf": "9e6fab28dba03fa1d9cadb630a7b9b2996fe14a9b95cc8ee5793567d64778ea5",
+    "cover-library.asf": "1c1bc1da5973bbff6ed4ed96104a94dd9131799f40ec47ae436bb47d46d7e814",
+    "cover-local-2.asf": "f6ca882f3c77982557f8603369c12a038065090bb99b95b786a7551c97a4fa59",
+    "bad-picture-long-description.asf": "41d418da793a5d9f9b99c2dcac3a669517b18969135bfc371e6b727690188f12",
+    "selected-stream-2.asf": "5c8eb8723eae9dd1bd49a0a9ccf20628bf0518b3a1f457e46c5cc5da223e0a70",
+    "aac.asf": "83a71258a16e14fee6d7d7690b2e977a94e769a28b05b62b7e0e593cb6259699",
+    "bad-word-width.asf": "12cfe6ee26e6daff29c4bfa6b121207a7267212ba0b4e135f6621c58dbb7fcad",
+    "bad-picture-description.asf": "e2768c9f98ee7baab91dfd5e4bbf0e3ddc120757433a3915967ed087c8287ea9",
+    "unsigned-metadata.asf": "31c5e230c2c970c1e5f942db6d09fea633a288fffeeb2c2cec49fbbeffc206ee",
+    "selected-stream.asf": "5c8eb8723eae9dd1bd49a0a9ccf20628bf0518b3a1f457e46c5cc5da223e0a70",
+    "bad-picture-size.asf": "20a3e62e48ea43651be35c79602400bc5b5822327cb6e1e015fa3962a72423c9",
+    "cover-declared-jpeg.asf": "017c8eeb464dce48507fa39f09b8c170eebd5642a820d8cc2e72db1b057c4b2b",
+    "bare-header.asf": "857f79a20f1f6c371735187eea1353c646f067cd4af2b22c223398359ce06c96",
+    "protected-metadata-value.asf": "73f4e68ed93e164b30196e7f90c012143602c66a12008a39a78e863b9008b111",
+    "bad-name-odd.asf": "b672834a6789223f127145e53bd1aba657149d6ec19c967bb5f2a9daa382ed18",
+    "bad-partial-descriptors.asf": "3924dd0c1116eebc54999e03bf624d7b3713b44d0de09db6414d4680c6dbfc95",
+    "bad-picture-empty.asf": "6cb2283ea32cdb2dd0871deb7a13df2151862550b7e72ef3d5d6d731c94a7029",
+    "libmp3lame.asf": "11e381a2aa81428f5f5c700af9449f12a99fa49336e6da61fdd18380e213950b",
+    "other.jpg": "e695ba041a6934649337a93f3a3f261e970582fa63da5f73d9b138941efe5174",
+    "protected-library-name.asf": "790c379ce26a845169f599c1128677c149730803e1127d2a2dddca703bd63f8e",
+    "protected-basic-short.asf": "3a48a00c74377fa76dbff92fd46a85fff07595f2b6b045fcfbdb2aa24e5af268",
+    "record-budget.asf": "d9c03aea00ebed848518b9e6e5c2e7a6033211d03113c1fc97cc54967d2fee2b",
+    "library.asf": "0c790a5cf9f253a7f5ceaf6161865751830ac2022e48d855e987e2d5cce670a3",
+    "cover-local.asf": "f6ca882f3c77982557f8603369c12a038065090bb99b95b786a7551c97a4fa59",
+    "bad-text-odd.asf": "21a685fa370a7c9f8cdd18618477321ae326da9104f46993fcb3f1ed7207717e",
+    "metadata.asf": "986938cb2e054121984fe47aa2606121d92d80ae8f467167c17cafe6860219d2",
+    "unsigned-library.asf": "54cfb4fde528bb4988ba499b035534fb3753559650c9307ba62c4c07a727bebe",
+    "bad-picture-mime-surrogate.asf": "72a51fcb3061c81fe704323a9f27410600e22e2cbbaf45e3a4757b5389d304c7",
+    "nul-surrogate.asf": "65b9fa530abb325da03f703a4ab70526855ab2833ebbb2d1474a747256122723",
+    "pcm_s16le.asf": "bce0acbf9f7ab1afaec7de631909976724de6c8f247f5d16369031418d94923b",
+    "value-boundary.asf": "e2e79136a94230abd745408f6091106f191dc3ee6f27ee4e906291a55cfee7e4",
+    "bad-extended-count.asf": "ccecaeb60b6069e27a1c1aed3186195d8e71166f4800adad25ca038409d8542b",
+    "bad-dword-width.asf": "482ac3f25b263252c77e75333ec5fceb16a0155a6e579865739c4d67f73ce1b0",
+    "cover-case.asf": "d942f65b4a2d3f72612cf9fbc8dd8607f53d1226739d57002bc893a26881ddf8",
+    "bad-basic-short.asf": "97b63b35d58306bcdc6afc376cc9baea2b01b30cfe3b357cde3a733b9444cf11",
+    "bad-qword-width.asf": "3421fef006c3aa62f74ee36793698de1b9ab016923f9b4a23f053d3c955afda4",
+    "global-language.asf": "ceeade78f4a5dd7986a14f027c7b735ca134d0743846fa5700381828fb739dac",
+    "bad-basic-odd.asf": "e3e09aa2b6902ee463480becc9487f7d73bd90a191a283dd5d279f8522502a95",
+    "unsigned-extended.asf": "2dd530d6a2a855832a954062a9f5febe82ee7821b88fafe23c55d02037a4166f",
+    "bad-picture-mime.asf": "b13eda882b202b384b9b7070caa6d00798ac7aed557fe71bc27954e7ebcc4ff8",
+    "after-data.asf": "f30bc80f3914a047c4798c10561a4e3d5d39f34120bc9abc40ada55836c5f089",
+    "cover-large.asf": "93a2216cd9c7cfc68f2f4147316e5ba35969aabfeb06565bbe4fffa17e886bb1",
+    "cover-local-invalid.asf": "b589747fe260bfbd9c58edf73c9664f6c0403f19421b6592d84d7dbb8feb9e7c",
+    "back.png": "385a92647193b6011c5e5e5260d7b7014351c56cabb30add4d458ae6efc49557",
+    "front.png": "e6aeb8688de618cf3c8d49d4c0798db5eb5e6fd9cd58e63b38b5f348f743d014",
+    "cover-extended.asf": "b4a851cc84e461117deaf154744c8ae811743af17fcad88a1dcb9bf9dc458b01",
+    "bad-library-name.asf": "5c5a9621a8dabef554d2c1068079a201dfc701cdcc843b0b9f99cd839edc37d3",
+    "nested-four.asf": "76a6e12f76fedff7efde28502b2c6fcd9cea9ec72c73c8b2aef9c06be72ffbf9",
+    "\u00dcn\u00efcode \u6f22\u5b57 \ud83c\udfb5.asf": "aeb7b31472b38823f650bf588f6e1ecb1fc8d8a2caadca06baa132018572f913"
+  },
+  "fixture_ffmpeg": "ffmpeg version 9.0.1 Copyright (c) 2000-2026 the FFmpeg developers",
+  "fixture_writer_sha256": "fd66e4dcf2f1b103b279e0a8d12a57162006a9a61dfb0820f03a9fe5bfafbf19",
+  "runtime_platform": "Linux-6.1.0-53-amd64-x86_64-with-glibc2.36",
+  "runtime_ffmpeg": "ffmpeg version 5.1.9-0+deb12u1 Copyright (c) 2000-2026 the FFmpeg developers",
+  "runtime_sources": {
+    "src/tags.s": "c3826724e4e67d7b840b6bbb38d7af4b60e370ad2a354a78cc85551ea5224de1",
+    "src/tags_asf.inc": "179a413a2fae216f5448953f2457e17bbf631203a3e2a10d45f2a86ba4d203a0",
+    "src/cover.inc": "4c6a2398bdd6d9dab885f7b01ac37e7bce6c1979f8de99ca9fd450ad6f0b4a71",
+    "src/asf.s": "bd086a94a63fa76e3309e8081a3288f6780bb99916012621e57c3a9b1f690997",
+    "src/decoder.s": "44e88449c121f6d67f1805555f15663fe2d3883531fce2dbf5a8587e58f1d8f8",
+    "tests/verify-asf-metadata.py": "3db9d546449303bd07b2744784185805526b375e5b76d0033229644752de78ac",
+    "tests/asf-metadata-oracle.c": "057b7e3ae0f5aedf77401e8509f76daf942dfae33008220311717cdcfb005af3",
+    "tests/verify-asf.py": "58767cd614fdc166538826e54c03ed80faf35c9c695fd8e80fa3d54859bf50dc"
+  },
+  "cli_sha256": "b71dad39b2e3535e62f2c6b8ad9d5572e1169ea319a9792bbf607a1247b655b2",
+  "oracle_sha256": "49b27b01c71db54d892b69a4dad2c6a36831e17aba866846de3c2a943a5ca786",
+  "chapter_regression_provenance": {
+    "cli_sha256": "b71dad39b2e3535e62f2c6b8ad9d5572e1169ea319a9792bbf607a1247b655b2",
+    "runtime_sources": {
+      "src/tags.s": "c3826724e4e67d7b840b6bbb38d7af4b60e370ad2a354a78cc85551ea5224de1",
+      "src/tags_asf.inc": "179a413a2fae216f5448953f2457e17bbf631203a3e2a10d45f2a86ba4d203a0",
+      "src/chapters_asf.inc": "ec504ed49f0f9eb72b4cd2398c36a4bfdd1acc710061188c24b1b35da3d6b651",
+      "src/chapters.inc": "d1c07f752c20f3772c737d2959e3a94525d582efb0807a8d9921cd234db2dc59",
+      "src/asf.s": "bd086a94a63fa76e3309e8081a3288f6780bb99916012621e57c3a9b1f690997",
+      "src/decoder.s": "44e88449c121f6d67f1805555f15663fe2d3883531fce2dbf5a8587e58f1d8f8"
+    },
+    "runner_sha256": "3db9d546449303bd07b2744784185805526b375e5b76d0033229644752de78ac",
+    "playback_skipped": "reader suite without playback"
+  }
+}

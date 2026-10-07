@@ -63,11 +63,11 @@ def oracle_run(command,args,env=None):
     if result.returncode:raise Failure(f'Chapter oracle exited {result.returncode}: {text[-2000:]}')
     return json.loads(text.splitlines()[-1])
 
-def console_playback(work, wine, checks):
+def console_playback(work, wine, checks, path=None):
     nav.WINE=wine
     audio=nav.audio_environment()
     if audio is None:raise Failure('PulseAudio is required for chapter key playback')
-    path=work/'play.flac';reference=work/'play.f32'
+    path=work/'play.flac' if path is None else path;reference=work/'play.f32'
     if not wine:decode_f32(path,reference)
     pcm=reference.read_bytes()
     recorder=None

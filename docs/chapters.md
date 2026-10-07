@@ -23,12 +23,13 @@ The console reopens the heard file before choosing its chapter, since decoder me
 | WAVE, AIFF/AIFC | `CHAP` frames in `id3 `/`ID3 ` chunks |
 | Matroska/WebM | The ChapterAtoms of every edition |
 | MP4/M4A/M4B/MOV | The Nero `chpl` box and QuickTime chapter text tracks |
+| ASF | Marker Object entries, with UTF-16LE descriptions and preroll-adjusted start times |
 
 CAF, AVI, FLV, AU, WavPack, AC-3, MPEG-TS/PS, RIFX, RF64/BW64 and Wave64 chapters are not read, and neither are separate `.cue` files.
 
 ## Reading rules
 
-The rules follow FFmpeg's demuxers, so `lamp-cli --chapters` agrees with `ffprobe -show_chapters`:
+The rules follow FFmpeg's demuxers within the documented limits, so ordinary chapter lists agree with `ffprobe -show_chapters`:
 
 - Each source numbers its chapters: by comment number, cue sheet track, `CHAP` frame order, ChapterUID, or `chpl` entry and text track sample index. A chapter whose number was already seen moves the earlier chapter to its start and replaces its title, or removes it, as `avpriv_new_chapter` does. So a FLAC cue sheet track replaces the comment chapter with the same number. An MP4 chapter text track replaces the `chpl` entries at its sample indexes; `chpl` entries past the track's last sample stay.
 - Vorbis comments: a key of `CHAPTER`, up to three digits and nothing more (10 bytes at most) gives a start, read as `sscanf("%02d:%02d:%02d.%03d")` reads it. White space and a `+` are allowed. The last field counts milliseconds, so `.4` is 4 ms. A longer key ending in `NAME` titles the chapter with that number. Before that chapter exists, the comment stays an ordinary comment. Chapter comments are not tags.
@@ -51,6 +52,7 @@ The rules follow FFmpeg's demuxers, so `lamp-cli --chapters` agrees with `ffprob
   - Chapter text tracks: then come the tracks named by the last `tref/chap` box, in its order. Each sample is one chapter, timed in the track's `mdhd` timescale; edit lists are not applied.
   - Sample text: a 16-bit length, then UTF-8 text, or UTF-16 after a byte order mark. A sample whose length runs past the sample is skipped.
   - A track with a video handler (chapter images) gives no chapters.
+- ASF: the first structurally valid Marker Object, in stored order. Presentation times subtract the File Properties preroll regardless of header order. UTF-16LE descriptions become titles. Before-preroll starts, nanosecond overflow, invalid entry lengths/counts and trailing bytes are skipped as described in [ASF chapter rules](asf.md#marker-chapters); the whole marker object is preflighted before publication. Marker offsets/send times do not replace the decoder's sample/frame seek index.
 - A title ends at its first NUL. LAMP keeps up to 1024 bytes, cut at a character boundary. `lamp-cli` prints control characters as spaces, and prints an empty title as no title. LAMP keeps up to 1024 chapters per file and 256 KiB of titles. Chapter end times and other chapter metadata are not kept.
 
 ## Differences from FFmpeg 6.1
@@ -61,6 +63,8 @@ The rules follow FFmpeg's demuxers, so `lamp-cli --chapters` agrees with `ffprob
 - For Ogg, LAMP reads only the comment packet of the first stream it decodes. FFmpeg reads every stream's comments.
 
 ## Verification
+
+The [ASF marker suite](asf.md#verification-and-provenance) passes 76 native and 70 COFF/Wine checks, including 55 layouts, 43,306 protected reads and 64 exact heard-file seeks per build, four continuous PCM comparisons, 1,200/120 mutations and console bracket/paused playback observations. Six published-binary controls reproduce missing chapters and FFmpeg's marker-count mismatch before the change. Three [Wine player scenarios](../reports/asf-chapters-player-verification.json) also pass ASF/FLAC chapter controls and ASF title/cover track switching. ASF's malformed-input/header-order/negative-time rules and title limits are documented separately rather than treated as FFmpeg parity outside those limits.
 
 `python3 tests/verify-chapter-navigation.py` ([native report](../reports/chapter-navigation-verification.json), [Windows COFF/Wine report](../reports/chapter-navigation-wine-verification.json)) checks 24 boundary cases: chronological boundaries, duplicate and fractional starts, the three-second rule, missing/out-of-range chapters, unknown duration and 1024 starts ending at a protected page. Queue checks first decode ahead into a file with different chapters, then navigate the heard file and compare PCM with continuous decoding at 44.1 and 48 kHz: 112 exact seeks across MP3, MP4/ALAC, Matroska/ALAC, FLAC, Ogg/Vorbis, chaptered WAVE and WAVE without chapters. Console key playback and the Windows player's bracket keys, focused-control forwarding, menu commands and paused seeks have separate sink checks ([player report](../reports/chapter-player-verification.json)), including half a second of captured silence while a console chapter seek stays paused. `--wine-only` links the guarded oracle with shipping Windows objects and compares against the native references. The existing [25 navigation/resume checks](../reports/chapter-navigation-regression-verification.json) and [40 chapter-reader checks plus 1,100 mutations](../reports/chapter-reader-regression-verification.json) also pass. Native Windows remains unverified.
 
