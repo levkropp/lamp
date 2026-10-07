@@ -129,7 +129,7 @@ LOCALFN eac3_aht_mantissas
 .Laht_dither:
     mov dword ptr [rsp + 56], 0
 .Laht_dither_value:
-    call eac3_spx_random
+    call eac3_random
     and eax, 0x7fffff
     sub eax, 0x400000
     mov ecx, [rsp + 56]

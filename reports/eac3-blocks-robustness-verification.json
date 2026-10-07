@@ -1,0 +1,99 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "tone.ec3",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 100,
+      "decoded": 66,
+      "rejected_or_damaged": 34
+    },
+    {
+      "test": "written.ec3",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 100,
+      "decoded": 70,
+      "rejected_or_damaged": 30
+    },
+    {
+      "test": "spx.ec3",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 100,
+      "decoded": 70,
+      "rejected_or_damaged": 30
+    },
+    {
+      "test": "spx.mka",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 100,
+      "decoded": 46,
+      "rejected_or_damaged": 54
+    },
+    {
+      "test": "spx.mp4",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 100,
+      "decoded": 53,
+      "rejected_or_damaged": 47
+    },
+    {
+      "test": "spx.ts",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 100,
+      "decoded": 77,
+      "rejected_or_damaged": 23
+    },
+    {
+      "test": "aht.ec3",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 100,
+      "decoded": 73,
+      "rejected_or_damaged": 27
+    },
+    {
+      "test": "aht.mka",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 100,
+      "decoded": 48,
+      "rejected_or_damaged": 52
+    },
+    {
+      "test": "aht.mp4",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 100,
+      "decoded": 52,
+      "rejected_or_damaged": 48
+    },
+    {
+      "test": "aht.ts",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 100,
+      "decoded": 75,
+      "rejected_or_damaged": 25
+    },
+    {
+      "test": "eac3.mka",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 100,
+      "decoded": 51,
+      "rejected_or_damaged": 49
+    },
+    {
+      "test": "eac3.mp4",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 100,
+      "decoded": 39,
+      "rejected_or_damaged": 61
+    },
+    {
+      "test": "eac3.ts",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 100,
+      "decoded": 83,
+      "rejected_or_damaged": 17
+    }
+  ],
+  "mutations": 1300,
+  "decoded": 803,
+  "scope": "13 container/codec sources, 100 mutations each (Linux, 2 GiB address space), seed 20261010: byte flips, zero/0xff runs, cuts, removed and duplicated spans, large length fields; --check, every fourth from a random --start."
+}

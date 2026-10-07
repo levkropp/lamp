@@ -1,0 +1,62 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "spx-clean.ec3",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "spx-bad-block-0.ec3",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "spx-bad-block-1.ec3",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "spx-bad-block-2.ec3",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "spx-bad-block-3.ec3",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "spx-bad-block-4.ec3",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "spx-bad-block-5.ec3",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "aht-spx-clean.ec3",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "aht-spx-bad-block-0.ec3",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "aht-spx-bad-block-1.ec3",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "aht-spx-bad-block-2.ec3",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "aht-spx-bad-block-3.ec3",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "aht-spx-bad-block-4.ec3",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "aht-spx-bad-block-5.ec3",
+      "result": "exact Linux PCM"
+    }
+  ],
+  "scope": "Shipping PE vs native PCM for every concealment boundary"
+}

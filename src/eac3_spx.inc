@@ -214,7 +214,7 @@ LOCALFN eac3_spx_parse
 ENDFN eac3_spx_parse
 
 # Full signed 32-bit LFG word, shared with ordinary mantissa dithering.
-LOCALFN eac3_spx_random
+LOCALFN eac3_random
     mov ecx, [rip + ac3_lfg_index]
     lea r8d, [rcx - 24]
     and r8d, 63
@@ -228,6 +228,22 @@ LOCALFN eac3_spx_random
     mov [r10 + rdx*4], eax
     inc ecx
     mov [rip + ac3_lfg_index], ecx
+    ret
+ENDFN eac3_random
+
+# Rendering uses noise reserved at this block's original LFG position.
+# Ordinary/AHT dithering never consumes the reserved SPX row.
+LOCALFN eac3_spx_random
+    mov rdx, [rip + eac3_spx_reserved_ptr]
+    test rdx, rdx
+    jz eac3_random
+    xor eax, eax
+    cmp rdx, [rip + eac3_spx_reserved_end]
+    jae .Leac3_reserved_step
+    mov eax, [rdx]
+.Leac3_reserved_step:
+    add rdx, 4
+    mov [rip + eac3_spx_reserved_ptr], rdx
     ret
 ENDFN eac3_spx_random
 

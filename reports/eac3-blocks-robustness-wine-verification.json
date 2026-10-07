@@ -1,0 +1,106 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "tone.ec3",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 10,
+      "decoded": 8,
+      "rejected_or_damaged": 2
+    },
+    {
+      "test": "written.ec3",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 10,
+      "decoded": 7,
+      "rejected_or_damaged": 3
+    },
+    {
+      "test": "spx.ec3",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 10,
+      "decoded": 8,
+      "rejected_or_damaged": 2
+    },
+    {
+      "test": "spx.mka",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 10,
+      "decoded": 5,
+      "rejected_or_damaged": 5
+    },
+    {
+      "test": "spx.mp4",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 10,
+      "decoded": 6,
+      "rejected_or_damaged": 4
+    },
+    {
+      "test": "spx.ts",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 10,
+      "decoded": 8,
+      "rejected_or_damaged": 2
+    },
+    {
+      "test": "aht.ec3",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 10,
+      "decoded": 7,
+      "rejected_or_damaged": 3
+    },
+    {
+      "test": "aht.mka",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 10,
+      "decoded": 4,
+      "rejected_or_damaged": 6
+    },
+    {
+      "test": "aht.mp4",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 10,
+      "decoded": 3,
+      "rejected_or_damaged": 7
+    },
+    {
+      "test": "aht.ts",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 10,
+      "decoded": 9,
+      "rejected_or_damaged": 1
+    },
+    {
+      "test": "eac3.mka",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 10,
+      "decoded": 5,
+      "rejected_or_damaged": 5
+    },
+    {
+      "test": "eac3.mp4",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 10,
+      "decoded": 2,
+      "rejected_or_damaged": 8
+    },
+    {
+      "test": "eac3.ts",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 10,
+      "decoded": 9,
+      "rejected_or_damaged": 1
+    }
+  ],
+  "mutations": 130,
+  "decoded": 81,
+  "wine_debug": "err+all",
+  "scope": "13 container/codec sources, 100 mutations each (every tenth under Wine), seed 20261010: byte flips, zero/0xff runs, cuts, removed and duplicated spans, large length fields; --check, every fourth from a random --start.",
+  "wine_address_randomization": "Disabled per process with setarch x86_64 -R; Wine 8 previously failed to map shared user data before the decoder started",
+  "saved_startup_failure_replays": {
+    "input": "tests/generated/robustness-wine/crash-eac3.mka-40.bin",
+    "checks": 5,
+    "native_and_wine_exit": 2
+  }
+}

@@ -84,6 +84,11 @@ eac3_aht_gains: .zero 256+3         # final ternary group may have two spare gai
 .p2align 6
 ac3_state:                          # decoder state cleared by ac3_track_reset
 ac3_delay: .zero 6*128*8            # overlap halves (doubles)
+ac3_has_last: .zero 4
+.p2align 3
+eac3_spx_reserved_ptr: .zero 8
+eac3_spx_reserved_end: .zero 8
+ac3_params:                        # parsed state, separate from synthesis history
 ac3_dexps: .zero 7*256
 ac3_bap: .zero 7*256
 ac3_psd: .zero 7*256*2
@@ -120,7 +125,6 @@ ac3_dbaval: .zero 64
 ac3_dyn: .zero 8                    # two floats (dual mono: second channel's first)
 ac3_blksw: .zero 8*4
 ac3_dith: .zero 8*4
-ac3_has_last: .zero 4
 eac3_aht_ch: .zero 8*4
 eac3_current_block: .zero 4
 eac3_spx_active: .zero 4
@@ -138,7 +142,10 @@ eac3_spx_signal: .zero 8*17*4
 eac3_spx_rms: .zero 17*4
 eac3_spx_wrap: .zero 17*4
 .p2align 3
+ac3_params_end:
 ac3_state_end:
+.equ AC3_PARAMS_BYTES, ac3_params_end - ac3_params
+.equ AC3_PARAMS_WORDS, AC3_PARAMS_BYTES / 8
 
 .text
 # ECX=bits (1-32) -> EAX from the frame copy; zero past the frame's end.
@@ -774,6 +781,12 @@ LOCALFN ac3_decode
     jnz .Lac3_decode_bsi_ok
     mov r12d, 1
 .Lac3_decode_bsi_ok:
+    cmp dword ptr [rip + ac3_enhanced], 0
+    je .Lac3_decode_immediate
+    mov ecx, r12d
+    call eac3_decode_blocks
+    jmp .Lac3_decode_return
+.Lac3_decode_immediate:
     xor r13d, r13d                        # block
 .Lac3_decode_block:
     test r12d, r12d
@@ -783,7 +796,11 @@ LOCALFN ac3_decode
     cmp eax, AC3_UNSUPPORTED
     je .Lac3_decode_unsupported
     test eax, eax
-    jnz .Lac3_decode_keep
+    jz .Lac3_decode_block_bad
+    mov ecx, r13d
+    call ac3_transform
+    jmp .Lac3_decode_keep
+.Lac3_decode_block_bad:
     mov r12d, 1
 .Lac3_decode_conceal:
     # Previous block (zeros before the first) into this block's output.
@@ -948,3 +965,4 @@ ENDFN ac3_bsi
 .include "eac3.inc"
 .include "eac3_spx.inc"
 .include "eac3_aht.inc"
+.include "eac3_blocks.inc"

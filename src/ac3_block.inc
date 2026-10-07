@@ -36,7 +36,7 @@ LOCALFN ac3_stage_range
     ret
 ENDFN ac3_stage_range
 
-# One audio block, ECX=block -> EAX=1, or 0 when the block does not decode.
+# Parse one audio block into coefficients, ECX=block -> EAX=1, or 0 on failure.
 # Locals: 32 first channel of the side information loops (0 with coupling).
 LOCALFN ac3_block
     push rbx
@@ -814,8 +814,6 @@ LOCALFN ac3_block
     jne .Lac3_block_transform
     call ac3_rematrix
 .Lac3_block_transform:
-    mov ecx, ebx
-    call ac3_transform
     mov eax, 1
     jmp .Lac3_block_return
 .Lac3_block_unsupported:
