@@ -1,0 +1,666 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "id3v24.mp3",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "keys": [
+        "album",
+        "album_artist",
+        "artist",
+        "comment",
+        "composer",
+        "date",
+        "disc",
+        "genre",
+        "title",
+        "track"
+      ],
+      "note": ""
+    },
+    {
+      "test": "id3v23.mp3",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "keys": [
+        "album",
+        "album_artist",
+        "artist",
+        "comment",
+        "composer",
+        "date",
+        "disc",
+        "genre",
+        "title",
+        "track"
+      ],
+      "note": ""
+    },
+    {
+      "test": "id3v2-and-v1.mp3",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "keys": [
+        "album",
+        "album_artist",
+        "artist",
+        "comment",
+        "composer",
+        "date",
+        "disc",
+        "genre",
+        "title",
+        "track"
+      ],
+      "note": ""
+    },
+    {
+      "test": "id3v1.mp3",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "keys": [
+        "comment"
+      ],
+      "note": ""
+    },
+    {
+      "test": "adts.aac",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "keys": [
+        "album",
+        "album_artist",
+        "artist",
+        "comment",
+        "composer",
+        "date",
+        "disc",
+        "genre",
+        "title",
+        "track"
+      ],
+      "note": ""
+    },
+    {
+      "test": "native.flac",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "keys": [
+        "album",
+        "album_artist",
+        "artist",
+        "comment",
+        "composer",
+        "date",
+        "disc",
+        "genre",
+        "title",
+        "track"
+      ],
+      "note": ""
+    },
+    {
+      "test": "vorbis.ogg",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "keys": [
+        "album",
+        "album_artist",
+        "artist",
+        "comment",
+        "composer",
+        "date",
+        "disc",
+        "genre",
+        "title",
+        "track"
+      ],
+      "note": ""
+    },
+    {
+      "test": "opus.opus",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "keys": [
+        "album",
+        "album_artist",
+        "artist",
+        "comment",
+        "composer",
+        "date",
+        "disc",
+        "genre",
+        "title",
+        "track"
+      ],
+      "note": ""
+    },
+    {
+      "test": "flac.oga",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "keys": [
+        "album",
+        "album_artist",
+        "artist",
+        "comment",
+        "composer",
+        "date",
+        "disc",
+        "genre",
+        "title",
+        "track"
+      ],
+      "note": ""
+    },
+    {
+      "test": "aac.m4a",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "keys": [
+        "album",
+        "album_artist",
+        "artist",
+        "comment",
+        "composer",
+        "date",
+        "disc",
+        "genre",
+        "title",
+        "track"
+      ],
+      "note": ""
+    },
+    {
+      "test": "alac.mov",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "keys": [
+        "album",
+        "artist",
+        "comment",
+        "date",
+        "genre",
+        "title"
+      ],
+      "note": ""
+    },
+    {
+      "test": "audio.mka",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "keys": [
+        "album",
+        "album_artist",
+        "artist",
+        "comment",
+        "composer",
+        "date",
+        "disc",
+        "genre",
+        "title",
+        "track"
+      ],
+      "note": ""
+    },
+    {
+      "test": "opus.webm",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "keys": [
+        "album",
+        "album_artist",
+        "artist",
+        "comment",
+        "composer",
+        "date",
+        "disc",
+        "genre",
+        "title",
+        "track"
+      ],
+      "note": ""
+    },
+    {
+      "test": "pcm.wav",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "keys": [
+        "album",
+        "artist",
+        "comment",
+        "date",
+        "genre",
+        "title",
+        "track"
+      ],
+      "note": ""
+    },
+    {
+      "test": "pcm.avi",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "keys": [
+        "artist",
+        "comment",
+        "date",
+        "genre",
+        "title",
+        "track"
+      ],
+      "note": ""
+    },
+    {
+      "test": "pcm.caf",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "keys": [
+        "album",
+        "album_artist",
+        "artist",
+        "comment",
+        "composer",
+        "date",
+        "disc",
+        "genre",
+        "title",
+        "track"
+      ],
+      "note": ""
+    },
+    {
+      "test": "wavpack.wv",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "keys": [
+        "album",
+        "album_artist",
+        "artist",
+        "comment",
+        "composer",
+        "date",
+        "disc",
+        "genre",
+        "title",
+        "track"
+      ],
+      "note": ""
+    },
+    {
+      "test": "id3.aiff",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "keys": [
+        "album",
+        "album_artist",
+        "artist",
+        "comment",
+        "composer",
+        "date",
+        "disc",
+        "genre",
+        "title",
+        "track"
+      ],
+      "note": ""
+    },
+    {
+      "test": "text.aiff",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "keys": [
+        "artist",
+        "comment",
+        "title"
+      ],
+      "note": ""
+    },
+    {
+      "test": "annotation.au",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "keys": [
+        "album",
+        "artist",
+        "genre",
+        "title",
+        "track"
+      ],
+      "note": ""
+    },
+    {
+      "test": "id3v24.mp2",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "keys": [
+        "album",
+        "album_artist",
+        "artist",
+        "comment",
+        "composer",
+        "date",
+        "disc",
+        "genre",
+        "title",
+        "track"
+      ],
+      "note": "FFmpeg's ID3v2.4 tag on Layer II"
+    },
+    {
+      "test": "v22.mp3",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "keys": [
+        "album",
+        "artist",
+        "comment",
+        "composer",
+        "date",
+        "genre",
+        "title",
+        "track"
+      ],
+      "note": "ID3v2 written here"
+    },
+    {
+      "test": "v23-encodings.mp3",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "keys": [
+        "album",
+        "album_artist",
+        "artist",
+        "comment",
+        "date",
+        "disc",
+        "genre",
+        "title"
+      ],
+      "note": "ID3v2 written here"
+    },
+    {
+      "test": "v23-unsync.mp3",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "keys": [
+        "artist",
+        "title"
+      ],
+      "note": "ID3v2 written here"
+    },
+    {
+      "test": "v23-extended.mp3",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "keys": [
+        "title"
+      ],
+      "note": "ID3v2 written here"
+    },
+    {
+      "test": "v24-frame-unsync.mp3",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "keys": [
+        "album",
+        "artist",
+        "title"
+      ],
+      "note": "ID3v2 written here"
+    },
+    {
+      "test": "v24-extended.mp3",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "keys": [
+        "title"
+      ],
+      "note": "ID3v2 written here"
+    },
+    {
+      "test": "v24-encrypted.mp3",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "keys": [
+        "artist",
+        "title"
+      ],
+      "note": "ID3v2 written here"
+    },
+    {
+      "test": "v24-txxx.mp3",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "keys": [
+        "album_artist",
+        "comment",
+        "genre",
+        "title",
+        "track"
+      ],
+      "note": "ID3v2 written here"
+    },
+    {
+      "test": "v24-genres.mp3",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "keys": [
+        "genre",
+        "title"
+      ],
+      "note": "ID3v2 written here"
+    },
+    {
+      "test": "two-tags.mp3",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "keys": [
+        "artist",
+        "title"
+      ],
+      "note": "ID3v2 written here"
+    },
+    {
+      "test": "genre-raw.mp3",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "keys": [
+        "genre"
+      ],
+      "note": "genre '(200)'"
+    },
+    {
+      "test": "genre-word.mp3",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "keys": [
+        "genre"
+      ],
+      "note": "genre 'abc'"
+    },
+    {
+      "test": "genre-negative.mp3",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "keys": [
+        "genre"
+      ],
+      "note": "genre '-3'"
+    },
+    {
+      "test": "genre-text.mp3",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "keys": [
+        "genre"
+      ],
+      "note": "genre '17abc'"
+    },
+    {
+      "test": "ID3v1 genres 0-191 in TCON",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "note": "genre 133 is \"Afro-Punk\""
+    },
+    {
+      "test": "v11.mp3",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "keys": [
+        "album",
+        "artist",
+        "comment",
+        "date",
+        "genre",
+        "title",
+        "track"
+      ],
+      "note": "ID3v1.1 with a track and genre"
+    },
+    {
+      "test": "v1-latin1.mp3",
+      "result": "equal",
+      "comparator": "expected values",
+      "note": "ID3v1 Latin-1 text (FFmpeg passes the bytes through)"
+    },
+    {
+      "test": "v1-genre.mp3",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "keys": [
+        "title"
+      ],
+      "note": "ID3v1 without a genre"
+    },
+    {
+      "test": "id3-ape.mp3",
+      "result": "equal",
+      "comparator": "expected values",
+      "note": "APEv2 fills keys ID3v2 left empty"
+    },
+    {
+      "test": "ape-only.mp3",
+      "result": "equal",
+      "comparator": "expected values",
+      "note": "APEv2 alone, binary items skipped"
+    },
+    {
+      "test": "ape-v1.mp3",
+      "result": "equal",
+      "comparator": "expected values",
+      "note": "APEv2 before ID3v1 (FFmpeg 6.1 reads no APEv2 in MP3)"
+    },
+    {
+      "test": "comments.flac",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "keys": [
+        "album",
+        "album_artist",
+        "artist",
+        "comment",
+        "date",
+        "disc",
+        "genre",
+        "title",
+        "track"
+      ],
+      "note": "repeated, cased and malformed comments"
+    },
+    {
+      "test": "long.ogg",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "keys": [
+        "comment",
+        "title"
+      ],
+      "note": "a comment packet over two pages, cut at 4096 bytes"
+    },
+    {
+      "test": "items.m4a",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "keys": [
+        "album_artist",
+        "comment",
+        "composer",
+        "date",
+        "disc",
+        "genre",
+        "title",
+        "track"
+      ],
+      "note": "genre number, track without total"
+    },
+    {
+      "test": "items-qt.m4a",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "keys": [
+        "album_artist",
+        "comment",
+        "composer",
+        "date",
+        "disc",
+        "genre",
+        "title",
+        "track"
+      ],
+      "note": "genre number, track without total, QuickTime meta"
+    },
+    {
+      "test": "track-tags.mka",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "keys": [
+        "artist",
+        "title"
+      ],
+      "note": "track-targeted tags skipped"
+    },
+    {
+      "test": "id3-chunk.wav",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "keys": [
+        "genre",
+        "title"
+      ],
+      "note": "an id3 chunk"
+    },
+    {
+      "test": "apple.caf",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "keys": [
+        "artist",
+        "comment",
+        "date",
+        "title",
+        "track"
+      ],
+      "note": "Apple's info keys"
+    },
+    {
+      "test": "mutated tags",
+      "result": "no crash or hang",
+      "files": 1200,
+      "opened": 810
+    }
+  ],
+  "scope": "Metadata tags (ID3v2.2-2.4, ID3v1, APEv2, Vorbis comments, MP4 ilst, Matroska, RIFF INFO, AIFF, CAF) against ffprobe; mutated tags.",
+  "metadata_regression_provenance": {
+    "cli_sha256": "ec8198be7ca301cb0d2b00d51ad96b62aa7d4655966251c559f60c3cb8b15271",
+    "runner_sha256": "58f7be737ac7ea31995469d0a7c383275c1a1b83dfd02846f6f833a4fa08fefe",
+    "runtime_sources": {
+      "src/tags.s": "c3826724e4e67d7b840b6bbb38d7af4b60e370ad2a354a78cc85551ea5224de1",
+      "src/tags_asf.inc": "b8853df37d51c988c9f847372930ca22b9102c5655427ad0874ee6727109e726",
+      "src/cover.inc": "4c6a2398bdd6d9dab885f7b01ac37e7bce6c1979f8de99ca9fd450ad6f0b4a71",
+      "src/asf.s": "268009deee398b1336c51da80983a345ce897acb9f5da9b884582613315406e6",
+      "src/decoder.s": "44e88449c121f6d67f1805555f15663fe2d3883531fce2dbf5a8587e58f1d8f8"
+    },
+    "scope": "Existing native suite run after the final metadata runtime edit; playback skipped for ASF"
+  }
+}

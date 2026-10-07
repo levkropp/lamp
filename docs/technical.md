@@ -315,4 +315,4 @@ Next work includes reopen/seek latency measurements and caching, native multicha
 - [WASAPI](https://learn.microsoft.com/en-us/windows/win32/api/audioclient/nf-audioclient-iaudioclient-initialize)
 - [Windows MMCSS](https://learn.microsoft.com/en-us/windows/win32/procthread/multimedia-class-scheduler-service)
 
-Original project code is MIT licensed. Adapted algorithms/data retain required MIT-0, MIT, CC0 and BSD notices. The project's MIT license does not replace them.
+Original project code is MIT licensed. Adapted algorithms/data retain required MIT-0, MIT, CC0 and BSD notices. The project's MIT license does not replace them. ASF tags and WM/Picture use an original bounded assembly reader (`src/tags_asf.inc`), with global fallback and selected-stream precedence; see [ASF metadata rules](asf.md#tags-and-pictures). WMA remains unsupported pending compatible parameter-table provenance; LGPL/GPL WMA sources reviewed during research were not added to the runtime.

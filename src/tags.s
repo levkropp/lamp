@@ -13,7 +13,8 @@
 # - Vorbis comments in native FLAC and in Ogg Vorbis, Opus and FLAC (the
 #   first stream LAMP decodes); repeated keys join with ";".
 # - MP4/MOV ilst items, RIFF INFO (WAVE, AVI), AIFF NAME/AUTH/ANNO, CAF info
-#   Matroska Info title and untargeted SimpleTags, and AU annotations.
+#   Matroska Info title and untargeted SimpleTags, AU annotations and ASF
+#   Content Description/Extended Content Description/Metadata/Library tags.
 # Key mappings and precedence follow FFmpeg's demuxers. Values are cut at
 # their first NUL and at TAG_VALUE_MAX bytes; empty values are not stored.
 .include "lamp.inc"
@@ -3156,8 +3157,13 @@ FN tags_read
     jmp .Ltags_read_return
 .Ltags_read_mkv:
     cmp eax, 0xa3df451a                   # EBML
-    jne .Ltags_read_mp4
+    jne .Ltags_read_asf
     call mkv_tags
+    jmp .Ltags_read_return
+.Ltags_read_asf:
+    cmp eax, 0x75b22630                   # ASF Header GUID (checked in full)
+    jne .Ltags_read_mp4
+    call asf_tags
     jmp .Ltags_read_return
 .Ltags_read_mp4:
     mov r8d, [rsi + 4]
@@ -3203,3 +3209,4 @@ ENDFN tags_read
 
 .include "chapters.inc"
 .include "cover.inc"
+.include "tags_asf.inc"

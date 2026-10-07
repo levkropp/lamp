@@ -89,7 +89,8 @@ def merge(found):
 
 def main():
     scenarios = [list_checks, list_playback, keys, folder_playback, killed_stream, output_menu, dpi,
-                 modes, accessibility, eac3_playback, chapter_navigation, dense_queue, track_switching, track_queue]
+                 modes, accessibility, eac3_playback, chapter_navigation, dense_queue, track_switching, track_queue,
+                 asf_metadata]
     only = sys.argv[sys.argv.index('--only') + 1].split(',') if '--only' in sys.argv else None
     if only is not None:
         unknown = set(only) - {scenario.__name__ for scenario in scenarios}
@@ -105,7 +106,7 @@ def main():
         raise Failure('PulseAudio (pulseaudio and parec) is required for the private test sink.')
     run([sys.executable, ROOT / 'tools/build-windows.py', '--tests'], capture=False)
     display = Display()
-    wine = dict(env, **_nav.WINE_ENV, DISPLAY=display.name)
+    wine = {**env, **_nav.WINE_ENV, 'DISPLAY': display.name}
     # A Wine server left by an earlier suite may still be shutting down; start afresh.
     subprocess.run(['wineserver', '-k'], env=wine, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     subprocess.run(['wineserver', '-w'], env=wine, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=120)
@@ -123,6 +124,9 @@ def main():
     source_hashes.update({name: hashlib.sha256((ROOT / name).read_bytes()).hexdigest() for name in
         ('src/decoder.s', 'src/mp4.s', 'src/mkv.s', 'src/avi.s', 'src/mpegts.s', 'src/ogg_chain.s',
          'src/win/ui_tracks.inc', 'src/win/ui_draw.inc', 'tests/ui-driver.s')})
+    source_hashes.update({name: hashlib.sha256((ROOT / name).read_bytes()).hexdigest() for name in
+        ('src/tags.s', 'src/tags_asf.inc', 'src/cover.inc', 'src/asf.s',
+         'tests/asf-metadata-player-oracle.c', 'tests/verify-asf-metadata.py')})
     if only is not None:
         write_report('player-selected', {'result': 'passed', 'checks': checks,
             'source_hashes': source_hashes,
@@ -703,6 +707,87 @@ def track_switching(work, env, wine, checks):
             reference_pcm_sha256={key: hashlib.sha256(value).hexdigest() for key,value in references.items()},
             limit='Wine playback; native Windows remains unverified'))
         print(f'{extension}: paused track switches and Automatic PCM pass', flush=True)
+
+
+def asf_metadata(work, env, wine, checks):
+    """Observed ASF titles and rendered cover pixels after paused track switches."""
+    import json
+    import struct
+    spec = importlib.util.spec_from_file_location('asf_metadata_writer', ROOT / 'tests/verify-asf-metadata.py')
+    metadata = importlib.util.module_from_spec(spec); spec.loader.exec_module(metadata)
+    run(['x86_64-w64-mingw32-gcc', '-O2', ROOT / 'tests/asf-metadata-player-oracle.c',
+         '-lgdi32', '-luser32', '-o', BIN / 'asf-metadata-player-oracle.exe'])
+    images = []
+    for color in ('red', 'blue'):
+        image = work / ('asf-' + color + '.png')
+        ffmpeg('-f', 'lavfi', '-i', f'color=c={color}:s=16x16', '-frames:v', '1', '-threads', '1', image)
+        images.append(image.read_bytes())
+    path = work / 'ASF Ünicode metadata.asf'
+    ffmpeg('-f', 'lavfi', '-i', f'anoisesrc=r={RATE}:d=12:seed=9801:a=0.25',
+           '-f', 'lavfi', '-i', f'anoisesrc=r={RATE}:d=12:seed=9802:a=0.25',
+           '-map', '0:a', '-map', '1:a', '-ac', '2', '-c:a', 'pcm_s16le',
+           '-metadata', 'artist=LAMP Test', '-metadata', 'title=Global ASF title', path)
+    data = path.read_bytes(); header_end = struct.unpack_from('<Q', data, 16)[0]
+    children, streams, pos = [], [], 30
+    while pos < header_end:
+        size = struct.unpack_from('<Q', data, pos + 16)[0]; child = data[pos:pos + size]
+        children.append(child)
+        if child[:16] == metadata.writer.STREAM and child[24:40] == metadata.writer.AUDIO:
+            streams.append(struct.unpack_from('<H', child, 72)[0] & 127)
+        pos += size
+    if len(streams) != 2: raise Failure('Expected two ASF audio Stream Properties')
+    names = ('ASF red 🎵', 'ASF blue 漢字')
+    entries = [entry for stream, name, image in zip(streams, names, images) for entry in (
+        metadata.descriptor('Title', name, stream=stream, metadata=True),
+        metadata.descriptor('WM/Picture', metadata.picture(image), 1, stream=stream, metadata=True))]
+    extra = metadata.extension([metadata.descriptors(entries, metadata.LIBRARY)])
+    prefix = bytearray(data[:30]); struct.pack_into('<Q', prefix, 16, header_end + len(extra))
+    struct.pack_into('<I', prefix, 24, len(children) + 1)
+    # Put the metadata before stream discovery to exercise order independence.
+    result = bytearray(prefix + extra + b''.join(children) + data[header_end:])
+    position = 30 + len(extra)
+    for child in children:
+        if child[:16] == metadata.writer.FILE: struct.pack_into('<Q', result, position + 40, len(result))
+        position += len(child)
+    path.write_bytes(result)
+    references = {str(n): track_pcm(work, path, n) for n in (1, 2)}
+    session = Session(work, env, wine, 'asf-metadata', windows_path(path))
+    observations = []
+
+    def pixels():
+        return json.loads(run(['wine', BIN / 'asf-metadata-player-oracle.exe'], env=wine, timeout=30))
+
+    def observe(name, color):
+        lines = session.drive('t', 'n111', 'h113')
+        art = pixels()
+        if lines[0] != title(name) or lines[1] != 'Play' or int(lines[-1]) != 0 or \
+                art[color] < 40 or art['blue' if color == 'red' else 'red']:
+            raise Failure('ASF title/cover/paused beginning differs: ' + str((lines, art)))
+        assert_paused(session)
+        observations.append(dict(title=lines[0], play_control=lines[1], position=int(lines[-1]), pixels=art))
+
+    try:
+        session.drive('s1500', 'k20', 's800', 'k24', 's1200')
+        observe(names[0], 'red')
+        session.drive('r', 's250', 'e41', 's250', 'e23', 'e0d', 's1200')
+        observe(names[1], 'blue')
+        session.drive('r', 's250', 'e41', 's250', 'e24', 'e0d', 's1200')
+        observe(names[0], 'red')
+        offset = session.capture.stat().st_size
+        session.drive('k20', 's1200', 'c')
+    finally: capture = session.finish()
+    heard = merge(_nav.runs(capture[offset:], references))
+    if not heard or heard[0][0] != '1': raise Failure('ASF Automatic metadata did not match heard track: ' + str(heard))
+    checks.append(dict(test='ASF selected metadata and cover', result='rendered cover and title follow paused track choice',
+                       observations=observations, real_keyboard_popup_choices=['Track 2', 'Automatic'],
+                       automatic_runs=heard, fixture_sha256=hashlib.sha256(path.read_bytes()).hexdigest(),
+                       picture_sha256=[hashlib.sha256(image).hexdigest() for image in images],
+                       reference_pcm_sha256={key: hashlib.sha256(value).hexdigest() for key, value in references.items()},
+                       player_sha256=hashlib.sha256((BIN / 'lamp.exe').read_bytes()).hexdigest(),
+                       driver_sha256=hashlib.sha256((BIN / 'ui-driver.exe').read_bytes()).hexdigest(),
+                       pixel_oracle_sha256=hashlib.sha256((BIN / 'asf-metadata-player-oracle.exe').read_bytes()).hexdigest(),
+                       limit='Pixel/title/audio observations under Wine; native Windows remains unverified'))
+    print('ASF titles and red/blue cover pixels follow paused real-popup track switches', flush=True)
 
 
 def track_queue(work, env, wine, checks):
