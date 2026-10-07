@@ -1,0 +1,257 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "empty queue window lifecycle",
+      "result": "L, Escape, real popup Queue command and owner close",
+      "metrics": {
+        "open": true,
+        "count": 0,
+        "selected": -1,
+        "dpi": 96,
+        "client": [
+          732,
+          403
+        ],
+        "columns": [
+          56,
+          280,
+          92,
+          600
+        ]
+      }
+    },
+    {
+      "test": "queue window Unicode selection and replacement",
+      "result": "native End/Enter, Unicode prefix, duplicate entry, paused double click, Space PCM and live Open-dialog replacement",
+      "rows": [
+        {
+          "open": true,
+          "count": 4,
+          "selected": 0,
+          "row": 0,
+          "columns": [
+            "1",
+            "alpha.flac",
+            "Paused",
+            "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\queue-view\\alpha.flac"
+          ]
+        },
+        {
+          "open": true,
+          "count": 4,
+          "selected": 0,
+          "row": 1,
+          "columns": [
+            "2",
+            "\u00dcber \u6f22\ud83c\udfb5.flac",
+            "",
+            "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\queue-view\\\u00dcber \u6f22\ud83c\udfb5.flac"
+          ]
+        },
+        {
+          "open": true,
+          "count": 4,
+          "selected": 0,
+          "row": 2,
+          "columns": [
+            "3",
+            "alpha.flac",
+            "",
+            "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\queue-view\\alpha.flac"
+          ]
+        },
+        {
+          "open": true,
+          "count": 4,
+          "selected": 0,
+          "row": 3,
+          "columns": [
+            "4",
+            "zeta.flac",
+            "",
+            "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\queue-view\\zeta.flac"
+          ]
+        }
+      ],
+      "normal": {
+        "open": true,
+        "count": 4,
+        "selected": 0,
+        "dpi": 96,
+        "client": [
+          732,
+          403
+        ],
+        "columns": [
+          56,
+          280,
+          92,
+          600
+        ]
+      },
+      "resumed_runs": [
+        [
+          "zeta",
+          161,
+          67440
+        ]
+      ],
+      "replacement": {
+        "open": true,
+        "count": 1,
+        "selected": 0,
+        "row": 0,
+        "columns": [
+          "1",
+          "new.flac",
+          "Playing",
+          "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\queue-view\\another\\new.flac"
+        ]
+      },
+      "screenshot_sha256": "52d556c4608457dbf1f9abb45b7ea73f15dcd422569c41d0a2c7c392653edae5"
+    },
+    {
+      "test": "queue selection follows heard file on open",
+      "result": "natural transition selects heard entry; later playback state updates preserve browsed selection",
+      "heard": {
+        "open": true,
+        "count": 2,
+        "selected": 1,
+        "dpi": 96,
+        "client": [
+          732,
+          403
+        ],
+        "columns": [
+          56,
+          280,
+          92,
+          600
+        ]
+      },
+      "browsed": {
+        "open": true,
+        "count": 2,
+        "selected": 0,
+        "dpi": 96,
+        "client": [
+          732,
+          403
+        ],
+        "columns": [
+          56,
+          280,
+          92,
+          600
+        ]
+      }
+    },
+    {
+      "test": "65536-entry shipping queue window",
+      "result": "virtual count, native End/Enter, pause and last-file PCM",
+      "last": {
+        "open": true,
+        "count": 65536,
+        "selected": 65535,
+        "row": 65535,
+        "columns": [
+          "65536",
+          "z.flac",
+          "Paused",
+          "Z:\\tmp\\lqv-clf4zybd\\z.flac"
+        ]
+      },
+      "segments": [
+        [
+          "zeta",
+          139,
+          62880
+        ]
+      ]
+    },
+    {
+      "test": "queue window at 144 DPI",
+      "result": "independent font/window/columns scale and paused native activation",
+      "normal": {
+        "open": true,
+        "count": 4,
+        "selected": 0,
+        "dpi": 96,
+        "client": [
+          732,
+          403
+        ],
+        "columns": [
+          56,
+          280,
+          92,
+          600
+        ]
+      },
+      "scaled": {
+        "open": true,
+        "count": 2,
+        "selected": 1,
+        "dpi": 144,
+        "client": [
+          1100,
+          607
+        ],
+        "columns": [
+          84,
+          420,
+          138,
+          900
+        ]
+      },
+      "limit": "Wine 8 on Xvfb; native Windows, screen readers and mixed-monitor moves remain unverified",
+      "driver_sha256": "bfe49f1a7ba0d4989c6ebaae5f59970af69657946840c40f10baf1869ef154fe"
+    }
+  ],
+  "source_hashes": {
+    "src/queue.s": "18b7b6ead963997cd3341af2deecc143bcb7ca5637c1558b0e9fc6204165b223",
+    "src/win/player.s": "5f0a4c482830f4c50a893ab06b3f0ab549fa2a8f4cb15f2e325748c031897a90",
+    "src/win/ui.s": "16e381d29f9064f6592aad995ffa99d6f71cd9f108fae84a42d3c64211bea7cc",
+    "src/win/ui_queue.inc": "8133dcb55c45ed199ea4e34590d6a28a8952bf0473ccc0b34851e129722892bb",
+    "src/win/ui_menu.inc": "b055ff00cc54c3cc73bc1e7990db1b489e1986e3e082be562cd64a4fe537d3df",
+    "src/win/ui_queue_view.inc": "037980489e6cb212bef0bef2e0474feeedf6c242f61cc218848815e52fdfcfdb",
+    "tests/queue-view-driver.c": "0f4ecba4c09dfc2d02c1a05ccc69e35ff0687ba4bd5bcfca51bef71a3b318752",
+    "src/win/ui_resume.inc": "e279cb7af72e9e37e64d6c44932578770f49caf647c92ba01c0f754cc52452a6",
+    "src/win/resume_state.inc": "94ae5ad64c811b465f21089807b2475c1d78028895d8b027f1861de2192e8d79",
+    "src/resume.s": "d7be291cb21afaaacf14eacb128932cf3f132dd20b728562ae79f4f759b3e551",
+    "src/win/kernel32.def": "793225e863d8f8e5417bbe1375f60875c5053260a5fd1e6c2bb2f89ca79af440",
+    "tests/verify-player.py": "7e41e29330233858c7ed87ba815d49140f26ede310d3ac9cd3312d4a83a57092",
+    "src/decoder.s": "44e88449c121f6d67f1805555f15663fe2d3883531fce2dbf5a8587e58f1d8f8",
+    "src/mp4.s": "d498c8f74f2b157ad6a3e42984d8694667cb64b62074347c56a65cf7da3c622d",
+    "src/mkv.s": "4bfb6643338674c5597d1944f302b9435b065b5b7f559cf78e0f8a61c36fd05d",
+    "src/avi.s": "56f1336d789997c4e4d2d11946129f8f2a1d22ee46c653cd40dacacb4ebeac59",
+    "src/mpegts.s": "5dafcb58db5d634684462207d45e55ff088d5bf032f62d8302adc39be6ef125e",
+    "src/ogg_chain.s": "55d83b35ea390605b27a88f427f3871bd20fb5a51f4a0d83895dd54923708e10",
+    "src/win/ui_tracks.inc": "6ac6e03627d4d6d9654d3dc3c796ff515d46288b20ed5133d45b955af1013f4e",
+    "src/win/ui_draw.inc": "1ad8f1c2de90f92428b8a740511137b02d66654a3e1a289b613c2d4e032160b1",
+    "tests/ui-driver.s": "a9f197a4b35862af93076d9233d6480268b998a14cc187e004ee1f025e4488c8",
+    "src/tags.s": "c3826724e4e67d7b840b6bbb38d7af4b60e370ad2a354a78cc85551ea5224de1",
+    "src/tags_asf.inc": "179a413a2fae216f5448953f2457e17bbf631203a3e2a10d45f2a86ba4d203a0",
+    "src/cover.inc": "4c6a2398bdd6d9dab885f7b01ac37e7bce6c1979f8de99ca9fd450ad6f0b4a71",
+    "src/asf.s": "e82d9c9e864eae694320d5bae237e9714c63f9ef73111369d988eed5bd10e6b7",
+    "src/chapters_asf.inc": "ec504ed49f0f9eb72b4cd2398c36a4bfdd1acc710061188c24b1b35da3d6b651",
+    "src/chapters.inc": "d1c07f752c20f3772c737d2959e3a94525d582efb0807a8d9921cd234db2dc59",
+    "tests/verify-asf-chapters.py": "006d96022c3b0756af839d2593a70d2fc9f8ec3abd69bc49c138a947dfac0489",
+    "src/asf_spread.inc": "29af589bc2f54e64db22fffa882ebf6045a8d1e31114ceedfc512dd6b076a608",
+    "tests/verify-asf-spread.py": "ba1cd647b6e5a5c22b6e6ac7ffc56042ce81ec156f73983f37fc4b58a245cbf0",
+    "src/asf_extended.inc": "f4a41d6572b245d8acc44fd93ace28a94ffa1deee5e71eab0a0eb4391abf296f",
+    "tests/verify-asf-extended.py": "ccb965104e655cc05b4223c49347855bf9411c5fba08fdb464c5ad94da86f32d",
+    "tests/asf-metadata-player-oracle.c": "7882a422a1a21528366544e3786e50cb49925f26694f72bd3477ee5e9cec0a2c",
+    "tests/verify-asf-metadata.py": "3db9d546449303bd07b2744784185805526b375e5b76d0033229644752de78ac"
+  },
+  "binary_hashes": {
+    "lamp.exe": "4c4472d0e003d61d4baf69424f9a11f3429e684a3cec8b6a668949214ffe1760",
+    "lamp-cli.exe": "3883fb2ff4fe440f5da0929ce0e01232825c633427f96346b835b78d2d91c406",
+    "ui-driver.exe": "c4557ca74e22480f892c546af9b2f31fb29c502439920a0207996ace26e4664e"
+  },
+  "selected_scenarios": [
+    "queue_view"
+  ],
+  "scope": "Selected Windows player scenarios under Wine on Xvfb"
+}

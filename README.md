@@ -24,7 +24,7 @@ LAMP aims to reduce stutters. It cannot guarantee uninterrupted playback during 
 
 Windows 10/11 x64 with a working default audio output is the primary desktop target. Build from source for Opus and AIFF/AIFC support, or download the earlier [v0.3.0 Windows prerelease](https://github.com/levkropp/lamp/releases/tag/v0.3.0). Open `bin\lamp.exe` and drop audio files or folders onto the window; they play as a gapless list.
 
-In the Windows player, F/F11 toggles fullscreen, C toggles compact mode and Esc restores the preceding mode. Tab/Shift+Tab moves through the named buttons and sliders; Enter/Space activates buttons, and arrows or Home/End adjust a focused slider. See the [control table](docs/technical.md#run) for all shortcuts and the remaining native Windows accessibility checks.
+In the Windows player, F/F11 toggles fullscreen, C toggles compact mode and Esc restores the preceding mode. Tab/Shift+Tab moves through the named buttons and sliders; Enter/Space activates buttons, and arrows or Home/End adjust a focused slider. L opens the queue: browse filenames with the arrow keys or type a prefix, then press Enter to play an entry. See the [control table](docs/technical.md#run) for all shortcuts and the remaining native Windows accessibility checks.
 
 ```powershell
 .\bin\lamp.exe 'C:\Music\track.ogg'

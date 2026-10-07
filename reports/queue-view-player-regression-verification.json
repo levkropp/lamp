@@ -1,0 +1,663 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "folder",
+      "result": "natural order, folders in place, others left out",
+      "list": [
+        "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\1 one.flac",
+        "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\2 two.MP3",
+        "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\3 three.ec3",
+        "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\4 four.EAC3",
+        "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\5 f\u00fcnf.gsm",
+        "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\6 six.GSM",
+        "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\7 seven.AsF",
+        "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\8 \u0432\u043e\u0441\u044c\u043c\u044c.WMA",
+        "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\9 nine.wmv",
+        "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\10 ten.flac",
+        "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\disc 1\\z.wav",
+        "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\Disc 2\\a.wv",
+        "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\Disc 2\\b.ogg",
+        "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\\u00dcn\u00efcode.opus"
+      ]
+    },
+    {
+      "test": "command line and drop",
+      "result": "files as named, folders expanded",
+      "list": [
+        "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\notes.txt",
+        "Z:\\no such file.flac",
+        "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\Disc 2\\a.wv",
+        "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\Disc 2\\b.ogg"
+      ]
+    },
+    {
+      "test": "absolute queue paths",
+      "result": "relative and dotted local names frozen; URL spellings retained",
+      "list": [
+        "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\Disc 2\\a.wv",
+        "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\1 one.flac",
+        "https://example.invalid/list.m3u8",
+        "file:///Z:/music/one.flac"
+      ]
+    },
+    {
+      "test": "open dialog",
+      "result": "folder and names joined; one path whole",
+      "list": [
+        "Z:\\music\\a.flac",
+        "Z:\\music\\b c.mp3",
+        "Z:\\music\\voice.GSM",
+        "Z:\\top.flac",
+        "Z:\\music\\one.flac"
+      ]
+    },
+    {
+      "test": "command-line list",
+      "result": "in order, titled as heard",
+      "titles": [
+        "LAMP - Lev's Assembly Media Player",
+        "LAMP Test \u2013 First - LAMP",
+        "LAMP Test \u2013 Second - LAMP",
+        "LAMP Test \u2013 Third - LAMP"
+      ],
+      "segments": [
+        [
+          "First",
+          182,
+          120000
+        ],
+        [
+          "Second",
+          0,
+          120000
+        ],
+        [
+          "Third",
+          0,
+          120000
+        ]
+      ]
+    },
+    {
+      "test": "keys",
+      "result": "N, P twice, media next, next button, Right, N at the end, R and N",
+      "titles": [
+        "LAMP Test \u2013 One - LAMP",
+        "LAMP Test \u2013 Two - LAMP",
+        "LAMP Test \u2013 One - LAMP",
+        "LAMP Test \u2013 One - LAMP",
+        "LAMP Test \u2013 Two - LAMP",
+        "LAMP Test \u2013 Three - LAMP",
+        "LAMP Test \u2013 Three - LAMP",
+        "LAMP Test \u2013 Four - LAMP",
+        "LAMP Test \u2013 Four - LAMP",
+        "LAMP Test \u2013 One - LAMP"
+      ],
+      "segments": [
+        [
+          "One",
+          228,
+          133440
+        ],
+        [
+          "Two",
+          117,
+          68880
+        ],
+        [
+          "One",
+          156,
+          189840
+        ],
+        [
+          "One",
+          109,
+          69120
+        ],
+        [
+          "Two",
+          108,
+          69600
+        ],
+        [
+          "Three",
+          200,
+          69840
+        ],
+        [
+          "Three",
+          309211,
+          432000
+        ],
+        [
+          "Four",
+          0,
+          187680
+        ],
+        [
+          "One",
+          79,
+          69120
+        ]
+      ]
+    },
+    {
+      "test": "folder and playlist",
+      "result": "list order",
+      "titles": [
+        "LAMP - Lev's Assembly Media Player",
+        "LAMP Test \u2013 Track 1 - LAMP",
+        "LAMP Test \u2013 Track 2 - LAMP",
+        "LAMP Test \u2013 Track 10 - LAMP",
+        "LAMP Test \u2013 Inner - LAMP",
+        "LAMP Test \u2013 Listed - LAMP"
+      ],
+      "segments": [
+        [
+          "Track 1",
+          196,
+          72000
+        ],
+        [
+          "Track 2",
+          0,
+          72000
+        ],
+        [
+          "Track 10",
+          0,
+          72000
+        ],
+        [
+          "Inner",
+          0,
+          72000
+        ],
+        [
+          "Listed",
+          0,
+          72000
+        ]
+      ]
+    },
+    {
+      "test": "output menu",
+      "result": "continued on the chosen endpoint, then the default",
+      "default": [
+        [
+          "Output",
+          106,
+          154080
+        ],
+        [
+          "Output",
+          308328,
+          416640
+        ]
+      ],
+      "chosen": [
+        [
+          "Output",
+          152811,
+          309120
+        ]
+      ]
+    },
+    {
+      "test": "fullscreen and compact modes",
+      "result": "restored through keys and menu",
+      "dimensions": [
+        [
+          812,
+          483
+        ],
+        [
+          1280,
+          1024
+        ],
+        [
+          812,
+          483
+        ],
+        [
+          632,
+          233
+        ],
+        [
+          1280,
+          1024
+        ],
+        [
+          632,
+          233
+        ],
+        [
+          812,
+          483
+        ],
+        [
+          1280,
+          1024
+        ],
+        [
+          812,
+          483
+        ]
+      ]
+    },
+    {
+      "test": "keyboard and accessibility",
+      "result": "MSAA names and native control classes; Tab/Shift+Tab cycle, Enter and Space activation, slider keys, global mode shortcuts, keyboard focus preservation and mouse auto-hide/reveal",
+      "names_roles_classes": [
+        "Open files",
+        "10",
+        "Button",
+        "Previous track",
+        "10",
+        "Button",
+        "Pause",
+        "10",
+        "Button",
+        "Next track",
+        "10",
+        "Button",
+        "Repeat off",
+        "10",
+        "Button",
+        "Playback position",
+        "10",
+        "msctls_trackbar32",
+        "Volume",
+        "10",
+        "msctls_trackbar32"
+      ],
+      "focus": [
+        "Open files",
+        "Previous track",
+        "Pause",
+        "Play",
+        "10",
+        "Button",
+        "Pause",
+        "10",
+        "Button",
+        "Next track",
+        "Repeat off",
+        "Repeat on",
+        "10",
+        "Button",
+        "Playback position",
+        "Volume",
+        "Volume",
+        "10",
+        "msctls_trackbar32",
+        "0",
+        "Open files",
+        "Volume",
+        "Playback position",
+        "632 233",
+        "812 483",
+        "Volume",
+        "LAMP Test \u2013 Accessible A - LAMP",
+        "Open files"
+      ],
+      "limit": "Wine 8 exposes generic client roles; native Windows screen-reader testing remains."
+    },
+    {
+      "test": "flac chapter navigation",
+      "result": "brackets and menu choose heard-file chapters; pause preserved",
+      "paused_targets_ms": [
+        0,
+        1250,
+        3250,
+        1250,
+        3250,
+        6500,
+        6500,
+        3250,
+        6500
+      ],
+      "controls": [
+        "Play",
+        "10",
+        "Button",
+        "0",
+        "Play",
+        "10",
+        "Button",
+        "1388",
+        "Play",
+        "10",
+        "Button",
+        "3611",
+        "Play",
+        "10",
+        "Button",
+        "1388",
+        "Play",
+        "10",
+        "Button",
+        "3611",
+        "Play",
+        "10",
+        "Button",
+        "7222",
+        "Play",
+        "10",
+        "Button",
+        "7222",
+        "Play",
+        "10",
+        "Button",
+        "3611",
+        "Play",
+        "10",
+        "Button",
+        "7222",
+        "LAMP Test \u2013 Chapter A - LAMP"
+      ],
+      "segments": [
+        [
+          "A",
+          111,
+          106320
+        ],
+        [
+          "A",
+          312217,
+          408480
+        ]
+      ],
+      "paused_relative_targets_ms": [
+        0,
+        5000,
+        0
+      ],
+      "relative_controls": [
+        "Play",
+        "10",
+        "Button",
+        "0",
+        "Play",
+        "10",
+        "Button",
+        "5555",
+        "Play",
+        "10",
+        "Button",
+        "0"
+      ],
+      "fixture_sha256": "4b2f9d1155184c9849e10c40cf66042b3b91395fdf94a27980bf743e300b6369",
+      "reference_pcm_sha256": {
+        "A": "e7124cfb93eb3ebd291779967761db36560668adf8535351005d9e2160553438",
+        "B": "f75511869eb95946e237e8eeb5a3def88abe5925c7a6f711b6a38a27ad21a2f9"
+      },
+      "player_sha256": "220245982a1c9018b7fab68103f61a6befc305352d4a15099db6b309d7b43102",
+      "driver_sha256": "8cfb3c618c7c049f3612e78ac8645f5f79a3b04f1083f1102404eb0a019dc12b",
+      "silent_paused_window_frames": 24000,
+      "limit": "Wine playback; native Windows remains unverified"
+    },
+    {
+      "test": "dense queue heard-file fallback",
+      "result": "filename follows heard file after metadata eviction; worker chapter seeks preserve pause and exact resumed PCM",
+      "queued_files": 101,
+      "metadata_snapshot_capacity": 64,
+      "paused_targets_ms": [
+        0,
+        500,
+        1250
+      ],
+      "titles_and_controls": [
+        [
+          "dense-first.flac - LAMP",
+          "Play",
+          "10",
+          "Button"
+        ],
+        [
+          "dense-first.flac - LAMP",
+          "Play",
+          "10",
+          "Button"
+        ],
+        [
+          "dense-first.flac - LAMP",
+          "Play",
+          "10",
+          "Button"
+        ],
+        [
+          "dense-first.flac - LAMP",
+          "Play",
+          "10",
+          "Button"
+        ]
+      ],
+      "silent_window_frames": 24000,
+      "resumed_runs": [
+        [
+          "first",
+          60077,
+          21283
+        ]
+      ],
+      "limit": "Wine playback; native Windows remains unverified"
+    },
+    {
+      "test": "per-file audio track queue",
+      "result": "N/P retains selected entry and plays next single-track entry",
+      "segments": [
+        [
+          "selected",
+          178,
+          58080
+        ],
+        [
+          "single",
+          182,
+          54480
+        ],
+        [
+          "selected",
+          130,
+          55440
+        ]
+      ],
+      "titles": [
+        "LAMP Test \u2013 Single after selected - LAMP",
+        "queue-tracks.mp4 - LAMP"
+      ]
+    },
+    {
+      "test": "unsupported audio track switch",
+      "result": "previous track, heard file, position and pause retained",
+      "controls": [
+        "Play",
+        "10",
+        "Button",
+        "4166",
+        "unsupported-tracks.mkv - LAMP"
+      ],
+      "retained_runs": [
+        [
+          "retained",
+          240181,
+          297840
+        ]
+      ]
+    },
+    {
+      "test": "GUI resume defaults off",
+      "result": "saved position ignored and state untouched",
+      "segments": [
+        [
+          "first",
+          194,
+          107280
+        ]
+      ]
+    },
+    {
+      "test": "GUI remembers opt-in and paused heard position",
+      "result": "real menu preference and exact second-file 5000ms persisted",
+      "rows": [
+        "5000\tZ:\\home\\lamp\\lamp\\tests\\generated\\player\\resume\\\u00dcn\u00efcode-first.flac\tZ:\\home\\lamp\\lamp\\tests\\generated\\player\\resume\\\u7b2c\u4e8c.flac",
+        "37\tZ:\\other.flac\tZ:\\other.flac"
+      ]
+    },
+    {
+      "test": "GUI reopens expanded Unicode playlist",
+      "result": "same first-file key; second-file resumed PCM",
+      "segments": [
+        [
+          "second",
+          240102,
+          344160
+        ]
+      ],
+      "titles": [
+        "LAMP Test \u2013 Resume second - LAMP"
+      ]
+    },
+    {
+      "test": "GUI saves replaced queue through real Open dialog",
+      "result": "relative input paths remain absolute across a dialog in another folder; old paired second-file 5000ms saved before replacement; closing new list keeps both keys",
+      "rows": [
+        "5000\tZ:\\home\\lamp\\lamp\\tests\\generated\\player\\resume\\another\\\u66ff\u63db.flac\tZ:\\home\\lamp\\lamp\\tests\\generated\\player\\resume\\another\\\u66ff\u63db.flac",
+        "5000\tZ:\\home\\lamp\\lamp\\tests\\generated\\player\\resume\\\u00dcn\u00efcode-first.flac\tZ:\\home\\lamp\\lamp\\tests\\generated\\player\\resume\\\u7b2c\u4e8c.flac",
+        "37\tZ:\\other.flac\tZ:\\other.flac"
+      ],
+      "titles": [
+        "LAMP Test \u2013 Resume replacement - LAMP"
+      ]
+    },
+    {
+      "test": "GUI extreme saved time after queue replacement",
+      "result": "18-digit time saturates loading frames, worker finishes at EOF, own record forgotten and explicit replay remains usable",
+      "controls": [
+        "LAMP Test \u2013 Resume replacement - LAMP",
+        "Play",
+        "10",
+        "Button"
+      ],
+      "segments": [
+        [
+          "second",
+          240031,
+          332640
+        ],
+        [
+          "replacement",
+          113,
+          104880
+        ]
+      ]
+    },
+    {
+      "test": "GUI completion and explicit replay",
+      "result": "completion deletes only own record; Space starts the first file",
+      "segments": [
+        [
+          "second",
+          240209,
+          432000
+        ],
+        [
+          "first",
+          164,
+          104640
+        ]
+      ]
+    },
+    {
+      "test": "GUI missing file and persistent disable",
+      "result": "missing file starts first; disable survives reopen and preserves records",
+      "segments": [
+        [
+          "first",
+          120,
+          102240
+        ]
+      ],
+      "disabled_segments": [
+        [
+          "first",
+          87,
+          95520
+        ]
+      ]
+    },
+    {
+      "test": "GUI malformed settings and oversized state",
+      "result": "three malformed preferences default off; 16MiB+1 state ignored and replaced by bounded paired record",
+      "fixture_sha256": {
+        "\u00dcn\u00efcode-first.flac": "25359846fa1549cd8cd88ae55cf79176be539fea7c9f02a01e6dc12e37a3ef8f",
+        "\u7b2c\u4e8c.flac": "61b78d21b9b55243a26828676060cbc220006ee9700d2e0e41f0bc33efa3054b",
+        "\u66ff\u63db.flac": "5e356e1c0861d165c6950278f8ab4828d27cf619ec84248374efb91162fdac51",
+        "list.m3u8": "b8a3905713ae3692de52dabae5af6aeb6835e359866af7bf8359414677c49901"
+      },
+      "reference_pcm_sha256": {
+        "first": "339ebe848779d9a714f2a88cfa55bb338ffad8854ff6fe40fb75ce483f6e09b8",
+        "second": "0f47ce9682450c37955e2755f5942476ec6ee65ff794d878fd0b7c3ad9cbdcda",
+        "replacement": "d35d4202ad6d8421a6b0c71edd03b1c330f6194bec609cb20403a63b5e50d23c"
+      },
+      "limit": "Wine 8 on Xvfb and a private PulseAudio sink; native Windows remains unverified"
+    }
+  ],
+  "source_hashes": {
+    "src/queue.s": "18b7b6ead963997cd3341af2deecc143bcb7ca5637c1558b0e9fc6204165b223",
+    "src/win/player.s": "5f0a4c482830f4c50a893ab06b3f0ab549fa2a8f4cb15f2e325748c031897a90",
+    "src/win/ui.s": "16e381d29f9064f6592aad995ffa99d6f71cd9f108fae84a42d3c64211bea7cc",
+    "src/win/ui_queue.inc": "8133dcb55c45ed199ea4e34590d6a28a8952bf0473ccc0b34851e129722892bb",
+    "src/win/ui_menu.inc": "b055ff00cc54c3cc73bc1e7990db1b489e1986e3e082be562cd64a4fe537d3df",
+    "src/win/ui_queue_view.inc": "037980489e6cb212bef0bef2e0474feeedf6c242f61cc218848815e52fdfcfdb",
+    "tests/queue-view-driver.c": "0f4ecba4c09dfc2d02c1a05ccc69e35ff0687ba4bd5bcfca51bef71a3b318752",
+    "src/win/ui_resume.inc": "e279cb7af72e9e37e64d6c44932578770f49caf647c92ba01c0f754cc52452a6",
+    "src/win/resume_state.inc": "94ae5ad64c811b465f21089807b2475c1d78028895d8b027f1861de2192e8d79",
+    "src/resume.s": "d7be291cb21afaaacf14eacb128932cf3f132dd20b728562ae79f4f759b3e551",
+    "src/win/kernel32.def": "793225e863d8f8e5417bbe1375f60875c5053260a5fd1e6c2bb2f89ca79af440",
+    "tests/verify-player.py": "7e41e29330233858c7ed87ba815d49140f26ede310d3ac9cd3312d4a83a57092",
+    "src/decoder.s": "44e88449c121f6d67f1805555f15663fe2d3883531fce2dbf5a8587e58f1d8f8",
+    "src/mp4.s": "d498c8f74f2b157ad6a3e42984d8694667cb64b62074347c56a65cf7da3c622d",
+    "src/mkv.s": "4bfb6643338674c5597d1944f302b9435b065b5b7f559cf78e0f8a61c36fd05d",
+    "src/avi.s": "56f1336d789997c4e4d2d11946129f8f2a1d22ee46c653cd40dacacb4ebeac59",
+    "src/mpegts.s": "5dafcb58db5d634684462207d45e55ff088d5bf032f62d8302adc39be6ef125e",
+    "src/ogg_chain.s": "55d83b35ea390605b27a88f427f3871bd20fb5a51f4a0d83895dd54923708e10",
+    "src/win/ui_tracks.inc": "6ac6e03627d4d6d9654d3dc3c796ff515d46288b20ed5133d45b955af1013f4e",
+    "src/win/ui_draw.inc": "1ad8f1c2de90f92428b8a740511137b02d66654a3e1a289b613c2d4e032160b1",
+    "tests/ui-driver.s": "a9f197a4b35862af93076d9233d6480268b998a14cc187e004ee1f025e4488c8",
+    "src/tags.s": "c3826724e4e67d7b840b6bbb38d7af4b60e370ad2a354a78cc85551ea5224de1",
+    "src/tags_asf.inc": "179a413a2fae216f5448953f2457e17bbf631203a3e2a10d45f2a86ba4d203a0",
+    "src/cover.inc": "4c6a2398bdd6d9dab885f7b01ac37e7bce6c1979f8de99ca9fd450ad6f0b4a71",
+    "src/asf.s": "e82d9c9e864eae694320d5bae237e9714c63f9ef73111369d988eed5bd10e6b7",
+    "src/chapters_asf.inc": "ec504ed49f0f9eb72b4cd2398c36a4bfdd1acc710061188c24b1b35da3d6b651",
+    "src/chapters.inc": "d1c07f752c20f3772c737d2959e3a94525d582efb0807a8d9921cd234db2dc59",
+    "tests/verify-asf-chapters.py": "006d96022c3b0756af839d2593a70d2fc9f8ec3abd69bc49c138a947dfac0489",
+    "src/asf_spread.inc": "29af589bc2f54e64db22fffa882ebf6045a8d1e31114ceedfc512dd6b076a608",
+    "tests/verify-asf-spread.py": "ba1cd647b6e5a5c22b6e6ac7ffc56042ce81ec156f73983f37fc4b58a245cbf0",
+    "src/asf_extended.inc": "f4a41d6572b245d8acc44fd93ace28a94ffa1deee5e71eab0a0eb4391abf296f",
+    "tests/verify-asf-extended.py": "ccb965104e655cc05b4223c49347855bf9411c5fba08fdb464c5ad94da86f32d",
+    "tests/asf-metadata-player-oracle.c": "7882a422a1a21528366544e3786e50cb49925f26694f72bd3477ee5e9cec0a2c",
+    "tests/verify-asf-metadata.py": "3db9d546449303bd07b2744784185805526b375e5b76d0033229644752de78ac"
+  },
+  "binary_hashes": {
+    "lamp.exe": "220245982a1c9018b7fab68103f61a6befc305352d4a15099db6b309d7b43102",
+    "lamp-cli.exe": "afdc3d13c09eeae36f77d60263a0902f173b9ecad7117a619f772c260de71db1",
+    "ui-driver.exe": "8cfb3c618c7c049f3612e78ac8645f5f79a3b04f1083f1102404eb0a019dc12b"
+  },
+  "selected_scenarios": [
+    "list_checks",
+    "list_playback",
+    "keys",
+    "folder_playback",
+    "output_menu",
+    "modes",
+    "accessibility",
+    "chapter_navigation",
+    "dense_queue",
+    "track_queue",
+    "resume"
+  ],
+  "scope": "Selected Windows player scenarios under Wine on Xvfb"
+}

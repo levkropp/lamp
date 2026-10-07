@@ -76,7 +76,7 @@ The shared timeline retains 524,288 distinct file boundaries in 8 MiB of zero-in
   - M3U, M3U8 and PLS playlists in the list expand as above.
   - A folder adds its audio files (the open dialog's types, without playlists) and those of its folders, up to eight folders deep. Names are in natural order, as Explorer sorts them (`StrCmpLogicalW`: `2` before `10`), with files and folders together.
   - Hidden and system entries are left out. Files named directly are kept whatever their type; they are skipped at playback when they do not open.
-  - A list holds up to 32,768 files.
+  - A directly built list holds up to 32,768 files; playlist expansion can produce up to 65,536 entries within its path arena.
 - **Controls:**
   - With more than one file, previous and next buttons sit beside play/pause.
   - The status strip shows `REPEAT` and the number of the file heard (`2 / 5`).
@@ -93,8 +93,13 @@ The shared timeline retains 524,288 distinct file boundaries in 8 MiB of zero-in
 | Up / Down, M | Volume, mute |
 | R | Repeat on or off |
 | O | Open files |
-| Right click, Shift+F10, menu key | The context menu: Open files, window modes, Repeat, Remember playback position, Previous/Next chapter, Audio track and Output (see [device notes](devices.md)) |
+| L | Show or close the queue window |
+| Right click, Shift+F10, menu key | The context menu: Open files, Queue, window modes, Repeat, Remember playback position, Previous/Next chapter, Audio track and Output (see [device notes](devices.md)) |
 | Q | Close |
+
+The **Queue** window lists the expanded entries in playback order, with their filename, state and full path. L in the player or Queue in its context menu opens it; Esc in the queue closes it. Up/Down, Home/End and Page Up/Down move the selection. Typing finds a filename by its Unicode prefix. Enter or a double click starts that entry from its beginning while retaining pause and its audio-track choice; Space pauses or resumes playback. Duplicate filenames remain separate entries. Opening the view selects the heard entry, and subsequent playback updates its state without moving a selection you are browsing.
+
+The view uses a native virtual list control, reading only requested row text from the existing expanded paths. It does not parse files or add a playback timer. Replacing a list clears its selection and rows before old path storage is released, then shows the new expanded list. Selections from an old generation or while replacement is pending are ignored. The queue has its own DPI-scaled font and columns, and closes with the player. Reordering, removing and saving entries remain future work.
 
 The Windows player's **Remember playback position** context-menu item is off by default. Its choice survives ordinary exits in `%LOCALAPPDATA%\LAMP\player-resume.txt`. When enabled, closing the window or replacing its list saves the heard file and millisecond position, including while paused. The UI captures that pair before stopping the worker and writes it after the worker joins, while the old expanded paths still belong to that list. New command-line, dropped and opened lists consult the same `resume.txt` records as the Windows console's `--resume`; the key is the first expanded file, so opening an M3U8 or its equivalent file list finds the same record. Local paths become absolute when accepted, keeping playback and saved keys stable if a later Open dialog changes the process directory; URL spellings stay intact.
 
@@ -115,6 +120,10 @@ The [Audio track submenu](tracks.md#windows-player) keeps a choice per expanded 
 Navigation starts a new playback thread at the target file and position (`engine_play_list`), as seeks always did. Natural transitions stay gapless. When the endpoint is lost after playback started, the window reopens the heard file at the heard position, as the console does (see [device notes](devices.md)).
 
 ## Verification
+
+The [queue-window callback report](../reports/queue-view-verification.json) records 83 checks using the shipping UI source: protected Unicode text buffers, exact/prefix filename search, stale and pending selections, pause/track preservation, a native 65,536-row virtual list, replacement, reopen and Escape through the main message loop. Run `python3 tests/verify-queue-view.py` under Wine on a display.
+
+The [queue-window player report](../reports/queue-view-player-verification.json) checks the shipping executable through its native controls and captured audio: empty/open/close lifecycle, Unicode prefix search, duplicate filenames, Enter and double-click selection while paused, Space playback, live Open-dialog replacement, heard-file selection after a natural transition, preserved browsing selection, the last of 65,536 expanded entries and 144 DPI. The 22-check [surrounding player regression](../reports/queue-view-player-regression-verification.json) covers existing list, navigation, output, mode, focus, chapter, track and resume behavior. The Xvfb image was inspected; this Wine installation lacks some CJK/emoji font glyphs even though row text round-trips exactly. Native Windows, screen-reader interaction and mixed-monitor moves remain unverified.
 
 The [GUI resume regression report](../reports/gui-resume-player-verification.json) records 22 Wine checks, including eight focused resume cases. `python3 tests/verify-player.py --only resume` exercises opt-in through the real popup, exact paused saves in a Unicode second file, equivalent playlist reopening, replacement through an Open dialog in another directory, oversized saved times, completion/replay, missing filenames, persistent disable, malformed preferences and oversized state. The broader run includes absolute local-path normalization, URL preservation, list/folder playback, output switching, modes, accessibility, chapters, dense queues, per-file track selection and ASF metadata/artwork.
 
