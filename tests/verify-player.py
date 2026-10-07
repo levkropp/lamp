@@ -90,7 +90,7 @@ def merge(found):
 def main():
     scenarios = [list_checks, list_playback, keys, folder_playback, killed_stream, output_menu, dpi,
                  modes, accessibility, eac3_playback, chapter_navigation, dense_queue, track_switching, track_queue,
-                 asf_metadata, asf_chapter_navigation]
+                 asf_metadata, asf_chapter_navigation, asf_spread]
     only = sys.argv[sys.argv.index('--only') + 1].split(',') if '--only' in sys.argv else None
     if only is not None:
         unknown = set(only) - {scenario.__name__ for scenario in scenarios}
@@ -127,6 +127,7 @@ def main():
     source_hashes.update({name: hashlib.sha256((ROOT / name).read_bytes()).hexdigest() for name in
         ('src/tags.s', 'src/tags_asf.inc', 'src/cover.inc', 'src/asf.s',
          'src/chapters_asf.inc', 'src/chapters.inc', 'tests/verify-asf-chapters.py',
+         'src/asf_spread.inc', 'tests/verify-asf-spread.py',
          'tests/asf-metadata-player-oracle.c', 'tests/verify-asf-metadata.py')})
     if only is not None:
         write_report('player-selected', {'result': 'passed', 'checks': checks,
@@ -729,6 +730,15 @@ def track_switching(work, env, wine, checks):
 
 def asf_metadata(work, env, wine, checks):
     """Observed ASF titles and rendered cover pixels after paused track switches."""
+    _asf_metadata(work, env, wine, checks)
+
+
+def asf_spread(work, env, wine, checks):
+    """Two spreading layouts: real popup tracks, covers and resumed PCM."""
+    _asf_metadata(work, env, wine, checks, spreading=True)
+
+
+def _asf_metadata(work, env, wine, checks, spreading=False):
     import json
     import struct
     spec = importlib.util.spec_from_file_location('asf_metadata_writer', ROOT / 'tests/verify-asf-metadata.py')
@@ -740,11 +750,25 @@ def asf_metadata(work, env, wine, checks):
         image = work / ('asf-' + color + '.png')
         ffmpeg('-f', 'lavfi', '-i', f'color=c={color}:s=16x16', '-frames:v', '1', '-threads', '1', image)
         images.append(image.read_bytes())
-    path = work / 'ASF Ünicode metadata.asf'
+    path = work / ('ASF Ünicode spreading.asf' if spreading else 'ASF Ünicode metadata.asf')
     ffmpeg('-f', 'lavfi', '-i', f'anoisesrc=r={RATE}:d=12:seed=9801:a=0.25',
            '-f', 'lavfi', '-i', f'anoisesrc=r={RATE}:d=12:seed=9802:a=0.25',
            '-map', '0:a', '-map', '1:a', '-ac', '2', '-c:a', 'pcm_s16le',
            '-metadata', 'artist=LAMP Test', '-metadata', 'title=Global ASF title', path)
+    if spreading:
+        spec = importlib.util.spec_from_file_location('asf_spread_writer', ROOT / 'tests/verify-asf-spread.py')
+        spread = importlib.util.module_from_spec(spec); spec.loader.exec_module(spread)
+        formats, audio = [], []
+        for ordinal in (0, 1):
+            raw = work / f'gui-spread-{ordinal}.wav'
+            ffmpeg('-i', path, '-map', f'0:a:{ordinal}', '-c:a', 'copy', raw)
+            fmt, pcm = spread.writer.wave_parts(raw.read_bytes()); formats.append(fmt); audio.append(pcm)
+        groups = [spread.packets(audio[0], 2, 768, 3, fragmented=False),
+                  spread.packets(audio[1], 3, 256, 4, 2, fragmented=False)]
+        interleaved = [packet for i in range(max(map(len, groups))) for group in groups for packet in group[i:i+1]]
+        path.write_bytes(spread.writer.asf([spread.stream(formats[0], 2, 768, 3),
+                                           spread.stream(formats[1], 3, 256, 4, 2)], interleaved,
+                                          extra=[metadata.basic('Global ASF title', 'LAMP Test')]))
     data = path.read_bytes(); header_end = struct.unpack_from('<Q', data, 16)[0]
     children, streams, pos = [], [], 30
     while pos < header_end:
@@ -769,8 +793,9 @@ def asf_metadata(work, env, wine, checks):
         position += len(child)
     path.write_bytes(result)
     references = {str(n): track_pcm(work, path, n) for n in (1, 2)}
-    session = Session(work, env, wine, 'asf-metadata', windows_path(path))
+    session = Session(work, env, wine, 'asf-spread' if spreading else 'asf-metadata', windows_path(path))
     observations = []
+    spread_runs = None
 
     def pixels():
         return json.loads(run(['wine', BIN / 'asf-metadata-player-oracle.exe'], env=wine, timeout=30))
@@ -789,6 +814,15 @@ def asf_metadata(work, env, wine, checks):
         observe(names[0], 'red')
         session.drive('r', 's250', 'e41', 's250', 'e23', 'e0d', 's1200')
         observe(names[1], 'blue')
+        if spreading:
+            spread_offset = session.capture.stat().st_size
+            session.drive('k20', 's1200', 'k20', 's800')
+            assert_paused(session)
+            spread_runs = merge(_nav.runs(session.capture.read_bytes()[spread_offset:], references))
+            if not spread_runs or spread_runs[0][0] != '2' or spread_runs[0][1] >= RATE // 2:
+                raise Failure('ASF spreading Track 2 resumed wrong PCM: ' + str(spread_runs))
+            session.drive('k24', 's1200')
+            observe(names[1], 'blue')
         session.drive('r', 's250', 'e41', 's250', 'e24', 'e0d', 's1200')
         observe(names[0], 'red')
         offset = session.capture.stat().st_size
@@ -796,7 +830,10 @@ def asf_metadata(work, env, wine, checks):
     finally: capture = session.finish()
     heard = merge(_nav.runs(capture[offset:], references))
     if not heard or heard[0][0] != '1': raise Failure('ASF Automatic metadata did not match heard track: ' + str(heard))
-    checks.append(dict(test='ASF selected metadata and cover', result='rendered cover and title follow paused track choice',
+    checks.append(dict(test='ASF spreading track metadata and cover' if spreading else 'ASF selected metadata and cover',
+                       result='rendered cover and title follow paused track choice',
+                       spreading_layouts=[[2,768,3],[3,256,4]] if spreading else None,
+                       selected_track_runs=spread_runs,
                        observations=observations, real_keyboard_popup_choices=['Track 2', 'Automatic'],
                        automatic_runs=heard, fixture_sha256=hashlib.sha256(path.read_bytes()).hexdigest(),
                        picture_sha256=[hashlib.sha256(image).hexdigest() for image in images],
@@ -805,7 +842,7 @@ def asf_metadata(work, env, wine, checks):
                        driver_sha256=hashlib.sha256((BIN / 'ui-driver.exe').read_bytes()).hexdigest(),
                        pixel_oracle_sha256=hashlib.sha256((BIN / 'asf-metadata-player-oracle.exe').read_bytes()).hexdigest(),
                        limit='Pixel/title/audio observations under Wine; native Windows remains unverified'))
-    print('ASF titles and red/blue cover pixels follow paused real-popup track switches', flush=True)
+    print('ASF '+('spreading ' if spreading else '')+'titles and red/blue cover pixels follow paused real-popup track switches', flush=True)
 
 
 def track_queue(work, env, wine, checks):
