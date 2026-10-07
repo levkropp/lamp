@@ -32,6 +32,7 @@ Writes <out>/player-verification.json, or player-selected-verification.json
 when --only selects scenarios.
 """
 import importlib.util
+import hashlib
 import os
 from pathlib import Path
 import shutil
@@ -88,7 +89,7 @@ def merge(found):
 
 def main():
     scenarios = [list_checks, list_playback, keys, folder_playback, killed_stream, output_menu, dpi,
-                 modes, accessibility, eac3_playback, chapter_navigation]
+                 modes, accessibility, eac3_playback, chapter_navigation, dense_queue]
     only = sys.argv[sys.argv.index('--only') + 1].split(',') if '--only' in sys.argv else None
     if only is not None:
         unknown = set(only) - {scenario.__name__ for scenario in scenarios}
@@ -116,18 +117,24 @@ def main():
     finally:
         subprocess.run(['wineserver', '-k'], env=wine, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         display.stop()
+    source_hashes = {name: hashlib.sha256((ROOT / name).read_bytes()).hexdigest() for name in
+        ('src/queue.s', 'src/win/player.s', 'src/win/ui.s', 'src/win/ui_queue.inc',
+         'src/win/ui_menu.inc', 'src/win/kernel32.def', 'tests/verify-player.py')}
     if only is not None:
         write_report('player-selected', {'result': 'passed', 'checks': checks,
+            'source_hashes': source_hashes,
             'selected_scenarios': only, 'scope': 'Selected Windows player scenarios under Wine on Xvfb'})
         print(f'Passed {len(checks)} player checks (only {", ".join(only)}).')
         return
     write_report('player', {'result': 'passed', 'checks': checks,
+                            'source_hashes': source_hashes,
                             'scope': 'lamp.exe list building (folders, command line, drops, the open dialog), '
                                      'gapless list playback with the title following the file heard, N/P, the '
                                      'media next command, the next button, seeking, repeat, playlists, '
                                      'reopening a killed stream, choosing outputs, 144 DPI, fullscreen/compact '
                                      'restoration, Tab/Shift+Tab focus, slider values and MSAA names/native '
-                                     'control classes, raw E-AC-3 playback and folder discovery, chronological chapter keys/menu and paused seeks, under Wine on Xvfb; native Windows screen-reader '
+                                     'control classes, raw E-AC-3 playback and folder discovery, chronological chapter keys/menu and paused seeks, '
+                                     'dense queue filename/chapter fallback after metadata eviction, under Wine on Xvfb; native Windows screen-reader '
                                      'roles remain unverified.'})
     print(f'Passed {len(checks)} player checks.')
 
@@ -535,6 +542,14 @@ def chapter_navigation(work, env, wine, checks):
                 raise Failure(f'Paused chapter target {ms} ms: {sequence}')
         if sequence[-1]!=title('Chapter A'):
             raise Failure('Chapter controls used the file decoded ahead: '+str(sequence))
+        relative=session.drive('k24','s1500','n111','h113',
+            'k27','s1500','n111','h113','k25','s1500','n111','h113')
+        for index,ms in enumerate([0,5000,0]):
+            if relative[index*4]!='Play' or abs(int(relative[index*4+3])-ms*10000//9000)>2:
+                raise Failure(f'Paused Home/Right/Left target {ms} ms: {relative}')
+        restored=session.drive('o105','s1500','o105','s1500','o105','s1500','t','n111','h113')
+        if restored[0]!=title('Chapter A') or restored[1]!='Play' or abs(int(restored[-1])-6500*10000//9000)>2:
+            raise Failure(f'Paused chapter restoration after relative seeking: {restored}')
         session.drive('k20','s2000','c')
     finally:
         capture=session.finish()
@@ -545,8 +560,70 @@ def chapter_navigation(work, env, wine, checks):
         raise Failure(f'Chapter seeks played while paused or chose wrong PCM: {segments}')
     checks.append(dict(test='chapter navigation',result='brackets and menu choose heard-file chapters; pause preserved',
         paused_targets_ms=expected,controls=sequence,segments=segments,
+        paused_relative_targets_ms=[0,5000,0],relative_controls=relative,
         limit='Wine playback; native Windows remains unverified'))
     print('Chapter keys, menu, heard-file snapshots and paused seeks pass',flush=True)
+
+
+def dense_queue(work, env, wine, checks):
+    """Metadata evicted by decode ahead: filename and paused chapter fallback."""
+    path = work / 'dense-first.flac'
+    ffmpeg('-f', 'lavfi', '-i', f'anoisesrc=r={RATE}:d=2:seed=9301:a=0.25', '-ac', '2',
+           '-metadata', 'artist=LAMP Test', '-metadata', 'title=Early metadata',
+           '-metadata', 'CHAPTER001=00:00:00.000', '-metadata', 'CHAPTER002=00:00:00.500',
+           '-metadata', 'CHAPTER003=00:00:01.250', '-metadata', 'CHAPTER004=00:00:07.000',
+           '-c:a', 'flac', path)
+    later = work / 'dense-later.flac'
+    ffmpeg('-f', 'lavfi', '-i', f'anoisesrc=r={RATE}:d=0.02:seed=9302:a=0.25', '-ac', '2',
+           '-metadata', 'artist=LAMP Test', '-metadata', 'title=Future metadata',
+           '-metadata', 'CHAPTER001=00:00:07.000', '-c:a', 'flac', later)
+    reference = _nav.linux_decode(work, path)
+    references = {'first': reference, 'later': _nav.linux_decode(work, later)}
+    session = Session(work, env, wine, 'dense-queue', windows_path(path), *([windows_path(later)] * 100))
+    expected_title = path.name + ' - LAMP'
+    def paused_fallback():
+        deadline = time.monotonic() + 45
+        while time.monotonic() < deadline:
+            lines = session.drive('t', 'n111')
+            if lines[0] == expected_title and lines[1] == 'Play': return lines
+            time.sleep(0.1)
+        raise Failure(f'Dense queue did not show the paused heard filename: {lines}')
+    try:
+        # Pause as soon as the window exists. The producer still fills the
+        # ring with all 101 files, evicting the first metadata snapshot.
+        session.drive('k20')
+        observed = [paused_fallback()]
+        # Previous chapter returns to zero, independently of where the
+        # initial pause landed. Both subsequent seeks must reopen file 0's
+        # chapters on the worker, while the decoder has reached file 100.
+        for command in ('o104', 'kdd', 'kdd'):
+            session.drive(command, 's1500')
+            observed.append(paused_fallback())
+        time.sleep(0.6)
+        before = session.capture.read_bytes()
+        silent_frames = RATE // 2
+        if len(before) < silent_frames * FRAME or any(before[-silent_frames * FRAME:]):
+            raise Failure('Dense queue chapter restarts played while paused')
+        offset = len(before)
+        session.drive('k20')
+        deadline = time.monotonic() + 30
+        while time.monotonic() < deadline:
+            resumed = _nav.runs(session.capture.read_bytes()[offset:], references)
+            if resumed and resumed[0][2] >= 256: break
+            time.sleep(0.05)
+        else: raise Failure('Dense queue did not resume first-file PCM')
+        session.drive('c')
+    finally:
+        capture = session.finish()
+    resumed = _nav.runs(capture[offset:], references)
+    if not resumed or resumed[0][0] != 'first' or not 1250 * 48 <= resumed[0][1] < 1400 * 48:
+        raise Failure(f'Dense queue reopened the wrong file/chapter: {resumed}')
+    checks.append(dict(test='dense queue heard-file fallback',
+        result='filename follows heard file after metadata eviction; worker chapter seeks preserve pause and exact resumed PCM',
+        queued_files=101, metadata_snapshot_capacity=64, paused_targets_ms=[0, 500, 1250],
+        titles_and_controls=observed, silent_window_frames=silent_frames, resumed_runs=resumed,
+        limit='Wine playback; native Windows remains unverified'))
+    print('Dense queue filename and paused chapter fallback pass', flush=True)
 
 
 def eac3_playback(work, env, wine, checks):

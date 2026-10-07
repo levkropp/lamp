@@ -616,6 +616,7 @@ LOCALFN ui_window_proc
     mul rcx
     mov ecx, [rip + queue_rate]
     div rcx
+    mov ecx, [rip + ui_shown_index]      # the displayed timeline's file
     call ui_seek
     jmp .Lui_handled
 .Lui_wm_command:
@@ -723,15 +724,19 @@ LOCALFN ui_window_proc
     jmp .Lui_handled
 .Lui_seek_forward:
     call ui_heard_position
+    mov ecx, eax
     lea rax, [rdx + 5000]
     call ui_seek
     jmp .Lui_handled
 .Lui_seek_backward:
     call ui_heard_position
+    mov ecx, eax
     lea rax, [rdx - 5000]
     call ui_seek
     jmp .Lui_handled
 .Lui_seek_home:
+    call ui_heard_position
+    mov ecx, eax
     xor eax, eax
     call ui_seek
     jmp .Lui_handled
@@ -797,6 +802,7 @@ LOCALFN ui_window_proc
     mov edx, 1000
     mul rdx
     div rcx
+    mov ecx, [rip + ui_shown_index]
     call ui_seek
     jmp .Lui_handled
 .Lui_transport_click:
@@ -857,6 +863,8 @@ LOCALFN ui_window_proc
     cmp dword ptr [rip + engine_command], 5
     jne .Lui_done_repeat
     mov ecx, [rip + engine_heard_index]   # the endpoint was lost: reopen there
+    test ecx, ecx
+    js .Lui_done_state                  # no retained heard position: finish with the error
     mov rdx, [rip + engine_heard_ms]
     call ui_play_at
     jmp .Lui_handled

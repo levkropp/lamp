@@ -1,0 +1,200 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "boundary rules",
+      "result": {
+        "boundaries": 24,
+        "guarded_starts": 1024
+      }
+    },
+    {
+      "test": "book.mp3 heard-file chapters at 44100 Hz",
+      "result": {
+        "boundaries": 24,
+        "heard_file_seeks": 8,
+        "result": "exact PCM after decode ahead",
+        "rate": 44100
+      }
+    },
+    {
+      "test": "book.mp3 heard-file chapters at 48000 Hz",
+      "result": {
+        "boundaries": 24,
+        "heard_file_seeks": 8,
+        "result": "exact PCM after decode ahead",
+        "rate": 48000
+      }
+    },
+    {
+      "test": "book.m4a heard-file chapters at 44100 Hz",
+      "result": {
+        "boundaries": 24,
+        "heard_file_seeks": 8,
+        "result": "exact PCM after decode ahead",
+        "rate": 44100
+      }
+    },
+    {
+      "test": "book.m4a heard-file chapters at 48000 Hz",
+      "result": {
+        "boundaries": 24,
+        "heard_file_seeks": 8,
+        "result": "exact PCM after decode ahead",
+        "rate": 48000
+      }
+    },
+    {
+      "test": "book.mka heard-file chapters at 44100 Hz",
+      "result": {
+        "boundaries": 24,
+        "heard_file_seeks": 8,
+        "result": "exact PCM after decode ahead",
+        "rate": 44100
+      }
+    },
+    {
+      "test": "book.mka heard-file chapters at 48000 Hz",
+      "result": {
+        "boundaries": 24,
+        "heard_file_seeks": 8,
+        "result": "exact PCM after decode ahead",
+        "rate": 48000
+      }
+    },
+    {
+      "test": "book.flac heard-file chapters at 44100 Hz",
+      "result": {
+        "boundaries": 24,
+        "heard_file_seeks": 8,
+        "result": "exact PCM after decode ahead",
+        "rate": 44100
+      }
+    },
+    {
+      "test": "book.flac heard-file chapters at 48000 Hz",
+      "result": {
+        "boundaries": 24,
+        "heard_file_seeks": 8,
+        "result": "exact PCM after decode ahead",
+        "rate": 48000
+      }
+    },
+    {
+      "test": "book.ogg heard-file chapters at 44100 Hz",
+      "result": {
+        "boundaries": 24,
+        "heard_file_seeks": 8,
+        "result": "exact PCM after decode ahead",
+        "rate": 44100
+      }
+    },
+    {
+      "test": "book.ogg heard-file chapters at 48000 Hz",
+      "result": {
+        "boundaries": 24,
+        "heard_file_seeks": 8,
+        "result": "exact PCM after decode ahead",
+        "rate": 48000
+      }
+    },
+    {
+      "test": "book.wav heard-file chapters at 44100 Hz",
+      "result": {
+        "boundaries": 24,
+        "heard_file_seeks": 8,
+        "result": "exact PCM after decode ahead",
+        "rate": 44100
+      }
+    },
+    {
+      "test": "book.wav heard-file chapters at 48000 Hz",
+      "result": {
+        "boundaries": 24,
+        "heard_file_seeks": 8,
+        "result": "exact PCM after decode ahead",
+        "rate": 48000
+      }
+    },
+    {
+      "test": "no-chapters.wav heard-file chapters at 44100 Hz",
+      "result": {
+        "boundaries": 24,
+        "heard_file_seeks": 8,
+        "result": "exact PCM after decode ahead",
+        "rate": 44100
+      }
+    },
+    {
+      "test": "no-chapters.wav heard-file chapters at 48000 Hz",
+      "result": {
+        "boundaries": 24,
+        "heard_file_seeks": 8,
+        "result": "exact PCM after decode ahead",
+        "rate": 48000
+      }
+    },
+    {
+      "test": "console ] then [",
+      "result": "heard chapter starts",
+      "starts": [
+        72288,
+        156050,
+        60132
+      ],
+      "runs": [
+        [
+          "book",
+          72288,
+          12912
+        ],
+        [
+          "book",
+          156050,
+          1150
+        ],
+        [
+          "book",
+          157362,
+          3438
+        ],
+        [
+          "book",
+          60132,
+          2988
+        ]
+      ]
+    },
+    {
+      "test": "console paused chapter seek",
+      "result": "silent until resume, then chapter PCM",
+      "silent_window_frames": 24000,
+      "resumed_runs": [
+        [
+          "book",
+          156134,
+          14506
+        ]
+      ]
+    }
+  ],
+  "fixture_hashes": {
+    "book.mp3": "0c04620b9ed2322572900c9c5e5c611999de0854ff68fe034ff2137ef00e5d91",
+    "book.m4a": "d3ed9c2d8dbd2b712798d67612d3f0b76715fef4d4b40c7153e0b93f3c68423e",
+    "book.mka": "58d6366e5d99859c5514602435855b909a0729e85089c6985ed1e2aba714d084",
+    "book.flac": "b26d6403d88ce75e1a7cead742160d223f21a88d83a963c54a4ed7b851cde8ef",
+    "book.ogg": "42a6c013875e1e98847be851f5a12d7fd14c9d80aec853b852b45b3145266770",
+    "book.wav": "824c230bb422983fd2592629cbfc775102c303fd332475cd51e49ff33f2c5cda",
+    "no-chapters.wav": "c74b17f2458bd3d8b1d581fb2ce1613e99b3f876e8b465c62ce0808a51505eae",
+    "later.flac": "1d0c7cc3e7ec945364643c1ba316a8c65a4ccc3ace777c85cff291139cb0c04c",
+    "play.flac": "cb484ff87647b870af35a36a2e3c1777f53417eef4145da7de67bcaf0a981378"
+  },
+  "fixture_ffmpeg": "ffmpeg version 5.1.9-0+deb12u1 Copyright (c) 2000-2026 the FFmpeg developers",
+  "oracle_source_sha256": "dc4284becd2a6bd394e3ce77922cd0b93ff02fb9f369a33a3dbd36e7860d2b9b",
+  "probe_source_sha256": "df9c4ff10f74716617c1ae4f13f4d3d4efb55f2fe24ef85f9f8fc68e2f6e568a",
+  "environment": {
+    "platform": "Linux-6.1.0-53-amd64-x86_64-with-glibc2.36",
+    "python": "3.11.2 (main, May 12 2026, 05:17:27) [GCC 12.2.0]"
+  },
+  "scope": "Chronological chapter boundaries without reordered metadata; heard-file exact seeks after decode ahead, resampling and keys"
+}

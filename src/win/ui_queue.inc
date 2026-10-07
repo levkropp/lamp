@@ -42,12 +42,15 @@ ui_shown_start: .quad 0              # the file shown: its start in the output,
 ui_shown_frames: .quad 0             # its length,
 ui_shown_codec: .long 0              # codec,
 ui_shown_index: .long 0              # and index
-ui_shown: .long -1                   # the ring entry shown (its number since the launch)
+ui_shown: .quad -1                   # the ring entry shown (its number since the launch)
 ui_count: .long 0
 ui_list_new: .long 0                 # 1: the pending list plays at the next launch
 ui_start_index: .long 0
-ui_heard_count: .long 0              # ring entries written since the launch
+ui_chapter_pending: .long 0         # worker resolves chapters after snapshot eviction
 .p2align 3
+ui_heard_count: .quad 0              # ring entries written since the launch
+.p2align 3
+ui_ring_lock: .quad 0               # SRWLOCK_INIT; only bounded snapshot copies under it
 ui_scan_paths: .quad 0
 ui_scan_text: .quad 0
 ui_scan_count: .long 0
@@ -65,6 +68,8 @@ ui_audio_types: .asciz "wav", "aif", "aiff", "aifc", "flac", "mp3", "ogg", "opus
 .bss
 .p2align 3
 ui_ring: .zero UI_RING*UE_SIZE
+ui_open_entry: .zero UE_SIZE        # producer prepares metadata before taking the lock
+ui_heard_copy: .zero UE_SIZE        # UI-owned snapshot, never borrowed from the producer
 ui_shown_title: .zero UI_TITLE_UNITS*2
 ui_window_text: .zero (UI_TITLE_UNITS + 16)*2
 ui_join_text: .zero UI_PATH_UNITS*2
@@ -79,15 +84,9 @@ FN ui_file_opened
     push rbx
     push rsi
     push rdi
-    sub rsp, 32
-    mov eax, [rip + ui_heard_count]
-    and eax, UI_RING - 1
-    imul eax, eax, UE_SIZE
-    lea rbx, [rip + ui_ring]
-    add rbx, rax
-    xor ecx, ecx
-    xchg rcx, [rbx + UE_COVER]            # a picture the window never took
-    call mem_free
+    push r12
+    sub rsp, 40
+    lea rbx, [rip + ui_open_entry]
     mov rax, [rip + queue_output]
     mov [rbx + UE_START], rax
     mov eax, [rip + queue_index]
@@ -142,7 +141,23 @@ FN ui_file_opened
 .Lui_opened_cover:
     call ui_cover_copy
     mov [rbx + UE_COVER], rax
-    inc dword ptr [rip + ui_heard_count]  # published once written
+    lea rcx, [rip + ui_ring_lock]
+    call AcquireSRWLockExclusive
+    mov eax, [rip + ui_heard_count]
+    and eax, UI_RING - 1
+    imul eax, eax, UE_SIZE
+    lea rdi, [rip + ui_ring]
+    add rdi, rax
+    xor r12d, r12d
+    xchg r12, [rdi + UE_COVER]          # previously unclaimed cover; free after unlocking
+    mov rsi, rbx
+    mov ecx, UE_SIZE/8
+    rep movsq
+    inc qword ptr [rip + ui_heard_count]  # published once written
+    lea rcx, [rip + ui_ring_lock]
+    call ReleaseSRWLockExclusive
+    mov rcx, r12
+    call mem_free
     mov rcx, [rip + ui_hwnd]
     test rcx, rcx
     jz .Lui_opened_return
@@ -151,7 +166,8 @@ FN ui_file_opened
     xor r9d, r9d
     call PostMessageW
 .Lui_opened_return:
-    add rsp, 32
+    add rsp, 40
+    pop r12
     pop rdi
     pop rsi
     pop rbx
@@ -177,36 +193,81 @@ LOCALFN ui_basename
     ret
 ENDFN ui_basename
 
-# -> RAX=the ring entry of the file being heard (the latest to start at or
-# before engine_position; 0 before the first opens), EDX=its number and
-# R9=the position used to select it.
+# -> RAX=UI-owned copy of the heard entry, 0 if unavailable; RDX=its number,
+# R9=the paired position. No caller borrows a ring entry across publication.
 LOCALFN ui_heard
-    mov edx, [rip + ui_heard_count]
-    test edx, edx
+    xor ecx, ecx
+    jmp ui_heard_snapshot
+ENDFN ui_heard
+
+# As ui_heard, additionally transfers the selected cover to the UI copy.
+LOCALFN ui_heard_take
+    mov ecx, 1
+    jmp ui_heard_snapshot
+ENDFN ui_heard_take
+
+LOCALFN ui_heard_snapshot
+    push rbx
+    push rsi
+    push rdi
+    push r12
+    sub rsp, 56
+    mov ebx, ecx
+    lea rcx, [rip + ui_ring_lock]
+    call AcquireSRWLockExclusive
+    mov r9, [rip + engine_position]
+    mov [rsp + 48], r9
+    mov rdx, [rip + ui_heard_count]
+    test rdx, rdx
     jz .Lui_heard_none
-    mov r8d, edx
-    sub r8d, UI_RING
+    mov r8, rdx
+    sub r8, UI_RING
     jae .Lui_heard_oldest
     xor r8d, r8d
 .Lui_heard_oldest:
-    mov r9, [rip + engine_position]
     lea r10, [rip + ui_ring]
 .Lui_heard_entry:
-    dec edx
+    dec rdx
     mov eax, edx
     and eax, UI_RING - 1
     imul eax, eax, UE_SIZE
     add rax, r10
-    cmp edx, r8d
-    jbe .Lui_heard_found                  # the oldest kept
     cmp [rax + UE_START], r9
+    jbe .Lui_heard_found
+    cmp rdx, r8
     ja .Lui_heard_entry
+    jmp .Lui_heard_none                 # oldest snapshot is still in the future
 .Lui_heard_found:
-    ret
+    mov [rsp + 40], rdx
+    mov rsi, rax
+    xor r12d, r12d
+    test ebx, ebx
+    jz .Lui_heard_copy
+    xchg r12, [rsi + UE_COVER]
+.Lui_heard_copy:
+    lea rdi, [rip + ui_heard_copy]
+    mov ecx, UE_SIZE/8
+    rep movsq
+    mov [rip + ui_heard_copy + UE_COVER], r12
+    lea rcx, [rip + ui_ring_lock]
+    call ReleaseSRWLockExclusive
+    lea rax, [rip + ui_heard_copy]
+    mov rdx, [rsp + 40]
+    jmp .Lui_heard_return
 .Lui_heard_none:
+    lea rcx, [rip + ui_ring_lock]
+    call ReleaseSRWLockExclusive
     xor eax, eax
+    xor edx, edx
+.Lui_heard_return:
+    mov r9, [rsp + 48]
+    add rsp, 56
+    pop r12
+    pop rdi
+    pop rsi
+    pop rbx
     ret
-ENDFN ui_heard
+ENDFN ui_heard_snapshot
 
 # UI thread: when the file heard changes, shows its title, codec and length,
 # takes its picture and titles the window after it.
@@ -215,12 +276,12 @@ LOCALFN ui_heard_update
     push rsi
     push rdi
     sub rsp, 32
-    call ui_heard
+    call ui_heard_take
     test rax, rax
-    jz .Lui_update_return
-    cmp edx, [rip + ui_shown]
+    jz .Lui_update_fallback
+    cmp rdx, [rip + ui_shown]
     je .Lui_update_return
-    mov [rip + ui_shown], edx
+    mov [rip + ui_shown], rdx
     mov rbx, rax
     mov rax, [rbx + UE_START]
     mov [rip + ui_shown_start], rax
@@ -243,6 +304,47 @@ LOCALFN ui_heard_update
     call mem_free
 .Lui_update_title:
     call ui_window_title
+    jmp .Lui_update_return
+.Lui_update_fallback:
+    cmp qword ptr [rip + ui_heard_count], 0
+    je .Lui_update_return               # opening/restarting: no published file yet
+    mov rcx, r9
+    call queue_heard
+    test eax, eax
+    js .Lui_update_return
+    cmp eax, [rip + ui_count]
+    jae .Lui_update_return
+    cmp qword ptr [rip + ui_shown], -2
+    jne .Lui_update_filename
+    cmp eax, [rip + ui_shown_index]
+    jne .Lui_update_filename
+    cmp rdx, [rip + ui_shown_start]
+    je .Lui_update_return
+.Lui_update_filename:
+    mov qword ptr [rip + ui_shown], -2   # filename without a retained metadata snapshot
+    mov [rip + ui_shown_index], eax
+    mov [rip + ui_shown_start], rdx
+    mov qword ptr [rip + ui_shown_frames], 0
+    mov dword ptr [rip + ui_shown_codec], 0
+    mov rcx, [rip + ui_paths]
+    mov rcx, [rcx + rax*8]
+    call ui_basename
+    mov [rip + ui_filename], rax
+    mov rsi, rax
+    lea rdi, [rip + ui_shown_title]
+    mov ecx, UI_TITLE_UNITS - 1
+.Lui_update_filename_char:
+    lodsw
+    stosw
+    test ax, ax
+    jz .Lui_update_clear_cover
+    loop .Lui_update_filename_char
+    mov word ptr [rdi], 0
+.Lui_update_clear_cover:
+    call ui_cover_release
+    lea rcx, [rip + ui_cover_pending]
+    call ui_cover_free
+    jmp .Lui_update_title
 .Lui_update_return:
     add rsp, 32
     pop rdi
@@ -298,39 +400,58 @@ LOCALFN ui_schedule
     je .Lui_schedule_return
     cmp dword ptr [rip + pause_requested], 0
     jne .Lui_schedule_return              # resuming schedules again
-    mov edx, [rip + ui_heard_count]
-    mov r8d, edx
-    sub r8d, UI_RING
+    lea rcx, [rip + ui_ring_lock]
+    call AcquireSRWLockExclusive
+    mov rdx, [rip + ui_heard_count]
+    mov r8, rdx
+    sub r8, UI_RING
     jae .Lui_schedule_oldest
     xor r8d, r8d
 .Lui_schedule_oldest:
     mov r9, [rip + engine_position]
     lea r10, [rip + ui_ring]
+    cmp rdx, UI_RING
+    jbe .Lui_schedule_entry
+    mov eax, r8d
+    and eax, UI_RING - 1
+    imul eax, eax, UE_SIZE
+    cmp [r10 + rax + UE_START], r9
+    jbe .Lui_schedule_entry
+    xor eax, eax                       # metadata evicted: check the shared timeline in 20 ms
+    jmp .Lui_schedule_arm
 .Lui_schedule_entry:
-    cmp r8d, edx
-    jae .Lui_schedule_return              # none ahead
+    cmp r8, rdx
+    jae .Lui_schedule_unlock_return       # none ahead
     mov eax, r8d
     and eax, UI_RING - 1
     imul eax, eax, UE_SIZE
     mov rax, [r10 + rax + UE_START]
-    inc r8d
+    inc r8
     sub rax, r9
     jbe .Lui_schedule_entry               # already heard
     mov ecx, 1000
     mul rcx
     mov ecx, [rip + queue_rate]
     test ecx, ecx
-    jz .Lui_schedule_return
+    jz .Lui_schedule_unlock_return
     div rcx
     cmp rax, 60000
     jbe .Lui_schedule_arm
     mov eax, 60000                        # checked again then
 .Lui_schedule_arm:
+    mov [rsp + 32], eax
+    lea rcx, [rip + ui_ring_lock]
+    call ReleaseSRWLockExclusive
+    mov eax, [rsp + 32]
     lea r8d, [rax + 20]
     mov rcx, [rip + ui_hwnd]
     mov edx, 2
     xor r9d, r9d
     call SetTimer
+    jmp .Lui_schedule_return
+.Lui_schedule_unlock_return:
+    lea rcx, [rip + ui_ring_lock]
+    call ReleaseSRWLockExclusive
 .Lui_schedule_return:
     add rsp, 40
     ret
@@ -344,10 +465,24 @@ LOCALFN ui_heard_position
     jne .Lui_position_start
     call ui_heard
     test rax, rax
-    jz .Lui_position_start
+    jz .Lui_position_fallback
     mov r8, rax
-    mov rax, [rip + engine_position]
+    mov rax, r9                        # position paired with the selected snapshot
     sub rax, [r8 + UE_START]
+    mov r8d, [r8 + UE_INDEX]
+    jmp .Lui_position_delta
+.Lui_position_fallback:
+    cmp qword ptr [rip + ui_heard_count], 0
+    je .Lui_position_start
+    mov [rsp + 32], r9
+    mov rcx, r9
+    call queue_heard
+    mov r8d, eax
+    test eax, eax
+    js .Lui_position_unknown
+    mov rax, [rsp + 32]
+    sub rax, rdx
+.Lui_position_delta:
     jae .Lui_position_offset
     xor eax, eax
 .Lui_position_offset:
@@ -360,7 +495,11 @@ LOCALFN ui_heard_position
     div rcx
     mov rdx, rax
 .Lui_position_found:
-    mov eax, [r8 + UE_INDEX]
+    mov eax, r8d
+    jmp .Lui_position_return
+.Lui_position_unknown:
+    mov eax, -1
+    xor edx, edx
     jmp .Lui_position_return
 .Lui_position_start:
     mov eax, [rip + ui_start_index]
@@ -372,10 +511,15 @@ ENDFN ui_heard_position
 
 # ECX=index, RDX=milliseconds: plays the list from there.
 LOCALFN ui_play_at
+    test ecx, ecx
+    js .Lui_play_at_unknown
+    mov dword ptr [rip + ui_chapter_pending], 0
     mov [rip + ui_start_index], ecx
     mov [rip + ui_start_ms], rdx
     mov dword ptr [rip + pause_requested], 0
     jmp ui_request
+.Lui_play_at_unknown:
+    ret
 ENDFN ui_play_at
 
 # N: the file after the one heard (the first again with repeat).
@@ -384,6 +528,8 @@ LOCALFN ui_next
     cmp dword ptr [rip + ui_count], 0
     je .Lui_next_return
     call ui_heard_position
+    test eax, eax
+    js .Lui_next_return
     inc eax
     cmp eax, [rip + ui_count]
     jb .Lui_next_play
@@ -406,6 +552,8 @@ LOCALFN ui_previous
     cmp dword ptr [rip + ui_count], 0
     je .Lui_previous_return
     call ui_heard_position
+    test eax, eax
+    js .Lui_previous_return
     cmp rdx, 3000
     ja .Lui_previous_play
     dec eax
@@ -436,7 +584,7 @@ LOCALFN ui_chapter
     jne .Lui_chapter_return
     call ui_heard
     test rax, rax
-    jz .Lui_chapter_return
+    jz .Lui_chapter_fallback
     mov rsi, rax
     mov eax, [rsi + UE_INDEX]
     mov [rsp + 40], eax
@@ -479,7 +627,19 @@ LOCALFN ui_chapter
     mov [rip + ui_start_ms], rax
     mov eax, [rsp + 40]
     mov [rip + ui_start_index], eax
+    mov dword ptr [rip + ui_chapter_pending], 0
     call ui_request
+    jmp .Lui_chapter_return
+.Lui_chapter_fallback:
+    cmp qword ptr [rip + ui_heard_count], 0
+    je .Lui_chapter_return
+    call ui_heard_position
+    test eax, eax
+    js .Lui_chapter_return
+    mov [rip + ui_start_index], eax
+    mov [rip + ui_start_ms], rdx
+    mov [rip + ui_chapter_pending], ebx
+    call ui_request                    # keeps pause; worker owns the decoder once stopped
 .Lui_chapter_return:
     add rsp, 56
     pop rsi
@@ -487,17 +647,22 @@ LOCALFN ui_chapter
     ret
 ENDFN ui_chapter
 
-# RAX=milliseconds into the file heard, kept within it (up to a second before
-# its known end): plays from there.
+# ECX=the paired file index, RAX=milliseconds into it. A known displayed
+# duration keeps the target up to a second before its end. Never resample
+# the heard index here: a short file may have ended since the key/click.
+# Preserve pause through the restart, as chapter seeks do.
 LOCALFN ui_seek
-    sub rsp, 40
-    cmp dword ptr [rip + ui_count], 0
-    je .Lui_seek_return
+    sub rsp, 56
+    cmp ecx, [rip + ui_count]
+    jae .Lui_seek_return
+    mov [rsp + 40], ecx
     test rax, rax
     jns .Lui_seek_nonnegative
     xor eax, eax
 .Lui_seek_nonnegative:
     mov [rsp + 32], rax
+    cmp ecx, [rip + ui_shown_index]
+    jne .Lui_seek_target               # displayed length belongs to another file
     mov rax, [rip + ui_shown_frames]
     mov ecx, [rip + queue_rate]
     test rax, rax
@@ -515,12 +680,14 @@ LOCALFN ui_seek
     jae .Lui_seek_target
     mov [rsp + 32], rax
 .Lui_seek_target:
-    call ui_heard_position
-    mov ecx, eax
+    mov ecx, [rsp + 40]
     mov rdx, [rsp + 32]
-    call ui_play_at
+    mov [rip + ui_start_index], ecx
+    mov [rip + ui_start_ms], rdx
+    mov dword ptr [rip + ui_chapter_pending], 0
+    call ui_request
 .Lui_seek_return:
-    add rsp, 40
+    add rsp, 56
     ret
 ENDFN ui_seek
 
@@ -570,8 +737,8 @@ LOCALFN ui_request
     mov rcx, [rcx + rax*8]
     call ui_basename
     mov [rip + ui_filename], rax
-    mov dword ptr [rip + ui_shown], -1
-    mov dword ptr [rip + ui_heard_count], 0
+    mov qword ptr [rip + ui_shown], -1
+    mov qword ptr [rip + ui_heard_count], 0
     mov qword ptr [rip + ui_shown_start], 0
     mov rax, [rip + ui_start_ms]          # shown until the file opens
     mov ecx, [rip + queue_rate]
@@ -612,6 +779,28 @@ ENDFN ui_request
 
 LOCALFN ui_audio_thread
     sub rsp, 40
+    xor eax, eax
+    xchg eax, [rip + ui_chapter_pending]
+    test eax, eax
+    jz .Lui_audio_play
+    mov [rsp + 32], eax
+    mov eax, [rip + ui_start_index]
+    cmp eax, [rip + ui_count]
+    jae .Lui_audio_play
+    mov rcx, [rip + ui_paths]
+    mov rcx, [rcx + rax*8]
+    lea rax, [rip + engine_stop_requested]
+    mov [rip + ogg_cancel_ptr], rax      # the metadata reopen remains cancellable
+    call decoder_open
+    test eax, eax
+    jz .Lui_audio_chapter_close
+    mov ecx, [rsp + 32]
+    mov rdx, [rip + ui_start_ms]
+    call queue_chapter_target
+    mov [rip + ui_start_ms], rax
+.Lui_audio_chapter_close:
+    call decoder_close
+.Lui_audio_play:
     mov rcx, [rip + ui_paths]
     mov edx, [rip + ui_count]
     mov r8d, [rip + ui_start_index]
@@ -654,6 +843,7 @@ ENDFN ui_list_begin
 
 # The pending list plays next, from its first file, unpaused.
 FN ui_list_end
+    mov dword ptr [rip + ui_chapter_pending], 0
     mov dword ptr [rip + ui_list_new], 1
     mov dword ptr [rip + pause_requested], 0
     xor eax, eax

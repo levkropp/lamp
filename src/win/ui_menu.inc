@@ -77,7 +77,18 @@ LOCALFN ui_menu
     call ui_heard
     mov edx, 1                          # MF_GRAYED when no heard chapters
     test rax, rax
-    jz .Lui_menu_chapters
+    jnz .Lui_menu_snapshot
+    cmp qword ptr [rip + ui_heard_count], 0
+    je .Lui_menu_chapters
+    cmp dword ptr [rip + ui_restart], 0
+    jne .Lui_menu_chapters
+    call ui_heard_position
+    mov edx, 1
+    test eax, eax
+    js .Lui_menu_chapters
+    xor edx, edx                       # worker can reopen the heard file's metadata
+    jmp .Lui_menu_chapters
+.Lui_menu_snapshot:
     cmp dword ptr [rax + UE_CHAPTER_COUNT], 0
     je .Lui_menu_chapters
     cmp dword ptr [rip + ui_restart], 0

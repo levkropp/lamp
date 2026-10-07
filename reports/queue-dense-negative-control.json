@@ -1,0 +1,27 @@
+{
+  "test": "original dense queue negative control",
+  "result": "expected failure before fix",
+  "source_commit": "b6458e70a0160d2afc0ea2d53c1d041a5eea4ed0",
+  "input": {
+    "queued_paths": 100,
+    "container": "WAVE PCM",
+    "source_rate": 48000,
+    "source_channels": 1,
+    "source_bits": 16,
+    "frames_per_file": 1920
+  },
+  "calls": [
+    "queue_begin(paths,100)",
+    "queue_read(stereo_float_buffer,131072)",
+    "queue_heard(0)"
+  ],
+  "observed": {
+    "frames_decoded": 131072,
+    "decoder_file": 68,
+    "heard_at_frame_0": 5,
+    "expected_file": 0,
+    "decode_error": 0
+  },
+  "exit_code": 1,
+  "scope": "Captured from the shipping-source Linux archive before the timeline change; the dense positive cases check the same boundary after the fix."
+}

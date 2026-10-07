@@ -1,5 +1,7 @@
 LIBRARY KERNEL32.dll
 EXPORTS
+    AcquireSRWLockExclusive
+    ReleaseSRWLockExclusive
     CloseHandle
     CreateEventW
     CreateFileMappingW
