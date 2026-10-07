@@ -358,10 +358,6 @@
       "result": "rejected"
     },
     {
-      "test": "ecplinu.ec3",
-      "result": "rejected"
-    },
-    {
       "test": "late_coupling.ec3",
       "result": "rejected"
     },

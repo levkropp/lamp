@@ -159,8 +159,7 @@ LOCALFN ac3_block
     je .Lac3_block_cpl_channels
     mov ecx, 1
     call ac3_get                          # ecplinu
-    test eax, eax
-    jnz .Lac3_block_unsupported
+    mov [rip + eac3_ecpl_active], eax
 .Lac3_block_cpl_channels:
     mov esi, 1
 .Lac3_block_cpl_channel:
@@ -180,6 +179,13 @@ LOCALFN ac3_block
     inc esi
     jmp .Lac3_block_cpl_channel
 .Lac3_block_cpl_phase:
+    cmp dword ptr [rip + eac3_ecpl_active], 0
+    je .Lac3_block_cpl_standard
+    call eac3_ecpl_strategy
+    test eax, eax
+    jz .Lac3_block_fail
+    jmp .Lac3_block_coords
+.Lac3_block_cpl_standard:
     cmp dword ptr [rip + ac3_acmod], 2
     jne .Lac3_block_cpl_range
     mov ecx, 1
@@ -271,6 +277,7 @@ LOCALFN ac3_block
     mov [rip + ac3_ncplbnd], edi
     jmp .Lac3_block_coords
 .Lac3_block_cpl_off:
+    mov dword ptr [rip + eac3_ecpl_active], 0
     mov esi, 1
 .Lac3_block_cpl_off_next:
     cmp esi, r12d
@@ -288,6 +295,13 @@ LOCALFN ac3_block
     # Coupling coordinates and phase flags.
     cmp dword ptr [rip + ac3_cplinu], 0
     je .Lac3_block_remat
+    cmp dword ptr [rip + eac3_ecpl_active], 0
+    je .Lac3_block_coords_standard
+    call eac3_ecpl_coordinates
+    test eax, eax
+    jz .Lac3_block_fail
+    jmp .Lac3_block_remat
+.Lac3_block_coords_standard:
     xor edi, edi                          # coordinates sent
     mov esi, 1
 .Lac3_block_coord_channel:
@@ -389,6 +403,19 @@ LOCALFN ac3_block
     cmp dword ptr [rip + ac3_cplinu], 0
     je .Lac3_block_remat_spx
     mov eax, [rip + ac3_start]
+    cmp dword ptr [rip + eac3_ecpl_active], 0
+    je .Lac3_block_remat_standard
+    xor edi, edi
+    lea rdx, [rip + ac3_remat_tab]
+.Lac3_block_remat_ecpl_count:
+    cmp edi, 4
+    jae .Lac3_block_remat_count
+    movzx ecx, word ptr [rdx + rdi*2]
+    cmp eax, ecx
+    jbe .Lac3_block_remat_count
+    inc edi
+    jmp .Lac3_block_remat_ecpl_count
+.Lac3_block_remat_standard:
     cmp eax, 61
     ja .Lac3_block_remat_count
     dec edi
@@ -1014,6 +1041,10 @@ LOCALFN ac3_calc_psd
     movzx edx, byte ptr [r11 + r12]
     cmp edi, edx
     ja .Lac3_psd_band
+    # Low-frequency compensation compares the final active band with the
+    # following band. ECPL can end a full-bandwidth channel at bin 13/25:
+    # its neighbor must be zero, never PSD left by a wider previous block.
+    mov word ptr [r10 + r12*2], 0
     pop r13
     pop r12
     pop rdi
@@ -1429,9 +1460,14 @@ LOCALFN ac3_coefficients
     jnz .Lac3_coef_coupled_end
     xor ecx, ecx
     call ac3_mantissas
+    cmp dword ptr [rip + eac3_ecpl_active], 0
+    jne .Lac3_coef_coupling_ready
     call ac3_uncouple
+.Lac3_coef_coupling_ready:
     mov r12d, 1
 .Lac3_coef_coupled_end:
+    cmp dword ptr [rip + eac3_ecpl_active], 0
+    jne .Lac3_coef_own_end
     mov eax, [rip + ac3_end]
     jmp .Lac3_coef_zero
 .Lac3_coef_own_end:
@@ -1452,6 +1488,8 @@ LOCALFN ac3_coefficients
     inc esi
     jmp .Lac3_coef_channel
 .Lac3_coef_dither:
+    cmp dword ptr [rip + eac3_ecpl_active], 0
+    jne .Lac3_coef_return
     mov esi, 1
 .Lac3_coef_dither_channel:
     cmp esi, [rip + ac3_nf]
@@ -1818,6 +1856,14 @@ LOCALFN ac3_transform
     inc ecx
     cmp ecx, 256
     jb .Lac3_transform_scale
+    cmp dword ptr [rip + eac3_ecpl_active], 0
+    je .Lac3_transform_ecpl_done
+    AC3_SLOT rax, ac3_incpl, rbx
+    cmp dword ptr [rax], 0
+    je .Lac3_transform_ecpl_done
+    mov ecx, ebx
+    call eac3_ecpl_apply
+.Lac3_transform_ecpl_done:
     cmp dword ptr [rip + ac3_enhanced], 0
     je .Lac3_transform_spx_done
     AC3_SLOT rax, eac3_spx_ch, rbx

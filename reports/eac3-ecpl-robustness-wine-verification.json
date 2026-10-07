@@ -1,0 +1,43 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "ecpl.ec3",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 20,
+      "decoded": 13,
+      "rejected_or_damaged": 7,
+      "repaired_frame_crcs": 96
+    },
+    {
+      "test": "ecpl.mka",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 20,
+      "decoded": 11,
+      "rejected_or_damaged": 9,
+      "repaired_frame_crcs": 0
+    },
+    {
+      "test": "ecpl.mp4",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 20,
+      "decoded": 6,
+      "rejected_or_damaged": 14,
+      "repaired_frame_crcs": 0
+    },
+    {
+      "test": "ecpl.ts",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 20,
+      "decoded": 15,
+      "rejected_or_damaged": 5,
+      "repaired_frame_crcs": 0
+    }
+  ],
+  "mutations": 80,
+  "decoded": 45,
+  "wine_debug": "err+all",
+  "crc_policy": "Alternating raw ECPL mutations repair CRCs of complete frames; other mutations retain damage",
+  "scope": "4 container/codec sources, 200 mutations each (every tenth under Wine), seed 20261013: byte flips, zero/0xff runs, cuts, removed and duplicated spans, large length fields; --check, every fourth from a random --start.",
+  "wine_address_randomization": "Disabled per process with setarch x86_64 -R for the previously observed Wine 8 shared-user-data startup mapping failure"
+}

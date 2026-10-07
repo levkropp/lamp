@@ -1,7 +1,7 @@
 """Test-only E-AC-3 streams sized by the independent decoder model.
 
 Covers 1/2/3/6 blocks, both exponent syntaxes, optional fields and reuse.
-Conventional and AHT mantissas are supported; enhanced coupling is rejected.
+Conventional, AHT and enhanced coupling syntax are supported.
 """
 import copy
 import random
@@ -13,6 +13,27 @@ import eac3_model as model
 class Writer(ac3_vectors.Writer):
     def choose(self, n, label, context):
         c, r = self.c, self.r
+        if c.get('ecpl_signal') and label == 'absexp': return 4
+        if c.get('ecpl_signal') and label == 'exp': return 62 # three zero exponent deltas
+        if label == 'ecplinu':
+            value = c.get('ecpl_frames', c.get(label, 0))
+            index = c.get('_index',0) if 'ecpl_frames' in c else context[0]
+            return value[index%len(value)] if isinstance(value,list) else value
+        if label in ('ecplbegf','ecplendf','ecplbndstrce','ecplbndstrc','ecplangleintrp',
+                     'ecplparam1e','ecplparam2e','ecpltrans','ecplamp','ecplangle','ecplchaos'):
+            if label in c:
+                value = c[label]
+                return value[c.get('_index',0)%len(value)] if isinstance(value,list) else value
+            if label == 'ecplbegf': return 0
+            if label == 'ecplendf': return max(0,context[0]-6)+r.randrange(16-max(0,context[0]-6))
+            if label in ('ecplparam1e','ecplparam2e'): return int(r.random()<.7)
+            if label in ('ecplamp','ecplangle','ecplchaos') and c.get('ecpl_cycle'):
+                indices = c.setdefault('_ecpl_indices',{})
+                index = indices.get(label,0); indices[label] = index+1
+                return index%(1<<n)
+            return r.getrandbits(n)
+        if label == 'chincpl' and 'ecpl_channels' in c:
+            return int(context[0] in c['ecpl_channels'])
         if label == 'addbsi':
             # Opaque metadata must not advertise an object extension without
             # its mandatory complexity byte (a one-byte field is possible).
@@ -135,7 +156,11 @@ def stream(seed, frames=12, acmod=2, lfe=0, blocks=6, fscod=0, typ=0, size=4096,
                   expstre=1, snroffststr=2, blkswe=1, dithflage=1, bamode=1, frmfgaincode=1,
                   dbaflde=1, skipflde=1, transproce=1, spxattene=1)
     config.update(options)
-    decoder = model.Decoder()
+    if config.get('ecplinu') or config.get('ecpl_frames'):
+        import eac3_ecpl_model
+        decoder = eac3_ecpl_model.Decoder()
+    else:
+        decoder = model.Decoder()
     out = bytearray()
     snr = 40
     for index in range(frames):
@@ -143,10 +168,12 @@ def stream(seed, frames=12, acmod=2, lfe=0, blocks=6, fscod=0, typ=0, size=4096,
         nb = blocks[index % len(blocks)] if isinstance(blocks, (list, tuple)) else blocks
         h = dict(fscod=fscod, acmod=acmod, lfe=lfe, bsid=16, bytes=size, shift=0, blocks=nb, typ=typ)
         vq_indices=dict(config.get('_vq_indices',{}))
+        ecpl_indices=dict(config.get('_ecpl_indices',{}))
         for attempt in range(100):
             # A rejected oversized attempt must not skip codebook entries
             # in the accepted stream used for exhaustive VQ coverage.
             if config.get('aht_vq_cycle'):config['_vq_indices']=dict(vq_indices)
+            if config.get('ecpl_cycle'):config['_ecpl_indices']=dict(ecpl_indices)
             trial = copy.deepcopy(decoder)
             writer = Writer(r, config, snr, index == 0)
             trial.decode_frame(writer, h, strict=True)

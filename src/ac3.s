@@ -12,7 +12,8 @@
 # fails, and a block that does not decode, repeat the previous block's output.
 .include "lamp.inc"
 .globl ac3_probe, ac3_open, ac3_track_open, ac3_track_samples, ac3_track_decode
-.globl ac3_track_reset, ac3_track_close
+.globl ac3_track_reset, ac3_track_close, ac3_track_lookahead
+.globl ac3_enhanced
 
 .equ AC3_MALFORMED, 100
 .equ AC3_UNSUPPORTED, 101
@@ -49,6 +50,8 @@ ac3_gain_scale: .float 2.384185791015625e-7  # 2^-22
 
 .data
 ac3_key: .long -1                   # fscod | sr_shift << 2 | acmod << 4 | lfeon << 7 | enhanced << 8
+.p2align 3
+ac3_frame_context:
 ac3_bitpos: .long 0
 ac3_bitlimit: .long 0               # frame bytes
 ac3_acmod: .long 0
@@ -64,6 +67,9 @@ ac3_blocks: .long 6
 ac3_frame_samples: .long AC3_FRAME
 ac3_lfg_index: .long 0
 ac3_wave: .quad 0                   # this stream's row of ac3_wave_index
+.p2align 3
+ac3_frame_context_end:
+.equ AC3_FRAME_CONTEXT_WORDS, (ac3_frame_context_end-ac3_frame_context)/8
 
 .bss
 .p2align 6
@@ -88,6 +94,15 @@ ac3_has_last: .zero 4
 .p2align 3
 eac3_spx_reserved_ptr: .zero 8
 eac3_spx_reserved_end: .zero 8
+eac3_ecpl_previous: .zero 256*4
+eac3_ecpl_trans_seed: .zero 4
+.p2align 3
+ac3_lookahead_pointer: .zero 8
+ac3_lookahead_bytes: .zero 4
+.p2align 3
+ac3_next_pointer: .zero 8
+ac3_next_bytes: .zero 4
+.p2align 3
 ac3_params:                        # parsed state, separate from synthesis history
 ac3_dexps: .zero 7*256
 ac3_bap: .zero 7*256
@@ -141,6 +156,12 @@ eac3_spx_noise: .zero 8*17*4
 eac3_spx_signal: .zero 8*17*4
 eac3_spx_rms: .zero 17*4
 eac3_spx_wrap: .zero 17*4
+eac3_ecpl_active: .zero 4
+eac3_ecpl_begin: .zero 4
+eac3_ecpl_interp: .zero 4
+eac3_ecpl_padding: .zero 4
+eac3_ecpl_struct: .zero 32
+eac3_ecpl_coords: .zero 8*168        # DSP descriptors, indexed by channel
 .p2align 3
 ac3_params_end:
 ac3_state_end:
@@ -553,17 +574,34 @@ ENDFN ac3_track_open
 
 FN ac3_track_close
     mov dword ptr [rip + ac3_key], -1
+    mov qword ptr [rip + ac3_lookahead_pointer], 0
+    mov dword ptr [rip + ac3_lookahead_bytes], 0
     ret
 ENDFN ac3_track_close
+
+# RCX=next mapped packet, EDX=bytes; the caller owns its lifetime through
+# the current decode. A following frame inside the current packet wins.
+FN ac3_track_lookahead
+    mov [rip + ac3_lookahead_pointer], rcx
+    mov [rip + ac3_lookahead_bytes], edx
+    ret
+ENDFN ac3_track_lookahead
 
 # Clears the overlap, concealment and parameter state (stream start, seeks).
 FN ac3_track_reset
     push rdi
+    sub rsp, 32
     lea rdi, [rip + ac3_state]
     lea rcx, [rip + ac3_state_end]
     sub rcx, rdi
     xor eax, eax
     rep stosb
+    mov dword ptr [rip + eac3_ecpl_trans_seed], 0xa511e9b3
+    cmp dword ptr [rip + ac3_enhanced], 0
+    je .Lac3_reset_done
+    call eac3_ecpl_random_init
+.Lac3_reset_done:
+    add rsp, 32
     pop rdi
     ret
 ENDFN ac3_track_reset
@@ -649,6 +687,16 @@ FN ac3_track_decode
     cmp r11d, [rsp + 36]
     ja .Lac3_decode_bad
     mov [rsp + 32], eax
+    mov rdx, [rip + ac3_lookahead_pointer]
+    mov ecx, [rip + ac3_lookahead_bytes]
+    cmp edi, eax
+    je .Lac3_decode_next_set
+    lea rdx, [rsi + rax]
+    mov ecx, edi
+    sub ecx, eax
+.Lac3_decode_next_set:
+    mov [rip + ac3_next_pointer], rdx
+    mov [rip + ac3_next_bytes], ecx
     mov rcx, rsi
     mov edx, eax
     call ac3_decode
@@ -666,6 +714,12 @@ FN ac3_track_decode
 .Lac3_decode_failed:
     xor ebx, ebx
 .Lac3_decode_done:
+    # Borrowed packets live through this call only. A subsequent direct
+    # packet decode without a setter must not reuse released caller memory.
+    mov qword ptr [rip + ac3_lookahead_pointer], 0
+    mov dword ptr [rip + ac3_lookahead_bytes], 0
+    mov qword ptr [rip + ac3_next_pointer], 0
+    mov dword ptr [rip + ac3_next_bytes], 0
     mov eax, ebx
     add rsp, 40
     pop r12
@@ -967,3 +1021,5 @@ ENDFN ac3_bsi
 .include "eac3_aht.inc"
 .include "eac3_blocks.inc"
 .include "eac3_ecpl.inc"
+.include "eac3_ecpl_stream.inc"
+.include "eac3_lookahead.inc"

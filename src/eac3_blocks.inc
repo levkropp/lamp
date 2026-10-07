@@ -10,6 +10,9 @@ eac3_block_fixed: .zero 6*7*256*4
 eac3_block_noise: .zero 6*1024*4       # at most five FBW channels * 180 bins
 eac3_block_noise_count: .zero 6*4
 eac3_block_valid: .zero 8
+eac3_block_ecpl: .zero 8
+.p2align 6
+eac3_block_spectra: .zero 6*256*4
 .text
 
 # ECX=block. Capture coefficients/parameters and reserve SPX LFG words.
@@ -34,6 +37,13 @@ LOCALFN eac3_capture_block
     lea rsi, [rip + ac3_fixed]
     mov ecx, 7*256
     rep movsd
+    mov ecx, ebx
+    shl ecx, 10
+    lea rax, [rip + eac3_block_spectra]
+    add rcx, rax
+    call eac3_ecpl_spectrum
+    lea rdx, [rip + eac3_block_ecpl]
+    mov [rdx + rbx], al
     xor r12d, r12d
     cmp dword ptr [rip + eac3_spx_active], 0
     je .Leac3_capture_count
@@ -92,6 +102,11 @@ LOCALFN eac3_decode_blocks
     mov r12d, ecx
     mov qword ptr [rip + eac3_spx_reserved_ptr], 0
     mov qword ptr [rip + eac3_spx_reserved_end], 0
+    mov qword ptr [rip + eac3_block_ecpl], 0
+    lea rdi, [rip + eac3_block_spectra]
+    xor eax, eax
+    mov ecx, 6*256
+    rep stosd
     xor ebx, ebx
 .Leac3_blocks_parse:
     lea rax, [rip + eac3_block_valid]
@@ -121,6 +136,16 @@ LOCALFN eac3_decode_blocks
     lea rdi, [rip + eac3_final_params]
     mov ecx, offset AC3_PARAMS_WORDS
     rep movsq
+    mov eax, [rip + ac3_blocks]
+    dec eax
+    lea rdx, [rip + eac3_block_valid]
+    cmp byte ptr [rdx + rax], 0
+    je .Leac3_blocks_no_lookahead
+    lea rdx, [rip + eac3_block_ecpl]
+    cmp byte ptr [rdx + rax], 0
+    je .Leac3_blocks_no_lookahead
+    call eac3_ecpl_lookahead
+.Leac3_blocks_no_lookahead:
     xor ebx, ebx
 .Leac3_blocks_render:
     lea rax, [rip + eac3_block_valid]
@@ -148,13 +173,43 @@ LOCALFN eac3_decode_blocks
     mov eax, [rax + rbx*4]
     lea rax, [rcx + rax*4]
     mov [rip + eac3_spx_reserved_end], rax
+    lea rax, [rip + eac3_block_ecpl]
+    cmp byte ptr [rax + rbx], 0
+    je .Leac3_blocks_carrier_ready
+    lea rcx, [rip + eac3_ecpl_previous]
+    mov eax, ebx
+    shl eax, 10
+    lea rdx, [rip + eac3_block_spectra]
+    add rdx, rax
+    lea r8, [rdx + 256*4]
+    lea eax, [rbx + 1]
+    cmp eax, [rip + ac3_blocks]
+    jb .Leac3_blocks_carrier_next
+    lea r8, [rip + eac3_ecpl_next]
+.Leac3_blocks_carrier_next:
+    lea r9, [rip + eac3_ecpl_carrier_work]
+    call eac3_ecpl_carrier
+.Leac3_blocks_carrier_ready:
     mov ecx, ebx
     call ac3_transform
+    cmp dword ptr [rip + decode_error], 0
+    jne .Leac3_blocks_fail
     mov rax, [rip + eac3_spx_reserved_ptr]
     cmp rax, [rip + eac3_spx_reserved_end]
     jne .Leac3_blocks_bad
+    mov eax, ebx
+    shl eax, 10
+    lea rsi, [rip + eac3_block_spectra]
+    add rsi, rax
+    lea rdi, [rip + eac3_ecpl_previous]
+    mov ecx, 256
+    rep movsd
     jmp .Leac3_blocks_keep
 .Leac3_blocks_conceal:
+    lea rdi, [rip + eac3_ecpl_previous]
+    xor eax, eax
+    mov ecx, 256
+    rep stosd
     xor r13d, r13d
 .Leac3_blocks_conceal_channel:
     cmp r13d, [rip + ac3_channels]

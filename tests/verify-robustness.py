@@ -85,6 +85,10 @@ SOURCES = [
     ('ac3.mka', SURROUND + ['-c:a', 'ac3']),
     ('tone.ec3', SURROUND + ['-c:a', 'eac3', '-f', 'eac3']),
     ('written.ec3', []),
+    ('ecpl.ec3', []),
+    ('ecpl.mka', []),
+    ('ecpl.mp4', []),
+    ('ecpl.ts', []),
     ('spx.ec3', []),
     ('spx.mka', []),
     ('spx.mp4', []),
@@ -194,6 +198,8 @@ def main():
     parser.add_argument('--seed', type=int, default=20261006)
     parser.add_argument('--wine', action='store_true')
     parser.add_argument('--only', help='comma-separated source filenames')
+    parser.add_argument('--repair-eac3-crc', action='store_true',
+                        help='repair complete raw ECPL frame CRCs in alternating mutations to exercise block parsing')
     args = parser.parse_args()
     if args.count < 1:
         parser.error('--count must be positive')
@@ -225,7 +231,17 @@ def main():
     for name, options in selected:
         source = work / name
         if not source.exists():
-            if name.startswith('aht.'):
+            if name.startswith('ecpl.'):
+                import eac3_vectors
+                raw=work/'ecpl.ec3'
+                if not raw.exists():
+                    data,_=eac3_vectors.stream(20261013,12,7,1,ecplinu=1,
+                        coupling=1,cplstre=1,ecplbegf=0,ecplendf=15,
+                        ecpl_cycle=True,ecplparam1e=1,ecplparam2e=1,
+                        short=0.25)
+                    raw.write_bytes(data)
+                if source!=raw:ffmpeg('-i',raw,'-c','copy',source)
+            elif name.startswith('aht.'):
                 import eac3_vectors
                 raw=work/'aht.ec3'
                 if not raw.exists():
@@ -259,8 +275,20 @@ def main():
         if good.returncode:
             raise Failure(f'{name} does not decode before mutation: {good.stdout[-300:]}')
         counts = {0: 0, 2: 0}
+        repaired = 0
         for n in range(0, args.count, step):
             data = mutate(original, rng)
+            if args.repair_eac3_crc and name == 'ecpl.ec3' and (n // step) % 2:
+                import ac3_model
+                mutable = bytearray(data)
+                at = 0
+                while at+8 <= len(mutable) and mutable[at:at+2] == b'\x0b\x77':
+                    size = 2 * (((mutable[at+2]&7)<<8 | mutable[at+3])+1)
+                    if size < 8 or at+size > len(mutable): break
+                    mutable[at+size-2:at+size] = ac3_model.crc16(mutable[at+2:at+size-2]).to_bytes(2,'big')
+                    repaired += 1
+                    at += size
+                data = bytes(mutable)
             path = work / f'mutated{Path(name).suffix}'
             path.write_bytes(data)
             options = ['--check']
@@ -284,7 +312,8 @@ def main():
         total += counts[0] + counts[2]
         decoded += counts[0]
         checks.append({'test': name, 'result': 'no crash, hang or runaway memory', 'mutations': counts[0] + counts[2],
-                       'decoded': counts[0], 'rejected_or_damaged': counts[2]})
+                       'decoded': counts[0], 'rejected_or_damaged': counts[2],
+                       **({'repaired_frame_crcs': repaired} if args.repair_eac3_crc else {})})
         print(f'{name}: {counts[0] + counts[2]} mutations, {counts[0]} decoded, {counts[2]} rejected', flush=True)
     report = 'robustness-selected' if args.only else 'robustness'
     if args.wine:
@@ -292,6 +321,7 @@ def main():
     write_report(report, {
         'result': 'passed', 'checks': checks, 'mutations': total, 'decoded': decoded,
         **({'wine_debug': env['WINEDEBUG']} if args.wine else {}),
+        **({'crc_policy': 'Alternating raw ECPL mutations repair CRCs of complete frames; other mutations retain damage'} if args.repair_eac3_crc else {}),
         'scope': f'{len(selected)} container/codec sources, {args.count} mutations each '
                  f'({"every tenth under Wine" if args.wine else "Linux, 2 GiB address space"}), seed {args.seed}: '
                  'byte flips, zero/0xff runs, cuts, removed and duplicated spans, large length fields; --check, '

@@ -8,7 +8,7 @@
       "comparator": "FFmpeg (shared stereo weights)",
       "snr_db": 138.7,
       "peak_error": 1.1920928955078125e-07,
-      "stats": "codec=20 rate=48000 channels=1 bits=0 frames=29184 underruns=0 decode_error=0 audio_error=0 elapsed_ms=35 cpu_us=45520 endpoint_dry=0"
+      "stats": "codec=20 rate=48000 channels=1 bits=0 frames=29184 underruns=0 decode_error=0 audio_error=0 elapsed_ms=41 cpu_us=52576 endpoint_dry=0"
     },
     {
       "test": "stereo.ec3",
@@ -16,7 +16,7 @@
       "comparator": "FFmpeg (shared stereo weights)",
       "snr_db": 138.7,
       "peak_error": 5.960464477539063e-08,
-      "stats": "codec=20 rate=48000 channels=2 bits=0 frames=29184 underruns=0 decode_error=0 audio_error=0 elapsed_ms=34 cpu_us=46132 endpoint_dry=0"
+      "stats": "codec=20 rate=48000 channels=2 bits=0 frames=29184 underruns=0 decode_error=0 audio_error=0 elapsed_ms=82 cpu_us=93799 endpoint_dry=0"
     },
     {
       "test": "stereo44.ec3",
@@ -24,7 +24,7 @@
       "comparator": "FFmpeg (shared stereo weights)",
       "snr_db": 138.8,
       "peak_error": 5.960464477539063e-08,
-      "stats": "codec=20 rate=44100 channels=2 bits=0 frames=27648 underruns=0 decode_error=0 audio_error=0 elapsed_ms=36 cpu_us=46329 endpoint_dry=0"
+      "stats": "codec=20 rate=44100 channels=2 bits=0 frames=27648 underruns=0 decode_error=0 audio_error=0 elapsed_ms=32 cpu_us=43561 endpoint_dry=0"
     },
     {
       "test": "stereo32.ec3",
@@ -32,7 +32,7 @@
       "comparator": "FFmpeg (shared stereo weights)",
       "snr_db": 139.1,
       "peak_error": 4.470348358154297e-08,
-      "stats": "codec=20 rate=32000 channels=2 bits=0 frames=19968 underruns=0 decode_error=0 audio_error=0 elapsed_ms=20 cpu_us=28664 endpoint_dry=0"
+      "stats": "codec=20 rate=32000 channels=2 bits=0 frames=19968 underruns=0 decode_error=0 audio_error=0 elapsed_ms=49 cpu_us=64974 endpoint_dry=0"
     },
     {
       "test": "low.ec3",
@@ -40,7 +40,7 @@
       "comparator": "FFmpeg (shared stereo weights)",
       "snr_db": 139.2,
       "peak_error": 5.960464477539063e-08,
-      "stats": "codec=20 rate=48000 channels=2 bits=0 frames=29184 underruns=0 decode_error=0 audio_error=0 elapsed_ms=41 cpu_us=53833 endpoint_dry=0"
+      "stats": "codec=20 rate=48000 channels=2 bits=0 frames=29184 underruns=0 decode_error=0 audio_error=0 elapsed_ms=36 cpu_us=46635 endpoint_dry=0"
     },
     {
       "test": "high.ec3",
@@ -48,7 +48,7 @@
       "comparator": "FFmpeg (shared stereo weights)",
       "snr_db": 138.6,
       "peak_error": 7.450580596923828e-08,
-      "stats": "codec=20 rate=48000 channels=2 bits=0 frames=29184 underruns=0 decode_error=0 audio_error=0 elapsed_ms=27 cpu_us=36240 endpoint_dry=0"
+      "stats": "codec=20 rate=48000 channels=2 bits=0 frames=29184 underruns=0 decode_error=0 audio_error=0 elapsed_ms=37 cpu_us=47167 endpoint_dry=0"
     },
     {
       "test": "2.1.ec3",
@@ -56,7 +56,7 @@
       "comparator": "FFmpeg (shared stereo weights)",
       "snr_db": 138.4,
       "peak_error": 4.470348358154297e-08,
-      "stats": "codec=20 rate=48000 channels=3 bits=0 frames=29184 underruns=0 decode_error=0 audio_error=0 elapsed_ms=34 cpu_us=49117 endpoint_dry=0"
+      "stats": "codec=20 rate=48000 channels=3 bits=0 frames=29184 underruns=0 decode_error=0 audio_error=0 elapsed_ms=67 cpu_us=78188 endpoint_dry=0"
     },
     {
       "test": "3.0.ec3",
@@ -64,7 +64,7 @@
       "comparator": "FFmpeg (shared stereo weights)",
       "snr_db": 138.4,
       "peak_error": 4.470348358154297e-08,
-      "stats": "codec=20 rate=48000 channels=3 bits=0 frames=29184 underruns=0 decode_error=0 audio_error=0 elapsed_ms=34 cpu_us=41871 endpoint_dry=0"
+      "stats": "codec=20 rate=48000 channels=3 bits=0 frames=29184 underruns=0 decode_error=0 audio_error=0 elapsed_ms=47 cpu_us=57494 endpoint_dry=0"
     },
     {
       "test": "3.0back.ec3",
@@ -72,7 +72,7 @@
       "comparator": "FFmpeg (shared stereo weights)",
       "snr_db": 138.3,
       "peak_error": 4.470348358154297e-08,
-      "stats": "codec=20 rate=48000 channels=3 bits=0 frames=29184 underruns=0 decode_error=0 audio_error=0 elapsed_ms=36 cpu_us=44380 endpoint_dry=0"
+      "stats": "codec=20 rate=48000 channels=3 bits=0 frames=29184 underruns=0 decode_error=0 audio_error=0 elapsed_ms=46 cpu_us=57426 endpoint_dry=0"
     },
     {
       "test": "4.0.ec3",
@@ -80,7 +80,7 @@
       "comparator": "FFmpeg (shared stereo weights)",
       "snr_db": 138.3,
       "peak_error": 2.9802322387695312e-08,
-      "stats": "codec=20 rate=48000 channels=4 bits=0 frames=29184 underruns=0 decode_error=0 audio_error=0 elapsed_ms=38 cpu_us=45968 endpoint_dry=0"
+      "stats": "codec=20 rate=48000 channels=4 bits=0 frames=29184 underruns=0 decode_error=0 audio_error=0 elapsed_ms=55 cpu_us=64626 endpoint_dry=0"
     },
     {
       "test": "quad.ec3",
@@ -88,7 +88,7 @@
       "comparator": "FFmpeg (shared stereo weights)",
       "snr_db": 138.5,
       "peak_error": 2.9802322387695312e-08,
-      "stats": "codec=20 rate=48000 channels=4 bits=0 frames=29184 underruns=0 decode_error=0 audio_error=0 elapsed_ms=39 cpu_us=45648 endpoint_dry=0"
+      "stats": "codec=20 rate=48000 channels=4 bits=0 frames=29184 underruns=0 decode_error=0 audio_error=0 elapsed_ms=55 cpu_us=64745 endpoint_dry=0"
     },
     {
       "test": "5.0.ec3",
@@ -96,7 +96,7 @@
       "comparator": "FFmpeg (shared stereo weights)",
       "snr_db": 138.6,
       "peak_error": 4.470348358154297e-08,
-      "stats": "codec=20 rate=48000 channels=5 bits=0 frames=29184 underruns=0 decode_error=0 audio_error=0 elapsed_ms=44 cpu_us=51956 endpoint_dry=0"
+      "stats": "codec=20 rate=48000 channels=5 bits=0 frames=29184 underruns=0 decode_error=0 audio_error=0 elapsed_ms=63 cpu_us=73197 endpoint_dry=0"
     },
     {
       "test": "5.1.ec3",
@@ -104,7 +104,7 @@
       "comparator": "FFmpeg (shared stereo weights)",
       "snr_db": 138.3,
       "peak_error": 3.725290298461914e-08,
-      "stats": "codec=20 rate=48000 channels=6 bits=0 frames=29184 underruns=0 decode_error=0 audio_error=0 elapsed_ms=68 cpu_us=80309 endpoint_dry=0"
+      "stats": "codec=20 rate=48000 channels=6 bits=0 frames=29184 underruns=0 decode_error=0 audio_error=0 elapsed_ms=73 cpu_us=83196 endpoint_dry=0"
     },
     {
       "test": "5.1-44.ec3",
@@ -112,7 +112,7 @@
       "comparator": "FFmpeg (shared stereo weights)",
       "snr_db": 138.3,
       "peak_error": 3.725290298461914e-08,
-      "stats": "codec=20 rate=44100 channels=6 bits=0 frames=27648 underruns=0 decode_error=0 audio_error=0 elapsed_ms=71 cpu_us=80287 endpoint_dry=0"
+      "stats": "codec=20 rate=44100 channels=6 bits=0 frames=27648 underruns=0 decode_error=0 audio_error=0 elapsed_ms=67 cpu_us=78498 endpoint_dry=0"
     },
     {
       "test": "4.1-32.ec3",
@@ -120,7 +120,7 @@
       "comparator": "FFmpeg (shared stereo weights)",
       "snr_db": 138.4,
       "peak_error": 4.470348358154297e-08,
-      "stats": "codec=20 rate=32000 channels=5 bits=0 frames=19968 underruns=0 decode_error=0 audio_error=0 elapsed_ms=87 cpu_us=101860 endpoint_dry=0"
+      "stats": "codec=20 rate=32000 channels=5 bits=0 frames=19968 underruns=0 decode_error=0 audio_error=0 elapsed_ms=49 cpu_us=68773 endpoint_dry=0"
     },
     {
       "test": "model stereo.ec3",
@@ -138,7 +138,7 @@
       "comparator": "FFmpeg (shared stereo weights)",
       "snr_db": 138.8,
       "peak_error": 1.52587890625e-05,
-      "stats": "codec=20 rate=48000 channels=2 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=42 cpu_us=100750 endpoint_dry=0"
+      "stats": "codec=20 rate=48000 channels=2 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=29452 endpoint_dry=0"
     },
     {
       "test": "model written-mode0.ec3",
@@ -151,7 +151,7 @@
       "comparator": "FFmpeg (shared stereo weights)",
       "snr_db": 139.4,
       "peak_error": 1.430511474609375e-06,
-      "stats": "codec=20 rate=48000 channels=2 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=27 cpu_us=39271 endpoint_dry=0"
+      "stats": "codec=20 rate=48000 channels=2 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=13 cpu_us=21751 endpoint_dry=0"
     },
     {
       "test": "model written-mode1.ec3",
@@ -164,7 +164,7 @@
       "comparator": "FFmpeg (shared stereo weights)",
       "snr_db": 138.8,
       "peak_error": 7.62939453125e-06,
-      "stats": "codec=20 rate=48000 channels=2 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=20 cpu_us=29900 endpoint_dry=0"
+      "stats": "codec=20 rate=48000 channels=2 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=17 cpu_us=28268 endpoint_dry=0"
     },
     {
       "test": "model written-mode2.ec3",
@@ -177,7 +177,7 @@
       "comparator": "FFmpeg (shared stereo weights)",
       "snr_db": 138.0,
       "peak_error": 7.62939453125e-06,
-      "stats": "codec=20 rate=48000 channels=4 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=31 cpu_us=41369 endpoint_dry=0"
+      "stats": "codec=20 rate=48000 channels=4 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=31 cpu_us=69353 endpoint_dry=0"
     },
     {
       "test": "model written-mode3.ec3",
@@ -190,7 +190,7 @@
       "comparator": "FFmpeg (shared stereo weights)",
       "snr_db": 138.8,
       "peak_error": 2.288818359375e-05,
-      "stats": "codec=20 rate=48000 channels=3 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=34 cpu_us=47907 endpoint_dry=0"
+      "stats": "codec=20 rate=48000 channels=3 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=17 cpu_us=24280 endpoint_dry=0"
     },
     {
       "test": "model written-mode4.ec3",
@@ -203,7 +203,7 @@
       "comparator": "FFmpeg (shared stereo weights)",
       "snr_db": 138.7,
       "peak_error": 2.384185791015625e-06,
-      "stats": "codec=20 rate=48000 channels=5 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=42 cpu_us=63106 endpoint_dry=0"
+      "stats": "codec=20 rate=48000 channels=5 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=18 cpu_us=27771 endpoint_dry=0"
     },
     {
       "test": "model written-mode5.ec3",
@@ -216,7 +216,7 @@
       "comparator": "FFmpeg (shared stereo weights)",
       "snr_db": 138.7,
       "peak_error": 7.62939453125e-06,
-      "stats": "codec=20 rate=48000 channels=4 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=22 cpu_us=34143 endpoint_dry=0"
+      "stats": "codec=20 rate=48000 channels=4 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=19 cpu_us=26204 endpoint_dry=0"
     },
     {
       "test": "model written-mode6.ec3",
@@ -229,7 +229,7 @@
       "comparator": "FFmpeg (shared stereo weights)",
       "snr_db": 139.2,
       "peak_error": 5.7220458984375e-06,
-      "stats": "codec=20 rate=48000 channels=6 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=26 cpu_us=38656 endpoint_dry=0"
+      "stats": "codec=20 rate=48000 channels=6 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=20 cpu_us=33181 endpoint_dry=0"
     },
     {
       "test": "model written-mode7.ec3",
@@ -242,7 +242,7 @@
       "comparator": "FFmpeg (shared stereo weights)",
       "snr_db": 138.5,
       "peak_error": 3.0517578125e-05,
-      "stats": "codec=20 rate=48000 channels=2 bits=0 frames=49152 underruns=0 decode_error=0 audio_error=0 elapsed_ms=52 cpu_us=65021 endpoint_dry=0"
+      "stats": "codec=20 rate=48000 channels=2 bits=0 frames=49152 underruns=0 decode_error=0 audio_error=0 elapsed_ms=51 cpu_us=59301 endpoint_dry=0"
     },
     {
       "test": "model lut.ec3",
@@ -255,7 +255,7 @@
       "comparator": "FFmpeg (shared stereo weights)",
       "snr_db": 138.6,
       "peak_error": 5.7220458984375e-06,
-      "stats": "codec=20 rate=48000 channels=2 bits=0 frames=9216 underruns=0 decode_error=0 audio_error=0 elapsed_ms=37 cpu_us=49061 endpoint_dry=0"
+      "stats": "codec=20 rate=48000 channels=2 bits=0 frames=9216 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=23498 endpoint_dry=0"
     },
     {
       "test": "model defaults.ec3",
@@ -268,7 +268,7 @@
       "comparator": "FFmpeg (shared stereo weights)",
       "snr_db": 138.5,
       "peak_error": 9.5367431640625e-06,
-      "stats": "codec=20 rate=48000 channels=4 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=26 cpu_us=40942 endpoint_dry=0"
+      "stats": "codec=20 rate=48000 channels=4 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=23881 endpoint_dry=0"
     },
     {
       "test": "model converted0.ec3",
@@ -285,7 +285,7 @@
       "comparator": "FFmpeg (shared stereo weights)",
       "snr_db": 137.8,
       "peak_error": 7.62939453125e-06,
-      "stats": "codec=20 rate=48000 channels=4 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=44 cpu_us=56066 endpoint_dry=0"
+      "stats": "codec=20 rate=48000 channels=4 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=17 cpu_us=24476 endpoint_dry=0"
     },
     {
       "test": "model converted2.ec3",
@@ -409,7 +409,7 @@
     },
     {
       "test": "seek-1.ec3 seeks",
-      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":2045,\"maximum_discarded\":256,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":4861,\"maximum_discarded\":512,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
     },
     {
       "test": "seek-2.ec3 seeks",
@@ -499,15 +499,6 @@
       }
     },
     {
-      "test": "ecplinu.ec3",
-      "result": "rejected",
-      "oracle": {
-        "result": "rejected",
-        "stage": "read",
-        "decode_error": 101
-      }
-    },
-    {
       "test": "late_coupling.ec3",
       "result": "rejected",
       "oracle": {
@@ -558,7 +549,7 @@
       "comparator": "FFmpeg (shared stereo weights)",
       "snr_db": 138.8,
       "peak_error": 8.940696716308594e-08,
-      "stats": "codec=20 rate=48000 channels=2 bits=0 frames=29184 underruns=0 decode_error=0 audio_error=0 elapsed_ms=32 cpu_us=43074 endpoint_dry=0"
+      "stats": "codec=20 rate=48000 channels=2 bits=0 frames=29184 underruns=0 decode_error=0 audio_error=0 elapsed_ms=23 cpu_us=30917 endpoint_dry=0"
     },
     {
       "test": "payload.ec3",
@@ -566,7 +557,7 @@
       "comparator": "FFmpeg (shared stereo weights)",
       "snr_db": 138.7,
       "peak_error": 5.960464477539063e-08,
-      "stats": "codec=20 rate=48000 channels=2 bits=0 frames=29184 underruns=0 decode_error=0 audio_error=0 elapsed_ms=47 cpu_us=62726 endpoint_dry=0"
+      "stats": "codec=20 rate=48000 channels=2 bits=0 frames=29184 underruns=0 decode_error=0 audio_error=0 elapsed_ms=29 cpu_us=37691 endpoint_dry=0"
     },
     {
       "test": "bad-exponents.ec3",
@@ -574,7 +565,7 @@
       "comparator": "FFmpeg (shared stereo weights)",
       "snr_db": 138.8,
       "peak_error": 8.940696716308594e-08,
-      "stats": "codec=20 rate=48000 channels=2 bits=0 frames=29184 underruns=0 decode_error=0 audio_error=0 elapsed_ms=47 cpu_us=60532 endpoint_dry=0"
+      "stats": "codec=20 rate=48000 channels=2 bits=0 frames=29184 underruns=0 decode_error=0 audio_error=0 elapsed_ms=26 cpu_us=34575 endpoint_dry=0"
     },
     {
       "test": "cancel-open",
@@ -583,6 +574,11 @@
     {
       "test": "cancel-read",
       "result": "{\"result\":\"cancelled\",\"frames_before_cancel\":16896}"
+    },
+    {
+      "test": "E-AC-3 playback",
+      "result": "played",
+      "stats": "Playing. Space: pause / resume. N / P: next / previous file. Left / Right: -5 / +5 s. Down / Up: -60 / +60 s. R: repeat. Q or Ctrl+C: stop. codec=20 rate=48000 channels=6 bits=0 frames=29184 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2688 cpu_us=81867 endpoint_dry=0"
     }
   ],
   "coverage": [
@@ -722,7 +718,6 @@
     "switch_syntax 1"
   ],
   "unsupported": [
-    "enhanced coupling",
     "dependent/additional substreams",
     "reduced rates",
     "coupling first activated after block 0",

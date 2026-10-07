@@ -198,6 +198,9 @@ class Decoder(ac3.Decoder):
         if blocks > 1 and g.get(1, 'blkstrtinfoe'):
             g.get((blocks-1)*(4+(h['bytes']-2).bit_length()-1), 'blkstrtinfo')
         self.first_cpl_coords, self.first_cpl_leak = [1]*7, True
+        self.cpl_band_struct = list(DEFAULT_CPL) + [0]*4
+        self.ecpl_in_use = False
+        if hasattr(self, 'ecpl_reset_bands'): self.ecpl_reset_bands()
         self.spx_in_use = False
         self.channel_in_spx = [0]*7
         self.first_spx_coords = [1]*7
@@ -216,6 +219,7 @@ class Decoder(ac3.Decoder):
                     block = self.block(g, blk)
                     if g.data and g.pos > h['bytes']*8-16:
                         raise ac3.DecodeError('truncated block')
+                    if hasattr(self, 'block_accepted'): self.block_accepted(blk)
                 except (ac3.DecodeError, IndexError):
                     if strict:
                         raise

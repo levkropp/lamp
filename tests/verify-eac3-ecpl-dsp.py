@@ -114,7 +114,7 @@ def main():
         reference_source_sha256=manifest['reference_source_sha256'],specification_sha256=manifest['specification_sha256'],
         reference_environment=manifest['model_environment'],fixture_hashes=manifest['files'],
         scope='ECPL carrier and channel DSP only; guarded inputs/outputs; all numeric codes and interpolation boundaries',
-        limitations=['ECPL bitstream parsing and cross-frame lookahead are not enabled by these kernels',
+        limitations=['This kernel suite does not validate bitstream parsing or cross-frame lookahead',
                      'Random arrays are supplied by the test; decoder RNG lifetime is not tested'])
     write_report('eac3-ecpl-dsp',report)
     print(f"Passed {result['cases']} enhanced-coupling DSP cases: {result}",flush=True)

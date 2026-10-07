@@ -266,6 +266,7 @@ def window_overlap(delay, cur, window):
 class Decoder:
     def __init__(self, check_crc=True):
         self.enhanced = False
+        self.ecpl_in_use = False
         self.check_crc = check_crc
         self.lfg = list(T['lfg'])
         self.lfg_index = 0
@@ -417,6 +418,33 @@ class Decoder:
                 target[j] = prev
                 j += 1
 
+    def conventional_cpl_strategy(self, g, blk):
+        acmod = self.acmod
+        if acmod == 2:
+            self.phase_flags_in_use = g.get(1, 'phsflginu')
+        begin = g.get(4, 'cplbegf')
+        end = (self.spx_start - 37)//12 if self.enhanced and self.spx_in_use else g.get(4, 'cplendf', begin) + 3
+        if begin >= end:
+            raise DecodeError('invalid coupling range')
+        self.start_freq[CPL] = begin * 12 + 37
+        self.end_freq[CPL] = end * 12 + 37
+        if blk == 0:
+            self.cpl_band_struct = list(self.default_cpl_bands) + [0]*4 if self.enhanced else [0] * 22
+        n = end - begin
+        if not self.enhanced or g.get(1, 'cplbndstrce'):
+            for s in range(n - 1):
+                self.cpl_band_struct[begin + 1 + s] = g.get(1, 'cplbndstrc')
+        sizes = [12]
+        for s in range(1, n):
+            if self.cpl_band_struct[begin + s]:
+                sizes[-1] += 12
+            else:
+                sizes.append(12)
+        self.num_cpl_bands = len(sizes)
+        self.cpl_band_sizes = sizes
+        if len(sizes) < n:
+            self.used.add('coupling band structure')
+
     def block(self, g, blk):
         nf, acmod = self.nfchans, self.acmod
         stages = [0] * 7
@@ -447,39 +475,21 @@ class Decoder:
             if self.cpl_in_use:
                 if acmod < 2:
                     raise DecodeError('coupling in mono or dual mono')
-                if self.enhanced and g.get(1, 'ecplinu'):
+                self.ecpl_in_use = self.enhanced and g.get(1, 'ecplinu', blk)
+                if self.ecpl_in_use and not hasattr(self, 'ecpl_strategy'):
                     raise DecodeError('enhanced coupling unsupported')
                 for ch in range(1, nf + 1):
                     self.channel_in_cpl[ch] = 1 if self.enhanced and acmod == 2 else \
                         g.get(1, 'chincpl', ch, nf, sum(self.channel_in_cpl[1:ch]))
-                if acmod == 2:
-                    self.phase_flags_in_use = g.get(1, 'phsflginu')
-                begin = g.get(4, 'cplbegf')
-                end = (self.spx_start - 37)//12 if self.enhanced and self.spx_in_use else g.get(4, 'cplendf', begin) + 3
-                if begin >= end:
-                    raise DecodeError('invalid coupling range')
-                self.start_freq[CPL] = begin * 12 + 37
-                self.end_freq[CPL] = end * 12 + 37
-                if blk == 0:
-                    self.cpl_band_struct = list(self.default_cpl_bands) + [0]*4 if self.enhanced else [0] * 22
-                n = end - begin
-                if not self.enhanced or g.get(1, 'cplbndstrce'):
-                    for s in range(n - 1):
-                        self.cpl_band_struct[begin + 1 + s] = g.get(1, 'cplbndstrc')
-                sizes = [12]
-                for s in range(1, n):
-                    if self.cpl_band_struct[begin + s]:
-                        sizes[-1] += 12
-                    else:
-                        sizes.append(12)
-                self.num_cpl_bands = len(sizes)
-                self.cpl_band_sizes = sizes
+                if self.ecpl_in_use:
+                    self.ecpl_strategy(g, blk)
+                else:
+                    self.conventional_cpl_strategy(g, blk)
                 self.used.add('coupling')
-                if len(sizes) < n:
-                    self.used.add('coupling band structure')
                 if sum(self.channel_in_cpl[1:nf + 1]) < nf:
                     self.used.add('partial coupling')
             else:
+                self.ecpl_in_use = False
                 for ch in range(1, nf + 1):
                     self.channel_in_cpl[ch] = 0
                     self.first_cpl_coords[ch] = 1
@@ -488,7 +498,9 @@ class Decoder:
         elif blk == 0:
             raise DecodeError('no coupling strategy in block 0')
         cpl = self.cpl_in_use
-        if cpl:
+        if cpl and self.ecpl_in_use:
+            self.ecpl_coordinates(g, blk)
+        elif cpl:
             exist = False
             for ch in range(1, nf + 1):
                 if self.channel_in_cpl[ch]:
@@ -512,7 +524,9 @@ class Decoder:
         if acmod == 2:
             if (self.enhanced and blk == 0) or g.get(1, 'rematstr', blk):
                 self.num_rematrixing_bands = 4
-                if cpl and self.start_freq[CPL] <= 61:
+                if cpl and self.ecpl_in_use:
+                    self.num_rematrixing_bands = sum(b < self.start_freq[CPL] for b in REMATRIX_BANDS[:-1])
+                elif cpl and self.start_freq[CPL] <= 61:
                     self.num_rematrixing_bands -= 1 + (self.start_freq[CPL] == 37)
                 elif self.enhanced and self.spx_in_use and self.spx_start <= 61:
                     self.num_rematrixing_bands -= 1
@@ -651,15 +665,16 @@ class Decoder:
             if self.channel_in_cpl[ch]:
                 if not got_cpl:
                     self.mantissas(g, CPL, fixed[CPL], groups)
-                    self.uncouple(fixed)
+                    if not self.ecpl_in_use:
+                        self.uncouple(fixed)
                     got_cpl = True
-                end = self.end_freq[CPL]
+                end = self.end_freq[ch] if self.ecpl_in_use else self.end_freq[CPL]
             else:
                 end = self.end_freq[ch]
             for b in range(end, 256):
                 fixed[ch][b] = 0
         for ch in range(1, nf + 1):
-            if not self.dither_flag[ch] and self.channel_in_cpl[ch]:
+            if not self.ecpl_in_use and not self.dither_flag[ch] and self.channel_in_cpl[ch]:
                 for b in range(self.start_freq[CPL], self.end_freq[CPL]):
                     if not self.bap[CPL][b]:
                         fixed[ch][b] = 0
@@ -671,11 +686,17 @@ class Decoder:
                         t0 = fixed[1][b]
                         fixed[1][b] = _i32(t0 + fixed[2][b])
                         fixed[2][b] = _i32(t0 - fixed[2][b])
+        return self.synthesize_block(fixed)
+
+    def synthesize_block(self, fixed):
+        acmod = self.acmod
         output = []
         for ch in range(1, self.channels + 1):
             audio = 2 - ch if acmod == 0 and ch <= 2 else 0
             gain = f32(self.dynamic_range[audio] * (1.0 / 4194304.0))
             coeffs = [f32(f32(float(v)) * gain) for v in fixed[ch]]
+            if self.enhanced and self.ecpl_in_use and self.channel_in_cpl[ch]:
+                self.ecpl_apply(ch, coeffs)
             if self.enhanced and self.channel_in_spx[ch]:
                 self.spx_apply(ch, coeffs)
             delay = self.delay[ch - 1]
