@@ -1,0 +1,504 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "pcm_u8-1.avi",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=14 rate=22050 channels=1 bits=8 frames=22050 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=24844 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_u8-2.avi",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=14 rate=44100 channels=2 bits=8 frames=44100 underruns=0 decode_error=0 audio_error=0 elapsed_ms=24 cpu_us=32899 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_u8-video.avi",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=14 rate=32000 channels=2 bits=8 frames=64000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=52 cpu_us=61186 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_s16le-1.avi",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=14 rate=22050 channels=1 bits=16 frames=22050 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=22445 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_s16le-2.avi",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=14 rate=44100 channels=2 bits=16 frames=44100 underruns=0 decode_error=0 audio_error=0 elapsed_ms=22 cpu_us=31599 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_s16le-video.avi",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=14 rate=32000 channels=2 bits=16 frames=64000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=30 cpu_us=39603 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_s24le-1.avi",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=14 rate=22050 channels=1 bits=24 frames=22050 underruns=0 decode_error=0 audio_error=0 elapsed_ms=14 cpu_us=23854 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_s24le-2.avi",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=14 rate=44100 channels=2 bits=24 frames=44100 underruns=0 decode_error=0 audio_error=0 elapsed_ms=22 cpu_us=32809 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_s24le-video.avi",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=14 rate=32000 channels=2 bits=24 frames=64000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=30 cpu_us=36686 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_s32le-1.avi",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=14 rate=22050 channels=1 bits=32 frames=22050 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=24820 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_s32le-2.avi",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=14 rate=44100 channels=2 bits=32 frames=44100 underruns=0 decode_error=0 audio_error=0 elapsed_ms=20 cpu_us=28243 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_s32le-video.avi",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=14 rate=32000 channels=2 bits=32 frames=64000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=24 cpu_us=31051 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_f32le-1.avi",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=14 rate=22050 channels=1 bits=32 frames=22050 underruns=0 decode_error=0 audio_error=0 elapsed_ms=11 cpu_us=18661 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_f32le-2.avi",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=14 rate=44100 channels=2 bits=32 frames=44100 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=23535 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_f32le-video.avi",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=14 rate=32000 channels=2 bits=32 frames=64000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=21 cpu_us=26783 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_f64le-1.avi",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=14 rate=22050 channels=1 bits=64 frames=22050 underruns=0 decode_error=0 audio_error=0 elapsed_ms=11 cpu_us=18650 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_f64le-2.avi",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=14 rate=44100 channels=2 bits=64 frames=44100 underruns=0 decode_error=0 audio_error=0 elapsed_ms=17 cpu_us=24918 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_f64le-video.avi",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=14 rate=32000 channels=2 bits=64 frames=64000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=23 cpu_us=30272 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_alaw-1.avi",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=14 rate=22050 channels=1 bits=8 frames=22050 underruns=0 decode_error=0 audio_error=0 elapsed_ms=11 cpu_us=19100 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_alaw-2.avi",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=14 rate=44100 channels=2 bits=8 frames=44100 underruns=0 decode_error=0 audio_error=0 elapsed_ms=17 cpu_us=24843 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_alaw-video.avi",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=14 rate=32000 channels=2 bits=8 frames=64000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=23 cpu_us=31218 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_mulaw-1.avi",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=14 rate=22050 channels=1 bits=8 frames=22050 underruns=0 decode_error=0 audio_error=0 elapsed_ms=12 cpu_us=20260 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_mulaw-2.avi",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=14 rate=44100 channels=2 bits=8 frames=44100 underruns=0 decode_error=0 audio_error=0 elapsed_ms=19 cpu_us=27175 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_mulaw-video.avi",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=14 rate=32000 channels=2 bits=8 frames=64000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=22 cpu_us=29865 endpoint_dry=0"
+    },
+    {
+      "test": "adpcm_ima_wav-1.avi",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=14 rate=22050 channels=1 bits=4 frames=22451 underruns=0 decode_error=0 audio_error=0 elapsed_ms=11 cpu_us=19548 endpoint_dry=0"
+    },
+    {
+      "test": "adpcm_ima_wav-2.avi",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=14 rate=44100 channels=2 bits=4 frames=44748 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=23061 endpoint_dry=0"
+    },
+    {
+      "test": "adpcm_ima_wav-video.avi",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=14 rate=32000 channels=2 bits=4 frames=64071 underruns=0 decode_error=0 audio_error=0 elapsed_ms=21 cpu_us=30141 endpoint_dry=0"
+    },
+    {
+      "test": "adpcm_ms-1.avi",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=14 rate=22050 channels=1 bits=4 frames=22396 underruns=0 decode_error=0 audio_error=0 elapsed_ms=12 cpu_us=19033 endpoint_dry=0"
+    },
+    {
+      "test": "adpcm_ms-2.avi",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=14 rate=44100 channels=2 bits=4 frames=44528 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=23662 endpoint_dry=0"
+    },
+    {
+      "test": "adpcm_ms-video.avi",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=14 rate=32000 channels=2 bits=4 frames=64768 underruns=0 decode_error=0 audio_error=0 elapsed_ms=20 cpu_us=25231 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_u8-odd.avi",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=14 rate=11025 channels=1 bits=8 frames=11025 underruns=0 decode_error=0 audio_error=0 elapsed_ms=10 cpu_us=18174 endpoint_dry=0"
+    },
+    {
+      "test": "pcm-5.1.avi",
+      "result": "exact",
+      "comparator": "the same audio in WAVE (5.1)",
+      "note": "extensible format",
+      "stats": "codec=14 rate=48000 channels=6 bits=24 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=35 cpu_us=42800 endpoint_dry=0"
+    },
+    {
+      "test": "pcm-7.1.avi",
+      "result": "exact",
+      "comparator": "the same audio in WAVE (7.1)",
+      "note": "extensible format",
+      "stats": "codec=14 rate=48000 channels=8 bits=24 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=43 cpu_us=50126 endpoint_dry=0"
+    },
+    {
+      "test": "mp2.avi",
+      "result": "exact",
+      "comparator": "the raw mp2 stream",
+      "note": "",
+      "stats": "codec=3 rate=44100 channels=2 bits=0 frames=88704 underruns=0 decode_error=0 audio_error=0 elapsed_ms=46 cpu_us=53217 endpoint_dry=0"
+    },
+    {
+      "test": "mp2.avi against FFmpeg",
+      "result": "matched",
+      "snr_db": 124.1
+    },
+    {
+      "test": "mp3.avi",
+      "result": "exact",
+      "comparator": "the raw mp3 stream",
+      "note": "",
+      "stats": "codec=3 rate=44100 channels=2 bits=0 frames=89856 underruns=0 decode_error=0 audio_error=0 elapsed_ms=83 cpu_us=90370 endpoint_dry=0"
+    },
+    {
+      "test": "mp3.avi against FFmpeg",
+      "result": "matched",
+      "snr_db": 128.4
+    },
+    {
+      "test": "mp3-vbr.avi",
+      "result": "exact",
+      "comparator": "the raw mp3 stream",
+      "note": "",
+      "stats": "codec=3 rate=44100 channels=2 bits=0 frames=89856 underruns=0 decode_error=0 audio_error=0 elapsed_ms=82 cpu_us=89340 endpoint_dry=0"
+    },
+    {
+      "test": "mp3-vbr.avi against FFmpeg",
+      "result": "matched",
+      "snr_db": 129.1
+    },
+    {
+      "test": "ac3.avi",
+      "result": "exact",
+      "comparator": "the raw ac3 stream",
+      "note": "",
+      "stats": "codec=11 rate=44100 channels=2 bits=0 frames=89088 underruns=0 decode_error=0 audio_error=0 elapsed_ms=44 cpu_us=50131 endpoint_dry=0"
+    },
+    {
+      "test": "ac3.avi against FFmpeg",
+      "result": "matched",
+      "snr_db": 139.8
+    },
+    {
+      "test": "aac.avi",
+      "result": "exact",
+      "comparator": "the raw adts stream",
+      "note": "",
+      "stats": "codec=10 rate=44100 channels=2 bits=0 frames=90112 underruns=0 decode_error=0 audio_error=0 elapsed_ms=59 cpu_us=66182 endpoint_dry=0"
+    },
+    {
+      "test": "aac.avi against FFmpeg",
+      "result": "matched",
+      "snr_db": 138.4
+    },
+    {
+      "test": "second-stream.avi",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=14 rate=44100 channels=2 bits=16 frames=44100 underruns=0 decode_error=0 audio_error=0 elapsed_ms=18 cpu_us=26315 endpoint_dry=0"
+    },
+    {
+      "test": "first-stream.avi",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=14 rate=44100 channels=2 bits=16 frames=44100 underruns=0 decode_error=0 audio_error=0 elapsed_ms=24 cpu_us=31674 endpoint_dry=0"
+    },
+    {
+      "test": "opendml.avi",
+      "result": "exact",
+      "comparator": "pcm_s16le-video.avi",
+      "note": "RIFF AVI and two RIFF AVIX lists",
+      "stats": "codec=14 rate=32000 channels=2 bits=16 frames=64000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=22 cpu_us=28485 endpoint_dry=0"
+    },
+    {
+      "test": "opendml.avi against FFmpeg",
+      "result": "exact"
+    },
+    {
+      "test": "rec.avi",
+      "result": "exact",
+      "comparator": "pcm_s16le-video.avi",
+      "note": "LIST rec groups of three chunks",
+      "stats": "codec=14 rate=32000 channels=2 bits=16 frames=64000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=23 cpu_us=29864 endpoint_dry=0"
+    },
+    {
+      "test": "junk.avi",
+      "result": "exact",
+      "comparator": "pcm_s16le-video.avi",
+      "note": "JUNK and unknown chunks, rec groups, an AVIX list",
+      "stats": "codec=14 rate=32000 channels=2 bits=16 frames=64000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=23 cpu_us=34444 endpoint_dry=0"
+    },
+    {
+      "test": "pcm-recut.avi",
+      "result": "exact",
+      "comparator": "pcm_s16le-video.avi",
+      "note": "odd chunk sizes",
+      "stats": "codec=14 rate=32000 channels=2 bits=16 frames=64000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=24 cpu_us=32031 endpoint_dry=0"
+    },
+    {
+      "test": "adpcm_ima_wav-video-recut.avi",
+      "result": "exact",
+      "comparator": "adpcm_ima_wav-video.avi",
+      "note": "chunks re-cut to [777, 5, 2048] bytes",
+      "stats": "codec=14 rate=32000 channels=2 bits=4 frames=64071 underruns=0 decode_error=0 audio_error=0 elapsed_ms=17 cpu_us=24064 endpoint_dry=0"
+    },
+    {
+      "test": "adpcm_ms-video-recut.avi",
+      "result": "exact",
+      "comparator": "adpcm_ms-video.avi",
+      "note": "chunks re-cut to [1000, 3] bytes",
+      "stats": "codec=14 rate=32000 channels=2 bits=4 frames=64768 underruns=0 decode_error=0 audio_error=0 elapsed_ms=20 cpu_us=27666 endpoint_dry=0"
+    },
+    {
+      "test": "mp3-recut.avi",
+      "result": "exact",
+      "comparator": "mp3.avi",
+      "note": "chunks re-cut to [417, 1, 2000] bytes",
+      "stats": "codec=3 rate=44100 channels=2 bits=0 frames=89856 underruns=0 decode_error=0 audio_error=0 elapsed_ms=86 cpu_us=95029 endpoint_dry=0"
+    },
+    {
+      "test": "ac3-recut.avi",
+      "result": "exact",
+      "comparator": "ac3.avi",
+      "note": "chunks re-cut to [500, 999] bytes",
+      "stats": "codec=11 rate=44100 channels=2 bits=0 frames=89088 underruns=0 decode_error=0 audio_error=0 elapsed_ms=47 cpu_us=53997 endpoint_dry=0"
+    },
+    {
+      "test": "aac-adts.avi",
+      "result": "exact",
+      "comparator": "aac.adts",
+      "note": "ADTS frames, no AudioSpecificConfig",
+      "stats": "codec=10 rate=44100 channels=2 bits=0 frames=90112 underruns=0 decode_error=0 audio_error=0 elapsed_ms=58 cpu_us=65918 endpoint_dry=0"
+    },
+    {
+      "test": "truncated.avi",
+      "result": "exact",
+      "comparator": "the first 44282 frames of pcm_s16le-2.avi",
+      "note": "cut inside the last audio chunk",
+      "stats": "codec=14 rate=44100 channels=2 bits=16 frames=44100 underruns=0 decode_error=0 audio_error=0 elapsed_ms=22 cpu_us=30669 endpoint_dry=0"
+    },
+    {
+      "test": "written-ac3.avi",
+      "result": "exact",
+      "comparator": "written.ac3",
+      "note": "dither-free",
+      "stats": "codec=11 rate=48000 channels=6 bits=0 frames=92160 underruns=0 decode_error=0 audio_error=0 elapsed_ms=150 cpu_us=157144 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_s16le-video.avi seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":14,\"discarded_frames\":0,\"maximum_discarded\":0,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "pcm_alaw-2.avi seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":14,\"discarded_frames\":0,\"maximum_discarded\":0,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "pcm_f64le-1.avi seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":14,\"discarded_frames\":0,\"maximum_discarded\":0,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "adpcm_ima_wav-video.avi seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":6091,\"maximum_discarded\":1017,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "adpcm_ms-2.avi seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":5733,\"maximum_discarded\":1012,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "mp3.avi seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":30333,\"maximum_discarded\":3455,\"maximum_probes\":0,\"index_points\":3,\"maximum_skimmed_headers\":12,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "mp3-vbr.avi seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":30333,\"maximum_discarded\":3455,\"maximum_probes\":0,\"index_points\":3,\"maximum_skimmed_headers\":12,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "written-ac3.avi seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":11517,\"maximum_discarded\":1536,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "aac.avi seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":7421,\"maximum_discarded\":1024,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "aac-adts.avi seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":7421,\"maximum_discarded\":1024,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "opendml.avi seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":14,\"discarded_frames\":0,\"maximum_discarded\":0,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "pcm-5.1.avi seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":14,\"discarded_frames\":0,\"maximum_discarded\":0,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "mp3-recut.avi seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":30333,\"maximum_discarded\":3455,\"maximum_probes\":0,\"index_points\":3,\"maximum_skimmed_headers\":12,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "avi-movi-first.avi",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":100}"
+    },
+    {
+      "test": "avi-no-movi.avi",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":100}"
+    },
+    {
+      "test": "avi-two-hdrl.avi",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":100}"
+    },
+    {
+      "test": "avi-hdrl-in-avix.avi",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":100}"
+    },
+    {
+      "test": "avi-unsupported.avi",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "avi-video-only.avi",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "avi-rifx.avi",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":1}"
+    },
+    {
+      "test": "avi-bad-align.avi",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":1}"
+    },
+    {
+      "test": "avi-truncated-header.avi",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "cancel-open opendml.avi",
+      "result": "{\"result\":\"cancelled\"}"
+    }
+  ],
+  "rejections": 9,
+  "scope": "AVI audio (PCM, float, G.711, IMA/Microsoft ADPCM, MPEG audio, AC-3, AAC) from FFmpeg's muxer and rewritten (OpenDML, rec groups, re-cut chunks, ADTS, truncation) against FFmpeg or equivalent files; stream selection; seeks; malformed and unsupported files; cancellation.",
+  "runtime_sources": {
+    "src/asf.s": "39777838f1ea373cbb7f4a99803d6559e306565402a881c4bd18e2d217c7f775",
+    "src/avi.s": "56f1336d789997c4e4d2d11946129f8f2a1d22ee46c653cd40dacacb4ebeac59",
+    "src/decoder.s": "44e88449c121f6d67f1805555f15663fe2d3883531fce2dbf5a8587e58f1d8f8",
+    "src/mpegts.s": "5dafcb58db5d634684462207d45e55ff088d5bf032f62d8302adc39be6ef125e",
+    "src/track.s": "a0ab0586b55a7ca052e9d457733eb6bdb160f90c04b9e5359b76e401a85ae91d"
+  },
+  "suite_sha256": "52d318743e627c2713035329d1498fd947212bc4de2d6047ce4f061c7d224eaa",
+  "cli_sha256": "66b93efe8812a4d30044e4a22a8106d43c2d77b1b5c3db35c5508c61ec7e10f3",
+  "provenance": "Run in build-asf with the same shipping objects/binary verified by the matching ASF suite; added by the checkpoint runner."
+}

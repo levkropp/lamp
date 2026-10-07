@@ -11,7 +11,7 @@
 # in the format they become track packets, without one they are gathered and
 # open as ADTS. Video and other streams are skipped.
 .include "lamp.inc"
-.globl avi_open, wav_image_begin, wav_image_end
+.globl avi_open, avi_format, wav_image_begin, wav_image_end
 .globl avi_w64_header, avi_w64_data   # LPCM builds its Wave64 images with them
 
 .equ AVI_MALFORMED, 100

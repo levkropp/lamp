@@ -156,13 +156,14 @@ def list_checks(work, env, wine, checks):
     album = tree / 'Album'
     for name in ('10 ten.flac', '2 two.MP3', '1 one.flac', 'Ünïcode.opus', 'cover.jpg', 'album.m3u', 'notes.txt',
                  '3 three.ec3', '4 four.EAC3', '5 fünf.gsm', '6 six.GSM', 'voice.gsm.txt',
+                 '7 seven.AsF', '8 восьмь.WMA', '9 nine.wmv', 'video.wmv.txt',
                  'Disc 2/b.ogg', 'Disc 2/a.wv', 'disc 1/z.wav', '.hidden/h.flac', 'Empty/readme.txt'):
         path = album / name
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_bytes(b'')
     root = windows_path(album)
     expected = [root + '\\' + name for name in ('1 one.flac', '2 two.MP3', '3 three.ec3', '4 four.EAC3',
-                                                 '5 fünf.gsm', '6 six.GSM', '10 ten.flac', 'disc 1\\z.wav',
+                                                 '5 fünf.gsm', '6 six.GSM', '7 seven.AsF', '8 восьмь.WMA', '9 nine.wmv', '10 ten.flac', 'disc 1\\z.wav',
                                                  'Disc 2\\a.wv', 'Disc 2\\b.ogg', 'Ünïcode.opus')]
     got = ui_list(wine, 'paths', root)
     if got != expected:
@@ -649,6 +650,7 @@ def track_switching(work, env, wine, checks):
                ('mp4', ['-c:a', 'alac'], 1), ('avi', ['-c:a', 'pcm_s16le'], 1),
                ('ogg', ['-c:a', 'libvorbis'], 1), ('ts', ['-c:a', 'mp2', '-b:a', '192k'], 1),
                ('vob', ['-c:a', 'mp2', '-b:a', '192k', '-f', 'vob'], 1)]
+    formats.append(('asf', ['-c:a', 'pcm_s16le'], 1))
     for number, (extension, options, automatic) in enumerate(formats):
         path = work / ('gui-tracks.' + extension)
         ffmpeg('-f', 'lavfi', '-i', f'anoisesrc=r={RATE}:d=12:seed={9500+number*2}:a=0.25',

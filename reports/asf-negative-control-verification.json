@@ -1,0 +1,45 @@
+{
+  "result": "passed",
+  "scope": "ASF introduction and sparse metadata gather allocation regression",
+  "published_parent_commit": "ce96911c922af78f6afe8a01235db876077ceb15",
+  "parent_source_archive_sha256": "368d3ce443da33d6f654bab6896cead2626e3993414f3c55298967ea718fff2a",
+  "small_fixture_sha256": "566c50787d9da7a3fd66d31bb2becbdfbea3bd1056ead5099f8ba2147f838dd8",
+  "reference_pcm_sha256": "cec25fd38e314ea0e22fd583422fbf49f341ab9eb04c2087a2f93c90de082632",
+  "published_parent": {
+    "exit_code": 2,
+    "output": "Skipped (unsupported, malformed, or inaccessible): /home/lamp/lamp/tests/generated/asf/fields-1.asf\nUnsupported, malformed, or inaccessible file. Supports WAV/W64, AIFF/AIFC, CAF, AU, FLAC, WavPack, Monkey's Audio, MP1/MP2/MP3, AAC (LC, HE), AC-3/E-AC-3, Ogg (Vorbis, Opus, FLAC), Matroska/WebM, MP4/MOV, AVI, FLV and MPEG-TS/PS audio.",
+    "binary_sha256": "7ad7314fe8390bede61f15886bc61788f18b81011fec408cd4fa92efcd4d3bbb"
+  },
+  "uncommitted_before": {
+    "base_commit": "ce96911c922af78f6afe8a01235db876077ceb15",
+    "scope": "uncommitted ASF implementation before sizing its gather reservation by packet data",
+    "source_sha256": "414dfb921e19c8760537e022dd9b2db9fd9df4b158394444b025c11901e448d4",
+    "cli_sha256": "007b9c52055f06bfae6e2997a3bfad0760993439ab3a0d181d4239fcc79ad29e",
+    "oracle_sha256": "6f94734ee0b6330c596d8ca251c7a938bed887b41b5102d7ec98674dee927126"
+  },
+  "before_small": {
+    "exit_code": 0,
+    "output": "codec=21 rate=44100 channels=2 bits=16 frames=4410 underruns=0 decode_error=0 audio_error=0 elapsed_ms=7 cpu_us=13725 endpoint_dry=0",
+    "binary_sha256": "007b9c52055f06bfae6e2997a3bfad0760993439ab3a0d181d4239fcc79ad29e"
+  },
+  "before_large": {
+    "exit_code": 2,
+    "output": "Skipped (unsupported, malformed, or inaccessible): /home/lamp/asf-gather-negative/large.asf\nUnsupported, malformed, or inaccessible file. Supports WAV/W64, AIFF/AIFC, CAF, AU, FLAC, WavPack, Monkey's Audio, MP1/MP2/MP3, AAC (LC, HE), AC-3/E-AC-3, Ogg (Vorbis, Opus, FLAC), Matroska/WebM, MP4/MOV, AVI, FLV, ASF and MPEG-TS/PS audio.",
+    "binary_sha256": "007b9c52055f06bfae6e2997a3bfad0760993439ab3a0d181d4239fcc79ad29e"
+  },
+  "after_large": {
+    "exit_code": 0,
+    "output": "codec=21 rate=44100 channels=2 bits=16 frames=4410 underruns=0 decode_error=0 audio_error=0 elapsed_ms=6 cpu_us=10178 endpoint_dry=0",
+    "binary_sha256": "66b93efe8812a4d30044e4a22a8106d43c2d77b1b5c3db35c5508c61ec7e10f3"
+  },
+  "sparse_geometry": {
+    "result": "passed",
+    "logical_bytes": 4295010132,
+    "allocated_bytes": 49152,
+    "initial_allocation_report": 49152,
+    "frames": 4410
+  },
+  "after_asf_source_sha256": "39777838f1ea373cbb7f4a99803d6559e306565402a881c4bd18e2d217c7f775",
+  "note": "The failing gather binary includes uncommitted ASF code; the published parent has no ASF demuxer. Sparse geometry is produced by the hash-recorded boundary oracle rather than hashing zero-filled holes.",
+  "boundary_oracle_source_sha256": "39da9b58a61fcaa0dda90bd53818f429548fee2081989734b64c61aa614c7881"
+}
