@@ -6,7 +6,7 @@
 # No timestamps are synthesized: the presented audio is consecutive decoded
 # samples. Network chunk framing and DVR-MS stay unsupported.
 .include "lamp.inc"
-.globl asf_open, asf_stream, asf_spread_scratch
+.globl asf_open, asf_stream, asf_spread_scratch, asf_extended_budget
 .equ ASF_MALFORMED, 100
 .equ ASF_UNSUPPORTED, 101
 .equ ASF_LIMIT, 1 << 24
@@ -22,6 +22,7 @@ asf_no_correction: .quad 0x11cf5b5520fb5700, 0x2b445c5f8000fda8
 asf_audio_spread: .quad 0x11cf618fbfc3cd50, 0x20e2b400aa00b28b
 asf_data_guid: .quad 0x11cf668e75b22636, 0x6cce6200aa00d9a6
 asf_extension_guid: .quad 0x11cfa92e5fbf03b5, 0x6553200cc000e38e
+asf_extended_stream_guid: .quad 0x4332c67214e6a5cb, 0x5a5b065269a99983
 asf_marker_guid: .quad 0x11cfa951f487cd01, 0x6553200cc000e68e
 asf_encrypt_guid: .quad 0x11d2bd232211b3fb, 0x6efc55c9a000b7b4
 asf_ext_encrypt_guid: .quad 0x4c172622298ae614, 0x9c28e97ee0da35b9
@@ -37,6 +38,7 @@ asf_file_seen: .long 0
 asf_top_objects: .long 0
 asf_top_markers: .long 0
 asf_all_objects: .long 0
+asf_extended_budget: .long 0       # names + extension systems, shared per header
 asf_broadcast: .long 0
 asf_stream: .long 0                 # stream id 1..127, 0 when none
 asf_spread_span: .long 0
@@ -262,6 +264,10 @@ LOCALFN asf_objects
     call asf_guid
     jz .Lasf_objects_extension
     mov rcx, rsi
+    lea rdx, [rip + asf_extended_stream_guid]
+    call asf_guid
+    jz .Lasf_objects_extended_stream
+    mov rcx, rsi
     lea rdx, [rip + asf_encrypt_guid]
     call asf_guid
     jz .Lasf_objects_unsupported
@@ -310,6 +316,13 @@ LOCALFN asf_objects
     test eax, eax
     jz .Lasf_objects_bad
     jmp .Lasf_objects_advance
+.Lasf_objects_extended_stream:
+    mov rcx, rsi
+    mov rdx, r13
+    call asf_extended_stream_properties
+    test eax, eax
+    jz .Lasf_objects_bad
+    jmp .Lasf_objects_advance
 .Lasf_objects_extension:
     cmp rbx, 46
     jb .Lasf_objects_bad
@@ -343,7 +356,7 @@ LOCALFN asf_objects
     ret
 ENDFN asf_objects
 
-# -> EAX=1. Adds the completed gathered object to an AAC packet track.
+# -> EAX=1/0. Restores spreading, then publishes a completed AAC packet.
 LOCALFN asf_complete
     push rsi
     push rdi
@@ -704,6 +717,7 @@ FN asf_open
     mov dword ptr [rip + asf_top_objects], 0
     mov dword ptr [rip + asf_top_markers], 0
     mov dword ptr [rip + asf_all_objects], 0
+    mov dword ptr [rip + asf_extended_budget], 65536
     mov dword ptr [rip + asf_stream], 0
     mov dword ptr [rip + asf_spread_bytes], 0
     mov qword ptr [rip + asf_spread_scratch], 0
@@ -887,3 +901,4 @@ FN asf_open
 ENDFN asf_open
 
 .include "asf_spread.inc"
+.include "asf_extended.inc"
