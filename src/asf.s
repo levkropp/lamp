@@ -4,9 +4,9 @@
 # WAVE formats reuse AVI's format policy and gathered Wave64 image; AAC
 # with an AudioSpecificConfig uses complete rebuilt objects as track packets.
 # No timestamps are synthesized: the presented audio is consecutive decoded
-# samples. Network chunk framing, DVR-MS and scrambled audio stay unsupported.
+# samples. Network chunk framing and DVR-MS stay unsupported.
 .include "lamp.inc"
-.globl asf_open, asf_stream
+.globl asf_open, asf_stream, asf_spread_scratch
 .equ ASF_MALFORMED, 100
 .equ ASF_UNSUPPORTED, 101
 .equ ASF_LIMIT, 1 << 24
@@ -18,6 +18,8 @@ asf_header_guid: .quad 0x11cf668e75b22630, 0x6cce6200aa00d9a6
 asf_file_guid: .quad 0x11cfa9478cabdca1, 0x6553200cc000e48e
 asf_stream_guid: .quad 0x11cfa9b7b7dc0791, 0x6553200cc000e68e
 asf_audio_guid: .quad 0x11cf5b4df8699e40, 0x2b445c5f8000fda8
+asf_no_correction: .quad 0x11cf5b5520fb5700, 0x2b445c5f8000fda8
+asf_audio_spread: .quad 0x11cf618fbfc3cd50, 0x20e2b400aa00b28b
 asf_data_guid: .quad 0x11cf668e75b22636, 0x6cce6200aa00d9a6
 asf_extension_guid: .quad 0x11cfa92e5fbf03b5, 0x6553200cc000e38e
 asf_marker_guid: .quad 0x11cfa951f487cd01, 0x6553200cc000e68e
@@ -37,6 +39,11 @@ asf_top_markers: .long 0
 asf_all_objects: .long 0
 asf_broadcast: .long 0
 asf_stream: .long 0                 # stream id 1..127, 0 when none
+asf_spread_span: .long 0
+asf_spread_packet: .long 0
+asf_spread_chunk: .long 0
+asf_spread_bytes: .long 0            # 0 for identity/no correction
+asf_spread_scratch: .quad 0          # owned only while asf_open gathers
 asf_mode: .long 0                   # AVI format mode: Wave64/AAC/ADTS
 asf_tag: .long 0
 asf_fmt_bytes: .long 0
@@ -119,7 +126,7 @@ LOCALFN asf_stream_properties
     push rbx
     push rsi
     push rdi
-    sub rsp, 32
+    sub rsp, 64
     mov rsi, rcx
     mov rdi, rdx
     sub rdx, rcx
@@ -157,6 +164,15 @@ LOCALFN asf_stream_properties
 .Lasf_stream_choose:
     test ebx, 0x8000                    # encrypted stream is unavailable
     jnz .Lasf_stream_ok
+    mov rcx, rsi
+    mov rdx, rdi
+    call asf_spread_format
+    test eax, eax
+    jz .Lasf_stream_ok
+    mov [rsp + 32], r8d
+    mov [rsp + 36], r9d
+    mov [rsp + 40], r10d
+    mov [rsp + 44], r11d
     lea rcx, [rsi + 78]
     mov edx, [rsi + 64]
     cmp edx, ASF_FMT_LIMIT
@@ -164,17 +180,17 @@ LOCALFN asf_stream_properties
     call avi_format
     test eax, eax
     jz .Lasf_stream_ok
-    # Some producers include spreading data outside its advertised length.
-    # Span 1 is already in order; span >1 needs descrambling not implemented.
-    mov r8d, [rsi + 64]
-    lea r8, [rsi + r8 + 78]
-    cmp r8, rdi
-    jae .Lasf_stream_take
-    cmp byte ptr [r8], 1
-    ja .Lasf_stream_ok
 .Lasf_stream_take:
     mov [rip + asf_tag], eax
     mov [rip + asf_mode], edx
+    mov eax, [rsp + 32]
+    mov [rip + asf_spread_span], eax
+    mov eax, [rsp + 36]
+    mov [rip + asf_spread_packet], eax
+    mov eax, [rsp + 40]
+    mov [rip + asf_spread_chunk], eax
+    mov eax, [rsp + 44]
+    mov [rip + asf_spread_bytes], eax
     and ebx, 127
     mov [rip + asf_stream], ebx
     lea rax, [rsi + 78]
@@ -189,7 +205,7 @@ LOCALFN asf_stream_properties
 .Lasf_stream_bad:
     xor eax, eax
 .Lasf_stream_return:
-    add rsp, 32
+    add rsp, 64
     pop rdi
     pop rsi
     pop rbx
@@ -329,7 +345,39 @@ ENDFN asf_objects
 
 # -> EAX=1. Adds the completed gathered object to an AAC packet track.
 LOCALFN asf_complete
-    sub rsp, 40
+    push rsi
+    push rdi
+    sub rsp, 56
+    cmp dword ptr [rip + asf_spread_bytes], 0
+    je .Lasf_complete_ordered
+    mov eax, [rip + asf_object_have]
+    cmp eax, [rip + asf_spread_bytes]
+    jne .Lasf_complete_bad
+    cmp qword ptr [rip + asf_spread_scratch], 0
+    jne .Lasf_complete_spread
+    mov ecx, eax
+    call mem_alloc
+    mov [rip + asf_spread_scratch], rax
+    test rax, rax
+    jz .Lasf_complete_bad
+.Lasf_complete_spread:
+    mov rdi, [rip + mts_buffer]
+    add rdi, [rip + asf_object_start]
+    mov rcx, rdi
+    mov rdx, [rip + asf_spread_scratch]
+    mov r8d, [rip + asf_spread_bytes]
+    mov r9d, [rip + asf_spread_span]
+    mov eax, [rip + asf_spread_packet]
+    mov [rsp + 32], eax
+    mov eax, [rip + asf_spread_chunk]
+    mov [rsp + 40], eax
+    call asf_despread
+    test eax, eax
+    jz .Lasf_complete_return
+    mov rsi, [rip + asf_spread_scratch]
+    mov ecx, [rip + asf_spread_bytes]
+    rep movsb
+.Lasf_complete_ordered:
     mov dword ptr [rip + asf_pending], 0
     mov eax, 1
     cmp dword ptr [rip + asf_mode], 1
@@ -338,8 +386,13 @@ LOCALFN asf_complete
     add rcx, [rip + asf_object_start]
     mov edx, [rip + asf_object_have]
     call track_add
+    jmp .Lasf_complete_return
+.Lasf_complete_bad:
+    xor eax, eax
 .Lasf_complete_return:
-    add rsp, 40
+    add rsp, 56
+    pop rdi
+    pop rsi
     ret
 ENDFN asf_complete
 
@@ -642,7 +695,7 @@ FN asf_open
     push rdi
     push r12
     push r13
-    sub rsp, 48
+    sub rsp, 64
     mov rsi, rcx
     mov rdi, rdx
     mov [rip + asf_file], rcx
@@ -652,6 +705,8 @@ FN asf_open
     mov dword ptr [rip + asf_top_markers], 0
     mov dword ptr [rip + asf_all_objects], 0
     mov dword ptr [rip + asf_stream], 0
+    mov dword ptr [rip + asf_spread_bytes], 0
+    mov qword ptr [rip + asf_spread_scratch], 0
     mov dword ptr [rip + asf_pending], 0
     mov qword ptr [rip + asf_packets], 0
     lea rdx, [rip + asf_seen_ids]
@@ -808,7 +863,21 @@ FN asf_open
 .Lasf_open_fail:
     xor eax, eax
 .Lasf_open_return:
-    add rsp, 48
+    # Scratch does not escape open, including failed/cancelled opens. Keep
+    # the Wave64 pointer/end and the open result across the allocator call.
+    mov [rsp + 32], rax
+    mov [rsp + 40], rcx
+    mov [rsp + 48], rdx
+    mov rcx, [rip + asf_spread_scratch]
+    test rcx, rcx
+    jz .Lasf_open_freed
+    call mem_free
+    mov qword ptr [rip + asf_spread_scratch], 0
+.Lasf_open_freed:
+    mov rax, [rsp + 32]
+    mov rcx, [rsp + 40]
+    mov rdx, [rsp + 48]
+    add rsp, 64
     pop r13
     pop r12
     pop rdi
@@ -816,3 +885,5 @@ FN asf_open
     pop rbx
     ret
 ENDFN asf_open
+
+.include "asf_spread.inc"
