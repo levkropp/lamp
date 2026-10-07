@@ -28,6 +28,8 @@
 .equ ADPCM_UNSUPPORTED, 101
 .equ ADPCM_IMA, 0x11
 .equ ADPCM_MS, 2
+.equ ADPCM_DK3, 0x62                # Duck stereo sum/difference IMA
+.equ ADPCM_DK4, 0x61                # Duck mono/stereo interleaved IMA
 .equ ADPCM_QT, 0x4d49               # LAMP's tag for QuickTime IMA4 (not a WAVE tag)
 .equ ADPCM_SWF, 0x5346              # LAMP's tag for Flash ADPCM (not a WAVE tag)
 .equ ADPCM_G726, 0x45
@@ -77,6 +79,10 @@ ms_state: .zero 2*MS_SIZE
 # (FFmpeg: IMA 1 + whole 8-sample groups, Microsoft 2 + two per byte).
 LOCALFN adpcm_block_samples
     mov r8d, [rip + adpcm_channels]
+    cmp dword ptr [rip + adpcm_tag], ADPCM_DK3
+    je .Ladpcm_samples_dk3
+    cmp dword ptr [rip + adpcm_tag], ADPCM_DK4
+    je .Ladpcm_samples_dk4
     cmp dword ptr [rip + adpcm_tag], ADPCM_GSM
     je .Ladpcm_samples_gsm
     cmp dword ptr [rip + adpcm_tag], ADPCM_GSM_MS
@@ -117,6 +123,24 @@ LOCALFN adpcm_block_samples
     xor edx, edx
     div r8d
     add eax, 2
+    ret
+.Ladpcm_samples_dk4:
+    lea eax, [r8*4]
+    sub ecx, eax
+    jb .Ladpcm_samples_none
+    lea eax, [rcx*2]
+    xor edx, edx
+    div r8d
+    inc eax
+    ret
+.Ladpcm_samples_dk3:
+    sub ecx, 16
+    jb .Ladpcm_samples_none
+    lea eax, [rcx*2]                      # three codes produce two stereo frames
+    xor edx, edx
+    mov ecx, 3
+    div ecx
+    shl eax, 1
     ret
 .Ladpcm_samples_qt:
     mov eax, ecx                          # 64 per whole 34-byte block group
@@ -195,13 +219,21 @@ FN adpcm_packet_layout
     jnz .Ladpcm_layout_g72x
     movzx edx, word ptr [rcx + 2]
     imul edx, edx, 7
+    cmp r9d, ADPCM_DK3
+    je .Ladpcm_layout_dk3
+    cmp r9d, ADPCM_DK4
+    je .Ladpcm_layout_ima
     cmp r9d, ADPCM_IMA
     jne .Ladpcm_layout_block
+.Ladpcm_layout_ima:
     movzx edx, word ptr [rcx + 2]
     shl edx, 2
 .Ladpcm_layout_block:
     movzx eax, word ptr [rcx + 12]
     ret
+.Ladpcm_layout_dk3:
+    mov edx, 18                          # header plus one complete three-code group
+    jmp .Ladpcm_layout_block
 .Ladpcm_layout_g72x:
     mov eax, G72X_PACKET
     mov edx, 1
@@ -302,6 +334,18 @@ FN adpcm_track_open
     mov [rip + adpcm_bits], eax
     jmp .Ladpcm_open_channels
 .Ladpcm_open_four_bits:
+    cmp ebx, ADPCM_DK3
+    jne .Ladpcm_open_regular_four
+    # DK3 stores three 4-bit codes for four channel samples. Historical
+    # headers declare its effective width as 3; 4 names the code width.
+    cmp eax, 3
+    je .Ladpcm_open_dk3_bits
+    cmp eax, 4
+    jne .Ladpcm_open_fail
+.Ladpcm_open_dk3_bits:
+    mov [rip + adpcm_bits], eax
+    jmp .Ladpcm_open_channels
+.Ladpcm_open_regular_four:
     cmp eax, 4
     jne .Ladpcm_open_fail
 .Ladpcm_open_channels:
@@ -313,6 +357,14 @@ FN adpcm_track_open
     je .Ladpcm_open_layout
     cmp ebx, ADPCM_SWF
     je .Ladpcm_open_two
+    cmp ebx, ADPCM_DK4
+    je .Ladpcm_open_two
+    cmp ebx, ADPCM_DK3
+    jne .Ladpcm_open_ms_tag
+    cmp esi, 2
+    jne .Ladpcm_open_fail
+    jmp .Ladpcm_open_layout
+.Ladpcm_open_ms_tag:
     cmp ebx, ADPCM_MS
     jne .Ladpcm_open_fail
 .Ladpcm_open_two:
@@ -360,6 +412,8 @@ FN adpcm_track_open
     mov dword ptr [rip + decode_error], ADPCM_MALFORMED
     cmp ebx, ADPCM_IMA
     je .Ladpcm_open_samples
+    cmp ebx, ADPCM_DK3
+    je .Ladpcm_open_samples
     mov dword ptr [rip + adpcm_bits], 2   # Flash: the most samples per byte
 .Ladpcm_open_samples:
     mov [rsp + 32], r10d
@@ -374,6 +428,8 @@ FN adpcm_track_open
     mov [rip + source_channels], esi
     mov eax, [rip + adpcm_bits]           # IMA/G.726 code size; GSM 0; others 4
     cmp dword ptr [rip + adpcm_tag], ADPCM_IMA
+    je .Ladpcm_open_bits
+    cmp dword ptr [rip + adpcm_tag], ADPCM_DK3
     je .Ladpcm_open_bits
     cmp dword ptr [rip + adpcm_tag], ADPCM_G726
     je .Ladpcm_open_bits
@@ -553,9 +609,19 @@ FN adpcm_track_decode
     je .Ladpcm_decode_swf
     cmp dword ptr [rip + adpcm_tag], ADPCM_QT
     je .Ladpcm_decode_qt
+    cmp dword ptr [rip + adpcm_tag], ADPCM_DK3
+    je .Ladpcm_decode_dk3
+    cmp dword ptr [rip + adpcm_tag], ADPCM_DK4
+    je .Ladpcm_decode_dk4
     cmp dword ptr [rip + adpcm_tag], ADPCM_IMA
     jne .Ladpcm_decode_ms
     call ima_block
+    jmp .Ladpcm_decode_check
+.Ladpcm_decode_dk3:
+    call dk3_block
+    jmp .Ladpcm_decode_check
+.Ladpcm_decode_dk4:
+    call dk4_block
     jmp .Ladpcm_decode_check
 .Ladpcm_decode_qt:
     call ima4_block
@@ -758,6 +824,8 @@ LOCALFN swf_block
     pop rbx
     ret
 ENDFN swf_block
+
+.include "adpcm_duck.inc"
 
 # RCX=IMA block, EDX=samples per channel -> EAX=1 with the channel planes
 # filled. Each channel's header holds its first sample and step index; four

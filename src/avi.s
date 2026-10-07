@@ -121,6 +121,10 @@ LOCALFN avi_format
     je .Lavi_format_return
     cmp eax, 0x11
     je .Lavi_format_return
+    cmp eax, 0x61
+    je .Lavi_format_return
+    cmp eax, 0x62
+    je .Lavi_format_return
     cmp eax, 0x50
     je .Lavi_format_return
     cmp eax, 0x55

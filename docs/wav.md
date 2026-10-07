@@ -49,6 +49,7 @@ These WAVE format tags (in a basic fmt chunk, or as an extensible chunk's subfor
 | 6, 7 | G.711 A-law and mu-law: 8-bit codes expanded to 16 bits by ITU-T G.711's rules (tables in `src/adpcm_tables.inc`), then read as 16-bit PCM, with direct seeks; 1-8 channels |
 | 0x11 | IMA ADPCM with 2–5-bit codes, 1–8 channels; four-byte channel stripes, with complete 4/12/4/20-byte groups per channel for 2/3/4/5-bit codes |
 | 2 | Microsoft ADPCM, mono or stereo, with the standard seven predictors |
+| 0x61, 0x62 | [Duck DK4 (mono/stereo) and DK3 (stereo)](#duck-dk3-and-dk4), four-bit IMA block formats |
 | 0x45, 0x14, 0x40, 0x64 | G.726 (ITU-T G.726 and the G.721/G.723 tags), 16–40 kbit/s: 2-, 3-, 4- or 5-bit codes (the fmt chunk's bits per sample), packed from the most significant bit, mono, decoding as FFmpeg's `adpcm_g726` does |
 | 0x28f | G.722 at 64 kbit/s: one 8-bit codeword (a 6-bit low and a 2-bit high band) per two output samples, mono |
 | 0x31 | [GSM 06.10](#gsm-0610) full-rate speech, Microsoft's 65-byte blocks of two 20 ms frames, mono |
@@ -61,6 +62,18 @@ The new 2/3/5-bit expansion matches [FFmpeg 9.0.1](https://raw.githubusercontent
 
 
 G.726 and G.722 carry no block headers: the decoder's state runs on through the data, which LAMP splits as FFmpeg's demuxer does into packets of 4096 bytes (4095 for 3- and 5-bit codes, so that packets hold whole codes). Data ending inside a code decodes the whole codes before it. A seek restarts three packets (1.5–6 seconds) before the target from a reset state. The adaptive state converges on the continuous decode within them: every seek tested equals continuous decoding, though nothing in the format guarantees it. G.726 and G.722 with more than one channel, and G.726 codes outside 2–5 bits, reject as unsupported (101). The decoders (`src/g72x.s`) follow FFmpeg's `g726.c` and `g722.c`, including G.726's 11-bit floating-point products; their tables are G.726's and G.722's quantizer, scale and filter tables as FFmpeg lists them.
+
+### Duck DK3 and DK4
+
+WAVE tag `0x61` selects DK4, with one signed 16-bit predictor and step index per channel. It emits the predictor as the first sample, then reads high-nibble-first IMA codes: consecutive samples in mono, alternating left/right in stereo. Tag `0x62` selects DK3 stereo. Its 16-byte header stores the sum and difference predictors at offsets 10/12 and byte indices at 14/15; low-nibble-first sum/difference/sum codes produce two stereo frames. The sum/difference outputs wrap to signed 16-bit values, matching established [FFmpeg decoding](https://raw.githubusercontent.com/FFmpeg/FFmpeg/n9.0.1/libavcodec/adpcm.c). [FFmpeg's RIFF tag table](https://raw.githubusercontent.com/FFmpeg/FFmpeg/n9.0.1/libavformat/riff.c) confirms the format tags. The assembly is original; no FFmpeg implementation is linked or copied into the runtime.
+
+The [negative control](../reports/duck-adpcm-negative-control.json) records the historical three-bit DK3 header rejecting before that declaration was supported.
+
+Both formats restart their predictor state at each block, so the shared track index gives exact seeks without primer packets. DK4 accepts header-only blocks; DK3 needs a complete three-code group after its header. Incomplete trailing groups are ignored. DK3 accepts a three-bit effective width (as historical files declare) or a four-bit code width. Wrong channel counts or other code widths reject with error 101; invalid step indices reject with 100. A WAVE block alignment below the packet minimum leaves no valid packets and rejects with the shared track framing error 60. RIFF, RF64, Wave64, extensible headers and AVI audio use the same decoder; proprietary `.duk` containers remain unsupported.
+
+`python3 tests/verify-duck-adpcm.py` prepares and compares 50 synthetic streams with an integer model and FFmpeg, then checks two hash-pinned historical AVI encoder samples and their WAVE stream copies. The samples come from FFmpeg's [DK3](https://samples.ffmpeg.org/A-codecs/DK3/) and [DK4](https://samples.ffmpeg.org/A-codecs/DK4/) archive; they are downloaded into the ignored generated-fixture directory, with checksums verified, and are not distributed in the repository. Both [modern FFmpeg reference preparation](../reports/duck-adpcm-modern-reference-verification.json) and the FFmpeg 5.1.9 native preparation are recorded. Old FFmpeg timestamps repeat on one-sample DK4 blocks; `asetpts=N` normalizes only their timestamps for the raw PCM comparison.
+
+The [native report](../reports/duck-adpcm-verification.json) and [Windows COFF/Wine report](../reports/duck-adpcm-wine-verification.json) cover exact PCM, 810 seeks and 843 protected-memory checks per build, every initial IMA index, predictor extremes, maximum 65,535-byte blocks, partial/short final blocks, fact trimming, Unicode paths and alternate containers. Eleven field/index rejections and six cancellation/reopen cases are included. Native Linux playback covers all three channel/codec variants; native Windows hardware remains unverified. The new sources also have [native mutation](../reports/duck-adpcm-robustness-verification.json) and [Wine mutation](../reports/duck-adpcm-robustness-wine-verification.json) reports.
 
 ### GSM 06.10
 
