@@ -17,6 +17,7 @@
 .globl queue_count, queue_failures, queue_rate, queue_index, queue_repeat, queue_goto, queue_heard
 .globl queue_navigate, parse_time, queue_start, queue_open, queue_paths, queue_output, queue_target, queue_frames
 .globl queue_chapter_target
+.globl queue_track_choice, queue_select_track
 
 .equ QUEUE_SKIPPED, 6               # decode_error after skipped files
 .equ CH_SIZE, 64                    # src/ogg_chain.s link entries
@@ -27,6 +28,7 @@
 queue_paths: .quad 0
 queue_announce: .quad 0             # called after a later file opens
 queue_skipped: .quad 0              # called with RCX=path for a skipped file
+queue_track_choice: .quad 0         # optional ECX=queue index -> EAX=audio ordinal (0 automatic)
 queue_file_frames: .quad 0          # source frames read from the current file
 queue_file_total: .quad 0           # its declared frames (0 unknown)
 queue_count: .long 0
@@ -52,6 +54,20 @@ queue_marks: .zero QUEUE_MARKS*16    # (output frame where a file starts, its in
 queue_skip_pcm: .zero 2048*8         # frames read and dropped by queue_start
 
 .text
+# Applies an optional per-file choice on the decoder-owning thread. The CLI
+# leaves the callback unset, retaining its global --track policy.
+FN queue_select_track
+    sub rsp, 40
+    mov rax, [rip + queue_track_choice]
+    test rax, rax
+    jz .Lqueue_select_track_done
+    call rax
+    mov [rip + track_choice], eax
+.Lqueue_select_track_done:
+    add rsp, 40
+    ret
+ENDFN queue_select_track
+
 # RCX=path pointers, EDX=count -> EAX=1 when a file opened (the first that
 # opens); queue_rate is then its output rate.
 FN queue_begin
@@ -119,6 +135,9 @@ LOCALFN queue_advance
     mov rcx, [rip + queue_paths]
     mov rbx, [rcx + rax*8]
     call decoder_close
+    mov ecx, [rip + queue_next]
+    dec ecx
+    call queue_select_track
     mov dword ptr [rip + decode_error], 0
     mov rcx, rbx
     call decoder_open

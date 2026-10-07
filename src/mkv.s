@@ -411,6 +411,8 @@ LOCALFN mkv_track_entry
     cmp qword ptr [rip + mkv_entry_type], 2
     jne .Lmkv_entry_ok
     inc dword ptr [rip + mkv_audio_index]
+    mov eax, [rip + mkv_audio_index]
+    mov [rip + audio_tracks_count], eax
     mov eax, [rip + track_choice]
     test eax, eax
     jz .Lmkv_entry_automatic
@@ -440,6 +442,8 @@ LOCALFN mkv_track_entry
     cmp qword ptr [rip + mkv_entry_default], 0
     je .Lmkv_entry_ok
 .Lmkv_entry_select:
+    mov eax, [rip + mkv_audio_index]
+    mov [rip + audio_track_selected], eax
     mov rax, [rip + mkv_entry_number]
     mov [rip + mkv_track_number], rax
     mov eax, [rip + mkv_entry_codec]

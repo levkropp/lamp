@@ -106,6 +106,8 @@ The producer prepares metadata before publishing an entry. A [Windows SRW lock](
 
 When many short files evict the heard file's metadata from the 64 entries, the shared timeline still identifies its index and start. The window shows its filename and clears unavailable tag title, duration, codec and cover metadata. A short timer follows subsequent heard boundaries while that fallback is active. Chapter commands reopen the identified file on the playback worker, after the previous worker has stopped, then select its chapter and restart with pause preserved. The metadata limit stays bounded even for long queues.
 
+The [Audio track submenu](tracks.md#windows-player) keeps a choice per expanded queue entry, preserves paused position and validates changes on the worker. Each worker receives its own launch snapshot; replacement UI requests cannot change the index, time or pending chapter/track operation it is processing.
+
 Navigation starts a new playback thread at the target file and position (`engine_play_list`), as seeks always did. Natural transitions stay gapless. When the endpoint is lost after playback started, the window reopens the heard file at the heard position, as the console does (see [device notes](devices.md)).
 
 ## Verification

@@ -5,6 +5,7 @@
 .globl ui_width, ui_height, ui_pixels, ui_bmi, ui_state, ui_filename, ui_thread, ui_count, ui_layout
 .equ WM_WORKER_DONE, 0x8001
 .equ WM_FILE_OPENED, 0x8002
+.equ WM_TRACK_REJECTED, 0x8003
 .data
 ui_class: .short 'L', 'a', 'm', 'p', 'W', 'i', 'n', 'd', 'o', 'w', 0
 ui_title: .short 'L', 'A', 'M', 'P', ' ', '-', ' ', 'L', 'e', 'v', 39, 's', ' ', 'A', 's', 's', 'e', 'm', 'b', 'l', 'y', ' ', 'M', 'e', 'd', 'i', 'a', ' ', 'P', 'l', 'a', 'y', 'e', 'r', 0
@@ -452,6 +453,8 @@ LOCALFN ui_window_proc
     je .Lui_wm_done
     cmp edx, WM_FILE_OPENED
     je .Lui_wm_opened
+    cmp edx, WM_TRACK_REJECTED
+    je .Lui_wm_track_rejected
     cmp edx, 0x319
     je .Lui_wm_command
     cmp edx, 0x7b
@@ -561,6 +564,10 @@ LOCALFN ui_window_proc
 .Lui_wm_opened:
     call ui_invalidate
     call ui_schedule
+    jmp .Lui_handled
+.Lui_wm_track_rejected:
+    mov [rip + ui_track_error_index], r8d
+    call ui_invalidate
     jmp .Lui_handled
 .Lui_wm_context:
     mov rcx, r9                           # WM_CONTEXTMENU: its screen point
@@ -953,6 +960,7 @@ ENDFN ui_window_proc
 .include "ui_draw.inc"
 .include "ui_cover.inc"
 .include "ui_queue.inc"
+.include "ui_tracks.inc"
 .include "ui_modes.inc"
 .include "ui_menu.inc"
 .include "ui_controls.inc"

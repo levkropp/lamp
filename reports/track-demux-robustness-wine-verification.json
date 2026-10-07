@@ -1,0 +1,86 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "flac.oga",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 10,
+      "decoded": 0,
+      "rejected_or_damaged": 10
+    },
+    {
+      "test": "tone.ogg",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 10,
+      "decoded": 0,
+      "rejected_or_damaged": 10
+    },
+    {
+      "test": "tone.opus",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 10,
+      "decoded": 0,
+      "rejected_or_damaged": 10
+    },
+    {
+      "test": "aac.m4a",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 10,
+      "decoded": 0,
+      "rejected_or_damaged": 10
+    },
+    {
+      "test": "alac.m4a",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 10,
+      "decoded": 4,
+      "rejected_or_damaged": 6
+    },
+    {
+      "test": "flac.mka",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 10,
+      "decoded": 0,
+      "rejected_or_damaged": 10
+    },
+    {
+      "test": "pcm.avi",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 10,
+      "decoded": 9,
+      "rejected_or_damaged": 1
+    },
+    {
+      "test": "mp2.ts",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 10,
+      "decoded": 5,
+      "rejected_or_damaged": 5
+    },
+    {
+      "test": "lpcm.vob",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 10,
+      "decoded": 10,
+      "rejected_or_damaged": 0
+    },
+    {
+      "test": "lpcm.m2ts",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 10,
+      "decoded": 10,
+      "rejected_or_damaged": 0
+    },
+    {
+      "test": "mp2.mpg",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 10,
+      "decoded": 5,
+      "rejected_or_damaged": 5
+    }
+  ],
+  "mutations": 110,
+  "decoded": 43,
+  "wine_debug": "err+all",
+  "scope": "11 container/codec sources, 100 mutations each (every tenth under Wine), seed 20261006: byte flips, zero/0xff runs, cuts, removed and duplicated spans, large length fields; --check, every fourth from a random --start."
+}

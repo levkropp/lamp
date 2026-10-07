@@ -195,6 +195,8 @@ LOCALFN avi_strl
     cmp dword ptr [r12], 0x73647561       # auds
     jne .Lavi_strl_return
     inc dword ptr [rip + avi_audio_index]
+    mov ecx, [rip + avi_audio_index]
+    mov [rip + audio_tracks_count], ecx
     mov ecx, [rip + track_choice]
     test ecx, ecx
     jz .Lavi_strl_first
@@ -220,6 +222,8 @@ LOCALFN avi_strl
     mov [rip + avi_mode], edx
     mov [rip + avi_fmt], r13
     mov [rip + avi_fmt_bytes], ebx
+    mov eax, [rip + avi_audio_index]
+    mov [rip + audio_track_selected], eax
     mov eax, [rsp + 32]
     mov [rip + avi_stream], eax
     xor edx, edx

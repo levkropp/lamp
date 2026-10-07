@@ -5,6 +5,7 @@
 #   aN       send WM_APPCOMMAND N (11 next, 12 previous, 14 play/pause)
 #   oN       send WM_COMMAND N, as the context menu's item N does
 #   r        open the context menu as the keyboard does
+#   eXX      inject native key XX through SendInput (including an active menu)
 #   z        print the client area's width and height
 #   mX,Y     click the client area at X, Y pixels above its bottom
 #   sN       sleep N milliseconds
@@ -62,6 +63,8 @@ driver_bstr: .zero 8
 driver_variant: .zero 24
 driver_role: .zero 24
 driver_placement: .zero 44
+.p2align 3
+driver_menu_input: .zero 80           # two x64 INPUT records
 
 .text
 FN driver_start
@@ -98,6 +101,8 @@ FN driver_start
     je .Ldriver_menu_command
     cmp eax, 'r'
     je .Ldriver_context
+    cmp eax, 'e'
+    je .Ldriver_native_key
     cmp eax, 'z'
     je .Ldriver_size
     cmp eax, 'm'
@@ -333,10 +338,28 @@ FN driver_start
     jmp .Ldriver_command
 .Ldriver_context:
     mov rcx, [rip + driver_hwnd]
+    call SetForegroundWindow
+    mov rcx, [rip + driver_hwnd]
     mov edx, 0x7b                         # WM_CONTEXTMENU, from the keyboard
     mov r8, rcx
     mov r9, -1
     call PostMessageW
+    jmp .Ldriver_command
+.Ldriver_native_key:
+    mov rcx, rsi
+    mov edx, 16
+    call driver_number
+    lea rdx, [rip + driver_menu_input]
+    mov dword ptr [rdx], 1
+    mov word ptr [rdx + 8], ax
+    mov dword ptr [rdx + 40], 1
+    mov word ptr [rdx + 48], ax
+    mov dword ptr [rdx + 56], 2         # KEYEVENTF_KEYUP
+    mov ecx, 2
+    mov r8d, 40
+    call SendInput
+    cmp eax, 2
+    jne .Ldriver_bad
     jmp .Ldriver_command
 .Ldriver_size:
     mov r13d, edi                         # the next argument's index
