@@ -17,13 +17,15 @@ usage: python3 tests/verify-ac3.py [--skip-playback]
   skipped and a truncated final frame is dropped.
 - Frames with CRC errors, and frames whose valid CRC covers corrupted data,
   match FFmpeg's concealment; heavily corrupted streams decode cleanly.
-- Seeks in dither-free streams equal continuous decoding; E-AC-3 and broken
+- Seeks in dither-free streams equal continuous decoding; dependent E-AC-3 and broken
   streams reject; cancelled open/read stop cleanly; one file plays.
 Writes <out>/ac3-verification.json.
 """
 import array
 import json
 import math
+import importlib.util
+import struct
 from pathlib import Path
 import random
 import sys
@@ -242,8 +244,25 @@ def main():
     ffmpeg('-f', 'lavfi', '-i', noise.format(rate=44100, seed=99), '-ac', '2', '-c:a', 'ac3', '-b:a', '192k', path)
     edit = decode_f32(path, Path(str(path) + '.f32'))
     frames = int(edit.split(' frames=')[1].split()[0])
-    if not 66150 - 1536 <= frames <= 66150:                # 1.5 s, the edit ending near the input's end
-        raise Failure(f'{path.name}: {frames} frames presented for 66150 input samples')
+    # End padding varies by muxer version. Independently compute the bounded
+    # edit from its movie/media clocks and packet-duration table.
+    spec = importlib.util.spec_from_file_location('mp4_tests', Path(__file__).with_name('verify-mp4.py'))
+    mp4_tests = importlib.util.module_from_spec(spec); spec.loader.exec_module(mp4_tests)
+    data = path.read_bytes()
+    mvhd, _ = mp4_tests.find(data, 'moov/mvhd')
+    mdhd, _ = mp4_tests.find(data, 'moov/trak/mdia/mdhd')
+    elst, _ = mp4_tests.find(data, 'moov/trak/edts/elst')
+    stts, _ = mp4_tests.find(data, 'moov/trak/mdia/minf/stbl/stts')
+    if data[mvhd] or data[mdhd] or data[elst] or struct.unpack_from('>I',data,elst+4)[0]!=1:
+        raise Failure('expected single version-0 priming edit')
+    movie_clock = struct.unpack_from('>I',data,mvhd+12)[0]
+    media_clock = struct.unpack_from('>I',data,mdhd+12)[0]
+    duration, begin = struct.unpack_from('>Ii',data,elst+8)
+    runs = struct.unpack_from('>I',data,stts+4)[0]
+    raw_frames = sum(n*d for n,d in (struct.unpack_from('>II',data,stts+8+i*8) for i in range(runs)))
+    presented = min(raw_frames-begin, duration*media_clock//movie_clock)
+    if begin != 256 or frames != presented:
+        raise Failure(f'{path.name}: {frames} frames, bounded edit {presented}, priming {begin}')
     against_ffmpeg(path, checks, label='direct-44k.mp4 (priming edit)', frames=frames)
     plain = (work / 'stereo-48k.ac3').read_bytes()
     pcm = Path(str(work / 'stereo-48k.ac3') + '.f32').read_bytes()
@@ -317,22 +336,24 @@ def main():
 
     # Unsupported and malformed streams.
     rejected = 0
+    # Independent E-AC-3 now has its own suite; dependent channel substreams
+    # remain unsupported by the shared decoder.
     eac3 = work / 'eac3.ec3'
     ffmpeg('-f', 'lavfi', '-i', noise.format(rate=48000, seed=5), '-ac', '2', '-c:a', 'eac3', '-f', 'eac3', eac3)
-    for path, code in ((eac3, 101),):
-        line = run([chain, 'reject', path]).strip().splitlines()[-1]
-        if json.loads(line).get('decode_error') != code:
-            raise Failure(f'{path.name}: expected decode_error {code}, got {line}')
-        rejected += 1
-        checks.append({'test': path.name, 'result': 'rejected', 'oracle': line})
-    for suffix in ('mka', 'mp4'):
-        other = work / f'eac3.{suffix}'
-        ffmpeg('-i', eac3, '-c', 'copy', other)
-        line = run([chain, 'reject', other]).strip().splitlines()[-1]
-        if json.loads(line).get('decode_error') != 101:
-            raise Failure(f'{other.name}: expected decode_error 101, got {line}')
-        rejected += 1
-        checks.append({'test': other.name, 'result': 'rejected', 'oracle': line})
+    frames = []
+    data = eac3.read_bytes()
+    while data:
+        size = 2 * (((data[2] & 7) << 8 | data[3]) + 1)
+        b = bytearray(data[:size]); data = data[size:]
+        b[2] = (b[2] & 63) | 64
+        b[-2:] = model.crc16(b[2:-2]).to_bytes(2, 'big')
+        frames.append(bytes(b))
+    eac3.write_bytes(b''.join(frames))
+    line = run([chain, 'reject', eac3]).strip().splitlines()[-1]
+    if json.loads(line).get('decode_error') != 101:
+        raise Failure(f'dependent E-AC-3: {line}')
+    rejected += 1
+    checks.append({'test': 'dependent E-AC-3', 'result': 'rejected', 'oracle': line})
     five = (work / '5.1-side.ac3').read_bytes()
     broken = {
         'layout-change': plain[:len(frame_list[0]) * 3] + five,
@@ -360,7 +381,7 @@ def main():
                                   '48 kHz, mono to 5.1, against FFmpeg (multichannel via LAMP mix weights); the '
                                   'model against FFmpeg; written streams covering every tool and bap; container '
                                   'exactness, tags and truncation; corrupted frames against FFmpeg\'s concealment; '
-                                  'fuzzing; exact seeks; E-AC-3 and malformed rejections; cancellation.'})
+                                  'fuzzing; exact seeks; dependent E-AC-3 and malformed rejections; cancellation.'})
     print(f'Passed {len(checks)} AC-3 checks.')
 
 

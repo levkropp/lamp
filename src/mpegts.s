@@ -320,6 +320,8 @@ LOCALFN mts_classify
     mov eax, KIND_AC3
     cmp ecx, 0x81
     je .Lmts_classify_done
+    cmp ecx, 0x87                         # ATSC E-AC-3
+    je .Lmts_classify_done
     mov eax, KIND_LATM
     cmp ecx, 0x11                         # LATM AAC
     je .Lmts_classify_done
@@ -354,8 +356,8 @@ LOCALFN mts_classify
     ja .Lmts_classify_done
     cmp r9d, 0x6a                         # DVB AC-3
     je .Lmts_classify_ac3
-    cmp r9d, 0x7a                         # E-AC-3
-    je .Lmts_classify_other
+    cmp r9d, 0x7a                         # DVB E-AC-3
+    je .Lmts_classify_ac3
     cmp r9d, 0x7b                         # DTS
     je .Lmts_classify_other
     cmp r9d, 0x7c                         # DVB AAC
@@ -368,7 +370,7 @@ LOCALFN mts_classify
     cmp r9d, 0x332d4341                   # "AC-3"
     je .Lmts_classify_ac3
     cmp r9d, 0x33434145                   # "EAC3"
-    je .Lmts_classify_other
+    je .Lmts_classify_ac3
     and r9d, 0x00ffffff
     cmp r9d, 0x00535444                   # "DTS"
     je .Lmts_classify_other
@@ -412,7 +414,7 @@ ENDFN mts_pes_data
 # Private data identified by its first PES packet: RCX=PES start code,
 # RAX=its elementary data, RDX=payload end -> ECX=kind: MPEG audio or ADTS
 # for audio stream ids (0xC0-0xDF), AC-3 for private stream 1 starting with
-# an AC-3 sync frame; KIND_OTHER for E-AC-3 or DTS there; KIND_NONE for
+# an AC-3 sync frame; KIND_OTHER for reserved ids or DTS there; KIND_NONE for
 # anything else. RAX and RDX are kept.
 LOCALFN mts_identify
     movzx r8d, byte ptr [rcx + 3]         # stream id
@@ -441,9 +443,9 @@ LOCALFN mts_identify
     movzx r10d, byte ptr [rax + 5]
     shr r10d, 3                           # bsid
     mov ecx, KIND_AC3
-    cmp r10d, 10
+    cmp r10d, 16
     jbe .Lmts_identify_done
-    mov ecx, KIND_OTHER                   # E-AC-3
+    mov ecx, KIND_OTHER                   # reserved bitstream id
     ret
 .Lmts_identify_dts:
     cmp dword ptr [rax], 0x0180fe7f       # DTS core sync

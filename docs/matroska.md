@@ -13,12 +13,12 @@ The demuxer selects one audio track: the first enabled audio track with a suppor
 | `A_FLAC` | FLAC (`fLaC` and metadata blocks in CodecPrivate) |
 | `A_ALAC` | Apple Lossless (`ALACSpecificConfig` in CodecPrivate); see [MP4 notes](mp4.md#apple-lossless) |
 | `A_AAC` | [AAC-LC or HE-AAC (v1 and v2)](aac.md) (AudioSpecificConfig in CodecPrivate); the legacy `A_AAC/MPEG2/...` and `A_AAC/MPEG4/...` IDs are not recognised |
-| `A_AC3` | [AC-3](ac3.md); `A_EAC3` is recognised and rejects as unsupported |
+| `A_AC3` | [AC-3](ac3.md); `A_EAC3` supports the partial [conventional-mantissa profile](eac3.md) |
 | `A_WAVPACK4` | [WavPack](wavpack.md) frames (block headers reduced to flags, CRC and sizes); CodecPrivate is optional |
 | `A_MPEG/L1`, `A_MPEG/L2`, `A_MPEG/L3` | MPEG audio Layers I–III, one frame per packet |
 | `A_PCM/INT/LIT`, `A_PCM/INT/BIG`, `A_PCM/FLOAT/IEEE` | PCM: unsigned 8-bit, signed 16/24/32-bit in either byte order, float32/64; 1–8 channels; integral 8–192 kHz SamplingFrequency |
 
-AC-3, E-AC-3, DTS and other CodecIDs are not decoded yet; such tracks are skipped.
+DTS and other unsupported CodecIDs are skipped. AC-3 and the supported E-AC-3 profile pass through the track decoder.
 
 ## Structure
 

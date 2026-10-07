@@ -1,0 +1,49 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "tone.ec3",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 50,
+      "decoded": 35,
+      "rejected_or_damaged": 15
+    },
+    {
+      "test": "written.ec3",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 50,
+      "decoded": 40,
+      "rejected_or_damaged": 10
+    },
+    {
+      "test": "eac3.mka",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 50,
+      "decoded": 29,
+      "rejected_or_damaged": 21
+    },
+    {
+      "test": "eac3.mp4",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 50,
+      "decoded": 29,
+      "rejected_or_damaged": 21
+    },
+    {
+      "test": "eac3.ts",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 50,
+      "decoded": 44,
+      "rejected_or_damaged": 6
+    }
+  ],
+  "mutations": 250,
+  "decoded": 177,
+  "scope": "5 container/codec sources, 500 mutations each (every tenth under Wine), seed 20261007: byte flips, zero/0xff runs, cuts, removed and duplicated spans, large length fields; --check, every fourth from a random --start.",
+  "wine_debug": "err+all",
+  "validation_notes": [
+    "The completed 250-case batch retained strict exit-code and 30-second timeout checks.",
+    "Earlier Wine invocations exited 1 without decoder statistics on two saved mutations. The MP4 input decoded in five warmed Wine replays; the raw input rejected with exit 2 in five replays, agreeing with Linux. Those initial exits were not reproduced.",
+    "Wine helpers holding inherited output pipes after a successful client exit were observed separately; the harness now records output to a temporary file. Native Windows remains unverified."
+  ]
+}

@@ -56,8 +56,15 @@ LOCALFN ac3_block
 .Lac3_block_switch:
     cmp esi, r12d
     ja .Lac3_block_dither
+    xor eax, eax
+    cmp dword ptr [rip + ac3_enhanced], 0
+    je .Lac3_block_switch_read
+    cmp dword ptr [rip + eac3_switch_syntax], 0
+    je .Lac3_block_switch_store
+.Lac3_block_switch_read:
     mov ecx, 1
     call ac3_get
+.Lac3_block_switch_store:
     AC3_SLOT rcx, ac3_blksw, rsi
     mov [rcx], eax
     inc esi
@@ -67,8 +74,15 @@ LOCALFN ac3_block
 .Lac3_block_dither_next:
     cmp esi, r12d
     ja .Lac3_block_range
+    mov eax, 1
+    cmp dword ptr [rip + ac3_enhanced], 0
+    je .Lac3_block_dither_read
+    cmp dword ptr [rip + eac3_dither_syntax], 0
+    je .Lac3_block_dither_store
+.Lac3_block_dither_read:
     mov ecx, 1
     call ac3_get
+.Lac3_block_dither_store:
     AC3_SLOT rcx, ac3_dith, rsi
     mov [rcx], eax
     inc esi
@@ -100,9 +114,32 @@ LOCALFN ac3_block
 .Lac3_block_range_done:
     dec esi
     jns .Lac3_block_range_next
+    # E-AC-3 spectral extension precedes coupling strategy.
+    cmp dword ptr [rip + ac3_enhanced], 0
+    je .Lac3_block_cpl_read
+    test ebx, ebx
+    jz .Lac3_block_spx_strategy
+    mov ecx, 1
+    call ac3_get
+    test eax, eax
+    jz .Lac3_block_cpl_frame
+.Lac3_block_spx_strategy:
+    mov ecx, 1
+    call ac3_get
+    test eax, eax
+    jnz .Lac3_block_unsupported
+.Lac3_block_cpl_frame:
+    mov eax, 1
+    cmp dword ptr [rip + ac3_acmod], 1
+    jbe .Lac3_block_cpl_dispatch
+    AC3_SLOT rcx, eac3_cplstre, rbx
+    mov eax, [rcx]
+    jmp .Lac3_block_cpl_dispatch
+.Lac3_block_cpl_read:
     # Coupling strategy.
     mov ecx, 1
     call ac3_get                          # cplstre
+.Lac3_block_cpl_dispatch:
     test eax, eax
     jnz .Lac3_block_cpl_new
     test ebx, ebx
@@ -111,19 +148,40 @@ LOCALFN ac3_block
 .Lac3_block_cpl_new:
     mov rax, 0x0303030303030303
     mov [rip + ac3_stages], rax
+    cmp dword ptr [rip + ac3_enhanced], 0
+    je .Lac3_block_cpl_inuse_read
+    AC3_SLOT rcx, eac3_cplinu, rbx
+    mov eax, [rcx]
+    jmp .Lac3_block_cpl_inuse_store
+.Lac3_block_cpl_inuse_read:
     mov ecx, 1
     call ac3_get
+.Lac3_block_cpl_inuse_store:
     mov [rip + ac3_cplinu], eax
     test eax, eax
     jz .Lac3_block_cpl_off
     cmp dword ptr [rip + ac3_acmod], 2
     jb .Lac3_block_fail
+    cmp dword ptr [rip + ac3_enhanced], 0
+    je .Lac3_block_cpl_channels
+    mov ecx, 1
+    call ac3_get                          # ecplinu
+    test eax, eax
+    jnz .Lac3_block_unsupported
+.Lac3_block_cpl_channels:
     mov esi, 1
 .Lac3_block_cpl_channel:
     cmp esi, r12d
     ja .Lac3_block_cpl_phase
+    mov eax, 1
+    cmp dword ptr [rip + ac3_enhanced], 0
+    je .Lac3_block_cpl_channel_read
+    cmp dword ptr [rip + ac3_acmod], 2
+    je .Lac3_block_cpl_channel_store
+.Lac3_block_cpl_channel_read:
     mov ecx, 1
     call ac3_get
+.Lac3_block_cpl_channel_store:
     AC3_SLOT rcx, ac3_incpl, rsi
     mov [rcx], eax
     inc esi
@@ -151,11 +209,28 @@ LOCALFN ac3_block
     mov [rip + ac3_end], eax
     test ebx, ebx
     jnz .Lac3_block_cpl_struct
+    cmp dword ptr [rip + ac3_enhanced], 0
+    je .Lac3_block_cpl_default_ac3
+    lea rcx, [rip + ac3_bndstrc]
+    lea rdx, [rip + eac3_default_cpl_bands]
+    movups xmm0, [rdx]
+    movups [rcx], xmm0
+    movzx eax, word ptr [rdx + 16]
+    mov [rcx + 16], ax
+    jmp .Lac3_block_cpl_struct
+.Lac3_block_cpl_default_ac3:
     lea rcx, [rip + ac3_bndstrc]
     xorps xmm0, xmm0
     movups [rcx], xmm0
     movups [rcx + 16], xmm0
 .Lac3_block_cpl_struct:
+    cmp dword ptr [rip + ac3_enhanced], 0
+    je .Lac3_block_cpl_struct_read
+    mov ecx, 1
+    call ac3_get
+    test eax, eax
+    jz .Lac3_block_cpl_sizes
+.Lac3_block_cpl_struct_read:
     lea esi, [r14 + 1]                    # band structure bits for subbands begin+1..end-1
 .Lac3_block_cpl_struct_next:
     cmp esi, r15d
@@ -196,10 +271,13 @@ LOCALFN ac3_block
     ja .Lac3_block_cpl_off_done
     AC3_SLOT rcx, ac3_incpl, rsi
     mov dword ptr [rcx], 0
+    AC3_SLOT rcx, eac3_first_coords, rsi
+    mov dword ptr [rcx], 1
     inc esi
     jmp .Lac3_block_cpl_off_next
 .Lac3_block_cpl_off_done:
     mov dword ptr [rip + ac3_phsinu], 0
+    mov dword ptr [rip + eac3_first_leak], 1
 .Lac3_block_coords:
     # Coupling coordinates and phase flags.
     cmp dword ptr [rip + ac3_cplinu], 0
@@ -211,7 +289,13 @@ LOCALFN ac3_block
     ja .Lac3_block_coord_phase
     AC3_SLOT rcx, ac3_incpl, rsi
     cmp dword ptr [rcx], 0
-    je .Lac3_block_coord_next
+    je .Lac3_block_coord_unused
+    cmp dword ptr [rip + ac3_enhanced], 0
+    je .Lac3_block_coord_read
+    AC3_SLOT rcx, eac3_first_coords, rsi
+    cmp dword ptr [rcx], 0
+    jne .Lac3_block_coord_new
+.Lac3_block_coord_read:
     mov ecx, 1
     call ac3_get                          # cplcoe
     test eax, eax
@@ -220,6 +304,8 @@ LOCALFN ac3_block
     jz .Lac3_block_fail
     jmp .Lac3_block_coord_next
 .Lac3_block_coord_new:
+    AC3_SLOT rcx, eac3_first_coords, rsi
+    mov dword ptr [rcx], 0
     mov edi, 1
     mov ecx, 2
     call ac3_get
@@ -250,6 +336,9 @@ LOCALFN ac3_block
     mov [rdx + rcx*4], eax
     inc r15d
     jmp .Lac3_block_coord_band
+.Lac3_block_coord_unused:
+    AC3_SLOT rcx, eac3_first_coords, rsi
+    mov dword ptr [rcx], 1
 .Lac3_block_coord_next:
     inc esi
     jmp .Lac3_block_coord_channel
@@ -276,6 +365,11 @@ LOCALFN ac3_block
     # Rematrixing flags (2/0 mode).
     cmp dword ptr [rip + ac3_acmod], 2
     jne .Lac3_block_first
+    cmp dword ptr [rip + ac3_enhanced], 0
+    je .Lac3_block_remat_read
+    test ebx, ebx
+    jz .Lac3_block_remat_new
+.Lac3_block_remat_read:
     mov ecx, 1
     call ac3_get                          # rematstr
     test eax, eax
@@ -317,12 +411,27 @@ LOCALFN ac3_block
 .Lac3_block_expstr:
     cmp esi, r13d
     ja .Lac3_block_bandwidth
+    cmp dword ptr [rip + ac3_enhanced], 0
+    je .Lac3_block_expstr_ac3
+    mov edx, ebx
+    shl edx, 3
+    add edx, esi
+    AC3_SLOT rcx, eac3_expstr, rdx
+    mov eax, [rcx]
+    jmp .Lac3_block_expstr_store
+.Lac3_block_expstr_ac3:
     mov ecx, 2
     cmp esi, [rip + ac3_lfe_ch]
     jne .Lac3_block_expstr_read
     mov ecx, 1
 .Lac3_block_expstr_read:
     call ac3_get
+.Lac3_block_expstr_store:
+    test ebx, ebx
+    jnz .Lac3_block_expstr_valid
+    test eax, eax
+    jz .Lac3_block_fail
+.Lac3_block_expstr_valid:
     AC3_SLOT rcx, ac3_expstr, rsi
     mov [rcx], eax
     test eax, eax
@@ -409,6 +518,11 @@ LOCALFN ac3_block
     jmp .Lac3_block_exponents_next
 .Lac3_block_allocation_info:
     # Bit allocation parameters.
+    cmp dword ptr [rip + ac3_enhanced], 0
+    je .Lac3_block_allocation_read
+    cmp dword ptr [rip + eac3_ba_syntax], 0
+    je .Lac3_block_snr
+.Lac3_block_allocation_read:
     mov ecx, 1
     call ac3_get                          # baie
     test eax, eax
@@ -450,6 +564,15 @@ LOCALFN ac3_block
     mov edx, 2
     call ac3_stage_range
 .Lac3_block_snr:
+    cmp dword ptr [rip + ac3_enhanced], 0
+    je .Lac3_block_snr_ac3
+    mov ecx, ebx
+    mov edx, [rsp + 32]
+    call eac3_block_snr
+    cmp eax, AC3_UNSUPPORTED
+    je .Lac3_block_unsupported
+    jmp .Lac3_block_leak
+.Lac3_block_snr_ac3:
     # SNR offsets and fast gains.
     mov ecx, 1
     call ac3_get                          # snroffste
@@ -506,6 +629,11 @@ LOCALFN ac3_block
     # Coupling leak initialization.
     cmp dword ptr [rip + ac3_cplinu], 0
     je .Lac3_block_delta
+    cmp dword ptr [rip + ac3_enhanced], 0
+    je .Lac3_block_leak_read
+    cmp dword ptr [rip + eac3_first_leak], 0
+    jne .Lac3_block_leak_new
+.Lac3_block_leak_read:
     mov ecx, 1
     call ac3_get                          # cplleake
     test eax, eax
@@ -514,6 +642,7 @@ LOCALFN ac3_block
     jz .Lac3_block_fail
     jmp .Lac3_block_delta
 .Lac3_block_leak_new:
+    mov dword ptr [rip + eac3_first_leak], 0
     mov ecx, 3
     call ac3_get
     mov esi, eax
@@ -535,8 +664,15 @@ LOCALFN ac3_block
     mov [rip + ac3_cplsleak], edi
 .Lac3_block_delta:
     # Delta bit allocation.
+    xor eax, eax
+    cmp dword ptr [rip + ac3_enhanced], 0
+    je .Lac3_block_delta_read
+    cmp dword ptr [rip + eac3_dba_syntax], 0
+    je .Lac3_block_delta_dispatch
+.Lac3_block_delta_read:
     mov ecx, 1
     call ac3_get                          # deltbaie
+.Lac3_block_delta_dispatch:
     test eax, eax
     jnz .Lac3_block_delta_new
     test ebx, ebx
@@ -628,6 +764,11 @@ LOCALFN ac3_block
     inc esi
     jmp .Lac3_block_allocate_channel
 .Lac3_block_skip:
+    cmp dword ptr [rip + ac3_enhanced], 0
+    je .Lac3_block_skip_read
+    cmp dword ptr [rip + eac3_skip_syntax], 0
+    je .Lac3_block_coefficients
+.Lac3_block_skip_read:
     mov ecx, 1
     call ac3_get                          # skiple
     test eax, eax
@@ -638,6 +779,13 @@ LOCALFN ac3_block
     add [rip + ac3_bitpos], eax
 .Lac3_block_coefficients:
     call ac3_coefficients
+    cmp dword ptr [rip + ac3_enhanced], 0
+    je .Lac3_block_coefficients_valid
+    mov eax, [rip + ac3_bitlimit]
+    lea eax, [rax*8 - 16]
+    cmp [rip + ac3_bitpos], eax
+    ja .Lac3_block_fail
+.Lac3_block_coefficients_valid:
     cmp dword ptr [rip + ac3_acmod], 2
     jne .Lac3_block_transform
     call ac3_rematrix
@@ -645,6 +793,9 @@ LOCALFN ac3_block
     mov ecx, ebx
     call ac3_transform
     mov eax, 1
+    jmp .Lac3_block_return
+.Lac3_block_unsupported:
+    mov eax, AC3_UNSUPPORTED
     jmp .Lac3_block_return
 .Lac3_block_fail:
     xor eax, eax

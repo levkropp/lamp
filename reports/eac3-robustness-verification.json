@@ -1,0 +1,43 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "tone.ec3",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 500,
+      "decoded": 336,
+      "rejected_or_damaged": 164
+    },
+    {
+      "test": "written.ec3",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 500,
+      "decoded": 347,
+      "rejected_or_damaged": 153
+    },
+    {
+      "test": "eac3.mka",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 500,
+      "decoded": 250,
+      "rejected_or_damaged": 250
+    },
+    {
+      "test": "eac3.mp4",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 500,
+      "decoded": 240,
+      "rejected_or_damaged": 260
+    },
+    {
+      "test": "eac3.ts",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 500,
+      "decoded": 391,
+      "rejected_or_damaged": 109
+    }
+  ],
+  "mutations": 2500,
+  "decoded": 1564,
+  "scope": "5 container/codec sources, 500 mutations each (Linux, 2 GiB address space), seed 20261007: byte flips, zero/0xff runs, cuts, removed and duplicated spans, large length fields; --check, every fourth from a random --start."
+}

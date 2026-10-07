@@ -14,7 +14,7 @@ usage: python3 tests/verify-tracks.py
   Opus stream, whose header is not on the file's first page, plays.
 - --track applies to every file of a queue.
 - A track that does not exist, or one LAMP does not decode (WMA in
-  Matroska, E-AC-3 in a transport stream), rejects with decode_error 101
+  Matroska), rejects with decode_error 101
   (tests/chain-oracle.c), and so does --track 2 on a file of one track
   (WAV, MP3, FLV); --track 1 plays them.
 Writes <out>/tracks-verification.json.
@@ -160,7 +160,12 @@ def main():
     rejected(chain, wma, 2)
     eac3 = work / 'eac3.ts'
     ffmpeg(*SOURCES[:8], '-map', '0', '-map', '1', '-c:a:0', 'ac3', '-c:a:1', 'eac3', eac3)
-    rejected(chain, eac3, 2)
+    single = work / 'eac3-a2.ts'
+    ffmpeg('-i', eac3, '-map', '0:a:1', '-c', 'copy', single)
+    code, stats, pcm = decode(eac3, 2)
+    if code or pcm != decode(single)[2]:
+        raise Failure(f'E-AC-3 track 2: {stats}')
+    checks.append({'test': 'eac3.ts track 2', 'result': 'exact', 'comparator': 'isolated E-AC-3 track'})
     singles = []
     for name, coding in (('one.wav', ['-c:a', 'pcm_s16le']), ('one.mp3', ['-c:a', 'libmp3lame']),
                          ('one.flv', ['-c:a', 'libmp3lame'])):
@@ -172,7 +177,7 @@ def main():
         rejected(chain, path, 2)
         singles.append(name)
     checks.append({'test': 'unsupported and missing tracks', 'result': 'rejected',
-                   'files': ['wma.mkv track 2', 'eac3.ts track 2'] + [f'{n} track 2' for n in singles] +
+                   'files': ['wma.mkv track 2'] + [f'{n} track 2' for n in singles] +
                    [f'{n} track {files[n][2] + 1}' for n in files]})
     print('Missing and unsupported tracks reject; --track 1 plays single-track files', flush=True)
     write_report('tracks', {'result': 'passed', 'checks': checks,

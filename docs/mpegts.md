@@ -5,8 +5,8 @@ LAMP 0.4.0-dev plays the audio of MPEG-2 transport streams (`.ts`, `.m2ts`, `.mt
 ## Transport streams
 
 - 188-byte packets, 192-byte M2TS/BDAV packets (a 4-byte time stamp before each) and 204-byte packets (16 parity bytes after each); at least five consecutive packets (or every packet of a shorter file) must start with the sync byte. Packets with the transport error flag or without payload are skipped, as are other PIDs.
-- The program association table names the first program's map; the map's first supported audio stream is selected: stream types 0x03 and 0x04 (MPEG audio Layers I-III), 0x0F (AAC in ADTS), 0x11 (AAC in LATM, [LOAS framing](latm.md)), 0x81 (AC-3) and 0x80 ([Blu-ray LPCM](#lpcm), when the program carries an `HDMV` or `HDPR` registration, as FFmpeg requires), or private data (0x06) with the DVB AC-3 descriptor or an `AC-3` registration. Private data without an identifying descriptor (as FFmpeg's M2TS mode writes MPEG audio) is identified from its first PES packet: audio stream ids carry MPEG audio or ADTS, private stream 1 an AC-3 sync frame. Tables must fit in the packet that starts them.
-- E-AC-3 (stream type 0x87 or its DVB descriptor), DTS, TrueHD and stream type 0x80 without an HDMV registration reject with `decode_error` 101 when no supported audio stream precedes them; a stream without tables or audio rejects with 100.
+- The program association table names the first program's map; the map's first supported audio stream is selected: stream types 0x03 and 0x04 (MPEG audio Layers I-III), 0x0F (AAC in ADTS), 0x11 (AAC in LATM, [LOAS framing](latm.md)), 0x81 (AC-3), 0x87 ([conventional E-AC-3](eac3.md)) and 0x80 ([Blu-ray LPCM](#lpcm), when the program carries an `HDMV` or `HDPR` registration, as FFmpeg requires), or private data (0x06) with the DVB AC-3/E-AC-3 descriptor or an `AC-3`/`EAC3` registration. Private data without an identifying descriptor (as FFmpeg's M2TS mode writes MPEG audio) is identified from its first PES packet: audio stream ids carry MPEG audio or ADTS, private stream 1 an AC-3/E-AC-3 sync frame. Tables must fit in the packet that starts them.
+- Unsupported E-AC-3 tools/substreams, DTS, TrueHD and stream type 0x80 without an HDMV registration reject with `decode_error` 101 when no supported audio stream precedes them; a stream without tables or audio rejects with 100.
 
 ## Program streams
 
@@ -32,7 +32,7 @@ Time stamps are not used: gaps and discontinuities play continuously, and the ou
 - Raw MPEG Layer II and III, ADTS AAC, stereo and 5.1 AC-3 streams written by FFmpeg and copied into transport streams with 188-, 192- and 204-byte packets, with video, AC-3 with the DVB descriptor, two audio streams (the first selected), MPEG-2 VOB and MPEG-1 system streams, and VOB with video: 31 files whose decode equals the raw stream's exactly.
 - The transport streams against FFmpeg's decode of the same files: MPEG Layer II 116 dB, Layer III 126 dB (FFmpeg's float decoders), AAC 138 dB, AC-3 139 dB.
 - 60 exact seeks in an AC-3 transport stream, M2TS MPEG audio, a transport stream with video and a VOB.
-- E-AC-3 (both signallings) rejects as unsupported; video-only transport and program streams and a transport stream without tables reject as malformed; a cancelled open stops cleanly; one transport stream plays through the Linux null sink.
+- Conventional E-AC-3 (ATSC and DVB signallings) equals raw decoding; video-only transport and program streams and a transport stream without tables reject as malformed; a cancelled open stops cleanly; one transport stream plays through the Linux null sink.
 
 LATM transport streams are checked by `tests/verify-latm.py` ([LATM notes](latm.md#verification)).
 
@@ -51,3 +51,5 @@ LATM transport streams are checked by `tests/verify-latm.py` ([LATM notes](latm.
 - A cancelled open stops cleanly, and a Blu-ray 5.1 stream plays through the Linux null sink.
 
 `tests/verify-robustness.py` also mutates a DVD VOB and a Blu-ray M2TS file 500 times each.
+
+`tests/verify-eac3.py` additionally isolates type 0x87, registration, DVB descriptor 0x7a and private-stream content detection, comparing each decode with raw E-AC-3 PCM. See the [E-AC-3 profile limits](eac3.md).

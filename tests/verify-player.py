@@ -100,7 +100,7 @@ def main():
     subprocess.run(['wineserver', '-w'], env=wine, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=120)
     checks = []
     scenarios = [list_checks, list_playback, keys, folder_playback, killed_stream, output_menu, dpi,
-                 modes, accessibility]
+                 modes, accessibility, eac3_playback]
     only = sys.argv[sys.argv.index('--only') + 1].split(',') if '--only' in sys.argv else None
     try:
         for scenario in scenarios:
@@ -118,7 +118,7 @@ def main():
                                      'media next command, the next button, seeking, repeat, playlists, '
                                      'reopening a killed stream, choosing outputs, 144 DPI, fullscreen/compact '
                                      'restoration, Tab/Shift+Tab focus, slider values and MSAA names/native '
-                                     'control classes, under Wine on Xvfb; native Windows screen-reader '
+                                     'control classes, raw E-AC-3 playback and folder discovery, under Wine on Xvfb; native Windows screen-reader '
                                      'roles remain unverified.'})
     print(f'Passed {len(checks)} player checks.')
 
@@ -136,12 +136,12 @@ def list_checks(work, env, wine, checks):
     shutil.rmtree(tree, ignore_errors=True)
     album = tree / 'Album'
     for name in ('10 ten.flac', '2 two.MP3', '1 one.flac', 'Ünïcode.opus', 'cover.jpg', 'album.m3u', 'notes.txt',
-                 'Disc 2/b.ogg', 'Disc 2/a.wv', 'disc 1/z.wav', '.hidden/h.flac', 'Empty/readme.txt'):
+                 '3 three.ec3', '4 four.EAC3', 'Disc 2/b.ogg', 'Disc 2/a.wv', 'disc 1/z.wav', '.hidden/h.flac', 'Empty/readme.txt'):
         path = album / name
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_bytes(b'')
     root = windows_path(album)
-    expected = [root + '\\' + name for name in ('1 one.flac', '2 two.MP3', '10 ten.flac', 'disc 1\\z.wav',
+    expected = [root + '\\' + name for name in ('1 one.flac', '2 two.MP3', '3 three.ec3', '4 four.EAC3', '10 ten.flac', 'disc 1\\z.wav',
                                                  'Disc 2\\a.wv', 'Disc 2\\b.ogg', 'Ünïcode.opus')]
     got = ui_list(wine, 'paths', root)
     if got != expected:
@@ -491,6 +491,26 @@ def accessibility(work, env, wine, checks):
                    'names_roles_classes': names, 'focus': focus,
                    'limit': 'Wine 8 exposes generic client roles; native Windows screen-reader testing remains.'})
     print('MSAA names, native classes, Tab order, Enter/Space and focused mode shortcuts pass', flush=True)
+
+
+def eac3_playback(work, env, wine, checks):
+    """The new raw codec kind plays through the GUI engine, not just --decode."""
+    path=work/'enhanced.ec3'
+    ffmpeg('-f','lavfi','-i',f'anoisesrc=r={RATE}:d=3:a=0.25:seed=20',
+           '-ac','2','-c:a','eac3','-b:a','192k','-f','eac3',path)
+    reference=_nav.linux_decode(work,path)
+    session=Session(work,env,wine,'eac3',windows_path(path))
+    titles=session.drive('p12000','c')
+    capture=session.finish()
+    expected_title='enhanced.ec3 - LAMP'
+    if expected_title not in titles:raise Failure(f'E-AC-3 GUI title: {titles}')
+    segments=merge(_nav.runs(capture,{'E-AC-3':reference}))
+    expect_segments('E-AC-3 GUI',segments,[('E-AC-3',None)])
+    if segments[0][2] < len(reference)//FRAME-RATE//4:
+        raise Failure(f'E-AC-3 GUI stopped early: {segments}')
+    checks.append({'test':'E-AC-3 GUI playback','result':'PCM matched through Wine sink',
+                   'titles':titles,'segments':segments})
+    print('E-AC-3 GUI: '+str(segments),flush=True)
 
 
 if __name__ == '__main__':

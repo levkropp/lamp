@@ -7,6 +7,8 @@
       "list": [
         "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\1 one.flac",
         "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\2 two.MP3",
+        "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\3 three.ec3",
+        "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\4 four.EAC3",
         "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\10 ten.flac",
         "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\disc 1\\z.wav",
         "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\Disc 2\\a.wv",
@@ -46,7 +48,7 @@
       "segments": [
         [
           "First",
-          78,
+          5,
           120000
         ],
         [
@@ -79,48 +81,48 @@
       "segments": [
         [
           "One",
-          157,
+          137,
           130080
         ],
         [
           "Two",
-          98,
-          67920
+          44,
+          68640
         ],
         [
           "One",
-          178,
-          189120
+          221,
+          190080
         ],
         [
           "One",
-          233,
-          66480
+          191,
+          67680
         ],
         [
           "Two",
-          62,
-          65760
-        ],
-        [
-          "Three",
-          16,
+          69,
           68880
         ],
         [
           "Three",
-          307837,
+          170,
+          69840
+        ],
+        [
+          "Three",
+          308702,
           432000
         ],
         [
           "Four",
           0,
-          185520
+          186240
         ],
         [
           "One",
-          178,
-          68640
+          183,
+          64320
         ]
       ]
     },
@@ -138,7 +140,7 @@
       "segments": [
         [
           "Track 1",
-          102,
+          94,
           72000
         ],
         [
@@ -169,33 +171,13 @@
       "runs": [
         [
           "Long",
-          32,
-          207568
+          4,
+          208556
         ],
         [
           "Long",
-          206574,
-          93426
-        ],
-        [
-          "Long",
-          300134,
-          4906
-        ],
-        [
-          "Long",
-          305068,
-          1172
-        ],
-        [
-          "Long",
-          306462,
-          1458
-        ],
-        [
-          "Long",
-          307991,
-          76009
+          207508,
+          176492
         ]
       ]
     },
@@ -205,20 +187,20 @@
       "default": [
         [
           "Output",
-          92,
-          152400
+          232,
+          151920
         ],
         [
           "Output",
-          311612,
-          440640
+          309291,
+          429360
         ]
       ],
       "chosen": [
         [
           "Output",
-          151237,
-          312960
+          150410,
+          310560
         ]
       ]
     },
@@ -335,7 +317,22 @@
         "Open files"
       ],
       "limit": "Wine 8 exposes generic client roles; native Windows screen-reader testing remains."
+    },
+    {
+      "test": "E-AC-3 GUI playback",
+      "result": "PCM matched through Wine sink",
+      "titles": [
+        "LAMP - Lev's Assembly Media Player",
+        "enhanced.ec3 - LAMP"
+      ],
+      "segments": [
+        [
+          "E-AC-3",
+          15,
+          144384
+        ]
+      ]
     }
   ],
-  "scope": "lamp.exe list building (folders, command line, drops, the open dialog), gapless list playback with the title following the file heard, N/P, the media next command, the next button, seeking, repeat, playlists, reopening a killed stream, choosing outputs, 144 DPI, fullscreen/compact restoration, Tab/Shift+Tab focus, slider values and MSAA names/native control classes, under Wine on Xvfb; native Windows screen-reader roles remain unverified."
+  "scope": "lamp.exe list building (folders, command line, drops, the open dialog), gapless list playback with the title following the file heard, N/P, the media next command, the next button, seeking, repeat, playlists, reopening a killed stream, choosing outputs, 144 DPI, fullscreen/compact restoration, Tab/Shift+Tab focus, slider values and MSAA names/native control classes, raw E-AC-3 playback and folder discovery, under Wine on Xvfb; native Windows screen-reader roles remain unverified."
 }

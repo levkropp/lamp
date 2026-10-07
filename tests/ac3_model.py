@@ -264,6 +264,7 @@ def window_overlap(delay, cur, window):
 
 class Decoder:
     def __init__(self, check_crc=True):
+        self.enhanced = False
         self.check_crc = check_crc
         self.lfg = list(T['lfg'])
         self.lfg_index = 0
@@ -416,13 +417,13 @@ class Decoder:
         nf, acmod = self.nfchans, self.acmod
         stages = [0] * 7
         for ch in range(1, nf + 1):
-            self.block_switch[ch] = g.get(1, 'blksw', blk, ch)
+            self.block_switch[ch] = g.get(1, 'blksw', blk, ch) if not self.enhanced or self.switch_syntax else 0
             if self.block_switch[ch]:
                 self.used.add('short blocks')
         if nf > 1 and len(set(self.block_switch[1:nf + 1])) > 1:
             self.used.add('mixed transforms')
         for ch in range(1, nf + 1):
-            self.dither_flag[ch] = g.get(1, 'dithflag')
+            self.dither_flag[ch] = g.get(1, 'dithflag') if not self.enhanced or self.dither_syntax else 1
             self.used.add(f'dither {self.dither_flag[ch]}')
         for i in (1, 0) if acmod == 0 else (0,):
             if g.get(1, 'dynrnge'):
@@ -431,15 +432,23 @@ class Decoder:
             elif blk == 0:
                 self.dynamic_range[i] = 1.0
         # Coupling strategy.
-        new = g.get(1, 'cplstre', blk)
+        if self.enhanced:
+            if (blk == 0 or g.get(1, 'spxstre')) and g.get(1, 'spxinu'):
+                raise DecodeError('spectral extension unsupported')
+            new = self.cplstre[blk] if acmod > 1 else 1
+        else:
+            new = g.get(1, 'cplstre', blk)
         if new:
             stages = [3] * 7
-            self.cpl_in_use = g.get(1, 'cplinu', acmod)
+            self.cpl_in_use = self.cplinu[blk] if self.enhanced else g.get(1, 'cplinu', acmod)
             if self.cpl_in_use:
                 if acmod < 2:
                     raise DecodeError('coupling in mono or dual mono')
+                if self.enhanced and g.get(1, 'ecplinu'):
+                    raise DecodeError('enhanced coupling unsupported')
                 for ch in range(1, nf + 1):
-                    self.channel_in_cpl[ch] = g.get(1, 'chincpl', ch, nf, sum(self.channel_in_cpl[1:ch]))
+                    self.channel_in_cpl[ch] = 1 if self.enhanced and acmod == 2 else \
+                        g.get(1, 'chincpl', ch, nf, sum(self.channel_in_cpl[1:ch]))
                 if acmod == 2:
                     self.phase_flags_in_use = g.get(1, 'phsflginu')
                 begin = g.get(4, 'cplbegf')
@@ -449,10 +458,11 @@ class Decoder:
                 self.start_freq[CPL] = begin * 12 + 37
                 self.end_freq[CPL] = end * 12 + 37
                 if blk == 0:
-                    self.cpl_band_struct = [0] * 22
+                    self.cpl_band_struct = list(self.default_cpl_bands) + [0]*4 if self.enhanced else [0] * 22
                 n = end - begin
-                for s in range(n - 1):
-                    self.cpl_band_struct[begin + 1 + s] = g.get(1, 'cplbndstrc')
+                if not self.enhanced or g.get(1, 'cplbndstrce'):
+                    for s in range(n - 1):
+                        self.cpl_band_struct[begin + 1 + s] = g.get(1, 'cplbndstrc')
                 sizes = [12]
                 for s in range(1, n):
                     if self.cpl_band_struct[begin + s]:
@@ -471,6 +481,7 @@ class Decoder:
                     self.channel_in_cpl[ch] = 0
                     self.first_cpl_coords[ch] = 1
                 self.phase_flags_in_use = 0
+                self.first_cpl_leak = self.enhanced
         elif blk == 0:
             raise DecodeError('no coupling strategy in block 0')
         cpl = self.cpl_in_use
@@ -478,7 +489,7 @@ class Decoder:
             exist = False
             for ch in range(1, nf + 1):
                 if self.channel_in_cpl[ch]:
-                    if g.get(1, 'cplcoe', blk, new):
+                    if (self.enhanced and self.first_cpl_coords[ch]) or g.get(1, 'cplcoe', blk, new):
                         self.first_cpl_coords[ch] = 0
                         exist = True
                         master = 3 * g.get(2, 'mstrcplco')
@@ -496,7 +507,7 @@ class Decoder:
                     if self.phase_flags[bnd]:
                         self.used.add('phase flags')
         if acmod == 2:
-            if g.get(1, 'rematstr', blk):
+            if (self.enhanced and blk == 0) or g.get(1, 'rematstr', blk):
                 self.num_rematrixing_bands = 4
                 if cpl and self.start_freq[CPL] <= 61:
                     self.num_rematrixing_bands -= 1 + (self.start_freq[CPL] == 37)
@@ -507,7 +518,10 @@ class Decoder:
             elif blk == 0:
                 self.num_rematrixing_bands = 0
         for ch in range(0 if cpl else 1, self.channels + 1):
-            self.exp_strategy[ch] = g.get(1 if ch == self.lfe_ch else 2, 'expstr', blk, new)
+            self.exp_strategy[ch] = self.frame_expstr[blk][ch] if self.enhanced else \
+                g.get(1 if ch == self.lfe_ch else 2, 'expstr', blk, new)
+            if blk == 0 and self.exp_strategy[ch] == 0:
+                raise DecodeError('reuse in first block')
             if self.exp_strategy[ch] != EXP_REUSE:
                 stages[ch] = 3
             self.used.add(f'exponent strategy {self.exp_strategy[ch]}')
@@ -538,7 +552,7 @@ class Decoder:
                 if ch != CPL and ch != self.lfe_ch:
                     g.get(2, 'gainrng')
         p = self.params
-        if g.get(1, 'baie', blk):
+        if (not self.enhanced or self.ba_syntax) and g.get(1, 'baie', blk):
             p['slow_decay'] = T['slow_decay'][g.get(2, 'sdcycod')] >> p['sr_shift']
             p['fast_decay'] = T['fast_decay'][g.get(2, 'fdcycod')] >> p['sr_shift']
             p['slow_gain'] = T['slow_gain'][g.get(2, 'sgaincod')]
@@ -548,35 +562,39 @@ class Decoder:
                 p['floor'] -= 0x10000
             for ch in range(0 if cpl else 1, self.channels + 1):
                 stages[ch] = max(stages[ch], 2)
-        elif blk == 0:
+        elif blk == 0 and (not self.enhanced or self.ba_syntax):
             raise DecodeError('no bit allocation information in block 0')
-        if g.get(1, 'snroffste', blk if blk and not (new and cpl) else 0):
-            csnr = (g.get(6, 'csnroffst') - 15) << 4
-            for ch in range(0 if cpl else 1, self.channels + 1):
-                snr = (csnr + g.get(4, 'fsnroffst')) << 2
-                if blk and self.snr_offset[ch] != snr:
-                    stages[ch] = max(stages[ch], 1)
-                self.snr_offset[ch] = snr
-                if snr == -960:
-                    self.used.add('snr offset -960')
-                prev = self.fast_gain[ch]
-                self.fast_gain[ch] = T['fast_gain'][g.get(3, 'fgaincod')]
-                if blk and prev != self.fast_gain[ch]:
-                    stages[ch] = max(stages[ch], 2)
-        elif blk == 0:
-            raise DecodeError('no SNR offsets in block 0')
+        if self.enhanced:
+            self.block_snr(g, blk, stages)
+        else:
+            if g.get(1, 'snroffste', blk if blk and not (new and cpl) else 0):
+                csnr = (g.get(6, 'csnroffst') - 15) << 4
+                for ch in range(0 if cpl else 1, self.channels + 1):
+                    snr = (csnr + g.get(4, 'fsnroffst')) << 2
+                    if blk and self.snr_offset[ch] != snr:
+                        stages[ch] = max(stages[ch], 1)
+                    self.snr_offset[ch] = snr
+                    if snr == -960:
+                        self.used.add('snr offset -960')
+                    prev = self.fast_gain[ch]
+                    self.fast_gain[ch] = T['fast_gain'][g.get(3, 'fgaincod')]
+                    if blk and prev != self.fast_gain[ch]:
+                        stages[ch] = max(stages[ch], 2)
+            elif blk == 0:
+                raise DecodeError('no SNR offsets in block 0')
         if cpl:
-            if g.get(1, 'cplleake', blk, new):
+            if (self.enhanced and self.first_cpl_leak) or g.get(1, 'cplleake', blk, new):
                 fl, sl = g.get(3, 'cplfleak'), g.get(3, 'cplsleak')
                 if blk and (fl != p['cpl_fast_leak'] or sl != p['cpl_slow_leak']):
                     stages[CPL] = max(stages[CPL], 2)
                 p['cpl_fast_leak'], p['cpl_slow_leak'] = fl, sl
-            elif blk == 0:
+            elif blk == 0 and not self.enhanced:
                 raise DecodeError('no coupling leak information in block 0')
+            self.first_cpl_leak = False
         stale = any(self.dba_mode[ch] in (DBA_REUSE, DBA_NEW) and
                     not _dba_fits(self.dba[ch], T['bin_band'][self.start_freq[ch]])
                     for ch in range(0 if cpl else 1, nf + 1))
-        if g.get(1, 'deltbaie', stale or (new and cpl)):
+        if (not self.enhanced or self.dba_syntax) and g.get(1, 'deltbaie', stale or (new and cpl)):
             for ch in range(0 if cpl else 1, nf + 1):
                 fits = _dba_fits(self.dba[ch], T['bin_band'][self.start_freq[ch]]) and not (ch == CPL and new) \
                     and ch in self.dba_sent                 # the writer reuses only this frame's segments
@@ -611,7 +629,7 @@ class Decoder:
                 self.bap[ch] = calc_bap(self.mask[ch], self.psd[ch], self.start_freq[ch], self.end_freq[ch],
                                         self.snr_offset[ch], p['floor'])
         g.mark('mantissas', blk)
-        if g.get(1, 'skiple'):
+        if (not self.enhanced or self.skip_syntax) and g.get(1, 'skiple'):
             n = g.get(9, 'skipl')
             g.get(8 * n, 'skip')
             self.used.add('skip field')

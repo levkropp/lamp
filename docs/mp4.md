@@ -11,6 +11,7 @@ A file is recognised by a leading `ftyp`, `moov`, `mdat`, `wide`, `free` or `ski
 | `alac` | Apple Lossless: 16/20/24/32-bit, 1–8 channels in ALAC channel order, 8–192 kHz, frames of up to 65,536 samples |
 | `mp4a` with `esds` object type 0x40 or 0x67 | [AAC-LC or HE-AAC (v1 and v2)](aac.md), configuration from the DecoderSpecificInfo |
 | `ac-3` | [AC-3](ac3.md); the sync frames describe the stream (`dac3` is not needed) |
+| `ec-3` | Partial [E-AC-3 conventional-mantissa profile](eac3.md); sync frames supply rates and block counts |
 | `mp4a` with `esds` object type 0x6B or 0x69, `.mp3` | MPEG audio Layers I–III (MPEG-1 and MPEG-2 rates) |
 | `Opus` with `dOps` | Opus families 0/1 |
 | `fLaC` with `dfLa` | FLAC |
@@ -20,7 +21,7 @@ A file is recognised by a leading `ftyp`, `moov`, `mdat`, `wide`, `free` or `ski
 | `ima4` | QuickTime IMA ADPCM; 34 bytes per channel decode to 64 frames, 1–8 channels |
 | `agsm` | GSM 06.10 full-rate speech; 33-byte mono frames, bit-exact with libgsm |
 
-AAC object types other than LC, SBR and PS, and E-AC-3 (`ec-3`), reject when the track is opened (see [AAC](aac.md) and [AC-3](ac3.md) notes); other sample entries are skipped.
+AAC object types other than LC, SBR and PS reject when the track is opened. E-AC-3 (`ec-3`) supports the partial [conventional-mantissa profile](eac3.md); AHT/SPX/dependent substreams reject. Other sample entries are skipped.
 
 ## Samples and timing
 

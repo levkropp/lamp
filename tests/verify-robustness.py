@@ -25,6 +25,7 @@ from pathlib import Path
 import random
 import subprocess
 import sys
+import tempfile
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from lamp_test import ROOT, Failure, build_lamp, ffmpeg, lamp_cli, main_guard, scratch, write_report
@@ -82,6 +83,11 @@ SOURCES = [
     ('gsm.mov', PHONE + ['-c:a', 'libgsm']),
     ('tone.ac3', SURROUND + ['-c:a', 'ac3']),
     ('ac3.mka', SURROUND + ['-c:a', 'ac3']),
+    ('tone.ec3', SURROUND + ['-c:a', 'eac3', '-f', 'eac3']),
+    ('written.ec3', []),
+    ('eac3.mka', SURROUND + ['-c:a', 'eac3']),
+    ('eac3.mp4', SURROUND + ['-c:a', 'eac3']),
+    ('eac3.ts', SURROUND + ['-c:a', 'eac3']),
     ('vorbis.mka', NOISE + ['-c:a', 'libvorbis']),
     ('flac.mka', NOISE + ['-c:a', 'flac']),
     ('aac.mka', NOISE + ['-c:a', 'aac']),
@@ -111,6 +117,18 @@ SOURCES = [
     ('old.ape', None),
 ]
 LIMIT = 2 << 30                      # address space, Linux
+
+
+def wine_run(arguments, **options):
+    # Wine helpers can inherit the first client's output and hold a pipe open
+    # after that client exits. Wait on the process itself, keeping a bounded
+    # diagnostic tail, rather than treating a helper's open pipe as a hang.
+    with tempfile.TemporaryFile() as output:
+        result = subprocess.run(arguments, stdout=output, stderr=subprocess.STDOUT, **options)
+        output.seek(0, os.SEEK_END)
+        output.seek(max(0, output.tell()-1024))
+        result.stdout = output.read()
+    return result
 
 
 def mutate(data, rng):
@@ -183,7 +201,8 @@ def main():
     rng = random.Random(args.seed)
     if args.wine:
         command = ['wine', str(ROOT / 'bin' / 'lamp-cli.exe')]
-        env = dict(os.environ, WINEPREFIX=os.environ.get('WINEPREFIX', str(Path.home() / '.wine')), WINEDEBUG='-all')
+        env = dict(os.environ, WINEPREFIX=os.environ.get('WINEPREFIX', str(Path.home() / '.wine')),
+                   WINEDEBUG=os.environ.get('WINEDEBUG', '-all'))
         step = 10
         try:                         # Wine's first start may set up its prefix at length
             subprocess.run(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, env=env, timeout=600)
@@ -198,13 +217,20 @@ def main():
     for name, options in selected:
         source = work / name
         if not source.exists():
-            if options is None:
+            if name == 'written.ec3':
+                import eac3_vectors
+                data, _ = eac3_vectors.stream(20261007, 12, 7, 1, blocks=[1,2,3,6], short=0.25)
+                source.write_bytes(data)
+            elif options is None:
                 monkeys_audio(name, source)
             else:
                 ffmpeg(*options, source)
         original = source.read_bytes()
-        good = subprocess.run([*command, '--check', str(source)], stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-                              env=env, timeout=120)
+        if args.wine:
+            good = wine_run([*command, '--check', str(source)], env=env, timeout=120)
+        else:
+            good = subprocess.run([*command, '--check', str(source)], stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                                  env=env, timeout=120)
         if good.returncode:
             raise Failure(f'{name} does not decode before mutation: {good.stdout[-300:]}')
         counts = {0: 0, 2: 0}
@@ -216,9 +242,12 @@ def main():
             if (n // step) % 4 == 3:
                 options += ['--start', f'{rng.uniform(0, 1.4):.3f}']
             try:
-                result = subprocess.run([*command, *options, str(path)], stdout=subprocess.PIPE,
-                                        stderr=subprocess.STDOUT, env=env, timeout=30,
-                                        preexec_fn=limit_memory if resource and not args.wine else None)
+                if args.wine:
+                    result = wine_run([*command, *options, str(path)], env=env, timeout=30)
+                else:
+                    result = subprocess.run([*command, *options, str(path)], stdout=subprocess.PIPE,
+                                            stderr=subprocess.STDOUT, env=env, timeout=30,
+                                            preexec_fn=limit_memory if resource else None)
             except subprocess.TimeoutExpired:
                 (work / f'hang-{name}-{n}.bin').write_bytes(data)
                 raise Failure(f'mutation {n} of {name} ({options}) hung; kept as hang-{name}-{n}.bin')
@@ -237,6 +266,7 @@ def main():
         report += '-wine'
     write_report(report, {
         'result': 'passed', 'checks': checks, 'mutations': total, 'decoded': decoded,
+        **({'wine_debug': env['WINEDEBUG']} if args.wine else {}),
         'scope': f'{len(selected)} container/codec sources, {args.count} mutations each '
                  f'({"every tenth under Wine" if args.wine else "Linux, 2 GiB address space"}), seed {args.seed}: '
                  'byte flips, zero/0xff runs, cuts, removed and duplicated spans, large length fields; --check, '

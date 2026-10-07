@@ -17,7 +17,7 @@ sample_rate: .long 0
 source_channels: .long 0
 source_bits: .long 0
 decode_error: .long 0
-codec_kind: .long 0                 #1 WAV,2 FLAC,3 MP3,4 Vorbis,5 Opus,6 AIFF/AIFC,...,11 AC-3,12 WavPack,13 CAF,14 AVI,15 FLV,16 AU,17 APE
+codec_kind: .long 0                 #1 WAV,2 FLAC,3 MP3,4 Vorbis,5 Opus,6 AIFF/AIFC,...,11 AC-3,12 WavPack,13 CAF,14 AVI,15 FLV,16 AU,17 APE,18 LPCM,19 GSM,20 E-AC-3
 total_frames: .quad 0
 map_token: .quad 0
 map_base: .quad 0
