@@ -1,0 +1,436 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "pcm_u8-1.asf",
+      "result": "exact",
+      "pcm_sha256": "a8578d9d17983c3e3df53fc4cc0c6460fb495764f7810588290ea26e6560e63c"
+    },
+    {
+      "test": "pcm_s16le-1.asf",
+      "result": "exact",
+      "pcm_sha256": "aa1456ccfe694bca3a23074ba3dc645d3972331c1befee4d362a5fa6bedb4a69"
+    },
+    {
+      "test": "pcm_s16le-2.asf",
+      "result": "exact",
+      "pcm_sha256": "b832e0adfcdb115274845f1ef7d59c55b790996bf9466cc64620b08f99c7ee9d"
+    },
+    {
+      "test": "pcm_s24le-2.asf",
+      "result": "exact",
+      "pcm_sha256": "3d091bede7032281348efc08321aac7779801d1a7ccdc5efe85498957afbf5ae"
+    },
+    {
+      "test": "pcm_s32le-2.asf",
+      "result": "exact",
+      "pcm_sha256": "5ad019b76334334aa3ac313e3b4926105780197792786de303d671a933b6da11"
+    },
+    {
+      "test": "pcm_f32le-2.asf",
+      "result": "exact",
+      "pcm_sha256": "667ddef2cdc5a736fd8e6e8d041e5f767bac4da4a7eb0be6026f3cb25245b3eb"
+    },
+    {
+      "test": "pcm_f64le-1.asf",
+      "result": "exact",
+      "pcm_sha256": "8e05a13a202fe9642fddcc3f341c933b8abdc4dc7ef374d3a906c67a6facac62"
+    },
+    {
+      "test": "pcm_alaw-1.asf",
+      "result": "exact",
+      "pcm_sha256": "b20a7084012a66723f605a8c1daa46b8f9c463da56a2cf12ebc5e549a92e9773"
+    },
+    {
+      "test": "pcm_alaw-2.asf",
+      "result": "exact",
+      "pcm_sha256": "0c064715d7e5d9e543b95eaa01ae47f9830eafbd52d915d4ae604600a5395529"
+    },
+    {
+      "test": "pcm_mulaw-2.asf",
+      "result": "exact",
+      "pcm_sha256": "91e74c7e98aacfeda2bd388058d42a79537485394a25470542f955214665ae34"
+    },
+    {
+      "test": "adpcm_ima_wav-1.asf",
+      "result": "exact",
+      "pcm_sha256": "568684534561d937862d058e7d9e389374e75906eb0c45ac11b7f3a826810d4e"
+    },
+    {
+      "test": "adpcm_ima_wav-2.asf",
+      "result": "exact",
+      "pcm_sha256": "77185594d536062cc2ef8fba10e92d6f86bd2340110e9c03ae8941bc71d95da6"
+    },
+    {
+      "test": "adpcm_ms-1.asf",
+      "result": "exact",
+      "pcm_sha256": "f8582dfe8688d6dd097855fae2bf67df53fcc7d5cba6047a26d76c4793c589bd"
+    },
+    {
+      "test": "adpcm_ms-2.asf",
+      "result": "exact",
+      "pcm_sha256": "f36a1d5adda05420b661ccd657a6b0234c268d103100c3517f7446f0fe3702d7"
+    },
+    {
+      "test": "mp2-2.asf",
+      "result": "exact",
+      "pcm_sha256": "6e95714bb0ab1ec7a7d85360c576a7b8ae24c0101fdd09a4608ca3f58bc86766"
+    },
+    {
+      "test": "libmp3lame-2.asf",
+      "result": "exact",
+      "pcm_sha256": "00643145d70f94e8a24036bc1c0ba56218dfa3e91fdd70a411fd3ff93c4c9200"
+    },
+    {
+      "test": "ac3.asf",
+      "result": "exact",
+      "pcm_sha256": "b3f3611b9a254c4af61f8febb43fb0253fc313babcb424a78e7c209d5c20cfdb"
+    },
+    {
+      "test": "aac.asf",
+      "result": "exact",
+      "pcm_sha256": "35ed960c27c6550c3a2583a4502ddc05a5d4eca5358dc832c55af3ce61dac512"
+    },
+    {
+      "test": "legacy-zero-length.asf",
+      "result": "exact",
+      "pcm_sha256": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1"
+    },
+    {
+      "test": "odd-chunks.asf",
+      "result": "exact",
+      "pcm_sha256": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1"
+    },
+    {
+      "test": "wide-span.asf",
+      "result": "exact",
+      "pcm_sha256": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1"
+    },
+    {
+      "test": "compressed-objects.asf",
+      "result": "exact",
+      "pcm_sha256": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1"
+    },
+    {
+      "test": "variable-packets.asf",
+      "result": "exact",
+      "pcm_sha256": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1"
+    },
+    {
+      "test": "span-one.asf",
+      "result": "exact",
+      "pcm_sha256": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1"
+    },
+    {
+      "test": "one-row.asf",
+      "result": "exact",
+      "pcm_sha256": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1"
+    },
+    {
+      "test": "seven-byte-record.asf",
+      "result": "exact",
+      "pcm_sha256": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1"
+    },
+    {
+      "test": "silence-data.asf",
+      "result": "exact",
+      "pcm_sha256": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1"
+    },
+    {
+      "test": "Unicode-\u97f3\u697d-\u03a9.asf",
+      "result": "exact",
+      "pcm_sha256": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1"
+    },
+    {
+      "test": "max-span.asf",
+      "result": "exact",
+      "pcm_sha256": "b3fba10596556f816a426a414b4770647e3bcc003a830adb020ce20134b0f3cc"
+    },
+    {
+      "test": "max-packet.asf",
+      "result": "exact",
+      "pcm_sha256": "7aa4999174f53e475a7009c89f43c840cb4402b767c2d6049e34c1359a0b5d7f"
+    },
+    {
+      "test": "max-chunk.asf",
+      "result": "exact",
+      "pcm_sha256": "3e8f7bebd498a8b4a0c610db2a005ce76d65e9288b455cc0a0be4bcf501b7047"
+    },
+    {
+      "test": "skip-unavailable-0.asf",
+      "result": "exact",
+      "pcm_sha256": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1"
+    },
+    {
+      "test": "skip-unavailable-2.asf",
+      "result": "exact",
+      "pcm_sha256": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1"
+    },
+    {
+      "test": "multitrack-0.asf",
+      "result": "exact",
+      "pcm_sha256": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1"
+    },
+    {
+      "test": "multitrack-1.asf",
+      "result": "exact",
+      "pcm_sha256": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1"
+    },
+    {
+      "test": "multitrack-2.asf",
+      "result": "exact",
+      "pcm_sha256": "8be13872807de301ea52369611289723c61afb713b61f0d753ac66553fbd1640"
+    },
+    {
+      "test": "metadata-chapters.asf",
+      "result": "exact",
+      "pcm_sha256": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1"
+    },
+    {
+      "test": "no-lists.asf",
+      "result": "exact",
+      "pcm_sha256": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1"
+    },
+    {
+      "test": "top-level-wrapper.asf",
+      "result": "exact",
+      "pcm_sha256": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1"
+    },
+    {
+      "test": "depth-four.asf",
+      "result": "exact",
+      "pcm_sha256": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1"
+    },
+    {
+      "test": "max-name.asf",
+      "result": "exact",
+      "pcm_sha256": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1"
+    },
+    {
+      "test": "large-info.asf",
+      "result": "exact",
+      "pcm_sha256": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1"
+    },
+    {
+      "test": "empty-names.asf",
+      "result": "exact",
+      "pcm_sha256": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1"
+    },
+    {
+      "test": "empty-system-info.asf",
+      "result": "exact",
+      "pcm_sha256": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1"
+    },
+    {
+      "test": "standalone-plus-extension.asf",
+      "result": "exact",
+      "pcm_sha256": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1"
+    },
+    {
+      "test": "fixed-payload-extensions.asf",
+      "result": "exact",
+      "pcm_sha256": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1"
+    },
+    {
+      "test": "variable-payload-extension.asf",
+      "result": "exact",
+      "pcm_sha256": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1"
+    },
+    {
+      "test": "catalog-127-0.asf",
+      "result": "exact",
+      "pcm_sha256": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1"
+    },
+    {
+      "test": "catalog-127-127.asf",
+      "result": "exact",
+      "pcm_sha256": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1"
+    },
+    {
+      "test": "quota-exact.asf",
+      "result": "exact",
+      "pcm_sha256": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1"
+    },
+    {
+      "test": "object-quota-exact.asf",
+      "result": "exact",
+      "pcm_sha256": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1"
+    }
+  ],
+  "cli_sha256": "b908eea97cfb178b796cb9fc93b6e5086be50d5936499898f8c5e0ab085daade",
+  "cli_bytes": 434352,
+  "runtime_sources": {
+    "src/asf.s": "e82d9c9e864eae694320d5bae237e9714c63f9ef73111369d988eed5bd10e6b7",
+    "src/asf_extended.inc": "f4a41d6572b245d8acc44fd93ace28a94ffa1deee5e71eab0a0eb4391abf296f",
+    "src/asf_spread.inc": "29af589bc2f54e64db22fffa882ebf6045a8d1e31114ceedfc512dd6b076a608",
+    "src/avi.s": "56f1336d789997c4e4d2d11946129f8f2a1d22ee46c653cd40dacacb4ebeac59",
+    "src/decoder.s": "44e88449c121f6d67f1805555f15663fe2d3883531fce2dbf5a8587e58f1d8f8",
+    "src/track.s": "a0ab0586b55a7ca052e9d457733eb6bdb160f90c04b9e5359b76e401a85ae91d",
+    "src/mpegts.s": "5dafcb58db5d634684462207d45e55ff088d5bf032f62d8302adc39be6ef125e",
+    "tests/verify-asf-extended.py": "ccb965104e655cc05b4223c49347855bf9411c5fba08fdb464c5ad94da86f32d",
+    "tests/asf-extended-oracle.c": "69d3855f79b57669a87c6e44c7a8ab115f0749b293753bc3e7d7ef5da0f7ea43",
+    "tests/asf-boundary-oracle.c": "39da9b58a61fcaa0dda90bd53818f429548fee2081989734b64c61aa614c7881",
+    "tests/asf-spread-oracle.c": "42989ca1c8c32a83cb46bb09e15059481909dd619f07819119d17e8b34870595",
+    "tests/asf-seek-oracle.c": "67fd0e72951d7cb8683e7c8885fd0e5cbbf19b62662e56bc0bb20e104eb2da9f",
+    "tests/seek-oracle.c": "3354db980a9957d61d5d9d054110faacb0159e25640fbc42905edd254517f148",
+    "tests/chain-oracle.c": "770757565631753a57a6a8352cbac5ffecd33bb380eec247f23874277f7a00f7",
+    "tests/track-catalog-oracle.c": "93175cde74b34ab85aeb8838c5a428cd39955adf45fdd6407229ad45488e652f",
+    "tests/verify-asf-spread.py": "ba1cd647b6e5a5c22b6e6ac7ffc56042ce81ec156f73983f37fc4b58a245cbf0",
+    "tests/verify-asf.py": "58767cd614fdc166538826e54c03ed80faf35c9c695fd8e80fa3d54859bf50dc",
+    "tests/verify-asf-metadata.py": "3db9d546449303bd07b2744784185805526b375e5b76d0033229644752de78ac",
+    "tests/verify-asf-chapters.py": "006d96022c3b0756af839d2593a70d2fc9f8ec3abd69bc49c138a947dfac0489",
+    "tests/verify-robustness.py": "33133ac03d5006b41f34ff6575d6b6e02b5c72e702069176d39e72febb18aebf"
+  },
+  "fixture_hashes": {
+    "Unicode-\u97f3\u697d-\u03a9.asf": "2e0bfa7afbcbd7d9c7ad59c28170ed057a7b6f95e969d7047f5ac436fda01c81",
+    "Unicode-\u97f3\u697d-\u03a9.asf.ffmpeg.f32": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "aac.asf": "3990b4b45fdbac0e5a008b99094fd7ab6ce79c702d309ca3e4bc75101098b4b7",
+    "aac.asf.aac": "2f7d1d29db8674ee67a8911929e147c2857096c14be2ed142c8be8604d3f6e48",
+    "aac.asf.ffmpeg.f32": "f8edded72eb8c1ca4827a8d4d298584b9993b96e11ae0b2b1a6dcdaaba4bc57e",
+    "ac3.asf": "99f6337e8674739c647f2aeacc097e64da47063523856b5a0de34d2d7dfb0f19",
+    "ac3.asf.ffmpeg.f32": "bb3f4fd366d21a9550bf1f227ec809221053c6c4391df58a1eb6e4ed2dd517ac",
+    "ac3.asf.wav": "a73a944e843828ab69ac289f130db05b68bfc03d47be72cd1d19f9ee2af0a17d",
+    "adpcm_ima_wav-1.asf": "cc7bdb0589a07c0467870cd6d12fa6c7ef53e8a4eddbd61cbd35c648a4bffeb3",
+    "adpcm_ima_wav-1.asf.ffmpeg.f32": "7ce45ddbc19e9826a506f90339e9a73d4462fa8a7a57f78412f447a7611121e2",
+    "adpcm_ima_wav-1.asf.wav": "7a04bf70b97273e5a3986531e96e08bb949f61dab87a62514cb7b0a5090b9c31",
+    "adpcm_ima_wav-2.asf": "dfdf6028e7435162644d4fb7643e5879c86bacf9ef5030ac291fcebb41d4d505",
+    "adpcm_ima_wav-2.asf.ffmpeg.f32": "3c76c23f83aa76056d0cabd6a46793c51e18df4d8554692184cbbf6d6f9ed480",
+    "adpcm_ima_wav-2.asf.wav": "b5b0d1ab7d4a3b9b2dceb8072c446e8242f972fd269a09da7650320679a5c6f1",
+    "adpcm_ms-1.asf": "b26ab9c7d2366c1c5f228f281b8bcba756244428c3e19a028b72806a98503e91",
+    "adpcm_ms-1.asf.ffmpeg.f32": "f8582dfe8688d6dd097855fae2bf67df53fcc7d5cba6047a26d76c4793c589bd",
+    "adpcm_ms-1.asf.wav": "b91431a518f5ea917e20f5ca0aa0ecac8e31f2a34c0ce5627c43e905f8aaa975",
+    "adpcm_ms-2.asf": "b7d493953517aa882ca7b108a8be02fc4ce315bb3b2cf8eb8fd8b52c5d1174ed",
+    "adpcm_ms-2.asf.ffmpeg.f32": "f36a1d5adda05420b661ccd657a6b0234c268d103100c3517f7446f0fe3702d7",
+    "adpcm_ms-2.asf.wav": "5492221a3d019be08248827996f7d02e5e0e1932a122304c2fba0afe0ad7f63b",
+    "bad-child-guid.asf": "c04bf1edbe9e6b79517994b9e8eb9b85f62d4a0014bf57328ec460c1be696f9f",
+    "basic.object": "b8db4310f79831c9950308f165273e5a625e1a4c11e3782243466a222c65829f",
+    "catalog-127-0.asf": "57d7d66fb69bba0f3982c6a7e0de61cd71f93784f4e5ef7774a3970261043971",
+    "catalog-127-127.asf": "57d7d66fb69bba0f3982c6a7e0de61cd71f93784f4e5ef7774a3970261043971",
+    "compressed-objects.asf": "677490f2f15ac73eb9fa34b93bb56dece5fcb12c8965ffd20dcbc115130f2a05",
+    "compressed-objects.asf.ffmpeg.f32": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "depth-five.asf": "f3605cf3e196ddf14c302438e1a8422d8996492b032d83cf4165a007f77c47b7",
+    "depth-four.asf": "39eb9e7cc566d7799f5e7cd3b64fd98e62b932ebecdd056a232ba84e582caa6d",
+    "depth-four.asf.ffmpeg.f32": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "duplicate-stream-id.asf": "c57604850bf3624613987baad0b69d90c69a5f0bca4cfa29ddd8aba4eeaff11a",
+    "empty-names.asf": "e55a5170b4557a8af0cedd3a0fc754ca02aafe6cc8cd26a8432c2a5260e9691d",
+    "empty-names.asf.ffmpeg.f32": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "empty-system-info.asf": "84e5579daf8cbce540d8e81b80e763b362cae16a6cb2d6c853387bcb7c63a4d6",
+    "empty-system-info.asf.ffmpeg.f32": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "extra-child-byte.asf": "c6938d0066675c3c4d1cf82d1520077a408dc9c5897f94e64af3ca92956a7dad",
+    "fixed-payload-extensions.asf": "5907c9dce237a0e0916f9cc83779fefffe8545cf5a3a9839253f2ae5f59ceecc",
+    "fixed-payload-extensions.asf.ffmpeg.f32": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "large-id.asf": "f09fba1415cb78e464d5e4601aa9351b95435a3d6da70364836c999aff939ff1",
+    "large-info.asf": "eef0df8fdf9c3f1afdc06e53a491d248682912ad177c10d68f51d98aa786d2e2",
+    "large-info.asf.ffmpeg.f32": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "large-info.object": "3ddfc0e85b9cc9f64ed41a0cc638752648049ce62267162a195dc0c16ef2ab89",
+    "legacy-zero-length.asf": "8410a249ecc9f7c1d50744fd49a454161fcd8ea1b8fc9bb49188d1cc4fb48016",
+    "legacy-zero-length.asf.ffmpeg.f32": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "libmp3lame-2.asf": "0ff964a2aa8c57ac59c55e9bdd703a2aa708eb7ce86c33f3a75a7ee938f4d51c",
+    "libmp3lame-2.asf.ffmpeg.f32": "eb6dfca01289eb6d27ffb13837f4998ac826b69ab437c4ca6e00746e3ef12680",
+    "libmp3lame-2.asf.wav": "850b32a8bab5214cec87e680868a5acbf888393dcd34854c7aecf5df479b6026",
+    "lists.object": "204daa62785e91d2a65db34a590bde2e134b8c8a17172b1cd3d017b302432954",
+    "many-names.object": "ab5df8e2c2c4f4fe355f06134d66e1ca4674bb2df97e5ed8e66fe45a92f1c534",
+    "max-chunk.asf": "7b823e62134672b816f605b51d7c257ef0b031dfa40737039765022f8844b427",
+    "max-chunk.asf.ffmpeg.f32": "3e8f7bebd498a8b4a0c610db2a005ce76d65e9288b455cc0a0be4bcf501b7047",
+    "max-chunk.asf.wav": "481edc4f6f64688a446a2136b066d2ada8d7d1dfb1b30b1850b631420969dc89",
+    "max-name.asf": "e39b23c8261696cdde5fcc1e3ab0f4133b0a9302ee632190cef349642fa35b98",
+    "max-name.asf.ffmpeg.f32": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "max-name.object": "ffe99ec9ca2f5aad7a4bdd92e40c95bffb6419d5b9c4c7b584ac19a1dbe8f17d",
+    "max-packet.asf": "f4a1c6e3cad23d7aaea35a4c02eea74ee668a6c10ce72df7b91219a1ee925b27",
+    "max-packet.asf.ffmpeg.f32": "7aa4999174f53e475a7009c89f43c840cb4402b767c2d6049e34c1359a0b5d7f",
+    "max-packet.asf.wav": "58734a46d81787c846b9dcce590a953f17fec526f1164c874fa4dcbbf67c5e5e",
+    "max-span.asf": "ce21e4dd9a615c0f95a4d7e5b598d3f1fbf72cc005ff24c195a474dc5be79317",
+    "max-span.asf.ffmpeg.f32": "b3fba10596556f816a426a414b4770647e3bcc003a830adb020ce20134b0f3cc",
+    "max-span.asf.wav": "3c21fc786edfb77984a3805ca7b8300d279a1d58e8791a8c43761d6d7c609321",
+    "metadata-chapters.asf": "0d7b5ae782bd66e49b8eb9c7af5702e9aa1b7f7c64b01ca33c824237dca3946c",
+    "metadata-chapters.asf.ffmpeg.f32": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "mismatched-id.asf": "87ff263eaf6c79bdd394109642478da43948e4f492bc15fa9e4b71ca794df662",
+    "mp2-2.asf": "e5871b6c3ba8877a0d36f246c071204274ef15594f7180fce6d30d56e49ff18e",
+    "mp2-2.asf.ffmpeg.f32": "c88e7dd78ede5da06a26fca730ede6df0f09d1cd5c9fd09fc6960e1679f4662c",
+    "mp2-2.asf.wav": "ba4f0866a0e73ac641c711f563339516e74d7f0232b2c72276d2be7f60865912",
+    "multitrack-0.asf": "6e204839b5060b3005c55f36071ae1d2801a5180be704d663da2925b9c8fd29e",
+    "multitrack-0.asf.ffmpeg.f32": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "multitrack-1.asf": "6e204839b5060b3005c55f36071ae1d2801a5180be704d663da2925b9c8fd29e",
+    "multitrack-1.asf.ffmpeg.f32": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "multitrack-2.asf": "6e204839b5060b3005c55f36071ae1d2801a5180be704d663da2925b9c8fd29e",
+    "multitrack-2.asf.ffmpeg.f32": "8be13872807de301ea52369611289723c61afb713b61f0d753ac66553fbd1640",
+    "name-count.asf": "d623016c36d2ae22f11f51fce195ad4f668fb8c4ea98d9c33942651388f66fbd",
+    "no-lists.asf": "70b034024f77af1a1ef45d50140fedbeb2bedbe016f24933709d22292ebe10be",
+    "no-lists.asf.ffmpeg.f32": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "object-quota-exact.asf": "42302a8ba28e374b9429dad9ecc3dfcb9798dbd9def2982e1895b275242b6c34",
+    "object-quota-exceeded.asf": "2c6094bbc3bee86b1a48581bde9ddfa0bbf899f9579f5fcc9cd351959af9bb65",
+    "odd-chunks.asf": "f518947cfdad4b954fa9ee3384079065eb7de1f9290cc1bb547746eec7e8ba58",
+    "odd-chunks.asf.ffmpeg.f32": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "odd-name.asf": "bfd24940064643d21c6bc7422c9b6126daaeeb526e9147618c960087aefadbc7",
+    "one-row.asf": "1db082c0c72fb650cb240fbed79527c5484c09716c7e2180012eb68e9c3807eb",
+    "one-row.asf.ffmpeg.f32": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "other.wav": "1941451502ef81668a3bb40ddc302ff420aba01a8039b7c3e129cc19649f8b7f",
+    "packet-source.wav": "5a838235f4b0551f3345e1bfc0420928bb124c8f1aa8442e033d51030436ea1a",
+    "pcm_alaw-1.asf": "57b9dd6c01a523ff9b43e7a6adfadcdd0bd6d7b8fec6d5e90c6f9bb531b0738c",
+    "pcm_alaw-1.asf.ffmpeg.f32": "b20a7084012a66723f605a8c1daa46b8f9c463da56a2cf12ebc5e549a92e9773",
+    "pcm_alaw-1.asf.wav": "14bb22d19f103a369981987b8812fdd9bb9ead6755dd13684f41868f54795a10",
+    "pcm_alaw-2.asf": "34d81456fd86c392d6706319f34fb50e0d419d0ee3eb9a809c035d2581e44ffa",
+    "pcm_alaw-2.asf.ffmpeg.f32": "0c064715d7e5d9e543b95eaa01ae47f9830eafbd52d915d4ae604600a5395529",
+    "pcm_alaw-2.asf.wav": "73ccaa87345adcfccc64eaa3af3442d6a515a340184b7ea041d12227affa99d0",
+    "pcm_f32le-2.asf": "ad4aee739fd401239decf978105500bfe971fb528a7cf7bc5af502f7e3d51f04",
+    "pcm_f32le-2.asf.ffmpeg.f32": "667ddef2cdc5a736fd8e6e8d041e5f767bac4da4a7eb0be6026f3cb25245b3eb",
+    "pcm_f32le-2.asf.wav": "1cfba7be7b2eb7ad1546a4955e1db03a462002aee3304afeb813aca07581e983",
+    "pcm_f64le-1.asf": "cf97cdd15a73da27f0aae16c936c4ef9a72dcbbd6906efbf62c943a40d15cb5c",
+    "pcm_f64le-1.asf.ffmpeg.f32": "8e05a13a202fe9642fddcc3f341c933b8abdc4dc7ef374d3a906c67a6facac62",
+    "pcm_f64le-1.asf.wav": "cfe3af1858d2c2e0112cf85c3205e942d3f53b556309c2f1f3b38d0b06051ae7",
+    "pcm_mulaw-2.asf": "dc50b714bc53e50e08e1c81e77e8dfb249e32e8774632e997d1eda4dcbf608f2",
+    "pcm_mulaw-2.asf.ffmpeg.f32": "91e74c7e98aacfeda2bd388058d42a79537485394a25470542f955214665ae34",
+    "pcm_mulaw-2.asf.wav": "0def982dbebd1c0f56b335e507cddebf57b328bea409d99a279fe51f4f6c8a86",
+    "pcm_s16le-1.asf": "c4b0dfc773443e98708a4cb91b09e3f8efed15b20974d13c4300e6467c378c70",
+    "pcm_s16le-1.asf.ffmpeg.f32": "aa1456ccfe694bca3a23074ba3dc645d3972331c1befee4d362a5fa6bedb4a69",
+    "pcm_s16le-1.asf.wav": "0bf0ed6633eb9cf3b617d564c3997fb3160432cf7e938829964d832917da0626",
+    "pcm_s16le-2.asf": "8d76ee71e45e3ccae537927d8bdc4382e01944edc27be08f83c49760c08be13a",
+    "pcm_s16le-2.asf.ffmpeg.f32": "b832e0adfcdb115274845f1ef7d59c55b790996bf9466cc64620b08f99c7ee9d",
+    "pcm_s16le-2.asf.wav": "30396d5c34b6800fc6bc6093717b9cbfe5e423be15beb2c127c72e0625bcc21d",
+    "pcm_s24le-2.asf": "36c0a0aa3cc4921fe145205f411db42e7d39540b67bce4c3e3e7f15c18dd6594",
+    "pcm_s24le-2.asf.ffmpeg.f32": "3d091bede7032281348efc08321aac7779801d1a7ccdc5efe85498957afbf5ae",
+    "pcm_s24le-2.asf.wav": "7e5cd971d562ade23f7306d4575656374b2ba494124de11e3acf2a28a8f08398",
+    "pcm_s32le-2.asf": "dbdd55a245b89eb5d6fba3b02bd13e90767f558f2934502798111d151a96fcd3",
+    "pcm_s32le-2.asf.ffmpeg.f32": "5ad019b76334334aa3ac313e3b4926105780197792786de303d671a933b6da11",
+    "pcm_s32le-2.asf.wav": "4de023516eead1f54d4071befdaa1f92cc3ad53cc19964ed420b58b2e7c69217",
+    "pcm_u8-1.asf": "ec3eec2612ff3573c1be741aba909fcbf7036b71e1d08d0bd607a893cd1c25cf",
+    "pcm_u8-1.asf.ffmpeg.f32": "a8578d9d17983c3e3df53fc4cc0c6460fb495764f7810588290ea26e6560e63c",
+    "pcm_u8-1.asf.wav": "c890be8ee16df00cf1eabdbaa07d13d823b61afc2bef1561622d82cc92da42c9",
+    "quota-exact.asf": "260e80fa808c00984d0af84a65d7959729fed365af2b6ef58a09905ff8448c4d",
+    "quota-exceeded.asf": "120d25ad303f18a49e58b592a29d45f0539c98f609c94c489e87ed36448fca0a",
+    "seven-byte-record.asf": "f2671d07d044eaadb488e1039847505be0233b45397dfc1e83496a2f2b76998a",
+    "short-child.asf": "aa1ce00109bb99a0ff340872d5a76373707f28b14f7a42e8d03047bbd8d4f522",
+    "short-fixed.asf": "2786179afde81cff5818c92576a73cb2091de3b94a5a104fe1fbfb01a2cfef29",
+    "short-name-prefix.asf": "383b76bf2922ebff6d592ef5c596489ca04b7a4f28e1df280498bb23a5538fb2",
+    "short-name.asf": "6f200cd97aa88705af2c55cb9abb8e835fe965e8a7c32db0a5e350a4d830a5f0",
+    "short-system-prefix.asf": "2739704e7ca923a42aead9d85276dc6afe4137409bee1f22e4cfb57fa9f1e751",
+    "silence-data.asf": "98e1a1887fb8525673dd4df220c2e0954169d1a6d95a4149d2c0ee9b83347830",
+    "silence-data.asf.ffmpeg.f32": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "single-quota-exceeded.asf": "50bd4de9a697e4d57ae4fcc1a055ee7a5b8ae55ae51e1caecefd847d2ff1572f",
+    "skip-unavailable-0.asf": "16d1d23c7069d0914858c0ad08be10011095477a93d110468790d1f95a46e945",
+    "skip-unavailable-2.asf": "16d1d23c7069d0914858c0ad08be10011095477a93d110468790d1f95a46e945",
+    "span-one.asf": "45dcbf7310336436c01ad150048bc29ffda949573127d934cb56f7142b0c5d70",
+    "span-one.asf.ffmpeg.f32": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "sparse-plan.json": "954ccdb621a21200d028c9f02937499cc9be5b13ea7ac715102f2dca9555af11",
+    "sparse-prefix.bin": "2787e6d23aa52c340ed6783ba35147ecf3d3297c59c1f42290cc31bae7b918b3",
+    "sparse-suffix.bin": "55ec882ea9e3c4999e9918eeb8d6efd5ee35e59d3b7c8b4fe949980ca6d7d716",
+    "standalone-plus-extension.asf": "00e755f1ada3c9cb3085d3199694e823617a16ca94d97ec71a6d8bafeb91d00a",
+    "standalone-plus-extension.asf.ffmpeg.f32": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "system-count.asf": "1d0c999c23b008aafeaefbd8f752b257f51bb9ab9c7dc74e21da10b1eabfab06",
+    "system-info-overrun.asf": "2d0d3a215dcd1812900f23064800237fd9f07858fb72a1110a3526a10767effe",
+    "top-level-wrapper.asf": "e8c77d6622456428e2a63f25f3d7545673d33f6a4e7c57ffc0536a1e88b13a57",
+    "top-level-wrapper.asf.ffmpeg.f32": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "two-children.asf": "f0c6cf604b3acd1dc2cda8ec8f476152b7c9d10d56d93be2557b64070399112b",
+    "unavailable-embedded-track.asf": "57d7d66fb69bba0f3982c6a7e0de61cd71f93784f4e5ef7774a3970261043971",
+    "variable-packets.asf": "0595b724d28c3a4713435b5b0b4bb8bb2757c70527a383464957dc41ce360c10",
+    "variable-packets.asf.ffmpeg.f32": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "variable-payload-extension.asf": "a3102b5ab81e05c8a259ca3c25f67c5bc76f47d92a4bad53b0adfcfa95495c79",
+    "variable-payload-extension.asf.ffmpeg.f32": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "wide-span.asf": "388a7d3f326e27aa3d22d2fa43d0b7e3635a5b23937c3c7fc3bdfd93b38b2bbc",
+    "wide-span.asf.ffmpeg.f32": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "zero-id.asf": "f0be1923d8ced0e6a1f9cd25ff179b823ef1475b392b5fcbcbe0b5eb0793982a"
+  },
+  "debug_cli_sha256": "724c0e043ede9d943706a21f5f28d4aa10ef0a575b2c1469528a72e88fbf4829",
+  "native_report_sha256": "cb0114c8ca295b4ccdebda2f753cd1e655fb4f6a774ae0efd29b186275053e42",
+  "scope": "Shipping static stripped Linux build: all 51 embedded/ordinary/track cases equal the guarded native run"
+}

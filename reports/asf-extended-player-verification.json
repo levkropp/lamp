@@ -1,0 +1,426 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "ASF selected metadata and cover",
+      "result": "rendered cover and title follow paused track choice",
+      "embedded_stream_properties": false,
+      "spreading_layouts": null,
+      "selected_track_runs": null,
+      "observations": [
+        {
+          "title": "LAMP Test \u2013 ASF red \ud83c\udfb5 - LAMP",
+          "play_control": "Play",
+          "position": 0,
+          "pixels": {
+            "red": 576,
+            "blue": 0,
+            "green": 0,
+            "samples": 6222,
+            "width": 812,
+            "height": 483
+          }
+        },
+        {
+          "title": "LAMP Test \u2013 ASF blue \u6f22\u5b57 - LAMP",
+          "play_control": "Play",
+          "position": 0,
+          "pixels": {
+            "red": 0,
+            "blue": 576,
+            "green": 0,
+            "samples": 6222,
+            "width": 812,
+            "height": 483
+          }
+        },
+        {
+          "title": "LAMP Test \u2013 ASF red \ud83c\udfb5 - LAMP",
+          "play_control": "Play",
+          "position": 0,
+          "pixels": {
+            "red": 576,
+            "blue": 0,
+            "green": 0,
+            "samples": 6222,
+            "width": 812,
+            "height": 483
+          }
+        }
+      ],
+      "real_keyboard_popup_choices": [
+        "Track 2",
+        "Automatic"
+      ],
+      "automatic_runs": [
+        [
+          "1",
+          145,
+          58080
+        ]
+      ],
+      "fixture_sha256": "972444509b97ba999d8500e26f0e6ccc0c75d3659cf6a24cf44e308a5258221e",
+      "picture_sha256": [
+        "1b2bbf246184130848230202b2aad630691442c709f7ff015eb25b8639a5e5e1",
+        "785090597e739d0ec824dc66223d33f26ae4be8da5fc5711f202d5a41dafffb5"
+      ],
+      "reference_pcm_sha256": {
+        "1": "1fd7a2397b6c342729274a27ca00c5b48745a53bec036a4849fe8a9c03f76c57",
+        "2": "7bd15572065004fd6980565def3a145b0fcaa15c9f3c6d2936d9b2a685f9e564"
+      },
+      "player_sha256": "fb74d116ff919d64560df8716c05762622a45ae9d3ef44c7bc6d47f64cac5532",
+      "driver_sha256": "b5cbd43ce920d27f640a1bc84c4e3d230084946f7ac570eff5ae55c33204469d",
+      "pixel_oracle_sha256": "c2917aa0aa72203a7093918648c167ec22c4292b822b5f33b35df7117c9ecc5c",
+      "limit": "Pixel/title/audio observations under Wine; native Windows remains unverified"
+    },
+    {
+      "test": "asf chapter navigation",
+      "result": "brackets and menu choose heard-file chapters; pause preserved",
+      "paused_targets_ms": [
+        0,
+        1250,
+        3250,
+        1250,
+        3250,
+        6500,
+        6500,
+        3250,
+        6500
+      ],
+      "controls": [
+        "Play",
+        "10",
+        "Button",
+        "0",
+        "Play",
+        "10",
+        "Button",
+        "1388",
+        "Play",
+        "10",
+        "Button",
+        "3611",
+        "Play",
+        "10",
+        "Button",
+        "1388",
+        "Play",
+        "10",
+        "Button",
+        "3611",
+        "Play",
+        "10",
+        "Button",
+        "7222",
+        "Play",
+        "10",
+        "Button",
+        "7222",
+        "Play",
+        "10",
+        "Button",
+        "3611",
+        "Play",
+        "10",
+        "Button",
+        "7222",
+        "LAMP Test \u2013 Chapter A - LAMP"
+      ],
+      "segments": [
+        [
+          "A",
+          70,
+          107040
+        ],
+        [
+          "A",
+          312034,
+          408240
+        ]
+      ],
+      "paused_relative_targets_ms": [
+        0,
+        5000,
+        0
+      ],
+      "relative_controls": [
+        "Play",
+        "10",
+        "Button",
+        "0",
+        "Play",
+        "10",
+        "Button",
+        "5555",
+        "Play",
+        "10",
+        "Button",
+        "0"
+      ],
+      "fixture_sha256": "3bedaf6dda4322651fade9b74c47dadcf7e3ab12fac98eb81aaa7ca431f37dbb",
+      "reference_pcm_sha256": {
+        "A": "baf56ceecba92dc746f01d8b0d43317e62d72dc46bd8d970466b891bd2f63eac",
+        "B": "f75511869eb95946e237e8eeb5a3def88abe5925c7a6f711b6a38a27ad21a2f9"
+      },
+      "player_sha256": "fb74d116ff919d64560df8716c05762622a45ae9d3ef44c7bc6d47f64cac5532",
+      "driver_sha256": "b5cbd43ce920d27f640a1bc84c4e3d230084946f7ac570eff5ae55c33204469d",
+      "silent_paused_window_frames": 24000,
+      "limit": "Wine playback; native Windows remains unverified"
+    },
+    {
+      "test": "ASF spreading track metadata and cover",
+      "result": "rendered cover and title follow paused track choice",
+      "embedded_stream_properties": false,
+      "spreading_layouts": [
+        [
+          2,
+          768,
+          3
+        ],
+        [
+          3,
+          256,
+          4
+        ]
+      ],
+      "selected_track_runs": [
+        [
+          "2",
+          104,
+          58080
+        ]
+      ],
+      "observations": [
+        {
+          "title": "LAMP Test \u2013 ASF red \ud83c\udfb5 - LAMP",
+          "play_control": "Play",
+          "position": 0,
+          "pixels": {
+            "red": 576,
+            "blue": 0,
+            "green": 0,
+            "samples": 6222,
+            "width": 812,
+            "height": 483
+          }
+        },
+        {
+          "title": "LAMP Test \u2013 ASF blue \u6f22\u5b57 - LAMP",
+          "play_control": "Play",
+          "position": 0,
+          "pixels": {
+            "red": 0,
+            "blue": 576,
+            "green": 0,
+            "samples": 6222,
+            "width": 812,
+            "height": 483
+          }
+        },
+        {
+          "title": "LAMP Test \u2013 ASF blue \u6f22\u5b57 - LAMP",
+          "play_control": "Play",
+          "position": 0,
+          "pixels": {
+            "red": 0,
+            "blue": 576,
+            "green": 0,
+            "samples": 6222,
+            "width": 812,
+            "height": 483
+          }
+        },
+        {
+          "title": "LAMP Test \u2013 ASF red \ud83c\udfb5 - LAMP",
+          "play_control": "Play",
+          "position": 0,
+          "pixels": {
+            "red": 576,
+            "blue": 0,
+            "green": 0,
+            "samples": 6222,
+            "width": 812,
+            "height": 483
+          }
+        }
+      ],
+      "real_keyboard_popup_choices": [
+        "Track 2",
+        "Automatic"
+      ],
+      "automatic_runs": [
+        [
+          "1",
+          73,
+          57840
+        ]
+      ],
+      "fixture_sha256": "314ece86e8573d2bf55142fc9a40fe7c5853ca57e92078de7c1898be358a08a8",
+      "picture_sha256": [
+        "1b2bbf246184130848230202b2aad630691442c709f7ff015eb25b8639a5e5e1",
+        "785090597e739d0ec824dc66223d33f26ae4be8da5fc5711f202d5a41dafffb5"
+      ],
+      "reference_pcm_sha256": {
+        "1": "1fd7a2397b6c342729274a27ca00c5b48745a53bec036a4849fe8a9c03f76c57",
+        "2": "7bd15572065004fd6980565def3a145b0fcaa15c9f3c6d2936d9b2a685f9e564"
+      },
+      "player_sha256": "fb74d116ff919d64560df8716c05762622a45ae9d3ef44c7bc6d47f64cac5532",
+      "driver_sha256": "b5cbd43ce920d27f640a1bc84c4e3d230084946f7ac570eff5ae55c33204469d",
+      "pixel_oracle_sha256": "9a26fae03bc3f2ffbc430b06f31d350bc71b7bb67b4048b55c751248f5eb5808",
+      "limit": "Pixel/title/audio observations under Wine; native Windows remains unverified"
+    },
+    {
+      "test": "ASF embedded spreading track metadata and cover",
+      "result": "rendered cover and title follow paused track choice",
+      "embedded_stream_properties": true,
+      "spreading_layouts": [
+        [
+          2,
+          768,
+          3
+        ],
+        [
+          3,
+          256,
+          4
+        ]
+      ],
+      "selected_track_runs": [
+        [
+          "2",
+          3,
+          58080
+        ]
+      ],
+      "observations": [
+        {
+          "title": "LAMP Test \u2013 ASF red \ud83c\udfb5 - LAMP",
+          "play_control": "Play",
+          "position": 0,
+          "pixels": {
+            "red": 576,
+            "blue": 0,
+            "green": 0,
+            "samples": 6222,
+            "width": 812,
+            "height": 483
+          }
+        },
+        {
+          "title": "LAMP Test \u2013 ASF blue \u6f22\u5b57 - LAMP",
+          "play_control": "Play",
+          "position": 0,
+          "pixels": {
+            "red": 0,
+            "blue": 576,
+            "green": 0,
+            "samples": 6222,
+            "width": 812,
+            "height": 483
+          }
+        },
+        {
+          "title": "LAMP Test \u2013 ASF blue \u6f22\u5b57 - LAMP",
+          "play_control": "Play",
+          "position": 0,
+          "pixels": {
+            "red": 0,
+            "blue": 576,
+            "green": 0,
+            "samples": 6222,
+            "width": 812,
+            "height": 483
+          }
+        },
+        {
+          "title": "LAMP Test \u2013 ASF red \ud83c\udfb5 - LAMP",
+          "play_control": "Play",
+          "position": 0,
+          "pixels": {
+            "red": 576,
+            "blue": 0,
+            "green": 0,
+            "samples": 6222,
+            "width": 812,
+            "height": 483
+          }
+        }
+      ],
+      "real_keyboard_popup_choices": [
+        "Track 2",
+        "Automatic"
+      ],
+      "automatic_runs": [
+        [
+          "1",
+          225,
+          57840
+        ]
+      ],
+      "fixture_sha256": "13782ab6092305b148489c08d9fc9d26931ca7eac2424fb974a13b4d1a9dc431",
+      "picture_sha256": [
+        "1b2bbf246184130848230202b2aad630691442c709f7ff015eb25b8639a5e5e1",
+        "785090597e739d0ec824dc66223d33f26ae4be8da5fc5711f202d5a41dafffb5"
+      ],
+      "reference_pcm_sha256": {
+        "1": "1fd7a2397b6c342729274a27ca00c5b48745a53bec036a4849fe8a9c03f76c57",
+        "2": "7bd15572065004fd6980565def3a145b0fcaa15c9f3c6d2936d9b2a685f9e564"
+      },
+      "player_sha256": "fb74d116ff919d64560df8716c05762622a45ae9d3ef44c7bc6d47f64cac5532",
+      "driver_sha256": "b5cbd43ce920d27f640a1bc84c4e3d230084946f7ac570eff5ae55c33204469d",
+      "pixel_oracle_sha256": "fc009a4e30dff72fcb2afe195df91a6a5d935bd1b40a6719a23464b6fbb4b8e1",
+      "limit": "Pixel/title/audio observations under Wine; native Windows remains unverified"
+    }
+  ],
+  "source_hashes": {
+    "src/queue.s": "18b7b6ead963997cd3341af2deecc143bcb7ca5637c1558b0e9fc6204165b223",
+    "src/win/player.s": "7dfb1a6a7c81d37c29a72773a5a893d4f0a8b14611c8603f2c2037716c343154",
+    "src/win/ui.s": "d87244034a4b4baa48a71ca297330b129674717ecb6ec2a4cffbd2a0310d1301",
+    "src/win/ui_queue.inc": "4ce3d765b743ad29d118e02b87f566ebe44347cb1bce8d02b6291d1c13c8ad17",
+    "src/win/ui_menu.inc": "0d1ea389ea0c88157f740759e5a7224e6d964f33ce0ce8014ea9fca451891954",
+    "src/win/kernel32.def": "d3b93c1a54c07bdbb30ea043ee5176a848ed5ade1c10d67230d7121a09f1fd6c",
+    "tests/verify-player.py": "458b61b29ca46f1b8888406c8b185cc35e83432b31a0923e349f1d63aeca1bb4",
+    "src/decoder.s": "44e88449c121f6d67f1805555f15663fe2d3883531fce2dbf5a8587e58f1d8f8",
+    "src/mp4.s": "d498c8f74f2b157ad6a3e42984d8694667cb64b62074347c56a65cf7da3c622d",
+    "src/mkv.s": "4bfb6643338674c5597d1944f302b9435b065b5b7f559cf78e0f8a61c36fd05d",
+    "src/avi.s": "56f1336d789997c4e4d2d11946129f8f2a1d22ee46c653cd40dacacb4ebeac59",
+    "src/mpegts.s": "5dafcb58db5d634684462207d45e55ff088d5bf032f62d8302adc39be6ef125e",
+    "src/ogg_chain.s": "55d83b35ea390605b27a88f427f3871bd20fb5a51f4a0d83895dd54923708e10",
+    "src/win/ui_tracks.inc": "6ac6e03627d4d6d9654d3dc3c796ff515d46288b20ed5133d45b955af1013f4e",
+    "src/win/ui_draw.inc": "5a923131378d1facecafc49d24ac4d4b5184a4c7bc04cf26c18de5f89977a854",
+    "tests/ui-driver.s": "36a6ef9cb94375cbb9bd0062ee3a5ee125a02a4c0780097dfac400c4e2bc4aab",
+    "src/tags.s": "c3826724e4e67d7b840b6bbb38d7af4b60e370ad2a354a78cc85551ea5224de1",
+    "src/tags_asf.inc": "179a413a2fae216f5448953f2457e17bbf631203a3e2a10d45f2a86ba4d203a0",
+    "src/cover.inc": "4c6a2398bdd6d9dab885f7b01ac37e7bce6c1979f8de99ca9fd450ad6f0b4a71",
+    "src/asf.s": "e82d9c9e864eae694320d5bae237e9714c63f9ef73111369d988eed5bd10e6b7",
+    "src/chapters_asf.inc": "ec504ed49f0f9eb72b4cd2398c36a4bfdd1acc710061188c24b1b35da3d6b651",
+    "src/chapters.inc": "d1c07f752c20f3772c737d2959e3a94525d582efb0807a8d9921cd234db2dc59",
+    "tests/verify-asf-chapters.py": "006d96022c3b0756af839d2593a70d2fc9f8ec3abd69bc49c138a947dfac0489",
+    "src/asf_spread.inc": "29af589bc2f54e64db22fffa882ebf6045a8d1e31114ceedfc512dd6b076a608",
+    "tests/verify-asf-spread.py": "ba1cd647b6e5a5c22b6e6ac7ffc56042ce81ec156f73983f37fc4b58a245cbf0",
+    "src/asf_extended.inc": "f4a41d6572b245d8acc44fd93ace28a94ffa1deee5e71eab0a0eb4391abf296f",
+    "tests/verify-asf-extended.py": "ccb965104e655cc05b4223c49347855bf9411c5fba08fdb464c5ad94da86f32d",
+    "tests/asf-metadata-player-oracle.c": "7882a422a1a21528366544e3786e50cb49925f26694f72bd3477ee5e9cec0a2c",
+    "tests/verify-asf-metadata.py": "3db9d546449303bd07b2744784185805526b375e5b76d0033229644752de78ac"
+  },
+  "selected_scenarios": [
+    "asf_extended",
+    "asf_spread",
+    "asf_metadata",
+    "asf_chapter_navigation"
+  ],
+  "scope": "Selected Windows player scenarios under Wine on Xvfb",
+  "wine_address_randomization": "Disabled per process with setarch x86_64 -R to avoid Wine 8 shared-user-data startup mapping failures",
+  "playback_environment": "Private PulseAudio sink inside dbus-run-session; avoids the shared org.PulseAudio1 name conflict",
+  "shipping_artifacts": {
+    "lamp.exe": {
+      "bytes": 483328,
+      "sha256": "fb74d116ff919d64560df8716c05762622a45ae9d3ef44c7bc6d47f64cac5532"
+    },
+    "lamp-cli.exe": {
+      "bytes": 457728,
+      "sha256": "0736ee5f903b52658c18fd144cf491d76a871e7a8677af2267bb8308f208abe2"
+    }
+  },
+  "native_cli_sha256": "724c0e043ede9d943706a21f5f28d4aa10ef0a575b2c1469528a72e88fbf4829"
+}
