@@ -520,6 +520,7 @@ FN ui_draw
     cmp qword ptr [rip + ui_pixels], 0
     je .Lui_draw_done
     call ui_heard_update                  # the file being heard
+    call ui_view_sync
     xor r12d, r12d                        # play/pause moves right with a list
     cmp dword ptr [rip + ui_count], 2
     jb .Lui_draw_single

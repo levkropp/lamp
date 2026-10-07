@@ -52,6 +52,15 @@ LOCALFN ui_menu
     mov r8d, ID_OPEN
     lea r9, [rip + ui_menu_open]
     call AppendMenuW
+    mov rcx, rbx
+    xor edx, edx
+    cmp qword ptr [rip + ui_view_hwnd], 0
+    je .Lui_menu_queue_view
+    mov edx, 8
+.Lui_menu_queue_view:
+    mov r8d, ID_QUEUE_VIEW
+    lea r9, [rip + ui_view_menu]
+    call AppendMenuW
     xor edx, edx
     cmp dword ptr [rip + ui_fullscreen], 0
     je .Lui_menu_fullscreen
@@ -300,8 +309,13 @@ LOCALFN ui_menu_command
     jmp .Lui_menu_command_return
 .Lui_command_open:
     cmp ecx, ID_OPEN
-    jne .Lui_command_repeat
+    jne .Lui_command_queue_view
     call ui_open_dialog
+    jmp .Lui_menu_command_return
+.Lui_command_queue_view:
+    cmp ecx, ID_QUEUE_VIEW
+    jne .Lui_command_repeat
+    call ui_view_toggle
     jmp .Lui_menu_command_return
 .Lui_command_repeat:
     cmp ecx, ID_REPEAT

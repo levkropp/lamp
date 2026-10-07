@@ -1,5 +1,6 @@
 LIBRARY KERNEL32.dll
 EXPORTS
+    CompareStringOrdinal
     AcquireSRWLockExclusive
     ReleaseSRWLockExclusive
     CloseHandle

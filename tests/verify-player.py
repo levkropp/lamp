@@ -90,7 +90,7 @@ def merge(found):
 def main():
     scenarios = [list_checks, list_playback, keys, folder_playback, killed_stream, output_menu, dpi,
                  modes, accessibility, eac3_playback, chapter_navigation, dense_queue, track_switching, track_queue,
-                 asf_metadata, asf_chapter_navigation, asf_spread, asf_extended, resume]
+                 asf_metadata, asf_chapter_navigation, asf_spread, asf_extended, resume, queue_view]
     only = sys.argv[sys.argv.index('--only') + 1].split(',') if '--only' in sys.argv else None
     if only is not None:
         unknown = set(only) - {scenario.__name__ for scenario in scenarios}
@@ -120,7 +120,7 @@ def main():
         display.stop()
     source_hashes = {name: hashlib.sha256((ROOT / name).read_bytes()).hexdigest() for name in
         ('src/queue.s', 'src/win/player.s', 'src/win/ui.s', 'src/win/ui_queue.inc',
-         'src/win/ui_menu.inc', 'src/win/ui_resume.inc', 'src/win/resume_state.inc', 'src/resume.s', 'src/win/kernel32.def', 'tests/verify-player.py')}
+         'src/win/ui_menu.inc', 'src/win/ui_queue_view.inc', 'tests/queue-view-driver.c', 'src/win/ui_resume.inc', 'src/win/resume_state.inc', 'src/resume.s', 'src/win/kernel32.def', 'tests/verify-player.py')}
     source_hashes.update({name: hashlib.sha256((ROOT / name).read_bytes()).hexdigest() for name in
         ('src/decoder.s', 'src/mp4.s', 'src/mkv.s', 'src/avi.s', 'src/mpegts.s', 'src/ogg_chain.s',
          'src/win/ui_tracks.inc', 'src/win/ui_draw.inc', 'tests/ui-driver.s')})
@@ -146,7 +146,7 @@ def main():
                                      'reopening a killed stream, choosing outputs, 144 DPI, fullscreen/compact '
                                      'restoration, Tab/Shift+Tab focus, slider values and MSAA names/native '
                                      'control classes, raw E-AC-3 playback and folder discovery, chronological chapter keys/menu and paused seeks, '
-                                     'dense queue filename/chapter fallback after metadata eviction, per-entry audio track switching, Automatic, paused position retention and unsupported-track rollback, under Wine on Xvfb; native Windows screen-reader '
+                                     'native virtual queue browsing and activation, dense queue filename/chapter fallback after metadata eviction, per-entry audio track switching, Automatic, paused position retention and unsupported-track rollback, under Wine on Xvfb; native Windows screen-reader '
                                      'roles remain unverified.'})
     print(f'Passed {len(checks)} player checks.')
 
@@ -1114,6 +1114,160 @@ def eac3_playback(work, env, wine, checks):
     checks.append({'test':'E-AC-3 GUI playback','result':'PCM matched through Wine sink',
                    'titles':titles,'segments':segments})
     print('E-AC-3 GUI: '+str(segments),flush=True)
+
+
+def queue_view(work, env, wine, checks):
+    """Shipping modeless queue: native rows/keys, pause, replacement and scale."""
+    import json
+    import tempfile
+    driver = BIN / 'queue-view-driver.exe'
+    run(['x86_64-w64-mingw32-gcc', '-O2', '-mwindows', '-D_WIN32_WINNT=0x0a00', ROOT / 'tests/queue-view-driver.c',
+         '-luser32', '-o', driver])
+
+    def inspect(*args):
+        try:
+            return json.loads(run(['wine', driver, *args], env=wine, timeout=30))
+        except Failure as error:
+            raise Failure('Queue inspection ' + repr(args) + ': ' + str(error)) from error
+
+    def selected(row):
+        value = inspect()
+        if value['selected'] != row:
+            raise Failure('Queue keyboard selected a different entry: ' + str(value))
+        return value
+
+    session = Session(work, env, wine, 'queue-empty')
+    try:
+        session.drive('k4c', 's500', 'v0d', 's200')
+        empty = inspect()
+        if empty['count'] != 0 or empty['selected'] != -1:
+            raise Failure('Empty queue has selectable entries: ' + str(empty))
+        session.drive('e1b')
+        deadline = time.monotonic() + 5
+        while (closed := inspect()) != {'open': False} and time.monotonic() < deadline:
+            time.sleep(0.1)
+        if closed != {'open': False}: raise Failure('Escape did not close queue: ' + str(closed))
+        session.drive('r', 's250', 'e51', 'e0d', 's500')
+        if inspect()['count'] != 0: raise Failure('Real queue menu did not reopen empty view')
+        session.drive('c')
+    finally: session.finish()
+    if inspect() != {'open': False}: raise Failure('Queue survived player close')
+    checks.append(dict(test='empty queue window lifecycle', result='L, Escape, real popup Queue command and owner close', metrics=empty))
+
+    first = tagged(work, 'queue-view/alpha.flac', 'Queue alpha', 12, 711)
+    unicode = tagged(work, 'queue-view/Über 漢🎵.flac', 'Queue Unicode', 12, 712)
+    last = tagged(work, 'queue-view/zeta.flac', 'Queue zeta', 12, 713)
+    playlist = work / 'queue-view/list.m3u8'
+    playlist.write_text('#EXTM3U\n' + '\n'.join(p.name for p in (first, unicode, first, last)) + '\n', encoding='utf-8')
+    references = {name: _nav.linux_decode(work, path) for name, path in [('alpha', first), ('unicode', unicode), ('zeta', last)]}
+    session = Session(work, env, wine, 'queue-selection', windows_path(playlist))
+    try:
+        session.drive('s1800', 'k20', 's500', 'k24', 's1000', 'k4c', 's500')
+        normal = selected(0)
+        rows = [inspect(str(n)) for n in range(4)]
+        for n, path in enumerate((first, unicode, first, last)):
+            want = [str(n+1), path.name, 'Paused' if n == 0 else '', windows_path(path)]
+            if rows[n]['columns'] != want: raise Failure('Queue rows differ: ' + str(rows))
+        run(['ffmpeg', '-loglevel', 'error', '-y', '-f', 'x11grab', '-video_size', '1280x1024',
+             '-i', wine['DISPLAY'], '-frames:v', '1', work / 'queue-view.png'], timeout=30)
+        session.drive('v23', 'v0d', 's1200')
+        selected(3)
+        if session.drive('t', 'n111')[0:2] != [title('Queue zeta'), 'Play'] or inspect('3')['columns'][2] != 'Paused':
+            raise Failure('End/Enter did not choose the last entry while paused')
+        assert_paused(session)
+        session.drive('v24', 's1300', 'xüber', 's400')
+        selected(1)
+        session.drive('v0d', 's1100')
+        if session.drive('t') != [title('Queue Unicode')]: raise Failure('Unicode type-ahead activated wrong entry')
+        assert_paused(session)
+        session.drive('v24', 'v28', 'v28', 'v0d', 's1100')
+        selected(2)
+        if inspect('2')['columns'][2] != 'Paused': raise Failure('Duplicate filename lost its distinct row')
+        session.drive('v23', 'v0d', 's1000')
+        offset = session.capture.stat().st_size
+        session.drive('v20', 's1400', 'v20', 's800')
+        assert_paused(session)
+        resumed = merge(_nav.runs(session.capture.read_bytes()[offset:], references))
+        if not resumed or resumed[0][0] != 'zeta' or resumed[0][1] > RATE//2:
+            raise Failure('Queue Space did not resume selected PCM from its beginning: ' + str(resumed))
+        inspect('0', 'double')
+        session.drive('s1100')
+        if inspect('0')['columns'][2] != 'Paused' or session.drive('t') != [title('Queue alpha')]:
+            raise Failure('Native double click did not activate row zero while paused')
+        assert_paused(session)
+        replacement = tagged(work, 'queue-view/another/new.flac', 'Queue replacement', 12, 714)
+        session.drive('o100', 's2500', 'l4e', 's250', 'x' + windows_path(replacement), 'e0d', 's2000')
+        deadline = time.monotonic() + 5
+        while True:
+            row = inspect('0')
+            if row['count'] == 1 and row['selected'] == 0 and row['columns'][1] == replacement.name and row['columns'][3] == windows_path(replacement):
+                break
+            if time.monotonic() >= deadline: raise Failure('Open-dialog replacement left stale queue entries: ' + str(row))
+            time.sleep(0.1)
+        session.drive('c')
+    finally: session.finish()
+    if inspect() != {'open': False}: raise Failure('Queue owner close left a window')
+    checks.append(dict(test='queue window Unicode selection and replacement', result='native End/Enter, Unicode prefix, duplicate entry, paused double click, Space PCM and live Open-dialog replacement',
+                       rows=rows, normal=normal, resumed_runs=resumed, replacement=row,
+                       screenshot_sha256=hashlib.sha256((work/'queue-view.png').read_bytes()).hexdigest()))
+
+    intro = tagged(work, 'queue-view/intro.flac', 'Queue intro', 3, 715)
+    session = Session(work, env, wine, 'queue-heard', windows_path(intro), windows_path(last))
+    try:
+        deadline = time.monotonic() + 15
+        while session.drive('s250', 't') != [title('Queue zeta')]:
+            if time.monotonic() >= deadline: raise Failure('Queue did not naturally reach its second entry')
+        session.drive('k20', 's600', 'k4c', 's500')
+        heard = selected(1)
+        if inspect('1')['columns'][2] != 'Paused': raise Failure('Opening queue missed the heard entry')
+        session.drive('v24', 'v20', 's900', 'v20', 's500')
+        browsed = selected(0)
+        if inspect('1')['columns'][2] != 'Paused' or session.drive('t') != [title('Queue zeta')]:
+            raise Failure('Browsing moved playback or state updates moved the selection')
+        assert_paused(session)
+        session.drive('c')
+    finally: session.finish()
+    checks.append(dict(test='queue selection follows heard file on open',
+                       result='natural transition selects heard entry; later playback state updates preserve browsed selection',
+                       heard=heard, browsed=browsed))
+
+    # Keep absolute names short enough for the shared playlist's 4M-unit arena.
+    with tempfile.TemporaryDirectory(prefix='lqv-', dir='/tmp') as folder:
+        folder = Path(folder)
+        shutil.copy2(first, folder/'a.flac');shutil.copy2(last, folder/'z.flac')
+        large = folder/'many.m3u8';large.write_text('a.flac\n'*65535+'z.flac\n')
+        session = Session(work, env, wine, 'queue-large', windows_path(large))
+        try:
+            session.drive('s2000', 'k20', 's500', 'k4c', 's500', 'v23', 'v0d', 's1500')
+            final = inspect('65535')
+            if final['count'] != 65536 or final['selected'] != 65535 or final['columns'][:3] != ['65536', 'z.flac', 'Paused']:
+                raise Failure('Large queue did not reach last expanded entry: ' + str(final))
+            assert_paused(session)
+            offset = session.capture.stat().st_size
+            session.drive('v20', 's1300', 'c')
+        finally: pcm = session.finish()
+        segments = merge(_nav.runs(pcm[offset:], references))
+        if not segments or segments[0][0] != 'zeta' or segments[0][1] > RATE//2:
+            raise Failure('Large queue last entry PCM differs: ' + str(segments))
+    checks.append(dict(test='65536-entry shipping queue window', result='virtual count, native End/Enter, pause and last-file PCM', last=final, segments=segments))
+
+    earlier = wine_dpi(wine, 144)
+    try:
+        session = Session(work, env, wine, 'queue-dpi', windows_path(first), windows_path(last))
+        try:
+            session.drive('s2500', 'k20', 's500', 'k4c', 's700', 'v23', 'v0d', 's1400')
+            scaled = inspect()
+            if scaled['dpi'] != 144 or scaled['columns'] != [84, 420, 138, 900] or not all(
+                    1.45 <= b/a <= 1.55 for a,b in zip(normal['client'],scaled['client'])):
+                raise Failure('Queue DPI size/columns differ: ' + str(scaled))
+            if inspect('1')['columns'][2] != 'Paused': raise Failure('Scaled queue activation lost pause')
+            session.drive('c')
+        finally: session.finish()
+    finally: wine_dpi(wine, earlier)
+    checks.append(dict(test='queue window at 144 DPI', result='independent font/window/columns scale and paused native activation', normal=normal, scaled=scaled,
+                       limit='Wine 8 on Xvfb; native Windows, screen readers and mixed-monitor moves remain unverified',
+                       driver_sha256=hashlib.sha256(driver.read_bytes()).hexdigest()))
+    print('Queue window: native Unicode rows, empty/reopen/owner close, paused selection, live replacement, 65536 entries and 144 DPI pass', flush=True)
 
 
 if __name__ == '__main__':

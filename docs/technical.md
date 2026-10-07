@@ -1,6 +1,6 @@
 # LAMP 0.4.0-dev technical details
 
-An audio player for Windows and Linux x86-64 and Apple Silicon macOS with handwritten assembly decoders for the formats below, plus native assembly interfaces on Windows and macOS. The current Windows console build is **456,704 bytes (446 KiB)**; the graphical build is **482,304 bytes (471 KiB)**. Both include LAMP's icon and version resources. The static Linux `lamp-cli` release build (`./build.sh release`) is **434,328 bytes**. The published v0.3.0 archive retains its earlier four-format build and manifest.
+An audio player for Windows and Linux x86-64 and Apple Silicon macOS with handwritten assembly decoders for the formats below, plus native assembly interfaces on Windows and macOS. The current Windows console build is **458,240 bytes (448 KiB)**; the graphical build is **487,424 bytes (476 KiB)**. Both include LAMP's icon and version resources. The static Linux `lamp-cli` release build (`./build.sh release`) is **434,328 bytes**. The published v0.3.0 archive retains its earlier four-format build and manifest.
 
 The dark canvas, compact playback controls and automatic hiding are inspired by mpv. The custom pixel buffer and Win32 presentation follow Rhun's documented assembly UI model. The Windows canvas uses Rhun as a design reference. The Mac build vendors its MIT translator/helper macros and adapts native helpers with attribution; no Rhun branding, fonts or icons are included.
 
@@ -33,7 +33,8 @@ Linux x86-64 builds the same command line with `./build.sh`; paths are UTF-8 byt
 | N, next button or media key | Next file (the first after the last with repeat) |
 | P, previous button or media key | The file again after 3 s of it, else the previous file |
 | R | Repeat the list on/off |
-| Right click, Shift+F10 or menu key | Context menu: open files, repeat, fullscreen, compact mode, output device |
+| L | Open/close the queue window; its arrows and filename prefix search browse entries, Enter or double click plays an entry, Space pauses/resumes, Esc closes it |
+| Right click, Shift+F10 or menu key | Context menu: open files, queue, repeat, remember playback position, fullscreen, compact mode, audio track, output device |
 | F or F11 | Toggle fullscreen on the window's monitor; restore the prior placement |
 | C | Toggle compact mode; restore the prior normal placement |
 | Esc | Leave fullscreen, then compact mode |
@@ -262,6 +263,7 @@ The UI preview uses the actual assembly renderer with synthetic playback state; 
 - Fullscreen and compact modes restore their source dimensions through keys and menu commands without stopping playback. Tab/Shift+Tab traverse native controls, Enter/Space activate buttons, slider keys change their values, and global mode shortcuts work with child focus.
 - MSAA exposes the seven control names, including Play/Pause and Repeat state changes; native control classes are checked. Wine 8 returns generic client roles for buttons and sliders, so its role results do not verify native Windows accessibility roles.
 - `ui-list.exe` builds lists from folders, an HDROP and dialog results through the player's own code.
+- `--only queue_view` checks native queue rows, Unicode search, paused selection, resumed audio, replacement, heard-file selection, 65,536 entries and 144 DPI. `tests/verify-queue-view.py` separately checks protected callback buffers and the virtual control under Wine on a display; see [queue verification](queue.md#verification).
 
 **Real Explorer drops, the open dialog's own window, moves between monitors of different DPI and screen-reader operation remain unverified** on Windows itself. Audio controls are tested separately by a native assembly harness.
 

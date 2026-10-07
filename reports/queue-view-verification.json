@@ -1,0 +1,25 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "checks": 83,
+      "guarded_text_capacities": 24,
+      "virtual_rows": 65536,
+      "keyboard_loop": 1,
+      "result": "passed"
+    }
+  ],
+  "sources": {
+    "src/win/ui.s": "16e381d29f9064f6592aad995ffa99d6f71cd9f108fae84a42d3c64211bea7cc",
+    "src/win/ui_queue.inc": "8133dcb55c45ed199ea4e34590d6a28a8952bf0473ccc0b34851e129722892bb",
+    "src/win/ui_queue_view.inc": "037980489e6cb212bef0bef2e0474feeedf6c242f61cc218848815e52fdfcfdb",
+    "src/win/ui_menu.inc": "b055ff00cc54c3cc73bc1e7990db1b489e1986e3e082be562cd64a4fe537d3df",
+    "src/win/ui_draw.inc": "1ad8f1c2de90f92428b8a740511137b02d66654a3e1a289b613c2d4e032160b1",
+    "src/win/kernel32.def": "793225e863d8f8e5417bbe1375f60875c5053260a5fd1e6c2bb2f89ca79af440",
+    "tests/ui-queue-view-oracle.c": "61103dcd28db61986e656318c93768b00855268477ea524bf937276873e99d69",
+    "tests/ui-queue-view-probe.s": "283712f5b03555e872bdeb3fa428ff199d9d1fdc86076e09f007733427314654",
+    "tests/verify-queue-view.py": "f401790b1531718351a1ccf71e6fde03973e8b9fe5fa36fb0c3a052aa67a7b92"
+  },
+  "oracle_sha256": "b0dbaf72b62ed6afb0a7519ac8876ec2e6abd6afa63241b299369527017cdef1",
+  "scope": "Shipping UI source with test-only aliases: guarded Unicode callback buffers, filename search, stale/pending list selection rejection, pause and track preservation, real native virtual list control with 65,536 rows, replacement, reopen and Escape through the shipping message loop. Wine; native Windows remains unverified."
+}

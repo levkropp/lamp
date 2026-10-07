@@ -268,6 +268,10 @@ FN ui_start
     test eax, eax
     jle .Lui_exit
     lea rcx, [rip + ui_message]
+    call ui_view_key
+    test eax, eax
+    jnz .Lui_message_loop
+    lea rcx, [rip + ui_message]
     call ui_controls_key
     test eax, eax
     jnz .Lui_message_loop
@@ -680,6 +684,8 @@ LOCALFN ui_window_proc
     je .Lui_previous_key
     cmp r8d, 0x52                         # R
     je .Lui_repeat_key
+    cmp r8d, 0x4c                        # L: queue window
+    je .Lui_queue_view_key
     cmp r8d, 0x4f
     je .Lui_open_key
     cmp r8d, 0xdd                        # ] on the standard bracket keys
@@ -712,6 +718,9 @@ LOCALFN ui_window_proc
     jne .Lui_fullscreen_key
     cmp dword ptr [rip + ui_compact], 0
     jne .Lui_compact_key
+    jmp .Lui_handled
+.Lui_queue_view_key:
+    call ui_view_toggle
     jmp .Lui_handled
 .Lui_open_key:
     call ui_open_dialog
@@ -968,6 +977,7 @@ ENDFN ui_window_proc
 .include "ui_draw.inc"
 .include "ui_cover.inc"
 .include "ui_queue.inc"
+.include "ui_queue_view.inc"
 .include "ui_resume.inc"
 .include "ui_tracks.inc"
 .include "ui_modes.inc"

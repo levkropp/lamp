@@ -721,6 +721,7 @@ LOCALFN ui_request
     cmp dword ptr [rip + ui_list_new], 0
     je .Lui_launch_file
     mov dword ptr [rip + ui_list_new], 0
+    call ui_view_clear
     call ui_tracks_reset
     mov rax, [rip + ui_list_pending]
     xchg rax, [rip + ui_list_current]
@@ -732,6 +733,8 @@ LOCALFN ui_request
     mov [rip + ui_paths], rax
     mov [rip + ui_count], edx
     call ui_resume_lookup
+    mov ecx, [rip + ui_start_index]
+    call ui_view_reload
     mov dword ptr [rip + ui_shown_index], -1
 .Lui_launch_file:
     mov eax, [rip + ui_start_index]
