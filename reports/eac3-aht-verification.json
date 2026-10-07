@@ -196,7 +196,7 @@
     {
       "test": "gaq-0.ec3",
       "result": "matched normative model",
-      "stats": "codec=20 rate=48000 channels=3 bits=0 frames=393216 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1673 cpu_us=1652898 endpoint_dry=0",
+      "stats": "codec=20 rate=48000 channels=3 bits=0 frames=393216 underruns=0 decode_error=0 audio_error=0 elapsed_ms=373 cpu_us=384752 endpoint_dry=0",
       "snr_db": null,
       "peak_error": 0.0
     },
@@ -209,7 +209,7 @@
     {
       "test": "gaq-1.ec3",
       "result": "matched normative model",
-      "stats": "codec=20 rate=48000 channels=3 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=109 cpu_us=170820 endpoint_dry=0",
+      "stats": "codec=20 rate=48000 channels=3 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=40 cpu_us=51563 endpoint_dry=0",
       "snr_db": null,
       "peak_error": 0.0
     },
@@ -222,7 +222,7 @@
     {
       "test": "gaq-2.ec3",
       "result": "matched normative model",
-      "stats": "codec=20 rate=48000 channels=3 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=85 cpu_us=103197 endpoint_dry=0",
+      "stats": "codec=20 rate=48000 channels=3 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=35 cpu_us=43941 endpoint_dry=0",
       "snr_db": null,
       "peak_error": 0.0
     },
@@ -235,7 +235,7 @@
     {
       "test": "gaq-3.ec3",
       "result": "matched normative model",
-      "stats": "codec=20 rate=48000 channels=3 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=62 cpu_us=71359 endpoint_dry=0",
+      "stats": "codec=20 rate=48000 channels=3 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=35 cpu_us=45976 endpoint_dry=0",
       "snr_db": null,
       "peak_error": 0.0
     },
@@ -248,7 +248,7 @@
     {
       "test": "layout-0-0.ec3",
       "result": "matched normative model",
-      "stats": "codec=20 rate=48000 channels=2 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=39 cpu_us=58836 endpoint_dry=0",
+      "stats": "codec=20 rate=48000 channels=2 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=23404 endpoint_dry=0",
       "snr_db": null,
       "peak_error": 0.0
     },
@@ -261,7 +261,7 @@
     {
       "test": "layout-0-1.ec3",
       "result": "matched normative model",
-      "stats": "codec=20 rate=48000 channels=3 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=34 cpu_us=44488 endpoint_dry=0",
+      "stats": "codec=20 rate=48000 channels=3 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=17 cpu_us=24736 endpoint_dry=0",
       "snr_db": null,
       "peak_error": 0.0
     },
@@ -274,7 +274,7 @@
     {
       "test": "layout-1-0.ec3",
       "result": "matched normative model",
-      "stats": "codec=20 rate=48000 channels=1 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=34 cpu_us=54677 endpoint_dry=0",
+      "stats": "codec=20 rate=48000 channels=1 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=12 cpu_us=20862 endpoint_dry=0",
       "snr_db": null,
       "peak_error": 0.0
     },
@@ -287,7 +287,7 @@
     {
       "test": "layout-1-1.ec3",
       "result": "matched normative model",
-      "stats": "codec=20 rate=48000 channels=2 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=25 cpu_us=45273 endpoint_dry=0",
+      "stats": "codec=20 rate=48000 channels=2 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=18 cpu_us=26929 endpoint_dry=0",
       "snr_db": null,
       "peak_error": 0.0
     },
@@ -300,7 +300,7 @@
     {
       "test": "layout-2-0.ec3",
       "result": "matched normative model",
-      "stats": "codec=20 rate=48000 channels=2 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=25 cpu_us=40224 endpoint_dry=0",
+      "stats": "codec=20 rate=48000 channels=2 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=13 cpu_us=19829 endpoint_dry=0",
       "snr_db": null,
       "peak_error": 0.0
     },
@@ -313,7 +313,7 @@
     {
       "test": "layout-2-1.ec3",
       "result": "matched normative model",
-      "stats": "codec=20 rate=48000 channels=3 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=25 cpu_us=38919 endpoint_dry=0",
+      "stats": "codec=20 rate=48000 channels=3 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=19 cpu_us=32723 endpoint_dry=0",
       "snr_db": null,
       "peak_error": 0.0
     },
@@ -326,7 +326,7 @@
     {
       "test": "layout-3-0.ec3",
       "result": "matched normative model",
-      "stats": "codec=20 rate=48000 channels=3 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=24 cpu_us=36429 endpoint_dry=0",
+      "stats": "codec=20 rate=48000 channels=3 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=20 cpu_us=29592 endpoint_dry=0",
       "snr_db": null,
       "peak_error": 0.0
     },
@@ -339,7 +339,7 @@
     {
       "test": "layout-3-1.ec3",
       "result": "matched normative model",
-      "stats": "codec=20 rate=48000 channels=4 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=24 cpu_us=36647 endpoint_dry=0",
+      "stats": "codec=20 rate=48000 channels=4 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=33 cpu_us=45440 endpoint_dry=0",
       "snr_db": null,
       "peak_error": 0.0
     },
@@ -352,7 +352,7 @@
     {
       "test": "layout-4-0.ec3",
       "result": "matched normative model",
-      "stats": "codec=20 rate=48000 channels=3 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=29 cpu_us=41196 endpoint_dry=0",
+      "stats": "codec=20 rate=48000 channels=3 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=39 cpu_us=57714 endpoint_dry=0",
       "snr_db": null,
       "peak_error": 0.0
     },
@@ -365,7 +365,7 @@
     {
       "test": "layout-4-1.ec3",
       "result": "matched normative model",
-      "stats": "codec=20 rate=48000 channels=4 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=29 cpu_us=37539 endpoint_dry=0",
+      "stats": "codec=20 rate=48000 channels=4 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=77 cpu_us=91017 endpoint_dry=0",
       "snr_db": null,
       "peak_error": 0.0
     },
@@ -378,7 +378,7 @@
     {
       "test": "layout-5-0.ec3",
       "result": "matched normative model",
-      "stats": "codec=20 rate=48000 channels=4 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=26 cpu_us=37596 endpoint_dry=0",
+      "stats": "codec=20 rate=48000 channels=4 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=30 cpu_us=43567 endpoint_dry=0",
       "snr_db": null,
       "peak_error": 0.0
     },
@@ -391,7 +391,7 @@
     {
       "test": "layout-5-1.ec3",
       "result": "matched normative model",
-      "stats": "codec=20 rate=48000 channels=5 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=31 cpu_us=46088 endpoint_dry=0",
+      "stats": "codec=20 rate=48000 channels=5 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=26 cpu_us=37513 endpoint_dry=0",
       "snr_db": null,
       "peak_error": 0.0
     },
@@ -404,7 +404,7 @@
     {
       "test": "layout-6-0.ec3",
       "result": "matched normative model",
-      "stats": "codec=20 rate=48000 channels=4 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=35 cpu_us=47774 endpoint_dry=0",
+      "stats": "codec=20 rate=48000 channels=4 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=21 cpu_us=30340 endpoint_dry=0",
       "snr_db": null,
       "peak_error": 0.0
     },
@@ -417,7 +417,7 @@
     {
       "test": "layout-6-1.ec3",
       "result": "matched normative model",
-      "stats": "codec=20 rate=48000 channels=5 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=27 cpu_us=39068 endpoint_dry=0",
+      "stats": "codec=20 rate=48000 channels=5 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=24 cpu_us=35248 endpoint_dry=0",
       "snr_db": null,
       "peak_error": 0.0
     },
@@ -430,7 +430,7 @@
     {
       "test": "layout-7-0.ec3",
       "result": "matched normative model",
-      "stats": "codec=20 rate=48000 channels=5 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=38 cpu_us=50532 endpoint_dry=0",
+      "stats": "codec=20 rate=48000 channels=5 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=23 cpu_us=35202 endpoint_dry=0",
       "snr_db": null,
       "peak_error": 0.0
     },
@@ -443,7 +443,7 @@
     {
       "test": "layout-7-1.ec3",
       "result": "matched normative model",
-      "stats": "codec=20 rate=48000 channels=6 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=32 cpu_us=46384 endpoint_dry=0",
+      "stats": "codec=20 rate=48000 channels=6 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=32 cpu_us=44033 endpoint_dry=0",
       "snr_db": null,
       "peak_error": 0.0
     },
@@ -456,7 +456,7 @@
     {
       "test": "partial.ec3",
       "result": "matched normative model",
-      "stats": "codec=20 rate=48000 channels=6 bits=0 frames=9216 underruns=0 decode_error=0 audio_error=0 elapsed_ms=49 cpu_us=66235 endpoint_dry=0",
+      "stats": "codec=20 rate=48000 channels=6 bits=0 frames=9216 underruns=0 decode_error=0 audio_error=0 elapsed_ms=55 cpu_us=96731 endpoint_dry=0",
       "snr_db": null,
       "peak_error": 0.0
     },
@@ -469,7 +469,7 @@
     {
       "test": "lut.ec3",
       "result": "matched normative model",
-      "stats": "codec=20 rate=48000 channels=6 bits=0 frames=9216 underruns=0 decode_error=0 audio_error=0 elapsed_ms=45 cpu_us=64196 endpoint_dry=0",
+      "stats": "codec=20 rate=48000 channels=6 bits=0 frames=9216 underruns=0 decode_error=0 audio_error=0 elapsed_ms=38 cpu_us=50469 endpoint_dry=0",
       "snr_db": null,
       "peak_error": 0.0
     },
@@ -482,7 +482,7 @@
     {
       "test": "spx.ec3",
       "result": "matched normative model",
-      "stats": "codec=20 rate=48000 channels=6 bits=0 frames=9216 underruns=0 decode_error=0 audio_error=0 elapsed_ms=41 cpu_us=55483 endpoint_dry=0",
+      "stats": "codec=20 rate=48000 channels=6 bits=0 frames=9216 underruns=0 decode_error=0 audio_error=0 elapsed_ms=42 cpu_us=54554 endpoint_dry=0",
       "snr_db": null,
       "peak_error": 0.0
     },
@@ -495,7 +495,7 @@
     {
       "test": "clamped-groups.ec3",
       "result": "matched normative model",
-      "stats": "codec=20 rate=48000 channels=3 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=28 cpu_us=44833 endpoint_dry=0",
+      "stats": "codec=20 rate=48000 channels=3 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=22 cpu_us=33742 endpoint_dry=0",
       "snr_db": null,
       "peak_error": 0.0
     },
@@ -508,7 +508,7 @@
     {
       "test": "converted.ec3",
       "result": "matched normative model",
-      "stats": "codec=20 rate=48000 channels=3 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=26 cpu_us=40194 endpoint_dry=0",
+      "stats": "codec=20 rate=48000 channels=3 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=25 cpu_us=37380 endpoint_dry=0",
       "snr_db": null,
       "peak_error": 0.0
     },
@@ -521,7 +521,7 @@
     {
       "test": "rate-1.ec3",
       "result": "matched normative model",
-      "stats": "codec=20 rate=44100 channels=6 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=28 cpu_us=40060 endpoint_dry=0",
+      "stats": "codec=20 rate=44100 channels=6 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=22 cpu_us=32880 endpoint_dry=0",
       "snr_db": null,
       "peak_error": 0.0
     },
@@ -534,7 +534,7 @@
     {
       "test": "rate-2.ec3",
       "result": "matched normative model",
-      "stats": "codec=20 rate=32000 channels=6 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=32 cpu_us=36916 endpoint_dry=0",
+      "stats": "codec=20 rate=32000 channels=6 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=21 cpu_us=30548 endpoint_dry=0",
       "snr_db": null,
       "peak_error": 0.0
     },
@@ -547,7 +547,7 @@
     {
       "test": "transitions.ec3",
       "result": "matched normative model",
-      "stats": "codec=20 rate=48000 channels=3 bits=0 frames=13824 underruns=0 decode_error=0 audio_error=0 elapsed_ms=34 cpu_us=46829 endpoint_dry=0",
+      "stats": "codec=20 rate=48000 channels=3 bits=0 frames=13824 underruns=0 decode_error=0 audio_error=0 elapsed_ms=25 cpu_us=33705 endpoint_dry=0",
       "snr_db": null,
       "peak_error": 0.0
     },
@@ -560,7 +560,7 @@
     {
       "test": "seek.ec3",
       "result": "matched normative model",
-      "stats": "codec=20 rate=48000 channels=3 bits=0 frames=73728 underruns=0 decode_error=0 audio_error=0 elapsed_ms=118 cpu_us=127894 endpoint_dry=0",
+      "stats": "codec=20 rate=48000 channels=3 bits=0 frames=73728 underruns=0 decode_error=0 audio_error=0 elapsed_ms=150 cpu_us=168838 endpoint_dry=0",
       "snr_db": null,
       "peak_error": 0.0
     },
@@ -573,7 +573,7 @@
     {
       "test": "noisy.ec3",
       "result": "matched normative model",
-      "stats": "codec=20 rate=48000 channels=3 bits=0 frames=18432 underruns=0 decode_error=0 audio_error=0 elapsed_ms=40 cpu_us=50111 endpoint_dry=0",
+      "stats": "codec=20 rate=48000 channels=3 bits=0 frames=18432 underruns=0 decode_error=0 audio_error=0 elapsed_ms=29 cpu_us=39161 endpoint_dry=0",
       "snr_db": null,
       "peak_error": 0.0
     },
@@ -586,7 +586,7 @@
     {
       "test": "noise-primer-3.ec3",
       "result": "matched normative model",
-      "stats": "codec=20 rate=48000 channels=3 bits=0 frames=15360 underruns=0 decode_error=0 audio_error=0 elapsed_ms=38 cpu_us=51799 endpoint_dry=0",
+      "stats": "codec=20 rate=48000 channels=3 bits=0 frames=15360 underruns=0 decode_error=0 audio_error=0 elapsed_ms=38 cpu_us=50766 endpoint_dry=0",
       "snr_db": null,
       "peak_error": 0.0
     },
@@ -599,7 +599,7 @@
     {
       "test": "noise-primer-7.ec3",
       "result": "matched normative model",
-      "stats": "codec=20 rate=48000 channels=3 bits=0 frames=9216 underruns=0 decode_error=0 audio_error=0 elapsed_ms=33 cpu_us=53466 endpoint_dry=0",
+      "stats": "codec=20 rate=48000 channels=3 bits=0 frames=9216 underruns=0 decode_error=0 audio_error=0 elapsed_ms=37 cpu_us=50465 endpoint_dry=0",
       "snr_db": null,
       "peak_error": 0.0
     },
@@ -702,7 +702,7 @@
     {
       "test": "AHT playback",
       "result": "played",
-      "stats": "Playing. Space: pause / resume. N / P: next / previous file. Left / Right: -5 / +5 s. Down / Up: -60 / +60 s. R: repeat. Q or Ctrl+C: stop. codec=20 rate=48000 channels=6 bits=0 frames=9216 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1981 cpu_us=85626 endpoint_dry=0"
+      "stats": "Playing. Space: pause / resume. N / P: next / previous file. Left / Right: -5 / +5 s. Down / Up: -60 / +60 s. R: repeat. Q or Ctrl+C: stop. codec=20 rate=48000 channels=6 bits=0 frames=9216 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2084 cpu_us=61269 endpoint_dry=0"
     }
   ],
   "coverage": [

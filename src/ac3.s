@@ -966,3 +966,4 @@ ENDFN ac3_bsi
 .include "eac3_spx.inc"
 .include "eac3_aht.inc"
 .include "eac3_blocks.inc"
+.include "eac3_ecpl.inc"

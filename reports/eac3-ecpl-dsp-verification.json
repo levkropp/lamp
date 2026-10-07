@@ -1,0 +1,1220 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "zero carrier",
+      "bands": 22,
+      "flags": 0
+    },
+    {
+      "test": "literal half-gain identity",
+      "bands": 22,
+      "flags": 0
+    },
+    {
+      "test": "isolated block 0 bin 13",
+      "bands": 22,
+      "flags": 0
+    },
+    {
+      "test": "isolated block 0 bin 25",
+      "bands": 22,
+      "flags": 0
+    },
+    {
+      "test": "isolated block 0 bin 37",
+      "bands": 22,
+      "flags": 0
+    },
+    {
+      "test": "isolated block 0 bin 61",
+      "bands": 22,
+      "flags": 0
+    },
+    {
+      "test": "isolated block 0 bin 121",
+      "bands": 22,
+      "flags": 0
+    },
+    {
+      "test": "isolated block 0 bin 252",
+      "bands": 22,
+      "flags": 0
+    },
+    {
+      "test": "isolated block 1 bin 13",
+      "bands": 22,
+      "flags": 0
+    },
+    {
+      "test": "isolated block 1 bin 25",
+      "bands": 22,
+      "flags": 0
+    },
+    {
+      "test": "isolated block 1 bin 37",
+      "bands": 22,
+      "flags": 0
+    },
+    {
+      "test": "isolated block 1 bin 61",
+      "bands": 22,
+      "flags": 0
+    },
+    {
+      "test": "isolated block 1 bin 121",
+      "bands": 22,
+      "flags": 0
+    },
+    {
+      "test": "isolated block 1 bin 252",
+      "bands": 22,
+      "flags": 0
+    },
+    {
+      "test": "isolated block 2 bin 13",
+      "bands": 22,
+      "flags": 0
+    },
+    {
+      "test": "isolated block 2 bin 25",
+      "bands": 22,
+      "flags": 0
+    },
+    {
+      "test": "isolated block 2 bin 37",
+      "bands": 22,
+      "flags": 0
+    },
+    {
+      "test": "isolated block 2 bin 61",
+      "bands": 22,
+      "flags": 0
+    },
+    {
+      "test": "isolated block 2 bin 121",
+      "bands": 22,
+      "flags": 0
+    },
+    {
+      "test": "isolated block 2 bin 252",
+      "bands": 22,
+      "flags": 0
+    },
+    {
+      "test": "flags 0",
+      "bands": 22,
+      "flags": 0
+    },
+    {
+      "test": "single band flags 0",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "merged bands flags 0",
+      "bands": 4,
+      "flags": 0
+    },
+    {
+      "test": "flags 1",
+      "bands": 22,
+      "flags": 1
+    },
+    {
+      "test": "single band flags 1",
+      "bands": 1,
+      "flags": 1
+    },
+    {
+      "test": "merged bands flags 1",
+      "bands": 4,
+      "flags": 1
+    },
+    {
+      "test": "flags 2",
+      "bands": 22,
+      "flags": 2
+    },
+    {
+      "test": "single band flags 2",
+      "bands": 1,
+      "flags": 2
+    },
+    {
+      "test": "merged bands flags 2",
+      "bands": 4,
+      "flags": 2
+    },
+    {
+      "test": "flags 3",
+      "bands": 22,
+      "flags": 3
+    },
+    {
+      "test": "single band flags 3",
+      "bands": 1,
+      "flags": 3
+    },
+    {
+      "test": "merged bands flags 3",
+      "bands": 4,
+      "flags": 3
+    },
+    {
+      "test": "flags 4",
+      "bands": 22,
+      "flags": 4
+    },
+    {
+      "test": "single band flags 4",
+      "bands": 1,
+      "flags": 4
+    },
+    {
+      "test": "merged bands flags 4",
+      "bands": 4,
+      "flags": 4
+    },
+    {
+      "test": "flags 5",
+      "bands": 22,
+      "flags": 5
+    },
+    {
+      "test": "single band flags 5",
+      "bands": 1,
+      "flags": 5
+    },
+    {
+      "test": "merged bands flags 5",
+      "bands": 4,
+      "flags": 5
+    },
+    {
+      "test": "flags 6",
+      "bands": 22,
+      "flags": 6
+    },
+    {
+      "test": "single band flags 6",
+      "bands": 1,
+      "flags": 6
+    },
+    {
+      "test": "merged bands flags 6",
+      "bands": 4,
+      "flags": 6
+    },
+    {
+      "test": "flags 7",
+      "bands": 22,
+      "flags": 7
+    },
+    {
+      "test": "single band flags 7",
+      "bands": 1,
+      "flags": 7
+    },
+    {
+      "test": "merged bands flags 7",
+      "bands": 4,
+      "flags": 7
+    },
+    {
+      "test": "amplitude 0",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "amplitude 1",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "amplitude 2",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "amplitude 3",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "amplitude 4",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "amplitude 5",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "amplitude 6",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "amplitude 7",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "amplitude 8",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "amplitude 9",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "amplitude 10",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "amplitude 11",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "amplitude 12",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "amplitude 13",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "amplitude 14",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "amplitude 15",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "amplitude 16",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "amplitude 17",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "amplitude 18",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "amplitude 19",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "amplitude 20",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "amplitude 21",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "amplitude 22",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "amplitude 23",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "amplitude 24",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "amplitude 25",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "amplitude 26",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "amplitude 27",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "amplitude 28",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "amplitude 29",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "amplitude 30",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "amplitude 31",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 0",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 1",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 2",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 3",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 4",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 5",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 6",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 7",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 8",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 9",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 10",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 11",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 12",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 13",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 14",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 15",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 16",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 17",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 18",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 19",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 20",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 21",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 22",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 23",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 24",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 25",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 26",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 27",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 28",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 29",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 30",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 31",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 32",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 33",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 34",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 35",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 36",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 37",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 38",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 39",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 40",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 41",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 42",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 43",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 44",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 45",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 46",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 47",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 48",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 49",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 50",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 51",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 52",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 53",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 54",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 55",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 56",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 57",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 58",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 59",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 60",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 61",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 62",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "phase 63",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "chaos 0 transient False",
+      "bands": 2,
+      "flags": 4
+    },
+    {
+      "test": "chaos 0 transient True",
+      "bands": 2,
+      "flags": 6
+    },
+    {
+      "test": "chaos 1 transient False",
+      "bands": 2,
+      "flags": 4
+    },
+    {
+      "test": "chaos 1 transient True",
+      "bands": 2,
+      "flags": 6
+    },
+    {
+      "test": "chaos 2 transient False",
+      "bands": 2,
+      "flags": 4
+    },
+    {
+      "test": "chaos 2 transient True",
+      "bands": 2,
+      "flags": 6
+    },
+    {
+      "test": "chaos 3 transient False",
+      "bands": 2,
+      "flags": 4
+    },
+    {
+      "test": "chaos 3 transient True",
+      "bands": 2,
+      "flags": 6
+    },
+    {
+      "test": "chaos 4 transient False",
+      "bands": 2,
+      "flags": 4
+    },
+    {
+      "test": "chaos 4 transient True",
+      "bands": 2,
+      "flags": 6
+    },
+    {
+      "test": "chaos 5 transient False",
+      "bands": 2,
+      "flags": 4
+    },
+    {
+      "test": "chaos 5 transient True",
+      "bands": 2,
+      "flags": 6
+    },
+    {
+      "test": "chaos 6 transient False",
+      "bands": 2,
+      "flags": 4
+    },
+    {
+      "test": "chaos 6 transient True",
+      "bands": 2,
+      "flags": 6
+    },
+    {
+      "test": "chaos 7 transient False",
+      "bands": 2,
+      "flags": 4
+    },
+    {
+      "test": "chaos 7 transient True",
+      "bands": 2,
+      "flags": 6
+    },
+    {
+      "test": "interpolation [31, 32] edges [13, 19, 253]",
+      "bands": 2,
+      "flags": 4
+    },
+    {
+      "test": "interpolation [31, 32] edges [13, 241, 253]",
+      "bands": 2,
+      "flags": 4
+    },
+    {
+      "test": "interpolation [31, 32] edges [13, 14, 253]",
+      "bands": 2,
+      "flags": 4
+    },
+    {
+      "test": "interpolation [31, 32] edges [13, 252, 253]",
+      "bands": 2,
+      "flags": 4
+    },
+    {
+      "test": "interpolation [31, 32] edges [13, 14, 15]",
+      "bands": 2,
+      "flags": 4
+    },
+    {
+      "test": "interpolation [31, 32] edges [13, 20, 27]",
+      "bands": 2,
+      "flags": 4
+    },
+    {
+      "test": "interpolation [32, 31] edges [13, 19, 253]",
+      "bands": 2,
+      "flags": 4
+    },
+    {
+      "test": "interpolation [32, 31] edges [13, 241, 253]",
+      "bands": 2,
+      "flags": 4
+    },
+    {
+      "test": "interpolation [32, 31] edges [13, 14, 253]",
+      "bands": 2,
+      "flags": 4
+    },
+    {
+      "test": "interpolation [32, 31] edges [13, 252, 253]",
+      "bands": 2,
+      "flags": 4
+    },
+    {
+      "test": "interpolation [32, 31] edges [13, 14, 15]",
+      "bands": 2,
+      "flags": 4
+    },
+    {
+      "test": "interpolation [32, 31] edges [13, 20, 27]",
+      "bands": 2,
+      "flags": 4
+    },
+    {
+      "test": "interpolation [0, 32] edges [13, 19, 253]",
+      "bands": 2,
+      "flags": 4
+    },
+    {
+      "test": "interpolation [0, 32] edges [13, 241, 253]",
+      "bands": 2,
+      "flags": 4
+    },
+    {
+      "test": "interpolation [0, 32] edges [13, 14, 253]",
+      "bands": 2,
+      "flags": 4
+    },
+    {
+      "test": "interpolation [0, 32] edges [13, 252, 253]",
+      "bands": 2,
+      "flags": 4
+    },
+    {
+      "test": "interpolation [0, 32] edges [13, 14, 15]",
+      "bands": 2,
+      "flags": 4
+    },
+    {
+      "test": "interpolation [0, 32] edges [13, 20, 27]",
+      "bands": 2,
+      "flags": 4
+    },
+    {
+      "test": "interpolation [32, 0] edges [13, 19, 253]",
+      "bands": 2,
+      "flags": 4
+    },
+    {
+      "test": "interpolation [32, 0] edges [13, 241, 253]",
+      "bands": 2,
+      "flags": 4
+    },
+    {
+      "test": "interpolation [32, 0] edges [13, 14, 253]",
+      "bands": 2,
+      "flags": 4
+    },
+    {
+      "test": "interpolation [32, 0] edges [13, 252, 253]",
+      "bands": 2,
+      "flags": 4
+    },
+    {
+      "test": "interpolation [32, 0] edges [13, 14, 15]",
+      "bands": 2,
+      "flags": 4
+    },
+    {
+      "test": "interpolation [32, 0] edges [13, 20, 27]",
+      "bands": 2,
+      "flags": 4
+    },
+    {
+      "test": "interpolation [63, 1] edges [13, 19, 253]",
+      "bands": 2,
+      "flags": 4
+    },
+    {
+      "test": "interpolation [63, 1] edges [13, 241, 253]",
+      "bands": 2,
+      "flags": 4
+    },
+    {
+      "test": "interpolation [63, 1] edges [13, 14, 253]",
+      "bands": 2,
+      "flags": 4
+    },
+    {
+      "test": "interpolation [63, 1] edges [13, 252, 253]",
+      "bands": 2,
+      "flags": 4
+    },
+    {
+      "test": "interpolation [63, 1] edges [13, 14, 15]",
+      "bands": 2,
+      "flags": 4
+    },
+    {
+      "test": "interpolation [63, 1] edges [13, 20, 27]",
+      "bands": 2,
+      "flags": 4
+    },
+    {
+      "test": "interpolation [1, 63] edges [13, 19, 253]",
+      "bands": 2,
+      "flags": 4
+    },
+    {
+      "test": "interpolation [1, 63] edges [13, 241, 253]",
+      "bands": 2,
+      "flags": 4
+    },
+    {
+      "test": "interpolation [1, 63] edges [13, 14, 253]",
+      "bands": 2,
+      "flags": 4
+    },
+    {
+      "test": "interpolation [1, 63] edges [13, 252, 253]",
+      "bands": 2,
+      "flags": 4
+    },
+    {
+      "test": "interpolation [1, 63] edges [13, 14, 15]",
+      "bands": 2,
+      "flags": 4
+    },
+    {
+      "test": "interpolation [1, 63] edges [13, 20, 27]",
+      "bands": 2,
+      "flags": 4
+    },
+    {
+      "test": "random merged 0",
+      "bands": 10,
+      "flags": 3
+    },
+    {
+      "test": "random merged 1",
+      "bands": 6,
+      "flags": 0
+    },
+    {
+      "test": "random merged 2",
+      "bands": 12,
+      "flags": 2
+    },
+    {
+      "test": "random merged 3",
+      "bands": 13,
+      "flags": 5
+    },
+    {
+      "test": "random merged 4",
+      "bands": 13,
+      "flags": 3
+    },
+    {
+      "test": "random merged 5",
+      "bands": 9,
+      "flags": 1
+    },
+    {
+      "test": "random merged 6",
+      "bands": 13,
+      "flags": 7
+    },
+    {
+      "test": "random merged 7",
+      "bands": 13,
+      "flags": 0
+    },
+    {
+      "test": "random merged 8",
+      "bands": 13,
+      "flags": 4
+    },
+    {
+      "test": "random merged 9",
+      "bands": 11,
+      "flags": 0
+    },
+    {
+      "test": "random merged 10",
+      "bands": 10,
+      "flags": 6
+    },
+    {
+      "test": "random merged 11",
+      "bands": 15,
+      "flags": 5
+    },
+    {
+      "test": "random merged 12",
+      "bands": 16,
+      "flags": 7
+    },
+    {
+      "test": "random merged 13",
+      "bands": 8,
+      "flags": 3
+    },
+    {
+      "test": "random merged 14",
+      "bands": 13,
+      "flags": 0
+    },
+    {
+      "test": "random merged 15",
+      "bands": 13,
+      "flags": 2
+    },
+    {
+      "test": "random merged 16",
+      "bands": 17,
+      "flags": 0
+    },
+    {
+      "test": "random merged 17",
+      "bands": 13,
+      "flags": 2
+    },
+    {
+      "test": "random merged 18",
+      "bands": 15,
+      "flags": 3
+    },
+    {
+      "test": "random merged 19",
+      "bands": 9,
+      "flags": 0
+    },
+    {
+      "test": "random merged 20",
+      "bands": 11,
+      "flags": 0
+    },
+    {
+      "test": "random merged 21",
+      "bands": 6,
+      "flags": 5
+    },
+    {
+      "test": "random merged 22",
+      "bands": 13,
+      "flags": 0
+    },
+    {
+      "test": "random merged 23",
+      "bands": 12,
+      "flags": 0
+    },
+    {
+      "test": "random merged 24",
+      "bands": 12,
+      "flags": 2
+    },
+    {
+      "test": "random merged 25",
+      "bands": 6,
+      "flags": 1
+    },
+    {
+      "test": "random merged 26",
+      "bands": 11,
+      "flags": 5
+    },
+    {
+      "test": "random merged 27",
+      "bands": 11,
+      "flags": 2
+    },
+    {
+      "test": "random merged 28",
+      "bands": 11,
+      "flags": 3
+    },
+    {
+      "test": "random merged 29",
+      "bands": 12,
+      "flags": 6
+    },
+    {
+      "test": "random merged 30",
+      "bands": 11,
+      "flags": 7
+    },
+    {
+      "test": "random merged 31",
+      "bands": 13,
+      "flags": 5
+    },
+    {
+      "test": "invalid band count -1",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "invalid band count 0",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "invalid band count 23",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "invalid band count 4294967295",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "invalid flags 8",
+      "bands": 1,
+      "flags": 8
+    },
+    {
+      "test": "invalid flags 4294967295",
+      "bands": 1,
+      "flags": 4294967295
+    },
+    {
+      "test": "invalid edges [12, 253]",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "invalid edges [13, 13]",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "invalid edges [13, 254]",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "invalid edges [13, 0]",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "invalid edges [13, 253, 200]",
+      "bands": 2,
+      "flags": 0
+    },
+    {
+      "test": "invalid amp",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "invalid angle",
+      "bands": 1,
+      "flags": 0
+    },
+    {
+      "test": "invalid chaos",
+      "bands": 1,
+      "flags": 0
+    }
+  ],
+  "metrics": {
+    "result": "passed",
+    "cases": 238,
+    "maximum_carrier_error": 7.915624536045107e-16,
+    "maximum_channel_error": 1.9147010366094008e-16,
+    "identity_cases": 21,
+    "maximum_half_gain_identity_error": 9.313225746154785e-10
+  },
+  "normalization": "Literal ATSC E.3.5.5.1: windowed IMDCT steps 1-5, overlap without factor 2, DFT divided by 512; unit-amplitude zero-phase identity gain is 0.5",
+  "reference": "Direct C cosine sums and DFT, ATSC A/52:2018 E.3.5.5",
+  "reference_source_sha256": "dd0f8afbbb7376443f0c3d0916098aa12d22d2f023d8889b989434eb5e2eb318",
+  "specification_sha256": "4580b631f5ac1aafdd31034f28d5fc9c29bce72a3d3f6367e3d9746906e0ffa1",
+  "reference_environment": {
+    "python": "3.14.7 (main, Aug  5 2026, 10:29:49) [Clang 21.0.0 (clang-2100.1.1.101)]",
+    "architecture": "arm64"
+  },
+  "fixture_hashes": {
+    "cases.bin": "ac38f49de7c8ad69593114e54d25030cc8b7392484922c75be9652ad2f8c7bd3",
+    "reference.bin": "35ee8b8a48f3654c09633e66bc71cc29bbcc4ae5ae92cb3a2c6a4ae4fead8324"
+  },
+  "scope": "ECPL carrier and channel DSP only; guarded inputs/outputs; all numeric codes and interpolation boundaries",
+  "limitations": [
+    "ECPL bitstream parsing and cross-frame lookahead are not enabled by these kernels",
+    "Random arrays are supplied by the test; decoder RNG lifetime is not tested"
+  ]
+}
