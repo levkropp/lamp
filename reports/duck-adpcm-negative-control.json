@@ -1,0 +1,22 @@
+{
+  "test": "Historical DK3 three-bit effective width negative control",
+  "result": "expected failure before accepting the effective width declaration",
+  "source_base_commit": "ab838e20ca9e9d6714ee55766151c188daab0808",
+  "source_state": "Uncommitted initial Duck implementation on the stated base commit",
+  "sources": {
+    "src/adpcm.s": "29baa357df2fcf48c85b3ddf9d89286e413a08d55fb741bf9fdec05c501e1771",
+    "src/adpcm_duck.inc": "2bd1c8c8598eecf850f58b1f91d365e0a676463e8a8cc7140bd1bfc671914a23",
+    "src/decoder.s": "6c5630001f1d61f12672fb02ac308328daaf173c4ef32dfc80d011b6e5d2cfb5",
+    "src/avi.s": "48d72b6378c1dcb5531ac925b2a193bd4592894888412663c5f14286dbde7d4d"
+  },
+  "source_url": "https://samples.ffmpeg.org/A-codecs/DK3/sonic3dblast_intro.avi",
+  "source_sha256": "b32a3fa8400131502f9276a3a7683f9bd019f790b69f6806eb2db8712a6989c7",
+  "declared_bits": 3,
+  "observed": {
+    "result": "rejected",
+    "stage": "open",
+    "decode_error": 101
+  },
+  "binary_sha256": "d5fa6f31df86fb327301807d4abbe485459dcbe599653b5ca59b5dc7d719a357",
+  "archive_sha256": "4acb7b3ce9082ab1a97a68350d88cf3a59846701f60bffb5977f69a0c661566f"
+}

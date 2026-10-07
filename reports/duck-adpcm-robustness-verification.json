@@ -1,0 +1,29 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "dk4-mono.wav",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 500,
+      "decoded": 271,
+      "rejected_or_damaged": 229
+    },
+    {
+      "test": "dk4-stereo.wav",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 500,
+      "decoded": 235,
+      "rejected_or_damaged": 265
+    },
+    {
+      "test": "dk3.wav",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 500,
+      "decoded": 260,
+      "rejected_or_damaged": 240
+    }
+  ],
+  "mutations": 1500,
+  "decoded": 766,
+  "scope": "3 container/codec sources, 500 mutations each (Linux, 2 GiB address space), seed 20261006: byte flips, zero/0xff runs, cuts, removed and duplicated spans, large length fields; --check, every fourth from a random --start."
+}

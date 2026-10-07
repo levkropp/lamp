@@ -51,6 +51,9 @@ SOURCES = [
     ('ima-2bit.wav', None),
     ('ima-3bit.wav', None),
     ('ima-5bit.wav', None),
+    ('dk4-mono.wav', None),
+    ('dk4-stereo.wav', None),
+    ('dk3.wav', None),
     ('ms.wav', NOISE + ['-c:a', 'adpcm_ms']),
     ('mp3.wav', NOISE + ['-c:a', 'libmp3lame']),
     ('pcm.w64', NOISE + ['-c:a', 'pcm_s16le']),
@@ -271,6 +274,12 @@ def main():
                 align=channels*(4+adpcm_model.IMA_GROUP_BYTES[bits]*12)
                 body=adpcm_model.random_ima(random.Random(name),channels,align,24)
                 source.write_bytes(adpcm_model.wave(0x11,channels,48000,align,body,bits=bits))
+            elif name in ('dk4-mono.wav', 'dk4-stereo.wav', 'dk3.wav'):
+                import duck_adpcm_model
+                tag=duck_adpcm_model.DK3 if name=='dk3.wav' else duck_adpcm_model.DK4
+                channels=1 if name=='dk4-mono.wav' else 2
+                body=duck_adpcm_model.random_blocks(random.Random(name),tag,channels,256,89)
+                source.write_bytes(duck_adpcm_model.wave(tag,channels,48000,256,body))
             elif options is None:
                 monkeys_audio(name, source)
             else:

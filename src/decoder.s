@@ -832,6 +832,10 @@ LOCALFN decoder_open_format
     je .Lwav_codec
     cmp ecx, 0x11
     je .Lwav_codec
+    cmp ecx, 0x61                          # Duck DK3/DK4 IMA
+    je .Lwav_codec
+    cmp ecx, 0x62
+    je .Lwav_codec
     cmp ecx, 0x45                           # G.726, and its other tags
     je .Lwav_codec
     cmp ecx, 0x14

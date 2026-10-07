@@ -7,6 +7,7 @@ LAMP 0.4.0-dev plays the audio of AVI files (`.avi`) with a handwritten demuxer 
 | 1, 3 (or extensible) | PCM 8/16/24/32-bit and float32/64, 1–8 channels with WAVE speaker masks, as in [WAV](wav.md) |
 | 6, 7 | [G.711](wav.md#compressed-audio) A-law and µ-law |
 | 0x11, 2 | [IMA and Microsoft ADPCM](wav.md#compressed-audio) |
+| 0x61, 0x62 | [Duck DK4 mono/stereo and DK3 stereo](wav.md#duck-dk3-and-dk4) |
 | 0x50, 0x55 | [MPEG audio](mp2.md) Layers I–III, constant or variable bit rate |
 | 0x2000 | [AC-3](ac3.md) |
 | 0xFF | [AAC-LC and HE-AAC](aac.md): with an AudioSpecificConfig after the WAVEFORMATEX, each chunk is one raw frame; without one, the chunks are ADTS frames |

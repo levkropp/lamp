@@ -1,0 +1,1785 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "dk4-1ch-block4.wav",
+      "result": "exact",
+      "frames": 89,
+      "guard": {
+        "result": "passed",
+        "guard_checks": 11,
+        "frames": 1,
+        "bits": 4,
+        "channels": 1
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 14,
+        "discarded_frames": 11,
+        "maximum_discarded": 1,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "comparator": "integer model checked against FFmpeg"
+    },
+    {
+      "test": "dk4-1ch-block5.wav",
+      "result": "exact",
+      "frames": 267,
+      "guard": {
+        "result": "passed",
+        "guard_checks": 11,
+        "frames": 3,
+        "bits": 4,
+        "channels": 1
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 13,
+        "discarded_frames": 32,
+        "maximum_discarded": 3,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "comparator": "integer model checked against FFmpeg"
+    },
+    {
+      "test": "dk4-1ch-block6.wav",
+      "result": "exact",
+      "frames": 445,
+      "guard": {
+        "result": "passed",
+        "guard_checks": 11,
+        "frames": 5,
+        "bits": 4,
+        "channels": 1
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 13,
+        "discarded_frames": 58,
+        "maximum_discarded": 5,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "comparator": "integer model checked against FFmpeg"
+    },
+    {
+      "test": "dk4-1ch-block7.wav",
+      "result": "exact",
+      "frames": 623,
+      "guard": {
+        "result": "passed",
+        "guard_checks": 11,
+        "frames": 7,
+        "bits": 4,
+        "channels": 1
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 13,
+        "discarded_frames": 77,
+        "maximum_discarded": 7,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "comparator": "integer model checked against FFmpeg"
+    },
+    {
+      "test": "dk4-1ch-block11.wav",
+      "result": "exact",
+      "frames": 1335,
+      "guard": {
+        "result": "passed",
+        "guard_checks": 11,
+        "frames": 15,
+        "bits": 4,
+        "channels": 1
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 13,
+        "discarded_frames": 173,
+        "maximum_discarded": 15,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "comparator": "integer model checked against FFmpeg"
+    },
+    {
+      "test": "dk4-1ch-block64.wav",
+      "result": "exact",
+      "frames": 10769,
+      "guard": {
+        "result": "passed",
+        "guard_checks": 11,
+        "frames": 121,
+        "bits": 4,
+        "channels": 1
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 11,
+        "discarded_frames": 1063,
+        "maximum_discarded": 121,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "comparator": "integer model checked against FFmpeg"
+    },
+    {
+      "test": "dk4-1ch-block515.wav",
+      "result": "exact",
+      "frames": 91047,
+      "guard": {
+        "result": "passed",
+        "guard_checks": 11,
+        "frames": 1023,
+        "bits": 4,
+        "channels": 1
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 11,
+        "discarded_frames": 5914,
+        "maximum_discarded": 1023,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "comparator": "integer model checked against FFmpeg"
+    },
+    {
+      "test": "dk4-1ch-block65535.wav",
+      "result": "exact",
+      "frames": 131063,
+      "guard": {
+        "result": "passed",
+        "guard_checks": 11,
+        "frames": 131063,
+        "bits": 4,
+        "channels": 1
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 625876,
+        "maximum_discarded": 131063,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "comparator": "integer model checked against FFmpeg"
+    },
+    {
+      "test": "dk4-1ch-fact.wav",
+      "result": "exact",
+      "frames": 4027,
+      "guard": {
+        "result": "passed",
+        "guard_checks": 11,
+        "frames": 505,
+        "bits": 4,
+        "channels": 1
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 11,
+        "discarded_frames": 5169,
+        "maximum_discarded": 492,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "comparator": "integer model checked against FFmpeg"
+    },
+    {
+      "test": "dk4-1ch-partial.wav",
+      "result": "exact",
+      "frames": 4047,
+      "guard": {
+        "result": "passed",
+        "guard_checks": 11,
+        "frames": 505,
+        "bits": 4,
+        "channels": 1
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 11,
+        "discarded_frames": 329,
+        "maximum_discarded": 120,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "comparator": "integer model checked against FFmpeg"
+    },
+    {
+      "test": "dk4-1ch-short-header.wav",
+      "result": "exact",
+      "frames": 4040,
+      "guard": {
+        "result": "passed",
+        "guard_checks": 11,
+        "frames": 505,
+        "bits": 4,
+        "channels": 1
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 11,
+        "discarded_frames": 5306,
+        "maximum_discarded": 505,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "comparator": "integer model checked against FFmpeg"
+    },
+    {
+      "test": "dk4-1ch-extensible.wav",
+      "result": "exact",
+      "frames": 4040,
+      "guard": {
+        "result": "passed",
+        "guard_checks": 11,
+        "frames": 505,
+        "bits": 4,
+        "channels": 1
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 11,
+        "discarded_frames": 5306,
+        "maximum_discarded": 505,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "comparator": "integer model checked against FFmpeg"
+    },
+    {
+      "test": "dk4-1ch-rf64.wav",
+      "result": "exact",
+      "frames": 4040,
+      "guard": {
+        "result": "passed",
+        "guard_checks": 11,
+        "frames": 505,
+        "bits": 4,
+        "channels": 1
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 11,
+        "discarded_frames": 5306,
+        "maximum_discarded": 505,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "comparator": "integer model checked against FFmpeg"
+    },
+    {
+      "test": "dk4-1ch-w64.w64",
+      "result": "exact",
+      "frames": 4040,
+      "guard": {
+        "result": "passed",
+        "guard_checks": 11,
+        "frames": 505,
+        "bits": 4,
+        "channels": 1
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 11,
+        "discarded_frames": 5306,
+        "maximum_discarded": 505,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "comparator": "integer model checked against FFmpeg"
+    },
+    {
+      "test": "dk4-1ch-\u97f3\u58f0-\u00dcn\u00efcode.wav",
+      "result": "exact",
+      "frames": 4040,
+      "guard": {
+        "result": "passed",
+        "guard_checks": 11,
+        "frames": 505,
+        "bits": 4,
+        "channels": 1
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 11,
+        "discarded_frames": 5306,
+        "maximum_discarded": 505,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "comparator": "integer model checked against FFmpeg"
+    },
+    {
+      "test": "dk4-1ch.avi",
+      "result": "exact",
+      "frames": 4040,
+      "guard": null,
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 11,
+        "discarded_frames": 5306,
+        "maximum_discarded": 505,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "comparator": "FFmpeg stream copy of checked RF64 blocks"
+    },
+    {
+      "test": "dk4-2ch-block8.wav",
+      "result": "exact",
+      "frames": 89,
+      "guard": {
+        "result": "passed",
+        "guard_checks": 18,
+        "frames": 1,
+        "bits": 4,
+        "channels": 2
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 14,
+        "discarded_frames": 11,
+        "maximum_discarded": 1,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "comparator": "integer model checked against FFmpeg"
+    },
+    {
+      "test": "dk4-2ch-block9.wav",
+      "result": "exact",
+      "frames": 178,
+      "guard": {
+        "result": "passed",
+        "guard_checks": 18,
+        "frames": 2,
+        "bits": 4,
+        "channels": 2
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 13,
+        "discarded_frames": 21,
+        "maximum_discarded": 2,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "comparator": "integer model checked against FFmpeg"
+    },
+    {
+      "test": "dk4-2ch-block10.wav",
+      "result": "exact",
+      "frames": 267,
+      "guard": {
+        "result": "passed",
+        "guard_checks": 18,
+        "frames": 3,
+        "bits": 4,
+        "channels": 2
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 13,
+        "discarded_frames": 32,
+        "maximum_discarded": 3,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "comparator": "integer model checked against FFmpeg"
+    },
+    {
+      "test": "dk4-2ch-block11.wav",
+      "result": "exact",
+      "frames": 356,
+      "guard": {
+        "result": "passed",
+        "guard_checks": 18,
+        "frames": 4,
+        "bits": 4,
+        "channels": 2
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 13,
+        "discarded_frames": 46,
+        "maximum_discarded": 4,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "comparator": "integer model checked against FFmpeg"
+    },
+    {
+      "test": "dk4-2ch-block15.wav",
+      "result": "exact",
+      "frames": 712,
+      "guard": {
+        "result": "passed",
+        "guard_checks": 18,
+        "frames": 8,
+        "bits": 4,
+        "channels": 2
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 13,
+        "discarded_frames": 92,
+        "maximum_discarded": 8,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "comparator": "integer model checked against FFmpeg"
+    },
+    {
+      "test": "dk4-2ch-block68.wav",
+      "result": "exact",
+      "frames": 5429,
+      "guard": {
+        "result": "passed",
+        "guard_checks": 18,
+        "frames": 61,
+        "bits": 4,
+        "channels": 2
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 13,
+        "discarded_frames": 612,
+        "maximum_discarded": 61,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "comparator": "integer model checked against FFmpeg"
+    },
+    {
+      "test": "dk4-2ch-block519.wav",
+      "result": "exact",
+      "frames": 45568,
+      "guard": {
+        "result": "passed",
+        "guard_checks": 18,
+        "frames": 512,
+        "bits": 4,
+        "channels": 2
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 11,
+        "discarded_frames": 4093,
+        "maximum_discarded": 512,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "comparator": "integer model checked against FFmpeg"
+    },
+    {
+      "test": "dk4-2ch-block65535.wav",
+      "result": "exact",
+      "frames": 65528,
+      "guard": {
+        "result": "passed",
+        "guard_checks": 18,
+        "frames": 65528,
+        "bits": 4,
+        "channels": 2
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 330969,
+        "maximum_discarded": 65528,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "comparator": "integer model checked against FFmpeg"
+    },
+    {
+      "test": "dk4-2ch-fact.wav",
+      "result": "exact",
+      "frames": 1979,
+      "guard": {
+        "result": "passed",
+        "guard_checks": 18,
+        "frames": 249,
+        "bits": 4,
+        "channels": 2
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 11,
+        "discarded_frames": 2609,
+        "maximum_discarded": 236,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "comparator": "integer model checked against FFmpeg"
+    },
+    {
+      "test": "dk4-2ch-partial.wav",
+      "result": "exact",
+      "frames": 1996,
+      "guard": {
+        "result": "passed",
+        "guard_checks": 18,
+        "frames": 249,
+        "bits": 4,
+        "channels": 2
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 11,
+        "discarded_frames": 298,
+        "maximum_discarded": 120,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "comparator": "integer model checked against FFmpeg"
+    },
+    {
+      "test": "dk4-2ch-short-header.wav",
+      "result": "exact",
+      "frames": 1992,
+      "guard": {
+        "result": "passed",
+        "guard_checks": 18,
+        "frames": 249,
+        "bits": 4,
+        "channels": 2
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 11,
+        "discarded_frames": 2746,
+        "maximum_discarded": 249,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "comparator": "integer model checked against FFmpeg"
+    },
+    {
+      "test": "dk4-2ch-extensible.wav",
+      "result": "exact",
+      "frames": 1992,
+      "guard": {
+        "result": "passed",
+        "guard_checks": 18,
+        "frames": 249,
+        "bits": 4,
+        "channels": 2
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 11,
+        "discarded_frames": 2746,
+        "maximum_discarded": 249,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "comparator": "integer model checked against FFmpeg"
+    },
+    {
+      "test": "dk4-2ch-rf64.wav",
+      "result": "exact",
+      "frames": 1992,
+      "guard": {
+        "result": "passed",
+        "guard_checks": 18,
+        "frames": 249,
+        "bits": 4,
+        "channels": 2
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 11,
+        "discarded_frames": 2746,
+        "maximum_discarded": 249,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "comparator": "integer model checked against FFmpeg"
+    },
+    {
+      "test": "dk4-2ch-w64.w64",
+      "result": "exact",
+      "frames": 1992,
+      "guard": {
+        "result": "passed",
+        "guard_checks": 18,
+        "frames": 249,
+        "bits": 4,
+        "channels": 2
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 11,
+        "discarded_frames": 2746,
+        "maximum_discarded": 249,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "comparator": "integer model checked against FFmpeg"
+    },
+    {
+      "test": "dk4-2ch-\u97f3\u58f0-\u00dcn\u00efcode.wav",
+      "result": "exact",
+      "frames": 1992,
+      "guard": {
+        "result": "passed",
+        "guard_checks": 18,
+        "frames": 249,
+        "bits": 4,
+        "channels": 2
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 11,
+        "discarded_frames": 2746,
+        "maximum_discarded": 249,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "comparator": "integer model checked against FFmpeg"
+    },
+    {
+      "test": "dk4-2ch.avi",
+      "result": "exact",
+      "frames": 1992,
+      "guard": null,
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 11,
+        "discarded_frames": 2746,
+        "maximum_discarded": 249,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "comparator": "FFmpeg stream copy of checked RF64 blocks"
+    },
+    {
+      "test": "dk3-2ch-block18.wav",
+      "result": "exact",
+      "frames": 178,
+      "guard": {
+        "result": "passed",
+        "guard_checks": 24,
+        "frames": 2,
+        "bits": 3,
+        "channels": 2
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 13,
+        "discarded_frames": 21,
+        "maximum_discarded": 2,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "comparator": "integer model checked against FFmpeg"
+    },
+    {
+      "test": "dk3-2ch-block20.wav",
+      "result": "exact",
+      "frames": 356,
+      "guard": {
+        "result": "passed",
+        "guard_checks": 24,
+        "frames": 4,
+        "bits": 3,
+        "channels": 2
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 13,
+        "discarded_frames": 46,
+        "maximum_discarded": 4,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "comparator": "integer model checked against FFmpeg"
+    },
+    {
+      "test": "dk3-2ch-block22.wav",
+      "result": "exact",
+      "frames": 712,
+      "guard": {
+        "result": "passed",
+        "guard_checks": 24,
+        "frames": 8,
+        "bits": 3,
+        "channels": 2
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 13,
+        "discarded_frames": 92,
+        "maximum_discarded": 8,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "comparator": "integer model checked against FFmpeg"
+    },
+    {
+      "test": "dk3-2ch-block24.wav",
+      "result": "exact",
+      "frames": 890,
+      "guard": {
+        "result": "passed",
+        "guard_checks": 24,
+        "frames": 10,
+        "bits": 3,
+        "channels": 2
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 13,
+        "discarded_frames": 111,
+        "maximum_discarded": 10,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "comparator": "integer model checked against FFmpeg"
+    },
+    {
+      "test": "dk3-2ch-block26.wav",
+      "result": "exact",
+      "frames": 1068,
+      "guard": {
+        "result": "passed",
+        "guard_checks": 24,
+        "frames": 12,
+        "bits": 3,
+        "channels": 2
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 13,
+        "discarded_frames": 142,
+        "maximum_discarded": 12,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "comparator": "integer model checked against FFmpeg"
+    },
+    {
+      "test": "dk3-2ch-block32.wav",
+      "result": "exact",
+      "frames": 1780,
+      "guard": {
+        "result": "passed",
+        "guard_checks": 24,
+        "frames": 20,
+        "bits": 3,
+        "channels": 2
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 13,
+        "discarded_frames": 226,
+        "maximum_discarded": 20,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "comparator": "integer model checked against FFmpeg"
+    },
+    {
+      "test": "dk3-2ch-block64.wav",
+      "result": "exact",
+      "frames": 5696,
+      "guard": {
+        "result": "passed",
+        "guard_checks": 24,
+        "frames": 64,
+        "bits": 3,
+        "channels": 2
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 13,
+        "discarded_frames": 670,
+        "maximum_discarded": 64,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "comparator": "integer model checked against FFmpeg"
+    },
+    {
+      "test": "dk3-2ch-block256.wav",
+      "result": "exact",
+      "frames": 28480,
+      "guard": {
+        "result": "passed",
+        "guard_checks": 24,
+        "frames": 320,
+        "bits": 3,
+        "channels": 2
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 11,
+        "discarded_frames": 2973,
+        "maximum_discarded": 320,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "comparator": "integer model checked against FFmpeg"
+    },
+    {
+      "test": "dk3-2ch-block4096.wav",
+      "result": "exact",
+      "frames": 484160,
+      "guard": {
+        "result": "passed",
+        "guard_checks": 24,
+        "frames": 5440,
+        "bits": 3,
+        "channels": 2
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 7,
+        "discarded_frames": 49693,
+        "maximum_discarded": 5440,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "comparator": "integer model checked against FFmpeg"
+    },
+    {
+      "test": "dk3-2ch-block65535.wav",
+      "result": "exact",
+      "frames": 87358,
+      "guard": {
+        "result": "passed",
+        "guard_checks": 24,
+        "frames": 87358,
+        "bits": 3,
+        "channels": 2
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 429204,
+        "maximum_discarded": 87358,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "comparator": "integer model checked against FFmpeg"
+    },
+    {
+      "test": "dk3-2ch-fact.wav",
+      "result": "exact",
+      "frames": 2547,
+      "guard": {
+        "result": "passed",
+        "guard_checks": 24,
+        "frames": 320,
+        "bits": 3,
+        "channels": 2
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 11,
+        "discarded_frames": 3319,
+        "maximum_discarded": 307,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "comparator": "integer model checked against FFmpeg"
+    },
+    {
+      "test": "dk3-2ch-partial.wav",
+      "result": "exact",
+      "frames": 2564,
+      "guard": {
+        "result": "passed",
+        "guard_checks": 24,
+        "frames": 320,
+        "bits": 3,
+        "channels": 2
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 11,
+        "discarded_frames": 298,
+        "maximum_discarded": 120,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "comparator": "integer model checked against FFmpeg"
+    },
+    {
+      "test": "dk3-2ch-short-header.wav",
+      "result": "exact",
+      "frames": 2560,
+      "guard": {
+        "result": "passed",
+        "guard_checks": 24,
+        "frames": 320,
+        "bits": 3,
+        "channels": 2
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 11,
+        "discarded_frames": 3456,
+        "maximum_discarded": 320,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "comparator": "integer model checked against FFmpeg"
+    },
+    {
+      "test": "dk3-2ch-extensible.wav",
+      "result": "exact",
+      "frames": 2560,
+      "guard": {
+        "result": "passed",
+        "guard_checks": 24,
+        "frames": 320,
+        "bits": 4,
+        "channels": 2
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 11,
+        "discarded_frames": 3456,
+        "maximum_discarded": 320,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "comparator": "integer model checked against FFmpeg"
+    },
+    {
+      "test": "dk3-2ch-rf64.wav",
+      "result": "exact",
+      "frames": 2560,
+      "guard": {
+        "result": "passed",
+        "guard_checks": 24,
+        "frames": 320,
+        "bits": 3,
+        "channels": 2
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 11,
+        "discarded_frames": 3456,
+        "maximum_discarded": 320,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "comparator": "integer model checked against FFmpeg"
+    },
+    {
+      "test": "dk3-2ch-w64.w64",
+      "result": "exact",
+      "frames": 2560,
+      "guard": {
+        "result": "passed",
+        "guard_checks": 24,
+        "frames": 320,
+        "bits": 3,
+        "channels": 2
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 11,
+        "discarded_frames": 3456,
+        "maximum_discarded": 320,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "comparator": "integer model checked against FFmpeg"
+    },
+    {
+      "test": "dk3-2ch-\u97f3\u58f0-\u00dcn\u00efcode.wav",
+      "result": "exact",
+      "frames": 2560,
+      "guard": {
+        "result": "passed",
+        "guard_checks": 24,
+        "frames": 320,
+        "bits": 3,
+        "channels": 2
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 11,
+        "discarded_frames": 3456,
+        "maximum_discarded": 320,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "comparator": "integer model checked against FFmpeg"
+    },
+    {
+      "test": "dk3-2ch.avi",
+      "result": "exact",
+      "frames": 2560,
+      "guard": null,
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 11,
+        "discarded_frames": 3456,
+        "maximum_discarded": 320,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "comparator": "FFmpeg stream copy of checked RF64 blocks"
+    },
+    {
+      "test": "historical-dk3.avi",
+      "result": "exact",
+      "frames": 1738536,
+      "guard": null,
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 11,
+        "discarded_frames": 19845,
+        "maximum_discarded": 2708,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "comparator": "FFmpeg on hash-pinned historical encoder output"
+    },
+    {
+      "test": "historical-dk3.wav",
+      "result": "exact",
+      "frames": 1738536,
+      "guard": null,
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 11,
+        "discarded_frames": 19845,
+        "maximum_discarded": 2708,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "comparator": "FFmpeg on hash-pinned historical encoder output"
+    },
+    {
+      "test": "historical-dk4.avi",
+      "result": "exact",
+      "frames": 2277756,
+      "guard": null,
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 11,
+        "discarded_frames": 11601,
+        "maximum_discarded": 2041,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "comparator": "FFmpeg on hash-pinned historical encoder output"
+    },
+    {
+      "test": "historical-dk4.wav",
+      "result": "exact",
+      "frames": 2277756,
+      "guard": null,
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 11,
+        "discarded_frames": 11601,
+        "maximum_discarded": 2041,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "comparator": "FFmpeg on hash-pinned historical encoder output"
+    },
+    {
+      "test": "unsupported-tag97-channels3.wav",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 101
+      }
+    },
+    {
+      "test": "unsupported-tag98-channels1.wav",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 101
+      }
+    },
+    {
+      "test": "unsupported-tag98-channels3.wav",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 101
+      }
+    },
+    {
+      "test": "reject-tag97-bits.wav",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 101
+      }
+    },
+    {
+      "test": "reject-tag97-align.wav",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 60
+      }
+    },
+    {
+      "test": "reject-tag97-index0.wav",
+      "result": {
+        "result": "rejected",
+        "stage": "read",
+        "decode_error": 100
+      }
+    },
+    {
+      "test": "reject-tag97-index1.wav",
+      "result": {
+        "result": "rejected",
+        "stage": "read",
+        "decode_error": 100
+      }
+    },
+    {
+      "test": "reject-tag98-bits.wav",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 101
+      }
+    },
+    {
+      "test": "reject-tag98-align.wav",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 60
+      }
+    },
+    {
+      "test": "reject-tag98-index0.wav",
+      "result": {
+        "result": "rejected",
+        "stage": "read",
+        "decode_error": 100
+      }
+    },
+    {
+      "test": "reject-tag98-index1.wav",
+      "result": {
+        "result": "rejected",
+        "stage": "read",
+        "decode_error": 100
+      }
+    },
+    {
+      "test": "dk4-1ch cancel-open",
+      "result": {
+        "result": "cancelled"
+      }
+    },
+    {
+      "test": "dk4-1ch cancel-read",
+      "result": {
+        "result": "cancelled",
+        "frames_before_cancel": 8228
+      }
+    },
+    {
+      "test": "dk4-2ch cancel-open",
+      "result": {
+        "result": "cancelled"
+      }
+    },
+    {
+      "test": "dk4-2ch cancel-read",
+      "result": {
+        "result": "cancelled",
+        "frames_before_cancel": 4148
+      }
+    },
+    {
+      "test": "dk3-2ch cancel-open",
+      "result": {
+        "result": "cancelled"
+      }
+    },
+    {
+      "test": "dk3-2ch cancel-read",
+      "result": {
+        "result": "cancelled",
+        "frames_before_cancel": 16640
+      }
+    }
+  ],
+  "fixture_hashes": {
+    "dk3-2ch-block18.wav": "87d2df3c38c523661b8922072ba3df0a496e863e6e15714c0bc459c791179e1a",
+    "dk3-2ch-block18.wav.block": "f4e0965332c8a8ee241d3daf19fc225390ca436f3812f4fb0dd2fb366bba87d0",
+    "dk3-2ch-block18.wav.block.f32": "7f5bf70005f1fe4b2f61e858297c93052bc90fb11366667ad0cfe351ed4fbe64",
+    "dk3-2ch-block18.wav.fmt": "d9888038556b08c687ecd61dbd3543e88a75fbdf8ae62a912e2533a7c01946c2",
+    "dk3-2ch-block18.wav.reference.f32": "81f6b46fb57096f2b81557dd275a9d1342fd2791a207ca62fe06f13276a89b51",
+    "dk3-2ch-block20.wav": "3699b93cf996e2c4b9fcfdd9a36b5fe64f44bee662a7951a9c3fb9b511838160",
+    "dk3-2ch-block20.wav.block": "933be4a1f50534b8a41176dbc60a00de991c2f9eafc8460e34433a62fa13f5eb",
+    "dk3-2ch-block20.wav.block.f32": "a25af6f96553a5c4ff73402af89b8aa728a13383005f39aab836938eb4eef415",
+    "dk3-2ch-block20.wav.fmt": "0c7a076fa228d8e6ffe57b30885c46b83879b0aff73dc6ee0609ef35cc93dfb7",
+    "dk3-2ch-block20.wav.reference.f32": "e9e9796fef5d854ec04f0eb4ac1856a57ddc4d194ad6de28867cbf40282a6bb4",
+    "dk3-2ch-block22.wav": "ecfab1207ee4f05638c01cc161d5d3b7153688e0620d39226f111475cd02657d",
+    "dk3-2ch-block22.wav.block": "e3d19fa0653cc31784aa87bdb96f85a33388d05b61a4b048c79f88ffe188fd4c",
+    "dk3-2ch-block22.wav.block.f32": "85ce4fc6ab1adad0d69b34cbb9549c76a01771fed38fcbe9e6866b8f0919ca95",
+    "dk3-2ch-block22.wav.fmt": "691b585974130ef5b11521bb6e63d41c46af718837f22e5625a980a4623f982f",
+    "dk3-2ch-block22.wav.reference.f32": "cce67b882fe2804fd3a5f5f4d8187991aabf82f1b1af8b6d864b555d72cf9cab",
+    "dk3-2ch-block24.wav": "12d557782e6e7e8a4e406bb821d9619b98973428fce25ef489d21f8b2ec6aecc",
+    "dk3-2ch-block24.wav.block": "e4bef4ace97de47b175da4d1f52f98ce34c91ba31e622f44a4c830dcb78184b5",
+    "dk3-2ch-block24.wav.block.f32": "3c7deca0b4ac43a26fef81e5508203a55fc787dc7ffee4a2374a4c13367b6cce",
+    "dk3-2ch-block24.wav.fmt": "f4548a51f3af34ba804ec20b09ce4f63d7fd319a05f3a95dc0291357730dddc2",
+    "dk3-2ch-block24.wav.reference.f32": "a717721f81f6e0a670d679372caf43f9c58bbb4ce60b58c69a761a53a22a5785",
+    "dk3-2ch-block256.wav": "351083c92ff479ceb41642512cf77c713f6e85d60a0efa5761c85f547ae00ea9",
+    "dk3-2ch-block256.wav.block": "750a350642c0c6564a02b83649bd9c5f7f2125d57a93b9cd41323acaefba453a",
+    "dk3-2ch-block256.wav.block.f32": "66b10ff43ffeb34fe885f375181daabda1aad7ef56ef2d6287f9a83a9a790713",
+    "dk3-2ch-block256.wav.fmt": "926230835e6f84503974a3fe244e95a17f9b692d1f2c0ba52e73f5c1a6841112",
+    "dk3-2ch-block256.wav.reference.f32": "4cef06dae68dc8536868cd209df2524433a8552d63e0af3eeb7c25b87f70f04d",
+    "dk3-2ch-block26.wav": "42d355ecab50bb4f4e0cc6f85c125a484d767190aa1d514fef18964693c68915",
+    "dk3-2ch-block26.wav.block": "9da21567ba275200a04b529158b7bd53dbe50458177de1b2b5019646dd972a1d",
+    "dk3-2ch-block26.wav.block.f32": "02779a4ed0871c0dd922dd943682e452ff34af53d9a7cf301cef42b264acaebc",
+    "dk3-2ch-block26.wav.fmt": "fc0bde96a9d653a857096f28b8b9e87233dea3e3f0cb842a1f8fd63a954445ff",
+    "dk3-2ch-block26.wav.reference.f32": "c758d062c044298ab656ebbac787d4d8e2f43545932fe0ec911a6cd94cee09b8",
+    "dk3-2ch-block32.wav": "f5f3c017aa24dbf50b00e5926d41eefd532561f4344cce86c93ba8b406399459",
+    "dk3-2ch-block32.wav.block": "dcb002444a85be94fb09e8f8932a72c343f74a272007aa78ea1de798325f80c8",
+    "dk3-2ch-block32.wav.block.f32": "7edb94ff4db2b182503e979d9ee9bae6261043bc5076d3d93535ce6124a5b5f9",
+    "dk3-2ch-block32.wav.fmt": "2a394642ef494ec2bafce42fc1aad85f006f94d2dc03e585132fffa60595654b",
+    "dk3-2ch-block32.wav.reference.f32": "8079027dc2732d36596f49325fd979ae2127c09ba12129c76d9a54212e41d857",
+    "dk3-2ch-block4096.wav": "56987db5e9bb74d98a6f50da1a80e16faf4866cdb33e115f3d243cfb04dd1152",
+    "dk3-2ch-block4096.wav.block": "e437416e5e70bb1407a4d4b5eeac0eb16714e38efb7d6066ada054cba7db261d",
+    "dk3-2ch-block4096.wav.block.f32": "567d44b7fbc1ea99a0ddce95c32464937994ed5b4abefbf791964a21fd0d1bb9",
+    "dk3-2ch-block4096.wav.fmt": "b93b8346a2e21204c1ac16d6984128396926961152aab7a3aa9458f3de3e909f",
+    "dk3-2ch-block4096.wav.reference.f32": "9aeb3311ea1dc46e88a88c3373831bc53f9b87baf61081a00ddd3f9e320ea2d6",
+    "dk3-2ch-block64.wav": "58831b8428f1400831ae8db75b42a08d9e76a3ec88b20b1023343688f9420614",
+    "dk3-2ch-block64.wav.block": "7e1ae215ab2cc4ae9f57586d33626300f5580d0c1a09ce290a186e7e71529e85",
+    "dk3-2ch-block64.wav.block.f32": "a1fed7e0bcce1c17f935bbb9b526f70709d8deeb2addbcf976a3b073d7ef7c93",
+    "dk3-2ch-block64.wav.fmt": "b0986197047c01aeffc44eaf53d2fa9697967a44797d6c584e04e36dbc653c43",
+    "dk3-2ch-block64.wav.reference.f32": "89c8a65d6c5d3c90f45a10e531be0b25b1b2459caa694432935e60364957dfaa",
+    "dk3-2ch-block65535.wav": "703d9a4626c15a0daa0a35c45cd9313c910fc03ab6c13a46ff01db6d349936a0",
+    "dk3-2ch-block65535.wav.block": "e5c4f13199681b8519e1398bb971cee97e5b92cdbdb4c9c13c9c8bd371a094e8",
+    "dk3-2ch-block65535.wav.block.f32": "e3f679621fdd45b9e4fd06dd068b5b99be9138957bc4d18eeb979ed87fbff178",
+    "dk3-2ch-block65535.wav.fmt": "f9e99085904f3433ff11bf971d2a8549c9190f4c42f8f64abcfa5af28c59dd2f",
+    "dk3-2ch-block65535.wav.reference.f32": "e3f679621fdd45b9e4fd06dd068b5b99be9138957bc4d18eeb979ed87fbff178",
+    "dk3-2ch-extensible.wav": "148e611e194402bb5845fdbb6529721bbf0b81dc8220889f52be3c85b51c4e40",
+    "dk3-2ch-extensible.wav.block": "f993f2c922837c306e7207ac14d84859823d89130b15e9340d22e379c6541a96",
+    "dk3-2ch-extensible.wav.block.f32": "e45b2229dd545445cb29eead6aefb5b0b335f69c0e5074ca4617634f55b9d220",
+    "dk3-2ch-extensible.wav.fmt": "8033b61d61acd64e1b4681201b93d6c90b6249db748d2144a638694eb0a7b402",
+    "dk3-2ch-extensible.wav.reference.f32": "8d9ea7a959e3660a742673587bc3172ac11ba564219078024461af1e4b12f004",
+    "dk3-2ch-fact.wav": "e92d3d16190663d481561654a7d57a4d189ab8260e59e2a1f8605243ad7ba628",
+    "dk3-2ch-fact.wav.block": "6ddf3f31384b13d3c138f49a36f7fd7ac74a1c34ad7e834a279cbca94f8dbf85",
+    "dk3-2ch-fact.wav.block.f32": "f341469f48ad208f346fd85575aee4cc220f5e87f94612f2299a480ff0882f6d",
+    "dk3-2ch-fact.wav.fmt": "926230835e6f84503974a3fe244e95a17f9b692d1f2c0ba52e73f5c1a6841112",
+    "dk3-2ch-fact.wav.reference.f32": "d5ca7874fed8195a8a5904fb38ac2938843e79e7f8b806f19829bb4abc0c80bc",
+    "dk3-2ch-partial.wav": "56f11d84f94ea0f627359870f41532c3160eb247b38a811efde6430d32f8e3a7",
+    "dk3-2ch-partial.wav.block": "01666e53b091a240190024e34b44b3e251d265dc4491e4ab73880a8a74f4445f",
+    "dk3-2ch-partial.wav.block.f32": "7a6803ab1cf343df710a58c072e67770c6893cccce10e41e584e4600dd605f4b",
+    "dk3-2ch-partial.wav.fmt": "926230835e6f84503974a3fe244e95a17f9b692d1f2c0ba52e73f5c1a6841112",
+    "dk3-2ch-partial.wav.reference.f32": "31aa78b26f7442091114ac8d1cae9a539dd9caec454a3f6cc927a29f7f16922a",
+    "dk3-2ch-rf64.wav": "93855978cead5cf813e6da760ac01b82ad0cb8826f8ed8c8dfb162e9e6eff34e",
+    "dk3-2ch-rf64.wav.block": "fabbb3bffc6c71ae6bdf1d33a6a7ef1bdab2483551db4e2ebc3aea5912cb8c21",
+    "dk3-2ch-rf64.wav.block.f32": "d116a4bba54e1b2588f456ad3a7959f93e35ac51a9a42a45cee1052532f8ab2b",
+    "dk3-2ch-rf64.wav.fmt": "926230835e6f84503974a3fe244e95a17f9b692d1f2c0ba52e73f5c1a6841112",
+    "dk3-2ch-rf64.wav.reference.f32": "9cea00ec64c623a5d42b65ee7084c0531eb3c72c799beca59799677703cefada",
+    "dk3-2ch-short-header.wav": "0d0bc49c0f9f9d9c2cba589baca004c11bfbeb67e8a41d996d02f90e53af9300",
+    "dk3-2ch-short-header.wav.block": "5c03cb5792f6aedf65363e8ea879b6bfb581049ec400fe04181ac70abde34089",
+    "dk3-2ch-short-header.wav.block.f32": "3bd77e3227cf56e6112c678288e178e1d66754a83893128e09632a99cefee4ae",
+    "dk3-2ch-short-header.wav.fmt": "926230835e6f84503974a3fe244e95a17f9b692d1f2c0ba52e73f5c1a6841112",
+    "dk3-2ch-short-header.wav.reference.f32": "cdd0690d2179a1bd5bdbe53962582dabb56639fecb720269021f90c3a8711115",
+    "dk3-2ch-w64.w64": "a2b81c397f772aa34b2a9db797232288f1c26637aac21d62583795dbb7c96b5d",
+    "dk3-2ch-w64.w64.block": "70b7de3edf8555d79c551c9994ff91ba45dec70b7e26a9e53882395a8fccd81d",
+    "dk3-2ch-w64.w64.block.f32": "3d5495095936801d0b3864083f545da362fcdf7f48903cfd475d597161f9c6d2",
+    "dk3-2ch-w64.w64.fmt": "926230835e6f84503974a3fe244e95a17f9b692d1f2c0ba52e73f5c1a6841112",
+    "dk3-2ch-w64.w64.reference.f32": "eb543f752c10c759d3778bdde37ce0aeef6b04510f9c05d874847cc4da689aba",
+    "dk3-2ch-\u97f3\u58f0-\u00dcn\u00efcode.wav": "63dbe4a6e3396421f781e056642e0f8f4628c13acf2849fda60a82501399e59c",
+    "dk3-2ch-\u97f3\u58f0-\u00dcn\u00efcode.wav.block": "1891e05cd3de8501838172f05661ed69f853b000a316b8dab1943b20085a2b91",
+    "dk3-2ch-\u97f3\u58f0-\u00dcn\u00efcode.wav.block.f32": "1dda6a6fc461101c60d75c18d295321aee89f9436836c7897d53c5bd095e37ab",
+    "dk3-2ch-\u97f3\u58f0-\u00dcn\u00efcode.wav.fmt": "926230835e6f84503974a3fe244e95a17f9b692d1f2c0ba52e73f5c1a6841112",
+    "dk3-2ch-\u97f3\u58f0-\u00dcn\u00efcode.wav.reference.f32": "4440de225de7db85f58c8abc4d2b01f316e9fdd5a49cd513385a11adcd5da39a",
+    "dk3-2ch.avi": "b701e9cce936d5644e5c34341a1234da561a5ec1605d78bc42b9cdb3b1347008",
+    "dk3-2ch.avi.reference.f32": "9cea00ec64c623a5d42b65ee7084c0531eb3c72c799beca59799677703cefada",
+    "dk4-1ch-block11.wav": "bb2b128c13d96c07464936407f6c09a25410927c87fbac6d9dc9e1fe2ba7878e",
+    "dk4-1ch-block11.wav.block": "493dbbb8cfc42785b526301a17bf77867e71c9514cc806e3da952709175f24dd",
+    "dk4-1ch-block11.wav.block.f32": "b7c520280a03062d2e18d9346cb404b546699cd51a0ada0b4cef5c002d6dbb49",
+    "dk4-1ch-block11.wav.fmt": "270054c82ba7b1a7abddb09ecfb119e409aeb54a0e94e1abdfceccb1ee864591",
+    "dk4-1ch-block11.wav.reference.f32": "ee688dce4be5ed19856f96f414133a7c7c3540a6d103ceecf7f6f2add45e4fea",
+    "dk4-1ch-block4.wav": "22644c51e7477091115767e3dcd10290b8b63bcfeb2e44188fef29adeadc7053",
+    "dk4-1ch-block4.wav.block": "94751be059d25844fadecb89656e16fe3ec44058475017859ec762f26173f014",
+    "dk4-1ch-block4.wav.block.f32": "7c8e9e654585093fe245e490010889af419e1023882a4110ddfc3d53ce48721e",
+    "dk4-1ch-block4.wav.fmt": "e250fe428db47a4008f85a4e135fa84ab51c71bebb178a6fc9fdcfab72300816",
+    "dk4-1ch-block4.wav.reference.f32": "f6a4d806ea00afc63f5818f7993e7f2e491d9820782447f9b437ba4fe536030e",
+    "dk4-1ch-block5.wav": "d65a1eacc5c6548478d2404074d5e41d3cfb5dad1df83701fdcdfec58c9ca869",
+    "dk4-1ch-block5.wav.block": "100774cdf3edf05f67d3d2f9939a60bfdcb9dbc38106c3ee7f078c2914a27b2a",
+    "dk4-1ch-block5.wav.block.f32": "e421cb2a7acff113b79e5b6ca65d7c0a77c97c1de7b6197d31ada9a7433727a1",
+    "dk4-1ch-block5.wav.fmt": "8857a3dba4e4eadb6611740c260af07f19a3d466d381cc317e7acdde2c80c8ec",
+    "dk4-1ch-block5.wav.reference.f32": "1b478760517c616b8052d4d8a562babd6a5d86dd7d1d1b273300d266147f5969",
+    "dk4-1ch-block515.wav": "ad35724c239f97008afbf7132d02402af44e40944505e7204311e46775f73e04",
+    "dk4-1ch-block515.wav.block": "b572a309716534906ec0b8cf493171940a2d00ea9dfa4e4f6fca53ac440afc09",
+    "dk4-1ch-block515.wav.block.f32": "285b7a2f1835a498212550dde2f459337f3212ff3e8a1aea99a75d969e273a45",
+    "dk4-1ch-block515.wav.fmt": "198f5060d9db611f5a25399bdcec02a2f229d49f00ac7e528e7505e3de5d5d68",
+    "dk4-1ch-block515.wav.reference.f32": "6ac07e884f18816b2af9af8b7c5f938e45a32e470a9b3a34cfe1cae409e81fc7",
+    "dk4-1ch-block6.wav": "3e5d07d1ae942623d01f350873b313aab6c089ace97fcdd56f6db4160fcfaa90",
+    "dk4-1ch-block6.wav.block": "3422a5b7cddd7152a94a2b507a5ab237c564eda6a780d0179083ec65d86da3d5",
+    "dk4-1ch-block6.wav.block.f32": "bc09276105f463f20d0ce388037268fc5ba17e08cd1ea11c5090128f1b8be504",
+    "dk4-1ch-block6.wav.fmt": "199a5e9f2306ed12664a9744e577816eb63a617c310c37112bad094df267aaac",
+    "dk4-1ch-block6.wav.reference.f32": "60be975734fba2a35a200886b960937a3c17ed261608e224b5fdce1e3da3a8cf",
+    "dk4-1ch-block64.wav": "220146e7795c62053e756e103f0c9389d2842e0d685571b6850c8c2713766f0d",
+    "dk4-1ch-block64.wav.block": "b75b9d6da2281ad9245ae25a5af0fd6f76bb1a896cc1da62b0b1e8fc05c498f8",
+    "dk4-1ch-block64.wav.block.f32": "2a56312728eb6019f4785eb4ad13cd47280aaf28bdd7fa50324c887f3a58f434",
+    "dk4-1ch-block64.wav.fmt": "d226dbb57621d6dc2cb66932a793c5f19070963ad13e32a2fe1c650944a67bd2",
+    "dk4-1ch-block64.wav.reference.f32": "17e43a9bdfca0e0f4641692fccda955e499bb50ad98af17e5b02946477198473",
+    "dk4-1ch-block65535.wav": "4d332a577a75f4551c808f19b1cc2a829ad6c93b82341a2927b57e89f5e49b85",
+    "dk4-1ch-block65535.wav.block": "56d658a394edf101517f7aa90e627d8310cf4a8ac9a416936cca6e63dc256998",
+    "dk4-1ch-block65535.wav.block.f32": "5243ff1c8a4deb89ab89d6e9a8d83d6cd943128f02708693aea76b730a46c631",
+    "dk4-1ch-block65535.wav.fmt": "aab9bb596c675523d1c1644c41297994acdf5a6fb4e2a638fe28bf76bdef4b9f",
+    "dk4-1ch-block65535.wav.reference.f32": "5243ff1c8a4deb89ab89d6e9a8d83d6cd943128f02708693aea76b730a46c631",
+    "dk4-1ch-block7.wav": "3f552c6dae400935952e36dc73cedc4bf8c6878c5d2be7e4c47ead7b9bd004b2",
+    "dk4-1ch-block7.wav.block": "9caea4da7c34deb59591640ccdb763047009194151e24cf073c10d0517abfbff",
+    "dk4-1ch-block7.wav.block.f32": "e26adeaf5c44c35e40e6db20e46b23af795293cea47ba258a7838a0ba8c8d6ff",
+    "dk4-1ch-block7.wav.fmt": "90e3d9599ea91a4e22407151d496e83611c1df6a92aa8f662179355007fd7366",
+    "dk4-1ch-block7.wav.reference.f32": "01e17b28dff8c3b75eb82fd2f1518964cb9b75bf4a722e16d517abb7830a18f7",
+    "dk4-1ch-extensible.wav": "328be3f87cdd45407c39de689e2d383285157411deac8dccfc4ceb60a5f32d31",
+    "dk4-1ch-extensible.wav.block": "17eb39635fda7f73d03d56645d07f90e76482a4edf2a6276532c612c8caebbf6",
+    "dk4-1ch-extensible.wav.block.f32": "93135093799f0daf21143fba07c18b949fa218a1c0c6b5a5fd53a5db5f9b6594",
+    "dk4-1ch-extensible.wav.fmt": "1ed5a58c5cbaa89584948c2ecbceddc0530318558f6d90f2d2bc18badee9d125",
+    "dk4-1ch-extensible.wav.reference.f32": "5cc767334e3275b1c08817d929bd2bb41b9b93755046ec3b6374910327a08e9c",
+    "dk4-1ch-fact.wav": "febe55d0d8a94093de0a323040351ff1814d65d8af09fc65e03a9c92af36da38",
+    "dk4-1ch-fact.wav.block": "35588f422fd47bb57b49c07652e663d7bd32610eff3284a907d4cf51d2443de0",
+    "dk4-1ch-fact.wav.block.f32": "84650df87ced3043e8de66fc70692cfebc8adeee705e55b24e59bc12a4e21816",
+    "dk4-1ch-fact.wav.fmt": "6c6384cd425b3c5fd948b092d0d238b817e6223d56693fcb9768a8eec2a29906",
+    "dk4-1ch-fact.wav.reference.f32": "3cb9b91610d51cd6200912310eb54f61dc66a3d761ddbcc504c70b6bdf768cee",
+    "dk4-1ch-partial.wav": "a9ddfe444cbe40ef0eb7126f0a436a1d9b7387f34deedd71f2c47e420e6c38e6",
+    "dk4-1ch-partial.wav.block": "c147eed56adf8694766c924a369b1ee4b43f064c4f4905ec6298c73d987227a4",
+    "dk4-1ch-partial.wav.block.f32": "bb77a87755770c03e0b0f4c048815ea1d6c4d8e0874f2ef0e6837a15370a7f8a",
+    "dk4-1ch-partial.wav.fmt": "6c6384cd425b3c5fd948b092d0d238b817e6223d56693fcb9768a8eec2a29906",
+    "dk4-1ch-partial.wav.reference.f32": "817c4eb5ac65ddb44ed23c0e674a7e6d353fceddc0d3146b81e2f62b5e489956",
+    "dk4-1ch-rf64.wav": "a922418f3f56e05059eb24c6110e7e75388e9350542e1029c3aa41350b013dc7",
+    "dk4-1ch-rf64.wav.block": "66e14cff3bfa6d6399a7cab4c21634f8c1b553e46f600ea4ff6e859d56330af8",
+    "dk4-1ch-rf64.wav.block.f32": "4b8409667233abca6710951ffbec86da9fdc527fe6418662cf00d95cea1ac933",
+    "dk4-1ch-rf64.wav.fmt": "6c6384cd425b3c5fd948b092d0d238b817e6223d56693fcb9768a8eec2a29906",
+    "dk4-1ch-rf64.wav.reference.f32": "4d672d45066ab62299a25ffd48a56e31c9402c0ee4c665d905d60d8c083e09e0",
+    "dk4-1ch-short-header.wav": "4cb6a584c233515ef69bac36a911d844d3bcc87cc80f0be28515dabfecc43814",
+    "dk4-1ch-short-header.wav.block": "fe105c419171ba5f68bbe0dc72ea72cc1c5a7654eeba37f810917c22364444d9",
+    "dk4-1ch-short-header.wav.block.f32": "00d9849f411246f2f161062b515a45916b8755df6021e6afe1d0270b8ef415a0",
+    "dk4-1ch-short-header.wav.fmt": "6c6384cd425b3c5fd948b092d0d238b817e6223d56693fcb9768a8eec2a29906",
+    "dk4-1ch-short-header.wav.reference.f32": "f1aca7df79192fa935b102f2774124bfd6f962a982e6c51203ab7e13e6608efe",
+    "dk4-1ch-w64.w64": "fde7e99ae1a7bf4e366e1543459ce523ab5ed8d61fcae0f0a9b41bb664b27c92",
+    "dk4-1ch-w64.w64.block": "40d0eaae65bcc4eb79388e207a8713499b792791e7b8113ea42990622d5c6b54",
+    "dk4-1ch-w64.w64.block.f32": "0b210b810ef6b8502f1dbaa70075cb81873cdb4080a58b92f9deb4e7250a8765",
+    "dk4-1ch-w64.w64.fmt": "6c6384cd425b3c5fd948b092d0d238b817e6223d56693fcb9768a8eec2a29906",
+    "dk4-1ch-w64.w64.reference.f32": "d7b85ccd886719f269d114ab5b638296a4ecda4e2d7aa40b268540d7b14f7baa",
+    "dk4-1ch-\u97f3\u58f0-\u00dcn\u00efcode.wav": "3d00382c88eee0d9ca5d620915744b13e6aac36eadb395da9ba86ac229f3a8f7",
+    "dk4-1ch-\u97f3\u58f0-\u00dcn\u00efcode.wav.block": "22aa1decdbb66808312a28e3c121c01403ba5e380c5c28decc785b8f09683f2c",
+    "dk4-1ch-\u97f3\u58f0-\u00dcn\u00efcode.wav.block.f32": "81385703ee51ca5e5281bd53acdab1534a4bdf4234d0b8a7fd47f71bfb92e063",
+    "dk4-1ch-\u97f3\u58f0-\u00dcn\u00efcode.wav.fmt": "6c6384cd425b3c5fd948b092d0d238b817e6223d56693fcb9768a8eec2a29906",
+    "dk4-1ch-\u97f3\u58f0-\u00dcn\u00efcode.wav.reference.f32": "615046222536ff092e5bcf7c3a479d42137fb6e9db5c9dbf3485cfdbade38c79",
+    "dk4-1ch.avi": "50d8c7b6e4f73ab97d471a14aade78272b36a69ccb8c87d5d67c6882f966ba75",
+    "dk4-1ch.avi.reference.f32": "4d672d45066ab62299a25ffd48a56e31c9402c0ee4c665d905d60d8c083e09e0",
+    "dk4-2ch-block10.wav": "97618de6e9721fa8aad1058fb393a013f6e29e6b85818293c5ea6b8408d50b2e",
+    "dk4-2ch-block10.wav.block": "e2ef38378aba244738b26bd31deb9d2d470e063298dff944227ad12e3c7c9b36",
+    "dk4-2ch-block10.wav.block.f32": "271289ffe1717f26d24a51047baf2c62bbd6d605911c7c6812f536c50dc91012",
+    "dk4-2ch-block10.wav.fmt": "e63245dcdb606591a3d0313a02e339d1873688fdf1478aeec5f8964e7caab14d",
+    "dk4-2ch-block10.wav.reference.f32": "53583ba4f544828baf3114e9af2b33349856d92d80a6aad3721f75687ff3cb9d",
+    "dk4-2ch-block11.wav": "bb5ddebe55170212fd22086790da4520720f23989d8464aeddab8cbafbeed45c",
+    "dk4-2ch-block11.wav.block": "d91ed6f55f9120f8cf470d011406eb2059a7dc5c097ee549c2d903cf1a844459",
+    "dk4-2ch-block11.wav.block.f32": "f41d0da7d8e47432313d78653590fee2fd1bc0edbf0072c784d4bf9a0acba0f7",
+    "dk4-2ch-block11.wav.fmt": "66d4477bc5c228d18b89041af4d8bb815cc488974623c0e6a746ff6165520792",
+    "dk4-2ch-block11.wav.reference.f32": "fb4f93c67b9d59290dff392349f44cf0a79fc0711868ce966a5c934f58c85b30",
+    "dk4-2ch-block15.wav": "fdb1e0be0c75150d194efa6b24570efcda9174c0e9423886a85b05b179ac57aa",
+    "dk4-2ch-block15.wav.block": "86918e7b7f800a5f09feb2d6c631b5d26b1964e87408958424e25805a4bfb88e",
+    "dk4-2ch-block15.wav.block.f32": "8b2e69a7de76f09ada7267e8fc3b9b04c19944eb67d59268b72e22ae77a3b49e",
+    "dk4-2ch-block15.wav.fmt": "0f976b44d5797360817507c82a7ebf968a678023b38e10322861aeeab8e27502",
+    "dk4-2ch-block15.wav.reference.f32": "0bd1be3ff197505adc50d6f16d255253ac14105fd783633f70450f448021985c",
+    "dk4-2ch-block519.wav": "6fcc8b31a07711ac78b4e875c60771cacf523166046e51a87e3abbd4ba06b949",
+    "dk4-2ch-block519.wav.block": "ecb270b67ff59ddd74322c05d4dd76d443c8e8edd4555bc0f55657866a30c5da",
+    "dk4-2ch-block519.wav.block.f32": "72faddd9ce03da2f01bbd767cf267d23645c096b8645343ab5e0b44dbfdf9ded",
+    "dk4-2ch-block519.wav.fmt": "8e6e23c45f18f8d96de4423ef88ed48d84e72e22360b43cc98d4ef4f0207aec0",
+    "dk4-2ch-block519.wav.reference.f32": "43dca7bb345048c030fa4ab7e0a63b824b94ea7e3288655e10f4c9f838cbdea0",
+    "dk4-2ch-block65535.wav": "2ada1b589d87712e3f8de6e0a57f2902c3982508526cc6973ca9b31032a65403",
+    "dk4-2ch-block65535.wav.block": "d464364f160237ce262ab903c88ee94389b2dc2eeea808318b841e25e4f1f63e",
+    "dk4-2ch-block65535.wav.block.f32": "3d80d5ad8256f127eb89ae21860139096d3a1c4ce6434b0340fd1f44c1c06a6b",
+    "dk4-2ch-block65535.wav.fmt": "d888079da41b518a5b20a6f7d3896e08493b12316e06dc839e9ff830ff21ca16",
+    "dk4-2ch-block65535.wav.reference.f32": "3d80d5ad8256f127eb89ae21860139096d3a1c4ce6434b0340fd1f44c1c06a6b",
+    "dk4-2ch-block68.wav": "4c3be383100dc3c022fc71cea78f1704eec49f74c1806022980a78661cd9b1ff",
+    "dk4-2ch-block68.wav.block": "c4bb34b9e7c83fbf797a01d7eb1bd4dbdb33f2510d54a85853d5d2066200e3cd",
+    "dk4-2ch-block68.wav.block.f32": "3603ebf93f56f0278f969700875e993f1077a52dd6487e7a4f426adfe5d9eb22",
+    "dk4-2ch-block68.wav.fmt": "e6933ce4d11b2493bac0308fbca6fa4b760094ecce0923c6907640a7b55c9da3",
+    "dk4-2ch-block68.wav.reference.f32": "6d20684aef1c8db43964ce0e87c644cdfa5cd2e9e7530d85fa0819fe8ebd470c",
+    "dk4-2ch-block8.wav": "90550d710e5daad9fb3a2c8e6b67cd02771251695fe6a6973fabf22a573dc089",
+    "dk4-2ch-block8.wav.block": "a7af02e19d6cdd3c31e7d169d4be5da93011f01528169449b50da3112bb97b12",
+    "dk4-2ch-block8.wav.block.f32": "8afd80831c3ae6da50d4a52cafbb6c4f1a9ceb7086452520b07bb0bbd0057f79",
+    "dk4-2ch-block8.wav.fmt": "20e25b818245e15f417adc242ee220accbecb3b5363e686802d4b2dce506ba16",
+    "dk4-2ch-block8.wav.reference.f32": "6dd4d8b28e8e9c8d8ed8b459e59ab7a75e34ee165c2690fa33ace218eda2cab0",
+    "dk4-2ch-block9.wav": "d18ecc6e49a6eb0fef3e1e073daa3f6eb1722b4fa128c3c5691407e9f2041dbc",
+    "dk4-2ch-block9.wav.block": "fab93832490ca6295cb1fd8fa78b7fd4d726dbaa9440da1ffcd4567b95d5367b",
+    "dk4-2ch-block9.wav.block.f32": "7484d13817a1650750e85b20c7acadbcbfbfed59f9ff47fdc5bd0f11c678b0c1",
+    "dk4-2ch-block9.wav.fmt": "a7e51f45541c62b7f5934e41052d789a2317d1f18d6ec4f09abc050039fec2d2",
+    "dk4-2ch-block9.wav.reference.f32": "c91383129d27cabb59c9137ff87da4fefaf398e22c975991411c1197553948af",
+    "dk4-2ch-extensible.wav": "42c3d41529eb187b0efeed6667288112f69486d19d8f115ffd77c43ed8215238",
+    "dk4-2ch-extensible.wav.block": "3962e3fdb4aab6266b5af69e82083b6df4adb072f28f544fe64aa9f139b6b593",
+    "dk4-2ch-extensible.wav.block.f32": "6af7832897a07513aefad1543b907339b306a70de1cdf8ba0503793136ae955c",
+    "dk4-2ch-extensible.wav.fmt": "1e360cf812627a49b9a8e3f3030216d73e3da34cee1786582bd70e0f207e4d23",
+    "dk4-2ch-extensible.wav.reference.f32": "777ece08045f845553dff8fc5e62ae4d0b996d934c485f738ce2f78fd8cc6254",
+    "dk4-2ch-fact.wav": "13e1ed1d9caf04bb07ace58c3bff16df4437b957d450d35eac82f6d10d76ceaf",
+    "dk4-2ch-fact.wav.block": "9357e2e07ab3daaa1a0f0d99450e6f89f19eb27616705d9c948f3c117bd1a587",
+    "dk4-2ch-fact.wav.block.f32": "acb3a61ecf0e99ca699d235849c15ca07d6f3df0c527d479aa3628ed7ffb2321",
+    "dk4-2ch-fact.wav.fmt": "fb74a6133e72a1dcfc1e5bdc471f4b62bd92bbd32bf5a8067a18e079cd5e3409",
+    "dk4-2ch-fact.wav.reference.f32": "cb782b9ed853bc929e6da9af7d60f0dbdf6ff508bc5626da093feab75ddf602a",
+    "dk4-2ch-partial.wav": "0f2505ec4d251c5933b41c827639d7d03e253499bcd4de8d6953d9c8ca2bdbb8",
+    "dk4-2ch-partial.wav.block": "2f42821ac977e231701533f76999a82d33597c62c3c634890ff673d99b06f0d4",
+    "dk4-2ch-partial.wav.block.f32": "28b33b07e20230088de7e62c4ed2608a62afc7a71ca18ac6286530aa2045fcb2",
+    "dk4-2ch-partial.wav.fmt": "fb74a6133e72a1dcfc1e5bdc471f4b62bd92bbd32bf5a8067a18e079cd5e3409",
+    "dk4-2ch-partial.wav.reference.f32": "40b3588d1b1d416c73e8e5d613e44a890d059ec03cd9631c808607c3ea2968b8",
+    "dk4-2ch-rf64.wav": "a41179f3e851a600fdf162289671f542090c5cb0353e7df0ec93f338b858b26c",
+    "dk4-2ch-rf64.wav.block": "8ca36d675fdfd983ed668c02f3c2e5c3e80cdc54fe1a592f89c61368c5e96312",
+    "dk4-2ch-rf64.wav.block.f32": "1e51f78388add213335d8bd6fa8b13265714df02872966cc3cfe3711cfc9bed1",
+    "dk4-2ch-rf64.wav.fmt": "fb74a6133e72a1dcfc1e5bdc471f4b62bd92bbd32bf5a8067a18e079cd5e3409",
+    "dk4-2ch-rf64.wav.reference.f32": "df2cd4f766d61d912d69f42f9d8334491b8685a092f47e9dfff121fa3017bb93",
+    "dk4-2ch-short-header.wav": "ccc8289b978f682015431ab70db08f3678a29cfc91456e771de47ee75d60b5f4",
+    "dk4-2ch-short-header.wav.block": "f74e91ecf2fc466603ac160c451a6db95cc206568caca2dbe1091c04c566b9b5",
+    "dk4-2ch-short-header.wav.block.f32": "2f46ed96099e1e6279ad70f0afa2060f87881e1d07b306f6d5b6922ab0a0f305",
+    "dk4-2ch-short-header.wav.fmt": "fb74a6133e72a1dcfc1e5bdc471f4b62bd92bbd32bf5a8067a18e079cd5e3409",
+    "dk4-2ch-short-header.wav.reference.f32": "3cc844210e95a78752c6af9971ea39cba15a621ce454f4251af8c33ff2c3b98e",
+    "dk4-2ch-w64.w64": "79474088178f0ed4da99157b72e484e687defcf35a8c58c83e9910f37830f51c",
+    "dk4-2ch-w64.w64.block": "bf35fcefb55c63050901f3f86ec5fb8adfff90752bc5c34c996aa972f48b9419",
+    "dk4-2ch-w64.w64.block.f32": "2db9cab993c75877dbd1c8cb9c073fd4e54caa1611933084de8bc78d0b676426",
+    "dk4-2ch-w64.w64.fmt": "fb74a6133e72a1dcfc1e5bdc471f4b62bd92bbd32bf5a8067a18e079cd5e3409",
+    "dk4-2ch-w64.w64.reference.f32": "a2a0f817ce51ab11c936596ab0746831ae44c018df5b3be5059ef9ba190e5dab",
+    "dk4-2ch-\u97f3\u58f0-\u00dcn\u00efcode.wav": "ec8fe1c81b62238488b3275361be3addb1c7c936b49cc6b9b899c18acd1867b9",
+    "dk4-2ch-\u97f3\u58f0-\u00dcn\u00efcode.wav.block": "9c23a311e71d509484b63520c3d8bcc857a7265025edf363aff51b08f8df4a4e",
+    "dk4-2ch-\u97f3\u58f0-\u00dcn\u00efcode.wav.block.f32": "1c21dc185be37a38c53ac85ca7a95740913d7bffec3001cf3870599d00c55cc3",
+    "dk4-2ch-\u97f3\u58f0-\u00dcn\u00efcode.wav.fmt": "fb74a6133e72a1dcfc1e5bdc471f4b62bd92bbd32bf5a8067a18e079cd5e3409",
+    "dk4-2ch-\u97f3\u58f0-\u00dcn\u00efcode.wav.reference.f32": "8520cefb1a256ee5d637036d274afa7ff89fbf1749577ccd407ebcf9a96f855d",
+    "dk4-2ch.avi": "2538aa298c982c19f593e4055c3fd7c62442fde0ca936941aee073f9655b5d02",
+    "dk4-2ch.avi.reference.f32": "df2cd4f766d61d912d69f42f9d8334491b8685a092f47e9dfff121fa3017bb93",
+    "historical-dk3.avi": "b32a3fa8400131502f9276a3a7683f9bd019f790b69f6806eb2db8712a6989c7",
+    "historical-dk3.avi.reference.f32": "28801c7afc22b1b9d9205eafd2c77f8523ba1991b3699a5cb0d6d8c5c04905ed",
+    "historical-dk3.wav": "34df7a8af565bf6449426051dc289c00a18fd2eb8a46b1e1131332aee00b6a06",
+    "historical-dk3.wav.reference.f32": "28801c7afc22b1b9d9205eafd2c77f8523ba1991b3699a5cb0d6d8c5c04905ed",
+    "historical-dk4.avi": "3db0950816272d4c94077b7f38f67b85440a4dade38b07e3a1a4e230d2248e3d",
+    "historical-dk4.avi.reference.f32": "f85e8cd7b9ef1ca6b6c71852fab5f2d61d05a1d7e336dd0b5810a2a67576d9f6",
+    "historical-dk4.wav": "70b4d80150d5e07e8e0f15369a1c33fbb3b02d45a7a959dbdf99fa6e9efdb389",
+    "historical-dk4.wav.reference.f32": "f85e8cd7b9ef1ca6b6c71852fab5f2d61d05a1d7e336dd0b5810a2a67576d9f6",
+    "reject-tag97-align.wav": "12769f8981a997f9a9dbdd7a7c4e4e70f86d5b487661cbb95e71f10f9a0f6c54",
+    "reject-tag97-bits.wav": "7c47d4a322a5b679139c71367d63469ac3b3155855aee23ce36c98d5682d0689",
+    "reject-tag97-index0.wav": "785ec28a9c17ff11eeaf25bd614177bfe71f567619cc42863e7a40e9f2b3d058",
+    "reject-tag97-index1.wav": "db510cb81d6b1a0951a4ad1f6736ca3a5b146f8eede63a731765fbf06e6bdb96",
+    "reject-tag98-align.wav": "057c5c8616694ef744ee3db3372096d66aba74c017c3a5120fece446feae73dc",
+    "reject-tag98-bits.wav": "626a9d8fa2009a50c152235f1adce1e42aa30ead1cf75a90e161ed192a6538f8",
+    "reject-tag98-index0.wav": "7fd358aeca743e925600abcdc57ebb5b34a359b3a415ad0a5f9135b1ef5214d4",
+    "reject-tag98-index1.wav": "b3566115291280989fb0ec3c8981d7644f3d95ef761479ef40b6ee07fb24ef93",
+    "unsupported-tag97-channels3.wav": "235549680187549df96913aac6ec5dd4ad62327b1e94acc5cab0996f7bd4dea6",
+    "unsupported-tag98-channels1.wav": "18663038ab8880516451318a2177df906625085515b7257045aedaf26580ff12",
+    "unsupported-tag98-channels3.wav": "4d282833220eed94d5b2c0c959913a3f7d995ad42be295d2606cd2cba2108d37"
+  },
+  "reference_ffmpeg": "ffmpeg version 5.1.9-0+deb12u1 Copyright (c) 2000-2026 the FFmpeg developers",
+  "reference_environment": {
+    "platform": "Linux-6.1.0-53-amd64-x86_64-with-glibc2.36",
+    "python": "3.11.2 (main, May 12 2026, 05:17:27) [GCC 12.2.0]"
+  },
+  "sources": {
+    "src/adpcm.s": "49fc245ffa8e0ca6a517df9b1b06b8ea746128ca6caf1bc997b4814291a17bdf",
+    "src/adpcm_duck.inc": "2bd1c8c8598eecf850f58b1f91d365e0a676463e8a8cc7140bd1bfc671914a23",
+    "src/adpcm_tables.inc": "d0422b828759b312ada2aa0ad9763fe1bcdca9ce8768c57d17aadee9072818d2",
+    "src/decoder.s": "6c5630001f1d61f12672fb02ac308328daaf173c4ef32dfc80d011b6e5d2cfb5",
+    "src/avi.s": "48d72b6378c1dcb5531ac925b2a193bd4592894888412663c5f14286dbde7d4d",
+    "src/track.s": "a0ab0586b55a7ca052e9d457733eb6bdb160f90c04b9e5359b76e401a85ae91d",
+    "tests/duck-adpcm-oracle.c": "eb67dd4487a4a6faea25e6349968271a875e6bd436138c7c683f7596cbde9dcf",
+    "tests/verify-duck-adpcm.py": "4bb62283a4622c2f6b16358dc9d86b7a6c485489492f20d0f8b9977ee9878649",
+    "tests/seek-oracle.c": "3354db980a9957d61d5d9d054110faacb0159e25640fbc42905edd254517f148"
+  },
+  "historical_sources": [
+    {
+      "file": "historical-dk3.avi",
+      "url": "https://samples.ffmpeg.org/A-codecs/DK3/sonic3dblast_intro.avi",
+      "sha256": "b32a3fa8400131502f9276a3a7683f9bd019f790b69f6806eb2db8712a6989c7"
+    },
+    {
+      "file": "historical-dk4.avi",
+      "url": "https://samples.ffmpeg.org/A-codecs/DK4/virtuafighter2-opening1.avi",
+      "sha256": "3db0950816272d4c94077b7f38f67b85440a4dade38b07e3a1a4e230d2248e3d"
+    }
+  ],
+  "scope": "Duck DK4 mono/stereo and DK3 stereo, every initial step index, predictor edges, int16 sum/difference wrap, tiny/partial/maximum blocks, fact trimming, extensible/RF64/Wave64, Unicode and AVI copies; guarded packet/output, exact seeks, invalid fields/indices and cancellation; synthetic streams plus two hash-pinned historical AVI encoder samples and their audio-only WAVE copies, compared with independent FFmpeg decoding."
+}
