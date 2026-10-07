@@ -21,7 +21,7 @@
 
 .data
 playing_text: .ascii "Playing. Space: pause / resume. N / P: next / previous file. Left / Right: -5 / +5 s.\n"
-    .asciz "Down / Up: -60 / +60 s. R: repeat. Q or Ctrl+C: stop.\n"
+    .asciz "Down / Up: -60 / +60 s. [ / ]: previous / next chapter. R: repeat. Q or Ctrl+C: stop.\n"
 repeat_on_text: .asciz "Repeat: on\n"
 audio_lost_text: .asciz "Audio output lost; reopening.\n"
 repeat_off_text: .asciz "Repeat: off\n"
@@ -515,7 +515,7 @@ LOCALFN engine_wait
 ENDFN engine_wait
 
 # Space toggles pause; Q stops; R toggles repeat. N or >, P or <, the arrow
-# keys (ESC [ C/D/A/B) stop with an engine_command for the caller, noting
+# keys (ESC [ C/D/A/B), [ and ] stop with an engine_command for the caller, noting
 # the file heard and the position in it.
 LOCALFN engine_read_keys
     push rdi
@@ -564,6 +564,12 @@ LOCALFN engine_read_keys
     mov ecx, 3
     jmp .Leng_keys_command
 .Leng_keys_letter:
+    mov ecx, 6
+    cmp al, ']'
+    je .Leng_keys_command
+    mov ecx, 7
+    cmp al, '['
+    je .Leng_keys_command
     mov ecx, 1
     cmp al, '>'
     je .Leng_keys_command

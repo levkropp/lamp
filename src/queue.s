@@ -16,6 +16,7 @@
 .globl queue_begin, queue_read, queue_seek, queue_announce, queue_skipped
 .globl queue_count, queue_failures, queue_rate, queue_index, queue_repeat, queue_goto, queue_heard
 .globl queue_navigate, parse_time, queue_start, queue_open, queue_paths, queue_output, queue_target, queue_frames
+.globl queue_chapter_target
 
 .equ QUEUE_SKIPPED, 6               # decode_error after skipped files
 .equ CH_SIZE, 64                    # src/ogg_chain.s link entries
@@ -387,7 +388,8 @@ FN queue_heard
 ENDFN queue_heard
 
 # A player's navigation. ECX=command (1 next, 2 previous, 3 seek, 4 the list
-# again), EDX=queue index heard, R8=milliseconds into it, R9D=seek seconds ->
+# again, 6 next chapter, 7 previous chapter), EDX=queue index heard,
+# R8=milliseconds into it, R9D=seek seconds ->
 # EAX=1 with a file open (queue_goto), RDX=milliseconds to start it at; 0
 # when playback ends. Next: the file after the one heard (the first again
 # with repeat). Previous: the heard file from its start after 3 s of it,
@@ -398,7 +400,9 @@ FN queue_navigate
     push rbx
     push rsi
     push rdi
-    sub rsp, 32
+    push r12
+    sub rsp, 40
+    mov r12d, ecx
     mov ebx, edx                          # target
     xor esi, esi                          # start, ms
     cmp ecx, 4
@@ -410,6 +414,10 @@ FN queue_navigate
     je .Lqueue_navigate_next
     cmp ecx, 2
     je .Lqueue_navigate_previous
+    cmp ecx, 6
+    je .Lqueue_navigate_chapter
+    cmp ecx, 7
+    je .Lqueue_navigate_chapter
     movsxd rax, r9d
     imul rax, rax, 1000
     add rax, r8
@@ -417,6 +425,9 @@ FN queue_navigate
     xor eax, eax
 .Lqueue_navigate_seek:
     mov rsi, rax
+    jmp .Lqueue_navigate_open
+.Lqueue_navigate_chapter:
+    mov rsi, r8
     jmp .Lqueue_navigate_open
 .Lqueue_navigate_next:
     inc ebx
@@ -446,18 +457,55 @@ FN queue_navigate
     test eax, eax
     jz .Lqueue_navigate_return
     cmp ebx, [rip + queue_index]
-    je .Lqueue_navigate_position
+    jne .Lqueue_navigate_other
+    cmp r12d, 6
+    jb .Lqueue_navigate_position
+    cmp r12d, 7
+    ja .Lqueue_navigate_position
+    # Reopening the heard file restores its chapters: metadata of a file
+    # decoded ahead must never choose the target.
+    mov ecx, r12d
+    mov rdx, rsi
+    call queue_chapter_target
+    mov rsi, rax
+    jmp .Lqueue_navigate_position
+.Lqueue_navigate_other:
     xor esi, esi                          # a later file opened instead
 .Lqueue_navigate_position:
     mov eax, 1
 .Lqueue_navigate_return:
     mov rdx, rsi
-    add rsp, 32
+    add rsp, 40
+    pop r12
     pop rdi
     pop rsi
     pop rbx
     ret
 ENDFN queue_navigate
+
+# ECX=6/7, RDX=heard ms -> RAX=chapter target in the current opened file.
+FN queue_chapter_target
+    sub rsp, 40
+    mov [rsp + 32], ecx
+    mov r10, rdx
+    mov rax, [rip + output_frames]
+    mov ecx, 1000
+    mul rcx
+    mov ecx, [rip + output_rate]
+    xor r8d, r8d
+    test ecx, ecx
+    jz .Lqueue_chapter_select
+    cmp rdx, rcx
+    jae .Lqueue_chapter_select          # unrepresentable duration: unknown
+    div rcx
+    mov r8, rax
+.Lqueue_chapter_select:
+    mov ecx, [rsp + 32]
+    mov rdx, r10
+    call chapter_target
+    add rsp, 40
+    ret
+ENDFN queue_chapter_target
 
 # RCX=NUL-terminated time: seconds, M:S or H:M:S, the seconds with an
 # optional fraction -> RAX=milliseconds; CF when it is not a time.

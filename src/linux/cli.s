@@ -32,7 +32,7 @@ usage:
     .ascii "every file to HZ, or to the output's rate, with LAMP's own filter; --track plays each file's\n"
     .ascii "Nth audio track, counted in the container's order.\n"
     .ascii "Playback: Space pauses/resumes; N/P next/previous file; arrows seek 5 s or 60 s;\n"
-    .ascii "R toggles repeat; Q or Ctrl+C stops.\n"
+    .ascii "[/] previous/next chapter; R toggles repeat; Q or Ctrl+C stops.\n"
     .ascii "RIFF/RIFX/RF64/BW64/W64 WAV: 1..8 channels, PCM 8/16/24/32 or float32/64.\n"
     .ascii "AIFF/AIFC: signed PCM 1..32 bits or float32/64, 1..8 channels.\n"
     .ascii "Native FLAC: 4..32 bit, 1..8 channels, speaker-mask-aware downmix.\n"

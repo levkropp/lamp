@@ -109,41 +109,59 @@ class Recorder:
         return Path(self.path).read_bytes()
 
 
-def interactive(arguments, env, actions):
-    """Runs lamp-cli on a pseudo-terminal; actions are (delay seconds, bytes).
+def interactive(arguments, env, actions, ready_text=None):
+    """Runs lamp-cli on a pseudo-terminal; actions are (delay, bytes/callback).
+    A callback can wait for captured PCM and return the next key's bytes.
     -> (exit code, its output)."""
     pid, fd = pty.fork()
     if pid == 0:
         argv = command(*arguments)
         os.execvpe(argv[0], argv, dict(env, **WINE_ENV) if WINE else env)
     output = b''
+    reaped = False
 
     def pump(seconds):
         nonlocal output
-        end = time.time() + seconds
-        while time.time() < end:
+        end = time.monotonic() + seconds
+        while time.monotonic() < end:
             ready, _, _ = select.select([fd], [], [], 0.02)
             if ready:
                 try:
                     output += os.read(fd, 4096)
                 except OSError:
                     return
-    for n, (delay, action) in enumerate(actions):
-        pump(delay + (WINE_STARTUP if WINE and n == 0 else 0))
-        os.write(fd, action)
-    deadline = time.time() + 60
-    while time.time() < deadline:
+    try:
+        if ready_text is not None:
+            deadline = time.monotonic() + 60
+            while ready_text not in output:
+                pump(0.05)
+                finished, status = os.waitpid(pid, os.WNOHANG)
+                if finished:
+                    reaped = True
+                    raise Failure(f'Playback exited before ready: {output[-1000:]}')
+                if time.monotonic() >= deadline:
+                    raise Failure(f'Playback did not become ready: {output[-1000:]}')
+        for n, (delay, action) in enumerate(actions):
+            pump(delay + (WINE_STARTUP if WINE and n == 0 and ready_text is None else 0))
+            key = action() if callable(action) else action
+            if key is not None:
+                os.write(fd, key)
+        deadline = time.monotonic() + 60
+        while time.monotonic() < deadline:
+            pump(0.1)
+            finished, status = os.waitpid(pid, os.WNOHANG)
+            if finished:
+                reaped = True
+                break
+        else:
+            raise Failure(f'Interactive playback did not exit: {arguments}')
         pump(0.1)
-        finished, status = os.waitpid(pid, os.WNOHANG)
-        if finished:
-            break
-    else:
-        os.kill(pid, signal.SIGKILL)
-        os.waitpid(pid, 0)
-        raise Failure(f'Interactive playback did not exit: {arguments}')
-    pump(0.1)
-    os.close(fd)
-    return os.WEXITSTATUS(status) if os.WIFEXITED(status) else -1, output.decode('utf-8', 'replace')
+        return os.WEXITSTATUS(status) if os.WIFEXITED(status) else -1, output.decode('utf-8', 'replace')
+    finally:
+        if not reaped:
+            os.kill(pid, signal.SIGKILL)
+            os.waitpid(pid, 0)
+        os.close(fd)
 
 
 def resume_state(env):

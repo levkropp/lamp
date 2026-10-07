@@ -16,6 +16,7 @@
 .equ UI_PATH_UNITS, 32768           # a path
 .equ UI_RING, 64                    # files opened, the one heard among them
 .equ UI_TITLE_UNITS, 1040
+.equ UI_CHAPTERS_MAX, 1024
 .equ LIST_PATHS, 0                  # a list: path pointers,
 .equ LIST_TEXT, 8                   # their characters,
 .equ LIST_COUNT, 16                 # the files
@@ -26,8 +27,10 @@
 .equ UE_COVER, 16                   # its picture (as ui_cover_copy makes it) until the window takes it,
 .equ UE_INDEX, 24                   # its index in the list,
 .equ UE_CODEC, 28                   # codec_kind
-.equ UE_TITLE, 32                   # and title: "Artist - Title", or the file name
-.equ UE_SIZE, UE_TITLE + UI_TITLE_UNITS*2
+.equ UE_CHAPTER_COUNT, 32           # heard-file chapter snapshot (no borrowed metadata)
+.equ UE_TITLE, 40                   # and title: "Artist - Title", or the file name
+.equ UE_CHAPTERS, UE_TITLE + UI_TITLE_UNITS*2
+.equ UE_SIZE, UE_CHAPTERS + UI_CHAPTERS_MAX*8
 
 .data
 .p2align 3
@@ -102,6 +105,18 @@ FN ui_file_opened
     div r8
 .Lui_opened_frames:
     mov [rbx + UE_FRAMES], rax
+    call chapters_count
+    mov [rbx + UE_CHAPTER_COUNT], eax
+    xor esi, esi
+.Lui_opened_chapters:
+    cmp esi, [rbx + UE_CHAPTER_COUNT]
+    jae .Lui_opened_title
+    mov ecx, esi
+    call chapters_get
+    mov [rbx + rsi*8 + UE_CHAPTERS], rax
+    inc esi
+    jmp .Lui_opened_chapters
+.Lui_opened_title:
     lea rcx, [rbx + UE_TITLE]
     call ui_tag_title
     test rax, rax
@@ -163,7 +178,8 @@ LOCALFN ui_basename
 ENDFN ui_basename
 
 # -> RAX=the ring entry of the file being heard (the latest to start at or
-# before engine_position; 0 before the first opens), EDX=its number.
+# before engine_position; 0 before the first opens), EDX=its number and
+# R9=the position used to select it.
 LOCALFN ui_heard
     mov edx, [rip + ui_heard_count]
     test edx, edx
@@ -407,6 +423,69 @@ LOCALFN ui_previous
     add rsp, 40
     ret
 ENDFN ui_previous
+
+# ECX=6 next / 7 previous chapter. Use the heard ring entry's bounded
+# snapshot, since the decoder's chapter table may already belong to the
+# next file. Keep pause_requested unchanged through this seek/restart.
+LOCALFN ui_chapter
+    push rbx
+    push rsi
+    sub rsp, 56
+    mov ebx, ecx
+    cmp dword ptr [rip + ui_restart], 0
+    jne .Lui_chapter_return
+    call ui_heard
+    test rax, rax
+    jz .Lui_chapter_return
+    mov rsi, rax
+    mov eax, [rsi + UE_INDEX]
+    mov [rsp + 40], eax
+    mov rax, r9                        # position paired with this entry
+    sub rax, [rsi + UE_START]
+    jae .Lui_chapter_position
+    xor eax, eax
+.Lui_chapter_position:
+    mov ecx, [rip + queue_rate]
+    test ecx, ecx
+    jz .Lui_chapter_return
+    mov edx, 1000
+    mul rdx
+    div rcx
+    mov [rsp + 48], rax
+    mov ecx, [rsi + UE_CHAPTER_COUNT]
+    test ecx, ecx
+    jz .Lui_chapter_return
+    mov [rsp + 32], ecx                # fifth argument
+    mov rax, [rsi + UE_FRAMES]
+    mov ecx, 1000
+    mul rcx
+    mov ecx, [rip + queue_rate]
+    xor r8d, r8d
+    test ecx, ecx
+    jz .Lui_chapter_select
+    cmp rdx, rcx
+    jae .Lui_chapter_select
+    div rcx
+    mov r8, rax
+.Lui_chapter_select:
+    mov ecx, ebx
+    mov rdx, [rsp + 48]
+    lea r9, [rsi + UE_CHAPTERS]
+    call chapter_target_from
+    test edx, edx
+    jz .Lui_chapter_return
+    cmp rax, [rsp + 48]
+    je .Lui_chapter_return
+    mov [rip + ui_start_ms], rax
+    mov eax, [rsp + 40]
+    mov [rip + ui_start_index], eax
+    call ui_request
+.Lui_chapter_return:
+    add rsp, 56
+    pop rsi
+    pop rbx
+    ret
+ENDFN ui_chapter
 
 # RAX=milliseconds into the file heard, kept within it (up to a second before
 # its known end): plays from there.

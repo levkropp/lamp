@@ -669,6 +669,10 @@ LOCALFN ui_window_proc
     je .Lui_repeat_key
     cmp r8d, 0x4f
     je .Lui_open_key
+    cmp r8d, 0xdd                        # ] on the standard bracket keys
+    je .Lui_next_chapter_key
+    cmp r8d, 0xdb                        # [
+    je .Lui_previous_chapter_key
     cmp r8d, 0x27
     je .Lui_seek_forward
     cmp r8d, 0x25
@@ -704,6 +708,14 @@ LOCALFN ui_window_proc
     jmp .Lui_handled
 .Lui_previous_key:
     call ui_previous
+    jmp .Lui_handled
+.Lui_next_chapter_key:
+    mov ecx, 6
+    call ui_chapter
+    jmp .Lui_handled
+.Lui_previous_chapter_key:
+    mov ecx, 7
+    call ui_chapter
     jmp .Lui_handled
 .Lui_repeat_key:
     xor dword ptr [rip + queue_repeat], 1  # read by the queue at the list's end

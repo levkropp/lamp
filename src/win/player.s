@@ -47,7 +47,7 @@ usage: .ascii "LAMP 0.4.0-dev - Lev's Assembly Media Player"
       .byte 13, 10
       .ascii "in the container's order."
       .byte 13, 10
-      .ascii "Playback: Space pauses/resumes; Q or Ctrl+C stops."
+      .ascii "Playback: Space pauses/resumes; N/P next/previous file; [/] previous/next chapter; Q or Ctrl+C stops."
       .byte 13, 10
       .ascii "RIFF/RF64/BW64 WAV: 1..8 channels, PCM 8/16/24/32 or float32/64."
       .byte 13, 10
@@ -65,7 +65,7 @@ output_error: .ascii "Cannot create output file."
 .byte 13, 10, 0
 play_text: .ascii "Playing. Space: pause / resume. N / P: next / previous file. Left / Right: -5 / +5 s."
 .byte 13, 10
-    .ascii "Down / Up: -60 / +60 s. R: repeat. Q or Ctrl+C: stop."
+    .ascii "Down / Up: -60 / +60 s. [ / ]: previous / next chapter. R: repeat. Q or Ctrl+C: stop."
 .byte 13, 10, 0
 repeat_on_text: .ascii "Repeat: on"
 .byte 13, 10, 0
@@ -1478,7 +1478,7 @@ LOCALFN fill_render
 ENDFN fill_render
 
 # Console keys: Space pauses, Q stops, R toggles repeat; N or >, P or <
-# and the arrow keys stop playback with an engine_command, noting the file
+# and the arrow/bracket keys stop playback with an engine_command, noting the file
 # heard and the position in it.
 LOCALFN keyboard
     push rbp
@@ -1509,6 +1509,12 @@ LOCALFN keyboard
     je .Lkeyboard_wait
     movzx eax, word ptr [rip + input_record + 10]   # virtual key
     movzx ecx, word ptr [rip + input_record + 14]   # character
+    mov edx, 6
+    cmp ecx, ']'
+    je .Lkeyboard_command
+    mov edx, 7
+    cmp ecx, '['
+    je .Lkeyboard_command
     cmp eax, 0x20
     je .Lkeyboard_pause
     cmp eax, 0x52                       # R

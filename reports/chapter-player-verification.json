@@ -1,0 +1,242 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "keys",
+      "result": "N, P twice, media next, next button, Right, N at the end, R and N",
+      "titles": [
+        "LAMP Test \u2013 One - LAMP",
+        "LAMP Test \u2013 Two - LAMP",
+        "LAMP Test \u2013 One - LAMP",
+        "LAMP Test \u2013 One - LAMP",
+        "LAMP Test \u2013 Two - LAMP",
+        "LAMP Test \u2013 Three - LAMP",
+        "LAMP Test \u2013 Three - LAMP",
+        "LAMP Test \u2013 Four - LAMP",
+        "LAMP Test \u2013 Four - LAMP",
+        "LAMP Test \u2013 One - LAMP"
+      ],
+      "segments": [
+        [
+          "One",
+          96,
+          127920
+        ],
+        [
+          "Two",
+          168,
+          69120
+        ],
+        [
+          "One",
+          176,
+          190080
+        ],
+        [
+          "One",
+          218,
+          69360
+        ],
+        [
+          "Two",
+          10,
+          69600
+        ],
+        [
+          "Three",
+          225,
+          69360
+        ],
+        [
+          "Three",
+          308301,
+          432000
+        ],
+        [
+          "Four",
+          0,
+          185280
+        ],
+        [
+          "One",
+          69,
+          69120
+        ]
+      ]
+    },
+    {
+      "test": "fullscreen and compact modes",
+      "result": "restored through keys and menu",
+      "dimensions": [
+        [
+          812,
+          483
+        ],
+        [
+          1280,
+          1024
+        ],
+        [
+          812,
+          483
+        ],
+        [
+          632,
+          233
+        ],
+        [
+          1280,
+          1024
+        ],
+        [
+          632,
+          233
+        ],
+        [
+          812,
+          483
+        ],
+        [
+          1280,
+          1024
+        ],
+        [
+          812,
+          483
+        ]
+      ]
+    },
+    {
+      "test": "keyboard and accessibility",
+      "result": "MSAA names and native control classes; Tab/Shift+Tab cycle, Enter and Space activation, slider keys, global mode shortcuts, keyboard focus preservation and mouse auto-hide/reveal",
+      "names_roles_classes": [
+        "Open files",
+        "10",
+        "Button",
+        "Previous track",
+        "10",
+        "Button",
+        "Pause",
+        "10",
+        "Button",
+        "Next track",
+        "10",
+        "Button",
+        "Repeat off",
+        "10",
+        "Button",
+        "Playback position",
+        "10",
+        "msctls_trackbar32",
+        "Volume",
+        "10",
+        "msctls_trackbar32"
+      ],
+      "focus": [
+        "Open files",
+        "Previous track",
+        "Pause",
+        "Play",
+        "10",
+        "Button",
+        "Pause",
+        "10",
+        "Button",
+        "Next track",
+        "Repeat off",
+        "Repeat on",
+        "10",
+        "Button",
+        "Playback position",
+        "Volume",
+        "Volume",
+        "10",
+        "msctls_trackbar32",
+        "0",
+        "Open files",
+        "Volume",
+        "Playback position",
+        "632 233",
+        "812 483",
+        "Volume",
+        "LAMP Test \u2013 Accessible A - LAMP",
+        "Open files"
+      ],
+      "limit": "Wine 8 exposes generic client roles; native Windows screen-reader testing remains."
+    },
+    {
+      "test": "chapter navigation",
+      "result": "brackets and menu choose heard-file chapters; pause preserved",
+      "paused_targets_ms": [
+        0,
+        1250,
+        3250,
+        1250,
+        3250,
+        6500,
+        6500,
+        3250,
+        6500
+      ],
+      "controls": [
+        "Play",
+        "10",
+        "Button",
+        "0",
+        "Play",
+        "10",
+        "Button",
+        "1388",
+        "Play",
+        "10",
+        "Button",
+        "3611",
+        "Play",
+        "10",
+        "Button",
+        "1388",
+        "Play",
+        "10",
+        "Button",
+        "3611",
+        "Play",
+        "10",
+        "Button",
+        "7222",
+        "Play",
+        "10",
+        "Button",
+        "7222",
+        "Play",
+        "10",
+        "Button",
+        "3611",
+        "Play",
+        "10",
+        "Button",
+        "7222",
+        "LAMP Test \u2013 Chapter A - LAMP"
+      ],
+      "segments": [
+        [
+          "A",
+          98,
+          106560
+        ],
+        [
+          "A",
+          312110,
+          408240
+        ]
+      ],
+      "limit": "Wine playback; native Windows remains unverified"
+    }
+  ],
+  "selected_scenarios": [
+    "chapter_navigation",
+    "keys",
+    "modes",
+    "accessibility"
+  ],
+  "scope": "Selected Windows player scenarios under Wine on Xvfb"
+}
