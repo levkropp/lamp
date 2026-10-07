@@ -1,0 +1,85 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "flac.oga",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 100,
+      "decoded": 0,
+      "rejected_or_damaged": 100
+    },
+    {
+      "test": "tone.ogg",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 100,
+      "decoded": 0,
+      "rejected_or_damaged": 100
+    },
+    {
+      "test": "tone.opus",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 100,
+      "decoded": 0,
+      "rejected_or_damaged": 100
+    },
+    {
+      "test": "aac.m4a",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 100,
+      "decoded": 7,
+      "rejected_or_damaged": 93
+    },
+    {
+      "test": "alac.m4a",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 100,
+      "decoded": 38,
+      "rejected_or_damaged": 62
+    },
+    {
+      "test": "flac.mka",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 100,
+      "decoded": 7,
+      "rejected_or_damaged": 93
+    },
+    {
+      "test": "pcm.avi",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 100,
+      "decoded": 96,
+      "rejected_or_damaged": 4
+    },
+    {
+      "test": "mp2.ts",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 100,
+      "decoded": 36,
+      "rejected_or_damaged": 64
+    },
+    {
+      "test": "lpcm.vob",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 100,
+      "decoded": 100,
+      "rejected_or_damaged": 0
+    },
+    {
+      "test": "lpcm.m2ts",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 100,
+      "decoded": 100,
+      "rejected_or_damaged": 0
+    },
+    {
+      "test": "mp2.mpg",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 100,
+      "decoded": 45,
+      "rejected_or_damaged": 55
+    }
+  ],
+  "mutations": 1100,
+  "decoded": 429,
+  "scope": "11 container/codec sources, 100 mutations each (Linux, 2 GiB address space), seed 20261006: byte flips, zero/0xff runs, cuts, removed and duplicated spans, large length fields; --check, every fourth from a random --start."
+}

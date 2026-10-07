@@ -662,6 +662,32 @@ LOCALFN mp4_sample_entry
     ret
 ENDFN mp4_sample_entry
 
+# Count every sound trak, independently of enabled flags and selection.
+# Unreadable unselected handlers do not change the existing rejection policy.
+LOCALFN mp4_count_audio
+    push rbx
+    sub rsp, 32
+    mov r8d, BOX_MDIA
+    call mp4_child
+    test rax, rax
+    jz .Lmp4_count_done
+    mov rcx, rax
+    mov r8d, BOX_HDLR
+    call mp4_child
+    test rax, rax
+    jz .Lmp4_count_done
+    lea rcx, [rax + 12]
+    cmp rcx, rdx
+    ja .Lmp4_count_done
+    cmp dword ptr [rax + 8], SOUN
+    jne .Lmp4_count_done
+    inc dword ptr [rip + audio_tracks_count]
+.Lmp4_count_done:
+    add rsp, 32
+    pop rbx
+    ret
+ENDFN mp4_count_audio
+
 # One trak (RCX payload, RDX end). Selects it when it is the first enabled
 # sound track with a supported sample entry. EAX=0 only when malformed.
 LOCALFN mp4_trak
@@ -911,6 +937,8 @@ LOCALFN mp4_trak
     mov dword ptr [rip + mp4_edit_found], 1
 .Lmp4_trak_selected:
     mov dword ptr [rip + mp4_selected], 1
+    mov eax, [rip + audio_tracks_count]
+    mov [rip + audio_track_selected], eax
 .Lmp4_trak_ok:
     mov eax, 1
     jmp .Lmp4_trak_return
@@ -1525,6 +1553,11 @@ FN mp4_open
     mov rsi, rdx
     cmp eax, BOX_TRAK
     jne .Lmp4_tracks
+    mov [rsp + 32], r8
+    mov rcx, r8
+    call mp4_count_audio
+    mov r8, [rsp + 32]
+    mov rdx, rsi
     mov rcx, r8
     call mp4_trak
     test eax, eax

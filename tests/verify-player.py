@@ -89,7 +89,7 @@ def merge(found):
 
 def main():
     scenarios = [list_checks, list_playback, keys, folder_playback, killed_stream, output_menu, dpi,
-                 modes, accessibility, eac3_playback, chapter_navigation, dense_queue]
+                 modes, accessibility, eac3_playback, chapter_navigation, dense_queue, track_switching, track_queue]
     only = sys.argv[sys.argv.index('--only') + 1].split(',') if '--only' in sys.argv else None
     if only is not None:
         unknown = set(only) - {scenario.__name__ for scenario in scenarios}
@@ -120,6 +120,9 @@ def main():
     source_hashes = {name: hashlib.sha256((ROOT / name).read_bytes()).hexdigest() for name in
         ('src/queue.s', 'src/win/player.s', 'src/win/ui.s', 'src/win/ui_queue.inc',
          'src/win/ui_menu.inc', 'src/win/kernel32.def', 'tests/verify-player.py')}
+    source_hashes.update({name: hashlib.sha256((ROOT / name).read_bytes()).hexdigest() for name in
+        ('src/decoder.s', 'src/mp4.s', 'src/mkv.s', 'src/avi.s', 'src/mpegts.s', 'src/ogg_chain.s',
+         'src/win/ui_tracks.inc', 'src/win/ui_draw.inc', 'tests/ui-driver.s')})
     if only is not None:
         write_report('player-selected', {'result': 'passed', 'checks': checks,
             'source_hashes': source_hashes,
@@ -134,7 +137,7 @@ def main():
                                      'reopening a killed stream, choosing outputs, 144 DPI, fullscreen/compact '
                                      'restoration, Tab/Shift+Tab focus, slider values and MSAA names/native '
                                      'control classes, raw E-AC-3 playback and folder discovery, chronological chapter keys/menu and paused seeks, '
-                                     'dense queue filename/chapter fallback after metadata eviction, under Wine on Xvfb; native Windows screen-reader '
+                                     'dense queue filename/chapter fallback after metadata eviction, per-entry audio track switching, Automatic, paused position retention and unsupported-track rollback, under Wine on Xvfb; native Windows screen-reader '
                                      'roles remain unverified.'})
     print(f'Passed {len(checks)} player checks.')
 
@@ -624,6 +627,127 @@ def dense_queue(work, env, wine, checks):
         titles_and_controls=observed, silent_window_frames=silent_frames, resumed_runs=resumed,
         limit='Wine playback; native Windows remains unverified'))
     print('Dense queue filename and paused chapter fallback pass', flush=True)
+
+
+def track_pcm(work, path, choice):
+    output = work / (path.name + f'.track-{choice}.f32')
+    if output.exists(): output.unlink()
+    run([_nav.lamp_cli(), '--decode', '--track', choice, path, output])
+    return output.read_bytes()
+
+
+def assert_paused(session):
+    time.sleep(0.6)
+    data = session.capture.read_bytes()
+    if len(data) < RATE // 2 * FRAME or any(data[-RATE // 2 * FRAME:]):
+        raise Failure('Track switch played while paused')
+
+
+def track_switching(work, env, wine, checks):
+    """Real heard-file switches, paused seek position and Automatic in each demuxer."""
+    formats = [('mkv', ['-c:a', 'flac', '-disposition:a:0', '0', '-disposition:a:1', 'default'], 2),
+               ('mp4', ['-c:a', 'alac'], 1), ('avi', ['-c:a', 'pcm_s16le'], 1),
+               ('ogg', ['-c:a', 'libvorbis'], 1), ('ts', ['-c:a', 'mp2', '-b:a', '192k'], 1),
+               ('vob', ['-c:a', 'mp2', '-b:a', '192k', '-f', 'vob'], 1)]
+    for number, (extension, options, automatic) in enumerate(formats):
+        path = work / ('gui-tracks.' + extension)
+        ffmpeg('-f', 'lavfi', '-i', f'anoisesrc=r={RATE}:d=12:seed={9500+number*2}:a=0.25',
+               '-f', 'lavfi', '-i', f'anoisesrc=r={RATE}:d=12:seed={9501+number*2}:a=0.25',
+               '-map', '0:a', '-map', '1:a', '-ac', '2', *options, path)
+        references = {str(n): track_pcm(work, path, n) for n in (1, 2)}
+        session = Session(work, env, wine, 'switch-' + extension, windows_path(path))
+        try:
+            initial = session.drive('s1500', 'k20', 's600', 'k24', 's1000', 'n111', 'h113')
+            if initial[0] != 'Play' or int(initial[-1]) != 0:
+                raise Failure(f'{extension}: initial paused Home: {initial}')
+            popup = session.drive('r', 's250', 'e41', 's250', 'e23', 'e0d', 's1200', 'n111', 'h113')
+            if popup[0] != 'Play' or int(popup[-1]) != 0:
+                raise Failure(f'{extension}: real popup lost paused beginning: {popup}')
+            assert_paused(session)
+            popup_offset = session.capture.stat().st_size
+            session.drive('k20', 's800', 'k20', 's800')
+            popup_runs = merge(_nav.runs(session.capture.read_bytes()[popup_offset:], references))
+            if not popup_runs or popup_runs[0][0] != '2' or popup_runs[0][1] >= RATE // 2:
+                raise Failure(f'{extension}: real popup did not select track 2: {popup_runs}')
+            observed = session.drive('k24', 's1200', 'k27', 's1200', 'n111', 'h113',
+                                     'o401', 's1200', 'n111', 'h113', 'o402', 's1200', 'n111', 'h113')
+            target = 5000 * RATE * 10000 // (1000 * (len(references['2']) // FRAME))
+            for index in range(3):
+                if observed[index * 4] != 'Play' or abs(int(observed[index * 4 + 3]) - target) > 3:
+                    raise Failure(f'{extension}: track switch lost paused 5 s position: {observed}')
+            assert_paused(session)
+            offset = session.capture.stat().st_size
+            session.drive('k20', 's1200', 'k20', 's800')
+            switched = merge(_nav.runs(session.capture.read_bytes()[offset:], references))
+            if not switched or switched[0][0] != '2' or not 5000 * 48 <= switched[0][1] < 5600 * 48:
+                raise Failure(f'{extension}: wrong track/time after resume: {switched}')
+            before_auto = session.drive('n111', 'h113')
+            auto = session.drive('r', 's250', 'e41', 's250', 'e24', 'e0d', 's1200', 'n111', 'h113')
+            if auto[0] != 'Play' or abs(int(auto[-1]) - int(before_auto[-1])) > 3:
+                raise Failure(f'{extension}: Automatic lost paused position: {before_auto}, {auto}')
+            assert_paused(session)
+            offset = session.capture.stat().st_size
+            session.drive('k20', 's1200', 'c')
+        finally:
+            capture = session.finish()
+        automatic_runs = merge(_nav.runs(capture[offset:], references))
+        if not automatic_runs or automatic_runs[0][0] != str(automatic):
+            raise Failure(f'{extension}: Automatic chose wrong PCM: {automatic_runs}')
+        checks.append(dict(test='audio track switch ' + extension, result='heard track PCM and paused time preserved',
+            automatic=automatic, paused_target_ms=5000, controls=observed,
+            real_keyboard_popup_choices=['Track 2', 'Automatic'],
+            real_popup_runs=popup_runs,
+            switched_runs=switched, automatic_runs=automatic_runs,
+            reference_pcm_sha256={key: hashlib.sha256(value).hexdigest() for key,value in references.items()},
+            limit='Wine playback; native Windows remains unverified'))
+        print(f'{extension}: paused track switches and Automatic PCM pass', flush=True)
+
+
+def track_queue(work, env, wine, checks):
+    """Track choices persist per entry; an unsupported switch retains heard PCM."""
+    first = work / 'queue-tracks.mp4'
+    ffmpeg('-f','lavfi','-i',f'anoisesrc=r={RATE}:d=12:seed=9701:a=0.25',
+           '-f','lavfi','-i',f'anoisesrc=r={RATE}:d=12:seed=9702:a=0.25',
+           '-map','0:a','-map','1:a','-ac','2','-c:a','alac',first)
+    later = tagged(work,'track-next.flac','Single after selected',4,9703)
+    references = {'selected': track_pcm(work,first,2), 'single': _nav.linux_decode(work,later)}
+    session = Session(work,env,wine,'track-queue',windows_path(first),windows_path(later))
+    try:
+        session.drive('s1500','k20','s600','k24','s1000','o402','s1200')
+        assert_paused(session)
+        offset = session.capture.stat().st_size
+        names = session.drive('k20','s1200','k4e','s1200','t','k50','s1200','t','c')
+    finally: capture = session.finish()
+    segments = merge(_nav.runs(capture[offset:],references))
+    expect_segments('per-file track queue',segments,[('selected',0),('single',0),('selected',0)])
+    if names != [title('Single after selected'),first.name+' - LAMP']:
+        raise Failure(f'Per-file track queue titles: {names}')
+    checks.append(dict(test='per-file audio track queue',result='N/P retains selected entry and plays next single-track entry',
+                       segments=segments,titles=names))
+    print('Per-file track choice survives N/P without skipping a single-track file',flush=True)
+
+    unsupported = work / 'unsupported-tracks.mkv'
+    ffmpeg('-f','lavfi','-i',f'anoisesrc=r={RATE}:d=12:seed=9721:a=0.25',
+           '-f','lavfi','-i',f'anoisesrc=r={RATE}:d=12:seed=9722:a=0.25',
+           '-map','0:a','-map','1:a','-ac','2','-c:a:0','flac','-c:a:1','wmav2',unsupported)
+    reference = track_pcm(work,unsupported,1)
+    session = Session(work,env,wine,'unsupported-track',windows_path(unsupported),windows_path(later))
+    try:
+        controls = session.drive('s1500','k20','s600','k24','s1000','k27','s1200',
+                                 'o402','s1200','n111','h113','t')
+        if controls[0]!='Play' or abs(int(controls[3])-5000*10000//12000)>3 or \
+                controls[-1]!=unsupported.name+' - LAMP':
+            raise Failure(f'Unsupported track lost heard file, pause or position: {controls}')
+        assert_paused(session)
+        offset = session.capture.stat().st_size
+        session.drive('k20','s1200','c')
+    finally: capture=session.finish()
+    segments=merge(_nav.runs(capture[offset:],{'retained':reference}))
+    if not segments or segments[0][0]!='retained' or not 5000*48<=segments[0][1]<5200*48:
+        raise Failure(f'Unsupported track did not retain previous PCM: {segments}')
+    checks.append(dict(test='unsupported audio track switch',result='previous track, heard file, position and pause retained',
+                       controls=controls,retained_runs=segments))
+    print('Unsupported track switch retains previous heard PCM and pause',flush=True)
 
 
 def eac3_playback(work, env, wine, checks):

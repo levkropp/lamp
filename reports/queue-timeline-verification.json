@@ -64,7 +64,7 @@
     {
       "test": "concurrent history overwrite",
       "result": {
-        "concurrent_history_queries": 922224,
+        "concurrent_history_queries": 1202610,
         "real_overwrites": 4095,
         "final_retention_queries": 8192,
         "mixed_start_index_records": 0
@@ -102,9 +102,11 @@
     "forty-96000.wav.48000.f32": "d5d33cf6d79e60a9f0dfe77457ebc1b3dca4b7880a8d1ca69b0026d51715b70b"
   },
   "sources": {
-    "src/queue.s": "532af12a6c41624d5571e0845d11643da349d892bc312e4da4f6630d2878f762",
+    "src/queue.s": "18b7b6ead963997cd3341af2deecc143bcb7ca5637c1558b0e9fc6204165b223",
+    "src/decoder.s": "2ba07ab1b6895cefd5fc6466909704d3620a4bf620053787e31c905bf54eba44",
     "tests/queue-timeline-probe.s": "06414297bd57d79a67c5a3967bc62708c1de4fb169fe11daa778d59bd3716b00",
-    "tests/queue-timeline-oracle.c": "94b2c775acfd7dadc2774b31db61127e695d9aaf5f433d7246ab5e140cc6f743"
+    "tests/queue-timeline-oracle.c": "94b2c775acfd7dadc2774b31db61127e695d9aaf5f433d7246ab5e140cc6f743",
+    "tests/verify-queue-timeline.py": "de1bde0063535d539fdd53810a083644b49f64882e11fa0e17f3afc5f0d5017a"
   },
   "environment": {
     "platform": "Linux-6.1.0-53-amd64-x86_64-with-glibc2.36",

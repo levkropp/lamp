@@ -624,6 +624,13 @@ FN ui_draw
     je .Lui_status_ready
     lea rcx, [rip + ui_paused]
 .Lui_status_ready:
+    mov eax, [rip + ui_track_error_index]
+    cmp eax, -1
+    je .Lui_status_track_ready
+    cmp eax, [rip + ui_shown_index]
+    jne .Lui_status_track_ready
+    lea rcx, [rip + ui_track_unavailable]
+.Lui_status_track_ready:
     mov edx, [rip + px_margin]
     mov r8d, [rip + ui_height]
     sub r8d, [rip + px_status_y]
@@ -674,6 +681,12 @@ FN ui_draw
     mov r9d, [rip + ui_muted_color]
     call ui_right_text
 .Lui_status_codec:
+    mov eax, [rip + ui_track_error_index]
+    cmp eax, -1
+    je .Lui_status_codec_normal
+    cmp eax, [rip + ui_shown_index]
+    je .Lui_draw_hints                   # leave room for the longer switch-error status
+.Lui_status_codec_normal:
     mov eax, [rip + ui_shown_codec]
     test eax, eax
     jz .Lui_draw_hints

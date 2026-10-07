@@ -24,6 +24,7 @@
 .equ CH_RATE, 48
 .equ CH_CHANNELS, 52
 .equ CH_BITS, 56
+.equ CH_AUDIO_COUNT, 60             # audio streams in this link, including unsupported mappings
 .equ CH_CAP, 65536
 .equ CH_STREAMS, 64               # logical streams per link
 
@@ -334,6 +335,7 @@ FN chain_open
     mov r14d, 1
     mov [r12 + CH_BEGIN], rsi
     mov dword ptr [r12 + CH_CODEC], 0
+    mov dword ptr [r12 + CH_AUDIO_COUNT], 0
     mov dword ptr [rip + chain_serial_count], 0
     mov dword ptr [rip + chain_audio_index], 0
 .Lch_scan_bos:
@@ -349,15 +351,6 @@ FN chain_open
     mov ecx, [rsi + 14]
     mov [rdx + rax*4], ecx
     inc dword ptr [rip + chain_serial_count]
-    cmp dword ptr [rip + track_choice], 0
-    jne .Lch_scan_choice
-    cmp dword ptr [r12 + CH_CODEC], 0
-    jne .Lch_scan_next
-    mov rcx, rsi
-    call chain_probe
-    test eax, eax
-    jz .Lch_scan_next
-    jmp .Lch_scan_select
 .Lch_scan_choice:
     mov rcx, rsi
     call chain_probe
@@ -371,12 +364,26 @@ FN chain_open
 .Lch_scan_audio:
     inc dword ptr [rip + chain_audio_index]
     mov ecx, [rip + chain_audio_index]
+    mov [r12 + CH_AUDIO_COUNT], ecx
+    cmp dword ptr [rip + track_choice], 0
+    jne .Lch_scan_numbered
+    cmp dword ptr [r12 + CH_CODEC], 0
+    jne .Lch_scan_next
+    test eax, eax
+    jz .Lch_scan_next
+    jmp .Lch_scan_select
+.Lch_scan_numbered:
     cmp ecx, [rip + track_choice]
     jne .Lch_scan_next
     mov dword ptr [rip + track_choice_used], 1
     test eax, eax
     jz .Lch_scan_next
 .Lch_scan_select:
+    cmp r13d, 1
+    jne .Lch_scan_selected_ordinal
+    mov ecx, [rip + chain_audio_index]
+    mov [rip + audio_track_selected], ecx
+.Lch_scan_selected_ordinal:
     mov [r12 + CH_CODEC], eax
     mov eax, [rsi + 14]
     mov [r12 + CH_SERIAL], eax
@@ -397,6 +404,23 @@ FN chain_open
     jz .Lch_open_bad
     mov [r12 + CH_END], rdi
     mov [rip + chain_count], r13d
+    # An explicit ordinal must exist in every link of the file. Publish
+    # the minimum link count; the automatic ordinal describes link 0.
+    mov eax, -1
+    xor ecx, ecx
+    mov rdx, [rip + chain_links]
+.Lch_audio_count:
+    cmp ecx, r13d
+    jae .Lch_audio_counted
+    cmp eax, [rdx + CH_AUDIO_COUNT]
+    jbe .Lch_audio_count_next
+    mov eax, [rdx + CH_AUDIO_COUNT]
+.Lch_audio_count_next:
+    add rdx, CH_SIZE
+    inc ecx
+    jmp .Lch_audio_count
+.Lch_audio_counted:
+    mov [rip + audio_tracks_count], eax
     # Open links last to first, so link 0 remains open. Each open validates
     # the whole link, including CRCs and timing.
     mov ebx, r13d

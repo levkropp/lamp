@@ -3,7 +3,10 @@
 # Repeat, chapters, window modes, and Output with each active render
 # endpoint (audio_devices). Choosing an output plays on it from the file
 # heard at the heard position; the choice applies at the next launch of the
-# playback thread, which no other thread then reads.
+# playback thread, which no other thread then reads. TrackPopupMenu uses
+# RETURNCMD/NONOTIFY so a track command is dispatched before its captured
+# file/list identity is released; WM_COMMAND notifications arrive after return.
+# https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-trackpopupmenu
 .equ ID_OPEN, 100
 .equ ID_REPEAT, 101
 .equ ID_PREVIOUS_CHAPTER, 104
@@ -36,7 +39,7 @@ ui_device_choice: .zero UI_DEVICE_UNITS*2   # the endpoint chosen, empty for the
 LOCALFN ui_menu
     push rbx
     push rsi
-    sub rsp, 72
+    sub rsp, 88
     mov [rsp + 56], rcx
     call CreatePopupMenu
     test rax, rax
@@ -105,6 +108,8 @@ LOCALFN ui_menu
     mov r8d, ID_NEXT_CHAPTER
     lea r9, [rip + ui_menu_next_chapter]
     call AppendMenuW
+    mov rcx, rbx
+    call ui_tracks_menu
     call CreatePopupMenu
     test rax, rax
     jz .Lui_menu_place
@@ -151,17 +156,32 @@ LOCALFN ui_menu
     shr eax, 16
     movsx r9d, ax
 .Lui_menu_show:
+    mov eax, [rip + ui_menu_track_index]
+    mov [rsp + 68], eax
+    mov rax, [rip + ui_menu_track_generation]
+    mov [rsp + 72], rax                 # local snapshots also survive a nested menu loop
     mov rcx, rbx
-    mov edx, 2                            # TPM_RIGHTBUTTON; the choice comes as WM_COMMAND
+    mov edx, 0x182                        # RIGHTBUTTON | RETURNCMD | NONOTIFY
     mov qword ptr [rsp + 32], 0
     mov rax, [rip + ui_hwnd]
     mov [rsp + 40], rax
     mov qword ptr [rsp + 48], 0
     call TrackPopupMenu
+    test eax, eax
+    jz .Lui_menu_closed
+    mov [rsp + 80], eax
+    mov eax, [rsp + 68]
+    mov [rip + ui_menu_track_index], eax
+    mov rax, [rsp + 72]
+    mov [rip + ui_menu_track_generation], rax
+    mov ecx, [rsp + 80]
+    call ui_menu_command                 # dispatch before releasing the menu's heard-file index
+.Lui_menu_closed:
+    mov dword ptr [rip + ui_menu_track_index], -1
     mov rcx, rbx
     call DestroyMenu                      # and its submenu
 .Lui_menu_return:
-    add rsp, 72
+    add rsp, 88
     pop rsi
     pop rbx
     ret
@@ -291,6 +311,14 @@ LOCALFN ui_menu_command
     call ui_chapter
     jmp .Lui_menu_command_return
 .Lui_command_default:
+    cmp ecx, ID_AUTO_TRACK
+    jb .Lui_command_device
+    cmp ecx, ID_AUDIO_TRACK + UI_TRACK_MENU_MAX
+    jae .Lui_command_device
+    sub ecx, ID_AUTO_TRACK
+    call ui_choose_track
+    jmp .Lui_menu_command_return
+.Lui_command_device:
     cmp ecx, ID_DEFAULT_OUTPUT
     jne .Lui_command_output
     mov word ptr [rip + ui_device_choice], 0

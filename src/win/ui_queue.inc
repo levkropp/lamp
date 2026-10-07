@@ -47,6 +47,10 @@ ui_count: .long 0
 ui_list_new: .long 0                 # 1: the pending list plays at the next launch
 ui_start_index: .long 0
 ui_chapter_pending: .long 0         # worker resolves chapters after snapshot eviction
+ui_worker_index: .long 0           # launch snapshot, immutable until that worker has stopped
+ui_worker_chapter: .long 0
+.p2align 3
+ui_worker_ms: .quad 0
 .p2align 3
 ui_heard_count: .quad 0              # ring entries written since the launch
 .p2align 3
@@ -130,6 +134,7 @@ FN ui_file_opened
 .Lui_opened_named:
     mov word ptr [rdi], 0
 .Lui_opened_cover:
+    call ui_track_opened                # publish this file's small ordinal catalog separately
     call ui_cover_copy
     mov [rbx + UE_COVER], rax
     lea rcx, [rip + ui_ring_lock]
@@ -505,6 +510,8 @@ LOCALFN ui_play_at
     test ecx, ecx
     js .Lui_play_at_unknown
     mov dword ptr [rip + ui_chapter_pending], 0
+    mov dword ptr [rip + ui_track_pending], -1
+    mov dword ptr [rip + ui_track_error_index], -1
     mov [rip + ui_start_index], ecx
     mov [rip + ui_start_ms], rdx
     mov dword ptr [rip + pause_requested], 0
@@ -624,6 +631,7 @@ LOCALFN ui_chapter
     mov eax, [rsp + 40]
     mov [rip + ui_start_index], eax
     mov dword ptr [rip + ui_chapter_pending], 0
+    mov dword ptr [rip + ui_track_pending], -1
     call ui_request
     jmp .Lui_chapter_return
 .Lui_chapter_fallback:
@@ -635,6 +643,7 @@ LOCALFN ui_chapter
     mov [rip + ui_start_index], eax
     mov [rip + ui_start_ms], rdx
     mov [rip + ui_chapter_pending], ebx
+    mov dword ptr [rip + ui_track_pending], -1
     call ui_request                    # keeps pause; worker owns the decoder once stopped
 .Lui_chapter_return:
     add rsp, 56
@@ -676,6 +685,7 @@ LOCALFN ui_seek
     jae .Lui_seek_target
     mov [rsp + 32], rax
 .Lui_seek_target:
+    mov dword ptr [rip + ui_track_pending], -1
     mov ecx, [rsp + 40]
     mov rdx, [rsp + 32]
     mov [rip + ui_start_index], ecx
@@ -702,6 +712,7 @@ LOCALFN ui_request
     cmp dword ptr [rip + ui_list_new], 0
     je .Lui_launch_file
     mov dword ptr [rip + ui_list_new], 0
+    call ui_tracks_reset
     mov rax, [rip + ui_list_pending]
     xchg rax, [rip + ui_list_current]
     mov [rip + ui_list_pending], rax
@@ -728,6 +739,7 @@ LOCALFN ui_request
     lea rcx, [rip + ui_cover_pending]
     call ui_cover_free
 .Lui_launch_same:
+    call ui_worker_capture             # a newer UI request cannot change this worker's inputs
     mov eax, [rip + ui_start_index]
     mov rcx, [rip + ui_paths]
     mov rcx, [rcx + rax*8]
@@ -775,14 +787,21 @@ ENDFN ui_request
 
 LOCALFN ui_audio_thread
     sub rsp, 40
-    xor eax, eax
-    xchg eax, [rip + ui_chapter_pending]
+    lea rax, [rip + ui_track_for_file]
+    mov [rip + queue_track_choice], rax
+    lea rax, [rip + engine_stop_requested]
+    mov [rip + ogg_cancel_ptr], rax
+    call ui_track_apply_pending
+    mov eax, [rip + ui_worker_chapter]
     test eax, eax
     jz .Lui_audio_play
     mov [rsp + 32], eax
-    mov eax, [rip + ui_start_index]
+    mov eax, [rip + ui_worker_index]
     cmp eax, [rip + ui_count]
     jae .Lui_audio_play
+    mov ecx, eax
+    call queue_select_track
+    mov eax, [rip + ui_worker_index]
     mov rcx, [rip + ui_paths]
     mov rcx, [rcx + rax*8]
     lea rax, [rip + engine_stop_requested]
@@ -791,16 +810,16 @@ LOCALFN ui_audio_thread
     test eax, eax
     jz .Lui_audio_chapter_close
     mov ecx, [rsp + 32]
-    mov rdx, [rip + ui_start_ms]
+    mov rdx, [rip + ui_worker_ms]
     call queue_chapter_target
-    mov [rip + ui_start_ms], rax
+    mov [rip + ui_worker_ms], rax
 .Lui_audio_chapter_close:
     call decoder_close
 .Lui_audio_play:
     mov rcx, [rip + ui_paths]
     mov edx, [rip + ui_count]
-    mov r8d, [rip + ui_start_index]
-    mov r9, [rip + ui_start_ms]
+    mov r8d, [rip + ui_worker_index]
+    mov r9, [rip + ui_worker_ms]
     call engine_play_list
     mov rcx, [rip + ui_hwnd]
     mov edx, WM_WORKER_DONE
@@ -839,6 +858,7 @@ ENDFN ui_list_begin
 
 # The pending list plays next, from its first file, unpaused.
 FN ui_list_end
+    mov dword ptr [rip + ui_track_pending], -1
     mov dword ptr [rip + ui_chapter_pending], 0
     mov dword ptr [rip + ui_list_new], 1
     mov dword ptr [rip + pause_requested], 0

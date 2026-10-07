@@ -9,6 +9,7 @@
 .globl flac_channel_ptrs
 .globl pcm_speaker_weights, pcm_mix_coeff
 .globl track_choice, track_choice_used
+.globl audio_tracks_count, audio_track_selected
 
 .equ TK_ADPCM, 10                   # track codec of WAVE ADPCM (src/track.s)
 
@@ -35,6 +36,8 @@ wav_codec_kind: .long 1            # codec_kind of an opened WAV reader: 1, or 1
 # only as track 1.
 track_choice: .long 0
 track_choice_used: .long 0
+audio_tracks_count: .long 0         # published only for a successful open; includes unsupported tracks
+audio_track_selected: .long 0      # selected audio ordinal (from 1), not the container's track ID
 wav_ds64: .quad 0
 wav_size_table: .quad 0
 wav_table_count: .long 0
@@ -161,6 +164,8 @@ FN decoder_open
     mov [rsp + 32], rcx
     call tags_clear
     mov dword ptr [rip + track_choice_used], 0
+    mov dword ptr [rip + audio_tracks_count], 0
+    mov dword ptr [rip + audio_track_selected], 0
     mov rcx, [rsp + 32]                 # the path
     call decoder_open_format
     test eax, eax
@@ -174,6 +179,11 @@ FN decoder_open
     xor eax, eax
     jmp .Lopen_published
 .Lopen_track_ok:
+    cmp dword ptr [rip + audio_tracks_count], 0
+    jne .Lopen_tracks_known
+    mov dword ptr [rip + audio_tracks_count], 1
+    mov dword ptr [rip + audio_track_selected], 1
+.Lopen_tracks_known:
     mov rcx, [rip + map_base]           # metadata, from the whole file
     mov rdx, rcx
     add rdx, [rip + file_size]
@@ -186,6 +196,11 @@ FN decoder_open
     mov rcx, [rip + total_frames]
     mov [rip + output_frames], rcx
 .Lopen_published:
+    test eax, eax
+    jnz .Lopen_return
+    mov dword ptr [rip + audio_tracks_count], 0
+    mov dword ptr [rip + audio_track_selected], 0
+.Lopen_return:
     add rsp, 40
     ret
 ENDFN decoder_open

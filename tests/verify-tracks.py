@@ -19,18 +19,71 @@ usage: python3 tests/verify-tracks.py
   (WAV, MP3, FLV); --track 1 plays them.
 Writes <out>/tracks-verification.json.
 """
+import hashlib
+import importlib.util
 import json
+import os
 from pathlib import Path
 import subprocess
 import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from lamp_test import (Failure, build_lamp, build_oracles, exe, ffmpeg, lamp_cli, main_guard, out_dir, run, scratch,
+from lamp_test import (ROOT, Failure, build_lamp, build_oracles, exe, ffmpeg, lamp_cli, main_guard, out_dir, run, scratch,
                        write_report)
 
 SOURCES = ['-f', 'lavfi', '-i', 'sine=f=440:d=2', '-f', 'lavfi', '-i', 'anoisesrc=r=44100:d=2:a=0.2:seed=3',
            '-f', 'lavfi', '-i', 'sine=f=880:d=2:sample_rate=48000']
 VIDEO = ['-f', 'lavfi', '-i', 'testsrc=size=96x64:rate=10:duration=2']
+
+
+def catalog_wine():
+    work = scratch('tracks')
+    cases = json.loads((work / 'catalog-cases.json').read_text())
+    prior = json.loads((out_dir() / 'tracks-verification.json').read_text())
+    if prior['result'] != 'passed': raise Failure('Native track verification must pass first')
+    spec = importlib.util.spec_from_file_location('catalog_windows_build', ROOT / 'tools/build-windows.py')
+    builder = importlib.util.module_from_spec(spec); spec.loader.exec_module(builder)
+    run([sys.executable, ROOT / 'tools/build-windows.py'], capture=False)
+    skip = {'player', 'ui', 'engine-probe', 'ui-preview', 'ui-list', 'ui-driver'}
+    objects = [p for p in sorted((ROOT / 'bin/obj').glob('*.obj')) if p.stem not in skip]
+    libs = list(sorted((ROOT / 'bin/obj').glob('*.lib')))
+    target = ROOT / 'bin/track-catalog-oracle.exe'
+    run([os.environ.get('MINGW_CC', 'x86_64-w64-mingw32-gcc'), '-O2', '-std=c11', '-municode',
+         '-I', ROOT / 'tests', ROOT / 'tests/track-catalog-oracle.c', *objects, *libs, '-lm', '-o', target])
+    checks = []
+    for case in cases:
+        path = work / case['file']
+        if hashlib.sha256(path.read_bytes()).hexdigest() != case['sha256']: raise Failure('Track fixture changed')
+        result = json.loads(run(['wine', target, path, case['choice'], case['count'], case['selected']],
+                                timeout=120).strip().splitlines()[-1])
+        checks.append(dict(test=case['file'], **result))
+    probe = out_dir() / 'ui-tracks-probe.obj'
+    run([builder.tool('llvm-mc'), '-triple=x86_64-pc-windows-msvc', '-filetype=obj',
+         '-defsym=WINDOWS=1', '-I', ROOT / 'src', '-I', ROOT / 'src/win',
+         ROOT / 'tests/ui-queue-snapshot-probe.s', '-o', probe])
+    ui_objects = [p for p in sorted((ROOT / 'bin/obj').glob('*.obj'))
+                  if p.stem not in {'ui', 'engine-probe', 'ui-preview', 'ui-list', 'ui-driver'}]
+    ui_target = ROOT / 'bin/ui-tracks-oracle.exe'
+    run([os.environ.get('MINGW_CC', 'x86_64-w64-mingw32-gcc'), '-O2', '-std=c11', '-municode',
+         '-I', ROOT / 'tests', ROOT / 'tests/ui-tracks-oracle.c', probe, *ui_objects, *libs,
+         '-lm', '-luser32', '-o', ui_target])
+    ui_result = json.loads(run(['wine', ui_target, work / 'three.mp4', work / 'wma.mkv', work / 'one.wav',
+                               work / 'three.mp4.track2.f32', work / 'one.wav.f32'], timeout=120).strip().splitlines()[-1])
+    checks.append(dict(test='Windows track menu, deferred switch and per-file queue', **ui_result))
+    sources = catalog_sources()
+    sources.update({name: hashlib.sha256((ROOT / name).read_bytes()).hexdigest() for name in
+                    ['src/queue.s', 'src/win/ui.s', 'src/win/ui_queue.inc', 'src/win/ui_tracks.inc',
+                     'src/win/ui_menu.inc', 'src/win/ui_draw.inc', 'tests/ui-tracks-oracle.c',
+                     'tests/ui-queue-snapshot-probe.s']})
+    write_report('track-catalog-wine', dict(result='passed', checks=checks,
+        sources=sources, scope='Shipping Windows COFF decoder audio counts/ordinals, reopen and failure clearing, real Win32 menu labels/checks/cap, deferred paused track switching, shorter-track clamp, unsupported-track rollback, menu file pairing and exact per-file queue PCM under Wine; same hashed fixtures as the native PCM track suite.'))
+    print(f'Passed {len(checks)} Windows track catalog checks.', flush=True)
+
+
+def catalog_sources():
+    return {name: hashlib.sha256((ROOT / name).read_bytes()).hexdigest() for name in
+            ['src/decoder.s', 'src/mp4.s', 'src/mkv.s', 'src/avi.s', 'src/mpegts.s', 'src/ogg_chain.s',
+             'tests/track-catalog-oracle.c', 'tests/verify-tracks.py']}
 
 
 def decode(path, track=None, output=None):
@@ -67,11 +120,17 @@ def rejected(chain, path, track):
 
 
 def main():
+    if '--wine-only' in sys.argv: catalog_wine(); return
     library = build_lamp()
-    build_oracles(out_dir(), {'chain-oracle': 'chain-oracle.c'}, library)
+    build_oracles(out_dir(), {'chain-oracle': 'chain-oracle.c', 'track-catalog-oracle': 'track-catalog-oracle.c'}, library)
     chain = exe('chain-oracle')
     work = scratch('tracks')
     checks = []
+    catalog_cases = []
+    def catalog(path, choice, count, selected):
+        run([exe('track-catalog-oracle'), path, choice, count, selected])
+        catalog_cases.append(dict(file=path.name, choice=choice, count=count, selected=selected,
+                                  sha256=hashlib.sha256(path.read_bytes()).hexdigest()))
     files = {
         'three.mkv': (VIDEO + SOURCES, ['-map', '0:v', '-map', '1:a', '-map', '2:a', '-map', '3:a', '-c:v', 'mpeg4',
                                          '-c:a:0', 'libopus', '-c:a:1', 'flac', '-c:a:2', 'aac',
@@ -102,6 +161,7 @@ def main():
             if ffmpeg_pcm(path, n - 1) != ffmpeg_pcm(single):
                 raise Failure(f'{name}: FFmpeg decodes track {n} differently from {single.name}')
             tracks.append(ours)
+            catalog(path, n, count, n)
         if len(set(tracks)) != count:
             raise Failure(f'{name}: tracks decode alike')
         code, stats, default = decode(path)
@@ -110,7 +170,9 @@ def main():
         checks.append({'test': name, 'result': 'exact', 'tracks': count, 'automatic': automatic,
                        'comparator': 'FFmpeg -map 0:a:N -c copy'})
         print(f'{name}: {count} tracks exact, automatic choice track {automatic}', flush=True)
+        catalog(path, 0, count, automatic)
         rejected(chain, path, count + 1)
+        catalog(path, count + 1, 0, 0)
 
     # Chained Ogg: the track is chosen in every link.
     links = []
@@ -130,6 +192,8 @@ def main():
     if code or ours != parts:
         raise Failure(f'chained.ogg --track 2: {stats}')
     checks.append({'test': 'chained.ogg --track 2', 'result': 'exact', 'note': 'track 2 of each link'})
+    catalog(chained, 0, 2, 1)
+    catalog(chained, 2, 2, 2)
 
     # Speex counts as a track: Opus second in its link plays automatically.
     speex = work / 'speex-opus.ogg'
@@ -140,6 +204,9 @@ def main():
     if decode(speex)[2] != reference or decode(speex, 2)[2] != reference:
         raise Failure('speex-opus.ogg: the Opus track does not play as its own file')
     rejected(chain, speex, 1)
+    catalog(speex, 0, 2, 2)
+    catalog(speex, 2, 2, 2)
+    catalog(speex, 1, 0, 0)
     checks.append({'test': 'speex-opus.ogg', 'result': 'exact', 'automatic': 2,
                    'note': 'Speex (track 1) is counted and rejects; Opus begins on the second BOS page'})
 
@@ -158,6 +225,8 @@ def main():
     wma = work / 'wma.mkv'
     ffmpeg(*SOURCES[:8], '-map', '0', '-map', '1', '-c:a:0', 'flac', '-c:a:1', 'wmav2', wma)
     rejected(chain, wma, 2)
+    catalog(wma, 0, 2, 1)
+    catalog(wma, 2, 0, 0)
     eac3 = work / 'eac3.ts'
     ffmpeg(*SOURCES[:8], '-map', '0', '-map', '1', '-c:a:0', 'ac3', '-c:a:1', 'eac3', eac3)
     single = work / 'eac3-a2.ts'
@@ -166,6 +235,8 @@ def main():
     if code or pcm != decode(single)[2]:
         raise Failure(f'E-AC-3 track 2: {stats}')
     checks.append({'test': 'eac3.ts track 2', 'result': 'exact', 'comparator': 'isolated E-AC-3 track'})
+    catalog(eac3, 0, 2, 1)
+    catalog(eac3, 2, 2, 2)
     singles = []
     for name, coding in (('one.wav', ['-c:a', 'pcm_s16le']), ('one.mp3', ['-c:a', 'libmp3lame']),
                          ('one.flv', ['-c:a', 'libmp3lame'])):
@@ -175,12 +246,43 @@ def main():
         if code or data != decode(path)[2]:
             raise Failure(f'{name} --track 1: {stats}')
         rejected(chain, path, 2)
+        catalog(path, 0, 1, 1)
+        catalog(path, 1, 1, 1)
+        catalog(path, 2, 0, 0)
         singles.append(name)
     checks.append({'test': 'unsupported and missing tracks', 'result': 'rejected',
                    'files': ['wma.mkv track 2'] + [f'{n} track 2' for n in singles] +
                    [f'{n} track {files[n][2] + 1}' for n in files]})
     print('Missing and unsupported tracks reject; --track 1 plays single-track files', flush=True)
+    # A disabled MP4 sound track still occupies its physical audio ordinal.
+    disabled = work / 'disabled-first.mp4'
+    data = bytearray((work / 'three.mp4').read_bytes())
+    def boxes(start, end):
+        while start + 8 <= end:
+            size = int.from_bytes(data[start:start + 4], 'big')
+            if size < 8 or start + size > end: raise Failure('Unexpected generated MP4 box')
+            yield data[start + 4:start + 8], start + 8, start + size
+            start += size
+    moov = next((a,b) for name,a,b in boxes(0,len(data)) if name == b'moov')
+    traks = [(a,b) for name,a,b in boxes(*moov) if name == b'trak']
+    trak = traks[0]
+    tkhd = next(a for name,a,b in boxes(*trak) if name == b'tkhd')
+    data[tkhd + 3] &= ~1
+    next_tkhd = next(a for name,a,b in boxes(*traks[1]) if name == b'tkhd')
+    data[next_tkhd + 3] |= 1
+    disabled.write_bytes(data)
+    catalog(disabled, 0, 3, 2)
+    catalog(disabled, 1, 3, 1)
+    if decode(disabled)[2] != decode(work / 'three.mp4', 2)[2]: raise Failure('Disabled MP4 default changed')
+    # Menu ordinals must exist in all Ogg links, while the automatic ordinal
+    # still names the first link's actually selected stream.
+    unequal = work / 'unequal.ogg'
+    unequal.write_bytes(speex.read_bytes() + (work / 'speex-opus-a2.ogg').read_bytes())
+    catalog(unequal, 0, 1, 2)
+    catalog(unequal, 2, 0, 0)
+    (work / 'catalog-cases.json').write_text(json.dumps(catalog_cases, indent=2) + '\n')
     write_report('tracks', {'result': 'passed', 'checks': checks,
+                            'catalog_checks': catalog_cases, 'sources': catalog_sources(),
                             'scope': 'lamp-cli --track N in Matroska, MP4, MPEG-TS/PS, AVI and Ogg (multiplexed '
                                      'and chained) against FFmpeg -map 0:a:N copies; queues; unsupported, '
                                      'missing and single tracks.'})

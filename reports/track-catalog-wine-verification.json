@@ -1,0 +1,442 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "three.mkv",
+      "audio_tracks": 3,
+      "selected_ordinal": 1,
+      "requested_ordinal": 1,
+      "failure_clears_catalog": true,
+      "reopen": true
+    },
+    {
+      "test": "three.mkv",
+      "audio_tracks": 3,
+      "selected_ordinal": 2,
+      "requested_ordinal": 2,
+      "failure_clears_catalog": true,
+      "reopen": true
+    },
+    {
+      "test": "three.mkv",
+      "audio_tracks": 3,
+      "selected_ordinal": 3,
+      "requested_ordinal": 3,
+      "failure_clears_catalog": true,
+      "reopen": true
+    },
+    {
+      "test": "three.mkv",
+      "audio_tracks": 3,
+      "selected_ordinal": 2,
+      "requested_ordinal": 0,
+      "failure_clears_catalog": true,
+      "reopen": true
+    },
+    {
+      "test": "three.mkv",
+      "audio_tracks": 0,
+      "selected_ordinal": 0,
+      "requested_ordinal": 4,
+      "failure_clears_catalog": true,
+      "reopen": true
+    },
+    {
+      "test": "three.mp4",
+      "audio_tracks": 3,
+      "selected_ordinal": 1,
+      "requested_ordinal": 1,
+      "failure_clears_catalog": true,
+      "reopen": true
+    },
+    {
+      "test": "three.mp4",
+      "audio_tracks": 3,
+      "selected_ordinal": 2,
+      "requested_ordinal": 2,
+      "failure_clears_catalog": true,
+      "reopen": true
+    },
+    {
+      "test": "three.mp4",
+      "audio_tracks": 3,
+      "selected_ordinal": 3,
+      "requested_ordinal": 3,
+      "failure_clears_catalog": true,
+      "reopen": true
+    },
+    {
+      "test": "three.mp4",
+      "audio_tracks": 3,
+      "selected_ordinal": 1,
+      "requested_ordinal": 0,
+      "failure_clears_catalog": true,
+      "reopen": true
+    },
+    {
+      "test": "three.mp4",
+      "audio_tracks": 0,
+      "selected_ordinal": 0,
+      "requested_ordinal": 4,
+      "failure_clears_catalog": true,
+      "reopen": true
+    },
+    {
+      "test": "three.ts",
+      "audio_tracks": 3,
+      "selected_ordinal": 1,
+      "requested_ordinal": 1,
+      "failure_clears_catalog": true,
+      "reopen": true
+    },
+    {
+      "test": "three.ts",
+      "audio_tracks": 3,
+      "selected_ordinal": 2,
+      "requested_ordinal": 2,
+      "failure_clears_catalog": true,
+      "reopen": true
+    },
+    {
+      "test": "three.ts",
+      "audio_tracks": 3,
+      "selected_ordinal": 3,
+      "requested_ordinal": 3,
+      "failure_clears_catalog": true,
+      "reopen": true
+    },
+    {
+      "test": "three.ts",
+      "audio_tracks": 3,
+      "selected_ordinal": 1,
+      "requested_ordinal": 0,
+      "failure_clears_catalog": true,
+      "reopen": true
+    },
+    {
+      "test": "three.ts",
+      "audio_tracks": 0,
+      "selected_ordinal": 0,
+      "requested_ordinal": 4,
+      "failure_clears_catalog": true,
+      "reopen": true
+    },
+    {
+      "test": "two.vob",
+      "audio_tracks": 2,
+      "selected_ordinal": 1,
+      "requested_ordinal": 1,
+      "failure_clears_catalog": true,
+      "reopen": true
+    },
+    {
+      "test": "two.vob",
+      "audio_tracks": 2,
+      "selected_ordinal": 2,
+      "requested_ordinal": 2,
+      "failure_clears_catalog": true,
+      "reopen": true
+    },
+    {
+      "test": "two.vob",
+      "audio_tracks": 2,
+      "selected_ordinal": 1,
+      "requested_ordinal": 0,
+      "failure_clears_catalog": true,
+      "reopen": true
+    },
+    {
+      "test": "two.vob",
+      "audio_tracks": 0,
+      "selected_ordinal": 0,
+      "requested_ordinal": 3,
+      "failure_clears_catalog": true,
+      "reopen": true
+    },
+    {
+      "test": "two.avi",
+      "audio_tracks": 2,
+      "selected_ordinal": 1,
+      "requested_ordinal": 1,
+      "failure_clears_catalog": true,
+      "reopen": true
+    },
+    {
+      "test": "two.avi",
+      "audio_tracks": 2,
+      "selected_ordinal": 2,
+      "requested_ordinal": 2,
+      "failure_clears_catalog": true,
+      "reopen": true
+    },
+    {
+      "test": "two.avi",
+      "audio_tracks": 2,
+      "selected_ordinal": 1,
+      "requested_ordinal": 0,
+      "failure_clears_catalog": true,
+      "reopen": true
+    },
+    {
+      "test": "two.avi",
+      "audio_tracks": 0,
+      "selected_ordinal": 0,
+      "requested_ordinal": 3,
+      "failure_clears_catalog": true,
+      "reopen": true
+    },
+    {
+      "test": "three.ogg",
+      "audio_tracks": 3,
+      "selected_ordinal": 1,
+      "requested_ordinal": 1,
+      "failure_clears_catalog": true,
+      "reopen": true
+    },
+    {
+      "test": "three.ogg",
+      "audio_tracks": 3,
+      "selected_ordinal": 2,
+      "requested_ordinal": 2,
+      "failure_clears_catalog": true,
+      "reopen": true
+    },
+    {
+      "test": "three.ogg",
+      "audio_tracks": 3,
+      "selected_ordinal": 3,
+      "requested_ordinal": 3,
+      "failure_clears_catalog": true,
+      "reopen": true
+    },
+    {
+      "test": "three.ogg",
+      "audio_tracks": 3,
+      "selected_ordinal": 1,
+      "requested_ordinal": 0,
+      "failure_clears_catalog": true,
+      "reopen": true
+    },
+    {
+      "test": "three.ogg",
+      "audio_tracks": 0,
+      "selected_ordinal": 0,
+      "requested_ordinal": 4,
+      "failure_clears_catalog": true,
+      "reopen": true
+    },
+    {
+      "test": "chained.ogg",
+      "audio_tracks": 2,
+      "selected_ordinal": 1,
+      "requested_ordinal": 0,
+      "failure_clears_catalog": true,
+      "reopen": true
+    },
+    {
+      "test": "chained.ogg",
+      "audio_tracks": 2,
+      "selected_ordinal": 2,
+      "requested_ordinal": 2,
+      "failure_clears_catalog": true,
+      "reopen": true
+    },
+    {
+      "test": "speex-opus.ogg",
+      "audio_tracks": 2,
+      "selected_ordinal": 2,
+      "requested_ordinal": 0,
+      "failure_clears_catalog": true,
+      "reopen": true
+    },
+    {
+      "test": "speex-opus.ogg",
+      "audio_tracks": 2,
+      "selected_ordinal": 2,
+      "requested_ordinal": 2,
+      "failure_clears_catalog": true,
+      "reopen": true
+    },
+    {
+      "test": "speex-opus.ogg",
+      "audio_tracks": 0,
+      "selected_ordinal": 0,
+      "requested_ordinal": 1,
+      "failure_clears_catalog": true,
+      "reopen": true
+    },
+    {
+      "test": "wma.mkv",
+      "audio_tracks": 2,
+      "selected_ordinal": 1,
+      "requested_ordinal": 0,
+      "failure_clears_catalog": true,
+      "reopen": true
+    },
+    {
+      "test": "wma.mkv",
+      "audio_tracks": 0,
+      "selected_ordinal": 0,
+      "requested_ordinal": 2,
+      "failure_clears_catalog": true,
+      "reopen": true
+    },
+    {
+      "test": "eac3.ts",
+      "audio_tracks": 2,
+      "selected_ordinal": 1,
+      "requested_ordinal": 0,
+      "failure_clears_catalog": true,
+      "reopen": true
+    },
+    {
+      "test": "eac3.ts",
+      "audio_tracks": 2,
+      "selected_ordinal": 2,
+      "requested_ordinal": 2,
+      "failure_clears_catalog": true,
+      "reopen": true
+    },
+    {
+      "test": "one.wav",
+      "audio_tracks": 1,
+      "selected_ordinal": 1,
+      "requested_ordinal": 0,
+      "failure_clears_catalog": true,
+      "reopen": true
+    },
+    {
+      "test": "one.wav",
+      "audio_tracks": 1,
+      "selected_ordinal": 1,
+      "requested_ordinal": 1,
+      "failure_clears_catalog": true,
+      "reopen": true
+    },
+    {
+      "test": "one.wav",
+      "audio_tracks": 0,
+      "selected_ordinal": 0,
+      "requested_ordinal": 2,
+      "failure_clears_catalog": true,
+      "reopen": true
+    },
+    {
+      "test": "one.mp3",
+      "audio_tracks": 1,
+      "selected_ordinal": 1,
+      "requested_ordinal": 0,
+      "failure_clears_catalog": true,
+      "reopen": true
+    },
+    {
+      "test": "one.mp3",
+      "audio_tracks": 1,
+      "selected_ordinal": 1,
+      "requested_ordinal": 1,
+      "failure_clears_catalog": true,
+      "reopen": true
+    },
+    {
+      "test": "one.mp3",
+      "audio_tracks": 0,
+      "selected_ordinal": 0,
+      "requested_ordinal": 2,
+      "failure_clears_catalog": true,
+      "reopen": true
+    },
+    {
+      "test": "one.flv",
+      "audio_tracks": 1,
+      "selected_ordinal": 1,
+      "requested_ordinal": 0,
+      "failure_clears_catalog": true,
+      "reopen": true
+    },
+    {
+      "test": "one.flv",
+      "audio_tracks": 1,
+      "selected_ordinal": 1,
+      "requested_ordinal": 1,
+      "failure_clears_catalog": true,
+      "reopen": true
+    },
+    {
+      "test": "one.flv",
+      "audio_tracks": 0,
+      "selected_ordinal": 0,
+      "requested_ordinal": 2,
+      "failure_clears_catalog": true,
+      "reopen": true
+    },
+    {
+      "test": "disabled-first.mp4",
+      "audio_tracks": 3,
+      "selected_ordinal": 2,
+      "requested_ordinal": 0,
+      "failure_clears_catalog": true,
+      "reopen": true
+    },
+    {
+      "test": "disabled-first.mp4",
+      "audio_tracks": 3,
+      "selected_ordinal": 1,
+      "requested_ordinal": 1,
+      "failure_clears_catalog": true,
+      "reopen": true
+    },
+    {
+      "test": "unequal.ogg",
+      "audio_tracks": 1,
+      "selected_ordinal": 2,
+      "requested_ordinal": 0,
+      "failure_clears_catalog": true,
+      "reopen": true
+    },
+    {
+      "test": "unequal.ogg",
+      "audio_tracks": 0,
+      "selected_ordinal": 0,
+      "requested_ordinal": 2,
+      "failure_clears_catalog": true,
+      "reopen": true
+    },
+    {
+      "test": "Windows track menu, deferred switch and per-file queue",
+      "menus": 4,
+      "menu_limit": 64,
+      "deferred_switch": true,
+      "pause_preserved": true,
+      "shorter_track_clamped_ms": 1999,
+      "unsupported_track_rollback": true,
+      "menu_file_pairing": true,
+      "menu_list_generation": true,
+      "worker_request_isolation": true,
+      "cancelled_switch_restores_choice": true,
+      "queue_pcm": "exact",
+      "queue_frames": 176400,
+      "single_track_following_selected_track": true,
+      "repeat_keeps_choice": true,
+      "new_list_clears_choices": true
+    }
+  ],
+  "sources": {
+    "src/decoder.s": "2ba07ab1b6895cefd5fc6466909704d3620a4bf620053787e31c905bf54eba44",
+    "src/mp4.s": "d498c8f74f2b157ad6a3e42984d8694667cb64b62074347c56a65cf7da3c622d",
+    "src/mkv.s": "4bfb6643338674c5597d1944f302b9435b065b5b7f559cf78e0f8a61c36fd05d",
+    "src/avi.s": "a0a47b85e8fbd40ba409572ed8125c486838dd1052c6bcc24a7b16336164bb83",
+    "src/mpegts.s": "183c94011dbb874eac2ea579f573bf6b51ccec8f0e44cacf123326f7e375ce7b",
+    "src/ogg_chain.s": "55d83b35ea390605b27a88f427f3871bd20fb5a51f4a0d83895dd54923708e10",
+    "tests/track-catalog-oracle.c": "93175cde74b34ab85aeb8838c5a428cd39955adf45fdd6407229ad45488e652f",
+    "tests/verify-tracks.py": "b0fe782a85ac4e5c235fd73aa7fe531dd13743812f0dd59e3415ef02a8fae2c6",
+    "src/queue.s": "18b7b6ead963997cd3341af2deecc143bcb7ca5637c1558b0e9fc6204165b223",
+    "src/win/ui.s": "c9b124d3386d4fefa263511e4b2d1c5395428cc3e6ec38ab4cea567534fcfc76",
+    "src/win/ui_queue.inc": "972458074baf32db76dd00bc8d4438923771354c69a8eb435e0fb2e5163149b7",
+    "src/win/ui_tracks.inc": "6ac6e03627d4d6d9654d3dc3c796ff515d46288b20ed5133d45b955af1013f4e",
+    "src/win/ui_menu.inc": "0d1ea389ea0c88157f740759e5a7224e6d964f33ce0ce8014ea9fca451891954",
+    "src/win/ui_draw.inc": "8aba155bc9d9b46dedbda155a8951935f0e776f99fb7cb3795109275ad765c48",
+    "tests/ui-tracks-oracle.c": "d5bcca9ebb7ee2eb6a43453b1981815994b632e7467757e9234877cd730b64fe",
+    "tests/ui-queue-snapshot-probe.s": "9bd84c270186b41b9c4c20681fee825840c297badfe67f4f8fb4a6db25dd25db"
+  },
+  "scope": "Shipping Windows COFF decoder audio counts/ordinals, reopen and failure clearing, real Win32 menu labels/checks/cap, deferred paused track switching, shorter-track clamp, unsupported-track rollback, menu file pairing and exact per-file queue PCM under Wine; same hashed fixtures as the native PCM track suite."
+}

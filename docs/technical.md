@@ -48,7 +48,7 @@ Linux x86-64 builds the same command line with `./build.sh`; paths are UTF-8 byt
 | M | Mute/unmute to 100% |
 | Q | Close |
 
-Files and folders on the command line, dropped or opened play as one gapless list, with playlists expanded and folders read in natural order; the title, picture, time and codec follow the file being heard, and the window's title names it; see [queue notes](queue.md#the-windows-player).
+Files and folders on the command line, dropped or opened play as one gapless list, with playlists expanded and folders read in natural order; the title, picture, time and codec follow the file being heard, and the window's title names it; see [queue notes](queue.md#the-windows-player). Its [Audio track submenu](tracks.md#windows-player) selects a numbered track or Automatic per queue entry, retaining pause and heard position and restoring the preceding choice if validation fails.
 
 Controls hide after 2.5 seconds of inactivity during playback, and reappear on mouse movement or keyboard input. Idle, paused, finished and hidden-control states stop redraw timers. Visible playback controls update at four frames per second. Layout, fonts, controls, hit tests and the picture's size are defined at 96 DPI and scaled to the window's DPI (`GetDpiForWindow`, per-monitor aware). On a DPI change the layout and fonts are made again at the new DPI and the window adopts Windows' suggested rectangle; the initial window is 820 by 510 pixels at 96 DPI, scaled likewise.
 

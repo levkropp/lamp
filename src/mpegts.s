@@ -586,12 +586,16 @@ FN mts_open
     lea rdx, [rax + 5]
     call mts_classify
     mov rcx, [rsp + 32]
-    cmp dword ptr [rip + track_choice], 0
-    je .Lmts_open_stream_automatic
-    # A chosen track: the Nth audio stream of the map.
     test eax, eax
     jz .Lmts_open_stream_next
     inc dword ptr [rip + mts_audio_index]
+    mov edx, [rip + mts_audio_index]
+    mov [rip + audio_tracks_count], edx
+    cmp r13d, -1                        # keep scanning the complete first map after selection
+    jne .Lmts_open_stream_next
+    cmp dword ptr [rip + track_choice], 0
+    je .Lmts_open_stream_automatic
+    # A chosen track: the Nth audio stream of the map.
     mov edx, [rip + mts_audio_index]
     cmp edx, [rip + track_choice]
     jne .Lmts_open_stream_next
@@ -618,19 +622,25 @@ FN mts_open
     movzx edx, byte ptr [rcx + 2]
     or eax, edx
     mov [rsp + 48], eax
+    mov eax, [rip + mts_audio_index]
+    mov [rip + audio_track_selected], eax
     jmp .Lmts_open_stream_next
 .Lmts_open_stream_select:
+    mov edx, [rip + mts_audio_index]
+    mov [rip + audio_track_selected], edx
     mov r14d, eax
     movzx r13d, byte ptr [rcx + 1]
     and r13d, 0x1f
     shl r13d, 8
     movzx eax, byte ptr [rcx + 2]
     or r13d, eax
-    jmp .Lmts_open_tables_done
+    jmp .Lmts_open_stream_next
 .Lmts_open_stream_next:
     mov rax, [rsp + 40]
     jmp .Lmts_open_stream
 .Lmts_open_pmt_done:
+    cmp r13d, -1
+    jne .Lmts_open_tables_done
     mov eax, [rsp + 48]                   # no typed audio: the private candidate
     cmp eax, -1
     je .Lmts_open_tables_done
@@ -964,6 +974,10 @@ FN mps_open
     or r8d, 0xbd00
 .Lmps_open_select:
     # R8D=stream id, R9D=kind, RAX=its data.
+    mov ecx, r8d
+    call mps_audio_seen                  # catalogue later streams too; preserves packet registers
+    mov ecx, [rip + mps_audio_count]
+    mov [rip + audio_tracks_count], ecx
     cmp r12d, -1
     jne .Lmps_open_selected
     cmp dword ptr [rip + track_choice], 0
@@ -973,8 +987,6 @@ FN mps_open
     mov dword ptr [rip + mts_unsupported], 1
     jmp .Lmps_open_skip
 .Lmps_open_choice:
-    mov ecx, r8d                          # the Nth audio stream to appear
-    call mps_audio_seen
     cmp r10d, [rip + track_choice]
     jne .Lmps_open_skip
     mov dword ptr [rip + track_choice_used], 1
@@ -983,6 +995,7 @@ FN mps_open
     mov dword ptr [rip + decode_error], MTS_UNSUPPORTED
     jmp .Lmps_open_bad
 .Lmps_open_take:
+    mov [rip + audio_track_selected], r10d
     mov r12d, r8d
     mov r13d, r9d
     cmp r9d, KIND_DVD

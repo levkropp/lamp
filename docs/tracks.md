@@ -8,10 +8,20 @@ By default LAMP plays one audio track per file, chosen by the container's rules:
 | MP4 / MOV | `trak` boxes with a `soun` handler, in `moov`, whether enabled or not. |
 | Ogg | Each link's Vorbis, Opus, FLAC, Speex, CELT and OGM audio streams, in BOS order. Every link of a chain plays its own Nth stream. |
 | MPEG transport streams | The first program's map: MPEG audio, ADTS and LATM AAC, AC-3/E-AC-3 conventional mantissas, Blu-ray LPCM and the audio LAMP does not decode (DTS, TrueHD), and private data streams without descriptors, in map order. |
-| MPEG program streams | Audio stream ids 0xC0-0xDF and private stream 1's audio substreams (AC-3, DTS, LPCM, MLP, TrueHD), in the order their first packets appear. |
+| MPEG program streams | Audio stream ids 0xC0-0xDF and private stream 1's audio substreams (AC-3, DTS, LPCM, MLP, TrueHD), in the order their first packets appear (at most 64 distinct IDs in the current catalog). |
 | AVI | `auds` stream lists, in `hdrl` order. |
 
-Every other format holds one audio track: `--track 1` plays it, and any other N rejects the file. A track that does not exist, or one LAMP does not decode (WMA in Matroska or Speex in Ogg), rejects with `decode_error` 101. Within a queue, such a file is skipped like any file that cannot play. The Windows player window has no track control yet.
+Every other format holds one audio track: `--track 1` plays it, and any other N rejects the file. A track that does not exist, or one LAMP does not decode (WMA in Matroska or Speex in Ogg), rejects with `decode_error` 101. Within a queue, such a file is skipped like any file that cannot play. The Windows player chooses tracks through its Audio track context submenu; its per-entry policy is described below.
+
+## Windows player
+
+Open the context menu with a right click, Shift+F10 or the menu key, then choose **Audio track → Automatic** or **Track N**. Numbers match `--track N`. The menu shows at most the first 64 ordinals and marks the current choice. It uses the heard file's count, including unsupported tracks, rather than the file decoded ahead. Ogg exposes ordinals present in every link, using the minimum link count; Automatic retains the container's normal per-link choices.
+
+A switch keeps the heard position in milliseconds and preserves pause. When the new track is shorter, the position is clamped to its last representable millisecond. The playback worker validates the requested track after the previous worker stops. If it cannot open, playback keeps the previous track, file and position; the status shows `TRACK UNAVAILABLE`. Parsing and validation stay off the window thread. A menu command is ignored if playback has crossed to another file or a new list has replaced its queue while that menu was open. The returned popup command is dispatched while its captured file index and list generation are held.
+
+Choices belong to individual expanded queue entries. N/P, repeat, seeking and output reconnection retain them. Other entries keep Automatic, so a selected multitrack file does not cause a later single-track file to be skipped. Opening a new list resets all choices. Up to 65,536 entries have fixed storage: 256 KiB for choices and 512 KiB for atomic count/selected-ordinal pairs. The small catalog survives eviction of richer title/cover/chapter metadata. Each worker receives an immutable launch request, preventing a replacement seek/chapter/track request from changing its inputs.
+
+Labels currently identify ordinal numbers; language, title and codec labels and persistent track preferences remain open. Native Windows hardware and screen-reader use remain unverified.
 
 ## Verification
 
@@ -32,3 +42,7 @@ Every other format holds one audio track: `--track 1` plays it, and any other N 
 - Rejections (`decode_error` 101, through `tests/chain-oracle.c`): a track past the last in each of the six files, WMA in Matroska, and `--track 2` on WAV, MP3 and FLV files, which play with `--track 1`.
 
 Conventional E-AC-3 on a second transport-stream audio track is checked against its isolated stream copy. Unsupported E-AC-3 tools or substreams still reject; see the [profile limits](eac3.md).
+
+The same suite also checks 50 native catalog cases: successful opens publish the count and selected audio ordinal; failed opens clear both, and reopening restores them. Counts include disabled MP4 sound tracks and unsupported codecs. Unequal Ogg links publish the minimum count while retaining the first link's automatic selected ordinal. `--wine-only` repeats those cases with shipping Windows COFF objects and tests the real Win32 menu, checked labels and 64-item cap, deferred paused handoff, shorter-track clamping, unsupported-track rollback, menu/file and list-generation pairing, immutable worker requests and cancellation, exact two-file queue PCM, repeat and new-list reset ([report](../reports/track-catalog-wine-verification.json)).
+
+`python3 tests/verify-player.py --only track_switching,track_queue` captures the Wine player's sink for eight scenarios: real keyboard popup selection of Track 2, paused switches at five seconds and return to Automatic in Matroska, MP4, AVI, Ogg and MPEG TS/PS; per-entry choices through N/P with a subsequent single-track file; and an unsupported WMA switch retaining the previous PCM and pause. Fixtures use 48 kHz audio, and comparisons use the corresponding native decoder output. The full player regression also checks the prior list, device, DPI, modes, accessibility, chapter and dense-queue behavior ([report](../reports/track-player-regression-verification.json)). A focused mutation regression covers 1,100 files across eleven changed demuxer/container paths ([report](../reports/track-demux-robustness-verification.json)); the recorded Windows subset covers 110 mutations under Wine ([report](../reports/track-demux-robustness-wine-verification.json)).
