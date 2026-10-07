@@ -1,11 +1,13 @@
 # The Windows player's context menu, included by src/win/ui.s. MIT, see
 # LICENSE. A right click, Shift+F10 or the menu key opens it: Open files,
-# Repeat, and Output with the default output and each active render
+# Repeat, chapters, window modes, and Output with each active render
 # endpoint (audio_devices). Choosing an output plays on it from the file
 # heard at the heard position; the choice applies at the next launch of the
 # playback thread, which no other thread then reads.
 .equ ID_OPEN, 100
 .equ ID_REPEAT, 101
+.equ ID_PREVIOUS_CHAPTER, 104
+.equ ID_NEXT_CHAPTER, 105
 .equ ID_DEFAULT_OUTPUT, 200
 .equ ID_OUTPUT, 201                 # and on: the endpoints in the enumerator's order
 .equ UI_DEVICES_MAX, 64
@@ -18,6 +20,8 @@ ui_device_count: .long 0
 ui_device_pending: .long 0          # 1: ui_device_choice applies at the next launch
 ui_menu_open: .short 'O', 'p', 'e', 'n', ' ', 'f', 'i', 'l', 'e', 's', '.', '.', '.', 9, 'O', 0
 ui_menu_repeat: .short 'R', 'e', 'p', 'e', 'a', 't', 9, 'R', 0
+ui_menu_previous_chapter: .short 'P','r','e','v','i','o','u','s',' ','c','h','a','p','t','e','r',9,'[',0
+ui_menu_next_chapter: .short 'N','e','x','t',' ','c','h','a','p','t','e','r',9,']',0
 ui_menu_output: .short 'O', 'u', 't', 'p', 'u', 't', 0
 ui_menu_default: .short 'D', 'e', 'f', 'a', 'u', 'l', 't', ' ', 'o', 'u', 't', 'p', 'u', 't', 0
 .bss
@@ -69,6 +73,26 @@ LOCALFN ui_menu
     mov rcx, rbx
     mov r8d, ID_REPEAT
     lea r9, [rip + ui_menu_repeat]
+    call AppendMenuW
+    call ui_heard
+    mov edx, 1                          # MF_GRAYED when no heard chapters
+    test rax, rax
+    jz .Lui_menu_chapters
+    cmp dword ptr [rax + UE_CHAPTER_COUNT], 0
+    je .Lui_menu_chapters
+    cmp dword ptr [rip + ui_restart], 0
+    jne .Lui_menu_chapters
+    xor edx, edx
+.Lui_menu_chapters:
+    mov [rsp + 64], edx
+    mov rcx, rbx
+    mov r8d, ID_PREVIOUS_CHAPTER
+    lea r9, [rip + ui_menu_previous_chapter]
+    call AppendMenuW
+    mov edx, [rsp + 64]
+    mov rcx, rbx
+    mov r8d, ID_NEXT_CHAPTER
+    lea r9, [rip + ui_menu_next_chapter]
     call AppendMenuW
     call CreatePopupMenu
     test rax, rax
@@ -239,9 +263,21 @@ LOCALFN ui_menu_command
     jmp .Lui_menu_command_return
 .Lui_command_repeat:
     cmp ecx, ID_REPEAT
-    jne .Lui_command_default
+    jne .Lui_command_previous_chapter
     xor dword ptr [rip + queue_repeat], 1
     call ui_invalidate
+    jmp .Lui_menu_command_return
+.Lui_command_previous_chapter:
+    cmp ecx, ID_PREVIOUS_CHAPTER
+    jne .Lui_command_next_chapter
+    mov ecx, 7
+    call ui_chapter
+    jmp .Lui_menu_command_return
+.Lui_command_next_chapter:
+    cmp ecx, ID_NEXT_CHAPTER
+    jne .Lui_command_default
+    mov ecx, 6
+    call ui_chapter
     jmp .Lui_menu_command_return
 .Lui_command_default:
     cmp ecx, ID_DEFAULT_OUTPUT

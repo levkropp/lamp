@@ -49,6 +49,7 @@ During console playback (Linux and Windows):
 | P or `<` | The heard file from its start when more than 3 s of it played, else the previous file |
 | Right / Left | 5 s forward / back in the heard file |
 | Up / Down | 60 s forward / back in the heard file |
+| `]` / `[` | Next / previous chapter in the heard file ([chapter rules](chapters.md)) |
 | R | Repeat on or off (turned on after the last file was read, the list starts again when it ends) |
 | Q, Ctrl+C | Stop |
 
@@ -86,15 +87,16 @@ The queue notes where each file starts in its output, to the frame, so a key act
 | P, media previous | The heard file from its start when more than 3 s of it played, else the previous file |
 | Right / Left, a click on the timeline | 5 s forward / back, or the clicked point, in the heard file |
 | Home | The heard file from its start |
+| `]` / `[` | Next / previous chapter, keeping pause ([chapter rules](chapters.md)) |
 | Up / Down, M | Volume, mute |
 | R | Repeat on or off |
 | O | Open files |
-| Right click, Shift+F10, menu key | The context menu: Open files, Repeat, and Output (see [device notes](devices.md)) |
+| Right click, Shift+F10, menu key | The context menu: Open files, window modes, Repeat, Previous/Next chapter, and Output (see [device notes](devices.md)) |
 | Q | Close |
 
 Files open before they are heard, so the window keeps what it shows per file:
 
-- As each file opens, the playback thread (for the first file) or the decoding thread (for later ones) notes it in a ring of 64 entries (`src/win/ui_queue.inc`): where it starts in the output, its length, codec, title and picture.
+- As each file opens, the playback thread (for the first file) or the decoding thread (for later ones) notes it in a ring of 64 entries (`src/win/ui_queue.inc`): where it starts in the output, its length, codec, title, picture and chapter starts.
 - The window shows the entry whose start the heard position has reached: the title, picture, time, timeline and codec.
 - A timer set for the next entry's start changes them on time, even while the controls are hidden.
 

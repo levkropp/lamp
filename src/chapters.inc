@@ -92,6 +92,118 @@ FN chapters_get
     ret
 ENDFN chapters_get
 
+# ECX=6 next / 7 previous, RDX=heard milliseconds, R8=duration milliseconds
+# (0 unknown) -> RAX=target milliseconds, EDX=1 if a boundary was found.
+FN chapter_target
+    sub rsp, 40
+    lea r9, [rip + chap_start]
+    mov eax, [rip + chap_count]
+    mov [rsp + 32], eax
+    call chapter_target_from
+    add rsp, 40
+    ret
+ENDFN chapter_target
+
+# Same arguments, R9=nanosecond start table, fifth argument=count. Scan
+# without sorting: printed chapter order stays intact, duplicate starts
+# form one boundary. Ignore starts at/past the known end. Previous restarts
+# the current chapter after 3 s, otherwise chooses the preceding boundary;
+# the beginning of the file is an implicit boundary. No usable chapters or
+# no next boundary leaves the position unchanged (EDX=0).
+FN chapter_target_from
+    push rbx
+    push rsi
+    push rdi
+    mov ebx, ecx
+    mov rsi, rdx
+    mov ecx, [rsp + 64]                 # fifth argument before our pushes
+    cmp ecx, CHAP_MAX
+    ja .Lchapter_target_none
+    test ecx, ecx
+    jz .Lchapter_target_none
+    test r9, r9
+    jz .Lchapter_target_none
+    mov r10, -1                        # nearest start strictly after position
+    xor r11d, r11d                     # current boundary (implicit zero)
+    xor edi, edi                       # at least one usable chapter
+.Lchapter_target_scan:
+    mov rax, [r9]
+    xor edx, edx
+    push rcx
+    mov ecx, 1000000
+    div rcx
+    pop rcx
+    test r8, r8
+    jz .Lchapter_target_usable
+    cmp rax, r8
+    jae .Lchapter_target_advance
+.Lchapter_target_usable:
+    mov edi, 1
+    cmp rax, rsi
+    ja .Lchapter_target_next
+    cmp rax, r11
+    cmova r11, rax
+    jmp .Lchapter_target_advance
+.Lchapter_target_next:
+    cmp rax, r10
+    cmovb r10, rax
+.Lchapter_target_advance:
+    add r9, 8
+    dec ecx
+    jnz .Lchapter_target_scan
+    test edi, edi
+    jz .Lchapter_target_none
+    cmp ebx, 6
+    jne .Lchapter_target_previous
+    cmp r10, -1
+    je .Lchapter_target_none
+    mov rax, r10
+    jmp .Lchapter_target_found
+.Lchapter_target_previous:
+    cmp ebx, 7
+    jne .Lchapter_target_none
+    mov rax, rsi
+    sub rax, r11
+    cmp rax, 3000
+    ja .Lchapter_target_current
+    # Second bounded scan finds the nearest boundary before the current.
+    mov ecx, [rsp + 64]
+    mov eax, ecx
+    shl eax, 3
+    sub r9, rax
+    xor r10d, r10d
+.Lchapter_target_prior:
+    mov rax, [r9]
+    xor edx, edx
+    push rcx
+    mov ecx, 1000000
+    div rcx
+    pop rcx
+    cmp rax, r11
+    jae .Lchapter_target_prior_advance
+    cmp rax, r10
+    cmova r10, rax
+.Lchapter_target_prior_advance:
+    add r9, 8
+    dec ecx
+    jnz .Lchapter_target_prior
+    mov rax, r10
+    jmp .Lchapter_target_found
+.Lchapter_target_current:
+    mov rax, r11
+.Lchapter_target_found:
+    mov edx, 1
+    jmp .Lchapter_target_return
+.Lchapter_target_none:
+    mov rax, rsi
+    xor edx, edx
+.Lchapter_target_return:
+    pop rdi
+    pop rsi
+    pop rbx
+    ret
+ENDFN chapter_target_from
+
 # ECX=chapter, RDX=buffer of CHAP_LINE bytes -> EAX=bytes of its
 # "HH:MM:SS.mmm title" line (NUL-terminated; no title, no space after the
 # time; control characters become spaces).

@@ -24,6 +24,8 @@ and FFmpeg. Builds bin/ with the test tools (tools/build-windows.py --tests).
   - Choosing another output (WM_COMMAND, as the context menu's Output items
     send) continues the file there from the heard position, and choosing
     the default output brings it back.
+  - Chapter bracket keys (including focused controls) and context-menu
+    commands use the heard file's chapters and preserve paused playback.
   - At 144 DPI (Wine's setting, restored afterwards) the window is half as
     large again and the scaled next button works.
 Writes <out>/player-verification.json, or player-selected-verification.json
@@ -86,7 +88,7 @@ def merge(found):
 
 def main():
     scenarios = [list_checks, list_playback, keys, folder_playback, killed_stream, output_menu, dpi,
-                 modes, accessibility, eac3_playback]
+                 modes, accessibility, eac3_playback, chapter_navigation]
     only = sys.argv[sys.argv.index('--only') + 1].split(',') if '--only' in sys.argv else None
     if only is not None:
         unknown = set(only) - {scenario.__name__ for scenario in scenarios}
@@ -125,7 +127,7 @@ def main():
                                      'media next command, the next button, seeking, repeat, playlists, '
                                      'reopening a killed stream, choosing outputs, 144 DPI, fullscreen/compact '
                                      'restoration, Tab/Shift+Tab focus, slider values and MSAA names/native '
-                                     'control classes, raw E-AC-3 playback and folder discovery, under Wine on Xvfb; native Windows screen-reader '
+                                     'control classes, raw E-AC-3 playback and folder discovery, chronological chapter keys/menu and paused seeks, under Wine on Xvfb; native Windows screen-reader '
                                      'roles remain unverified.'})
     print(f'Passed {len(checks)} player checks.')
 
@@ -500,6 +502,51 @@ def accessibility(work, env, wine, checks):
                    'names_roles_classes': names, 'focus': focus,
                    'limit': 'Wine 8 exposes generic client roles; native Windows screen-reader testing remains.'})
     print('MSAA names, native classes, Tab order, Enter/Space and focused mode shortcuts pass', flush=True)
+
+
+def chapter_navigation(work, env, wine, checks):
+    """Bracket keys and menu while paused, using chapters of the heard file."""
+    path=work/'chapter-a.flac'
+    comments=[]
+    for index,start in enumerate([6500,0,3250,1250,3250,12000]):
+        comments+=['-metadata',f'CHAPTER{index:03}=00:00:{start//1000:02}.{start%1000:03}']
+    ffmpeg('-f','lavfi','-i',f'anoisesrc=r={RATE}:d=9:seed=9102:a=0.25','-ac','2',
+           '-metadata','artist=LAMP Test','-metadata','title=Chapter A',*comments,'-c:a','flac',path)
+    later=work/'chapter-b.flac'
+    ffmpeg('-f','lavfi','-i',f'anoisesrc=r={RATE}:d=9:seed=9103:a=0.25','-ac','2',
+           '-metadata','artist=LAMP Test','-metadata','title=Chapter B',
+           '-metadata','CHAPTER001=00:00:07.000','-c:a','flac',later)
+    references={'A':_nav.linux_decode(work,path),'B':_nav.linux_decode(work,later)}
+    session=Session(work,env,wine,'chapters',windows_path(path),windows_path(later))
+    try:
+        # Pause before 3.25 s, then keep it paused through every restart.
+        before=session.drive('s2500','k20','s1000','n111','h113')
+        if before[0]!='Play' or not 0<int(before[-1])<3611:
+            raise Failure(f'Chapter test did not pause before its next boundary: {before}')
+        sequence=session.drive('o104','s1500','n111','h113',
+            'kdd','s1500','n111','h113','kdd','s1500','n111','h113',
+            'k09','vdb','s1500','n111','h113',
+            'o105','s1500','n111','h113','o105','s1500','n111','h113',
+            'o105','s1000','n111','h113','o104','s1500','n111','h113',
+            'o105','s1500','n111','h113','t')
+        expected=[0,1250,3250,1250,3250,6500,6500,3250,6500]
+        for index,ms in enumerate(expected):
+            if sequence[index*4]!='Play' or abs(int(sequence[index*4+3])-ms*10000//9000)>2:
+                raise Failure(f'Paused chapter target {ms} ms: {sequence}')
+        if sequence[-1]!=title('Chapter A'):
+            raise Failure('Chapter controls used the file decoded ahead: '+str(sequence))
+        session.drive('k20','s2000','c')
+    finally:
+        capture=session.finish()
+    segments=merge(_nav.runs(capture,references))
+    if len(segments)!=2 or any(name!='A' for name,_,_ in segments) or \
+            segments[0][1]>RATE//2 or segments[0][2]>=3250*48 or \
+            not 6500*48<=segments[1][1]<7000*48 or segments[1][2]>9000*48:
+        raise Failure(f'Chapter seeks played while paused or chose wrong PCM: {segments}')
+    checks.append(dict(test='chapter navigation',result='brackets and menu choose heard-file chapters; pause preserved',
+        paused_targets_ms=expected,controls=sequence,segments=segments,
+        limit='Wine playback; native Windows remains unverified'))
+    print('Chapter keys, menu, heard-file snapshots and paused seeks pass',flush=True)
 
 
 def eac3_playback(work, env, wine, checks):

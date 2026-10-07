@@ -18,6 +18,7 @@
 # their first NUL and at TAG_VALUE_MAX bytes; empty values are not stored.
 .include "lamp.inc"
 .globl tags_read, tags_clear, tags_get, tag_names, chapters_count, chapters_get, chapter_line
+.globl chapter_target, chapter_target_from
 .globl cover_get, cover_mimes
 
 .equ TAG_KEYS, 10

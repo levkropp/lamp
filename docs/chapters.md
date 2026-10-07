@@ -9,7 +9,11 @@ $ ./build/lamp-cli --chapters audiobook.m4b
 00:24:03.105 Chapter 2
 ```
 
-A file without chapters prints nothing. Playback does not use chapters yet; chapter navigation remains on the [roadmap](../ROADMAP.md).
+A file without chapters prints nothing. During playback, `]` seeks to the next chapter and `[` seeks to the previous chapter in the file being heard, in both consoles and the Windows player. The Windows context menu also offers Previous chapter and Next chapter. Chapter seeks preserve pause.
+
+Navigation uses chronological start times, rounding down to the millisecond, while `--chapters` retains the original list order. Duplicate times form one boundary. Previous restarts the current chapter after more than three seconds of it; within three seconds it goes to the preceding boundary. The file's beginning is an implicit boundary. Starts at or past the known audio duration are ignored. With no usable chapters or no next boundary, the heard position stays unchanged. Chapter navigation stays in the heard file, including with repeat enabled.
+
+The console reopens the heard file before choosing its chapter, since decoder metadata may already describe a later queued file. It uses the normal exact start/seek path, including rate conversion. The Windows player snapshots up to 1024 nanosecond starts in each of its 64 heard-file entries, alongside the title and picture; the fixed tables reserve 512 KiB and copy only the starts present. Keys and menu commands use that snapshot and preserve the pause state through the playback restart.
 
 | Format | Chapters read |
 | --- | --- |
@@ -57,6 +61,8 @@ The rules follow FFmpeg's demuxers, so `lamp-cli --chapters` agrees with `ffprob
 - For Ogg, LAMP reads only the comment packet of the first stream it decodes. FFmpeg reads every stream's comments.
 
 ## Verification
+
+`python3 tests/verify-chapter-navigation.py` ([native report](../reports/chapter-navigation-verification.json), [Windows COFF/Wine report](../reports/chapter-navigation-wine-verification.json)) checks 24 boundary cases: chronological boundaries, duplicate and fractional starts, the three-second rule, missing/out-of-range chapters, unknown duration and 1024 starts ending at a protected page. Queue checks first decode ahead into a file with different chapters, then navigate the heard file and compare PCM with continuous decoding at 44.1 and 48 kHz: 112 exact seeks across MP3, MP4/ALAC, Matroska/ALAC, FLAC, Ogg/Vorbis, chaptered WAVE and WAVE without chapters. Console key playback and the Windows player's bracket keys, focused-control forwarding, menu commands and paused seeks have separate sink checks ([player report](../reports/chapter-player-verification.json)), including half a second of captured silence while a console chapter seek stays paused. `--wine-only` links the guarded oracle with shipping Windows objects and compares against the native references. The existing [25 navigation/resume checks](../reports/chapter-navigation-regression-verification.json) and [40 chapter-reader checks plus 1,100 mutations](../reports/chapter-reader-regression-verification.json) also pass. Native Windows remains unverified.
 
 `python3 tests/verify-chapters.py` ([report](../reports/chapters-verification.json)) checks:
 
