@@ -1,0 +1,36 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "spx.ec3",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 500,
+      "decoded": 355,
+      "rejected_or_damaged": 145
+    },
+    {
+      "test": "spx.mka",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 500,
+      "decoded": 249,
+      "rejected_or_damaged": 251
+    },
+    {
+      "test": "spx.mp4",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 500,
+      "decoded": 269,
+      "rejected_or_damaged": 231
+    },
+    {
+      "test": "spx.ts",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 500,
+      "decoded": 387,
+      "rejected_or_damaged": 113
+    }
+  ],
+  "mutations": 2000,
+  "decoded": 1260,
+  "scope": "4 container/codec sources, 500 mutations each (Linux, 2 GiB address space), seed 20261006: byte flips, zero/0xff runs, cuts, removed and duplicated spans, large length fields; --check, every fourth from a random --start."
+}

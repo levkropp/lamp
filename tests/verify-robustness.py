@@ -85,6 +85,10 @@ SOURCES = [
     ('ac3.mka', SURROUND + ['-c:a', 'ac3']),
     ('tone.ec3', SURROUND + ['-c:a', 'eac3', '-f', 'eac3']),
     ('written.ec3', []),
+    ('spx.ec3', []),
+    ('spx.mka', []),
+    ('spx.mp4', []),
+    ('spx.ts', []),
     ('eac3.mka', SURROUND + ['-c:a', 'eac3']),
     ('eac3.mp4', SURROUND + ['-c:a', 'eac3']),
     ('eac3.ts', SURROUND + ['-c:a', 'eac3']),
@@ -217,7 +221,15 @@ def main():
     for name, options in selected:
         source = work / name
         if not source.exists():
-            if name == 'written.ec3':
+            if name.startswith('spx.'):
+                import eac3_vectors
+                raw=work/'spx.ec3'
+                if not raw.exists():
+                    data, _ = eac3_vectors.stream(20261008, 12, 7, 1, blocks=[1,2,3,6],
+                        spxinu=1,spxbegf=4,spxendf=7,spxstrtf=0,short=0.25)
+                    raw.write_bytes(data)
+                if source!=raw:ffmpeg('-i',raw,'-c','copy',source)
+            elif name == 'written.ec3':
                 import eac3_vectors
                 data, _ = eac3_vectors.stream(20261007, 12, 7, 1, blocks=[1,2,3,6], short=0.25)
                 source.write_bytes(data)

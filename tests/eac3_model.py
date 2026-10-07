@@ -1,18 +1,19 @@
 """Test-only E-AC-3 conventional-mantissa parser atop the AC-3 DSP model.
 
 ATSC A/52:2018 Annex E syntax. Labels allow eac3_vectors to generate independent
-coverage of fields that FFmpeg's encoder does not exercise. Unsupported AHT,
-SPX and enhanced coupling are rejected; metadata does not override LAMP's
+coverage of fields that FFmpeg's encoder does not exercise. Unsupported AHT
+and enhanced coupling are rejected; metadata does not override LAMP's
 shared speaker weights. No reference decoder is linked into the player.
 """
 import importlib.util
+import math
 from pathlib import Path
 import ac3_model as ac3
 
 _spec = importlib.util.spec_from_file_location('generate_eac3', Path(__file__).with_name('generate-eac3-tables.py'))
 _gen = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(_gen)
-EXPSTR, DEFAULT_CPL = _gen.tables()
+EXPSTR, DEFAULT_CPL, DEFAULT_SPX, SPX_ATTEN = _gen.tables()
 
 
 def header(data):
@@ -42,6 +43,7 @@ class Decoder(ac3.Decoder):
     def __init__(self, check_crc=True):
         super().__init__(check_crc)
         self.enhanced = True
+        self.spx_noise, self.spx_signal = [[0.0]*17 for _ in range(7)], [[0.0]*17 for _ in range(7)]
 
     def frame(self, data):
         h = header(data)
@@ -162,13 +164,19 @@ class Decoder(ac3.Decoder):
             for ch in range(1, nf + 1):
                 if g.get(1, 'chintransproc'):
                     g.get(18, 'transproc')
+        self.spx_atten = [-1]*7
         if atten:
             for ch in range(1, nf + 1):
                 if g.get(1, 'spxattencode'):
-                    g.get(5, 'spxattencod')
+                    self.spx_atten[ch] = g.get(5, 'spxattencod', ch)
+                    self.used.add(f'SPX attenuation {self.spx_atten[ch]}')
         if blocks > 1 and g.get(1, 'blkstrtinfoe'):
             g.get((blocks-1)*(4+(h['bytes']-2).bit_length()-1), 'blkstrtinfo')
         self.first_cpl_coords, self.first_cpl_leak = [1]*7, True
+        self.spx_in_use = False
+        self.channel_in_spx = [0]*7
+        self.first_spx_coords = [1]*7
+        self.spx_struct = DEFAULT_SPX[:]
         if self.lfe:
             self.start_freq[self.lfe_ch] = 0
             self.end_freq[self.lfe_ch] = 7
@@ -195,6 +203,87 @@ class Decoder(ac3.Decoder):
             self.last = block
         g.mark('end')
         return out
+
+    def spx_block(self, g, blk):
+        f = ac3.f32
+        if blk == 0 or g.get(1, 'spxstre', blk):
+            self.spx_in_use = g.get(1, 'spxinu', blk)
+            self.used.add(f'SPX active {self.spx_in_use}')
+            if self.spx_in_use:
+                for ch in range(1, self.nfchans+1):
+                    self.channel_in_spx[ch] = 1 if self.acmod == 1 else g.get(1, 'chinspx', ch, blk)
+                self.spx_copy = 12*g.get(2, 'spxstrtf')+25
+                begin, end = g.get(3, 'spxbegf')+2, g.get(3, 'spxendf')+5
+                if begin > 7: begin = 2*begin-7
+                if end > 7: end = 2*end-7
+                self.spx_start, self.spx_end = 12*begin+25, 12*end+25
+                if begin >= end or self.spx_copy >= self.spx_start:
+                    raise ac3.DecodeError('invalid SPX range')
+                if g.get(1, 'spxbndstrce', blk):
+                    for b in range(begin+1,end):
+                        self.spx_struct[b] = g.get(1, 'spxbndstrc', b)
+                    self.used.add('SPX explicit bands')
+                else:
+                    self.used.add('SPX default/reused bands')
+                self.spx_sizes = [12]
+                for b in range(begin+1,end):
+                    if self.spx_struct[b]: self.spx_sizes[-1] += 12
+                    else: self.spx_sizes.append(12)
+                self.used.add('SPX partial channels' if sum(self.channel_in_spx) < self.nfchans else 'SPX all channels')
+            else:
+                self.channel_in_spx = [0]*7
+        for ch in range(1,self.nfchans+1):
+            if not self.channel_in_spx[ch]:
+                self.first_spx_coords[ch] = 1
+                continue
+            if self.first_spx_coords[ch] or g.get(1, 'spxcoe', ch, blk):
+                self.first_spx_coords[ch] = 0
+                blend, master = g.get(5,'spxblnd',ch)/32, 3*g.get(2,'mstrspxco')
+                self.used.add(f'SPX blend {int(blend*32)}')
+                self.used.add(f'SPX master {master//3}')
+                pos = self.spx_start
+                for b,size in enumerate(self.spx_sizes):
+                    ratio = min(1.0,max(0.0,f(f((pos+size//2)/self.spx_end)-blend)))
+                    exp, mant = g.get(4,'spxcoexp'), g.get(2,'spxcomant')
+                    self.used.add(f'SPX exponent {exp}')
+                    self.used.add(f'SPX mantissa {mant}')
+                    coord = (2*mant if exp == 15 else mant+4)*2.0**(2-exp-master)
+                    self.spx_noise[ch][b] = f(f(math.sqrt(f(3*ratio)))*coord)
+                    self.spx_signal[ch][b] = f(f(math.sqrt(f(1-ratio)))*coord)
+                    pos += size
+            else:
+                self.used.add('SPX coordinate reuse')
+
+    def spx_apply(self, ch, coeffs):
+        f = ac3.f32
+        source, out = self.spx_copy, self.spx_start
+        borders, energies = [], []
+        for size in self.spx_sizes:
+            wrap = source+size > self.spx_start
+            if wrap: source = self.spx_copy
+            borders.append(wrap or out == self.spx_start)
+            for i in range(size):
+                if source == self.spx_start: source = self.spx_copy
+                coeffs[out+i] = coeffs[source]
+                source += 1
+            total = 0.0
+            for x in coeffs[out:out+size]: total = f(total+f(x*x))
+            energies.append(f(math.sqrt(f(total/size))))
+            out += size
+        out = self.spx_start
+        if self.spx_atten[ch] >= 0:
+            a = [f(x) for x in SPX_ATTEN[self.spx_atten[ch]]]
+            for size,border in zip(self.spx_sizes,borders):
+                if border:
+                    for i,gain in enumerate(a+a[1::-1]): coeffs[out-2+i] = f(coeffs[out-2+i]*gain)
+                out += size
+        out = self.spx_start
+        for b,size in enumerate(self.spx_sizes):
+            noise = f(f(self.spx_noise[ch][b]*energies[b])*(-2.0**-31))
+            for i in range(size):
+                v = ac3._i32(self.random_word())
+                coeffs[out] = f(f(coeffs[out]*self.spx_signal[ch][b])+f(noise*f(float(v))))
+                out += 1
 
     def block_snr(self, g, blk, stages):
         first = 0 if self.cpl_in_use else 1

@@ -301,12 +301,15 @@ class Decoder:
         self.mask = [[0] * 50 for _ in range(7)]
         self.used = set()                               # coverage tags
 
-    def dither(self):
+    def random_word(self):
         i = self.lfg_index
         v = (self.lfg[(i - 24) & 63] + self.lfg[(i - 55) & 63]) & 0xffffffff
         self.lfg[i & 63] = v
         self.lfg_index = i + 1
-        return (((v >> 8) * 181) >> 8) - 5931008
+        return v
+
+    def dither(self):
+        return (((self.random_word() >> 8) * 181) >> 8) - 5931008
 
     def frame(self, data):
         """One frame -> list of channels (AC-3 order, LFE last) of 1536 floats,
@@ -433,8 +436,7 @@ class Decoder:
                 self.dynamic_range[i] = 1.0
         # Coupling strategy.
         if self.enhanced:
-            if (blk == 0 or g.get(1, 'spxstre')) and g.get(1, 'spxinu'):
-                raise DecodeError('spectral extension unsupported')
+            self.spx_block(g, blk)
             new = self.cplstre[blk] if acmod > 1 else 1
         else:
             new = g.get(1, 'cplstre', blk)
@@ -452,7 +454,7 @@ class Decoder:
                 if acmod == 2:
                     self.phase_flags_in_use = g.get(1, 'phsflginu')
                 begin = g.get(4, 'cplbegf')
-                end = g.get(4, 'cplendf', begin) + 3
+                end = (self.spx_start - 37)//12 if self.enhanced and self.spx_in_use else g.get(4, 'cplendf', begin) + 3
                 if begin >= end:
                     raise DecodeError('invalid coupling range')
                 self.start_freq[CPL] = begin * 12 + 37
@@ -511,6 +513,8 @@ class Decoder:
                 self.num_rematrixing_bands = 4
                 if cpl and self.start_freq[CPL] <= 61:
                     self.num_rematrixing_bands -= 1 + (self.start_freq[CPL] == 37)
+                elif self.enhanced and self.spx_in_use and self.spx_start <= 61:
+                    self.num_rematrixing_bands -= 1
                 for bnd in range(self.num_rematrixing_bands):
                     self.rematrixing_flags[bnd] = g.get(1, 'rematflg')
                     if self.rematrixing_flags[bnd]:
@@ -531,6 +535,8 @@ class Decoder:
                 prev = self.end_freq[ch]
                 if self.channel_in_cpl[ch]:
                     self.end_freq[ch] = self.start_freq[CPL]
+                elif self.enhanced and self.channel_in_spx[ch]:
+                    self.end_freq[ch] = self.spx_start
                 else:
                     code = g.get(6, 'chbwcod')
                     if code > 60:
@@ -667,6 +673,8 @@ class Decoder:
             audio = 2 - ch if acmod == 0 and ch <= 2 else 0
             gain = f32(self.dynamic_range[audio] * (1.0 / 4194304.0))
             coeffs = [f32(f32(float(v)) * gain) for v in fixed[ch]]
+            if self.enhanced and self.channel_in_spx[ch]:
+                self.spx_apply(ch, coeffs)
             delay = self.delay[ch - 1]
             if self.block_switch[ch] and ch != self.lfe_ch:
                 first = imdct_half(coeffs[0::2])
