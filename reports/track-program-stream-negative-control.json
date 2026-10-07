@@ -1,0 +1,19 @@
+{
+  "test": "program stream audio ordinal 65 negative control",
+  "result": "expected failure before expanding the stream ID catalog",
+  "source_commit": "662cd8603f50de19e7a5332f9ced36aefca387ca",
+  "binary_sha256": "7620ac21ab04e59a3cfbd36a6a34ea5b4d9cf655c815e1864e2df8a01cd1c5a6",
+  "archive_sha256": "2abbcef065838967ce19b7dfd331664fab43bb11bdac7f3ba1b7908cea7f38dc",
+  "fixture_sha256": "ebb4f6c1d4c29365e638a04c6b335d441ce42b64ba85dc6533cbedacada72ab6",
+  "input": {
+    "unsupported_private_audio_ids": 64,
+    "supported_mpeg_audio_ordinal": 65
+  },
+  "observed": {
+    "cli_exit_code": 2,
+    "result": "rejected",
+    "stage": "open",
+    "decode_error": 101
+  },
+  "scope": "Original native binary/archive from the submillisecond checkpoint; synthetic unsupported private-stream PES IDs precede an independently encoded MPEG Layer II track. The existing chain oracle is linked against that archive to inspect decode_error."
+}

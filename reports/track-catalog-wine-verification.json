@@ -402,6 +402,98 @@
       "reopen": true
     },
     {
+      "test": "catalog-65.mpg",
+      "audio_tracks": 65,
+      "selected_ordinal": 65,
+      "requested_ordinal": 0,
+      "failure_clears_catalog": true,
+      "reopen": true
+    },
+    {
+      "test": "catalog-65.mpg",
+      "audio_tracks": 65,
+      "selected_ordinal": 65,
+      "requested_ordinal": 65,
+      "failure_clears_catalog": true,
+      "reopen": true
+    },
+    {
+      "test": "catalog-65.mpg",
+      "audio_tracks": 0,
+      "selected_ordinal": 0,
+      "requested_ordinal": 64,
+      "failure_clears_catalog": true,
+      "reopen": true
+    },
+    {
+      "test": "catalog-65.mpg",
+      "audio_tracks": 0,
+      "selected_ordinal": 0,
+      "requested_ordinal": 66,
+      "failure_clears_catalog": true,
+      "reopen": true
+    },
+    {
+      "test": "catalog-104.mpg",
+      "audio_tracks": 104,
+      "selected_ordinal": 65,
+      "requested_ordinal": 0,
+      "failure_clears_catalog": true,
+      "reopen": true
+    },
+    {
+      "test": "catalog-104.mpg",
+      "audio_tracks": 104,
+      "selected_ordinal": 104,
+      "requested_ordinal": 104,
+      "failure_clears_catalog": true,
+      "reopen": true
+    },
+    {
+      "test": "catalog-104.mpg",
+      "audio_tracks": 0,
+      "selected_ordinal": 0,
+      "requested_ordinal": 64,
+      "failure_clears_catalog": true,
+      "reopen": true
+    },
+    {
+      "test": "catalog-104.mpg",
+      "audio_tracks": 0,
+      "selected_ordinal": 0,
+      "requested_ordinal": 105,
+      "failure_clears_catalog": true,
+      "reopen": true
+    },
+    {
+      "test": "catalog-104.mpg",
+      "audio_tracks": 104,
+      "selected_ordinal": 65,
+      "requested_ordinal": 65,
+      "failure_clears_catalog": true,
+      "reopen": true
+    },
+    {
+      "test": "catalog-104.mpg",
+      "audio_tracks": 104,
+      "selected_ordinal": 73,
+      "requested_ordinal": 73,
+      "failure_clears_catalog": true,
+      "reopen": true
+    },
+    {
+      "test": "catalog-65.mpg track 65 PCM",
+      "result": "exact",
+      "frames": 88704,
+      "pcm_sha256": "1d8c2e765d5f38d9e74fc851670f7664f43b34ae72dbaf5ecc5ea9fef32d41ff"
+    },
+    {
+      "test": "catalog-104.mpg track 104 PCM",
+      "result": "exact",
+      "frames": 88704,
+      "pcm_sha256": "1d8c2e765d5f38d9e74fc851670f7664f43b34ae72dbaf5ecc5ea9fef32d41ff"
+    },
+    {
       "test": "Windows track menu, deferred switch and per-file queue",
       "menus": 4,
       "menu_limit": 64,
@@ -425,10 +517,10 @@
     "src/mp4.s": "d498c8f74f2b157ad6a3e42984d8694667cb64b62074347c56a65cf7da3c622d",
     "src/mkv.s": "4bfb6643338674c5597d1944f302b9435b065b5b7f559cf78e0f8a61c36fd05d",
     "src/avi.s": "a0a47b85e8fbd40ba409572ed8125c486838dd1052c6bcc24a7b16336164bb83",
-    "src/mpegts.s": "183c94011dbb874eac2ea579f573bf6b51ccec8f0e44cacf123326f7e375ce7b",
+    "src/mpegts.s": "5dafcb58db5d634684462207d45e55ff088d5bf032f62d8302adc39be6ef125e",
     "src/ogg_chain.s": "55d83b35ea390605b27a88f427f3871bd20fb5a51f4a0d83895dd54923708e10",
     "tests/track-catalog-oracle.c": "93175cde74b34ab85aeb8838c5a428cd39955adf45fdd6407229ad45488e652f",
-    "tests/verify-tracks.py": "b0fe782a85ac4e5c235fd73aa7fe531dd13743812f0dd59e3415ef02a8fae2c6",
+    "tests/verify-tracks.py": "cec55a95727c08cc681affb5ecbc44aa5460a315c2ba191740ce10ab9030d256",
     "src/queue.s": "18b7b6ead963997cd3341af2deecc143bcb7ca5637c1558b0e9fc6204165b223",
     "src/win/ui.s": "c9b124d3386d4fefa263511e4b2d1c5395428cc3e6ec38ab4cea567534fcfc76",
     "src/win/ui_queue.inc": "972458074baf32db76dd00bc8d4438923771354c69a8eb435e0fb2e5163149b7",
