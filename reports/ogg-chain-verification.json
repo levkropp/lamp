@@ -272,6 +272,16 @@
       "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":50}"
     },
     {
+      "test": "FLAC empty EOS",
+      "result": "exact PCM and seeks",
+      "oracle": "{\"result\":\"passed\",\"links\":1,\"frames\":36000,\"rate\":48000,\"seeks\":10,\"opus_seeks_left_to_dump\":0,\"maximum_discarded\":4189}"
+    },
+    {
+      "test": "flac-ogg-empty-eos-wrong-granule.ogg",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":50}"
+    },
+    {
       "test": "flac-ogg-rounded-granules.ogg",
       "result": "exact"
     },
@@ -286,6 +296,6 @@
       "oracle": "{\"result\":\"cancelled\",\"frames_before_cancel\":114688}"
     }
   ],
-  "rejections": 16,
+  "rejections": 17,
   "scope": "Chained Ogg links of Vorbis, Opus and FLAC, including rate changes resampled to the first link, same-serial chains and 48 links; multiplexed links with Opus, Vorbis, FLAC, Speex and Theora streams; exact continuous and seek PCM against the links' own decodes; Opus-link seeks equal standalone seeks; FLAC-in-Ogg exact against FFmpeg or native FLAC; malformed chains/mappings and cancellation."
 }

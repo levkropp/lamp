@@ -186,6 +186,22 @@ def runs(capture, references):
                 match = (name, index)
                 break
         if match is None:
+            # Wine can leave fewer than 128 exact frames between dropouts.
+            # Match the entire non-silent fragment when silence cuts the
+            # fingerprint short; every captured frame must still be exact.
+            end = position + FRAME
+            while end < position + 128 * FRAME and capture[end:end + FRAME] != zero:
+                end += FRAME
+            if end < position + 128 * FRAME:
+                key = capture[position:end]
+                for name, data in references.items():
+                    index = data.find(key)
+                    while index >= 0 and index % FRAME:
+                        index = data.find(key, index + 1)
+                    if index >= 0:
+                        match = (name, index)
+                        break
+        if match is None:
             raise Failure(f'Captured audio at frame {position // FRAME} is in no reference '
                           f'(after {[(n, s, f) for n, s, f in found]})')
         name, index = match
@@ -208,6 +224,23 @@ def runs(capture, references):
         found.append((name, index // FRAME, length // FRAME))
         position += length
     return found
+
+
+def check_capture_fragments():
+    """Short exact fragments before a dropout pass; changed samples fail."""
+    import struct
+    reference = b''.join(struct.pack('<ff', i + 1, -i - 1) for i in range(1024))
+    silence = bytes(512 * FRAME)
+    for length in (1, 32, 126, 128):
+        capture = reference[10 * FRAME:(10 + length) * FRAME] + silence + reference[400 * FRAME:600 * FRAME] + silence
+        if runs(capture, {'fixture': reference}) != [('fixture', 10, length), ('fixture', 400, 200)]:
+            raise Failure(f'Capture matcher loses a {length}-frame fragment')
+    damaged = reference[10 * FRAME:30 * FRAME] + struct.pack('<ff', 123456, -123456) + silence
+    try:
+        runs(damaged, {'fixture': reference})
+    except Failure:
+        return
+    raise Failure('Capture matcher accepts a changed sample')
 
 
 def main():

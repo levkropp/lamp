@@ -16,12 +16,19 @@ A file is recognised by a leading `ftyp`, `moov`, `mdat`, `wide`, `free` or `ski
 | `fLaC` with `dfLa` | FLAC |
 | `twos`, `sowt`, `in24`, `in32`, `fl32`, `fl64`, `raw `, `lpcm` | QuickTime PCM: 8/16/24/32-bit integer and float32/64 in either byte order (`enda` inside `wave`), version 0/1/2 sound descriptions |
 | `ipcm`, `fpcm` with `pcmC` | ISO/IEC 23003-5 integer and float PCM |
+| `alaw`, `ulaw` | G.711 A-law and mu-law; one byte per channel, expanded to signed 16-bit PCM |
+| `ima4` | QuickTime IMA ADPCM; 34 bytes per channel decode to 64 frames, 1–8 channels |
+| `agsm` | GSM 06.10 full-rate speech; 33-byte mono frames, bit-exact with libgsm |
 
 AAC object types other than LC, SBR and PS, and E-AC-3 (`ec-3`), reject when the track is opened (see [AAC](aac.md) and [AC-3](ac3.md) notes); other sample entries are skipped.
 
 ## Samples and timing
 
 Progressive files list samples from `stsz` or `stz2` (4/8/16-bit fields), `stsc` and `stco` or `co64`; every listed sample must lie inside the file and the tables must agree on the sample count. Fragmented files add the samples of every `moof`/`traf` for the track in file order, from `trun` records with `tfhd` and `trex` defaults, explicit base data offsets, `default-base-is-moof` and implicit offsets that continue the previous run. PCM chunks become packets of up to 4,096 frames. Opening reads every fragment.
+
+QuickTime IMA4 and GSM use the existing [compressed-audio decoders](wav.md#compressed-audio), in bounded groups of up to 20 blocks. Both packet-based tables and legacy QuickTime tables with a constant `stsz` size of one are accepted. The latter count decoded samples: chunk counts must be multiples of 64 for IMA4 or 160 for GSM, and convert to complete compressed blocks. Partial blocks reject. GSM seeks use three preceding packets to rebuild its synthesis history. IMA4 block headers retain only the upper predictor bits, so restarting at a later block can differ from continuous playback by up to 127/32768, as in AIFF-C and CAF; complete decodes match FFmpeg exactly.
+
+QuickTime PCM, G.711 and IMA4 use the default WAVE speaker order for multichannel stereo mixing; QuickTime `chan` layout atoms are not interpreted. The independent MOV comparisons currently cover mono and stereo.
 
 Presentation follows the track's timing:
 
@@ -43,3 +50,7 @@ The 24-byte `ALACSpecificConfig` (optionally behind the `alac` box's version and
 - ALAC, Opus and FLAC files are also written as fragmented MP4 (`frag_keyframe+empty_moov`, and with `default_base_moof` and 200 ms fragments); each decodes exactly like its progressive version. ALAC equals the same stream remuxed to Matroska, FLAC its native FLAC remux and Opus its Ogg remux.
 - 120 exact seeks across ALAC (including 5.1 and a fragmented file), FLAC, MP3, MP2 and PCM files, and five Opus seeks equal to Ogg Opus seeks.
 - Ten malformed files reject: a truncated file, a missing `moov`, an oversized box, a sample count beyond the sizes, a chunk offset past the end, an empty `stsc`, a reference to a second sample description, an `mp4a` entry without `esds`, an invalid ALAC depth and an ALAC coupling element. Cancelled open and read stop cleanly, and an ALAC file plays through the Linux null sink.
+
+`python3 tests/verify-quicktime.py` adds 18 MOV files with A-law, mu-law, IMA4 and GSM at 8 and 44.1 kHz, mono and stereo where supported. Complete PCM and presented duration equal FFmpeg; 270 seeks are exact except for IMA4's bounded predictor difference. Rewritten legacy IMA4 and GSM tables decode identically. Seven malformed descriptions, block sizes and sample/chunk counts reject, two-track selection is checked, and cancelled open/read stop cleanly. `--skip-playback` omits the optional null-sink check.
+
+`--wine` also checks the Windows CLI: all 18 continuous decodes equal the Linux PCM, 54 `--start` decodes equal continuous PCM within the same IMA4 bound, both audio tracks decode identically, and the seven malformed files reject. The separate report records these Windows checks.

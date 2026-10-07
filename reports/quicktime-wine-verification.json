@@ -1,0 +1,438 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "pcm_alaw-1-8000.mov",
+      "result": "exact PCM"
+    },
+    {
+      "test": "pcm_alaw-1-8000.mov --start 400 ms",
+      "result": "passed",
+      "maximum_deviation": 0,
+      "tolerance": 0.0
+    },
+    {
+      "test": "pcm_alaw-1-8000.mov --start 1600 ms",
+      "result": "passed",
+      "maximum_deviation": 0,
+      "tolerance": 0.0
+    },
+    {
+      "test": "pcm_alaw-1-8000.mov --start 3000 ms",
+      "result": "passed",
+      "maximum_deviation": 0,
+      "tolerance": 0.0
+    },
+    {
+      "test": "pcm_alaw-1-44100.mov",
+      "result": "exact PCM"
+    },
+    {
+      "test": "pcm_alaw-1-44100.mov --start 400 ms",
+      "result": "passed",
+      "maximum_deviation": 0,
+      "tolerance": 0.0
+    },
+    {
+      "test": "pcm_alaw-1-44100.mov --start 1600 ms",
+      "result": "passed",
+      "maximum_deviation": 0,
+      "tolerance": 0.0
+    },
+    {
+      "test": "pcm_alaw-1-44100.mov --start 3000 ms",
+      "result": "passed",
+      "maximum_deviation": 0,
+      "tolerance": 0.0
+    },
+    {
+      "test": "pcm_alaw-2-8000.mov",
+      "result": "exact PCM"
+    },
+    {
+      "test": "pcm_alaw-2-8000.mov --start 400 ms",
+      "result": "passed",
+      "maximum_deviation": 0,
+      "tolerance": 0.0
+    },
+    {
+      "test": "pcm_alaw-2-8000.mov --start 1600 ms",
+      "result": "passed",
+      "maximum_deviation": 0,
+      "tolerance": 0.0
+    },
+    {
+      "test": "pcm_alaw-2-8000.mov --start 3000 ms",
+      "result": "passed",
+      "maximum_deviation": 0,
+      "tolerance": 0.0
+    },
+    {
+      "test": "pcm_alaw-2-44100.mov",
+      "result": "exact PCM"
+    },
+    {
+      "test": "pcm_alaw-2-44100.mov --start 400 ms",
+      "result": "passed",
+      "maximum_deviation": 0,
+      "tolerance": 0.0
+    },
+    {
+      "test": "pcm_alaw-2-44100.mov --start 1600 ms",
+      "result": "passed",
+      "maximum_deviation": 0,
+      "tolerance": 0.0
+    },
+    {
+      "test": "pcm_alaw-2-44100.mov --start 3000 ms",
+      "result": "passed",
+      "maximum_deviation": 0,
+      "tolerance": 0.0
+    },
+    {
+      "test": "pcm_mulaw-1-8000.mov",
+      "result": "exact PCM"
+    },
+    {
+      "test": "pcm_mulaw-1-8000.mov --start 400 ms",
+      "result": "passed",
+      "maximum_deviation": 0,
+      "tolerance": 0.0
+    },
+    {
+      "test": "pcm_mulaw-1-8000.mov --start 1600 ms",
+      "result": "passed",
+      "maximum_deviation": 0,
+      "tolerance": 0.0
+    },
+    {
+      "test": "pcm_mulaw-1-8000.mov --start 3000 ms",
+      "result": "passed",
+      "maximum_deviation": 0,
+      "tolerance": 0.0
+    },
+    {
+      "test": "pcm_mulaw-1-44100.mov",
+      "result": "exact PCM"
+    },
+    {
+      "test": "pcm_mulaw-1-44100.mov --start 400 ms",
+      "result": "passed",
+      "maximum_deviation": 0,
+      "tolerance": 0.0
+    },
+    {
+      "test": "pcm_mulaw-1-44100.mov --start 1600 ms",
+      "result": "passed",
+      "maximum_deviation": 0,
+      "tolerance": 0.0
+    },
+    {
+      "test": "pcm_mulaw-1-44100.mov --start 3000 ms",
+      "result": "passed",
+      "maximum_deviation": 0,
+      "tolerance": 0.0
+    },
+    {
+      "test": "pcm_mulaw-2-8000.mov",
+      "result": "exact PCM"
+    },
+    {
+      "test": "pcm_mulaw-2-8000.mov --start 400 ms",
+      "result": "passed",
+      "maximum_deviation": 0,
+      "tolerance": 0.0
+    },
+    {
+      "test": "pcm_mulaw-2-8000.mov --start 1600 ms",
+      "result": "passed",
+      "maximum_deviation": 0,
+      "tolerance": 0.0
+    },
+    {
+      "test": "pcm_mulaw-2-8000.mov --start 3000 ms",
+      "result": "passed",
+      "maximum_deviation": 0,
+      "tolerance": 0.0
+    },
+    {
+      "test": "pcm_mulaw-2-44100.mov",
+      "result": "exact PCM"
+    },
+    {
+      "test": "pcm_mulaw-2-44100.mov --start 400 ms",
+      "result": "passed",
+      "maximum_deviation": 0,
+      "tolerance": 0.0
+    },
+    {
+      "test": "pcm_mulaw-2-44100.mov --start 1600 ms",
+      "result": "passed",
+      "maximum_deviation": 0,
+      "tolerance": 0.0
+    },
+    {
+      "test": "pcm_mulaw-2-44100.mov --start 3000 ms",
+      "result": "passed",
+      "maximum_deviation": 0,
+      "tolerance": 0.0
+    },
+    {
+      "test": "adpcm_ima_qt-1-8000.mov",
+      "result": "exact PCM"
+    },
+    {
+      "test": "adpcm_ima_qt-1-8000.mov --start 400 ms",
+      "result": "passed",
+      "maximum_deviation": 0.0029296875,
+      "tolerance": 0.003875732421875
+    },
+    {
+      "test": "adpcm_ima_qt-1-8000.mov --start 1600 ms",
+      "result": "passed",
+      "maximum_deviation": 0.003021240234375,
+      "tolerance": 0.003875732421875
+    },
+    {
+      "test": "adpcm_ima_qt-1-8000.mov --start 3000 ms",
+      "result": "passed",
+      "maximum_deviation": 0.002166748046875,
+      "tolerance": 0.003875732421875
+    },
+    {
+      "test": "adpcm_ima_qt-1-8000-legacy.mov",
+      "result": "exact PCM"
+    },
+    {
+      "test": "adpcm_ima_qt-1-8000-legacy.mov --start 400 ms",
+      "result": "passed",
+      "maximum_deviation": 0.0029296875,
+      "tolerance": 0.003875732421875
+    },
+    {
+      "test": "adpcm_ima_qt-1-8000-legacy.mov --start 1600 ms",
+      "result": "passed",
+      "maximum_deviation": 0.003021240234375,
+      "tolerance": 0.003875732421875
+    },
+    {
+      "test": "adpcm_ima_qt-1-8000-legacy.mov --start 3000 ms",
+      "result": "passed",
+      "maximum_deviation": 0.002166748046875,
+      "tolerance": 0.003875732421875
+    },
+    {
+      "test": "adpcm_ima_qt-1-44100.mov",
+      "result": "exact PCM"
+    },
+    {
+      "test": "adpcm_ima_qt-1-44100.mov --start 400 ms",
+      "result": "passed",
+      "maximum_deviation": 0.00384521484375,
+      "tolerance": 0.003875732421875
+    },
+    {
+      "test": "adpcm_ima_qt-1-44100.mov --start 1600 ms",
+      "result": "passed",
+      "maximum_deviation": 0.003021240234375,
+      "tolerance": 0.003875732421875
+    },
+    {
+      "test": "adpcm_ima_qt-1-44100.mov --start 3000 ms",
+      "result": "passed",
+      "maximum_deviation": 0.002593994140625,
+      "tolerance": 0.003875732421875
+    },
+    {
+      "test": "adpcm_ima_qt-1-44100-legacy.mov",
+      "result": "exact PCM"
+    },
+    {
+      "test": "adpcm_ima_qt-1-44100-legacy.mov --start 400 ms",
+      "result": "passed",
+      "maximum_deviation": 0.00384521484375,
+      "tolerance": 0.003875732421875
+    },
+    {
+      "test": "adpcm_ima_qt-1-44100-legacy.mov --start 1600 ms",
+      "result": "passed",
+      "maximum_deviation": 0.003021240234375,
+      "tolerance": 0.003875732421875
+    },
+    {
+      "test": "adpcm_ima_qt-1-44100-legacy.mov --start 3000 ms",
+      "result": "passed",
+      "maximum_deviation": 0.002593994140625,
+      "tolerance": 0.003875732421875
+    },
+    {
+      "test": "adpcm_ima_qt-2-8000.mov",
+      "result": "exact PCM"
+    },
+    {
+      "test": "adpcm_ima_qt-2-8000.mov --start 400 ms",
+      "result": "passed",
+      "maximum_deviation": 0.000732421875,
+      "tolerance": 0.003875732421875
+    },
+    {
+      "test": "adpcm_ima_qt-2-8000.mov --start 1600 ms",
+      "result": "passed",
+      "maximum_deviation": 0.0028076171875,
+      "tolerance": 0.003875732421875
+    },
+    {
+      "test": "adpcm_ima_qt-2-8000.mov --start 3000 ms",
+      "result": "passed",
+      "maximum_deviation": 0.00299072265625,
+      "tolerance": 0.003875732421875
+    },
+    {
+      "test": "adpcm_ima_qt-2-8000-legacy.mov",
+      "result": "exact PCM"
+    },
+    {
+      "test": "adpcm_ima_qt-2-8000-legacy.mov --start 400 ms",
+      "result": "passed",
+      "maximum_deviation": 0.000732421875,
+      "tolerance": 0.003875732421875
+    },
+    {
+      "test": "adpcm_ima_qt-2-8000-legacy.mov --start 1600 ms",
+      "result": "passed",
+      "maximum_deviation": 0.0028076171875,
+      "tolerance": 0.003875732421875
+    },
+    {
+      "test": "adpcm_ima_qt-2-8000-legacy.mov --start 3000 ms",
+      "result": "passed",
+      "maximum_deviation": 0.00299072265625,
+      "tolerance": 0.003875732421875
+    },
+    {
+      "test": "adpcm_ima_qt-2-44100.mov",
+      "result": "exact PCM"
+    },
+    {
+      "test": "adpcm_ima_qt-2-44100.mov --start 400 ms",
+      "result": "passed",
+      "maximum_deviation": 0.003631591796875,
+      "tolerance": 0.003875732421875
+    },
+    {
+      "test": "adpcm_ima_qt-2-44100.mov --start 1600 ms",
+      "result": "passed",
+      "maximum_deviation": 0.003662109375,
+      "tolerance": 0.003875732421875
+    },
+    {
+      "test": "adpcm_ima_qt-2-44100.mov --start 3000 ms",
+      "result": "passed",
+      "maximum_deviation": 0.0032958984375,
+      "tolerance": 0.003875732421875
+    },
+    {
+      "test": "adpcm_ima_qt-2-44100-legacy.mov",
+      "result": "exact PCM"
+    },
+    {
+      "test": "adpcm_ima_qt-2-44100-legacy.mov --start 400 ms",
+      "result": "passed",
+      "maximum_deviation": 0.003631591796875,
+      "tolerance": 0.003875732421875
+    },
+    {
+      "test": "adpcm_ima_qt-2-44100-legacy.mov --start 1600 ms",
+      "result": "passed",
+      "maximum_deviation": 0.003662109375,
+      "tolerance": 0.003875732421875
+    },
+    {
+      "test": "adpcm_ima_qt-2-44100-legacy.mov --start 3000 ms",
+      "result": "passed",
+      "maximum_deviation": 0.0032958984375,
+      "tolerance": 0.003875732421875
+    },
+    {
+      "test": "libgsm-1-8000.mov",
+      "result": "exact PCM"
+    },
+    {
+      "test": "libgsm-1-8000.mov --start 400 ms",
+      "result": "passed",
+      "maximum_deviation": 0,
+      "tolerance": 0.0
+    },
+    {
+      "test": "libgsm-1-8000.mov --start 1600 ms",
+      "result": "passed",
+      "maximum_deviation": 0,
+      "tolerance": 0.0
+    },
+    {
+      "test": "libgsm-1-8000.mov --start 3000 ms",
+      "result": "passed",
+      "maximum_deviation": 0,
+      "tolerance": 0.0
+    },
+    {
+      "test": "libgsm-1-8000-legacy.mov",
+      "result": "exact PCM"
+    },
+    {
+      "test": "libgsm-1-8000-legacy.mov --start 400 ms",
+      "result": "passed",
+      "maximum_deviation": 0,
+      "tolerance": 0.0
+    },
+    {
+      "test": "libgsm-1-8000-legacy.mov --start 1600 ms",
+      "result": "passed",
+      "maximum_deviation": 0,
+      "tolerance": 0.0
+    },
+    {
+      "test": "libgsm-1-8000-legacy.mov --start 3000 ms",
+      "result": "passed",
+      "maximum_deviation": 0,
+      "tolerance": 0.0
+    },
+    {
+      "test": "bad-legacy-partial-block.mov",
+      "result": "rejected"
+    },
+    {
+      "test": "bad-nine-channels.mov",
+      "result": "rejected"
+    },
+    {
+      "test": "bad-offset-past-end.mov",
+      "result": "rejected"
+    },
+    {
+      "test": "bad-partial-block.mov",
+      "result": "rejected"
+    },
+    {
+      "test": "bad-short-description.mov",
+      "result": "rejected"
+    },
+    {
+      "test": "bad-zero-channels.mov",
+      "result": "rejected"
+    },
+    {
+      "test": "bad-zero-rate.mov",
+      "result": "rejected"
+    },
+    {
+      "test": "track 1",
+      "result": "exact"
+    },
+    {
+      "test": "track 2",
+      "result": "exact"
+    }
+  ],
+  "scope": "Windows CLI under Wine: 18 MOV continuous decodes, 54 --start decodes, track selection and malformed rejections; exact against Linux continuous PCM except bounded IMA4 seeks."
+}

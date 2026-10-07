@@ -549,12 +549,15 @@ FN ui_draw
     mov r8d, [rip + px_brand_y]
     mov r9d, [rip + ui_text_color]
     call ui_text
+    cmp qword ptr [rip + ui_control_hwnds], 0
+    jne .Lui_draw_header_done
     lea rcx, [rip + ui_assembly]
     mov edx, [rip + ui_width]
     sub edx, [rip + px_assembly]
     mov r8d, [rip + px_brand_y]
     mov r9d, [rip + ui_muted_color]
     call ui_text
+.Lui_draw_header_done:
     mov rcx, [rip + ui_dc]
     mov rdx, [rip + ui_big_font]
     call SelectObject
@@ -570,7 +573,13 @@ FN ui_draw
     mov rcx, [rip + ui_filename]          # opening
 .Lui_draw_title:
     mov [rsp + 40], rcx
+    cmp dword ptr [rip + ui_compact], 0
+    je .Lui_draw_cover
+    mov eax, [rip + px_header]
+    jmp .Lui_draw_title_at
+.Lui_draw_cover:
     call ui_cover_place                   # the cover art, above the title
+.Lui_draw_title_at:
     mov edx, eax
     mov rcx, [rsp + 40]
     call ui_center_text
@@ -585,6 +594,8 @@ FN ui_draw
     call ui_center_text
     jmp .Lui_draw_status
 .Lui_draw_center_hint:
+    cmp dword ptr [rip + ui_compact], 0
+    jne .Lui_draw_status
     cmp dword ptr [rip + ui_state], 0
     jne .Lui_draw_status
     lea rcx, [rip + ui_open]
@@ -681,6 +692,8 @@ FN ui_draw
     cmp dword ptr [rip + ui_controls], 0
     je .Lui_draw_done
 .Lui_draw_controls:
+    cmp dword ptr [rip + ui_compact], 0
+    jne .Lui_draw_timeline
     lea rcx, [rip + ui_hint]
     test r12d, r12d
     jz .Lui_draw_hint
@@ -689,6 +702,7 @@ FN ui_draw
     mov r8d, [rip + ui_height]
     sub r8d, [rip + px_hint_y]
     call ui_hint_text
+.Lui_draw_timeline:
     # Timeline and current position.
     mov ecx, [rip + px_side]
     mov edx, [rip + ui_height]

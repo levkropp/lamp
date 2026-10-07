@@ -69,6 +69,7 @@ def main():
     step(TESTS / 'verify-ogg-chain.py')
     step(TESTS / 'verify-matroska.py', *playback)
     step(TESTS / 'verify-mp4.py', *playback)
+    step(TESTS / 'verify-quicktime.py', *playback)
     step(TESTS / 'verify-aac.py', *playback)
     step(TESTS / 'verify-heaac.py', *playback)
     step(TESTS / 'verify-latm.py', *playback)

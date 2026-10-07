@@ -63,6 +63,14 @@ mp4_formats:
     .byte 8, 0, 0, 0
     .ascii "ec-3"
     .byte 8, 0, 0, 0
+    .ascii "alaw"
+    .byte 1, 8, 8, 64
+    .ascii "ulaw"
+    .byte 1, 8, 16, 64
+    .ascii "ima4"
+    .byte 10, 4, 0, 0
+    .ascii "agsm"
+    .byte 10, 0, 0, 0
     .ascii "sowt"
     .byte 1, 16, 4, 8
     .ascii "twos"
@@ -115,9 +123,13 @@ mp4_trex_size: .long 0
 mp4_begin: .quad 0
 mp4_end: .quad 0
 mp4_pcm_frame: .long 0
+mp4_qt_block: .long 0              # bytes per compressed block
+mp4_qt_frames: .long 0             # decoded frames per block
+mp4_qt_legacy: .long 0             # stsc/stsz count decoded samples
 mp4_opus_head: .zero 19 + 2 + 255
 .bss
 mp4_candidate: .zero 128            # the sound track being parsed
+mp4_adpcm_fmt: .zero 16
 
 .text
 # RCX=box, RDX=limit -> EAX=type (0 when malformed), RDX=payload end,
@@ -326,6 +338,10 @@ LOCALFN mp4_sample_entry
     push r13
     sub rsp, 32
     mov dword ptr [rip + mp4_codec], 0
+    mov dword ptr [rip + mp4_qt_block], 0
+    mov dword ptr [rip + mp4_qt_legacy], 0
+    mov qword ptr [rip + mp4_config], 0
+    mov dword ptr [rip + mp4_config_bytes], 0
     lea rax, [rcx + 8]
     cmp rax, rdx
     ja .Lmp4_entry_none
@@ -419,7 +435,38 @@ LOCALFN mp4_sample_entry
     je .Lmp4_entry_alac
     cmp eax, 1
     je .Lmp4_entry_pcm
+    cmp eax, 10
+    je .Lmp4_entry_adpcm
     jmp .Lmp4_entry_ok                    # MPEG audio needs no configuration
+.Lmp4_entry_adpcm:
+    mov eax, [rip + mp4_channels]
+    cmp eax, 1
+    jb .Lmp4_entry_none
+    cmp eax, 8
+    ja .Lmp4_entry_none
+    lea rcx, [rip + mp4_adpcm_fmt]
+    mov [rcx + 2], ax
+    imul eax, eax, 34
+    mov word ptr [rcx], 0x4d49            # QuickTime IMA
+    mov word ptr [rcx + 14], 4
+    mov dword ptr [rip + mp4_qt_frames], 64
+    cmp ebx, 0x6d736761                   # agsm: standard 33-byte GSM
+    jne .Lmp4_entry_adpcm_block
+    cmp dword ptr [rip + mp4_channels], 1
+    jne .Lmp4_entry_none
+    mov word ptr [rcx], 0x5347
+    mov word ptr [rcx + 14], 0
+    mov dword ptr [rip + mp4_qt_frames], 160
+    mov eax, 33
+.Lmp4_entry_adpcm_block:
+    mov [rip + mp4_qt_block], eax
+    imul eax, eax, 20                     # bounded groups; GSM seek primer
+    mov [rcx + 12], ax
+    mov eax, [rip + mp4_rate]
+    mov [rcx + 4], eax
+    mov [rip + mp4_config], rcx
+    mov dword ptr [rip + mp4_config_bytes], 16
+    jmp .Lmp4_entry_ok
 .Lmp4_entry_esds:
     mov rcx, r8
     mov rdx, rdi
@@ -534,6 +581,15 @@ LOCALFN mp4_sample_entry
     mov [rip + mp4_config_bytes], edx
     jmp .Lmp4_entry_ok
 .Lmp4_entry_pcm:
+    test r13d, 64                         # G.711 has one code per channel
+    jz .Lmp4_entry_pcm_linear
+    mov [rip + mp4_pcm_flags], r12d
+    mov eax, [rip + mp4_channels]
+    test eax, eax
+    jz .Lmp4_entry_none
+    mov [rip + mp4_pcm_frame], eax
+    jmp .Lmp4_entry_ok
+.Lmp4_entry_pcm_linear:
     test r12d, 32                         # ipcm/fpcm: pcmC gives order and size
     jz .Lmp4_pcm_quicktime
     and r12d, 2
@@ -879,7 +935,13 @@ LOCALFN mp4_packet
     cmp rcx, [rip + mp4_begin]
     jb .Lmp4_packet_bad
     cmp dword ptr [rip + mp4_codec], 1
+    je .Lmp4_packet_pcm
+    cmp dword ptr [rip + mp4_codec], 10
     jne track_add
+    mov r8d, [rip + mp4_qt_block]
+    imul r8d, r8d, 20
+    jmp track_append
+.Lmp4_packet_pcm:
     mov r8d, [rip + mp4_pcm_frame]
     imul r8d, r8d, PCM_PACKET
     jmp track_append
@@ -931,6 +993,17 @@ LOCALFN mp4_sample_tables
     mov [rsp + 40], ecx                   # constant size (0 = table)
     mov dword ptr [rsp + 36], 32
 .Lmp4_tables_size_checked:
+    # Old QuickTime sound tables count decoded samples, not blocks. The
+    # flag lives outside the stack's per-packet size temporary at +44.
+    mov dword ptr [rip + mp4_qt_legacy], 0
+    cmp dword ptr [rip + mp4_codec], 10
+    jne .Lmp4_tables_size_mode
+    cmp dword ptr [rip + mp4_stz2], 0
+    jne .Lmp4_tables_size_mode
+    cmp dword ptr [rsp + 40], 1
+    jne .Lmp4_tables_size_mode
+    mov dword ptr [rip + mp4_qt_legacy], 1
+.Lmp4_tables_size_mode:
     cmp dword ptr [rsp + 40], 0
     jne .Lmp4_tables_counts
     # The table must hold every sample.
@@ -1019,6 +1092,8 @@ LOCALFN mp4_sample_tables
 .Lmp4_tables_offset_ready:
     add rsi, [rip + mp4_begin]            # absolute chunk start
     jc .Lmp4_tables_bad
+    cmp dword ptr [rip + mp4_qt_legacy], 0
+    jne .Lmp4_tables_legacy
     cmp dword ptr [rip + mp4_codec], 1
     jne .Lmp4_tables_sample
     # PCM: the chunk holds that many frames, listed in PCM_PACKET pieces.
@@ -1040,6 +1115,28 @@ LOCALFN mp4_sample_tables
     test eax, eax
     jz .Lmp4_tables_bad
     jmp .Lmp4_tables_pcm
+.Lmp4_tables_legacy:
+    mov eax, edi
+    add ebx, edi
+    jc .Lmp4_tables_bad
+    cmp ebx, [rsp + 32]
+    ja .Lmp4_tables_bad
+    xor edx, edx
+    div dword ptr [rip + mp4_qt_frames]
+    test edx, edx
+    jnz .Lmp4_tables_bad                   # no partial compressed block
+    mov edi, eax
+.Lmp4_tables_legacy_block:
+    test edi, edi
+    jz .Lmp4_tables_next_chunk
+    mov rcx, rsi
+    mov edx, [rip + mp4_qt_block]
+    add rsi, rdx
+    call mp4_packet
+    test eax, eax
+    jz .Lmp4_tables_bad
+    dec edi
+    jmp .Lmp4_tables_legacy_block
 .Lmp4_tables_sample:
     test edi, edi
     jz .Lmp4_tables_next_chunk

@@ -115,6 +115,8 @@ def flac_block_size(packet):
 def flac_items(data):
     """FLAC-in-Ogg packets with exact end-sample granules, one packet per page."""
     items = [(p[1], 0) for p in packets(data)]
+    if items and not items[-1][0]:
+        items.pop()                       # FFmpeg's optional empty EOS marker
     position = 0
     for k in range(2, len(items)):
         position += flac_block_size(items[k][0])
@@ -330,6 +332,13 @@ def main():
     rebuilt.write_bytes(build(serial, items))
     if pcm(rebuilt) != pcm(flac_a):
         raise Failure('Rebuilt FLAC-in-Ogg fixture differs')
+    terminated = work / 'flac-ogg-empty-eos.ogg'
+    terminated.write_bytes(build(serial, items + [(b'', items[-1][1])]))
+    if pcm(terminated) != pcm(flac_a):
+        raise Failure('Empty FLAC EOS marker changes the decoded samples')
+    result = run([chain, 'check', terminated, Path(str(terminated) + '.f32')])
+    checks.append({'test': 'FLAC empty EOS', 'result': 'exact PCM and seeks', 'oracle': result})
+    reject('flac-ogg-empty-eos-wrong-granule.ogg', build(serial, items + [(b'', items[-1][1] + 1)]))
     # Frame headers, not granules, place FLAC samples: rounded granules from a
     # remux must not change the output.
     shifted = [list(item) for item in items]

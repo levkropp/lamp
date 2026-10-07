@@ -6,7 +6,7 @@ const bin=process.argv[2]?path.resolve(process.argv[2]):path.join(root,'bin');
 const audio=['KERNEL32.dll','ole32.dll','SHELL32.dll','AVRT.dll'];
 const report=[];
 for(const [name,subsystem,expected]of[
- ['lamp-cli.exe',3,audio],['lamp.exe',2,[...audio,'USER32.dll','GDI32.dll','COMDLG32.dll']]
+ ['lamp-cli.exe',3,audio],['lamp.exe',2,[...audio,'USER32.dll','GDI32.dll','COMDLG32.dll','COMCTL32.dll','SHLWAPI.dll']]
 ]){
  const data=fs.readFileSync(path.join(bin,name)),pe=data.readUInt32LE(0x3c);
  if(data.readUInt16LE(0)!==0x5a4d||data.readUInt32LE(pe)!==0x4550||data.readUInt16LE(pe+4)!==0x8664)throw Error('Invalid x86-64 PE '+name);

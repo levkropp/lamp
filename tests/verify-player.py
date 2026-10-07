@@ -84,6 +84,7 @@ def merge(found):
 
 
 def main():
+    _nav.check_capture_fragments()
     for tool in ('wine', 'Xvfb', 'parec'):
         if not shutil.which(tool):
             raise Failure(f'{tool} is required.')
@@ -98,7 +99,8 @@ def main():
     subprocess.run(['wineserver', '-k'], env=wine, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     subprocess.run(['wineserver', '-w'], env=wine, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=120)
     checks = []
-    scenarios = [list_checks, list_playback, keys, folder_playback, killed_stream, output_menu, dpi]
+    scenarios = [list_checks, list_playback, keys, folder_playback, killed_stream, output_menu, dpi,
+                 modes, accessibility]
     only = sys.argv[sys.argv.index('--only') + 1].split(',') if '--only' in sys.argv else None
     try:
         for scenario in scenarios:
@@ -114,7 +116,10 @@ def main():
                             'scope': 'lamp.exe list building (folders, command line, drops, the open dialog), '
                                      'gapless list playback with the title following the file heard, N/P, the '
                                      'media next command, the next button, seeking, repeat, playlists, '
-                                     'reopening a killed stream, choosing outputs and 144 DPI, under Wine on Xvfb.'})
+                                     'reopening a killed stream, choosing outputs, 144 DPI, fullscreen/compact '
+                                     'restoration, Tab/Shift+Tab focus, slider values and MSAA names/native '
+                                     'control classes, under Wine on Xvfb; native Windows screen-reader '
+                                     'roles remain unverified.'})
     print(f'Passed {len(checks)} player checks.')
 
 
@@ -229,7 +234,10 @@ def list_playback(work, env, wine, checks):
     paths = [tagged(work, f'list/{n}.flac', name, 2.5, n + 1) for n, name in enumerate(names)]
     references = {name: _nav.linux_decode(work, path) for name, path in zip(names, paths)}
     session = Session(work, env, wine, 'list', *map(windows_path, paths))
-    titles = session.drive('p14000', 'c')
+    # The window exists before Wine finishes its audio/device setup. Leave
+    # room for a slow cold start, then require all three titles and complete
+    # audio runs rather than closing while the last track is still pending.
+    titles = session.drive('p20000', 'c')
     capture = session.finish()
     want = [title(name) for name in names]
     if [t for t in titles if t in want] != want:
@@ -415,6 +423,74 @@ def dpi(work, env, wine, checks):
     checks.append({'test': '144 DPI', 'result': 'window 1.5 times as large; the scaled next button works',
                    'client': [normal, scaled]})
     print(f'144 DPI: client {normal} -> {scaled}; the scaled next button moved to the next file', flush=True)
+
+
+def modes(work, env, wine, checks):
+    path = tagged(work, 'modes.flac', 'Modes', 25, 81)
+    session = Session(work, env, wine, 'modes', windows_path(path))
+    try:
+        sizes = session.drive('s1500', 'z', 'k7a', 's1000', 'z', 'k1b', 's1000', 'z',
+                              'k43', 's1000', 'z', 'k7a', 's1000', 'z', 'k1b', 's1000', 'z',
+                              'o103', 's1000', 'z', 'o102', 's1000', 'z', 'o102', 's1000', 'z', 't', 'c')
+    finally:
+        pcm = session.finish()
+    if len(sizes) != 10 or sizes[-1] != title('Modes'):
+        raise Failure(f'mode transitions: {sizes}')
+    dimensions = [tuple(map(int, row.split())) for row in sizes[:-1]]
+    normal, fullscreen, restored, compact, full_compact, restored_compact, normal_menu, full_menu, final = dimensions
+    if fullscreen != (1280, 1024) or full_compact != fullscreen or full_menu != fullscreen or \
+            restored != normal or normal_menu != normal or final != normal or restored_compact != compact or \
+            not (compact[0] < normal[0] and compact[1] < normal[1]):
+        raise Failure(f'mode sizes/restoration: {dimensions}')
+    if not pcm or session.player.returncode:
+        raise Failure('mode transitions interrupted playback or crashed the player')
+    checks.append({'test': 'fullscreen and compact modes', 'result': 'restored through keys and menu',
+                   'dimensions': dimensions})
+    print(f'fullscreen/compact keys and menu restore the source window: {dimensions}', flush=True)
+
+
+def accessibility(work, env, wine, checks):
+    a = tagged(work, 'accessible-long-a.flac', 'Accessible A', 90, 82)
+    b = tagged(work, 'accessible-long-b.flac', 'Accessible B', 90, 83)
+    session = Session(work, env, wine, 'accessibility', windows_path(a), windows_path(b))
+    try:
+        names = session.drive('s2500', 'n100', 'n110', 'n111', 'n112', 'n101', 'n113', 'n114')
+        # Wine 8 supplies the generic client role (10) for buttons/trackbars;
+        # Windows supplies push-button (43) and slider (51) roles. Check native
+        # classes as well, so a generic custom window cannot satisfy this test.
+        expected_names = ['Open files', 'Previous track', 'Pause', 'Next track',
+                          'Repeat off', 'Playback position', 'Volume']
+        expected_classes = ['Button'] * 5 + ['msctls_trackbar32'] * 2
+        if names[::3] != expected_names or names[2::3] != expected_classes or \
+                any(role not in ('10', '43' if i < 5 else '51') for i, role in enumerate(names[1::3])):
+            raise Failure(f'MSAA names/roles and native classes: {names}')
+        focus = session.drive('k09', 's1000', 'f', 'k09', 's1000', 'f', 'k09', 's1000', 'f',
+                              'v0d', 's1000', 'n111', 'v20', 's1000', 'n111',
+                              'k09', 's1000', 'f', 'k09', 's1000', 'f', 'v0d', 's1000', 'n101',
+                              'k09', 's1000', 'f', 'k09', 's1000', 'f', 'v24', 's1000', 'n114', 'h114',
+                              'k09', 's1000', 'f', 'b', 's1000', 'f', 'b', 's1000', 'f',
+                              'v43', 's1000', 'z', 'v1b', 's1000', 'z',
+                              'k09', 's3500', 'f', 'u114', 's3500', 'f',
+                              'k09', 's1000', 'f', 'c')
+        expected_focus = ['Open files', 'Previous track', 'Pause', 'Play', names[7], 'Button',
+                          'Pause', names[7], 'Button', 'Next track', 'Repeat off',
+                          'Repeat on', names[13], 'Button', 'Playback position',
+                          'Volume', 'Volume', names[19], 'msctls_trackbar32', '0',
+                          'Open files', 'Volume', 'Playback position']
+        if focus[:-5] != expected_focus:
+            raise Failure(f'keyboard focus/activation: {focus}')
+        if not tuple(map(int, focus[-5].split()))[1] < tuple(map(int, focus[-4].split()))[1]:
+            raise Failure(f'global compact/Escape keys while a child has focus: {focus[-5:-3]}')
+        if focus[-3:] != ['Volume', title('Accessible A'), 'Open files']:
+            raise Failure(f'keyboard focus preservation/mouse auto-hide/reveal: {focus[-3:]}')
+    finally:
+        session.finish()
+    checks.append({'test': 'keyboard and accessibility', 'result': 'MSAA names and native control classes; '
+                   'Tab/Shift+Tab cycle, Enter and Space activation, slider keys, global mode shortcuts, '
+                   'keyboard focus preservation and mouse auto-hide/reveal',
+                   'names_roles_classes': names, 'focus': focus,
+                   'limit': 'Wine 8 exposes generic client roles; native Windows screen-reader testing remains.'})
+    print('MSAA names, native classes, Tab order, Enter/Space and focused mode shortcuts pass', flush=True)
 
 
 if __name__ == '__main__':

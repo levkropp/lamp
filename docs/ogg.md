@@ -24,6 +24,8 @@ The FLAC-in-Ogg 1.0 mapping is supported: a first packet with `0x7F "FLAC"`, map
 
 Opening scans every frame header for its position and block size: positions must be consecutive from sample 0 and a nonzero STREAMINFO sample count must equal the total. Page granules are not used, because frame headers carry exact sample numbers and remuxers often round granules from millisecond timestamps. A 64 KiB index keeps up to 2,048 packet checkpoints, halving its density when full. Frames are decoded by the native FLAC decoder when read, with both CRCs; a packet must hold exactly one frame, and every frame except the last must reach the STREAMINFO minimum block size. Seeks restore the checkpoint at or before the target and are exact.
 
+An empty terminal EOS packet, as FFmpeg's Ogg muxer can write, is accepted only as the final packet on the EOS page and only when its granule equals the scanned sample count. Empty interior packets and contradictory terminal counts reject. The last audio frame may be short even when a separate empty packet carries EOS; PCM and seeks are checked against the same stream without that terminator.
+
 ## Resampler
 
 `src/resample.s` converts stereo float PCM between any two rates with a polyphase windowed-sinc filter. The filter has 64 sinc zero crossings per side at a cutoff of 0.955 of the lower rate's Nyquist frequency, under a Kaiser window with beta 9: about 128 taps when upsampling, widening in proportion to the ratio when downsampling (3,072 taps from 192 kHz to 8 kHz). Output frame *k* is the input interpolated at *k × in / out*; the filter is symmetric, so there is no delay. Each phase is normalized to unit DC gain. Positions advance with exact integer arithmetic, without drift.
