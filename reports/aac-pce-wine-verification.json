@@ -1,0 +1,806 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "encoder-mono.m4a",
+      "result": "byte-exact native PCM",
+      "frames": 13440
+    },
+    {
+      "test": "encoder-mono.aac",
+      "result": "byte-exact native PCM",
+      "frames": 15360
+    },
+    {
+      "test": "encoder-mono.mka",
+      "result": "byte-exact native PCM",
+      "frames": 15360
+    },
+    {
+      "test": "encoder-mono.loas",
+      "result": "byte-exact native PCM",
+      "frames": 15360
+    },
+    {
+      "test": "encoder-mono.ts",
+      "result": "byte-exact native PCM",
+      "frames": 15360
+    },
+    {
+      "test": "encoder-stereo.m4a",
+      "result": "byte-exact native PCM",
+      "frames": 13440
+    },
+    {
+      "test": "encoder-stereo.aac",
+      "result": "byte-exact native PCM",
+      "frames": 15360
+    },
+    {
+      "test": "encoder-stereo.mka",
+      "result": "byte-exact native PCM",
+      "frames": 15360
+    },
+    {
+      "test": "encoder-stereo.loas",
+      "result": "byte-exact native PCM",
+      "frames": 15360
+    },
+    {
+      "test": "encoder-stereo.ts",
+      "result": "byte-exact native PCM",
+      "frames": 15360
+    },
+    {
+      "test": "encoder-3.0.m4a",
+      "result": "byte-exact native PCM",
+      "frames": 13440
+    },
+    {
+      "test": "encoder-4.0.m4a",
+      "result": "byte-exact native PCM",
+      "frames": 13440
+    },
+    {
+      "test": "encoder-quad.m4a",
+      "result": "byte-exact native PCM",
+      "frames": 13440
+    },
+    {
+      "test": "encoder-5.0.m4a",
+      "result": "byte-exact native PCM",
+      "frames": 13440
+    },
+    {
+      "test": "encoder-5.0-side.m4a",
+      "result": "byte-exact native PCM",
+      "frames": 13440
+    },
+    {
+      "test": "stereo-tags-ordered.aac",
+      "result": "byte-exact native PCM",
+      "frames": 15360
+    },
+    {
+      "test": "stereo-tags-ordered-v0.loas",
+      "result": "byte-exact native PCM",
+      "frames": 15360
+    },
+    {
+      "test": "stereo-tags-ordered-v1.loas",
+      "result": "byte-exact native PCM",
+      "frames": 15360
+    },
+    {
+      "test": "stereo-tags-shuffled.aac",
+      "result": "byte-exact native PCM",
+      "frames": 15360
+    },
+    {
+      "test": "stereo-tags-shuffled-v0.loas",
+      "result": "byte-exact native PCM",
+      "frames": 15360
+    },
+    {
+      "test": "stereo-tags-shuffled-v1.loas",
+      "result": "byte-exact native PCM",
+      "frames": 15360
+    },
+    {
+      "test": "leading-data-changing-comments.aac",
+      "result": "byte-exact native PCM",
+      "frames": 15360
+    },
+    {
+      "test": "split-stereo-ordered.aac",
+      "result": "byte-exact native PCM",
+      "frames": 15360
+    },
+    {
+      "test": "split-stereo-ordered-v0.loas",
+      "result": "byte-exact native PCM",
+      "frames": 15360
+    },
+    {
+      "test": "split-stereo-ordered-v1.loas",
+      "result": "byte-exact native PCM",
+      "frames": 15360
+    },
+    {
+      "test": "split-stereo-shuffled.aac",
+      "result": "byte-exact native PCM",
+      "frames": 15360
+    },
+    {
+      "test": "split-stereo-shuffled-v0.loas",
+      "result": "byte-exact native PCM",
+      "frames": 15360
+    },
+    {
+      "test": "split-stereo-shuffled-v1.loas",
+      "result": "byte-exact native PCM",
+      "frames": 15360
+    },
+    {
+      "test": "side-six-ordered.aac",
+      "result": "byte-exact native PCM",
+      "frames": 15360
+    },
+    {
+      "test": "side-six-ordered-v0.loas",
+      "result": "byte-exact native PCM",
+      "frames": 15360
+    },
+    {
+      "test": "side-six-ordered-v1.loas",
+      "result": "byte-exact native PCM",
+      "frames": 15360
+    },
+    {
+      "test": "side-six-shuffled.aac",
+      "result": "byte-exact native PCM",
+      "frames": 15360
+    },
+    {
+      "test": "side-six-shuffled-v0.loas",
+      "result": "byte-exact native PCM",
+      "frames": 15360
+    },
+    {
+      "test": "side-six-shuffled-v1.loas",
+      "result": "byte-exact native PCM",
+      "frames": 15360
+    },
+    {
+      "test": "side-six-shuffled.m4a",
+      "result": "byte-exact native PCM",
+      "frames": 15360
+    },
+    {
+      "test": "side-six-shuffled.mka",
+      "result": "byte-exact native PCM",
+      "frames": 15360
+    },
+    {
+      "test": "side-six-shuffled.ts",
+      "result": "byte-exact native PCM",
+      "frames": 15360
+    },
+    {
+      "test": "back-six-ordered.aac",
+      "result": "byte-exact native PCM",
+      "frames": 15360
+    },
+    {
+      "test": "back-six-ordered-v0.loas",
+      "result": "byte-exact native PCM",
+      "frames": 15360
+    },
+    {
+      "test": "back-six-ordered-v1.loas",
+      "result": "byte-exact native PCM",
+      "frames": 15360
+    },
+    {
+      "test": "back-six-shuffled.aac",
+      "result": "byte-exact native PCM",
+      "frames": 15360
+    },
+    {
+      "test": "back-six-shuffled-v0.loas",
+      "result": "byte-exact native PCM",
+      "frames": 15360
+    },
+    {
+      "test": "back-six-shuffled-v1.loas",
+      "result": "byte-exact native PCM",
+      "frames": 15360
+    },
+    {
+      "test": "eight-single-ordered.aac",
+      "result": "byte-exact native PCM",
+      "frames": 15360
+    },
+    {
+      "test": "eight-single-ordered-v0.loas",
+      "result": "byte-exact native PCM",
+      "frames": 15360
+    },
+    {
+      "test": "eight-single-ordered-v1.loas",
+      "result": "byte-exact native PCM",
+      "frames": 15360
+    },
+    {
+      "test": "eight-single-shuffled.aac",
+      "result": "byte-exact native PCM",
+      "frames": 15360
+    },
+    {
+      "test": "eight-single-shuffled-v0.loas",
+      "result": "byte-exact native PCM",
+      "frames": 15360
+    },
+    {
+      "test": "eight-single-shuffled-v1.loas",
+      "result": "byte-exact native PCM",
+      "frames": 15360
+    },
+    {
+      "test": "seven-ordered.aac",
+      "result": "byte-exact native PCM",
+      "frames": 15360
+    },
+    {
+      "test": "seven-ordered-v0.loas",
+      "result": "byte-exact native PCM",
+      "frames": 15360
+    },
+    {
+      "test": "seven-ordered-v1.loas",
+      "result": "byte-exact native PCM",
+      "frames": 15360
+    },
+    {
+      "test": "seven-shuffled.aac",
+      "result": "byte-exact native PCM",
+      "frames": 15360
+    },
+    {
+      "test": "seven-shuffled-v0.loas",
+      "result": "byte-exact native PCM",
+      "frames": 15360
+    },
+    {
+      "test": "seven-shuffled-v1.loas",
+      "result": "byte-exact native PCM",
+      "frames": 15360
+    },
+    {
+      "test": "wide-eight-ordered.aac",
+      "result": "byte-exact native PCM",
+      "frames": 15360
+    },
+    {
+      "test": "wide-eight-ordered-v0.loas",
+      "result": "byte-exact native PCM",
+      "frames": 15360
+    },
+    {
+      "test": "wide-eight-ordered-v1.loas",
+      "result": "byte-exact native PCM",
+      "frames": 15360
+    },
+    {
+      "test": "wide-eight-shuffled.aac",
+      "result": "byte-exact native PCM",
+      "frames": 15360
+    },
+    {
+      "test": "wide-eight-shuffled-v0.loas",
+      "result": "byte-exact native PCM",
+      "frames": 15360
+    },
+    {
+      "test": "wide-eight-shuffled-v1.loas",
+      "result": "byte-exact native PCM",
+      "frames": 15360
+    },
+    {
+      "test": "he-split-stereo-ordered.aac",
+      "result": "byte-exact native PCM",
+      "frames": 16384
+    },
+    {
+      "test": "he-split-stereo-ordered.loas",
+      "result": "byte-exact native PCM",
+      "frames": 16384
+    },
+    {
+      "test": "he-split-stereo-shuffled.aac",
+      "result": "byte-exact native PCM",
+      "frames": 16384
+    },
+    {
+      "test": "he-split-stereo-shuffled.loas",
+      "result": "byte-exact native PCM",
+      "frames": 16384
+    },
+    {
+      "test": "he-side-six-ordered.aac",
+      "result": "byte-exact native PCM",
+      "frames": 16384
+    },
+    {
+      "test": "he-side-six-ordered.loas",
+      "result": "byte-exact native PCM",
+      "frames": 16384
+    },
+    {
+      "test": "he-side-six-shuffled.aac",
+      "result": "byte-exact native PCM",
+      "frames": 16384
+    },
+    {
+      "test": "he-side-six-shuffled.loas",
+      "result": "byte-exact native PCM",
+      "frames": 16384
+    },
+    {
+      "test": "he-eight-single-ordered.aac",
+      "result": "byte-exact native PCM",
+      "frames": 16384
+    },
+    {
+      "test": "he-eight-single-ordered.loas",
+      "result": "byte-exact native PCM",
+      "frames": 16384
+    },
+    {
+      "test": "he-eight-single-shuffled.aac",
+      "result": "byte-exact native PCM",
+      "frames": 16384
+    },
+    {
+      "test": "he-eight-single-shuffled.loas",
+      "result": "byte-exact native PCM",
+      "frames": 16384
+    },
+    {
+      "test": "ps-mono-ordered.aac",
+      "result": "byte-exact native PCM",
+      "frames": 16384
+    },
+    {
+      "test": "ps-mono-ordered.loas",
+      "result": "byte-exact native PCM",
+      "frames": 16384
+    },
+    {
+      "test": "ps-back-mono-ordered.aac",
+      "result": "byte-exact native PCM",
+      "frames": 16384
+    },
+    {
+      "test": "ps-back-mono-ordered.loas",
+      "result": "byte-exact native PCM",
+      "frames": 16384
+    },
+    {
+      "test": "reject-empty.aac",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 100
+    },
+    {
+      "test": "reject-empty.loas",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 100
+    },
+    {
+      "test": "reject-duplicate-single.aac",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 100
+    },
+    {
+      "test": "reject-duplicate-single.loas",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 100
+    },
+    {
+      "test": "reject-duplicate-pair.aac",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 100
+    },
+    {
+      "test": "reject-duplicate-pair.loas",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 100
+    },
+    {
+      "test": "reject-rate-mismatch.aac",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 100
+    },
+    {
+      "test": "reject-rate-mismatch.loas",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 100
+    },
+    {
+      "test": "reject-main-profile.aac",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 101
+    },
+    {
+      "test": "reject-main-profile.loas",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 101
+    },
+    {
+      "test": "reject-coupling.aac",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 101
+    },
+    {
+      "test": "reject-coupling.loas",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 101
+    },
+    {
+      "test": "reject-nine-channels.aac",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 101
+    },
+    {
+      "test": "reject-nine-channels.loas",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 101
+    },
+    {
+      "test": "reject-six-front.aac",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 101
+    },
+    {
+      "test": "reject-six-front.loas",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 101
+    },
+    {
+      "test": "reject-four-back.aac",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 101
+    },
+    {
+      "test": "reject-four-back.loas",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 101
+    },
+    {
+      "test": "reject-lone-side.aac",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 101
+    },
+    {
+      "test": "reject-lone-side.loas",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 101
+    },
+    {
+      "test": "reject-four-side.aac",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 101
+    },
+    {
+      "test": "reject-four-side.loas",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 101
+    },
+    {
+      "test": "reject-two-lfs.aac",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 101
+    },
+    {
+      "test": "reject-two-lfs.loas",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 101
+    },
+    {
+      "test": "reject-unpaired-front-runs.aac",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 101
+    },
+    {
+      "test": "reject-unpaired-front-runs.loas",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 101
+    },
+    {
+      "test": "reject-unknown-tag.aac",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 100
+    },
+    {
+      "test": "reject-duplicate-element.aac",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 100
+    },
+    {
+      "test": "reject-missing-element.aac",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 100
+    },
+    {
+      "test": "reject-program-change.aac",
+      "result": "rejected",
+      "stage": "read",
+      "decode_error": 101
+    },
+    {
+      "test": "reject-short-asc.loas",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 100
+    },
+    {
+      "test": "reject-large-asc.loas",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 100
+    },
+    {
+      "test": "side-six-shuffled.m4a exact seeks",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 7933,
+      "maximum_discarded": 1024,
+      "maximum_probes": 0,
+      "index_points": 0,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
+      "maximum_deviation": 0
+    },
+    {
+      "test": "side-six-shuffled.mka exact seeks",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 7933,
+      "maximum_discarded": 1024,
+      "maximum_probes": 0,
+      "index_points": 0,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
+      "maximum_deviation": 0
+    },
+    {
+      "test": "side-six-shuffled.ts exact seeks",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 7933,
+      "maximum_discarded": 1024,
+      "maximum_probes": 0,
+      "index_points": 0,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
+      "maximum_deviation": 0
+    },
+    {
+      "test": "side-six-shuffled.aac exact seeks",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 7933,
+      "maximum_discarded": 1024,
+      "maximum_probes": 0,
+      "index_points": 0,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
+      "maximum_deviation": 0
+    },
+    {
+      "test": "back-six-shuffled-v0.loas exact seeks",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 7933,
+      "maximum_discarded": 1024,
+      "maximum_probes": 0,
+      "index_points": 0,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
+      "maximum_deviation": 0
+    },
+    {
+      "test": "eight-single-shuffled-v1.loas exact seeks",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 7933,
+      "maximum_discarded": 1024,
+      "maximum_probes": 0,
+      "index_points": 0,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
+      "maximum_deviation": 0
+    },
+    {
+      "test": "side-six-shuffled.aac cancel-open",
+      "result": "cancelled"
+    },
+    {
+      "test": "side-six-shuffled.aac cancel-read",
+      "result": "cancelled",
+      "frames_before_cancel": 8192
+    },
+    {
+      "test": "eight-single-shuffled-v1.loas cancel-open",
+      "result": "cancelled"
+    },
+    {
+      "test": "eight-single-shuffled-v1.loas cancel-read",
+      "result": "cancelled",
+      "frames_before_cancel": 8192
+    },
+    {
+      "test": "stereo-tags-shuffled.packets",
+      "result": "passed",
+      "packets": 15,
+      "frames": 15360,
+      "guarded_prefixes": 817,
+      "guarded_mutations": 600,
+      "accepted_mutations": 480,
+      "config_lifetime": "released after open",
+      "replacement": "rejected without changing active map",
+      "capacity": "no writes below required frames"
+    },
+    {
+      "test": "eight-single-shuffled.packets",
+      "result": "passed",
+      "packets": 15,
+      "frames": 15360,
+      "guarded_prefixes": 2363,
+      "guarded_mutations": 600,
+      "accepted_mutations": 392,
+      "config_lifetime": "released after open",
+      "replacement": "rejected without changing active map",
+      "capacity": "no writes below required frames"
+    },
+    {
+      "test": "he-eight-single-shuffled.packets",
+      "result": "passed",
+      "packets": 8,
+      "frames": 16384,
+      "guarded_prefixes": 4600,
+      "guarded_mutations": 600,
+      "accepted_mutations": 73,
+      "config_lifetime": "released after open",
+      "replacement": "rejected without changing active map",
+      "capacity": "no writes below required frames"
+    },
+    {
+      "test": "ps-mono-ordered.packets",
+      "result": "passed",
+      "packets": 8,
+      "frames": 16384,
+      "guarded_prefixes": 612,
+      "guarded_mutations": 600,
+      "accepted_mutations": 26,
+      "config_lifetime": "released after open",
+      "replacement": "rejected without changing active map",
+      "capacity": "no writes below required frames"
+    },
+    {
+      "test": "ps-back-mono-ordered.packets",
+      "result": "passed",
+      "packets": 8,
+      "frames": 16384,
+      "guarded_prefixes": 612,
+      "guarded_mutations": 600,
+      "accepted_mutations": 26,
+      "config_lifetime": "released after open",
+      "replacement": "rejected without changing active map",
+      "capacity": "no writes below required frames"
+    },
+    {
+      "test": "stereo-tags-shuffled-v0.loas protected parser",
+      "result": "passed",
+      "guarded_prefixes": 827,
+      "guarded_mutations": 600,
+      "input_lifetime": "released before reading PCM"
+    },
+    {
+      "test": "eight-single-shuffled-v1.loas protected parser",
+      "result": "passed",
+      "guarded_prefixes": 2383,
+      "guarded_mutations": 600,
+      "input_lifetime": "released before reading PCM"
+    },
+    {
+      "test": "ps-mono-ordered.loas protected parser",
+      "result": "passed",
+      "guarded_prefixes": 625,
+      "guarded_mutations": 600,
+      "input_lifetime": "released before reading PCM"
+    },
+    {
+      "test": "side-six-shuffled.aac mutations",
+      "result": "no crash or hang",
+      "mutations": 20,
+      "decoded": 0,
+      "rejected_or_damaged": 20
+    },
+    {
+      "test": "eight-single-shuffled-v1.loas mutations",
+      "result": "no crash or hang",
+      "mutations": 20,
+      "decoded": 6,
+      "rejected_or_damaged": 14
+    },
+    {
+      "test": "side-six-shuffled.ts mutations",
+      "result": "no crash or hang",
+      "mutations": 20,
+      "decoded": 1,
+      "rejected_or_damaged": 19
+    },
+    {
+      "test": "he-eight-single-shuffled.aac mutations",
+      "result": "no crash or hang",
+      "mutations": 20,
+      "decoded": 0,
+      "rejected_or_damaged": 20
+    }
+  ],
+  "sources": {
+    "src/aac.s": "f1b6dab445c30b50572182be8799f7bb96f643938bfd47ccb36cf3a52d166743",
+    "src/aac_pce.inc": "fc523d39a21cb006cc3bdceec3106abb8400d5111cef46426c0decb18e99edd6",
+    "src/aac_sbr.inc": "057caca4c1a3ffa372e5aa86156ed1239fffa2ea9898788cd1bf9830f0bf9121",
+    "src/latm.s": "3418f1e329b1bc37828ebef0ed574f12f5720d7627e2376064a678a8f785e9d2",
+    "tests/aac_pce_vectors.py": "20ea15f9174b52f1c7dc6e303e3f19babb117513414b90d79348617a126e7e47",
+    "tests/aac-pce-packet-oracle.c": "83b979b49524aea5152cb890ab755b39722a0974514d4036d4ff8be0ae275b7f",
+    "tests/aac-pce-latm-oracle.c": "0c871009ab9ce4dfeca5957ef72b094d4ec892b295a6f8c02195b4c2afc9310b",
+    "tests/verify-aac-pce.py": "894fea076d319a01055eaa2c700fe79025be746b939a96ec52bc33e1309593a1",
+    "tests/verify-robustness.py": "33133ac03d5006b41f34ff6575d6b6e02b5c72e702069176d39e72febb18aebf"
+  },
+  "cli_sha256": "696130d49ae6c03caf4c1361b9935ef0584b12910920a66ed26cb3e437012fe1",
+  "scope": "Shipping Windows COFF objects under Wine; native Windows remains unverified."
+}

@@ -1,0 +1,506 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "model rendering",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "snr_db": 134.1
+    },
+    {
+      "test": "PS model rendering",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "snr_db": 129.8
+    },
+    {
+      "test": "mono-24k.aac",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "snr_db": 132.5,
+      "stats": "codec=10 rate=48000 channels=2 bits=0 frames=73728 underruns=0 decode_error=0 audio_error=0 elapsed_ms=497 cpu_us=504243 endpoint_dry=0"
+    },
+    {
+      "test": "mono-22k.aac",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "snr_db": 133.5,
+      "stats": "codec=10 rate=44100 channels=2 bits=0 frames=73728 underruns=0 decode_error=0 audio_error=0 elapsed_ms=417 cpu_us=424945 endpoint_dry=0"
+    },
+    {
+      "test": "mono-16k.aac",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "snr_db": 132.5,
+      "stats": "codec=10 rate=32000 channels=2 bits=0 frames=73728 underruns=0 decode_error=0 audio_error=0 elapsed_ms=452 cpu_us=459153 endpoint_dry=0"
+    },
+    {
+      "test": "mono-11k.aac",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "snr_db": 134.0,
+      "stats": "codec=10 rate=22050 channels=2 bits=0 frames=73728 underruns=0 decode_error=0 audio_error=0 elapsed_ms=346 cpu_us=353779 endpoint_dry=0"
+    },
+    {
+      "test": "stereo-24k.aac",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "snr_db": 128.0,
+      "stats": "codec=10 rate=48000 channels=2 bits=0 frames=73728 underruns=0 decode_error=0 audio_error=0 elapsed_ms=559 cpu_us=569249 endpoint_dry=0"
+    },
+    {
+      "test": "stereo-22k.aac",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "snr_db": 132.5,
+      "stats": "codec=10 rate=44100 channels=2 bits=0 frames=73728 underruns=0 decode_error=0 audio_error=0 elapsed_ms=612 cpu_us=620549 endpoint_dry=0"
+    },
+    {
+      "test": "stereo-12k.aac",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "snr_db": 131.7,
+      "stats": "codec=10 rate=24000 channels=2 bits=0 frames=73728 underruns=0 decode_error=0 audio_error=0 elapsed_ms=583 cpu_us=592436 endpoint_dry=0"
+    },
+    {
+      "test": "stereo-32k.aac",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "snr_db": 131.0,
+      "stats": "codec=10 rate=64000 channels=2 bits=0 frames=73728 underruns=0 decode_error=0 audio_error=0 elapsed_ms=571 cpu_us=579694 endpoint_dry=0"
+    },
+    {
+      "test": "stereo-44k.aac",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "snr_db": 125.5,
+      "stats": "codec=10 rate=88200 channels=2 bits=0 frames=73728 underruns=0 decode_error=0 audio_error=0 elapsed_ms=656 cpu_us=664310 endpoint_dry=0"
+    },
+    {
+      "test": "stereo-48k.aac",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "snr_db": 133.2,
+      "stats": "codec=10 rate=96000 channels=2 bits=0 frames=73728 underruns=0 decode_error=0 audio_error=0 elapsed_ms=624 cpu_us=632198 endpoint_dry=0"
+    },
+    {
+      "test": "3.0-24k.aac",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "snr_db": 132.3,
+      "stats": "codec=10 rate=48000 channels=3 bits=0 frames=73728 underruns=0 decode_error=0 audio_error=0 elapsed_ms=975 cpu_us=985309 endpoint_dry=0"
+    },
+    {
+      "test": "5.1-24k.aac",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "snr_db": 132.7,
+      "stats": "codec=10 rate=48000 channels=6 bits=0 frames=73728 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1888 cpu_us=1897369 endpoint_dry=0"
+    },
+    {
+      "test": "7.1-22k.aac",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "snr_db": 131.5,
+      "stats": "codec=10 rate=44100 channels=8 bits=0 frames=73728 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1958 cpu_us=1965587 endpoint_dry=0"
+    },
+    {
+      "test": "SBR coverage",
+      "result": "complete",
+      "tools": [
+        "1 patches",
+        "1.5 dB envelopes",
+        "2 patches",
+        "3 dB envelopes",
+        "3 patches",
+        "4 patches",
+        "6 patches",
+        "FIXFIX",
+        "FIXVAR",
+        "VARFIX",
+        "VARVAR",
+        "band envelopes",
+        "coupled pair",
+        "extended data",
+        "frequency-delta",
+        "header reset",
+        "independent pair",
+        "interpolated envelopes",
+        "limiter bands",
+        "limiter table below kx + M",
+        "linear master table",
+        "no smoothing",
+        "one limiter band",
+        "one-region master table",
+        "sinusoids",
+        "smoothing",
+        "time-delta",
+        "transient envelope",
+        "two-region master table"
+      ]
+    },
+    {
+      "test": "implicit.m4a",
+      "result": "exact",
+      "comparator": "stereo-24k.aac"
+    },
+    {
+      "test": "explicit.m4a",
+      "result": "exact",
+      "comparator": "stereo-24k.aac"
+    },
+    {
+      "test": "sync-extension.m4a",
+      "result": "exact",
+      "comparator": "stereo-24k.aac"
+    },
+    {
+      "test": "stereo.mka",
+      "result": "exact",
+      "comparator": "stereo-24k.aac"
+    },
+    {
+      "test": "fragmented.m4a",
+      "result": "exact",
+      "comparator": "stereo-24k.aac"
+    },
+    {
+      "test": "sbr-absent.m4a (core only)",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "snr_db": 137.9,
+      "stats": "codec=9 rate=24000 channels=2 bits=0 frames=36864 underruns=0 decode_error=0 audio_error=0 elapsed_ms=39 cpu_us=49009 endpoint_dry=0"
+    },
+    {
+      "test": "ps-0-24k.aac",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "snr_db": 130.9,
+      "stats": "codec=10 rate=48000 channels=2 bits=0 frames=61440 underruns=0 decode_error=0 audio_error=0 elapsed_ms=408 cpu_us=415384 endpoint_dry=0"
+    },
+    {
+      "test": "ps-1-24k.aac",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "snr_db": 130.7,
+      "stats": "codec=10 rate=48000 channels=2 bits=0 frames=61440 underruns=0 decode_error=0 audio_error=0 elapsed_ms=486 cpu_us=493034 endpoint_dry=0"
+    },
+    {
+      "test": "ps-2-24k.aac",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "snr_db": 130.3,
+      "stats": "codec=10 rate=48000 channels=2 bits=0 frames=61440 underruns=0 decode_error=0 audio_error=0 elapsed_ms=372 cpu_us=379334 endpoint_dry=0"
+    },
+    {
+      "test": "ps-3-24k.aac",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "snr_db": 130.2,
+      "stats": "codec=10 rate=48000 channels=2 bits=0 frames=61440 underruns=0 decode_error=0 audio_error=0 elapsed_ms=418 cpu_us=427953 endpoint_dry=0"
+    },
+    {
+      "test": "ps-4-22k.aac",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "snr_db": 130.4,
+      "stats": "codec=10 rate=44100 channels=2 bits=0 frames=61440 underruns=0 decode_error=0 audio_error=0 elapsed_ms=543 cpu_us=551025 endpoint_dry=0"
+    },
+    {
+      "test": "ps-5-22k.aac",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "snr_db": 130.5,
+      "stats": "codec=10 rate=44100 channels=2 bits=0 frames=61440 underruns=0 decode_error=0 audio_error=0 elapsed_ms=538 cpu_us=546426 endpoint_dry=0"
+    },
+    {
+      "test": "ps-6-16k.aac",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "snr_db": 131.9,
+      "stats": "codec=10 rate=32000 channels=2 bits=0 frames=61440 underruns=0 decode_error=0 audio_error=0 elapsed_ms=536 cpu_us=546434 endpoint_dry=0"
+    },
+    {
+      "test": "ps-7-16k.aac",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "snr_db": 129.9,
+      "stats": "codec=10 rate=32000 channels=2 bits=0 frames=61440 underruns=0 decode_error=0 audio_error=0 elapsed_ms=549 cpu_us=556642 endpoint_dry=0"
+    },
+    {
+      "test": "ps-8-12k.aac",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "snr_db": 128.4,
+      "stats": "codec=10 rate=24000 channels=2 bits=0 frames=61440 underruns=0 decode_error=0 audio_error=0 elapsed_ms=440 cpu_us=449375 endpoint_dry=0"
+    },
+    {
+      "test": "ps-9-11k.aac",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "snr_db": 129.5,
+      "stats": "codec=10 rate=22050 channels=2 bits=0 frames=61440 underruns=0 decode_error=0 audio_error=0 elapsed_ms=505 cpu_us=513558 endpoint_dry=0"
+    },
+    {
+      "test": "ps-10-24k.aac",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "snr_db": 130.2,
+      "stats": "codec=10 rate=48000 channels=2 bits=0 frames=61440 underruns=0 decode_error=0 audio_error=0 elapsed_ms=525 cpu_us=531375 endpoint_dry=0"
+    },
+    {
+      "test": "ps-11-22k.aac",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "snr_db": 130.8,
+      "stats": "codec=10 rate=44100 channels=2 bits=0 frames=61440 underruns=0 decode_error=0 audio_error=0 elapsed_ms=589 cpu_us=597828 endpoint_dry=0"
+    },
+    {
+      "test": "PS coverage",
+      "result": "complete",
+      "tools": [
+        "PS 20 bands",
+        "PS 34 bands",
+        "PS ICC mode 0",
+        "PS ICC mode 1",
+        "PS ICC mode 2",
+        "PS ICC mode 3",
+        "PS ICC mode 4",
+        "PS ICC mode 5",
+        "PS ICC mode None",
+        "PS IID mode 0",
+        "PS IID mode 1",
+        "PS IID mode 2",
+        "PS IID mode 3",
+        "PS IID mode 4",
+        "PS IID mode 5",
+        "PS IID mode None",
+        "PS IPD/OPD",
+        "PS appended last envelope",
+        "PS band layout switch",
+        "PS class 0 with 0 envelopes",
+        "PS class 0 with 1 envelopes",
+        "PS class 0 with 2 envelopes",
+        "PS class 0 with 4 envelopes",
+        "PS class 1 with 1 envelopes",
+        "PS class 1 with 2 envelopes",
+        "PS class 1 with 3 envelopes",
+        "PS class 1 with 4 envelopes"
+      ]
+    },
+    {
+      "test": "ps-corrupt-0.aac",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "snr_db": 128.9,
+      "stats": "codec=10 rate=48000 channels=2 bits=0 frames=40960 underruns=0 decode_error=0 audio_error=0 elapsed_ms=366 cpu_us=376440 endpoint_dry=0"
+    },
+    {
+      "test": "ps-corrupt-1.aac",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "snr_db": 131.4,
+      "stats": "codec=10 rate=48000 channels=2 bits=0 frames=40960 underruns=0 decode_error=0 audio_error=0 elapsed_ms=365 cpu_us=374838 endpoint_dry=0"
+    },
+    {
+      "test": "ps-corrupt-2.aac",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "snr_db": 133.0,
+      "stats": "codec=10 rate=48000 channels=2 bits=0 frames=40960 underruns=0 decode_error=0 audio_error=0 elapsed_ms=386 cpu_us=395849 endpoint_dry=0"
+    },
+    {
+      "test": "ps-corrupt-3.aac",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "snr_db": 134.3,
+      "stats": "codec=10 rate=48000 channels=2 bits=0 frames=40960 underruns=0 decode_error=0 audio_error=0 elapsed_ms=359 cpu_us=368056 endpoint_dry=0"
+    },
+    {
+      "test": "ps-corrupt-4.aac",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "snr_db": 128.5,
+      "stats": "codec=10 rate=48000 channels=2 bits=0 frames=40960 underruns=0 decode_error=0 audio_error=0 elapsed_ms=376 cpu_us=385645 endpoint_dry=0"
+    },
+    {
+      "test": "ps-corrupt-5.aac",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "snr_db": 131.3,
+      "stats": "codec=10 rate=48000 channels=2 bits=0 frames=40960 underruns=0 decode_error=0 audio_error=0 elapsed_ms=387 cpu_us=397143 endpoint_dry=0"
+    },
+    {
+      "test": "ps-implicit.m4a",
+      "result": "exact",
+      "comparator": "ps-0-24k.aac"
+    },
+    {
+      "test": "ps-object.m4a",
+      "result": "exact",
+      "comparator": "ps-0-24k.aac"
+    },
+    {
+      "test": "ps-sync-extension.m4a",
+      "result": "exact",
+      "comparator": "ps-0-24k.aac"
+    },
+    {
+      "test": "ps-absent.m4a (PS data ignored)",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "snr_db": 131.4,
+      "stats": "codec=9 rate=48000 channels=1 bits=0 frames=61440 underruns=0 decode_error=0 audio_error=0 elapsed_ms=286 cpu_us=296490 endpoint_dry=0"
+    },
+    {
+      "test": "crc.aac",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "snr_db": 129.6,
+      "stats": "codec=10 rate=48000 channels=2 bits=0 frames=73728 underruns=0 decode_error=0 audio_error=0 elapsed_ms=706 cpu_us=715432 endpoint_dry=0"
+    },
+    {
+      "test": "sbr-before-element.aac",
+      "result": "exact",
+      "comparator": "the stream without that fill element",
+      "note": "FFmpeg 6.1 does not skip the payload and drops the frame"
+    },
+    {
+      "test": "sbr-after-first-frame.m4a (core only)",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "snr_db": 137.9,
+      "stats": "codec=9 rate=24000 channels=1 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=24 cpu_us=34017 endpoint_dry=0"
+    },
+    {
+      "test": "sbr-after-first-frame.aac",
+      "result": "exact",
+      "comparator": "sbr-after-first-frame.m4a",
+      "note": "FFmpeg 6.1 switches ADTS output to the SBR rate mid-stream"
+    },
+    {
+      "test": "corrupt-0.aac",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "snr_db": 132.1,
+      "stats": "codec=10 rate=48000 channels=6 bits=0 frames=49152 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1299 cpu_us=1307225 endpoint_dry=0"
+    },
+    {
+      "test": "corrupt-1.aac",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "snr_db": 133.0,
+      "stats": "codec=10 rate=48000 channels=2 bits=0 frames=49152 underruns=0 decode_error=0 audio_error=0 elapsed_ms=433 cpu_us=442651 endpoint_dry=0"
+    },
+    {
+      "test": "corrupt-2.aac",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "snr_db": 135.4,
+      "stats": "codec=10 rate=48000 channels=3 bits=0 frames=49152 underruns=0 decode_error=0 audio_error=0 elapsed_ms=685 cpu_us=696934 endpoint_dry=0"
+    },
+    {
+      "test": "corrupt-3.aac",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "snr_db": 134.7,
+      "stats": "codec=10 rate=48000 channels=2 bits=0 frames=49152 underruns=0 decode_error=0 audio_error=0 elapsed_ms=688 cpu_us=670609 endpoint_dry=0"
+    },
+    {
+      "test": "corrupt-4.aac",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "snr_db": 130.0,
+      "stats": "codec=10 rate=48000 channels=6 bits=0 frames=49152 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1331 cpu_us=1341882 endpoint_dry=0"
+    },
+    {
+      "test": "corrupt-5.aac",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "snr_db": 133.2,
+      "stats": "codec=10 rate=48000 channels=2 bits=0 frames=49152 underruns=0 decode_error=0 audio_error=0 elapsed_ms=439 cpu_us=448674 endpoint_dry=0"
+    },
+    {
+      "test": "corrupt-6.aac",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "snr_db": 131.3,
+      "stats": "codec=10 rate=48000 channels=3 bits=0 frames=49152 underruns=0 decode_error=0 audio_error=0 elapsed_ms=690 cpu_us=700442 endpoint_dry=0"
+    },
+    {
+      "test": "corrupt-7.aac",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "snr_db": 134.7,
+      "stats": "codec=10 rate=48000 channels=2 bits=0 frames=49152 underruns=0 decode_error=0 audio_error=0 elapsed_ms=505 cpu_us=511560 endpoint_dry=0"
+    },
+    {
+      "test": "corrupt-8.aac",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "snr_db": 119.7,
+      "stats": "codec=10 rate=48000 channels=6 bits=0 frames=49152 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1524 cpu_us=1536816 endpoint_dry=0"
+    },
+    {
+      "test": "corrupt-9.aac",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "snr_db": 126.8,
+      "stats": "codec=10 rate=48000 channels=2 bits=0 frames=49152 underruns=0 decode_error=0 audio_error=0 elapsed_ms=464 cpu_us=474266 endpoint_dry=0"
+    },
+    {
+      "test": "corrupt-10.aac",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "snr_db": 127.3,
+      "stats": "codec=10 rate=48000 channels=3 bits=0 frames=49152 underruns=0 decode_error=0 audio_error=0 elapsed_ms=708 cpu_us=719266 endpoint_dry=0"
+    },
+    {
+      "test": "corrupt-11.aac",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "snr_db": 122.4,
+      "stats": "codec=10 rate=48000 channels=2 bits=0 frames=49152 underruns=0 decode_error=0 audio_error=0 elapsed_ms=497 cpu_us=508767 endpoint_dry=0"
+    },
+    {
+      "test": "80 heavily corrupted streams (20 with PS)",
+      "result": "decoded",
+      "decoded": 80
+    },
+    {
+      "test": "steady-mono.aac seeks",
+      "result": "matched continuous decoding",
+      "targets": 7,
+      "minimum_snr_db": 73.4
+    },
+    {
+      "test": "steady-stereo.aac seeks",
+      "result": "matched continuous decoding",
+      "targets": 7,
+      "minimum_snr_db": 55.0
+    },
+    {
+      "test": "steady-ps.aac seeks",
+      "result": "matched continuous decoding",
+      "targets": 7,
+      "minimum_snr_db": 74.4
+    },
+    {
+      "test": "downsampled-sbr.m4a",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "downsampled-sbr-sync.m4a",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "HE-AAC playback",
+      "result": "played",
+      "stats": "Playing. Space: pause / resume. N / P: next / previous file. Left / Right: -5 / +5 s. Down / Up: -60 / +60 s. [ / ]: previous / next chapter. R: repeat. Q or Ctrl+C: stop. codec=10 rate=48000 channels=2 bits=0 frames=73728 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3615 cpu_us=600942 endpoint_dry=0"
+    }
+  ],
+  "minimum_snr_db": 125.5,
+  "scope": "HE-AAC v1 and v2 in ADTS, MP4 (implicit, explicit and backward-compatible signalling) and Matroska: generated SBR and parametric stereo data on FFmpeg-encoded cores, mono to 7.1 at core rates 11.025-48 kHz, against FFmpeg; CRC, extended data, corrupted payloads; seeks; downsampled SBR rejects."
+}

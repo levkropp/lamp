@@ -34,7 +34,7 @@ loas_pos: .long 0
 
 .bss
 .p2align 3
-loas_config: .zero 64               # the first configuration, realigned
+loas_config: .zero 512               # the first configuration, realigned
 
 .text
 FN loas_close
@@ -188,8 +188,8 @@ ENDFN loas_copy
 
 # Reads an AudioSpecificConfig at loas_pos -> EAX=1 with loas_config_bits
 # set to its length (EAX=2 for an unsupported one, 0 when malformed): AAC
-# Main, LC, SSR or LTP (and SBR or PS around them), GASpecificConfig with a
-# channel configuration (no program config element).
+# Main, LC, SSR or LTP (and SBR or PS around them), GASpecificConfig with an
+# indexed layout or a bounded program config element.
 LOCALFN loas_asc
     push rbx
     push rsi
@@ -226,8 +226,6 @@ LOCALFN loas_asc
     jb .Lloas_asc_unsupported
     cmp ebx, 4
     ja .Lloas_asc_unsupported
-    test esi, esi
-    jz .Lloas_asc_unsupported             # a program config element
     mov ecx, 1
     call loas_bits                        # frameLengthFlag
     mov ecx, 1
@@ -239,7 +237,15 @@ LOCALFN loas_asc
 .Lloas_asc_extension:
     mov ecx, 1
     call loas_bits                        # extensionFlag
+    mov ebx, eax
+    test esi, esi
+    jnz .Lloas_asc_extension3
+    mov ecx, edi                          # PCE alignment is relative to ASC start
+    call loas_pce
     test eax, eax
+    jz .Lloas_asc_malformed
+.Lloas_asc_extension3:
+    test ebx, ebx
     jz .Lloas_asc_done
     mov ecx, 1
     call loas_bits                        # extensionFlag3
@@ -263,6 +269,78 @@ LOCALFN loas_asc
     ret
 ENDFN loas_asc
 
+# Skip a PCE to locate the following LATM fields. The AAC decoder validates
+# its actual layout. Counts and comments are bounded by their bit widths;
+# alignment is relative to this embedded ASC, not to the surrounding mux.
+LOCALFN loas_pce
+    push rbx
+    push rsi
+    sub rsp, 40
+    mov esi, ecx
+    mov ecx, 10
+    call loas_bits                        # tag, object type, sampling rate index
+    mov ecx, 12
+    call loas_bits
+    mov ebx, eax
+    shr eax, 8
+    mov edx, ebx
+    shr edx, 4
+    and edx, 15
+    add eax, edx
+    and ebx, 15
+    add ebx, eax
+    imul ebx, ebx, 5                     # front/side/back: pair bit and tag
+    mov ecx, 2
+    call loas_bits
+    lea ebx, [rbx + rax*4]               # LFE tags
+    mov ecx, 3
+    call loas_bits
+    lea ebx, [rbx + rax*4]               # associated-data tags
+    mov ecx, 4
+    call loas_bits
+    lea eax, [rax + rax*4]
+    add ebx, eax                          # coupling flag and tag
+    mov ecx, 1
+    call loas_bits
+    shl eax, 2
+    mov ecx, eax
+    call loas_bits
+    mov ecx, 1
+    call loas_bits
+    shl eax, 2
+    mov ecx, eax
+    call loas_bits
+    mov ecx, 1
+    call loas_bits
+    lea ecx, [rax + rax*2]
+    call loas_bits
+    add ebx, [rip + loas_pos]
+    sub ebx, esi
+    add ebx, 7
+    and ebx, -8
+    add ebx, esi
+    lea eax, [rbx + 8]
+    cmp eax, [rip + loas_limit]
+    ja .Lloas_pce_short                   # check list skip before reading comment
+    mov [rip + loas_pos], ebx
+    mov ecx, 8
+    call loas_bits                        # comment bytes
+    shl eax, 3
+    add eax, [rip + loas_pos]
+    mov [rip + loas_pos], eax
+    cmp eax, [rip + loas_limit]
+    setbe al
+    movzx eax, al
+    jmp .Lloas_pce_return
+.Lloas_pce_short:
+    xor eax, eax
+.Lloas_pce_return:
+    add rsp, 40
+    pop rsi
+    pop rbx
+    ret
+ENDFN loas_pce
+
 # -> EAX=audio object type (5 bits, 31 escaping to 32 + 6 bits).
 LOCALFN loas_object_type
     mov ecx, 5
@@ -283,7 +361,7 @@ LOCALFN loas_mux_config
     push rbx
     push rsi
     push rdi
-    sub rsp, 64
+    sub rsp, 576
     mov ecx, 1
     call loas_bits                        # audioMuxVersion
     mov ebx, eax
@@ -327,14 +405,14 @@ LOCALFN loas_mux_config
     mov [rip + loas_pos], esi             # skip the rest of ascLen
 .Lloas_mux_asc_copy:
     mov eax, [rip + loas_pos]
-    mov [rsp + 56], eax
+    mov [rsp + 560], eax
     mov [rip + loas_pos], edi
-    lea rcx, [rsp]                        # this configuration, realigned
+    lea rcx, [rsp + 32]                        # this configuration, realigned
     mov edx, [rip + loas_config_bits]
-    cmp edx, 8*48
+    cmp edx, 8*512
     ja .Lloas_mux_malformed
     call loas_copy
-    mov eax, [rsp + 56]
+    mov eax, [rsp + 560]
     mov [rip + loas_pos], eax
     mov ecx, [rip + loas_config_bits]
     add ecx, 7
@@ -342,14 +420,14 @@ LOCALFN loas_mux_config
     cmp dword ptr [rip + loas_config_bytes], 0
     jne .Lloas_mux_compare
     mov [rip + loas_config_bytes], ecx
-    lea rsi, [rsp]
+    lea rsi, [rsp + 32]
     lea rdi, [rip + loas_config]
     rep movsb
     jmp .Lloas_mux_frame_length
 .Lloas_mux_compare:
     cmp ecx, [rip + loas_config_bytes]
     jne .Lloas_mux_unsupported            # a configuration change
-    lea rsi, [rsp]
+    lea rsi, [rsp + 32]
     lea rdi, [rip + loas_config]
     repe cmpsb
     jne .Lloas_mux_unsupported
@@ -396,7 +474,7 @@ LOCALFN loas_mux_config
 .Lloas_mux_malformed:
     xor eax, eax
 .Lloas_mux_return:
-    add rsp, 64
+    add rsp, 576
     pop rdi
     pop rsi
     pop rbx

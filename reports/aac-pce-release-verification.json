@@ -1,0 +1,315 @@
+{
+  "result": "passed",
+  "cli_sha256": "16120075e071cbdeeb404a8ceb3e4f245bd0092e2dc890479b6850906edb7757",
+  "bytes": 438448,
+  "checks": [
+    {
+      "file": "encoder-mono.m4a",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "encoder-mono.aac",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "encoder-mono.mka",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "encoder-mono.loas",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "encoder-mono.ts",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "encoder-stereo.m4a",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "encoder-stereo.aac",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "encoder-stereo.mka",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "encoder-stereo.loas",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "encoder-stereo.ts",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "encoder-3.0.m4a",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "encoder-4.0.m4a",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "encoder-quad.m4a",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "encoder-5.0.m4a",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "encoder-5.0-side.m4a",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "stereo-tags-ordered.aac",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "stereo-tags-ordered-v0.loas",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "stereo-tags-ordered-v1.loas",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "stereo-tags-shuffled.aac",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "stereo-tags-shuffled-v0.loas",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "stereo-tags-shuffled-v1.loas",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "leading-data-changing-comments.aac",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "split-stereo-ordered.aac",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "split-stereo-ordered-v0.loas",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "split-stereo-ordered-v1.loas",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "split-stereo-shuffled.aac",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "split-stereo-shuffled-v0.loas",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "split-stereo-shuffled-v1.loas",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "side-six-ordered.aac",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "side-six-ordered-v0.loas",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "side-six-ordered-v1.loas",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "side-six-shuffled.aac",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "side-six-shuffled-v0.loas",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "side-six-shuffled-v1.loas",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "side-six-shuffled.m4a",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "side-six-shuffled.mka",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "side-six-shuffled.ts",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "back-six-ordered.aac",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "back-six-ordered-v0.loas",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "back-six-ordered-v1.loas",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "back-six-shuffled.aac",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "back-six-shuffled-v0.loas",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "back-six-shuffled-v1.loas",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "eight-single-ordered.aac",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "eight-single-ordered-v0.loas",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "eight-single-ordered-v1.loas",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "eight-single-shuffled.aac",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "eight-single-shuffled-v0.loas",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "eight-single-shuffled-v1.loas",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "seven-ordered.aac",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "seven-ordered-v0.loas",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "seven-ordered-v1.loas",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "seven-shuffled.aac",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "seven-shuffled-v0.loas",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "seven-shuffled-v1.loas",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "wide-eight-ordered.aac",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "wide-eight-ordered-v0.loas",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "wide-eight-ordered-v1.loas",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "wide-eight-shuffled.aac",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "wide-eight-shuffled-v0.loas",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "wide-eight-shuffled-v1.loas",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "he-split-stereo-ordered.aac",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "he-split-stereo-ordered.loas",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "he-split-stereo-shuffled.aac",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "he-split-stereo-shuffled.loas",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "he-side-six-ordered.aac",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "he-side-six-ordered.loas",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "he-side-six-shuffled.aac",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "he-side-six-shuffled.loas",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "he-eight-single-ordered.aac",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "he-eight-single-ordered.loas",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "he-eight-single-shuffled.aac",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "he-eight-single-shuffled.loas",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "ps-mono-ordered.aac",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "ps-mono-ordered.loas",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "ps-back-mono-ordered.aac",
+      "result": "byte-exact native debug PCM"
+    },
+    {
+      "file": "ps-back-mono-ordered.loas",
+      "result": "byte-exact native debug PCM"
+    }
+  ]
+}

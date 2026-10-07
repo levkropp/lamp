@@ -4,14 +4,26 @@ LAMP 0.4.0-dev decodes MPEG-4 AAC Low Complexity in MP4/M4A/MOV, Matroska, raw A
 
 ## Coverage
 
-- AudioSpecificConfig with object type 2 (LC) from an MP4 `esds` (object types 0x40 and 0x67), Matroska `A_AAC` CodecPrivate, a LATM StreamMuxConfig or the ADTS header; sampling-frequency indices 0–11 (8–96 kHz); channel configurations 1–7 (mono to 7.1). Configuration 7 is 7.1 front-wide as ISO defines it: C, Lc/Rc, L/R, Ls/Rs, LFE.
-- Raw data blocks with single-channel, channel-pair and LFE elements in the configured order; data stream, fill and program config elements are skipped.
+- AudioSpecificConfig with object type 2 (LC) from an MP4 `esds` (object types 0x40 and 0x67), Matroska `A_AAC` CodecPrivate, a LATM StreamMuxConfig or the ADTS header; sampling-frequency indices 0–11 (8–96 kHz); indexed channel configurations 1–7 and bounded program-config layouts (configuration 0, [below](#program-config-layouts)). Configuration 7 is 7.1 front-wide as ISO defines it: C, Lc/Rc, L/R, Ls/Rs, LFE.
+- Raw data blocks with single-channel, channel-pair and LFE elements. Indexed layouts retain their configured element order; program-config layouts identify elements by type and instance tag. Data stream and non-SBR fill elements are skipped.
 - Section data with all eleven spectral codebooks, zero, noise and intensity bands; scalefactors, noise energies and intensity positions; pulse data; escape values up to 8191; TNS with both resolutions, coefficient compression, either direction and orders up to 12 (7 for short windows).
 - Mid/side stereo with transmitted or all-band masks, intensity stereo, and perceptual noise substitution. A band that is noise in both channels of a pair with a transmitted M/S bit reuses the first channel's noise vector, as ISO specifies.
 - All four window sequences, grouped short windows, sine and Kaiser-Bessel-derived window shapes (alpha 4 and 6), and a 2048/256-point IMDCT computed as a DCT-IV through a 512/64-point complex FFT in double precision.
 - Multichannel output mixes to stereo with the shared WAVE speaker weights, as for FLAC, WAV and ALAC.
 
-Unsupported streams reject with `decode_error` 101: other object types (Main, SSR, LTP and later), explicit or sub-8 kHz rates, channel configuration 0 (layouts given by a program config element), 960-sample frames, coupling channel elements, gain control and prediction. Malformed streams reject with 100. Dynamic range control data is ignored.
+Unsupported streams reject with `decode_error` 101: other object types (Main, SSR, LTP and later), explicit or sub-8 kHz rates, unrepresentable program-config layouts, 960-sample frames, coupling channel elements, gain control and prediction. Malformed streams reject with 100. Dynamic range control data is ignored.
+
+## Program-config layouts
+
+Configuration 0 reads a Program Config Element (PCE) from the AudioSpecificConfig. ADTS instead requires a PCE before the first audio element of its first raw data block; leading data and fill elements are allowed. The parser stores a bounded numeric map, so caller-owned configuration bytes can be released after open.
+
+Up to eight channels and eight elements are supported: at most five front channels, two side channels, three back channels and one LFE. Front and back groups contain left/right pairs and an optional unpaired center. The center may appear before or after a channel-pair element; adjacent single-channel elements can form pairs. Four paired front channels mean front-left/right-of-center followed by front-left/right. Unsupported groups, such as a lone side channel or two unpaired front runs separated by a pair, reject rather than acquiring an inferred LFE or speaker position.
+
+Each `(element type, instance tag)` has one stable channel and SBR state slot. Every frame must contain each declared audio element exactly once; different element orders preserve channel placement and filter histories. Tags may repeat across different element types. A repeated PCE may change comments or mixdown hints, which are skipped, but changing the program tag, element map, speaker layout or rate requires a new track. Failed replacements leave the active map intact. The PCE object type must be LC and its rate must match the core. Coupling elements remain unsupported. The stereo renderer uses the existing speaker weights, not the optional PCE mixdown hints.
+
+LATM versions 0 and 1 realign PCEs relative to the embedded ASC start and accept configurations up to 512 bytes, including a 255-byte PCE comment. LATM still rejects changes to the complete ASC between StreamMuxConfigs, including comment changes.
+
+Noise substitution uses the decoder's shared pseudo-random generator: permuting elements can change the phase of noise bands even though their energy and speaker assignment remain correct. Byte-exact permutation tests therefore use cores with PNS disabled.
 
 ## Containers and timing
 
@@ -50,6 +62,19 @@ A seek also resets parametric stereo, which resumes with the next PS header. Wit
 Spectra, TNS and long-window overlap use single precision; noise scaling, the IMDCT, short-window assembly and stereo mixing use double precision. TNS reflection coefficients are the correctly rounded `sin()` values of the ISO formula. FFmpeg's tables differ by one float step for three coefficient values, which matters only for near-unstable filters, and FFmpeg applies its own window definitions to window-sequence transitions that encoders do not produce.
 
 ## Verification
+
+`python3 tests/verify-aac-pce.py` checks configuration 0. The recorded Linux run with FFmpeg 5.1.9 passes 148 checks:
+
+- 76 PCM comparisons against FFmpeg's decoded channels, mixed with LAMP's speaker weights: real encoder PCEs and separately encoded elements assembled into tagged 5.1 side/back, 6.1, 7.1 and 7.1 front-wide layouts; MP4, Matroska, ADTS, both LATM versions and transport streams. LC comparisons reach at least 138 dB SNR. Written SBR/PS comparisons reach at least 125 dB and include eight independent element histories, channel pairs and a mono rear-center PCE expanded to stereo.
+- Byte-exact PCM under per-frame element permutation, repeated PCEs, explicit versus implicit SBR/PS signalling, and container remuxing. PNS is disabled for these comparisons. As in the existing HE-AAC suite, written SBR data uses full-band noise cores so very large high-band gains do not amplify rounding noise from empty tonal bands.
+- A leading data/fill and changing-comment stream equals its ordinary PCE-first counterpart. FFmpeg 5.1.9 cannot probe that leading-element stream, so its reference is the already-verified equivalent PCM.
+- 90 exact seek comparisons, cancelled open/read, 32 malformed/unsupported streams, 12,839 protected input-prefix checks and 4,800 guarded configuration mutations. Guards also check output capacity, released configuration/input storage and preservation of the active map after a rejected PCE replacement. Another 800 complete-file mutations exercise decoding and periodic seeks.
+
+FFmpeg 5.1.9's forced-PCE 5.1/6.1/7.1 encodes declare a lone side channel and no LFE element. These five encoder variants are explicit unsupported-layout checks; independently written PCEs cover the valid six-to-eight-channel layouts. Encoder 3.0/4.0 output lacks a reported FFmpeg channel layout, so the comparison uses the known encoder input order and verifies its channel count.
+
+Five saved pre-change binary controls reject files that the new decoder opens. All 77 positive files retain byte-exact PCM in the stripped Linux release build, and raw AAC and transport-stream PCE playback pass through the private Linux audio sink. The reports are [native](../reports/aac-pce-verification.json), [baseline controls](../reports/aac-pce-negative-control.json), [release](../reports/aac-pce-release-verification.json) and [playback](../reports/aac-pce-playback-verification.json). `--wine-only` reuses the hash-pinned native fixtures and PCM with the Windows COFF build; its [131 checks](../reports/aac-pce-wine-verification.json) pass all 77 PCM outputs, 90 seeks, 32 malformed/unsupported fixtures and the same guarded checks, plus 80 complete-file mutations. Native Windows remains unverified. `--written-only` runs the written-fixture subset during development.
+
+The existing [AAC](../reports/aac-pce-aac-regression-verification.json), [LATM](../reports/aac-pce-latm-regression-verification.json) and [HE-AAC](../reports/aac-pce-heaac-regression-verification.json) suites pass 68, 71 and 68 checks. The final binary also reproduces [221 cached PCM outputs](../reports/aac-pce-indexed-regression-verification.json) from those suites byte-for-byte.
 
 `python3 tests/verify-aac.py` checks:
 
