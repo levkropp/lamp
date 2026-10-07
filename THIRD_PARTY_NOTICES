@@ -24,7 +24,7 @@ and related and neighboring rights to this software to the public domain
 worldwide. This software is distributed without any warranty.
 https://creativecommons.org/publicdomain/zero/1.0/
 
-The runtime MP3 code is handwritten x86-64 assembly. The reference C header
+The runtime MP3 source is handwritten x86-64 assembly; macOS builds translate it to ARM64. The reference C header
 is used to extract tables for the assembly include. No reference C source
 is linked into either player. FFmpeg is a separately
 installed test oracle and is not distributed with this project.
@@ -192,15 +192,43 @@ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-Rhun style and implementation-model reference:
+Rhun macOS build-time translator and native helpers:
 https://github.com/vshvedov/rhun
-The custom pixel canvas, Win32 presentation and compact monospace UI model
-were used as design references. No Rhun source code or assets were copied.
-The UI uses the Windows system font Consolas; no font file is distributed.
+Pinned revision: 4d11f81019617e6e3a3922c81f5dedc3025d7884
+
+Unchanged upstream tools/arm64.py and src/mac/mac.inc are included.
+src/mac/runtime.s adapts the string/division helpers from upstream src/mac/rt.s.
+The MASM normalizer, LAMP translator extensions, Apple ABI bridges, platform
+services, Core Audio backend and AppKit player are original LAMP additions.
+The Rhun logo, fonts, assets and application implementation are not included.
+
+MIT License
+
+Copyright (c) 2026 Vlad Shvedov
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
 
 Reference C implementations and oracle programs are development/test inputs
-only. Native LAMP runtime sources and all codec implementations linked
-into its executables are x86-64 assembly.
+only. Windows runtime sources are x86-64 assembly. macOS builds translate
+shared decoders into native ARM64 assembly and link native assembly adapters.
+No reference C decoder is linked into the players.
 
 
 RFC 8251 decoder update patch

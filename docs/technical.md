@@ -1,12 +1,14 @@
 # LAMP 0.4.0-dev technical details
 
-A Windows x86-64 audio player with handwritten assembly WAV, AIFF/AIFC, FLAC, MP3, Ogg/Vorbis and development Ogg/Opus decoders, plus a native assembly UI. The current console build is **197,632 bytes (193 KiB)**; the graphical build is **205,312 bytes (200.5 KiB)**. Both include LAMP's icon and version resources. The published v0.3.0 archive retains its earlier four-format build and manifest.
+An assembly audio player for Windows x86-64 and Apple Silicon macOS, with shared handwritten assembly WAV, AIFF/AIFC, FLAC, MP3, Ogg/Vorbis and development Ogg/Opus decoders, plus a native assembly UI. The current Windows console build is **197,632 bytes (193 KiB)**; the graphical build is **205,312 bytes (200.5 KiB)**. Both include LAMP's icon and version resources. The published v0.3.0 archive retains its earlier four-format build and manifest.
 
-The dark canvas, compact playback controls and automatic hiding are inspired by mpv. The custom pixel buffer and Win32 presentation follow Rhun's documented assembly UI model. No Rhun source, fonts, icons, or other assets were copied.
+The dark canvas, compact playback controls and automatic hiding are inspired by mpv. The custom pixel buffer and Win32 presentation follow Rhun's documented assembly UI model. The Windows canvas uses Rhun as a design reference. The Mac build vendors its MIT translator/helper macros and adapts native helpers with attribution; no Rhun branding, fonts or icons are included.
 
 **Opus remains a development feature.** Source builds play Ogg mapping family 0 mono/stereo and family 1 with 1–8 speaker channels downmixed to stereo, including SILK/hybrid/CELT, RFC 8251 updates, gain, pre-skip and end trimming. The original 51 modern-libopus family 0 files pass at tolerance 0.00004, with maximum error 0.00002277. Another 112 modern family 1 files pass with peak error 0.000001967. All 120 official elementary-decoder vector/rate/channel checks pass. [Opus stage documentation](opus.md) records interfaces, bounds and results; native surround output and Ogg chaining remain unfinished.
 
-All runtime application and decoder code is MASM x64 assembly. No C/C++/Rust codec, codec DLL, CRT, FFmpeg process, or media-player engine is linked or invoked. Reference C source is used only for algorithms, permitted coefficient/probability data, and test oracles.
+Windows runtime application and decoder code is MASM x64 assembly, linked without the CRT. The Mac build translates shared decoders into ARM64 and links native assembly libSystem, Core Audio and AppKit adapters. No C/C++/Rust codec, external codec library, FFmpeg process, or media-player engine is linked or invoked. Reference C source is used only for algorithms, permitted coefficient/probability data, and test oracles.
+
+Platform services, UI and benchmark descriptions below refer to Windows unless stated otherwise. [Apple Silicon notes](macos.md) describe the Mac build, calling conventions, playback ownership, verification and remaining platform work. Windows reports are retained with their original scope.
 
 ## Run
 
