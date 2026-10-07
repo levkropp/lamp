@@ -57,6 +57,20 @@ def catalog_wine():
         result = json.loads(run(['wine', target, path, case['choice'], case['count'], case['selected']],
                                 timeout=120).strip().splitlines()[-1])
         checks.append(dict(test=case['file'], **result))
+    for case in json.loads((work / 'wide-pcm-cases.json').read_text()):
+        path, reference = work / case['file'], work / case['reference']
+        if hashlib.sha256(path.read_bytes()).hexdigest() != case['sha256']:
+            raise Failure('Wide program stream fixture changed')
+        expected = reference.read_bytes()
+        if hashlib.sha256(expected).hexdigest() != case['pcm_sha256']:
+            raise Failure('Wide program stream PCM reference changed')
+        output = work / (case['file'] + '.wine.f32')
+        output.unlink(missing_ok=True)
+        run(['wine', ROOT / 'bin/lamp-cli.exe', '--decode', '--track', case['choice'], path, output], timeout=120)
+        if output.read_bytes() != expected:
+            raise Failure(f"Windows program stream ordinal {case['choice']}: PCM differs from raw stream")
+        checks.append(dict(test=f"{case['file']} track {case['choice']} PCM", result='exact',
+                           frames=len(expected)//8, pcm_sha256=case['pcm_sha256']))
     probe = out_dir() / 'ui-tracks-probe.obj'
     run([builder.tool('llvm-mc'), '-triple=x86_64-pc-windows-msvc', '-filetype=obj',
          '-defsym=WINDOWS=1', '-I', ROOT / 'src', '-I', ROOT / 'src/win',
@@ -119,6 +133,31 @@ def rejected(chain, path, track):
     return line
 
 
+def wide_program_stream(pack_source, mp2, ac3=None):
+    """Synthetic unsupported IDs followed by independently encoded audio.
+
+    Exercise the parser's complete recognized ID domain, rather than claiming
+    that the placeholder private streams contain decodable DTS/MLP/TrueHD.
+    """
+    source = pack_source.read_bytes()
+    if source[:4] != b'\x00\x00\x01\xba' or source[4] & 0xc0 != 0x40:
+        raise Failure('Expected an MPEG-2 pack header')
+    chunks = [source[:14 + (source[13] & 7)]]
+    def pes(stream, payload):
+        body = b'\x80\x00\x00' + payload
+        chunks.append(b'\x00\x00\x01' + bytes([stream]) + len(body).to_bytes(2, 'big') + body)
+    for substream in [*range(0x88, 0x90), *range(0x98, 0xd0)]:
+        pes(0xbd, bytes([substream]) + bytes(8))
+    if ac3 is not None:
+        for substream in range(0x80, 0x88):
+            for start in range(0, len(ac3), 60000):
+                pes(0xbd, bytes([substream, 0, 0, 0]) + ac3[start:start + 60000])
+    for stream in range(0xc0, 0xe0 if ac3 is not None else 0xc1):
+        for start in range(0, len(mp2), 60000):
+            pes(stream, mp2[start:start + 60000])
+    return b''.join(chunks) + b'\x00\x00\x01\xb9'
+
+
 def main():
     if '--wine-only' in sys.argv: catalog_wine(); return
     library = build_lamp()
@@ -127,6 +166,7 @@ def main():
     work = scratch('tracks')
     checks = []
     catalog_cases = []
+    wide_pcm_cases = []
     def catalog(path, choice, count, selected):
         run([exe('track-catalog-oracle'), path, choice, count, selected])
         catalog_cases.append(dict(file=path.name, choice=choice, count=count, selected=selected,
@@ -280,6 +320,44 @@ def main():
     unequal.write_bytes(speex.read_bytes() + (work / 'speex-opus-a2.ogg').read_bytes())
     catalog(unequal, 0, 1, 2)
     catalog(unequal, 2, 0, 0)
+    # Ordinal 65 used to reject because mps_audio_seen retained only 64 IDs.
+    # All 104 currently recognized IDs must fit, including unsupported ones.
+    mp2, ac3 = work / 'catalog-65.mp2', work / 'catalog-104.ac3'
+    ffmpeg('-i', work / 'two-a1.vob', '-map', '0:a:0', '-c', 'copy', '-f', 'mp2', mp2)
+    ffmpeg('-i', work / 'two-a2.vob', '-map', '0:a:0', '-c', 'copy', '-f', 'ac3', ac3)
+    mp2_pcm, ac3_pcm = decode(mp2)[2], decode(ac3)[2]
+    if not mp2_pcm or not ac3_pcm: raise Failure('Wide program stream references are empty')
+    for name, data, count, automatic, selected, reference, raw in (
+            ('catalog-65.mpg', wide_program_stream(work / 'two.vob', mp2.read_bytes()),
+             65, 65, 65, mp2_pcm, mp2),
+            ('catalog-104.mpg', wide_program_stream(work / 'two.vob', mp2.read_bytes(), ac3.read_bytes()),
+             104, 65, 104, mp2_pcm, mp2)):
+        path = work / name
+        path.write_bytes(data)
+        default_pcm = ac3_pcm if count == 104 else mp2_pcm
+        if decode(path)[2] != default_pcm or decode(path, selected)[2] != reference:
+            raise Failure(f'{name}: Automatic or track {selected} differs from its raw stream')
+        catalog(path, 0, count, automatic)
+        catalog(path, selected, count, selected)
+        catalog(path, 64, 0, 0)
+        catalog(path, count + 1, 0, 0)
+        rejected(chain, path, 64)
+        rejected(chain, path, count + 1)
+        if count == 104:
+            for choice, expected in ((65, ac3_pcm), (73, mp2_pcm)):
+                catalog(path, choice, count, choice)
+                if decode(path, choice)[2] != expected:
+                    raise Failure(f'{name}: track {choice} differs from its raw stream')
+        reference_path = work / (name + '.raw.f32')
+        reference_path.write_bytes(reference)
+        wide_pcm_cases.append(dict(file=name, choice=selected, reference=reference_path.name,
+                                   sha256=hashlib.sha256(data).hexdigest(),
+                                   pcm_sha256=hashlib.sha256(reference).hexdigest()))
+        checks.append(dict(test=name, result='exact', tracks=count, automatic=automatic,
+                           selected=selected, comparator=raw.name,
+                           note='64 synthetic unsupported private IDs; remaining audio payloads are independently encoded'))
+        print(f'{name}: {count} IDs counted, automatic {automatic} and track {selected} exact', flush=True)
+    (work / 'wide-pcm-cases.json').write_text(json.dumps(wide_pcm_cases, indent=2) + '\n')
     (work / 'catalog-cases.json').write_text(json.dumps(catalog_cases, indent=2) + '\n')
     write_report('tracks', {'result': 'passed', 'checks': checks,
                             'catalog_checks': catalog_cases, 'sources': catalog_sources(),

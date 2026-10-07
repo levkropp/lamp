@@ -14,6 +14,7 @@
 .equ MTS_MALFORMED, 100
 .equ MTS_UNSUPPORTED, 101
 .equ MTS_CHUNK, 1 << 20             # buffer commit step
+.equ MPS_AUDIO_IDS, 128             # all 32 MPEG + 72 recognized private audio IDs fit
 .equ KIND_MPA, 1
 .equ KIND_ADTS, 2
 .equ KIND_AC3, 3
@@ -42,7 +43,7 @@ mts_hdmv: .long 0                   # the program carries an HDMV registration
 mts_audio_index: .long -1           # audio streams of the map read (track_choice); -1: no map
 mps_audio_count: .long 0            # program stream audio ids, by first appearance
 .bss
-mps_audio_ids: .zero 64*4
+mps_audio_ids: .zero MPS_AUDIO_IDS*4
 .data
 
 .text
@@ -836,7 +837,8 @@ LOCALFN mps_pes_data
 ENDFN mps_pes_data
 
 # ECX=a program stream's audio stream id -> R10D=its number (from 1) in
-# order of first appearance, 0 once 64 are listed. Keeps RAX, R8 and R9.
+# order of first appearance, 0 if the bounded table is full. All currently
+# recognized 104 IDs fit. Keeps RAX, R8 and R9.
 LOCALFN mps_audio_seen
     lea r11, [rip + mps_audio_ids]
     xor r10d, r10d
@@ -848,7 +850,7 @@ LOCALFN mps_audio_seen
     inc r10d
     jmp .Lmps_seen_entry
 .Lmps_seen_new:
-    cmp r10d, 64
+    cmp r10d, MPS_AUDIO_IDS
     jae .Lmps_seen_full
     mov [r11 + r10*4], ecx
     inc dword ptr [rip + mps_audio_count]
