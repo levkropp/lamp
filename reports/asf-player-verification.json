@@ -1,0 +1,420 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "folder",
+      "result": "natural order, folders in place, others left out",
+      "list": [
+        "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\1 one.flac",
+        "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\2 two.MP3",
+        "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\3 three.ec3",
+        "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\4 four.EAC3",
+        "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\5 f\u00fcnf.gsm",
+        "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\6 six.GSM",
+        "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\7 seven.AsF",
+        "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\8 \u0432\u043e\u0441\u044c\u043c\u044c.WMA",
+        "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\9 nine.wmv",
+        "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\10 ten.flac",
+        "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\disc 1\\z.wav",
+        "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\Disc 2\\a.wv",
+        "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\Disc 2\\b.ogg",
+        "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\\u00dcn\u00efcode.opus"
+      ]
+    },
+    {
+      "test": "command line and drop",
+      "result": "files as named, folders expanded",
+      "list": [
+        "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\notes.txt",
+        "Z:\\no such file.flac",
+        "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\Disc 2\\a.wv",
+        "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\Disc 2\\b.ogg"
+      ]
+    },
+    {
+      "test": "open dialog",
+      "result": "folder and names joined; one path whole",
+      "list": [
+        "Z:\\music\\a.flac",
+        "Z:\\music\\b c.mp3",
+        "Z:\\music\\voice.GSM",
+        "Z:\\top.flac",
+        "Z:\\music\\one.flac"
+      ]
+    },
+    {
+      "test": "audio track switch mkv",
+      "result": "heard track PCM and paused time preserved",
+      "automatic": 2,
+      "paused_target_ms": 5000,
+      "controls": [
+        "Play",
+        "10",
+        "Button",
+        "4166",
+        "Play",
+        "10",
+        "Button",
+        "4166",
+        "Play",
+        "10",
+        "Button",
+        "4166"
+      ],
+      "real_keyboard_popup_choices": [
+        "Track 2",
+        "Automatic"
+      ],
+      "real_popup_runs": [
+        [
+          "2",
+          189,
+          38640
+        ]
+      ],
+      "switched_runs": [
+        [
+          "2",
+          240073,
+          297840
+        ]
+      ],
+      "automatic_runs": [
+        [
+          "2",
+          297151,
+          355200
+        ]
+      ],
+      "reference_pcm_sha256": {
+        "1": "0c7b00a5189c313d3b00bbce53af122f39adef540af82df9acbc52f35c56d15d",
+        "2": "16c18b45577f44801590cbc2fc70e96e0b8088cdbd1436833db4fe8e2a01bc57"
+      },
+      "limit": "Wine playback; native Windows remains unverified"
+    },
+    {
+      "test": "audio track switch mp4",
+      "result": "heard track PCM and paused time preserved",
+      "automatic": 1,
+      "paused_target_ms": 5000,
+      "controls": [
+        "Play",
+        "10",
+        "Button",
+        "4166",
+        "Play",
+        "10",
+        "Button",
+        "4166",
+        "Play",
+        "10",
+        "Button",
+        "4166"
+      ],
+      "real_keyboard_popup_choices": [
+        "Track 2",
+        "Automatic"
+      ],
+      "real_popup_runs": [
+        [
+          "2",
+          93,
+          38640
+        ]
+      ],
+      "switched_runs": [
+        [
+          "2",
+          240006,
+          297840
+        ]
+      ],
+      "automatic_runs": [
+        [
+          "1",
+          297127,
+          354960
+        ]
+      ],
+      "reference_pcm_sha256": {
+        "1": "17494a626f8d1997b72e4fd98897cc2fa09235dd4ac801b69b6a815b1f261624",
+        "2": "45fe444f004601f34652d56358863ee6b7778311e5b17b35a3ef22e231d674ec"
+      },
+      "limit": "Wine playback; native Windows remains unverified"
+    },
+    {
+      "test": "audio track switch avi",
+      "result": "heard track PCM and paused time preserved",
+      "automatic": 1,
+      "paused_target_ms": 5000,
+      "controls": [
+        "Play",
+        "10",
+        "Button",
+        "4166",
+        "Play",
+        "10",
+        "Button",
+        "4166",
+        "Play",
+        "10",
+        "Button",
+        "4166"
+      ],
+      "real_keyboard_popup_choices": [
+        "Track 2",
+        "Automatic"
+      ],
+      "real_popup_runs": [
+        [
+          "2",
+          20,
+          38640
+        ]
+      ],
+      "switched_runs": [
+        [
+          "2",
+          240124,
+          298080
+        ]
+      ],
+      "automatic_runs": [
+        [
+          "1",
+          297276,
+          354960
+        ]
+      ],
+      "reference_pcm_sha256": {
+        "1": "f36cbb43ebb7bdac40f41fba0a08b3fc07d0125352ebac7a8e3623f50ceeafa7",
+        "2": "2c29a4be4092d7fac7a257a0e72979bd196d948df277db1aad1c3fde73facc98"
+      },
+      "limit": "Wine playback; native Windows remains unverified"
+    },
+    {
+      "test": "audio track switch ogg",
+      "result": "heard track PCM and paused time preserved",
+      "automatic": 1,
+      "paused_target_ms": 5000,
+      "controls": [
+        "Play",
+        "10",
+        "Button",
+        "4166",
+        "Play",
+        "10",
+        "Button",
+        "4166",
+        "Play",
+        "10",
+        "Button",
+        "4166"
+      ],
+      "real_keyboard_popup_choices": [
+        "Track 2",
+        "Automatic"
+      ],
+      "real_popup_runs": [
+        [
+          "2",
+          25,
+          38640
+        ]
+      ],
+      "switched_runs": [
+        [
+          "2",
+          240036,
+          297840
+        ]
+      ],
+      "automatic_runs": [
+        [
+          "1",
+          296695,
+          354480
+        ]
+      ],
+      "reference_pcm_sha256": {
+        "1": "a44de796e1904da534019ab86cfd7252b9a1e35b59abe1244ad3a87db121e92b",
+        "2": "8140d69b564dfcb1bcc01e485d389dc646ffd8b6d93de90f4a647f95eecd0b7f"
+      },
+      "limit": "Wine playback; native Windows remains unverified"
+    },
+    {
+      "test": "audio track switch ts",
+      "result": "heard track PCM and paused time preserved",
+      "automatic": 1,
+      "paused_target_ms": 5000,
+      "controls": [
+        "Play",
+        "10",
+        "Button",
+        "4166",
+        "Play",
+        "10",
+        "Button",
+        "4166",
+        "Play",
+        "10",
+        "Button",
+        "4166"
+      ],
+      "real_keyboard_popup_choices": [
+        "Track 2",
+        "Automatic"
+      ],
+      "real_popup_runs": [
+        [
+          "2",
+          161,
+          38640
+        ]
+      ],
+      "switched_runs": [
+        [
+          "2",
+          240199,
+          297840
+        ]
+      ],
+      "automatic_runs": [
+        [
+          "1",
+          297331,
+          355200
+        ]
+      ],
+      "reference_pcm_sha256": {
+        "1": "fcfb126778aa385b5060e96c7c2a2ca1c2627067090b21c45d3a26a9a99f0f6d",
+        "2": "bd788616a50f8538dfa523799c7fb34bc04b2828ff63f6360006c64ed9a2bd04"
+      },
+      "limit": "Wine playback; native Windows remains unverified"
+    },
+    {
+      "test": "audio track switch vob",
+      "result": "heard track PCM and paused time preserved",
+      "automatic": 1,
+      "paused_target_ms": 5000,
+      "controls": [
+        "Play",
+        "10",
+        "Button",
+        "4166",
+        "Play",
+        "10",
+        "Button",
+        "4166",
+        "Play",
+        "10",
+        "Button",
+        "4166"
+      ],
+      "real_keyboard_popup_choices": [
+        "Track 2",
+        "Automatic"
+      ],
+      "real_popup_runs": [
+        [
+          "2",
+          161,
+          38640
+        ]
+      ],
+      "switched_runs": [
+        [
+          "2",
+          240064,
+          297840
+        ]
+      ],
+      "automatic_runs": [
+        [
+          "1",
+          297275,
+          355200
+        ]
+      ],
+      "reference_pcm_sha256": {
+        "1": "14b38aaf769439d6d6b4a20db7d2a4bf8b24a4bf982c57b6ef983a59b7ff53a1",
+        "2": "448a498abe00a18eb81f9da3598b2f50f68443a0b9d59b734f61f678ed8a32f3"
+      },
+      "limit": "Wine playback; native Windows remains unverified"
+    },
+    {
+      "test": "audio track switch asf",
+      "result": "heard track PCM and paused time preserved",
+      "automatic": 1,
+      "paused_target_ms": 5000,
+      "controls": [
+        "Play",
+        "10",
+        "Button",
+        "4166",
+        "Play",
+        "10",
+        "Button",
+        "4166",
+        "Play",
+        "10",
+        "Button",
+        "4166"
+      ],
+      "real_keyboard_popup_choices": [
+        "Track 2",
+        "Automatic"
+      ],
+      "real_popup_runs": [
+        [
+          "2",
+          25,
+          38640
+        ]
+      ],
+      "switched_runs": [
+        [
+          "2",
+          240051,
+          297840
+        ]
+      ],
+      "automatic_runs": [
+        [
+          "1",
+          296671,
+          354720
+        ]
+      ],
+      "reference_pcm_sha256": {
+        "1": "50dad4494e49c53c29237ee55ec0a02126da7cb4f6421f221d8ab3f2a0d09681",
+        "2": "ee2ab60a1cab42835f01a2ad0d585f51bf38aa5054c2ac2b0c984953fb7ffa19"
+      },
+      "limit": "Wine playback; native Windows remains unverified"
+    }
+  ],
+  "source_hashes": {
+    "src/queue.s": "18b7b6ead963997cd3341af2deecc143bcb7ca5637c1558b0e9fc6204165b223",
+    "src/win/player.s": "7dfb1a6a7c81d37c29a72773a5a893d4f0a8b14611c8603f2c2037716c343154",
+    "src/win/ui.s": "d87244034a4b4baa48a71ca297330b129674717ecb6ec2a4cffbd2a0310d1301",
+    "src/win/ui_queue.inc": "4ce3d765b743ad29d118e02b87f566ebe44347cb1bce8d02b6291d1c13c8ad17",
+    "src/win/ui_menu.inc": "0d1ea389ea0c88157f740759e5a7224e6d964f33ce0ce8014ea9fca451891954",
+    "src/win/kernel32.def": "d3b93c1a54c07bdbb30ea043ee5176a848ed5ade1c10d67230d7121a09f1fd6c",
+    "tests/verify-player.py": "d459161c7f428a8129393203fa03271c52f9d8ebfd7edb6df04e60aa1ecce431",
+    "src/decoder.s": "44e88449c121f6d67f1805555f15663fe2d3883531fce2dbf5a8587e58f1d8f8",
+    "src/mp4.s": "d498c8f74f2b157ad6a3e42984d8694667cb64b62074347c56a65cf7da3c622d",
+    "src/mkv.s": "4bfb6643338674c5597d1944f302b9435b065b5b7f559cf78e0f8a61c36fd05d",
+    "src/avi.s": "56f1336d789997c4e4d2d11946129f8f2a1d22ee46c653cd40dacacb4ebeac59",
+    "src/mpegts.s": "5dafcb58db5d634684462207d45e55ff088d5bf032f62d8302adc39be6ef125e",
+    "src/ogg_chain.s": "55d83b35ea390605b27a88f427f3871bd20fb5a51f4a0d83895dd54923708e10",
+    "src/win/ui_tracks.inc": "6ac6e03627d4d6d9654d3dc3c796ff515d46288b20ed5133d45b955af1013f4e",
+    "src/win/ui_draw.inc": "5a923131378d1facecafc49d24ac4d4b5184a4c7bc04cf26c18de5f89977a854",
+    "tests/ui-driver.s": "36a6ef9cb94375cbb9bd0062ee3a5ee125a02a4c0780097dfac400c4e2bc4aab"
+  },
+  "selected_scenarios": [
+    "list_checks",
+    "track_switching"
+  ],
+  "scope": "Selected Windows player scenarios under Wine on Xvfb",
+  "wine_address_randomization": "Disabled per process with setarch x86_64 -R for the observed Wine 8 shared-user-data startup mapping failure"
+}

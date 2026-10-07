@@ -1,6 +1,6 @@
 # Audio track selection
 
-By default LAMP plays one audio track per file, chosen by the container's rules: Matroska's default track, else the first supported one; the first supported track of MP4, AVI, an Ogg link or a transport or program stream. `--track N` (with playback, `--check` and `--decode`, in `lamp-cli` and `lamp-cli.exe`) plays each file's Nth audio track instead, counting from 1 in the container's order. That is the order of FFmpeg's `-map 0:a:N-1` and of mpv's `--aid=N`. In a queue the same N applies to every file.
+By default LAMP plays one audio track per file, chosen by the container's rules: Matroska's default track, else the first supported one; the first supported track of MP4, AVI, ASF, an Ogg link or a transport or program stream. `--track N` (with playback, `--check` and `--decode`, in `lamp-cli` and `lamp-cli.exe`) plays each file's Nth audio track instead, counting from 1 in the container's order. That is the order of FFmpeg's `-map 0:a:N-1` and of mpv's `--aid=N`. In a queue the same N applies to every file.
 
 | Container | Audio tracks, in order |
 | --- | --- |
@@ -10,6 +10,7 @@ By default LAMP plays one audio track per file, chosen by the container's rules:
 | MPEG transport streams | The first program's map: MPEG audio, ADTS and LATM AAC, AC-3/E-AC-3 conventional mantissas, Blu-ray LPCM and the audio LAMP does not decode (DTS, TrueHD), and private data streams without descriptors, in map order. |
 | MPEG program streams | Audio stream ids 0xC0-0xDF and private stream 1's audio substreams (AC-3, DTS, LPCM, MLP, TrueHD), in the order their first packets appear (all 104 currently recognized IDs fit in a bounded 128-entry catalog). |
 | AVI | `auds` stream lists, in `hdrl` order. |
+| ASF | Audio Stream Properties objects in header order, including unsupported and encrypted streams; stream IDs 1–127. |
 
 Every other format holds one audio track: `--track 1` plays it, and any other N rejects the file. A track that does not exist, or one LAMP does not decode (WMA in Matroska or Speex in Ogg), rejects with `decode_error` 101. Within a queue, such a file is skipped like any file that cannot play. The Windows player chooses tracks through its Audio track context submenu; its per-entry policy is described below.
 

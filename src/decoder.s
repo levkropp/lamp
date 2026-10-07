@@ -277,6 +277,8 @@ LOCALFN decoder_open_format
     je .Lopen_matroska
     cmp dword ptr [rax], 0x01564c46 # FLV version 1
     je .Lopen_flv
+    cmp dword ptr [rax], 0x75b22630 # ASF Header Object (full GUID checked below)
+    je .Lopen_asf
     mov ecx, [rax + 4]              # ISO base media / QuickTime top-level box
     cmp ecx, 0x70797466             # ftyp
     je .Lopen_mp4
@@ -544,6 +546,20 @@ LOCALFN decoder_open_format
     ret
 .Lopen_flv_image:
     mov dword ptr [rip + wav_codec_kind], 15
+    mov [rip + input_end], rdx
+    mov rax, rcx
+    jmp .Lopen_w64
+.Lopen_asf:
+    mov rcx, rax
+    mov rdx, [rip + input_end]
+    call asf_open
+    cmp eax, 1
+    jb .Lopen_bad
+    ja .Lopen_asf_image
+    leave
+    ret
+.Lopen_asf_image:
+    mov dword ptr [rip + wav_codec_kind], 21
     mov [rip + input_end], rdx
     mov rax, rcx
     jmp .Lopen_w64
@@ -2386,6 +2402,8 @@ FN decoder_seek
     je .Lseek_wav
     cmp dword ptr [rip + codec_kind], 18
     je .Lseek_wav
+    cmp dword ptr [rip + codec_kind], 21
+    je .Lseek_wav
     cmp dword ptr [rip + codec_kind], 3
     je .Lseek_mp3
     cmp dword ptr [rip + codec_kind], 17
@@ -3597,6 +3615,8 @@ FN decoder_read
     je .Lread_existing
     cmp dword ptr [rip + codec_kind], 18  # LPCM in MPEG-TS/PS
     je .Lread_existing
+    cmp dword ptr [rip + codec_kind], 21  # ASF PCM and G.711
+    je .Lread_existing
     cmp dword ptr [rip + codec_kind], 1
     jb .Lread_done
     cmp dword ptr [rip + codec_kind], 6
@@ -3632,6 +3652,8 @@ FN decoder_read
     cmp dword ptr [rip + codec_kind], 16
     je .Lread_wav
     cmp dword ptr [rip + codec_kind], 18
+    je .Lread_wav
+    cmp dword ptr [rip + codec_kind], 21
     je .Lread_wav
 .Lread_flac:
     mov rcx, rdi

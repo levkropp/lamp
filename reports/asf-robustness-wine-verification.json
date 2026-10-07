@@ -1,0 +1,48 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "pcm.asf",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 50,
+      "decoded": 26,
+      "rejected_or_damaged": 24
+    },
+    {
+      "test": "mp3.asf",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 50,
+      "decoded": 15,
+      "rejected_or_damaged": 35
+    },
+    {
+      "test": "aac.asf",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 50,
+      "decoded": 4,
+      "rejected_or_damaged": 46
+    },
+    {
+      "test": "ima.asf",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 50,
+      "decoded": 21,
+      "rejected_or_damaged": 29
+    }
+  ],
+  "mutations": 200,
+  "decoded": 66,
+  "wine_debug": "err+all",
+  "scope": "4 container/codec sources, 500 mutations each (every tenth under Wine), seed 20261006: byte flips, zero/0xff runs, cuts, removed and duplicated spans, large length fields; --check, every fourth from a random --start.",
+  "wine_address_randomization": "Disabled per process with setarch x86_64 -R after Wine 8 failed to map shared user data before the decoder started",
+  "runtime_sources": {
+    "src/asf.s": "39777838f1ea373cbb7f4a99803d6559e306565402a881c4bd18e2d217c7f775",
+    "src/avi.s": "56f1336d789997c4e4d2d11946129f8f2a1d22ee46c653cd40dacacb4ebeac59",
+    "src/decoder.s": "44e88449c121f6d67f1805555f15663fe2d3883531fce2dbf5a8587e58f1d8f8",
+    "src/mpegts.s": "5dafcb58db5d634684462207d45e55ff088d5bf032f62d8302adc39be6ef125e",
+    "src/track.s": "a0ab0586b55a7ca052e9d457733eb6bdb160f90c04b9e5359b76e401a85ae91d"
+  },
+  "suite_sha256": "33133ac03d5006b41f34ff6575d6b6e02b5c72e702069176d39e72febb18aebf",
+  "cli_sha256": "38b599c9ae28f69f98cbf4ab435947aa9d6e2cea0a1ec61df2b20813f55a1be3",
+  "provenance": "Run in build-asf with the same shipping objects/binary verified by the matching ASF suite; added by the checkpoint runner."
+}
