@@ -57,3 +57,15 @@ FN ui_seek_probe
     add rsp, 40
     ret
 ENDFN ui_seek_probe
+
+# Resume capture must sample the heard timeline despite a newer pending target.
+.globl ui_resume_capture_probe, ui_test_resume_enabled, ui_test_resume_pending
+.globl ui_test_resume_index, ui_test_resume_ms
+.set ui_resume_capture_probe, ui_resume_capture
+.set ui_test_resume_enabled, ui_resume_enabled
+.set ui_test_resume_pending, ui_resume_pending
+.set ui_test_resume_index, ui_resume_index
+.set ui_test_resume_ms, ui_resume_ms
+
+.globl ui_time_frames_probe
+.set ui_time_frames_probe, ui_time_frames

@@ -155,6 +155,9 @@ ui_volume_text: .zero 32*2
 .text
 FN ui_start
     sub rsp, 136
+    mov ecx, -1
+    call win_resume_preference
+    mov [rip + ui_resume_enabled], eax
     mov dword ptr [rip + engine_mode], 1
     lea rax, [rip + ui_file_opened]
     mov [rip + engine_opened], rax
@@ -855,6 +858,7 @@ LOCALFN ui_window_proc
     mov rcx, [rip + ui_thread]
     call CloseHandle
     mov qword ptr [rip + ui_thread], 0
+    call ui_resume_commit
     mov rcx, [rip + ui_hwnd]
     mov edx, 1
     call KillTimer
@@ -903,6 +907,7 @@ LOCALFN ui_window_proc
     mov dword ptr [rip + ui_state], 3
     jmp .Lui_done_repaint
 .Lui_done_position:
+    call ui_resume_forget
     mov rax, [rip + ui_shown_frames]      # the last file shown at its end
     test rax, rax
     jz .Lui_done_repaint
@@ -912,6 +917,7 @@ LOCALFN ui_window_proc
     call ui_invalidate
     jmp .Lui_handled
 .Lui_wm_close:
+    call ui_resume_capture
     cmp qword ptr [rip + ui_thread], 0
     je .Lui_destroy_now
     mov dword ptr [rip + ui_closing], 1
@@ -962,6 +968,7 @@ ENDFN ui_window_proc
 .include "ui_draw.inc"
 .include "ui_cover.inc"
 .include "ui_queue.inc"
+.include "ui_resume.inc"
 .include "ui_tracks.inc"
 .include "ui_modes.inc"
 .include "ui_menu.inc"

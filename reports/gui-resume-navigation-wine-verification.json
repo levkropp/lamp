@@ -1,0 +1,313 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "start.flac --start",
+      "result": "exact",
+      "starts": 5
+    },
+    {
+      "test": "start.mp3 --start",
+      "result": "exact",
+      "starts": 5
+    },
+    {
+      "test": "start.ogg --start",
+      "result": "exact",
+      "starts": 5
+    },
+    {
+      "test": "start.opus --start",
+      "result": "exact after 24000 frames",
+      "starts": 5
+    },
+    {
+      "test": "start.m4a --start",
+      "result": "exact",
+      "starts": 5
+    },
+    {
+      "test": "start.wav --start",
+      "result": "exact",
+      "starts": 5
+    },
+    {
+      "test": "start.wv --start",
+      "result": "exact",
+      "starts": 5
+    },
+    {
+      "test": "start.mka --start",
+      "result": "exact",
+      "starts": 5
+    },
+    {
+      "test": "start.ac3 --start",
+      "result": "within the dither (50 dB or more)",
+      "starts": 5
+    },
+    {
+      "test": "start.mp2 --start",
+      "result": "exact",
+      "starts": 5
+    },
+    {
+      "test": "queue --start",
+      "result": "exact",
+      "note": "only the first file starts late"
+    },
+    {
+      "test": "option errors",
+      "result": "usage",
+      "cases": 9
+    },
+    {
+      "test": "start",
+      "result": "passed",
+      "runs": [
+        [
+          "a",
+          120092,
+          1108
+        ],
+        [
+          "a",
+          121306,
+          166694
+        ]
+      ]
+    },
+    {
+      "test": "next",
+      "result": "passed",
+      "runs": [
+        [
+          "a",
+          288,
+          142512
+        ],
+        [
+          "b",
+          161,
+          143839
+        ]
+      ]
+    },
+    {
+      "test": "next on the last file",
+      "result": "passed",
+      "runs": [
+        [
+          "a",
+          288,
+          7152
+        ],
+        [
+          "a",
+          7522,
+          129998
+        ]
+      ]
+    },
+    {
+      "test": "previous file",
+      "result": "passed",
+      "runs": [
+        [
+          "c",
+          288,
+          1392
+        ],
+        [
+          "c",
+          1895,
+          10585
+        ],
+        [
+          "c",
+          12662,
+          83338
+        ],
+        [
+          "a",
+          0,
+          88320
+        ],
+        [
+          "c",
+          101,
+          1099
+        ],
+        [
+          "c",
+          1418,
+          94582
+        ],
+        [
+          "a",
+          0,
+          288000
+        ]
+      ]
+    },
+    {
+      "test": "previous restarts",
+      "result": "passed",
+      "runs": [
+        [
+          "a",
+          288,
+          4992
+        ],
+        [
+          "a",
+          5466,
+          254694
+        ],
+        [
+          "a",
+          50,
+          287950
+        ]
+      ]
+    },
+    {
+      "test": "seek",
+      "result": "passed",
+      "runs": [
+        [
+          "d",
+          288,
+          47232
+        ],
+        [
+          "d",
+          47552,
+          108208
+        ],
+        [
+          "d",
+          396193,
+          109967
+        ],
+        [
+          "d",
+          63,
+          671937
+        ]
+      ]
+    },
+    {
+      "test": "--repeat",
+      "result": "passed",
+      "runs": [
+        [
+          "e",
+          288,
+          57312
+        ],
+        [
+          "e",
+          0,
+          57600
+        ],
+        [
+          "e",
+          0,
+          57600
+        ],
+        [
+          "e",
+          0,
+          57600
+        ],
+        [
+          "e",
+          0,
+          6480
+        ]
+      ]
+    },
+    {
+      "test": "R key",
+      "result": "passed",
+      "runs": [
+        [
+          "e",
+          288,
+          25152
+        ],
+        [
+          "e",
+          25607,
+          31993
+        ],
+        [
+          "e",
+          132,
+          57468
+        ],
+        [
+          "e",
+          0,
+          46560
+        ]
+      ]
+    },
+    {
+      "test": "resume",
+      "result": "passed",
+      "runs": [
+        [
+          "a",
+          174048,
+          113952
+        ]
+      ]
+    },
+    {
+      "test": "resume in a list",
+      "result": "passed",
+      "runs": [
+        [
+          "a",
+          124495,
+          1025
+        ],
+        [
+          "a",
+          125659,
+          162341
+        ]
+      ]
+    },
+    {
+      "test": "--start wins",
+      "result": "passed",
+      "runs": [
+        [
+          "a",
+          96195,
+          191805
+        ]
+      ]
+    },
+    {
+      "test": "resume lines",
+      "result": "passed",
+      "note": "newest first, other lists kept, malformed lines dropped, 256 kept"
+    }
+  ],
+  "scope": "--start against whole decodes in ten formats, queues and option errors; keys N/P, arrows, R and --repeat through the null sink.",
+  "cli_sha256": "4243227b0dae9bd95a5586ab73f6bf0639f50c95263f6452715516f08bf92f9a",
+  "sources": {
+    "src/win/player.s": "5f0a4c482830f4c50a893ab06b3f0ab549fa2a8f4cb15f2e325748c031897a90",
+    "src/win/resume_state.inc": "94ae5ad64c811b465f21089807b2475c1d78028895d8b027f1861de2192e8d79",
+    "src/resume.s": "d7be291cb21afaaacf14eacb128932cf3f132dd20b728562ae79f4f759b3e551",
+    "src/queue.s": "18b7b6ead963997cd3341af2deecc143bcb7ca5637c1558b0e9fc6204165b223",
+    "tests/verify-navigation.py": "31f1bc1fd1cffa902967692b481fbfa87ccb062cd228062cda6cc290ebb26a7b"
+  },
+  "wine_address_randomization": "Disabled per process with setarch x86_64 -R for Wine 8 startup mapping stability",
+  "gui_run_cli_sha256": "886e43cae4ac2049a534fcd4b5efb7e4680bec70a2e9ebc24fe00a178eaab614",
+  "cli_equivalence": "Exact binary equality after clearing only the four-byte COFF TimeDateStamp; console sources unchanged by final GUI path normalization."
+}

@@ -11,6 +11,9 @@ typedef char snapshot_size_check[sizeof(snapshot) == 10312 ? 1 : -1];
 LAMP_ABI snapshot *ui_snapshot_probe(unsigned, uint64_t *);
 LAMP_ABI void ui_seek_probe(int, uint64_t);
 LAMP_ABI void ui_chapter_probe(unsigned);
+LAMP_ABI void ui_resume_capture_probe(void);
+extern unsigned ui_test_restart, ui_test_resume_enabled, ui_test_resume_pending, ui_test_resume_index;
+extern uint64_t ui_test_resume_ms;
 LAMP_ABI void ui_file_opened(void);
 LAMP_ABI int decoder_open(const lamp_char *);
 LAMP_ABI void decoder_close(void);
@@ -22,6 +25,45 @@ extern snapshot ui_test_ring[64];
 extern unsigned ui_count, ui_test_start_index, ui_test_shown_index;
 extern unsigned pause_requested;
 extern uint64_t ui_thread, ui_test_start_ms, ui_test_shown_frames;
+LAMP_ABI uint64_t ui_time_frames_probe(uint64_t, uint32_t);
+/* Independent decomposition: multiply whole seconds and the subsecond part,
+   checking their product/sum rather than the assembly's 128-bit division. */
+static uint64_t expected_frames(uint64_t ms, uint32_t rate) {
+    if (!rate) return 0;
+    uint64_t whole = ms / 1000, fraction = (ms % 1000) * rate / 1000;
+    if (whole > UINT64_MAX / rate) return UINT64_MAX;
+    whole *= rate;
+    return whole > UINT64_MAX - fraction ? UINT64_MAX : whole + fraction;
+}
+static unsigned time_frame_checks(void) {
+    static const uint64_t times[] = {0, 1, 999, 1000, 4294967295000ULL,
+        999999999999999999ULL, INT64_MAX, UINT64_MAX};
+    static const uint32_t rates[] = {0, 1, 8000, 48000, 192000, UINT32_MAX};
+    unsigned checked = 0;
+    for (unsigned r = 0; r < sizeof(rates)/sizeof(rates[0]); r++) {
+        for (unsigned t = 0; t < sizeof(times)/sizeof(times[0]); t++) {
+            if (ui_time_frames_probe(times[t], rates[r]) != expected_frames(times[t], rates[r])) return 0;
+            checked++;
+        }
+        if (rates[r] >= 1000) {
+            uint64_t edge = (UINT64_MAX / rates[r]) * 1000 + ((UINT64_MAX % rates[r]) * 1000) / rates[r];
+            for (int d = -2; d <= 2; d++) {
+                uint64_t ms = d < 0 ? edge - (uint64_t)-d : edge + (uint64_t)d;
+                if (ui_time_frames_probe(ms, rates[r]) != expected_frames(ms, rates[r])) return 0;
+                checked++;
+            }
+        }
+    }
+    uint64_t seed = 0x829197421631ULL;
+    for (unsigned i = 0; i < 1000; i++) {
+        seed = seed * 6364136223846793005ULL + 1442695040888963407ULL;
+        uint64_t ms = i & 1 ? seed : seed & ((1ULL << 42) - 1);
+        uint32_t rate = i % 16 ? (uint32_t)(seed >> 32) : 0;
+        if (ui_time_frames_probe(ms, rate) != expected_frames(ms, rate)) return 0;
+        checked++;
+    }
+    return checked;
+}
 static const lamp_char *paths[2], *names[2];
 static volatile LONG finished;
 
@@ -132,9 +174,33 @@ int lamp_main(int argc, lamp_char **argv) {
     if (ui_test_start_index != 35 || ui_test_start_ms != 70000 || pause_requested != 1) return 1;
     ui_seek_probe(35, 200000);
     if (ui_test_start_index != 35 || ui_test_start_ms != 99000 || pause_requested != 1) return 1;
+    /* New UI requests already name file 35/99s, while the actual heard
+       snapshot still names file 1/750ms. A close/replacement must keep the
+       latter pair, without altering the pending launch or pause. */
+    ui_test_count = 3; ui_test_restart = 1; ui_test_resume_enabled = 1;
+    ui_test_resume_pending = 0; ui_count = 100; engine_position = 84000;
+    for (unsigned i = 0; i < 3; i++) {
+        memset(&ui_test_ring[i], 0, sizeof(snapshot));
+        ui_test_ring[i].start = i * 48000ULL; ui_test_ring[i].index = i;
+    }
+    ui_resume_capture_probe();
+    if (ui_test_resume_pending != 1 || ui_test_resume_index != 1 || ui_test_resume_ms != 750 ||
+        ui_test_start_index != 35 || ui_test_start_ms != 99000 || pause_requested != 1) return 1;
+    ui_test_resume_pending = 0; ui_test_resume_enabled = 0;
+    ui_resume_capture_probe(); if (ui_test_resume_pending) return 1;
+    ui_test_resume_enabled = 1; ui_thread = 0;
+    ui_resume_capture_probe(); if (ui_test_resume_pending) return 1;
+    ui_thread = 1; ui_test_count = 0;
+    ui_resume_capture_probe(); if (ui_test_resume_pending) return 1;
+    ui_test_count = 3; ui_count = 1;
+    ui_resume_capture_probe(); if (ui_test_resume_pending) return 1;
+    ui_count = 100; engine_position = 0;
+    for (unsigned i = 0; i < 3; i++) ui_test_ring[i].start = 48000 + i * 48000ULL;
+    ui_resume_capture_probe(); if (ui_test_resume_pending) return 1;
     ui_thread = 0;
+    unsigned frame_checks = time_frame_checks(); if (!frame_checks) return 1;
     printf("{\"real_metadata_publications\":2000,\"coherent_snapshots\":%u,\"owned_covers_freed\":%u,"
-           "\"seeded_64bit_queries\":%u,\"paired_seek_checks\":4,\"submillisecond_checks\":2,"
-           "\"expired_snapshots\":\"unavailable\"}\n", reads, claimed, seeded);
+           "\"seeded_64bit_queries\":%u,\"paired_seek_checks\":4,\"submillisecond_checks\":2,\"paired_resume_checks\":6,\"time_frame_checks\":%u,"
+           "\"expired_snapshots\":\"unavailable\"}\n", reads, claimed, seeded, frame_checks);
     return 0;
 }

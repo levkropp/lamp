@@ -8,6 +8,7 @@
 # file/list identity is released; WM_COMMAND notifications arrive after return.
 # https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-trackpopupmenu
 .equ ID_OPEN, 100
+.equ ID_RESUME, 106
 .equ ID_REPEAT, 101
 .equ ID_PREVIOUS_CHAPTER, 104
 .equ ID_NEXT_CHAPTER, 105
@@ -22,6 +23,7 @@ ui_menu_outputs: .quad 0            # the Output submenu being filled
 ui_device_count: .long 0
 ui_device_pending: .long 0          # 1: ui_device_choice applies at the next launch
 ui_menu_open: .short 'O', 'p', 'e', 'n', ' ', 'f', 'i', 'l', 'e', 's', '.', '.', '.', 9, 'O', 0
+ui_menu_resume: .short 'R','e','m','e','m','b','e','r',' ','p','l','a','y','b','a','c','k',' ','&','p','o','s','i','t','i','o','n',0
 ui_menu_repeat: .short 'R', 'e', 'p', 'e', 'a', 't', 9, 'R', 0
 ui_menu_previous_chapter: .short 'P','r','e','v','i','o','u','s',' ','c','h','a','p','t','e','r',9,'[',0
 ui_menu_next_chapter: .short 'N','e','x','t',' ','c','h','a','p','t','e','r',9,']',0
@@ -76,6 +78,15 @@ LOCALFN ui_menu
     mov rcx, rbx
     mov r8d, ID_REPEAT
     lea r9, [rip + ui_menu_repeat]
+    call AppendMenuW
+    xor edx, edx
+    cmp dword ptr [rip + ui_resume_enabled], 0
+    je .Lui_menu_resume
+    mov edx, 8
+.Lui_menu_resume:
+    mov rcx, rbx
+    mov r8d, ID_RESUME
+    lea r9, [rip + ui_menu_resume]
     call AppendMenuW
     call ui_heard
     mov edx, 1                          # MF_GRAYED when no heard chapters
@@ -294,9 +305,14 @@ LOCALFN ui_menu_command
     jmp .Lui_menu_command_return
 .Lui_command_repeat:
     cmp ecx, ID_REPEAT
-    jne .Lui_command_previous_chapter
+    jne .Lui_command_resume
     xor dword ptr [rip + queue_repeat], 1
     call ui_invalidate
+    jmp .Lui_menu_command_return
+.Lui_command_resume:
+    cmp ecx, ID_RESUME
+    jne .Lui_command_previous_chapter
+    call ui_resume_toggle
     jmp .Lui_menu_command_return
 .Lui_command_previous_chapter:
     cmp ecx, ID_PREVIOUS_CHAPTER
