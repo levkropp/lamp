@@ -93,16 +93,7 @@ FN ui_file_opened
     mov [rbx + UE_INDEX], eax
     mov eax, [rip + codec_kind]
     mov [rbx + UE_CODEC], eax
-    mov rax, [rip + output_frames]        # at the session rate
-    mov r8d, [rip + output_rate]
-    mov ecx, [rip + queue_rate]
-    test r8d, r8d
-    jz .Lui_opened_frames
-    cmp r8d, ecx
-    je .Lui_opened_frames
-    mul rcx
-    div r8
-.Lui_opened_frames:
+    call queue_frames                   # ceil at the session rate, including one-frame files
     mov [rbx + UE_FRAMES], rax
     call chapters_count
     mov [rbx + UE_CHAPTER_COUNT], eax
@@ -615,6 +606,11 @@ LOCALFN ui_chapter
     jae .Lui_chapter_select
     div rcx
     mov r8, rax
+    test r8, r8
+    jnz .Lui_chapter_select
+    cmp qword ptr [rsi + UE_FRAMES], 0
+    je .Lui_chapter_select
+    mov r8d, 1                        # known positive duration below one millisecond
 .Lui_chapter_select:
     mov ecx, ebx
     mov rdx, [rsp + 48]

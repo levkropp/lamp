@@ -42,6 +42,8 @@ def prepare(work):
     for rate in (44100, 48000, 96000): wave(f'forty-{rate}.wav', rate, rate // 25, True)
     wave('one-frame.wav', 48000, 1)
     wave('empty.wav', 48000, 0)
+    wave('submillisecond.wav', 48000, 1, True)
+    wave('submillisecond-resampled.wav', 192000, 1, True)
     hashes = {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in work.iterdir()
               if p.name.endswith(('.wav', '.wav.f32'))}
     (work / 'manifest.json').write_text(json.dumps(hashes, indent=2) + '\n')
@@ -103,6 +105,8 @@ def main():
         ['empty', work / 'forty-48000.wav', work / 'empty.wav'])))
     checks.append(dict(test='repeating one-frame files', result=oracle(command, ['repeat', work / 'one-frame.wav'])))
     checks.append(dict(test='concurrent history overwrite', result=oracle(command, ['concurrent', work / 'one-frame.wav'])))
+    checks.append(dict(test='known submillisecond chapter duration', result=oracle(command,
+        ['tiny', work / 'submillisecond.wav', work / 'submillisecond-resampled.wav'])))
     if wine:
         snapshot_probe = out_dir() / 'ui-queue-snapshot-probe.obj'
         run([builder.tool('llvm-mc'), '-triple=x86_64-pc-windows-msvc', '-filetype=obj',
@@ -115,7 +119,7 @@ def main():
              '-I', ROOT / 'tests', ROOT / 'tests/ui-queue-snapshot-oracle.c', snapshot_probe,
              *ui_objects, *libs, '-lm', '-o', ui_target])
         checks.append(dict(test='Windows producer/UI snapshot handoff', result=oracle(['wine', ui_target],
-            [work / 'forty-48000.wav', work / 'one-frame.wav'])))
+            [work / 'forty-48000.wav', work / 'one-frame.wav', work / 'submillisecond-resampled.wav'])))
     source_names = ['src/queue.s', 'tests/queue-timeline-probe.s', 'tests/queue-timeline-oracle.c']
     if wine:
         source_names += ['src/win/ui.s', 'src/win/ui_queue.inc', 'src/win/kernel32.def',

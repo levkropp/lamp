@@ -1,0 +1,27 @@
+{
+  "test": "known submillisecond chapter duration negative control",
+  "result": "expected failure before fix",
+  "source_commit": "21c47b6b6727d64345c569e2fbf2a9ed676e199d",
+  "input": {
+    "container": "WAVE PCM with ID3 CHAP",
+    "source_frames": 1,
+    "source_rate": 48000,
+    "chapter_starts_ms": [
+      0,
+      10,
+      25,
+      60
+    ]
+  },
+  "calls": [
+    "queue_begin(paths,1)",
+    "queue_navigate(6,0,0,0)"
+  ],
+  "observed": {
+    "target_ms": 10,
+    "expected_ms": 0,
+    "decode_error": 0
+  },
+  "exit_code": 1,
+  "scope": "Captured from the shipping-source Linux archive before the positive-duration fix; the timeline oracle now verifies 48/192 kHz one-frame files at a 48 kHz session rate, and the Windows oracle checks the resampled metadata snapshot."
+}
