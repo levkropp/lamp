@@ -26,7 +26,8 @@ and FFmpeg. Builds bin/ with the test tools (tools/build-windows.py --tests).
     the default output brings it back.
   - At 144 DPI (Wine's setting, restored afterwards) the window is half as
     large again and the scaled next button works.
-Writes <out>/player-verification.json.
+Writes <out>/player-verification.json, or player-selected-verification.json
+when --only selects scenarios.
 """
 import importlib.util
 import os
@@ -84,6 +85,13 @@ def merge(found):
 
 
 def main():
+    scenarios = [list_checks, list_playback, keys, folder_playback, killed_stream, output_menu, dpi,
+                 modes, accessibility, eac3_playback]
+    only = sys.argv[sys.argv.index('--only') + 1].split(',') if '--only' in sys.argv else None
+    if only is not None:
+        unknown = set(only) - {scenario.__name__ for scenario in scenarios}
+        if unknown:
+            raise Failure('Unknown player scenarios: ' + ', '.join(sorted(unknown)))
     _nav.check_capture_fragments()
     for tool in ('wine', 'Xvfb', 'parec'):
         if not shutil.which(tool):
@@ -99,9 +107,6 @@ def main():
     subprocess.run(['wineserver', '-k'], env=wine, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     subprocess.run(['wineserver', '-w'], env=wine, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=120)
     checks = []
-    scenarios = [list_checks, list_playback, keys, folder_playback, killed_stream, output_menu, dpi,
-                 modes, accessibility, eac3_playback]
-    only = sys.argv[sys.argv.index('--only') + 1].split(',') if '--only' in sys.argv else None
     try:
         for scenario in scenarios:
             if only is None or scenario.__name__ in only:
@@ -110,6 +115,8 @@ def main():
         subprocess.run(['wineserver', '-k'], env=wine, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         display.stop()
     if only is not None:
+        write_report('player-selected', {'result': 'passed', 'checks': checks,
+            'selected_scenarios': only, 'scope': 'Selected Windows player scenarios under Wine on Xvfb'})
         print(f'Passed {len(checks)} player checks (only {", ".join(only)}).')
         return
     write_report('player', {'result': 'passed', 'checks': checks,
@@ -136,12 +143,14 @@ def list_checks(work, env, wine, checks):
     shutil.rmtree(tree, ignore_errors=True)
     album = tree / 'Album'
     for name in ('10 ten.flac', '2 two.MP3', '1 one.flac', 'Ünïcode.opus', 'cover.jpg', 'album.m3u', 'notes.txt',
-                 '3 three.ec3', '4 four.EAC3', 'Disc 2/b.ogg', 'Disc 2/a.wv', 'disc 1/z.wav', '.hidden/h.flac', 'Empty/readme.txt'):
+                 '3 three.ec3', '4 four.EAC3', '5 fünf.gsm', '6 six.GSM', 'voice.gsm.txt',
+                 'Disc 2/b.ogg', 'Disc 2/a.wv', 'disc 1/z.wav', '.hidden/h.flac', 'Empty/readme.txt'):
         path = album / name
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_bytes(b'')
     root = windows_path(album)
-    expected = [root + '\\' + name for name in ('1 one.flac', '2 two.MP3', '3 three.ec3', '4 four.EAC3', '10 ten.flac', 'disc 1\\z.wav',
+    expected = [root + '\\' + name for name in ('1 one.flac', '2 two.MP3', '3 three.ec3', '4 four.EAC3',
+                                                 '5 fünf.gsm', '6 six.GSM', '10 ten.flac', 'disc 1\\z.wav',
                                                  'Disc 2\\a.wv', 'Disc 2\\b.ogg', 'Ünïcode.opus')]
     got = ui_list(wine, 'paths', root)
     if got != expected:
@@ -160,10 +169,10 @@ def list_checks(work, env, wine, checks):
     checks.append({'test': 'command line and drop', 'result': 'files as named, folders expanded', 'list': got})
     print('the command line and a drop: files as named, folders expanded', flush=True)
 
-    got = ui_list(wine, 'dialog', 'Z:\\music', 'a.flac', 'b c.mp3')
+    got = ui_list(wine, 'dialog', 'Z:\\music', 'a.flac', 'b c.mp3', 'voice.GSM')
     got += ui_list(wine, 'dialog', 'Z:\\', 'top.flac')
     got += ui_list(wine, 'dialog', 'Z:\\music\\one.flac')
-    want = ['Z:\\music\\a.flac', 'Z:\\music\\b c.mp3', 'Z:\\top.flac', 'Z:\\music\\one.flac']
+    want = ['Z:\\music\\a.flac', 'Z:\\music\\b c.mp3', 'Z:\\music\\voice.GSM', 'Z:\\top.flac', 'Z:\\music\\one.flac']
     if got != want:
         raise Failure(f'dialog choices list {got}, not {want}')
     checks.append({'test': 'open dialog', 'result': 'folder and names joined; one path whole', 'list': got})

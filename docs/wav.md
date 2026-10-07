@@ -68,6 +68,8 @@ GSM 06.10 full-rate speech (RPE-LTP, 13 kbit/s at 8 kHz) decodes in WAVE (tag 0x
 
 Raw and AIFF-C frames are 33 bytes: a 0xD nibble, then the bits from the most significant. Microsoft's WAVE blocks pack two frames in 65 bytes from the least significant bit. A raw stream is recognised when it holds two or more 33-byte frames that each begin with the 0xD nibble; `--check` reports codec 19. In WAVE and AIFF-C the nibble is not checked, as FFmpeg does not check it.
 
+The Windows player includes `.gsm` in folder discovery and the Open dialog's audio filter. Its list regression covers lower/uppercase extensions, a Unicode filename, natural ordering and dialog path joining; [the focused Wine report](../reports/player-selected-verification.json) records those checks. Folder scans continue to leave out files whose final extension is unrelated, such as `voice.gsm.txt`.
+
 The decoder's state runs on from frame to frame. Frames go to the [track layer](matroska.md#track-layer) in packets of 20 (20 WAVE blocks), and a seek decodes three packets (1.2–2.4 seconds) from a reset state before the target. A lag outside 40–120 keeps the previous lag, as GSM 06.10 (4.3.2) and libgsm specify; FFmpeg's own decoder clips it instead. That decoder also saturates differently at extremes, so it departs from libgsm on random frames, though encoders write neither case. A cut last frame or block is dropped. Stereo GSM rejects as unsupported (101). The tables are GSM 06.10's tables 4.1–4.6, checked against libgsm 1.0.22's by `tests/check-gsm-tables.py` (see `THIRD_PARTY_NOTICES`).
 
 `python3 tests/verify-gsm.py` ([report](../reports/gsm-verification.json)) checks:

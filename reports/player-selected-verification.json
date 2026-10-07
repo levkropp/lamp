@@ -1,0 +1,47 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "folder",
+      "result": "natural order, folders in place, others left out",
+      "list": [
+        "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\1 one.flac",
+        "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\2 two.MP3",
+        "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\3 three.ec3",
+        "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\4 four.EAC3",
+        "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\5 f\u00fcnf.gsm",
+        "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\6 six.GSM",
+        "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\10 ten.flac",
+        "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\disc 1\\z.wav",
+        "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\Disc 2\\a.wv",
+        "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\Disc 2\\b.ogg",
+        "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\\u00dcn\u00efcode.opus"
+      ]
+    },
+    {
+      "test": "command line and drop",
+      "result": "files as named, folders expanded",
+      "list": [
+        "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\notes.txt",
+        "Z:\\no such file.flac",
+        "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\Disc 2\\a.wv",
+        "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\Disc 2\\b.ogg"
+      ]
+    },
+    {
+      "test": "open dialog",
+      "result": "folder and names joined; one path whole",
+      "list": [
+        "Z:\\music\\a.flac",
+        "Z:\\music\\b c.mp3",
+        "Z:\\music\\voice.GSM",
+        "Z:\\top.flac",
+        "Z:\\music\\one.flac"
+      ]
+    }
+  ],
+  "selected_scenarios": [
+    "list_checks"
+  ],
+  "scope": "Selected Windows player scenarios under Wine on Xvfb"
+}
