@@ -2,7 +2,7 @@
 
 **Goal:** an assembly-first media player that eventually handles everything relevant people use mpv for: common audio/video codecs and containers, subtitles, local and network playback, reliable seeking, hardware acceleration, and configurable controls.
 
-The current deliverable is a Windows x86-64 audio prototype. This document describes intended work, not implemented support. No milestone has a promised date. Additions must earn their CPU, memory, dependency, maintenance, and testing cost.
+The current deliverable is an audio prototype for Windows x86-64 and Apple Silicon macOS. This document describes intended work, not implemented support. No milestone has a promised date. Additions must earn their CPU, memory, dependency, maintenance, and testing cost.
 
 ## How we define coverage
 
@@ -22,6 +22,20 @@ The initial [compatibility matrix](docs/compatibility.md) records the v0.3.0 bas
 - [x] LAMP branding, embedded application icon, README and static website source.
 
 The public repository includes build/test tooling, a Windows prerelease and a website published from `gh-pages`. Optional Actions templates live in `docs/workflows/`; enabling them requires GitHub workflow permission. Desktop UI paths have not yet been comprehensively exercised.
+
+## 0a — Apple Silicon macOS foundation
+
+- [x] Rhun-style build-time translation of shared decoder assembly into native ARM64, with retained source provenance.
+- [x] Native ARM64 libSystem service adapters and Apple ABI bridges; Xcode command line tools build.
+- [x] Core Audio float stereo output with bounded buffers, pause/resume, indexed/paused seeking, EOF and stop/reopen recovery.
+- [x] AppKit shell written in assembly: Open, Finder open/drop handlers, native controls, keyboard shortcuts and fullscreen.
+- [x] App bundle, Retina icon, local ad-hoc signing and ZIP packaging with notices and hashes.
+- [x] Native six-format PCM/regression checks and all 35 Opus oracle suites.
+- [ ] Complete manual Open/drop/focus, fullscreen and Retina/multiple-display testing.
+- [ ] Asynchronous seeking, output-device selection/reconnection and Mac performance measurements.
+- [ ] Developer ID signing/notarization and published macOS releases.
+
+[Mac build and verification notes](docs/macos.md) record the native coverage and platform differences. Windows benchmark and official-vector reports retain their original platform scope. Linux/Windows x86-64 roadmap work on `claude` remains separate from this main-based Mac backend.
 
 ## 1 — Finish Opus
 

@@ -1,0 +1,37 @@
+# Optional template: copy into .github/workflows/ to enable with workflow scope.
+# Real output-device/AppKit tests run on a local Mac, not the hosted runner.
+# ARM64 runner labels: https://docs.github.com/en/actions/reference/runners/github-hosted-runners
+name: Build and verify Apple Silicon
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  macos-arm64:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.14'
+      - name: Check native architecture and install test tools
+        run: |
+          test "$(uname -m)" = arm64
+          brew install ffmpeg node
+      - name: Build and verify native PCM, layouts and Opus reference
+        run: python3 tests/verify-macos.py --layouts --opus
+      - name: Package app and CLI
+        run: python3 tools/package-mac.py
+      - uses: actions/upload-artifact@v7
+        with:
+          name: lamp-macos-arm64
+          path: |
+            build/packages/*.zip
+            build/packages/*.sha256
+            build/macos/macos-verification.json
+            build/macos/layout-fixtures/*/*-verification.json
+          if-no-files-found: error
+          retention-days: 14
