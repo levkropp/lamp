@@ -12,7 +12,7 @@ LAMP 0.4.0-dev decodes AC-3 (ATSC A/52) in raw `.ac3` files, Matroska (`A_AC3`) 
 
 Frames pass a CRC check over the whole frame. A frame whose CRC fails, and a block that does not decode (an exponent outside 0-24, a bandwidth code above 60, an invalid coupling range, a reserved delta strategy, missing block-0 information), repeat the last good block for the rest of the frame, as FFmpeg's concealment does.
 
-E-AC-3 (bit stream id 16, `.ec3`, `A_EAC3`, `ec-3`) rejects with `decode_error` 101; its spectral extension and adaptive hybrid transform need tables not yet available to the build. Other ids above 10 and malformed streams reject with 100.
+A partial [E-AC-3 conventional-mantissa profile](eac3.md) now shares this decoder; AHT, spectral extension and dependent channel substreams remain unsupported. Reserved ids and malformed streams reject.
 
 ## Containers and timing
 
@@ -38,7 +38,7 @@ Decoding runs about 185 times faster than real time for 5.1 at 448 kb/s and 340 
 - Matroska, MP4 and fragmented MP4 copies of three fixtures equal the raw decode exactly; a directly encoded 44.1 kHz MP4 with its priming edit matches FFmpeg; ID3v2/ID3v1 tags are skipped and a truncated final frame is dropped.
 - 12 streams with corrupted frames match FFmpeg: six whose CRCs fail (FFmpeg with `-err_detect crccheck`) and six whose recomputed CRCs cover the corruption, which exercises the block errors. 60 more heavily corrupted streams decode without errors.
 - 60 exact seeks in three dither-free written streams (2/0, 3/2 with LFE, mono) and their Matroska copy.
-- E-AC-3 in raw, Matroska and MP4 files rejects as unsupported; a channel mode change, garbage after the frames and an invalid frame size reject as malformed.
+- Dependent E-AC-3 rejects as unsupported; a channel mode change, garbage after the frames and an invalid frame size reject as malformed.
 - Cancelled open and read, and playback through the Linux null sink.
 
 `src/ac3_tables.inc` holds the A/52 frame sizes, band boundaries, log-addition, hearing threshold and bit allocation parameter tables, taken from codec-ac3 (MIT License) at a pinned commit and converted back from that decoder's representation, with the mantissa levels, dynamic range gains, window, twiddles, CRC table and dither generator state computed. `python3 tests/generate-ac3-tables.py` fetches the source, checks its hash, cross-checks the tables against the standard's formulas (the log-addition table, band sizes, frame sizes and bap runs) and verifies its output with `--check`.

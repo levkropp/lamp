@@ -10,7 +10,7 @@ usage: python3 tests/verify-mpegts.py [--skip-playback]
   must equal LAMP's decode of the raw stream, and one of each codec is also
   compared with FFmpeg's decode of the container.
 - Seeks in transport and program streams equal continuous decoding.
-- E-AC-3 rejects as unsupported (LATM AAC and LPCM are checked in
+- E-AC-3 ATSC/DVB streams equal their raw decodes (LATM AAC and LPCM are checked in
   verify-latm.py and verify-lpcm.py); streams without audio or tables reject
   as malformed; a cancelled open stops cleanly.
 Writes <out>/mpegts-verification.json.
@@ -152,18 +152,14 @@ def main():
 
     # Unsupported and malformed streams.
     rejected = 0
-    unsupported = {
-        'eac3.ts': ['-c:a', 'eac3', '-f', 'mpegts'],
-        'eac3-dvb.ts': ['-c:a', 'eac3', '-f', 'mpegts', '-mpegts_flags', 'system_b'],
-    }
-    for name, coding in unsupported.items():
+    eac3 = work / 'eac3.ec3'
+    ffmpeg('-f', 'lavfi', '-i', noise.format(seed=9), '-ac', '2', '-c:a', 'eac3', '-f', 'eac3', eac3)
+    eac3pcm = Path(str(eac3)+'.f32'); decode_f32(eac3, eac3pcm)
+    raw['eac3'] = (eac3, eac3pcm.read_bytes())
+    for name, flags in [('eac3.ts', []), ('eac3-dvb.ts', ['-mpegts_flags', 'system_b'])]:
         path = work / name
-        ffmpeg('-f', 'lavfi', '-i', noise.format(seed=9), '-ac', '2', *coding, path)
-        line = run([chain, 'reject', path]).strip().splitlines()[-1]
-        if json.loads(line).get('decode_error') != 101:
-            raise Failure(f'{name}: expected decode_error 101, got {line}')
-        rejected += 1
-        checks.append({'test': name, 'result': 'rejected', 'oracle': line})
+        ffmpeg('-i', eac3, '-c', 'copy', '-f', 'mpegts', *flags, path)
+        exact(path, 'eac3', 'ATSC/DVB E-AC-3 signalling')
     video_only = work / 'video-only.ts'
     ffmpeg(*video, '-c:v', 'mpeg2video', '-f', 'mpegts', video_only)
     no_tables = work / 'no-tables.ts'

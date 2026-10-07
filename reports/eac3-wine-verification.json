@@ -1,0 +1,402 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "2.1.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "3.0.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "3.0back.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "4.0.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "4.1-32.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "5.0.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "5.1-44.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "5.1-tagged.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "5.1.dvb.ts",
+      "result": "exact PCM"
+    },
+    {
+      "test": "5.1.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "5.1.frag.mp4",
+      "result": "exact PCM"
+    },
+    {
+      "test": "5.1.mka",
+      "result": "exact PCM"
+    },
+    {
+      "test": "5.1.mp4",
+      "result": "exact PCM"
+    },
+    {
+      "test": "5.1.ts",
+      "result": "exact PCM"
+    },
+    {
+      "test": "bad-exponents.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "converted0.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "converted2.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "crc.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "defaults.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "descriptor.ts",
+      "result": "exact PCM"
+    },
+    {
+      "test": "high.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "low.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "lut.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "mono-tagged.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "mono.dvb.ts",
+      "result": "exact PCM"
+    },
+    {
+      "test": "mono.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "mono.frag.mp4",
+      "result": "exact PCM"
+    },
+    {
+      "test": "mono.mka",
+      "result": "exact PCM"
+    },
+    {
+      "test": "mono.mp4",
+      "result": "exact PCM"
+    },
+    {
+      "test": "mono.ts",
+      "result": "exact PCM"
+    },
+    {
+      "test": "payload.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "probed.ts",
+      "result": "exact PCM"
+    },
+    {
+      "test": "quad.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "registered.ts",
+      "result": "exact PCM"
+    },
+    {
+      "test": "seek-1.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "seek-1.ec3 --start 17 ms",
+      "result": "exact"
+    },
+    {
+      "test": "seek-1.ec3 --start 60 ms",
+      "result": "exact"
+    },
+    {
+      "test": "seek-1.ec3 --start 150 ms",
+      "result": "exact"
+    },
+    {
+      "test": "seek-2.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "seek-2.ec3 --start 17 ms",
+      "result": "exact"
+    },
+    {
+      "test": "seek-2.ec3 --start 60 ms",
+      "result": "exact"
+    },
+    {
+      "test": "seek-2.ec3 --start 150 ms",
+      "result": "exact"
+    },
+    {
+      "test": "seek-3.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "seek-3.ec3 --start 17 ms",
+      "result": "exact"
+    },
+    {
+      "test": "seek-3.ec3 --start 60 ms",
+      "result": "exact"
+    },
+    {
+      "test": "seek-3.ec3 --start 150 ms",
+      "result": "exact"
+    },
+    {
+      "test": "seek-6.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "seek-6.ec3 --start 17 ms",
+      "result": "exact"
+    },
+    {
+      "test": "seek-6.ec3 --start 60 ms",
+      "result": "exact"
+    },
+    {
+      "test": "seek-6.ec3 --start 150 ms",
+      "result": "exact"
+    },
+    {
+      "test": "seek-[1,2,3,6].ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "seek-[1,2,3,6].ec3 --start 17 ms",
+      "result": "exact"
+    },
+    {
+      "test": "seek-[1,2,3,6].ec3 --start 60 ms",
+      "result": "exact"
+    },
+    {
+      "test": "seek-[1,2,3,6].ec3 --start 150 ms",
+      "result": "exact"
+    },
+    {
+      "test": "stereo-tagged.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "stereo.dvb.ts",
+      "result": "exact PCM"
+    },
+    {
+      "test": "stereo.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "stereo.frag.mp4",
+      "result": "exact PCM"
+    },
+    {
+      "test": "stereo.mka",
+      "result": "exact PCM"
+    },
+    {
+      "test": "stereo.mp4",
+      "result": "exact PCM"
+    },
+    {
+      "test": "stereo.ts",
+      "result": "exact PCM"
+    },
+    {
+      "test": "stereo32.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "stereo44.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "trimmed.mp4",
+      "result": "exact PCM"
+    },
+    {
+      "test": "truncated-final.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "variable.frag.mp4",
+      "result": "exact PCM"
+    },
+    {
+      "test": "variable.frag.mp4 --start 17 ms",
+      "result": "exact"
+    },
+    {
+      "test": "variable.frag.mp4 --start 60 ms",
+      "result": "exact"
+    },
+    {
+      "test": "variable.frag.mp4 --start 150 ms",
+      "result": "exact"
+    },
+    {
+      "test": "variable.mka",
+      "result": "exact PCM"
+    },
+    {
+      "test": "variable.mka --start 17 ms",
+      "result": "exact"
+    },
+    {
+      "test": "variable.mka --start 60 ms",
+      "result": "exact"
+    },
+    {
+      "test": "variable.mka --start 150 ms",
+      "result": "exact"
+    },
+    {
+      "test": "variable.mp4",
+      "result": "exact PCM"
+    },
+    {
+      "test": "variable.mp4 --start 17 ms",
+      "result": "exact"
+    },
+    {
+      "test": "variable.mp4 --start 60 ms",
+      "result": "exact"
+    },
+    {
+      "test": "variable.mp4 --start 150 ms",
+      "result": "exact"
+    },
+    {
+      "test": "written-mode0.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "written-mode1.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "written-mode2.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "written-mode3.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "written-mode4.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "written-mode5.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "written-mode6.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "written-mode7.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "dependent.ec3",
+      "result": "rejected"
+    },
+    {
+      "test": "substream1.ec3",
+      "result": "rejected"
+    },
+    {
+      "test": "reduced-rate.ec3",
+      "result": "rejected"
+    },
+    {
+      "test": "reserved-type.ec3",
+      "result": "rejected"
+    },
+    {
+      "test": "ahtinu.ec3",
+      "result": "rejected"
+    },
+    {
+      "test": "spxinu.ec3",
+      "result": "rejected"
+    },
+    {
+      "test": "ecplinu.ec3",
+      "result": "rejected"
+    },
+    {
+      "test": "late_coupling.ec3",
+      "result": "rejected"
+    },
+    {
+      "test": "snr_reuse.ec3",
+      "result": "rejected"
+    },
+    {
+      "test": "appended-dependent.ec3",
+      "result": "rejected"
+    },
+    {
+      "test": "appended-substream1.ec3",
+      "result": "rejected"
+    },
+    {
+      "test": "layout-change.ec3",
+      "result": "rejected"
+    },
+    {
+      "test": "garbage.ec3",
+      "result": "rejected"
+    },
+    {
+      "test": "bad-size.ec3",
+      "result": "rejected"
+    }
+  ],
+  "scope": "Windows CLI under Wine vs Linux PCM; variable-frame --start and unsupported/malformed rejections"
+}

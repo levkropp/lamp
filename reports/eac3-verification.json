@@ -1,0 +1,728 @@
+{
+  "result": "passed",
+  "profile": "E-AC-3 conventional mantissas; independent/converted substream 0",
+  "checks": [
+    {
+      "test": "mono.ec3",
+      "result": "matched",
+      "comparator": "FFmpeg (shared stereo weights)",
+      "snr_db": 138.7,
+      "peak_error": 1.1920928955078125e-07,
+      "stats": "codec=20 rate=48000 channels=1 bits=0 frames=29184 underruns=0 decode_error=0 audio_error=0 elapsed_ms=17 cpu_us=18303 endpoint_dry=0"
+    },
+    {
+      "test": "stereo.ec3",
+      "result": "matched",
+      "comparator": "FFmpeg (shared stereo weights)",
+      "snr_db": 138.7,
+      "peak_error": 5.960464477539063e-08,
+      "stats": "codec=20 rate=48000 channels=2 bits=0 frames=29184 underruns=0 decode_error=0 audio_error=0 elapsed_ms=20 cpu_us=21488 endpoint_dry=0"
+    },
+    {
+      "test": "stereo44.ec3",
+      "result": "matched",
+      "comparator": "FFmpeg (shared stereo weights)",
+      "snr_db": 138.8,
+      "peak_error": 5.960464477539063e-08,
+      "stats": "codec=20 rate=44100 channels=2 bits=0 frames=27648 underruns=0 decode_error=0 audio_error=0 elapsed_ms=22 cpu_us=24285 endpoint_dry=0"
+    },
+    {
+      "test": "stereo32.ec3",
+      "result": "matched",
+      "comparator": "FFmpeg (shared stereo weights)",
+      "snr_db": 139.1,
+      "peak_error": 4.470348358154297e-08,
+      "stats": "codec=20 rate=32000 channels=2 bits=0 frames=19968 underruns=0 decode_error=0 audio_error=0 elapsed_ms=17 cpu_us=17828 endpoint_dry=0"
+    },
+    {
+      "test": "low.ec3",
+      "result": "matched",
+      "comparator": "FFmpeg (shared stereo weights)",
+      "snr_db": 139.2,
+      "peak_error": 5.960464477539063e-08,
+      "stats": "codec=20 rate=48000 channels=2 bits=0 frames=29184 underruns=0 decode_error=0 audio_error=0 elapsed_ms=25 cpu_us=27423 endpoint_dry=0"
+    },
+    {
+      "test": "high.ec3",
+      "result": "matched",
+      "comparator": "FFmpeg (shared stereo weights)",
+      "snr_db": 138.6,
+      "peak_error": 7.450580596923828e-08,
+      "stats": "codec=20 rate=48000 channels=2 bits=0 frames=29184 underruns=0 decode_error=0 audio_error=0 elapsed_ms=21 cpu_us=22489 endpoint_dry=0"
+    },
+    {
+      "test": "2.1.ec3",
+      "result": "matched",
+      "comparator": "FFmpeg (shared stereo weights)",
+      "snr_db": 138.4,
+      "peak_error": 4.470348358154297e-08,
+      "stats": "codec=20 rate=48000 channels=3 bits=0 frames=29184 underruns=0 decode_error=0 audio_error=0 elapsed_ms=32 cpu_us=33444 endpoint_dry=0"
+    },
+    {
+      "test": "3.0.ec3",
+      "result": "matched",
+      "comparator": "FFmpeg (shared stereo weights)",
+      "snr_db": 138.4,
+      "peak_error": 4.470348358154297e-08,
+      "stats": "codec=20 rate=48000 channels=3 bits=0 frames=29184 underruns=0 decode_error=0 audio_error=0 elapsed_ms=28 cpu_us=29683 endpoint_dry=0"
+    },
+    {
+      "test": "3.0back.ec3",
+      "result": "matched",
+      "comparator": "FFmpeg (shared stereo weights)",
+      "snr_db": 138.3,
+      "peak_error": 4.470348358154297e-08,
+      "stats": "codec=20 rate=48000 channels=3 bits=0 frames=29184 underruns=0 decode_error=0 audio_error=0 elapsed_ms=30 cpu_us=30804 endpoint_dry=0"
+    },
+    {
+      "test": "4.0.ec3",
+      "result": "matched",
+      "comparator": "FFmpeg (shared stereo weights)",
+      "snr_db": 138.3,
+      "peak_error": 2.9802322387695312e-08,
+      "stats": "codec=20 rate=48000 channels=4 bits=0 frames=29184 underruns=0 decode_error=0 audio_error=0 elapsed_ms=35 cpu_us=36515 endpoint_dry=0"
+    },
+    {
+      "test": "quad.ec3",
+      "result": "matched",
+      "comparator": "FFmpeg (shared stereo weights)",
+      "snr_db": 138.5,
+      "peak_error": 2.9802322387695312e-08,
+      "stats": "codec=20 rate=48000 channels=4 bits=0 frames=29184 underruns=0 decode_error=0 audio_error=0 elapsed_ms=37 cpu_us=38175 endpoint_dry=0"
+    },
+    {
+      "test": "5.0.ec3",
+      "result": "matched",
+      "comparator": "FFmpeg (shared stereo weights)",
+      "snr_db": 138.6,
+      "peak_error": 4.470348358154297e-08,
+      "stats": "codec=20 rate=48000 channels=5 bits=0 frames=29184 underruns=0 decode_error=0 audio_error=0 elapsed_ms=46 cpu_us=46897 endpoint_dry=0"
+    },
+    {
+      "test": "5.1.ec3",
+      "result": "matched",
+      "comparator": "FFmpeg (shared stereo weights)",
+      "snr_db": 138.3,
+      "peak_error": 3.725290298461914e-08,
+      "stats": "codec=20 rate=48000 channels=6 bits=0 frames=29184 underruns=0 decode_error=0 audio_error=0 elapsed_ms=51 cpu_us=52450 endpoint_dry=0"
+    },
+    {
+      "test": "5.1-44.ec3",
+      "result": "matched",
+      "comparator": "FFmpeg (shared stereo weights)",
+      "snr_db": 138.3,
+      "peak_error": 3.725290298461914e-08,
+      "stats": "codec=20 rate=44100 channels=6 bits=0 frames=27648 underruns=0 decode_error=0 audio_error=0 elapsed_ms=47 cpu_us=48444 endpoint_dry=0"
+    },
+    {
+      "test": "4.1-32.ec3",
+      "result": "matched",
+      "comparator": "FFmpeg (shared stereo weights)",
+      "snr_db": 138.4,
+      "peak_error": 4.470348358154297e-08,
+      "stats": "codec=20 rate=32000 channels=5 bits=0 frames=19968 underruns=0 decode_error=0 audio_error=0 elapsed_ms=35 cpu_us=35610 endpoint_dry=0"
+    },
+    {
+      "test": "model stereo.ec3",
+      "result": "matched",
+      "snr_db": 138.9
+    },
+    {
+      "test": "model 5.1.ec3",
+      "result": "matched",
+      "snr_db": 138.8
+    },
+    {
+      "test": "written-mode0.ec3",
+      "result": "matched",
+      "comparator": "FFmpeg (shared stereo weights)",
+      "snr_db": 139.4,
+      "peak_error": 7.62939453125e-06,
+      "stats": "codec=20 rate=48000 channels=2 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=13 cpu_us=14651 endpoint_dry=0"
+    },
+    {
+      "test": "model written-mode0.ec3",
+      "result": "matched",
+      "snr_db": 139.3
+    },
+    {
+      "test": "written-mode1.ec3",
+      "result": "matched",
+      "comparator": "FFmpeg (shared stereo weights)",
+      "snr_db": 138.8,
+      "peak_error": 3.814697265625e-06,
+      "stats": "codec=20 rate=48000 channels=2 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=20 cpu_us=22022 endpoint_dry=0"
+    },
+    {
+      "test": "model written-mode1.ec3",
+      "result": "matched",
+      "snr_db": 138.8
+    },
+    {
+      "test": "written-mode2.ec3",
+      "result": "matched",
+      "comparator": "FFmpeg (shared stereo weights)",
+      "snr_db": 138.9,
+      "peak_error": 2.288818359375e-05,
+      "stats": "codec=20 rate=48000 channels=2 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=12 cpu_us=13197 endpoint_dry=0"
+    },
+    {
+      "test": "model written-mode2.ec3",
+      "result": "matched",
+      "snr_db": 139.1
+    },
+    {
+      "test": "written-mode3.ec3",
+      "result": "matched",
+      "comparator": "FFmpeg (shared stereo weights)",
+      "snr_db": 138.2,
+      "peak_error": 7.62939453125e-06,
+      "stats": "codec=20 rate=48000 channels=4 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=18324 endpoint_dry=0"
+    },
+    {
+      "test": "model written-mode3.ec3",
+      "result": "matched",
+      "snr_db": 138.0
+    },
+    {
+      "test": "written-mode4.ec3",
+      "result": "matched",
+      "comparator": "FFmpeg (shared stereo weights)",
+      "snr_db": 139.1,
+      "peak_error": 3.814697265625e-06,
+      "stats": "codec=20 rate=48000 channels=3 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=14024 endpoint_dry=0"
+    },
+    {
+      "test": "model written-mode4.ec3",
+      "result": "matched",
+      "snr_db": 138.8
+    },
+    {
+      "test": "written-mode5.ec3",
+      "result": "matched",
+      "comparator": "FFmpeg (shared stereo weights)",
+      "snr_db": 138.4,
+      "peak_error": 4.57763671875e-05,
+      "stats": "codec=20 rate=48000 channels=5 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=28 cpu_us=32974 endpoint_dry=0"
+    },
+    {
+      "test": "model written-mode5.ec3",
+      "result": "matched",
+      "snr_db": 138.3
+    },
+    {
+      "test": "written-mode6.ec3",
+      "result": "matched",
+      "comparator": "FFmpeg (shared stereo weights)",
+      "snr_db": 138.8,
+      "peak_error": 7.62939453125e-06,
+      "stats": "codec=20 rate=48000 channels=4 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=14 cpu_us=15517 endpoint_dry=0"
+    },
+    {
+      "test": "model written-mode6.ec3",
+      "result": "matched",
+      "snr_db": 138.7
+    },
+    {
+      "test": "written-mode7.ec3",
+      "result": "matched",
+      "comparator": "FFmpeg (shared stereo weights)",
+      "snr_db": 138.7,
+      "peak_error": 7.62939453125e-06,
+      "stats": "codec=20 rate=48000 channels=6 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=18120 endpoint_dry=0"
+    },
+    {
+      "test": "model written-mode7.ec3",
+      "result": "matched",
+      "snr_db": 138.9
+    },
+    {
+      "test": "lut.ec3",
+      "result": "matched",
+      "comparator": "FFmpeg (shared stereo weights)",
+      "snr_db": 138.5,
+      "peak_error": 6.103515625e-05,
+      "stats": "codec=20 rate=48000 channels=2 bits=0 frames=49152 underruns=0 decode_error=0 audio_error=0 elapsed_ms=46 cpu_us=49249 endpoint_dry=0"
+    },
+    {
+      "test": "model lut.ec3",
+      "result": "matched",
+      "snr_db": 138.6
+    },
+    {
+      "test": "defaults.ec3",
+      "result": "matched",
+      "comparator": "FFmpeg (shared stereo weights)",
+      "snr_db": 138.6,
+      "peak_error": 5.7220458984375e-06,
+      "stats": "codec=20 rate=48000 channels=2 bits=0 frames=9216 underruns=0 decode_error=0 audio_error=0 elapsed_ms=13 cpu_us=14641 endpoint_dry=0"
+    },
+    {
+      "test": "model defaults.ec3",
+      "result": "matched",
+      "snr_db": 138.8
+    },
+    {
+      "test": "converted0.ec3",
+      "result": "matched",
+      "comparator": "FFmpeg (shared stereo weights)",
+      "snr_db": 138.2,
+      "peak_error": 7.62939453125e-06,
+      "stats": "codec=20 rate=48000 channels=4 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=16336 endpoint_dry=0"
+    },
+    {
+      "test": "model converted0.ec3",
+      "result": "matched",
+      "snr_db": 138.3
+    },
+    {
+      "test": "converted0.ec3 packet capacity",
+      "result": "{\"result\":\"bounded\",\"packet_frames\":6144}"
+    },
+    {
+      "test": "converted2.ec3",
+      "result": "matched",
+      "comparator": "FFmpeg (shared stereo weights)",
+      "snr_db": 139.1,
+      "peak_error": 7.62939453125e-06,
+      "stats": "codec=20 rate=48000 channels=4 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=16815 endpoint_dry=0"
+    },
+    {
+      "test": "model converted2.ec3",
+      "result": "matched",
+      "snr_db": 139.3
+    },
+    {
+      "test": "converted2.ec3 packet capacity",
+      "result": "{\"result\":\"bounded\",\"packet_frames\":6144}"
+    },
+    {
+      "test": "stereo.mka",
+      "result": "exact",
+      "comparator": "raw E-AC-3"
+    },
+    {
+      "test": "stereo.mp4",
+      "result": "exact",
+      "comparator": "raw E-AC-3"
+    },
+    {
+      "test": "stereo.frag.mp4",
+      "result": "exact",
+      "comparator": "raw E-AC-3"
+    },
+    {
+      "test": "stereo.ts",
+      "result": "exact",
+      "comparator": "raw E-AC-3"
+    },
+    {
+      "test": "stereo.dvb.ts",
+      "result": "exact",
+      "comparator": "raw E-AC-3"
+    },
+    {
+      "test": "stereo-tagged.ec3",
+      "result": "exact"
+    },
+    {
+      "test": "5.1.mka",
+      "result": "exact",
+      "comparator": "raw E-AC-3"
+    },
+    {
+      "test": "5.1.mp4",
+      "result": "exact",
+      "comparator": "raw E-AC-3"
+    },
+    {
+      "test": "5.1.frag.mp4",
+      "result": "exact",
+      "comparator": "raw E-AC-3"
+    },
+    {
+      "test": "5.1.ts",
+      "result": "exact",
+      "comparator": "raw E-AC-3"
+    },
+    {
+      "test": "5.1.dvb.ts",
+      "result": "exact",
+      "comparator": "raw E-AC-3"
+    },
+    {
+      "test": "5.1-tagged.ec3",
+      "result": "exact"
+    },
+    {
+      "test": "mono.mka",
+      "result": "exact",
+      "comparator": "raw E-AC-3"
+    },
+    {
+      "test": "mono.mp4",
+      "result": "exact",
+      "comparator": "raw E-AC-3"
+    },
+    {
+      "test": "mono.frag.mp4",
+      "result": "exact",
+      "comparator": "raw E-AC-3"
+    },
+    {
+      "test": "mono.ts",
+      "result": "exact",
+      "comparator": "raw E-AC-3"
+    },
+    {
+      "test": "mono.dvb.ts",
+      "result": "exact",
+      "comparator": "raw E-AC-3"
+    },
+    {
+      "test": "mono-tagged.ec3",
+      "result": "exact"
+    },
+    {
+      "test": "registered.ts",
+      "result": "exact",
+      "PMT_route": "registration",
+      "comparator": "raw E-AC-3"
+    },
+    {
+      "test": "descriptor.ts",
+      "result": "exact",
+      "PMT_route": "descriptor",
+      "comparator": "raw E-AC-3"
+    },
+    {
+      "test": "probed.ts",
+      "result": "exact",
+      "PMT_route": "probe",
+      "comparator": "raw E-AC-3"
+    },
+    {
+      "test": "trimmed.mp4",
+      "result": "exact",
+      "head_trim": 256,
+      "presented_frames": 9600
+    },
+    {
+      "test": "seek-1.ec3 seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":2045,\"maximum_discarded\":256,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "seek-2.ec3 seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":3837,\"maximum_discarded\":512,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "seek-3.ec3 seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":5373,\"maximum_discarded\":768,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "seek-6.ec3 seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":11517,\"maximum_discarded\":1536,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "seek-[1,2,3,6].ec3 seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":9213,\"maximum_discarded\":1536,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "variable.mka variable-frame seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":9213,\"maximum_discarded\":1536,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "variable.mp4 variable-frame seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":11517,\"maximum_discarded\":1536,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "variable.frag.mp4 variable-frame seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":11517,\"maximum_discarded\":1536,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "truncated-final.ec3",
+      "result": "exact",
+      "note": "last incomplete sync frame dropped"
+    },
+    {
+      "test": "dependent.ec3",
+      "result": "rejected",
+      "oracle": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 101
+      }
+    },
+    {
+      "test": "appended-dependent.ec3",
+      "result": "rejected",
+      "oracle": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 101
+      }
+    },
+    {
+      "test": "substream1.ec3",
+      "result": "rejected",
+      "oracle": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 101
+      }
+    },
+    {
+      "test": "appended-substream1.ec3",
+      "result": "rejected",
+      "oracle": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 101
+      }
+    },
+    {
+      "test": "reduced-rate.ec3",
+      "result": "rejected",
+      "oracle": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 101
+      }
+    },
+    {
+      "test": "reserved-type.ec3",
+      "result": "rejected",
+      "oracle": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 100
+      }
+    },
+    {
+      "test": "ahtinu.ec3",
+      "result": "rejected",
+      "oracle": {
+        "result": "rejected",
+        "stage": "read",
+        "decode_error": 101
+      }
+    },
+    {
+      "test": "spxinu.ec3",
+      "result": "rejected",
+      "oracle": {
+        "result": "rejected",
+        "stage": "read",
+        "decode_error": 101
+      }
+    },
+    {
+      "test": "ecplinu.ec3",
+      "result": "rejected",
+      "oracle": {
+        "result": "rejected",
+        "stage": "read",
+        "decode_error": 101
+      }
+    },
+    {
+      "test": "late_coupling.ec3",
+      "result": "rejected",
+      "oracle": {
+        "result": "rejected",
+        "stage": "read",
+        "decode_error": 101
+      }
+    },
+    {
+      "test": "snr_reuse.ec3",
+      "result": "rejected",
+      "oracle": {
+        "result": "rejected",
+        "stage": "read",
+        "decode_error": 101
+      }
+    },
+    {
+      "test": "layout-change.ec3",
+      "result": "rejected",
+      "oracle": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 100
+      }
+    },
+    {
+      "test": "garbage.ec3",
+      "result": "rejected",
+      "oracle": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 100
+      }
+    },
+    {
+      "test": "bad-size.ec3",
+      "result": "rejected",
+      "oracle": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 100
+      }
+    },
+    {
+      "test": "crc.ec3",
+      "result": "matched",
+      "comparator": "FFmpeg (shared stereo weights)",
+      "snr_db": 138.8,
+      "peak_error": 8.940696716308594e-08,
+      "stats": "codec=20 rate=48000 channels=2 bits=0 frames=29184 underruns=0 decode_error=0 audio_error=0 elapsed_ms=21 cpu_us=21819 endpoint_dry=0"
+    },
+    {
+      "test": "payload.ec3",
+      "result": "matched",
+      "comparator": "FFmpeg (shared stereo weights)",
+      "snr_db": 138.7,
+      "peak_error": 5.960464477539063e-08,
+      "stats": "codec=20 rate=48000 channels=2 bits=0 frames=29184 underruns=0 decode_error=0 audio_error=0 elapsed_ms=19 cpu_us=21060 endpoint_dry=0"
+    },
+    {
+      "test": "bad-exponents.ec3",
+      "result": "matched",
+      "comparator": "FFmpeg (shared stereo weights)",
+      "snr_db": 138.8,
+      "peak_error": 8.940696716308594e-08,
+      "stats": "codec=20 rate=48000 channels=2 bits=0 frames=29184 underruns=0 decode_error=0 audio_error=0 elapsed_ms=28 cpu_us=31718 endpoint_dry=0"
+    },
+    {
+      "test": "cancel-open",
+      "result": "{\"result\":\"cancelled\"}"
+    },
+    {
+      "test": "cancel-read",
+      "result": "{\"result\":\"cancelled\",\"frames_before_cancel\":16896}"
+    },
+    {
+      "test": "E-AC-3 playback",
+      "result": "played",
+      "stats": "Playing. Space: pause / resume. N / P: next / previous file. Left / Right: -5 / +5 s. Down / Up: -60 / +60 s. R: repeat. Q or Ctrl+C: stop. codec=20 rate=48000 channels=6 bits=0 frames=29184 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2702 cpu_us=80720 endpoint_dry=0"
+    }
+  ],
+  "coverage": [
+    "LUT exponents",
+    "SNR strategy 0",
+    "SNR strategy 1",
+    "SNR strategy 2",
+    "acmod 0",
+    "acmod 1",
+    "acmod 2",
+    "acmod 3",
+    "acmod 4",
+    "acmod 5",
+    "acmod 6",
+    "acmod 7",
+    "ba_syntax 0",
+    "ba_syntax 1",
+    "bandwidth change",
+    "bap 0",
+    "bap 1",
+    "bap 10",
+    "bap 11",
+    "bap 12",
+    "bap 13",
+    "bap 14",
+    "bap 15",
+    "bap 2",
+    "bap 3",
+    "bap 4",
+    "bap 5",
+    "bap 6",
+    "bap 7",
+    "bap 8",
+    "bap 9",
+    "blocks 1",
+    "blocks 2",
+    "blocks 3",
+    "blocks 6",
+    "coupling",
+    "coupling band structure",
+    "dba_syntax 0",
+    "dba_syntax 1",
+    "delta bit allocation",
+    "delta bit allocation coupling",
+    "delta bit allocation reuse",
+    "dither 0",
+    "dither 1",
+    "dither_syntax 0",
+    "dither_syntax 1",
+    "dynamic range",
+    "dynamic range dual mono",
+    "exponent strategy 0",
+    "exponent strategy 1",
+    "exponent strategy 2",
+    "exponent strategy 3",
+    "frame exponent row 0",
+    "frame exponent row 1",
+    "frame exponent row 10",
+    "frame exponent row 11",
+    "frame exponent row 12",
+    "frame exponent row 13",
+    "frame exponent row 14",
+    "frame exponent row 15",
+    "frame exponent row 16",
+    "frame exponent row 17",
+    "frame exponent row 18",
+    "frame exponent row 19",
+    "frame exponent row 2",
+    "frame exponent row 20",
+    "frame exponent row 21",
+    "frame exponent row 22",
+    "frame exponent row 23",
+    "frame exponent row 24",
+    "frame exponent row 25",
+    "frame exponent row 26",
+    "frame exponent row 27",
+    "frame exponent row 28",
+    "frame exponent row 29",
+    "frame exponent row 3",
+    "frame exponent row 30",
+    "frame exponent row 31",
+    "frame exponent row 4",
+    "frame exponent row 5",
+    "frame exponent row 6",
+    "frame exponent row 7",
+    "frame exponent row 8",
+    "frame exponent row 9",
+    "frame type 0",
+    "frame type 2",
+    "gain_syntax 0",
+    "gain_syntax 1",
+    "mixed transforms",
+    "partial coupling",
+    "per-block exponents",
+    "phase flags",
+    "rematrixing 2 bands",
+    "rematrixing 3 bands",
+    "rematrixing 4 bands",
+    "short blocks",
+    "skip field",
+    "skip_syntax 0",
+    "skip_syntax 1",
+    "switch_syntax 0",
+    "switch_syntax 1"
+  ],
+  "unsupported": [
+    "AHT",
+    "SPX",
+    "enhanced coupling",
+    "dependent/additional substreams",
+    "reduced rates",
+    "coupling first activated after block 0",
+    "older-frame SNR reuse"
+  ],
+  "specification_sha256": "4580b631f5ac1aafdd31034f28d5fc9c29bce72a3d3f6367e3d9746906e0ffa1",
+  "limitations": [
+    "block-0 SNR packing compatible with FFmpeg; per-block updates outside profile",
+    "transient processing and object rendering not applied"
+  ]
+}

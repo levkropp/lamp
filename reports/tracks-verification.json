@@ -60,11 +60,15 @@
       "files": 2
     },
     {
+      "test": "eac3.ts track 2",
+      "result": "exact",
+      "comparator": "isolated E-AC-3 track"
+    },
+    {
       "test": "unsupported and missing tracks",
       "result": "rejected",
       "files": [
         "wma.mkv track 2",
-        "eac3.ts track 2",
         "one.wav track 2",
         "one.mp3 track 2",
         "one.flv track 2",

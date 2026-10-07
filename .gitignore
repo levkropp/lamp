@@ -19,3 +19,6 @@ tests/reference/pv-aacdec/
 tests/reference/jaadec/
 tests/reference/codec-ac3/
 tests/reference/libgsm/
+
+# Hash-pinned primary E-AC-3 specification, fetched by the table generator.
+tests/reference/A52-2018.pdf

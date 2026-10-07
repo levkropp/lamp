@@ -7,11 +7,11 @@ By default LAMP plays one audio track per file, chosen by the container's rules:
 | Matroska / WebM | TrackEntries of type audio, in the Tracks element, whether enabled or not. |
 | MP4 / MOV | `trak` boxes with a `soun` handler, in `moov`, whether enabled or not. |
 | Ogg | Each link's Vorbis, Opus, FLAC, Speex, CELT and OGM audio streams, in BOS order. Every link of a chain plays its own Nth stream. |
-| MPEG transport streams | The first program's map: MPEG audio, ADTS and LATM AAC, AC-3, Blu-ray LPCM and the audio LAMP does not decode (E-AC-3, DTS, TrueHD), and private data streams without descriptors, in map order. |
+| MPEG transport streams | The first program's map: MPEG audio, ADTS and LATM AAC, AC-3/E-AC-3 conventional mantissas, Blu-ray LPCM and the audio LAMP does not decode (DTS, TrueHD), and private data streams without descriptors, in map order. |
 | MPEG program streams | Audio stream ids 0xC0-0xDF and private stream 1's audio substreams (AC-3, DTS, LPCM, MLP, TrueHD), in the order their first packets appear. |
 | AVI | `auds` stream lists, in `hdrl` order. |
 
-Every other format holds one audio track: `--track 1` plays it, and any other N rejects the file. A track that does not exist, or one LAMP does not decode (WMA in Matroska, E-AC-3 in a transport stream, Speex in Ogg), rejects with `decode_error` 101. Within a queue, such a file is skipped like any file that cannot play. The Windows player window has no track control yet.
+Every other format holds one audio track: `--track 1` plays it, and any other N rejects the file. A track that does not exist, or one LAMP does not decode (WMA in Matroska or Speex in Ogg), rejects with `decode_error` 101. Within a queue, such a file is skipped like any file that cannot play. The Windows player window has no track control yet.
 
 ## Verification
 
@@ -29,4 +29,6 @@ Every other format holds one audio track: `--track 1` plays it, and any other N 
 - A chain of two Ogg links, each with Opus and Vorbis, plays each link's Vorbis stream with `--track 2`.
 - In an Ogg file of Speex and Opus, Speex counts as track 1 and rejects when chosen. The Opus stream, whose header is on the file's second page, plays by default and as track 2.
 - `--track 3` in a queue of the Matroska and MP4 files plays track 3 of each.
-- Rejections (`decode_error` 101, through `tests/chain-oracle.c`): a track past the last in each of the six files, WMA in Matroska, E-AC-3 in a transport stream, and `--track 2` on WAV, MP3 and FLV files, which play with `--track 1`.
+- Rejections (`decode_error` 101, through `tests/chain-oracle.c`): a track past the last in each of the six files, WMA in Matroska, and `--track 2` on WAV, MP3 and FLV files, which play with `--track 1`.
+
+Conventional E-AC-3 on a second transport-stream audio track is checked against its isolated stream copy. Unsupported E-AC-3 tools or substreams still reject; see the [profile limits](eac3.md).

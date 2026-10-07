@@ -1,10 +1,11 @@
-# Original AC-3 (ATSC A/52) decoder in x86-64 assembly. MIT, see LICENSE.
+# AC-3 and conventional E-AC-3 (ATSC A/52) decoder in x86-64 assembly. MIT, see LICENSE.
 # Reference: ATSC A/52 (Digital Audio Compression Standard). The structure,
 # fixed-point mantissa path and error concealment follow FFmpeg's decoder,
 # which the tests compare against. Tables: src/ac3_tables.inc
 # (tests/generate-ac3-tables.py). Track mode: Matroska, MP4 and raw .ac3
 # streams supply one or more sync frames per packet. bsid 0-10 (the
-# alternate syntax of bsid 6, the half- and quarter-rate ids 9 and 10), all
+# alternate syntax of bsid 6, the half- and quarter-rate ids 9 and 10), plus
+# E-AC-3 conventional mantissas (see eac3.inc and docs/eac3.md), all
 # channel modes with LFE, block switching, coupling with phase flags,
 # rematrixing, delta bit allocation, dynamic range and dither. The output
 # mixes to stereo with the shared WAVE speaker weights. A frame whose CRC
@@ -17,9 +18,10 @@
 .equ AC3_UNSUPPORTED, 101
 .equ AC3_BLOCK, 256
 .equ AC3_FRAME, 1536
-.equ AC3_MAX_BYTES, 3840
+.equ AC3_MAX_BYTES, 4096
 .equ TK_AC3, 8
 .equ CODEC_AC3, 11
+.equ CODEC_EAC3, 20
 
 RODATA
 .include "ac3_tables.inc"
@@ -46,7 +48,7 @@ ac3_one: .float 1.0
 ac3_gain_scale: .float 2.384185791015625e-7  # 2^-22
 
 .data
-ac3_key: .long -1                   # fscod | sr_shift << 2 | acmod << 4 | lfeon << 7
+ac3_key: .long -1                   # fscod | sr_shift << 2 | acmod << 4 | lfeon << 7 | enhanced << 8
 ac3_bitpos: .long 0
 ac3_bitlimit: .long 0               # frame bytes
 ac3_acmod: .long 0
@@ -57,6 +59,9 @@ ac3_channels: .long 0               # nf + lfe
 ac3_shift: .long 0                  # sr_shift (bsid 9, 10)
 ac3_fscod: .long 0
 ac3_bsid: .long 0
+ac3_enhanced: .long 0
+ac3_blocks: .long 6
+ac3_frame_samples: .long AC3_FRAME
 ac3_lfg_index: .long 0
 ac3_wave: .quad 0                   # this stream's row of ac3_wave_index
 
@@ -157,7 +162,7 @@ LOCALFN ac3_get_signed
 ENDFN ac3_get_signed
 
 # RCX=data, RDX=bytes available (at least 8 are read) -> EAX=frame bytes, or 0
-# when the data is not an AC-3 sync frame; EDX=stream key; ECX=bsid.
+# when not a supported AC-3/E-AC-3 sync frame; EDX=key; ECX=bsid; R11D=blocks.
 LOCALFN ac3_header
     push rbx
     xor eax, eax
@@ -169,7 +174,7 @@ LOCALFN ac3_header
     movzx r10d, byte ptr [rcx + 5]
     shr r10d, 3                           # bsid
     cmp r10d, 10
-    ja .Lac3_header_return                # E-AC-3 and reserved ids
+    ja .Lac3_header_enhanced
     movzx r8d, byte ptr [rcx + 4]
     mov r9d, r8d
     shr r9d, 6                            # fscod
@@ -221,9 +226,14 @@ LOCALFN ac3_header
     shl r11d, 7
     or edx, r11d
 .Lac3_header_return:
+    mov r11d, 6
     mov ecx, r10d
     pop rbx
     ret
+# E-AC-3 has a distinct sync header; keep the same stream-key contract.
+.Lac3_header_enhanced:
+    pop rbx
+    jmp eac3_header
 ENDFN ac3_header
 
 # RCX=mapped start, RDX=end -> EAX=1 when the data begins with an AC-3 frame
@@ -243,7 +253,7 @@ FN ac3_probe
     call ac3_header
     test eax, eax
     jnz .Lac3_probe_frame
-    cmp ecx, 11                           # E-AC-3: recognised, rejected at open
+    cmp ecx, 11                           # E-AC-3: recognise unsupported/malformed sync profiles
     jb .Lac3_probe_return
     cmp ecx, 16
     ja .Lac3_probe_return
@@ -339,7 +349,7 @@ FN ac3_open
     jb .Lac3_open_bad
     cmp ecx, 16
     ja .Lac3_open_bad
-    mov dword ptr [rip + decode_error], AC3_UNSUPPORTED
+    mov [rip + decode_error], r11d
     jmp .Lac3_open_bad
 .Lac3_open_first:
     mov r12d, edx                         # stream key
@@ -370,7 +380,14 @@ FN ac3_open
     mov rbx, rax
     call ac3_header
     test eax, eax
-    jz .Lac3_open_bad
+    jnz .Lac3_open_header_valid
+    cmp ecx, 11
+    jb .Lac3_open_bad
+    cmp ecx, 16
+    ja .Lac3_open_bad
+    mov [rip + decode_error], r11d
+    jmp .Lac3_open_bad
+.Lac3_open_header_valid:
     cmp edx, r12d
     jne .Lac3_open_bad
     cmp rax, rbx
@@ -389,7 +406,12 @@ FN ac3_open
     call track_finish
     test eax, eax
     jz .Lac3_open_bad
-    mov dword ptr [rip + codec_kind], CODEC_AC3
+    mov eax, CODEC_AC3
+    cmp dword ptr [rip + ac3_enhanced], 0
+    je .Lac3_open_codec
+    mov eax, CODEC_EAC3
+.Lac3_open_codec:
+    mov [rip + codec_kind], eax
     mov eax, 1
     jmp .Lac3_open_return
 .Lac3_open_bad:
@@ -423,10 +445,13 @@ FN ac3_track_open
     jb .Lac3_track_open_fail
     cmp ecx, 16
     ja .Lac3_track_open_fail
-    mov eax, AC3_UNSUPPORTED              # E-AC-3
+    mov eax, r11d                        # unsupported or malformed E-AC-3
     jmp .Lac3_track_open_fail
 .Lac3_track_open_supported:
     mov [rip + ac3_key], edx
+    mov eax, edx
+    shr eax, 8
+    mov [rip + ac3_enhanced], eax
     mov eax, edx
     and eax, 3
     mov [rip + ac3_fscod], eax
@@ -518,7 +543,7 @@ FN ac3_track_reset
     ret
 ENDFN ac3_track_reset
 
-# RCX=packet, EDX=bytes -> EAX=1536 per sync frame, or -1 unless the packet
+# RCX=packet, EDX=bytes -> EAX=256 * blocks per sync frame, or -1 unless the packet
 # holds whole frames of this stream.
 FN ac3_track_samples
     push rbx
@@ -535,14 +560,23 @@ FN ac3_track_samples
     mov edx, edi
     call ac3_header
     test eax, eax
-    jz .Lac3_samples_bad
+    jnz .Lac3_samples_header_valid
+    cmp ecx, 11
+    jb .Lac3_samples_bad
+    cmp ecx, 16
+    ja .Lac3_samples_bad
+    mov [rip + decode_error], r11d
+    jmp .Lac3_samples_bad
+.Lac3_samples_header_valid:
     cmp edx, [rip + ac3_key]
     jne .Lac3_samples_bad
     cmp eax, edi
     ja .Lac3_samples_bad
     add rsi, rax
     sub edi, eax
-    add ebx, AC3_FRAME
+    shl r11d, 8
+    add ebx, r11d
+    jc .Lac3_samples_bad
     jmp .Lac3_samples_frame
 .Lac3_samples_done:
     mov eax, ebx
@@ -568,6 +602,7 @@ FN ac3_track_decode
     mov rsi, rcx
     mov edi, edx
     mov r12, r8
+    mov [rsp + 36], r9d
     xor ebx, ebx
 .Lac3_decode_frame:
     test edi, edi
@@ -579,19 +614,31 @@ FN ac3_track_decode
     jz .Lac3_decode_bad
     cmp eax, edi
     ja .Lac3_decode_bad
+    cmp edx, [rip + ac3_key]
+    jne .Lac3_decode_bad
+    mov [rip + ac3_blocks], r11d
+    shl r11d, 8
+    mov [rip + ac3_frame_samples], r11d
+    add r11d, ebx
+    jc .Lac3_decode_bad
+    cmp r11d, [rsp + 36]
+    ja .Lac3_decode_bad
     mov [rsp + 32], eax
     mov rcx, rsi
     mov edx, eax
     call ac3_decode
+    test eax, eax
+    jz .Lac3_decode_failed
     lea rcx, [r12 + rbx*8]
     call ac3_emit
     mov eax, [rsp + 32]
     add rsi, rax
     sub edi, eax
-    add ebx, AC3_FRAME
+    add ebx, [rip + ac3_frame_samples]
     jmp .Lac3_decode_frame
 .Lac3_decode_bad:
     mov dword ptr [rip + decode_error], AC3_MALFORMED
+.Lac3_decode_failed:
     xor ebx, ebx
 .Lac3_decode_done:
     mov eax, ebx
@@ -622,7 +669,7 @@ LOCALFN ac3_emit
     movss [rdi + rcx*8], xmm0
     movss [rdi + rcx*8 + 4], xmm0
     inc ecx
-    cmp ecx, AC3_FRAME
+    cmp ecx, [rip + ac3_frame_samples]
     jb .Lac3_emit_mono
     jmp .Lac3_emit_done
 .Lac3_emit_stereo:
@@ -631,7 +678,7 @@ LOCALFN ac3_emit
     movss [rdi + rcx*8], xmm0
     movss [rdi + rcx*8 + 4], xmm1
     inc ecx
-    cmp ecx, AC3_FRAME
+    cmp ecx, [rip + ac3_frame_samples]
     jb .Lac3_emit_stereo
     jmp .Lac3_emit_done
 .Lac3_emit_mix:
@@ -660,7 +707,7 @@ LOCALFN ac3_emit
     movss [rdi + rcx*8], xmm0
     movss [rdi + rcx*8 + 4], xmm1
     inc ecx
-    cmp ecx, AC3_FRAME
+    cmp ecx, [rip + ac3_frame_samples]
     jb .Lac3_emit_frame
 .Lac3_emit_done:
     add rsp, 32
@@ -670,7 +717,7 @@ LOCALFN ac3_emit
     ret
 ENDFN ac3_emit
 
-# RCX=frame, EDX=its bytes: decodes six blocks into ac3_pcm. A failed CRC or
+# RCX=frame, EDX=its bytes: decodes ac3_blocks blocks into ac3_pcm. A failed CRC or
 # a block that does not decode repeats the previous block for the rest of
 # the frame.
 LOCALFN ac3_decode
@@ -697,13 +744,26 @@ LOCALFN ac3_decode
     test eax, eax
     setnz r12b                            # error: conceal the frame
     mov dword ptr [rip + ac3_bitpos], 40
+    cmp dword ptr [rip + ac3_enhanced], 0
+    je .Lac3_decode_parse_bsi
+    test r12d, r12d
+    jnz .Lac3_decode_bsi_ok
+.Lac3_decode_parse_bsi:
     call ac3_bsi
+    cmp eax, AC3_UNSUPPORTED
+    je .Lac3_decode_unsupported
+    test eax, eax
+    jnz .Lac3_decode_bsi_ok
+    mov r12d, 1
+.Lac3_decode_bsi_ok:
     xor r13d, r13d                        # block
 .Lac3_decode_block:
     test r12d, r12d
     jnz .Lac3_decode_conceal
     mov ecx, r13d
     call ac3_block
+    cmp eax, AC3_UNSUPPORTED
+    je .Lac3_decode_unsupported
     test eax, eax
     jnz .Lac3_decode_keep
     mov r12d, 1
@@ -761,8 +821,14 @@ LOCALFN ac3_decode
 .Lac3_decode_next:
     mov dword ptr [rip + ac3_has_last], 1
     inc r13d
-    cmp r13d, 6
+    cmp r13d, [rip + ac3_blocks]
     jb .Lac3_decode_block
+    mov eax, 1
+    jmp .Lac3_decode_return
+.Lac3_decode_unsupported:
+    mov dword ptr [rip + decode_error], AC3_UNSUPPORTED
+    xor eax, eax
+.Lac3_decode_return:
     add rsp, 32
     pop r13
     pop r12
@@ -775,6 +841,8 @@ ENDFN ac3_decode
 # Bit stream information after the sync information; sets the LFE channel's
 # fixed range.
 LOCALFN ac3_bsi
+    cmp dword ptr [rip + ac3_enhanced], 0
+    jne eac3_bsi
     push rbx
     sub rsp, 32
     mov ecx, 5
@@ -851,9 +919,12 @@ LOCALFN ac3_bsi
     lea rax, [rip + ac3_incpl]
     mov dword ptr [rax + rcx*4], 0
 .Lac3_bsi_return:
+    mov eax, 1
     add rsp, 32
     pop rbx
     ret
 ENDFN ac3_bsi
 
 .include "ac3_block.inc"
+
+.include "eac3.inc"
