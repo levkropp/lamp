@@ -1,4 +1,6 @@
 bin/
+build/
+__pycache__/
 tests/generated/
 tests/reference/opus-rfc6716/
 tests/reference/opus-rfc8251/
