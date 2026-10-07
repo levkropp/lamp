@@ -102,7 +102,7 @@
 .equ SB_U, SB_Q_FILT + 384          # 64 doubles: windowed analysis input
 .equ SB_SIZE, SB_U + 512
 
-.equ SBR_ELEMENTS, 5
+.equ SBR_ELEMENTS, 8
 
 # Parametric stereo state (mono HE-AAC v2 streams), parameters as FFmpeg's
 # decoder keeps them: rows of 34 signed bytes per envelope.

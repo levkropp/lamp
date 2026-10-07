@@ -1,0 +1,68 @@
+{
+  "result": "passed",
+  "baseline_source_commit": "bf5a794930f0b074435c021ddc7ae5076aec6f33",
+  "baseline_cli_sha256": "724c0e043ede9d943706a21f5f28d4aa10ef0a575b2c1469528a72e88fbf4829",
+  "new_cli_sha256": "b1ecacdd45cdaf7abafb86ab30d1f4acd4f55a1a78b0e166451ecc80092c1af7",
+  "checks": [
+    {
+      "file": "side.m4a",
+      "sha256": "a48fcdb579772a9315b53681e2104b8d5b9085d04424048c1d7984edb974277d",
+      "before": {
+        "exit_code": 2,
+        "output": "Skipped (unsupported, malformed, or inaccessible): /home/lamp/side.m4a\nUnsupported, malformed, or inaccessible file. Supports WAV/W64, AIFF/AIFC, CAF, AU, FLAC, WavPack, Monkey's Audio, MP1/MP2/MP3, AAC (LC, HE), AC-3/E-AC-3, Ogg (Vorbis, Opus, FLAC), Matroska/WebM, MP4/MOV, AVI, FLV, ASF and MPEG-TS/PS audio."
+      },
+      "after": {
+        "exit_code": 0,
+        "output": "codec=9 rate=48000 channels=6 bits=0 frames=12000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=49 cpu_us=63486 endpoint_dry=0"
+      }
+    },
+    {
+      "file": "side.aac",
+      "sha256": "d351325ca325a70e0fdc6e54375b0310ecb62af5c66e85cb1feefffec00854f3",
+      "before": {
+        "exit_code": 2,
+        "output": "Skipped (unsupported, malformed, or inaccessible): /home/lamp/side.aac\nUnsupported, malformed, or inaccessible file. Supports WAV/W64, AIFF/AIFC, CAF, AU, FLAC, WavPack, Monkey's Audio, MP1/MP2/MP3, AAC (LC, HE), AC-3/E-AC-3, Ogg (Vorbis, Opus, FLAC), Matroska/WebM, MP4/MOV, AVI, FLV, ASF and MPEG-TS/PS audio."
+      },
+      "after": {
+        "exit_code": 0,
+        "output": "codec=10 rate=48000 channels=6 bits=0 frames=13312 underruns=0 decode_error=0 audio_error=0 elapsed_ms=53 cpu_us=66243 endpoint_dry=0"
+      }
+    },
+    {
+      "file": "side-six-shuffled.m4a",
+      "sha256": "8b4dd902c2275bc418588c85f54d7b42e7788dd419cec4679fbf3efe8f84028a",
+      "before": {
+        "exit_code": 2,
+        "output": "Skipped (unsupported, malformed, or inaccessible): /home/lamp/lamp/tests/generated/aac-pce/side-six-shuffled.m4a\nUnsupported, malformed, or inaccessible file. Supports WAV/W64, AIFF/AIFC, CAF, AU, FLAC, WavPack, Monkey's Audio, MP1/MP2/MP3, AAC (LC, HE), AC-3/E-AC-3, Ogg (Vorbis, Opus, FLAC), Matroska/WebM, MP4/MOV, AVI, FLV, ASF and MPEG-TS/PS audio."
+      },
+      "after": {
+        "exit_code": 0,
+        "output": "codec=9 rate=48000 channels=6 bits=0 frames=15360 underruns=0 decode_error=0 audio_error=0 elapsed_ms=64 cpu_us=76021 endpoint_dry=0"
+      }
+    },
+    {
+      "file": "side-six-shuffled.aac",
+      "sha256": "fa525cbe6e09c1c37c538e981114c24e704757b13f9897d48cc7d0cefcc21c00",
+      "before": {
+        "exit_code": 2,
+        "output": "Skipped (unsupported, malformed, or inaccessible): /home/lamp/lamp/tests/generated/aac-pce/side-six-shuffled.aac\nUnsupported, malformed, or inaccessible file. Supports WAV/W64, AIFF/AIFC, CAF, AU, FLAC, WavPack, Monkey's Audio, MP1/MP2/MP3, AAC (LC, HE), AC-3/E-AC-3, Ogg (Vorbis, Opus, FLAC), Matroska/WebM, MP4/MOV, AVI, FLV, ASF and MPEG-TS/PS audio."
+      },
+      "after": {
+        "exit_code": 0,
+        "output": "codec=10 rate=48000 channels=6 bits=0 frames=15360 underruns=0 decode_error=0 audio_error=0 elapsed_ms=78 cpu_us=95553 endpoint_dry=0"
+      }
+    },
+    {
+      "file": "side-six-shuffled-v1.loas",
+      "sha256": "604d901f9e4c1cbe26c09e490f7ac9ce4e151e48c7b4bbb86541bb035b9727d8",
+      "before": {
+        "exit_code": 2,
+        "output": "Skipped (unsupported, malformed, or inaccessible): /home/lamp/lamp/tests/generated/aac-pce/side-six-shuffled-v1.loas\nUnsupported, malformed, or inaccessible file. Supports WAV/W64, AIFF/AIFC, CAF, AU, FLAC, WavPack, Monkey's Audio, MP1/MP2/MP3, AAC (LC, HE), AC-3/E-AC-3, Ogg (Vorbis, Opus, FLAC), Matroska/WebM, MP4/MOV, AVI, FLV, ASF and MPEG-TS/PS audio."
+      },
+      "after": {
+        "exit_code": 0,
+        "output": "codec=10 rate=48000 channels=6 bits=0 frames=15360 underruns=0 decode_error=0 audio_error=0 elapsed_ms=66 cpu_us=79630 endpoint_dry=0"
+      }
+    }
+  ]
+}

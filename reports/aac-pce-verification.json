@@ -1,0 +1,1378 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "encoder-mono.m4a",
+      "result": "matched FFmpeg",
+      "layout": "mono",
+      "frames": 13440,
+      "peak": 1.4901161193847656e-08,
+      "snr_db": 138.7631688514392,
+      "kind": "encoder PCE in AudioSpecificConfig",
+      "encoder_layout": "mono"
+    },
+    {
+      "test": "encoder-mono.aac",
+      "result": "matched FFmpeg",
+      "layout": "mono",
+      "frames": 15360,
+      "peak": 1.4901161193847656e-08,
+      "snr_db": 138.70914769848812,
+      "kind": "container remux"
+    },
+    {
+      "test": "encoder-mono.mka",
+      "result": "matched FFmpeg",
+      "layout": "mono",
+      "frames": 15360,
+      "peak": 1.4901161193847656e-08,
+      "snr_db": 138.70914769848812,
+      "kind": "container remux"
+    },
+    {
+      "test": "encoder-mono.loas",
+      "result": "matched FFmpeg",
+      "layout": "mono",
+      "frames": 15360,
+      "peak": 1.4901161193847656e-08,
+      "snr_db": 138.70914769848812,
+      "kind": "container remux"
+    },
+    {
+      "test": "encoder-mono.ts",
+      "result": "matched FFmpeg",
+      "layout": "mono",
+      "frames": 15360,
+      "peak": 1.4901161193847656e-08,
+      "snr_db": 138.70914769848812,
+      "kind": "container remux"
+    },
+    {
+      "test": "encoder-stereo.m4a",
+      "result": "matched FFmpeg",
+      "layout": "stereo",
+      "frames": 13440,
+      "peak": 1.4901161193847656e-08,
+      "snr_db": 139.09047508739062,
+      "kind": "encoder PCE in AudioSpecificConfig",
+      "encoder_layout": "stereo"
+    },
+    {
+      "test": "encoder-stereo.aac",
+      "result": "matched FFmpeg",
+      "layout": "stereo",
+      "frames": 15360,
+      "peak": 1.4901161193847656e-08,
+      "snr_db": 139.03057334478612,
+      "kind": "container remux"
+    },
+    {
+      "test": "encoder-stereo.mka",
+      "result": "matched FFmpeg",
+      "layout": "stereo",
+      "frames": 15360,
+      "peak": 1.4901161193847656e-08,
+      "snr_db": 139.03057334478612,
+      "kind": "container remux"
+    },
+    {
+      "test": "encoder-stereo.loas",
+      "result": "matched FFmpeg",
+      "layout": "stereo",
+      "frames": 15360,
+      "peak": 1.4901161193847656e-08,
+      "snr_db": 139.03057334478612,
+      "kind": "container remux"
+    },
+    {
+      "test": "encoder-stereo.ts",
+      "result": "matched FFmpeg",
+      "layout": "stereo",
+      "frames": 15360,
+      "peak": 1.4901161193847656e-08,
+      "snr_db": 139.03057334478612,
+      "kind": "container remux"
+    },
+    {
+      "test": "encoder-3.0.m4a",
+      "result": "matched FFmpeg",
+      "layout": "3.0",
+      "frames": 13440,
+      "peak": 1.1175870895385742e-08,
+      "snr_db": 138.5735271729281,
+      "kind": "encoder PCE in AudioSpecificConfig",
+      "encoder_layout": "3.0"
+    },
+    {
+      "test": "encoder-4.0.m4a",
+      "result": "matched FFmpeg",
+      "layout": "4.0",
+      "frames": 13440,
+      "peak": 8.381903171539307e-09,
+      "snr_db": 138.51498281970183,
+      "kind": "encoder PCE in AudioSpecificConfig",
+      "encoder_layout": "4.0"
+    },
+    {
+      "test": "encoder-quad.m4a",
+      "result": "matched FFmpeg",
+      "layout": "quad",
+      "frames": 13440,
+      "peak": 9.313225746154785e-09,
+      "snr_db": 138.58209347884323,
+      "kind": "encoder PCE in AudioSpecificConfig",
+      "encoder_layout": "quad"
+    },
+    {
+      "test": "encoder-5.0.m4a",
+      "result": "matched FFmpeg",
+      "layout": "5.0",
+      "frames": 13440,
+      "peak": 2.2351741790771484e-08,
+      "snr_db": 138.62328754367695,
+      "kind": "encoder PCE in AudioSpecificConfig",
+      "encoder_layout": "5.0"
+    },
+    {
+      "test": "encoder-5.0-side.m4a",
+      "result": "matched FFmpeg",
+      "layout": "5.0(side)",
+      "frames": 13440,
+      "peak": 2.2351741790771484e-08,
+      "snr_db": 138.62328754367695,
+      "kind": "encoder PCE in AudioSpecificConfig",
+      "encoder_layout": "5.0(side)"
+    },
+    {
+      "test": "encoder-5.1.m4a",
+      "result": "unsupported side channel group",
+      "pce": {
+        "rate": 3,
+        "pce_rate": 3,
+        "tag": 0,
+        "object_type": 1,
+        "groups": [
+          [
+            [
+              1,
+              0
+            ],
+            [
+              0,
+              0
+            ]
+          ],
+          [
+            [
+              0,
+              1
+            ]
+          ],
+          [
+            [
+              1,
+              1
+            ]
+          ],
+          []
+        ]
+      },
+      "encoder_layout": "5.1"
+    },
+    {
+      "test": "encoder-5.1-side.m4a",
+      "result": "unsupported side channel group",
+      "pce": {
+        "rate": 3,
+        "pce_rate": 3,
+        "tag": 0,
+        "object_type": 1,
+        "groups": [
+          [
+            [
+              1,
+              0
+            ],
+            [
+              0,
+              0
+            ]
+          ],
+          [
+            [
+              0,
+              1
+            ]
+          ],
+          [
+            [
+              1,
+              1
+            ]
+          ],
+          []
+        ]
+      },
+      "encoder_layout": "5.1(side)"
+    },
+    {
+      "test": "encoder-6.1.m4a",
+      "result": "unsupported side channel group",
+      "pce": {
+        "rate": 3,
+        "pce_rate": 3,
+        "tag": 0,
+        "object_type": 1,
+        "groups": [
+          [
+            [
+              1,
+              0
+            ],
+            [
+              0,
+              0
+            ]
+          ],
+          [
+            [
+              0,
+              1
+            ]
+          ],
+          [
+            [
+              1,
+              1
+            ],
+            [
+              0,
+              2
+            ]
+          ],
+          []
+        ]
+      },
+      "encoder_layout": "6.1"
+    },
+    {
+      "test": "encoder-7.1.m4a",
+      "result": "unsupported side channel group",
+      "pce": {
+        "rate": 3,
+        "pce_rate": 3,
+        "tag": 0,
+        "object_type": 1,
+        "groups": [
+          [
+            [
+              1,
+              0
+            ],
+            [
+              0,
+              0
+            ]
+          ],
+          [
+            [
+              0,
+              1
+            ]
+          ],
+          [
+            [
+              1,
+              1
+            ],
+            [
+              1,
+              2
+            ]
+          ],
+          []
+        ]
+      },
+      "encoder_layout": "7.1"
+    },
+    {
+      "test": "encoder-7.1-wide.m4a",
+      "result": "unsupported side channel group",
+      "pce": {
+        "rate": 3,
+        "pce_rate": 3,
+        "tag": 0,
+        "object_type": 1,
+        "groups": [
+          [
+            [
+              1,
+              0
+            ],
+            [
+              0,
+              0
+            ]
+          ],
+          [
+            [
+              0,
+              1
+            ]
+          ],
+          [
+            [
+              1,
+              1
+            ],
+            [
+              1,
+              2
+            ]
+          ],
+          []
+        ]
+      },
+      "encoder_layout": "7.1(wide)"
+    },
+    {
+      "test": "stereo-tags-ordered.aac",
+      "result": "matched FFmpeg",
+      "layout": "stereo",
+      "frames": 15360,
+      "peak": 1.862645149230957e-08,
+      "snr_db": 139.09504929053114,
+      "kind": "tagged PCE elements"
+    },
+    {
+      "test": "stereo-tags-ordered-v0.loas",
+      "result": "matched FFmpeg",
+      "layout": "stereo",
+      "frames": 15360,
+      "peak": 1.862645149230957e-08,
+      "snr_db": 139.09504929053114,
+      "kind": "written LATM with 255-byte PCE comment"
+    },
+    {
+      "test": "stereo-tags-ordered-v1.loas",
+      "result": "matched FFmpeg",
+      "layout": "stereo",
+      "frames": 15360,
+      "peak": 1.862645149230957e-08,
+      "snr_db": 139.09504929053114,
+      "kind": "written LATM with 255-byte PCE comment"
+    },
+    {
+      "test": "stereo-tags-shuffled.aac",
+      "result": "matched FFmpeg",
+      "layout": "stereo",
+      "frames": 15360,
+      "peak": 1.862645149230957e-08,
+      "snr_db": 139.09504929053114,
+      "kind": "tagged PCE elements"
+    },
+    {
+      "test": "stereo-tags-shuffled-v0.loas",
+      "result": "matched FFmpeg",
+      "layout": "stereo",
+      "frames": 15360,
+      "peak": 1.862645149230957e-08,
+      "snr_db": 139.09504929053114,
+      "kind": "written LATM with 255-byte PCE comment"
+    },
+    {
+      "test": "stereo-tags-shuffled-v1.loas",
+      "result": "matched FFmpeg",
+      "layout": "stereo",
+      "frames": 15360,
+      "peak": 1.862645149230957e-08,
+      "snr_db": 139.09504929053114,
+      "kind": "written LATM with 255-byte PCE comment"
+    },
+    {
+      "test": "stereo-tags reordering",
+      "result": "byte-exact PCM under per-frame element permutation"
+    },
+    {
+      "test": "leading-data-changing-comments.aac",
+      "result": "byte-exact equivalent PCM",
+      "layout": "stereo",
+      "frames": 15360,
+      "peak": 0.0,
+      "snr_db": 999,
+      "kind": "leading data/fill before PCE and changing PCE comments",
+      "equivalent": "stereo-tags-ordered.aac.lamp.f32"
+    },
+    {
+      "test": "split-stereo-ordered.aac",
+      "result": "matched FFmpeg",
+      "layout": "stereo",
+      "frames": 15360,
+      "peak": 1.4901161193847656e-08,
+      "snr_db": 138.7415215661018,
+      "kind": "tagged PCE elements"
+    },
+    {
+      "test": "split-stereo-ordered-v0.loas",
+      "result": "matched FFmpeg",
+      "layout": "stereo",
+      "frames": 15360,
+      "peak": 1.4901161193847656e-08,
+      "snr_db": 138.7415215661018,
+      "kind": "written LATM with 255-byte PCE comment"
+    },
+    {
+      "test": "split-stereo-ordered-v1.loas",
+      "result": "matched FFmpeg",
+      "layout": "stereo",
+      "frames": 15360,
+      "peak": 1.4901161193847656e-08,
+      "snr_db": 138.7415215661018,
+      "kind": "written LATM with 255-byte PCE comment"
+    },
+    {
+      "test": "split-stereo-shuffled.aac",
+      "result": "matched FFmpeg",
+      "layout": "stereo",
+      "frames": 15360,
+      "peak": 1.4901161193847656e-08,
+      "snr_db": 138.7415215661018,
+      "kind": "tagged PCE elements"
+    },
+    {
+      "test": "split-stereo-shuffled-v0.loas",
+      "result": "matched FFmpeg",
+      "layout": "stereo",
+      "frames": 15360,
+      "peak": 1.4901161193847656e-08,
+      "snr_db": 138.7415215661018,
+      "kind": "written LATM with 255-byte PCE comment"
+    },
+    {
+      "test": "split-stereo-shuffled-v1.loas",
+      "result": "matched FFmpeg",
+      "layout": "stereo",
+      "frames": 15360,
+      "peak": 1.4901161193847656e-08,
+      "snr_db": 138.7415215661018,
+      "kind": "written LATM with 255-byte PCE comment"
+    },
+    {
+      "test": "split-stereo reordering",
+      "result": "byte-exact PCM under per-frame element permutation"
+    },
+    {
+      "test": "side-six-ordered.aac",
+      "result": "matched FFmpeg",
+      "layout": "5.1(side)",
+      "frames": 15360,
+      "peak": 1.4901161193847656e-08,
+      "snr_db": 138.43825602669875,
+      "kind": "tagged PCE elements"
+    },
+    {
+      "test": "side-six-ordered-v0.loas",
+      "result": "matched FFmpeg",
+      "layout": "5.1(side)",
+      "frames": 15360,
+      "peak": 1.4901161193847656e-08,
+      "snr_db": 138.43825602669875,
+      "kind": "written LATM with 255-byte PCE comment"
+    },
+    {
+      "test": "side-six-ordered-v1.loas",
+      "result": "matched FFmpeg",
+      "layout": "5.1(side)",
+      "frames": 15360,
+      "peak": 1.4901161193847656e-08,
+      "snr_db": 138.43825602669875,
+      "kind": "written LATM with 255-byte PCE comment"
+    },
+    {
+      "test": "side-six-shuffled.aac",
+      "result": "matched FFmpeg",
+      "layout": "5.1(side)",
+      "frames": 15360,
+      "peak": 1.4901161193847656e-08,
+      "snr_db": 138.43825602669875,
+      "kind": "tagged PCE elements"
+    },
+    {
+      "test": "side-six-shuffled-v0.loas",
+      "result": "matched FFmpeg",
+      "layout": "5.1(side)",
+      "frames": 15360,
+      "peak": 1.4901161193847656e-08,
+      "snr_db": 138.43825602669875,
+      "kind": "written LATM with 255-byte PCE comment"
+    },
+    {
+      "test": "side-six-shuffled-v1.loas",
+      "result": "matched FFmpeg",
+      "layout": "5.1(side)",
+      "frames": 15360,
+      "peak": 1.4901161193847656e-08,
+      "snr_db": 138.43825602669875,
+      "kind": "written LATM with 255-byte PCE comment"
+    },
+    {
+      "test": "side-six-shuffled.m4a",
+      "result": "matched FFmpeg",
+      "layout": "5.1(side)",
+      "frames": 15360,
+      "peak": 1.4901161193847656e-08,
+      "snr_db": 138.43825602669875,
+      "kind": "valid six-channel PCE container remux"
+    },
+    {
+      "test": "side-six-shuffled.mka",
+      "result": "matched FFmpeg",
+      "layout": "5.1(side)",
+      "frames": 15360,
+      "peak": 1.4901161193847656e-08,
+      "snr_db": 138.43825602669875,
+      "kind": "valid six-channel PCE container remux"
+    },
+    {
+      "test": "side-six-shuffled.ts",
+      "result": "matched FFmpeg",
+      "layout": "5.1(side)",
+      "frames": 15360,
+      "peak": 1.4901161193847656e-08,
+      "snr_db": 138.43825602669875,
+      "kind": "valid six-channel PCE container remux"
+    },
+    {
+      "test": "side-six reordering",
+      "result": "byte-exact PCM under per-frame element permutation"
+    },
+    {
+      "test": "back-six-ordered.aac",
+      "result": "matched FFmpeg",
+      "layout": "5.1",
+      "frames": 15360,
+      "peak": 1.4901161193847656e-08,
+      "snr_db": 138.43825602669875,
+      "kind": "tagged PCE elements"
+    },
+    {
+      "test": "back-six-ordered-v0.loas",
+      "result": "matched FFmpeg",
+      "layout": "5.1",
+      "frames": 15360,
+      "peak": 1.4901161193847656e-08,
+      "snr_db": 138.43825602669875,
+      "kind": "written LATM with 255-byte PCE comment"
+    },
+    {
+      "test": "back-six-ordered-v1.loas",
+      "result": "matched FFmpeg",
+      "layout": "5.1",
+      "frames": 15360,
+      "peak": 1.4901161193847656e-08,
+      "snr_db": 138.43825602669875,
+      "kind": "written LATM with 255-byte PCE comment"
+    },
+    {
+      "test": "back-six-shuffled.aac",
+      "result": "matched FFmpeg",
+      "layout": "5.1",
+      "frames": 15360,
+      "peak": 1.4901161193847656e-08,
+      "snr_db": 138.43825602669875,
+      "kind": "tagged PCE elements"
+    },
+    {
+      "test": "back-six-shuffled-v0.loas",
+      "result": "matched FFmpeg",
+      "layout": "5.1",
+      "frames": 15360,
+      "peak": 1.4901161193847656e-08,
+      "snr_db": 138.43825602669875,
+      "kind": "written LATM with 255-byte PCE comment"
+    },
+    {
+      "test": "back-six-shuffled-v1.loas",
+      "result": "matched FFmpeg",
+      "layout": "5.1",
+      "frames": 15360,
+      "peak": 1.4901161193847656e-08,
+      "snr_db": 138.43825602669875,
+      "kind": "written LATM with 255-byte PCE comment"
+    },
+    {
+      "test": "back-six reordering",
+      "result": "byte-exact PCM under per-frame element permutation"
+    },
+    {
+      "test": "eight-single-ordered.aac",
+      "result": "matched FFmpeg",
+      "layout": "7.1",
+      "frames": 15360,
+      "peak": 1.4901161193847656e-08,
+      "snr_db": 138.2122762209533,
+      "kind": "tagged PCE elements"
+    },
+    {
+      "test": "eight-single-ordered-v0.loas",
+      "result": "matched FFmpeg",
+      "layout": "7.1",
+      "frames": 15360,
+      "peak": 1.4901161193847656e-08,
+      "snr_db": 138.2122762209533,
+      "kind": "written LATM with 255-byte PCE comment"
+    },
+    {
+      "test": "eight-single-ordered-v1.loas",
+      "result": "matched FFmpeg",
+      "layout": "7.1",
+      "frames": 15360,
+      "peak": 1.4901161193847656e-08,
+      "snr_db": 138.2122762209533,
+      "kind": "written LATM with 255-byte PCE comment"
+    },
+    {
+      "test": "eight-single-shuffled.aac",
+      "result": "matched FFmpeg",
+      "layout": "7.1",
+      "frames": 15360,
+      "peak": 1.4901161193847656e-08,
+      "snr_db": 138.2122762209533,
+      "kind": "tagged PCE elements"
+    },
+    {
+      "test": "eight-single-shuffled-v0.loas",
+      "result": "matched FFmpeg",
+      "layout": "7.1",
+      "frames": 15360,
+      "peak": 1.4901161193847656e-08,
+      "snr_db": 138.2122762209533,
+      "kind": "written LATM with 255-byte PCE comment"
+    },
+    {
+      "test": "eight-single-shuffled-v1.loas",
+      "result": "matched FFmpeg",
+      "layout": "7.1",
+      "frames": 15360,
+      "peak": 1.4901161193847656e-08,
+      "snr_db": 138.2122762209533,
+      "kind": "written LATM with 255-byte PCE comment"
+    },
+    {
+      "test": "eight-single reordering",
+      "result": "byte-exact PCM under per-frame element permutation"
+    },
+    {
+      "test": "seven-ordered.aac",
+      "result": "matched FFmpeg",
+      "layout": "6.1",
+      "frames": 15360,
+      "peak": 1.4901161193847656e-08,
+      "snr_db": 138.42224877379576,
+      "kind": "tagged PCE elements"
+    },
+    {
+      "test": "seven-ordered-v0.loas",
+      "result": "matched FFmpeg",
+      "layout": "6.1",
+      "frames": 15360,
+      "peak": 1.4901161193847656e-08,
+      "snr_db": 138.42224877379576,
+      "kind": "written LATM with 255-byte PCE comment"
+    },
+    {
+      "test": "seven-ordered-v1.loas",
+      "result": "matched FFmpeg",
+      "layout": "6.1",
+      "frames": 15360,
+      "peak": 1.4901161193847656e-08,
+      "snr_db": 138.42224877379576,
+      "kind": "written LATM with 255-byte PCE comment"
+    },
+    {
+      "test": "seven-shuffled.aac",
+      "result": "matched FFmpeg",
+      "layout": "6.1",
+      "frames": 15360,
+      "peak": 1.4901161193847656e-08,
+      "snr_db": 138.42224877379576,
+      "kind": "tagged PCE elements"
+    },
+    {
+      "test": "seven-shuffled-v0.loas",
+      "result": "matched FFmpeg",
+      "layout": "6.1",
+      "frames": 15360,
+      "peak": 1.4901161193847656e-08,
+      "snr_db": 138.42224877379576,
+      "kind": "written LATM with 255-byte PCE comment"
+    },
+    {
+      "test": "seven-shuffled-v1.loas",
+      "result": "matched FFmpeg",
+      "layout": "6.1",
+      "frames": 15360,
+      "peak": 1.4901161193847656e-08,
+      "snr_db": 138.42224877379576,
+      "kind": "written LATM with 255-byte PCE comment"
+    },
+    {
+      "test": "seven reordering",
+      "result": "byte-exact PCM under per-frame element permutation"
+    },
+    {
+      "test": "wide-eight-ordered.aac",
+      "result": "matched FFmpeg",
+      "layout": "7.1(wide)",
+      "frames": 15360,
+      "peak": 1.4901161193847656e-08,
+      "snr_db": 138.45364756077834,
+      "kind": "tagged PCE elements"
+    },
+    {
+      "test": "wide-eight-ordered-v0.loas",
+      "result": "matched FFmpeg",
+      "layout": "7.1(wide)",
+      "frames": 15360,
+      "peak": 1.4901161193847656e-08,
+      "snr_db": 138.45364756077834,
+      "kind": "written LATM with 255-byte PCE comment"
+    },
+    {
+      "test": "wide-eight-ordered-v1.loas",
+      "result": "matched FFmpeg",
+      "layout": "7.1(wide)",
+      "frames": 15360,
+      "peak": 1.4901161193847656e-08,
+      "snr_db": 138.45364756077834,
+      "kind": "written LATM with 255-byte PCE comment"
+    },
+    {
+      "test": "wide-eight-shuffled.aac",
+      "result": "matched FFmpeg",
+      "layout": "7.1(wide)",
+      "frames": 15360,
+      "peak": 1.4901161193847656e-08,
+      "snr_db": 138.45364756077834,
+      "kind": "tagged PCE elements"
+    },
+    {
+      "test": "wide-eight-shuffled-v0.loas",
+      "result": "matched FFmpeg",
+      "layout": "7.1(wide)",
+      "frames": 15360,
+      "peak": 1.4901161193847656e-08,
+      "snr_db": 138.45364756077834,
+      "kind": "written LATM with 255-byte PCE comment"
+    },
+    {
+      "test": "wide-eight-shuffled-v1.loas",
+      "result": "matched FFmpeg",
+      "layout": "7.1(wide)",
+      "frames": 15360,
+      "peak": 1.4901161193847656e-08,
+      "snr_db": 138.45364756077834,
+      "kind": "written LATM with 255-byte PCE comment"
+    },
+    {
+      "test": "wide-eight reordering",
+      "result": "byte-exact PCM under per-frame element permutation"
+    },
+    {
+      "test": "he-split-stereo-ordered.aac",
+      "result": "matched FFmpeg",
+      "layout": "stereo",
+      "frames": 16384,
+      "peak": 5.010515451431274e-07,
+      "snr_db": 130.5808511828469,
+      "kind": "tagged SBR/PS with stable element histories",
+      "reference_layout": null
+    },
+    {
+      "test": "he-split-stereo-ordered.loas",
+      "result": "matched FFmpeg",
+      "layout": "stereo",
+      "frames": 16384,
+      "peak": 5.010515451431274e-07,
+      "snr_db": 130.5808511828469,
+      "kind": "explicit SBR/PS PCE in LATM ASC",
+      "reference_layout": null
+    },
+    {
+      "test": "he-split-stereo-shuffled.aac",
+      "result": "matched FFmpeg",
+      "layout": "stereo",
+      "frames": 16384,
+      "peak": 5.010515451431274e-07,
+      "snr_db": 130.5808511828469,
+      "kind": "tagged SBR/PS with stable element histories",
+      "reference_layout": null
+    },
+    {
+      "test": "he-split-stereo-shuffled.loas",
+      "result": "matched FFmpeg",
+      "layout": "stereo",
+      "frames": 16384,
+      "peak": 5.010515451431274e-07,
+      "snr_db": 130.5808511828469,
+      "kind": "explicit SBR/PS PCE in LATM ASC",
+      "reference_layout": null
+    },
+    {
+      "test": "he-split-stereo identity",
+      "result": "SBR/PS PCM retained through PCE signalling and element order"
+    },
+    {
+      "test": "he-side-six-ordered.aac",
+      "result": "matched FFmpeg",
+      "layout": "5.1(side)",
+      "frames": 16384,
+      "peak": 1.3113021850585938e-06,
+      "snr_db": 125.18662216111059,
+      "kind": "tagged SBR/PS with stable element histories",
+      "reference_layout": null
+    },
+    {
+      "test": "he-side-six-ordered.loas",
+      "result": "matched FFmpeg",
+      "layout": "5.1(side)",
+      "frames": 16384,
+      "peak": 1.3113021850585938e-06,
+      "snr_db": 125.18662216111059,
+      "kind": "explicit SBR/PS PCE in LATM ASC",
+      "reference_layout": null
+    },
+    {
+      "test": "he-side-six-shuffled.aac",
+      "result": "matched FFmpeg",
+      "layout": "5.1(side)",
+      "frames": 16384,
+      "peak": 1.3113021850585938e-06,
+      "snr_db": 125.18662216111059,
+      "kind": "tagged SBR/PS with stable element histories",
+      "reference_layout": null
+    },
+    {
+      "test": "he-side-six-shuffled.loas",
+      "result": "matched FFmpeg",
+      "layout": "5.1(side)",
+      "frames": 16384,
+      "peak": 1.3113021850585938e-06,
+      "snr_db": 125.18662216111059,
+      "kind": "explicit SBR/PS PCE in LATM ASC",
+      "reference_layout": null
+    },
+    {
+      "test": "he-side-six identity",
+      "result": "SBR/PS PCM retained through PCE signalling and element order"
+    },
+    {
+      "test": "he-eight-single-ordered.aac",
+      "result": "matched FFmpeg",
+      "layout": "7.1",
+      "frames": 16384,
+      "peak": 4.544854164123535e-07,
+      "snr_db": 129.4620411862578,
+      "kind": "tagged SBR/PS with stable element histories",
+      "reference_layout": null
+    },
+    {
+      "test": "he-eight-single-ordered.loas",
+      "result": "matched FFmpeg",
+      "layout": "7.1",
+      "frames": 16384,
+      "peak": 4.544854164123535e-07,
+      "snr_db": 129.4620411862578,
+      "kind": "explicit SBR/PS PCE in LATM ASC",
+      "reference_layout": null
+    },
+    {
+      "test": "he-eight-single-shuffled.aac",
+      "result": "matched FFmpeg",
+      "layout": "7.1",
+      "frames": 16384,
+      "peak": 4.544854164123535e-07,
+      "snr_db": 129.4620411862578,
+      "kind": "tagged SBR/PS with stable element histories",
+      "reference_layout": null
+    },
+    {
+      "test": "he-eight-single-shuffled.loas",
+      "result": "matched FFmpeg",
+      "layout": "7.1",
+      "frames": 16384,
+      "peak": 4.544854164123535e-07,
+      "snr_db": 129.4620411862578,
+      "kind": "explicit SBR/PS PCE in LATM ASC",
+      "reference_layout": null
+    },
+    {
+      "test": "he-eight-single identity",
+      "result": "SBR/PS PCM retained through PCE signalling and element order"
+    },
+    {
+      "test": "ps-mono-ordered.aac",
+      "result": "matched FFmpeg",
+      "layout": "stereo",
+      "frames": 16384,
+      "peak": 3.3527612686157227e-07,
+      "snr_db": 129.98096702631446,
+      "kind": "tagged SBR/PS with stable element histories",
+      "reference_layout": "stereo"
+    },
+    {
+      "test": "ps-mono-ordered.loas",
+      "result": "matched FFmpeg",
+      "layout": "stereo",
+      "frames": 16384,
+      "peak": 3.3527612686157227e-07,
+      "snr_db": 129.98096702631446,
+      "kind": "explicit SBR/PS PCE in LATM ASC",
+      "reference_layout": "stereo"
+    },
+    {
+      "test": "ps-mono identity",
+      "result": "SBR/PS PCM retained through PCE signalling and element order"
+    },
+    {
+      "test": "ps-back-mono-ordered.aac",
+      "result": "matched FFmpeg",
+      "layout": "stereo",
+      "frames": 16384,
+      "peak": 3.3527612686157227e-07,
+      "snr_db": 129.98096702631446,
+      "kind": "tagged SBR/PS with stable element histories",
+      "reference_layout": "stereo"
+    },
+    {
+      "test": "ps-back-mono-ordered.loas",
+      "result": "matched FFmpeg",
+      "layout": "stereo",
+      "frames": 16384,
+      "peak": 3.3527612686157227e-07,
+      "snr_db": 129.98096702631446,
+      "kind": "explicit SBR/PS PCE in LATM ASC",
+      "reference_layout": "stereo"
+    },
+    {
+      "test": "ps-back-mono identity",
+      "result": "SBR/PS PCM retained through PCE signalling and element order"
+    },
+    {
+      "test": "reject-empty.aac",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 100
+    },
+    {
+      "test": "reject-empty.loas",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 100
+    },
+    {
+      "test": "reject-duplicate-single.aac",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 100
+    },
+    {
+      "test": "reject-duplicate-single.loas",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 100
+    },
+    {
+      "test": "reject-duplicate-pair.aac",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 100
+    },
+    {
+      "test": "reject-duplicate-pair.loas",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 100
+    },
+    {
+      "test": "reject-rate-mismatch.aac",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 100
+    },
+    {
+      "test": "reject-rate-mismatch.loas",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 100
+    },
+    {
+      "test": "reject-main-profile.aac",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 101
+    },
+    {
+      "test": "reject-main-profile.loas",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 101
+    },
+    {
+      "test": "reject-coupling.aac",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 101
+    },
+    {
+      "test": "reject-coupling.loas",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 101
+    },
+    {
+      "test": "reject-nine-channels.aac",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 101
+    },
+    {
+      "test": "reject-nine-channels.loas",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 101
+    },
+    {
+      "test": "reject-six-front.aac",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 101
+    },
+    {
+      "test": "reject-six-front.loas",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 101
+    },
+    {
+      "test": "reject-four-back.aac",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 101
+    },
+    {
+      "test": "reject-four-back.loas",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 101
+    },
+    {
+      "test": "reject-lone-side.aac",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 101
+    },
+    {
+      "test": "reject-lone-side.loas",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 101
+    },
+    {
+      "test": "reject-four-side.aac",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 101
+    },
+    {
+      "test": "reject-four-side.loas",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 101
+    },
+    {
+      "test": "reject-two-lfs.aac",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 101
+    },
+    {
+      "test": "reject-two-lfs.loas",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 101
+    },
+    {
+      "test": "reject-unpaired-front-runs.aac",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 101
+    },
+    {
+      "test": "reject-unpaired-front-runs.loas",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 101
+    },
+    {
+      "test": "reject-unknown-tag.aac",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 100
+    },
+    {
+      "test": "reject-duplicate-element.aac",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 100
+    },
+    {
+      "test": "reject-missing-element.aac",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 100
+    },
+    {
+      "test": "reject-program-change.aac",
+      "result": "rejected",
+      "stage": "read",
+      "decode_error": 101
+    },
+    {
+      "test": "reject-short-asc.loas",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 100
+    },
+    {
+      "test": "reject-large-asc.loas",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 100
+    },
+    {
+      "test": "side-six-shuffled.m4a exact seeks",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 7933,
+      "maximum_discarded": 1024,
+      "maximum_probes": 0,
+      "index_points": 0,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
+      "maximum_deviation": 0
+    },
+    {
+      "test": "side-six-shuffled.mka exact seeks",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 7933,
+      "maximum_discarded": 1024,
+      "maximum_probes": 0,
+      "index_points": 0,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
+      "maximum_deviation": 0
+    },
+    {
+      "test": "side-six-shuffled.ts exact seeks",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 7933,
+      "maximum_discarded": 1024,
+      "maximum_probes": 0,
+      "index_points": 0,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
+      "maximum_deviation": 0
+    },
+    {
+      "test": "side-six-shuffled.aac exact seeks",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 7933,
+      "maximum_discarded": 1024,
+      "maximum_probes": 0,
+      "index_points": 0,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
+      "maximum_deviation": 0
+    },
+    {
+      "test": "back-six-shuffled-v0.loas exact seeks",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 7933,
+      "maximum_discarded": 1024,
+      "maximum_probes": 0,
+      "index_points": 0,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
+      "maximum_deviation": 0
+    },
+    {
+      "test": "eight-single-shuffled-v1.loas exact seeks",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 7933,
+      "maximum_discarded": 1024,
+      "maximum_probes": 0,
+      "index_points": 0,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
+      "maximum_deviation": 0
+    },
+    {
+      "test": "side-six-shuffled.aac cancel-open",
+      "result": "cancelled"
+    },
+    {
+      "test": "side-six-shuffled.aac cancel-read",
+      "result": "cancelled",
+      "frames_before_cancel": 8192
+    },
+    {
+      "test": "eight-single-shuffled-v1.loas cancel-open",
+      "result": "cancelled"
+    },
+    {
+      "test": "eight-single-shuffled-v1.loas cancel-read",
+      "result": "cancelled",
+      "frames_before_cancel": 8192
+    },
+    {
+      "test": "stereo-tags-shuffled.packets",
+      "result": "passed",
+      "packets": 15,
+      "frames": 15360,
+      "guarded_prefixes": 817,
+      "guarded_mutations": 600,
+      "accepted_mutations": 480,
+      "config_lifetime": "released after open",
+      "replacement": "rejected without changing active map",
+      "capacity": "no writes below required frames"
+    },
+    {
+      "test": "eight-single-shuffled.packets",
+      "result": "passed",
+      "packets": 15,
+      "frames": 15360,
+      "guarded_prefixes": 2363,
+      "guarded_mutations": 600,
+      "accepted_mutations": 392,
+      "config_lifetime": "released after open",
+      "replacement": "rejected without changing active map",
+      "capacity": "no writes below required frames"
+    },
+    {
+      "test": "he-eight-single-shuffled.packets",
+      "result": "passed",
+      "packets": 8,
+      "frames": 16384,
+      "guarded_prefixes": 4600,
+      "guarded_mutations": 600,
+      "accepted_mutations": 73,
+      "config_lifetime": "released after open",
+      "replacement": "rejected without changing active map",
+      "capacity": "no writes below required frames"
+    },
+    {
+      "test": "ps-mono-ordered.packets",
+      "result": "passed",
+      "packets": 8,
+      "frames": 16384,
+      "guarded_prefixes": 612,
+      "guarded_mutations": 600,
+      "accepted_mutations": 26,
+      "config_lifetime": "released after open",
+      "replacement": "rejected without changing active map",
+      "capacity": "no writes below required frames"
+    },
+    {
+      "test": "ps-back-mono-ordered.packets",
+      "result": "passed",
+      "packets": 8,
+      "frames": 16384,
+      "guarded_prefixes": 612,
+      "guarded_mutations": 600,
+      "accepted_mutations": 26,
+      "config_lifetime": "released after open",
+      "replacement": "rejected without changing active map",
+      "capacity": "no writes below required frames"
+    },
+    {
+      "test": "stereo-tags-shuffled-v0.loas protected parser",
+      "result": "passed",
+      "guarded_prefixes": 827,
+      "guarded_mutations": 600,
+      "input_lifetime": "released before reading PCM"
+    },
+    {
+      "test": "eight-single-shuffled-v1.loas protected parser",
+      "result": "passed",
+      "guarded_prefixes": 2383,
+      "guarded_mutations": 600,
+      "input_lifetime": "released before reading PCM"
+    },
+    {
+      "test": "ps-mono-ordered.loas protected parser",
+      "result": "passed",
+      "guarded_prefixes": 625,
+      "guarded_mutations": 600,
+      "input_lifetime": "released before reading PCM"
+    },
+    {
+      "test": "side-six-shuffled.aac mutations",
+      "result": "no crash or hang",
+      "mutations": 200,
+      "decoded": 10,
+      "rejected_or_damaged": 190
+    },
+    {
+      "test": "eight-single-shuffled-v1.loas mutations",
+      "result": "no crash or hang",
+      "mutations": 200,
+      "decoded": 53,
+      "rejected_or_damaged": 147
+    },
+    {
+      "test": "side-six-shuffled.ts mutations",
+      "result": "no crash or hang",
+      "mutations": 200,
+      "decoded": 18,
+      "rejected_or_damaged": 182
+    },
+    {
+      "test": "he-eight-single-shuffled.aac mutations",
+      "result": "no crash or hang",
+      "mutations": 200,
+      "decoded": 7,
+      "rejected_or_damaged": 193
+    }
+  ],
+  "cli_sha256": "b1ecacdd45cdaf7abafb86ab30d1f4acd4f55a1a78b0e166451ecc80092c1af7",
+  "ffmpeg": "ffmpeg version 5.1.9-0+deb12u1 Copyright (c) 2000-2026 the FFmpeg developers",
+  "sources": {
+    "src/aac.s": "f1b6dab445c30b50572182be8799f7bb96f643938bfd47ccb36cf3a52d166743",
+    "src/aac_pce.inc": "fc523d39a21cb006cc3bdceec3106abb8400d5111cef46426c0decb18e99edd6",
+    "src/aac_sbr.inc": "057caca4c1a3ffa372e5aa86156ed1239fffa2ea9898788cd1bf9830f0bf9121",
+    "src/latm.s": "3418f1e329b1bc37828ebef0ed574f12f5720d7627e2376064a678a8f785e9d2",
+    "tests/aac_pce_vectors.py": "20ea15f9174b52f1c7dc6e303e3f19babb117513414b90d79348617a126e7e47",
+    "tests/aac-pce-packet-oracle.c": "83b979b49524aea5152cb890ab755b39722a0974514d4036d4ff8be0ae275b7f",
+    "tests/aac-pce-latm-oracle.c": "0c871009ab9ce4dfeca5957ef72b094d4ec892b295a6f8c02195b4c2afc9310b",
+    "tests/verify-aac-pce.py": "894fea076d319a01055eaa2c700fe79025be746b939a96ec52bc33e1309593a1",
+    "tests/verify-robustness.py": "33133ac03d5006b41f34ff6575d6b6e02b5c72e702069176d39e72febb18aebf"
+  }
+}

@@ -3,7 +3,7 @@
 # Huffman codewords, scalefactor band offsets and TNS band limits come from
 # src/aac_tables.inc (tests/generate-aac-tables.py). Track mode: MP4,
 # Matroska and ADTS supply the AudioSpecificConfig and one raw data block per
-# packet. Object type 2 (LC), channel configurations 1-7, SCE/CPE/LFE with
+# packet. Object type 2 (LC), indexed or PCE layouts, SCE/CPE/LFE with
 # section data, scalefactors, pulses, TNS, perceptual noise substitution,
 # mid/side and intensity stereo, sine/KBD windows and a DCT-IV based IMDCT;
 # the output mixes to stereo with the shared WAVE speaker weights. HE-AAC
@@ -235,6 +235,8 @@ LOCALFN aac_inside
     ret
 ENDFN aac_inside
 
+.include "aac_pce.inc"
+
 FN aac_track_close
     sub rsp, 40
     call sbr_close
@@ -301,8 +303,6 @@ FN aac_track_open
     mov [rip + aac_rate_index], eax
     mov ecx, 4
     call aac_get                          # channelConfiguration
-    test eax, eax
-    jz .Laac_open_unsupported             # program config element layouts
     cmp eax, 7
     ja .Laac_open_unsupported
     mov [rip + aac_config], eax
@@ -330,6 +330,55 @@ FN aac_track_open
     call aac_get
     test eax, eax                         # 960 frames, core coder, extension
     jnz .Laac_open_unsupported
+    cmp dword ptr [rip + aac_config], 0
+    jne .Laac_open_default_map
+    # ADTS supplies our internal two-byte ASC. Its first raw data block
+    # carries the PCE; external AudioSpecificConfigs must contain it.
+    lea rax, [rip + adts_config]
+    cmp rsi, rax
+    jne .Laac_open_pce_asc
+    mov [rip + aac_ptr], rdi
+    mov [rip + aac_bytes], r12
+    mov qword ptr [rip + aac_pos], 0
+    mov dword ptr [rip + aac_element], 0
+.Laac_open_pce_leading:
+    mov ecx, 3
+    call aac_get
+    cmp eax, 5
+    je .Laac_open_pce_adts
+    cmp eax, 4
+    je .Laac_open_pce_data
+    cmp eax, 6
+    jne .Laac_open_bad
+    call aac_fill
+    jmp .Laac_open_pce_leading_check
+.Laac_open_pce_data:
+    call aac_data_element
+.Laac_open_pce_leading_check:
+    test eax, eax
+    jz .Laac_open_bad
+    call aac_inside
+    test eax, eax
+    jz .Laac_open_bad
+    jmp .Laac_open_pce_leading
+.Laac_open_pce_adts:
+    call aac_pce_read
+    test eax, eax
+    jz .Laac_open_bad
+    call aac_pce_commit
+    mov [rip + aac_ptr], rsi
+    mov [rip + aac_bytes], rbx
+    mov qword ptr [rip + aac_pos], 16
+    jmp .Laac_open_extensions
+.Laac_open_pce_asc:
+    call aac_pce_read
+    test eax, eax
+    jz .Laac_open_bad
+    call aac_pce_commit
+    jmp .Laac_open_extensions
+.Laac_open_default_map:
+    call aac_default_map
+.Laac_open_extensions:
     cmp dword ptr [rip + sbr_mode], 1
     je .Laac_open_format
     # Backward-compatible extension: SBR present, absent or (equal rate) implicit.
@@ -391,9 +440,7 @@ FN aac_track_open
     mov [rip + aac_tns_long], eax
     movzx eax, byte ptr [rcx + 11]
     mov [rip + aac_tns_short], eax
-    mov eax, [rip + aac_config]
-    lea rcx, [rip + aac_config_channels]
-    movzx eax, byte ptr [rcx + rax]
+    mov eax, [rip + aac_map + AP_CHANNELS]
     mov [rip + aac_channels], eax
     mov [rip + source_channels], eax
     mov dword ptr [rip + source_bits], 0
@@ -403,10 +450,8 @@ FN aac_track_open
     jz .Laac_open_bad
     mov [rip + aac_memory], rax
     call aac_init_tables
-    # Speaker layout for the stereo mix (ALAC and AAC share channel orders).
-    mov eax, [rip + aac_channels]
-    lea rcx, [rip + alac_masks]
-    mov eax, [rcx + rax*4 - 4]
+    # PCE or indexed speaker layout, with the same shared stereo weights.
+    mov eax, [rip + aac_map + AP_MASK]
     mov [rip + pcm_channel_mask], eax
     mov dword ptr [rip + pcm_mask_seen], 1
     mov dword ptr [rip + pcm_ignore_extra], 0
@@ -471,11 +516,9 @@ FN aac_track_open
     cmp dword ptr [rip + aac_rate_index], 3
     jb .Laac_open_sbr_done                # a core above 48 kHz
     mov dword ptr [rip + decode_error], 0
-    mov eax, [rip + aac_config]
-    lea rcx, [rip + aac_config_elements]
-    movzx ecx, byte ptr [rcx + rax]
+    mov ecx, [rip + aac_map + AP_COUNT]
     xor edx, edx                          # mono: parametric stereo unless signalled absent
-    cmp eax, 1
+    cmp dword ptr [rip + aac_channels], 1
     jne .Laac_open_sbr_state
     cmp dword ptr [rip + aac_ps_flag], 0
     setne dl
@@ -488,6 +531,7 @@ FN aac_track_open
     cmp qword ptr [rip + sbr_ps], 0
     je .Laac_open_sbr_ready
     mov dword ptr [rip + source_channels], 2
+    mov dword ptr [rip + pcm_mix], 0       # PS renders L/R, regardless of the mono PCE speaker
 .Laac_open_sbr_ready:
     mov eax, 1
 .Laac_open_sbr_done:
@@ -554,6 +598,8 @@ FN aac_track_decode
     mov qword ptr [rip + aac_pos], 0
     mov dword ptr [rip + aac_next], 0
     mov dword ptr [rip + aac_element], 0
+    mov dword ptr [rip + aac_seen_elements], 0
+    mov dword ptr [rip + aac_current_element], -1
 .Laac_decode_element:
     mov ecx, 3
     call aac_get
@@ -572,18 +618,27 @@ FN aac_track_decode
     je .Laac_decode_fil
     jmp .Laac_decode_unsupported          # coupling channel element
 .Laac_decode_channels:
-    # The element must be the next one of the configured layout.
-    mov eax, [rip + aac_config]
-    dec eax
-    imul eax, eax, 6
-    lea rcx, [rip + aac_layouts]
-    add rcx, rax
     mov edx, [rip + aac_element]
-    cmp edx, 5
+    cmp dword ptr [rip + aac_config], 0
+    jne .Laac_decode_slot
+    call aac_peek                      # PCE identity is type + instance tag
+    shr eax, 28
+    mov edx, ebx
+    shl edx, 4
+    add eax, edx
+    lea rcx, [rip + aac_map]
+    movzx edx, byte ptr [rcx + AP_LOOKUP + rax]
+.Laac_decode_slot:
+    cmp edx, [rip + aac_map + AP_COUNT]
     jae .Laac_decode_bad
-    movzx eax, byte ptr [rcx + rdx]
-    cmp eax, ebx
+    lea rcx, [rip + aac_map]
+    cmp bl, [rcx + AP_TYPES + rdx]
     jne .Laac_decode_bad
+    bts dword ptr [rip + aac_seen_elements], edx
+    jc .Laac_decode_bad
+    mov [rip + aac_current_element], edx
+    movzx eax, byte ptr [rcx + AP_FIRST + rdx]
+    mov [rip + aac_next], eax
     inc dword ptr [rip + aac_element]
     cmp ebx, 1
     je .Laac_decode_pair
@@ -614,32 +669,22 @@ FN aac_track_decode
     call aac_inside
     test eax, eax
     jz .Laac_decode_bad
-    mov eax, [rip + aac_next]
-    cmp eax, [rip + aac_channels]
+    mov eax, [rip + aac_element]
+    cmp eax, [rip + aac_map + AP_COUNT]
     jne .Laac_decode_bad
     cmp dword ptr [rip + sbr_active], 0
     je .Laac_decode_emit
-    # SBR per channel element, in layout order.
-    mov eax, [rip + aac_config]
-    dec eax
-    imul eax, eax, 6
-    lea rsi, [rip + aac_layouts]
-    add rsi, rax
+    # Stable element slots preserve SBR history across packet reordering.
+    lea rsi, [rip + aac_map]
     xor edi, edi                          # element
-    xor r12d, r12d                        # first channel
 .Laac_decode_sbr:
-    cmp edi, [rip + aac_element]
+    cmp edi, [rip + aac_map + AP_COUNT]
     jae .Laac_decode_emit
-    movzx ebx, byte ptr [rsi + rdi]
+    movzx ebx, byte ptr [rsi + AP_TYPES + rdi]
     mov ecx, edi
     mov edx, ebx
-    mov r8d, r12d
+    movzx r8d, byte ptr [rsi + AP_FIRST + rdi]
     call sbr_apply
-    inc r12d
-    cmp ebx, 1
-    jne .Laac_decode_sbr_next
-    inc r12d
-.Laac_decode_sbr_next:
     inc edi
     jmp .Laac_decode_sbr
 .Laac_decode_emit:
@@ -801,8 +846,8 @@ LOCALFN aac_data_element
     ret
 ENDFN aac_data_element
 
-# Program config element inside a frame: parsed and skipped -> EAX=1.
-LOCALFN aac_program_config
+# In-band PCE for an indexed layout: parsed and skipped -> EAX=1.
+LOCALFN aac_skip_program_config
     push rbx
     push rsi
     sub rsp, 40
@@ -858,7 +903,7 @@ LOCALFN aac_program_config
     pop rsi
     pop rbx
     ret
-ENDFN aac_program_config
+ENDFN aac_skip_program_config
 
 # Fill element: SBR data for the previous channel element when SBR is on,
 # otherwise skipped (implicit SBR is noted while the first packet is probed).
@@ -903,16 +948,11 @@ LOCALFN aac_fill
     jmp .Laac_fill_done
 .Laac_fill_decode:
     add qword ptr [rip + aac_pos], 4      # extension_type
-    mov eax, [rip + aac_element]
-    dec eax
+    mov eax, [rip + aac_current_element]
     lea rcx, [rip + sbr_elements]
     mov rcx, [rcx + rax*8]
-    mov edx, [rip + aac_config]
-    dec edx
-    imul edx, edx, 6
-    add edx, eax
-    lea rax, [rip + aac_layouts]
-    movzx edx, byte ptr [rax + rdx]       # element type
+    lea rdx, [rip + aac_map]
+    movzx edx, byte ptr [rdx + AP_TYPES + rax]
     xor r8d, r8d
     cmp esi, 14                           # EXT_SBR_DATA_CRC
     sete r8b
@@ -2683,9 +2723,7 @@ LOCALFN aac_emit
     jb .Laac_emit_stereo
     jmp .Laac_emit_done
 .Laac_emit_mix:
-    lea r8, [rip + alac_wave_index]
-    lea eax, [rbx - 1]
-    lea r8, [r8 + rax*8]                  # AAC channel -> WAVE position
+    lea r8, [rip + aac_map + AP_WAVE]     # stable channel -> WAVE position
     lea r9, [rip + pcm_mix_coeff]
     xor ecx, ecx
 .Laac_emit_frame:

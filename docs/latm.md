@@ -6,7 +6,7 @@ LAMP 0.4.0-dev plays AAC carried in LATM (ISO/IEC 14496-3, 1.7), framed by LOAS 
 
 - LOAS AudioSyncStream frames: the 0x2B7 sync, a 13-bit length and one AudioMuxElement. Raw files may start with an ID3v2 tag and end with an ID3v1 tag. A file is recognised by two consecutive frames, or by one frame that fills it.
 - StreamMuxConfig of audioMuxVersion 0 or 1 (taraBufferFullness, ascLen and the bits it covers), one program and one layer, frame length type 0 (byte counts), other data in either version's coding, and the configuration CRC (read, not checked). Frames with useSameStreamMux use the last configuration.
-- AudioSpecificConfig: object types 1–4 (LC; Main, SSR and LTP reach the AAC decoder, which rejects them), with SBR (object type 5) or PS (object type 29) around them and escaped object types. GASpecificConfig with a channel configuration, the core coder delay and the extension flag. In version 1, the backward-compatible SBR and PS signalling inside ascLen reaches the decoder, as from MP4.
+- AudioSpecificConfig: object types 1–4 (LC; Main, SSR and LTP reach the AAC decoder, which rejects them), with SBR (object type 5) or PS (object type 29) around them and escaped object types. GASpecificConfig with an indexed channel configuration or a [Program Config Element](aac.md#program-config-layouts), the core coder delay and the extension flag. PCE byte alignment is relative to the ASC start. In version 1, the backward-compatible SBR and PS signalling inside ascLen reaches the decoder, as from MP4.
 - Payloads: each sub-frame's PayloadLengthInfo and payload, at any bit position.
 - MPEG transport streams: stream type 0x11 opens the gathered PES data as a LOAS stream ([MPEG-TS notes](mpegts.md)). PES packets need not start at a frame. A stream of that type that starts with an ADTS frame plays as ADTS, as FFmpeg plays it; FFmpeg writes such streams when it copies ADTS with `-mpegts_flags latm`.
 
@@ -17,7 +17,7 @@ Frames before the first StreamMuxConfig use it. FFmpeg's command line decodes th
 - FFmpeg 6.1 reads only the first sub-frame of a frame and then finds the rest of the frame too long, so it decodes nothing from a stream of two or more sub-frames per frame (numSubFrames above 0). LAMP decodes every sub-frame.
 - FFmpeg reconfigures its decoder when the configuration's rate or channel configuration changes mid-stream. LAMP rejects any change in the AudioSpecificConfig as unsupported.
 
-Rejected with `decode_error` 101: audioMuxVersionA 1, several programs or layers, fixed, CELP or HVXC frame lengths (frame length types 1–7), other object types, channel configuration 0 (a program config element), configurations the AAC decoder does not support (such as 960-sample frames), and a configuration change. Malformed (100): no StreamMuxConfig at all, a StreamMuxConfig running past its frame, an ascLen shorter than the configuration it covers, or a configuration of more than 48 bytes.
+Rejected with `decode_error` 101: audioMuxVersionA 1, several programs or layers, fixed, CELP or HVXC frame lengths (frame length types 1–7), other object types, configurations the AAC decoder does not support (such as 960-sample frames or unsupported PCE speaker groups), and a configuration change. Malformed (100): no StreamMuxConfig at all, a StreamMuxConfig running past its frame, an ascLen shorter than the configuration it covers, or a configuration of more than 512 bytes.
 
 ## Verification
 
@@ -47,9 +47,11 @@ Rejected with `decode_error` 101: audioMuxVersionA 1, several programs or layers
 - 75 seeks (`tests/seek-oracle.c`) in three LOAS files, a sub-frame stream and a transport stream equal continuous decoding.
 - An ID3v2 tag before and an ID3v1 tag after the stream leave the decode unchanged. `--tags` reads the ID3v2 title and ignores the ID3v1 tag, as FFmpeg does.
 - 13 rejections:
-  - unsupported (101): audioMuxVersionA, two programs, two layers, fixed and CELP frame lengths, object types 23 (ER AAC LD) and 42 (USAC, an escaped type), a program config element, 960-sample frames, a configuration change;
+  - unsupported (101): audioMuxVersionA, two programs, two layers, fixed and CELP frame lengths, object types 23 (ER AAC LD) and 42 (USAC, an escaped type), configuration 0 without a PCE (its following mux bits describe an unsupported PCE profile), 960-sample frames, a configuration change;
   - malformed (100): an ascLen one bit short, data between frames, no configuration.
 
   A cancelled open stops cleanly, and an HE-AAC stream plays through the Linux null sink.
 
 `tests/verify-robustness.py` also mutates a LOAS file and a LATM transport stream 500 times each.
+
+`tests/verify-aac-pce.py` adds tagged PCE layouts in both mux versions, maximum-length PCE comments, explicit SBR/PS, configuration-size/length rejection, guarded input prefixes and mutations, exact seeks and Windows COFF/Wine comparisons. See the [AAC PCE verification](aac.md#verification) for results and reference limits.

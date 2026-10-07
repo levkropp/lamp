@@ -1,0 +1,17 @@
+{
+  "result": "passed",
+  "platform": "Linux private PulseAudio sink",
+  "checks": [
+    {
+      "file": "side-six-shuffled.aac",
+      "sha256": "fa525cbe6e09c1c37c538e981114c24e704757b13f9897d48cc7d0cefcc21c00",
+      "stats": "Playing. Space: pause / resume. N / P: next / previous file. Left / Right: -5 / +5 s. Down / Up: -60 / +60 s. [ / ]: previous / next chapter. R: repeat. Q or Ctrl+C: stop. codec=10 rate=48000 channels=6 bits=0 frames=15360 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2255 cpu_us=80672 endpoint_dry=0"
+    },
+    {
+      "file": "side-six-shuffled.ts",
+      "sha256": "3cfbcb1a2706f9c3918d85571fd3ade8ecb7e05dd44f3999b995370927bf57cb",
+      "stats": "Playing. Space: pause / resume. N / P: next / previous file. Left / Right: -5 / +5 s. Down / Up: -60 / +60 s. [ / ]: previous / next chapter. R: repeat. Q or Ctrl+C: stop. codec=10 rate=48000 channels=6 bits=0 frames=15360 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2386 cpu_us=70860 endpoint_dry=0"
+    }
+  ],
+  "cli_sha256": "b1ecacdd45cdaf7abafb86ab30d1f4acd4f55a1a78b0e166451ecc80092c1af7"
+}
