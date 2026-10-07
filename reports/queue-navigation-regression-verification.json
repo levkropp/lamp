@@ -1,0 +1,258 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "start.flac --start",
+      "result": "exact",
+      "starts": 5
+    },
+    {
+      "test": "start.mp3 --start",
+      "result": "exact",
+      "starts": 5
+    },
+    {
+      "test": "start.ogg --start",
+      "result": "exact",
+      "starts": 5
+    },
+    {
+      "test": "start.opus --start",
+      "result": "exact after 24000 frames",
+      "starts": 5
+    },
+    {
+      "test": "start.m4a --start",
+      "result": "exact",
+      "starts": 5
+    },
+    {
+      "test": "start.wav --start",
+      "result": "exact",
+      "starts": 5
+    },
+    {
+      "test": "start.wv --start",
+      "result": "exact",
+      "starts": 5
+    },
+    {
+      "test": "start.mka --start",
+      "result": "exact",
+      "starts": 5
+    },
+    {
+      "test": "start.ac3 --start",
+      "result": "within the dither (50 dB or more)",
+      "starts": 5
+    },
+    {
+      "test": "start.mp2 --start",
+      "result": "exact",
+      "starts": 5
+    },
+    {
+      "test": "queue --start",
+      "result": "exact",
+      "note": "only the first file starts late"
+    },
+    {
+      "test": "option errors",
+      "result": "usage",
+      "cases": 9
+    },
+    {
+      "test": "start",
+      "result": "passed",
+      "runs": [
+        [
+          "a",
+          120128,
+          167872
+        ]
+      ]
+    },
+    {
+      "test": "next",
+      "result": "passed",
+      "runs": [
+        [
+          "a",
+          480,
+          56640
+        ],
+        [
+          "b",
+          314,
+          143686
+        ]
+      ]
+    },
+    {
+      "test": "next on the last file",
+      "result": "passed",
+      "runs": [
+        [
+          "a",
+          960,
+          55680
+        ]
+      ]
+    },
+    {
+      "test": "previous file",
+      "result": "passed",
+      "runs": [
+        [
+          "c",
+          960,
+          95040
+        ],
+        [
+          "a",
+          0,
+          14400
+        ],
+        [
+          "c",
+          239,
+          95761
+        ],
+        [
+          "a",
+          0,
+          288000
+        ]
+      ]
+    },
+    {
+      "test": "previous restarts",
+      "result": "passed",
+      "runs": [
+        [
+          "a",
+          960,
+          177600
+        ],
+        [
+          "a",
+          164,
+          287836
+        ]
+      ]
+    },
+    {
+      "test": "seek",
+      "result": "passed",
+      "runs": [
+        [
+          "d",
+          960,
+          83040
+        ],
+        [
+          "d",
+          331223,
+          119017
+        ],
+        [
+          "d",
+          97,
+          671903
+        ]
+      ]
+    },
+    {
+      "test": "--repeat",
+      "result": "passed",
+      "runs": [
+        [
+          "e",
+          960,
+          56640
+        ],
+        [
+          "e",
+          0,
+          57600
+        ],
+        [
+          "e",
+          0,
+          40800
+        ]
+      ]
+    },
+    {
+      "test": "R key",
+      "result": "passed",
+      "runs": [
+        [
+          "e",
+          960,
+          56640
+        ],
+        [
+          "e",
+          283,
+          57317
+        ],
+        [
+          "e",
+          0,
+          37920
+        ]
+      ]
+    },
+    {
+      "test": "R key twice",
+      "result": "passed",
+      "runs": [
+        [
+          "e",
+          960,
+          56640
+        ]
+      ]
+    },
+    {
+      "test": "resume",
+      "result": "passed",
+      "runs": [
+        [
+          "a",
+          72480,
+          215520
+        ]
+      ]
+    },
+    {
+      "test": "resume in a list",
+      "result": "passed",
+      "runs": [
+        [
+          "a",
+          49536,
+          238464
+        ]
+      ]
+    },
+    {
+      "test": "--start wins",
+      "result": "passed",
+      "runs": [
+        [
+          "a",
+          96480,
+          191520
+        ]
+      ]
+    },
+    {
+      "test": "resume lines",
+      "result": "passed",
+      "note": "newest first, other lists kept, malformed lines dropped, 256 kept"
+    }
+  ],
+  "scope": "--start against whole decodes in ten formats, queues and option errors; keys N/P, arrows, R and --repeat through the null sink."
+}

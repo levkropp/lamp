@@ -65,6 +65,8 @@ During console playback (Linux and Windows):
 
 The queue notes where each file starts in its output, to the frame, so a key acts on the file being heard rather than on one the decoder already reads ahead. A key stops the stream with a command; the CLI then reopens the queue at the target (`queue_navigate`, `queue_goto`) and starts a new stream, as the Windows player restarts for its seeks. Natural transitions stay gapless; a key's transition is a new stream. Seeks keep the session rate. In a resampled file the decoder seeks a filter half-width before the target and the resampler restarts there, so the output from the target on equals continuous decoding. `--rate` sets the session rate for every file, the first included (see [device notes](devices.md#rates-and-channels)).
 
+The shared timeline retains 524,288 distinct file boundaries in 8 MiB of zero-initialized storage, twice the PCM ring's frame capacity. Normal queues write only the entries used. Empty opens at the same output frame replace the last boundary, so empty files cannot evict audible history. Lookup uses binary search over a chronological ring and 64-bit publication ordinals. A version sampled before and after lookup detects concurrent overwrite and retries, keeping a record’s start and index coherent. Both consoles use the same sampled position for the lookup and elapsed time. Windows relative seeks carry that paired file index into the restart; timeline clicks use the displayed file index. Seeks preserve pause. If an unusually large output backlog exceeds retained history, lookup reports an unknown file; relative navigation ignores that position and resume does not save it.
+
 ## The Windows player
 
 `lamp.exe` plays a list the same way, as one gapless queue:
@@ -100,9 +102,19 @@ Files open before they are heard, so the window keeps what it shows per file:
 - The window shows the entry whose start the heard position has reached: the title, picture, time, timeline and codec.
 - A timer set for the next entry's start changes them on time, even while the controls are hidden.
 
+The producer prepares metadata before publishing an entry. A [Windows SRW lock](https://learn.microsoft.com/en-us/windows/win32/sync/slim-reader-writer--srw--locks) protects the bounded publication/copy and cover-pointer transfer; the UI reads its own snapshot, so a concurrent overwrite cannot mix fields from different files. Allocation, parsing, picture copying and window calls stay outside the lock. Snapshot ordinals are also 64-bit.
+
+When many short files evict the heard file's metadata from the 64 entries, the shared timeline still identifies its index and start. The window shows its filename and clears unavailable tag title, duration, codec and cover metadata. A short timer follows subsequent heard boundaries while that fallback is active. Chapter commands reopen the identified file on the playback worker, after the previous worker has stopped, then select its chapter and restart with pause preserved. The metadata limit stays bounded even for long queues.
+
 Navigation starts a new playback thread at the target file and position (`engine_play_list`), as seeks always did. Natural transitions stay gapless. When the endpoint is lost after playback started, the window reopens the heard file at the heard position, as the console does (see [device notes](devices.md)).
 
 ## Verification
+
+The [negative control](../reports/queue-dense-negative-control.json) reproduced file 5 reported at frame 0 after file 68 decoded ahead, with no decode error.
+
+`python3 tests/verify-queue-timeline.py` ([native report](../reports/queue-timeline-verification.json), [Windows COFF/Wine report](../reports/queue-timeline-wine-verification.json)) checks dense queues of 100 forty-millisecond files at 44.1, 48 and 96 kHz, all played at 48 kHz. After 131,072 frames decode ahead into file 68, 3,279 position queries and 18 restarted PCM comparisons verify the heard file, boundary starts, N/P, seek and chapter navigation; the output ends at a protected page. A further 1,000 empty opens retain only two audible boundaries and preserve all later-file announcements. Repeating one-frame files crosses the list 40 times with 4,096 exact heard queries. Another 10,007 queries seed the complete retained window and ordinals beyond 2^32, including expired-history rejection, through test-only aliases of the shipping source. A two-thread case then performs 4,095 real overwrites of seeded wrapped history while querying the retiring window, followed by 8,192 exact retention checks.
+
+The Wine run additionally checks 2,000 concurrent Windows snapshot publications, coherent fields, exclusive cover ownership, 130 seeded 64-bit snapshot queries and four paired-index/pause seek cases. `python3 tests/verify-player.py --only dense_queue` plays a 101-file list whose first metadata snapshot is evicted, checks the correct paused filename, seeks to three chapter targets without playing while paused, then requires exact resumed first-file PCM ([player regression report](../reports/queue-player-regression-verification.json)). The chapter player scenario also checks paused Home/Right/Left seeks at 0/5/0 seconds before restoring the chapter target. Native Windows hardware remains unverified.
 
 `python3 tests/verify-queue.py` ([report](../reports/queue-verification.json)) checks:
 

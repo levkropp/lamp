@@ -1553,6 +1553,11 @@ LOCALFN keyboard
 .Lkeyboard_command:
     mov [rip + engine_command], edx
     call console_note_heard
+    cmp dword ptr [rip + engine_heard_index], 0
+    jns .Lkeyboard_known
+    mov dword ptr [rip + engine_command], 0
+    jmp .Lkeyboard_wait
+.Lkeyboard_known:
     mov rcx, [rip + stop_event]
     call SetEvent
     jmp .Lkeyboard_exit
@@ -1579,14 +1584,12 @@ ENDFN keyboard
 LOCALFN console_note_heard
     sub rsp, 40
     mov rcx, [rip + engine_position]
+    mov [rsp + 32], rcx
     call queue_heard
-    cmp eax, -1
-    jne .Lheard_found
-    mov eax, [rip + queue_index]
-    xor edx, edx
-.Lheard_found:
     mov [rip + engine_heard_index], eax
-    mov rax, [rip + engine_position]
+    test eax, eax
+    js .Lheard_none
+    mov rax, [rsp + 32]
     sub rax, rdx
     jae .Lheard_offset
     xor eax, eax

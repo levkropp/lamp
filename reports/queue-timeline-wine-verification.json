@@ -1,0 +1,117 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "seeded retained history and 64-bit ordinal",
+      "result": {
+        "seeded_history_queries": 10007,
+        "retained_boundaries": 524288,
+        "logical_count_above_2_to_32": true,
+        "expired_history": "unknown"
+      }
+    },
+    {
+      "test": "100 short files at 44100 Hz to 48000 Hz",
+      "result": {
+        "frames_prebuffered": 131072,
+        "decoded_file": 68,
+        "timeline_queries": 1093,
+        "exact_pcm_restarts": 6,
+        "guarded_output": true,
+        "rate": 48000
+      }
+    },
+    {
+      "test": "100 short files at 48000 Hz to 48000 Hz",
+      "result": {
+        "frames_prebuffered": 131072,
+        "decoded_file": 68,
+        "timeline_queries": 1093,
+        "exact_pcm_restarts": 6,
+        "guarded_output": true,
+        "rate": 48000
+      }
+    },
+    {
+      "test": "100 short files at 96000 Hz to 48000 Hz",
+      "result": {
+        "frames_prebuffered": 131072,
+        "decoded_file": 68,
+        "timeline_queries": 1093,
+        "exact_pcm_restarts": 6,
+        "guarded_output": true,
+        "rate": 48000
+      }
+    },
+    {
+      "test": "1000 empty opens between audible files",
+      "result": {
+        "empty_files": 1000,
+        "timeline_boundaries": 2,
+        "later_file_announcements": 1001,
+        "frames": 3840
+      }
+    },
+    {
+      "test": "repeating one-frame files",
+      "result": {
+        "single_frame_files": 4096,
+        "timeline_queries": 4096,
+        "gapless_list_wraps": 40,
+        "later_file_announcements": 4095
+      }
+    },
+    {
+      "test": "concurrent history overwrite",
+      "result": {
+        "concurrent_history_queries": 33594580,
+        "real_overwrites": 4095,
+        "final_retention_queries": 8192,
+        "mixed_start_index_records": 0
+      }
+    },
+    {
+      "test": "Windows producer/UI snapshot handoff",
+      "result": {
+        "real_metadata_publications": 2000,
+        "coherent_snapshots": 581985,
+        "owned_covers_freed": 2000,
+        "seeded_64bit_queries": 130,
+        "paired_seek_checks": 4,
+        "expired_snapshots": "unavailable"
+      }
+    }
+  ],
+  "fixture_hashes": {
+    "forty-44100.wav.f32": "65ebdcdae6b056f36569ddd08054703d46cd4879f6dac1ea5c7ff46cb49bba13",
+    "empty.wav.f32": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "one-frame.wav": "c028c334aa068e90330e052cead1b689c56dba1299737f1936cb49ff170577c2",
+    "forty-48000.wav.f32": "39f3e75fb22bc15b7dbf7ee808d5e5f2bdc4e37e3b07f76333a11fc058495601",
+    "forty-44100.wav": "86cfb5f0b4e7e165d5e82102eb83f9fc5738886736ef3eff5f8eb1ed1c582519",
+    "forty-96000.wav.f32": "4a46819512e912bd598d02ff9a946959741b20c90fa70740a60ee1e3f661267d",
+    "one-frame.wav.f32": "c901cb43cf845d388bfdae357b09f560915b207e20f07f9a06db1200c32b1b63",
+    "forty-96000.wav": "d051d435f6afc165cf60246fdbe4217d91da366edcc06c2c7422bf0345495886",
+    "empty.wav": "531cd597b25052b4845ef2f3887dec2183240802a93b6e044960de8ba017caa0",
+    "forty-48000.wav": "cc96a7b0702b13fc372ffd95ba70e4d3821ed31dd66980537c54492963693679"
+  },
+  "reference_pcm_hashes": {
+    "forty-44100.wav.48000.f32": "da285a16b8f05f3eb3a4790e6ed0fe59c8b5d94f1fe5d9b84624f535995c8037",
+    "forty-48000.wav.48000.f32": "39f3e75fb22bc15b7dbf7ee808d5e5f2bdc4e37e3b07f76333a11fc058495601",
+    "forty-96000.wav.48000.f32": "d5d33cf6d79e60a9f0dfe77457ebc1b3dca4b7880a8d1ca69b0026d51715b70b"
+  },
+  "sources": {
+    "src/queue.s": "4a561b73f4973159156114511c819a1b55f9a7a421b5610a055a2df3fe3e2b27",
+    "tests/queue-timeline-probe.s": "06414297bd57d79a67c5a3967bc62708c1de4fb169fe11daa778d59bd3716b00",
+    "tests/queue-timeline-oracle.c": "386daae78eee20871191b38e2a35e256cf8cee7464eb7d326aced492f838b89c",
+    "src/win/ui.s": "1867e56f24d7c3ba5f1e5d7241d2e5901d87f348308896ca2cb565b43a5f994d",
+    "src/win/ui_queue.inc": "f4e312348f7cd2be4c259879247893f5e9dc33023fd9d7ca2eb9e295130d9863",
+    "src/win/kernel32.def": "d3b93c1a54c07bdbb30ea043ee5176a848ed5ade1c10d67230d7121a09f1fd6c",
+    "tests/ui-queue-snapshot-probe.s": "b427f6a20084e921cc9b48a2c4e27c142a1e5ca9d0842cb65c88520e4ac7746b",
+    "tests/ui-queue-snapshot-oracle.c": "41518a586daf7b3b53448907c60bd61e32da28351dbaeb660fc67cb3730ab8d5"
+  },
+  "environment": {
+    "platform": "Linux-6.1.0-53-amd64-x86_64-with-glibc2.36",
+    "python": "3.11.2 (main, May 12 2026, 05:17:27) [GCC 12.2.0]"
+  },
+  "scope": "Real dense queues, exact restarted PCM at native/resampled rates, protected output, empty-file coalescing and repeat; retained-window wrap and 64-bit ordinals seeded through test-only private aliases. The Wine run also stresses the Windows UI snapshot/cover handoff on two threads. Native Windows hardware remains unverified."
+}

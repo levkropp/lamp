@@ -21,7 +21,7 @@
 .equ QUEUE_SKIPPED, 6               # decode_error after skipped files
 .equ CH_SIZE, 64                    # src/ogg_chain.s link entries
 .equ CH_RATE, 48
-.equ QUEUE_MARKS, 64                # files whose start in the output is kept
+.equ QUEUE_MARKS, 1 << 19           # bounded timeline; 8 MiB of demand-zero BSS
 
 .data
 queue_paths: .quad 0
@@ -39,9 +39,11 @@ queue_failures: .long 0
 queue_playing: .long 0              # a file is open
 queue_open_error: .long 0           # decode_error of the last file that did not open
 queue_repeat: .long 0               # 1: after the last file, the first again
-queue_mark_count: .long 0           # marks written since queue_begin/queue_goto
+queue_first_open: .long 1          # suppress the first successful open's announcement
 queue_idle: .long 0                 # files ended in a row without a frame
 .p2align 3
+queue_mark_count: .quad 0           # distinct boundaries since queue_begin/queue_goto
+queue_mark_version: .quad 0         # even outside the bounded record update; reader retries changes
 queue_output: .quad 0               # frames queue_read returned, from the first file's start
 
 .bss
@@ -73,7 +75,8 @@ FN queue_open
     mov dword ptr [rip + queue_open_error], 1  # an empty queue: decoder_open's generic error
     mov dword ptr [rip + queue_index], -1
     mov [rip + queue_output], rax
-    mov [rip + queue_mark_count], eax
+    mov [rip + queue_mark_count], rax
+    mov dword ptr [rip + queue_first_open], 1
     mov [rip + queue_idle], eax
     call queue_advance
     test eax, eax
@@ -124,14 +127,6 @@ LOCALFN queue_advance
     mov eax, [rip + queue_next]
     dec eax
     mov [rip + queue_index], eax
-    mov ecx, [rip + queue_mark_count]     # where it starts in the output
-    and ecx, QUEUE_MARKS - 1
-    shl ecx, 4
-    lea rdx, [rip + queue_marks]
-    mov r8, [rip + queue_output]
-    mov [rdx + rcx], r8
-    mov [rdx + rcx + 8], eax
-    inc dword ptr [rip + queue_mark_count]
     mov qword ptr [rip + queue_file_frames], 0
     mov rax, [rip + output_frames]
     mov [rip + queue_file_total], rax
@@ -154,16 +149,47 @@ LOCALFN queue_advance
     call resample_reset
     mov dword ptr [rip + queue_resampling], 1
 .Lqueue_advance_later:
+    jmp .Lqueue_advance_mark
+.Lqueue_advance_open:
+.Lqueue_advance_mark:
+    # Publish only validated opens. Empty files at the same frame replace
+    # the last boundary, so their number cannot evict audible history.
+    inc qword ptr [rip + queue_mark_version]
+    lea rdx, [rip + queue_marks]
+    mov r8, [rip + queue_output]
+    mov r9, [rip + queue_mark_count]
+    test r9, r9
+    jz .Lqueue_advance_new_mark
+    lea rcx, [r9 - 1]
+    and ecx, QUEUE_MARKS - 1
+    shl ecx, 4
+    cmp [rdx + rcx], r8
+    je .Lqueue_advance_replace_mark
+.Lqueue_advance_new_mark:
+    mov ecx, r9d
+    and ecx, QUEUE_MARKS - 1
+    shl ecx, 4
+    mov [rdx + rcx], r8
+    mov eax, [rip + queue_index]
+    mov [rdx + rcx + 8], eax
+    inc r9
+    mov [rip + queue_mark_count], r9      # published after both fields
+    jmp .Lqueue_advance_marked
+.Lqueue_advance_replace_mark:
+    mov eax, [rip + queue_index]
+    mov [rdx + rcx + 8], eax
+.Lqueue_advance_marked:
+    inc qword ptr [rip + queue_mark_version]
     mov dword ptr [rip + queue_playing], 1
-    cmp dword ptr [rip + queue_mark_count], 1
-    jbe .Lqueue_advance_done              # the first file of a run (resampled to queue_target)
+    xor eax, eax
+    xchg eax, [rip + queue_first_open]
+    test eax, eax
+    jnz .Lqueue_advance_done
     mov rax, [rip + queue_announce]
     test rax, rax
     jz .Lqueue_advance_done
     call rax
     jmp .Lqueue_advance_done
-.Lqueue_advance_open:
-    mov dword ptr [rip + queue_playing], 1
 .Lqueue_advance_done:
     mov eax, 1
     jmp .Lqueue_advance_return
@@ -340,7 +366,8 @@ FN queue_goto
     mov [rip + queue_next], ecx
     xor eax, eax
     mov [rip + queue_output], rax
-    mov [rip + queue_mark_count], eax
+    mov [rip + queue_mark_count], rax
+    mov dword ptr [rip + queue_first_open], 1
     mov [rip + queue_idle], eax
     mov [rip + decode_error], eax
     call queue_advance
@@ -349,41 +376,61 @@ FN queue_goto
 ENDFN queue_goto
 
 # RCX=output frame (counted as queue_output counts) -> EAX=the file playing
-# there, RDX=the output frame where it started; EAX=-1 when no mark is left.
+# there, RDX=its start; EAX=-1 when no retained boundary precedes the request.
 # Marks are written before the frames they describe are returned, so a
 # reader of returned frames sees them.
 FN queue_heard
-    mov r8d, [rip + queue_mark_count]
-    mov r9d, r8d
-    sub r9d, QUEUE_MARKS
+    push rbx
+.Lqueue_heard_retry:
+    mov rbx, [rip + queue_mark_version]
+    test bl, 1
+    jz .Lqueue_heard_stable
+    pause
+    jmp .Lqueue_heard_retry
+.Lqueue_heard_stable:
+    mov r8, [rip + queue_mark_count]     # exclusive upper bound, sampled once
+    mov r9, r8
+    sub r9, QUEUE_MARKS
     jae .Lqueue_heard_oldest
     xor r9d, r9d
 .Lqueue_heard_oldest:
+    mov rdx, r9                         # original lower bound
     lea r10, [rip + queue_marks]
 .Lqueue_heard_mark:
-    cmp r8d, r9d
-    jbe .Lqueue_heard_first
-    dec r8d
-    mov eax, r8d
+    # Upper bound in the chronological ring: logarithmic even for dense
+    # queues. Logical ordinals are 64-bit, independent of the ring slot.
+    cmp r9, r8
+    jae .Lqueue_heard_found
+    mov r11, r8
+    sub r11, r9
+    shr r11, 1
+    add r11, r9
+    mov eax, r11d
     and eax, QUEUE_MARKS - 1
     shl eax, 4
-    mov rdx, [r10 + rax]
-    cmp rdx, rcx
-    ja .Lqueue_heard_mark
-    mov eax, [r10 + rax + 8]
-    ret
-.Lqueue_heard_first:
-    cmp r8d, [rip + queue_mark_count]     # no mark at all
+    cmp [r10 + rax], rcx
+    ja .Lqueue_heard_before
+    lea r9, [r11 + 1]
+    jmp .Lqueue_heard_mark
+.Lqueue_heard_before:
+    mov r8, r11
+    jmp .Lqueue_heard_mark
+.Lqueue_heard_found:
+    cmp r9, rdx
     je .Lqueue_heard_none
-    mov eax, r9d                          # the oldest kept: before it, unknown
+    lea rax, [r9 - 1]
     and eax, QUEUE_MARKS - 1
     shl eax, 4
     mov rdx, [r10 + rax]
     mov eax, [r10 + rax + 8]
-    ret
+    jmp .Lqueue_heard_validate
 .Lqueue_heard_none:
     mov eax, -1
     xor edx, edx
+.Lqueue_heard_validate:
+    cmp rbx, [rip + queue_mark_version]
+    jne .Lqueue_heard_retry              # an overwritten slot cannot mix its start/index
+    pop rbx
     ret
 ENDFN queue_heard
 
@@ -410,6 +457,8 @@ FN queue_navigate
     xor ebx, ebx
     jmp .Lqueue_navigate_open
 .Lqueue_navigate_command:
+    test ebx, ebx
+    js .Lqueue_navigate_unknown         # never navigate from an unknown heard file
     cmp ecx, 1
     je .Lqueue_navigate_next
     cmp ecx, 2
@@ -473,6 +522,9 @@ FN queue_navigate
     xor esi, esi                          # a later file opened instead
 .Lqueue_navigate_position:
     mov eax, 1
+    jmp .Lqueue_navigate_return
+.Lqueue_navigate_unknown:
+    xor eax, eax
 .Lqueue_navigate_return:
     mov rdx, rsi
     add rsp, 40

@@ -603,6 +603,11 @@ LOCALFN engine_read_keys
     jne .Leng_keys_advance             # the first command counts
     mov [rip + engine_command], ecx
     call engine_note_heard
+    cmp dword ptr [rip + engine_heard_index], 0
+    jns .Leng_keys_known
+    mov dword ptr [rip + engine_command], 0
+    jmp .Leng_keys_advance
+.Leng_keys_known:
     mov dword ptr [rip + engine_stop_requested], 1
 .Leng_keys_advance:
     inc rsi
@@ -620,14 +625,12 @@ ENDFN engine_read_keys
 FN engine_note_heard
     sub rsp, 40
     mov rcx, [rip + engine_position]
+    mov [rsp + 32], rcx
     call queue_heard
-    cmp eax, -1
-    jne .Leng_heard_found
-    mov eax, [rip + queue_index]
-    xor edx, edx
-.Leng_heard_found:
     mov [rip + engine_heard_index], eax
-    mov rax, [rip + engine_position]
+    test eax, eax
+    js .Leng_heard_none
+    mov rax, [rsp + 32]
     sub rax, rdx
     jae .Leng_heard_offset
     xor eax, eax
