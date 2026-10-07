@@ -117,17 +117,10 @@ LOCALFN ac3_block
     # E-AC-3 spectral extension precedes coupling strategy.
     cmp dword ptr [rip + ac3_enhanced], 0
     je .Lac3_block_cpl_read
-    test ebx, ebx
-    jz .Lac3_block_spx_strategy
-    mov ecx, 1
-    call ac3_get
+    mov ecx, ebx
+    call eac3_spx_parse
     test eax, eax
-    jz .Lac3_block_cpl_frame
-.Lac3_block_spx_strategy:
-    mov ecx, 1
-    call ac3_get
-    test eax, eax
-    jnz .Lac3_block_unsupported
+    jnz .Lac3_block_fail
 .Lac3_block_cpl_frame:
     mov eax, 1
     cmp dword ptr [rip + ac3_acmod], 1
@@ -196,9 +189,22 @@ LOCALFN ac3_block
     mov ecx, 4
     call ac3_get
     mov r14d, eax                         # begin subband
+    cmp dword ptr [rip + ac3_enhanced], 0
+    je .Lac3_block_cpl_end_read
+    cmp dword ptr [rip + eac3_spx_active], 0
+    je .Lac3_block_cpl_end_read
+    mov eax, [rip + eac3_spx_start]
+    sub eax, 37
+    xor edx, edx
+    mov ecx, 12
+    div ecx
+    mov r15d, eax
+    jmp .Lac3_block_cpl_end_valid
+.Lac3_block_cpl_end_read:
     mov ecx, 4
     call ac3_get
     lea r15d, [rax + 3]                   # end subband
+.Lac3_block_cpl_end_valid:
     cmp r14d, r15d
     jae .Lac3_block_fail
     imul eax, r14d, 12
@@ -381,13 +387,22 @@ LOCALFN ac3_block
 .Lac3_block_remat_new:
     mov edi, 4
     cmp dword ptr [rip + ac3_cplinu], 0
-    je .Lac3_block_remat_count
+    je .Lac3_block_remat_spx
     mov eax, [rip + ac3_start]
     cmp eax, 61
     ja .Lac3_block_remat_count
     dec edi
     cmp eax, 37
     jne .Lac3_block_remat_count
+    dec edi
+    jmp .Lac3_block_remat_count
+.Lac3_block_remat_spx:
+    cmp dword ptr [rip + ac3_enhanced], 0
+    je .Lac3_block_remat_count
+    cmp dword ptr [rip + eac3_spx_active], 0
+    je .Lac3_block_remat_count
+    cmp dword ptr [rip + eac3_spx_start], 61
+    ja .Lac3_block_remat_count
     dec edi
 .Lac3_block_remat_count:
     mov [rip + ac3_nremat], edi
@@ -461,6 +476,14 @@ LOCALFN ac3_block
     mov eax, [rip + ac3_start]
     jmp .Lac3_block_bandwidth_end
 .Lac3_block_bandwidth_code:
+    cmp dword ptr [rip + ac3_enhanced], 0
+    je .Lac3_block_bandwidth_read
+    AC3_SLOT rcx, eac3_spx_ch, rsi
+    cmp dword ptr [rcx], 0
+    je .Lac3_block_bandwidth_read
+    mov eax, [rip + eac3_spx_start]
+    jmp .Lac3_block_bandwidth_end
+.Lac3_block_bandwidth_read:
     mov ecx, 6
     call ac3_get
     cmp eax, 60
@@ -1784,6 +1807,14 @@ LOCALFN ac3_transform
     inc ecx
     cmp ecx, 256
     jb .Lac3_transform_scale
+    cmp dword ptr [rip + ac3_enhanced], 0
+    je .Lac3_transform_spx_done
+    AC3_SLOT rax, eac3_spx_ch, rbx
+    cmp dword ptr [rax], 0
+    je .Lac3_transform_spx_done
+    mov ecx, ebx
+    call eac3_spx_apply
+.Lac3_transform_spx_done:
     lea eax, [rbx - 1]
     shl eax, 10
     lea r13, [rip + ac3_delay]

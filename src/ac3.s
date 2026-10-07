@@ -119,6 +119,20 @@ ac3_dyn: .zero 8                    # two floats (dual mono: second channel's fi
 ac3_blksw: .zero 8*4
 ac3_dith: .zero 8*4
 ac3_has_last: .zero 4
+eac3_spx_active: .zero 4
+eac3_spx_ch: .zero 8*4
+eac3_spx_first: .zero 8*4
+eac3_spx_atten_code: .zero 8*4
+eac3_spx_copy: .zero 4
+eac3_spx_start: .zero 4
+eac3_spx_end: .zero 4
+eac3_spx_count: .zero 4
+eac3_spx_struct: .zero 32
+eac3_spx_sizes: .zero 17*4
+eac3_spx_noise: .zero 8*17*4
+eac3_spx_signal: .zero 8*17*4
+eac3_spx_rms: .zero 17*4
+eac3_spx_wrap: .zero 17*4
 .p2align 3
 ac3_state_end:
 
@@ -928,3 +942,4 @@ ENDFN ac3_bsi
 .include "ac3_block.inc"
 
 .include "eac3.inc"
+.include "eac3_spx.inc"

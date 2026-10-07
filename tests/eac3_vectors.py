@@ -1,7 +1,7 @@
 """Test-only E-AC-3 streams sized by the independent decoder model.
 
 Covers 1/2/3/6 blocks, both exponent syntaxes, optional fields and reuse.
-AHT/SPX/enhanced coupling are deliberately reserved for later decoder work.
+AHT/enhanced coupling are deliberately reserved for later decoder work.
 """
 import copy
 import random
@@ -13,6 +13,24 @@ import eac3_model as model
 class Writer(ac3_vectors.Writer):
     def choose(self, n, label, context):
         c, r = self.c, self.r
+        if label == 'addbsi':
+            # Opaque metadata must not advertise an object extension without
+            # its mandatory complexity byte (a one-byte field is possible).
+            return r.getrandbits(n) & ~(1 << (n-8))
+        if label in ('spxstrtf','spxbegf','spxendf','spxbndstrce','spxbndstrc','spxcoe',
+                     'spxblnd','mstrspxco','spxcoexp','spxcomant','spxattencod','spxattencode'):
+            return c[label] if label in c else r.getrandbits(n)
+        if label == 'chinspx':
+            return int(context[0] in c.get('spx_channels',range(1,6)))
+        if label == 'spxinu':
+            value = c.get(label,0)
+            return value[context[0]%len(value)] if isinstance(value,list) else value
+        if label == 'spxstre' and c.get('spxinu'):
+            return c.get(label,1)
+        if label == 'cplbegf' and c.get('spxinu'):
+            begin = c.get('spxbegf',4)+2
+            if begin > 7: begin = 2*begin-7
+            return r.randrange(begin-1)
         if label == 'snroffste' and c.get('snr_reuse'):
             return 0
         if label in ('expstre', 'ahte', 'snroffststr', 'transproce', 'blkswe', 'dithflage', 'bamode',
@@ -26,6 +44,8 @@ class Writer(ac3_vectors.Writer):
                      'blkstrtinfoe', 'convexpstre', 'lfemixlevcode'):
             return r.randrange(2)
         if label in ('frame_expstr', 'frame_lfe_expstr'):
+            if c.get('spxinu') and c.get('expstre',1):
+                return 1 if n == 1 else r.randrange(1,4)
             blk = context[0]
             new = len(context) > 2 and context[2]
             if blk == 0 or new:

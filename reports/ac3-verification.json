@@ -9,7 +9,7 @@
       "lfe": 0,
       "peak_error": 8.940696716308594e-08,
       "snr_db": 138.7,
-      "stats": "codec=11 rate=48000 channels=1 bits=0 frames=72192 underruns=0 decode_error=0 audio_error=0 elapsed_ms=47 cpu_us=48550 endpoint_dry=0"
+      "stats": "codec=11 rate=48000 channels=1 bits=0 frames=72192 underruns=0 decode_error=0 audio_error=0 elapsed_ms=45 cpu_us=45603 endpoint_dry=0"
     },
     {
       "test": "stereo-48k.ac3",
@@ -19,7 +19,7 @@
       "lfe": 0,
       "peak_error": 1.1920928955078125e-07,
       "snr_db": 139.0,
-      "stats": "codec=11 rate=48000 channels=2 bits=0 frames=72192 underruns=0 decode_error=0 audio_error=0 elapsed_ms=75 cpu_us=76382 endpoint_dry=0"
+      "stats": "codec=11 rate=48000 channels=2 bits=0 frames=72192 underruns=0 decode_error=0 audio_error=0 elapsed_ms=60 cpu_us=62953 endpoint_dry=0"
     },
     {
       "test": "stereo-44k.ac3",
@@ -29,7 +29,7 @@
       "lfe": 0,
       "peak_error": 5.960464477539063e-08,
       "snr_db": 138.7,
-      "stats": "codec=11 rate=44100 channels=2 bits=0 frames=67584 underruns=0 decode_error=0 audio_error=0 elapsed_ms=57 cpu_us=59490 endpoint_dry=0"
+      "stats": "codec=11 rate=44100 channels=2 bits=0 frames=67584 underruns=0 decode_error=0 audio_error=0 elapsed_ms=62 cpu_us=64463 endpoint_dry=0"
     },
     {
       "test": "stereo-32k.ac3",
@@ -39,7 +39,7 @@
       "lfe": 0,
       "peak_error": 4.470348358154297e-08,
       "snr_db": 139.1,
-      "stats": "codec=11 rate=32000 channels=2 bits=0 frames=49152 underruns=0 decode_error=0 audio_error=0 elapsed_ms=51 cpu_us=55905 endpoint_dry=0"
+      "stats": "codec=11 rate=32000 channels=2 bits=0 frames=49152 underruns=0 decode_error=0 audio_error=0 elapsed_ms=86 cpu_us=88893 endpoint_dry=0"
     },
     {
       "test": "rematrix.ac3",
@@ -49,7 +49,7 @@
       "lfe": 0,
       "peak_error": 1.7881393432617188e-07,
       "snr_db": 139.4,
-      "stats": "codec=11 rate=48000 channels=2 bits=0 frames=72192 underruns=0 decode_error=0 audio_error=0 elapsed_ms=87 cpu_us=83534 endpoint_dry=0"
+      "stats": "codec=11 rate=48000 channels=2 bits=0 frames=72192 underruns=0 decode_error=0 audio_error=0 elapsed_ms=72 cpu_us=74114 endpoint_dry=0"
     },
     {
       "test": "no-coupling.ac3",
@@ -59,7 +59,7 @@
       "lfe": 0,
       "peak_error": 4.470348358154297e-08,
       "snr_db": 139.2,
-      "stats": "codec=11 rate=48000 channels=2 bits=0 frames=72192 underruns=0 decode_error=0 audio_error=0 elapsed_ms=90 cpu_us=90323 endpoint_dry=0"
+      "stats": "codec=11 rate=48000 channels=2 bits=0 frames=72192 underruns=0 decode_error=0 audio_error=0 elapsed_ms=65 cpu_us=67742 endpoint_dry=0"
     },
     {
       "test": "early-coupling.ac3",
@@ -69,7 +69,7 @@
       "lfe": 0,
       "peak_error": 4.470348358154297e-08,
       "snr_db": 139.1,
-      "stats": "codec=11 rate=48000 channels=2 bits=0 frames=72192 underruns=0 decode_error=0 audio_error=0 elapsed_ms=110 cpu_us=115414 endpoint_dry=0"
+      "stats": "codec=11 rate=48000 channels=2 bits=0 frames=72192 underruns=0 decode_error=0 audio_error=0 elapsed_ms=59 cpu_us=62785 endpoint_dry=0"
     },
     {
       "test": "32k-bitrate.ac3",
@@ -79,7 +79,7 @@
       "lfe": 0,
       "peak_error": 5.960464477539063e-08,
       "snr_db": 139.1,
-      "stats": "codec=11 rate=48000 channels=2 bits=0 frames=72192 underruns=0 decode_error=0 audio_error=0 elapsed_ms=68 cpu_us=70955 endpoint_dry=0"
+      "stats": "codec=11 rate=48000 channels=2 bits=0 frames=72192 underruns=0 decode_error=0 audio_error=0 elapsed_ms=63 cpu_us=65135 endpoint_dry=0"
     },
     {
       "test": "640k-bitrate.ac3",
@@ -89,7 +89,7 @@
       "lfe": 0,
       "peak_error": 1.1920928955078125e-07,
       "snr_db": 139.0,
-      "stats": "codec=11 rate=48000 channels=2 bits=0 frames=72192 underruns=0 decode_error=0 audio_error=0 elapsed_ms=74 cpu_us=79511 endpoint_dry=0"
+      "stats": "codec=11 rate=48000 channels=2 bits=0 frames=72192 underruns=0 decode_error=0 audio_error=0 elapsed_ms=73 cpu_us=74774 endpoint_dry=0"
     },
     {
       "test": "transients.ac3",
@@ -99,7 +99,7 @@
       "lfe": 0,
       "peak_error": 1.7881393432617188e-07,
       "snr_db": 139.7,
-      "stats": "codec=11 rate=48000 channels=2 bits=0 frames=72192 underruns=0 decode_error=0 audio_error=0 elapsed_ms=71 cpu_us=73354 endpoint_dry=0"
+      "stats": "codec=11 rate=48000 channels=2 bits=0 frames=72192 underruns=0 decode_error=0 audio_error=0 elapsed_ms=69 cpu_us=69265 endpoint_dry=0"
     },
     {
       "test": "alternate-syntax.ac3",
@@ -109,7 +109,7 @@
       "lfe": 0,
       "peak_error": 8.940696716308594e-08,
       "snr_db": 138.7,
-      "stats": "codec=11 rate=48000 channels=2 bits=0 frames=72192 underruns=0 decode_error=0 audio_error=0 elapsed_ms=54 cpu_us=55583 endpoint_dry=0"
+      "stats": "codec=11 rate=48000 channels=2 bits=0 frames=72192 underruns=0 decode_error=0 audio_error=0 elapsed_ms=64 cpu_us=66262 endpoint_dry=0"
     },
     {
       "test": "2.1.ac3",
@@ -119,7 +119,7 @@
       "lfe": 1,
       "peak_error": 4.470348358154297e-08,
       "snr_db": 138.4,
-      "stats": "codec=11 rate=48000 channels=3 bits=0 frames=72192 underruns=0 decode_error=0 audio_error=0 elapsed_ms=89 cpu_us=90585 endpoint_dry=0"
+      "stats": "codec=11 rate=48000 channels=3 bits=0 frames=72192 underruns=0 decode_error=0 audio_error=0 elapsed_ms=144 cpu_us=144948 endpoint_dry=0"
     },
     {
       "test": "3.0.ac3",
@@ -129,7 +129,7 @@
       "lfe": 0,
       "peak_error": 4.470348358154297e-08,
       "snr_db": 138.4,
-      "stats": "codec=11 rate=48000 channels=3 bits=0 frames=72192 underruns=0 decode_error=0 audio_error=0 elapsed_ms=85 cpu_us=87068 endpoint_dry=0"
+      "stats": "codec=11 rate=48000 channels=3 bits=0 frames=72192 underruns=0 decode_error=0 audio_error=0 elapsed_ms=98 cpu_us=99927 endpoint_dry=0"
     },
     {
       "test": "3.0-back.ac3",
@@ -139,7 +139,7 @@
       "lfe": 0,
       "peak_error": 4.470348358154297e-08,
       "snr_db": 138.4,
-      "stats": "codec=11 rate=48000 channels=3 bits=0 frames=72192 underruns=0 decode_error=0 audio_error=0 elapsed_ms=82 cpu_us=83186 endpoint_dry=0"
+      "stats": "codec=11 rate=48000 channels=3 bits=0 frames=72192 underruns=0 decode_error=0 audio_error=0 elapsed_ms=99 cpu_us=101428 endpoint_dry=0"
     },
     {
       "test": "4.0.ac3",
@@ -149,7 +149,7 @@
       "lfe": 0,
       "peak_error": 3.725290298461914e-08,
       "snr_db": 138.3,
-      "stats": "codec=11 rate=48000 channels=4 bits=0 frames=72192 underruns=0 decode_error=0 audio_error=0 elapsed_ms=102 cpu_us=103497 endpoint_dry=0"
+      "stats": "codec=11 rate=48000 channels=4 bits=0 frames=72192 underruns=0 decode_error=0 audio_error=0 elapsed_ms=134 cpu_us=137043 endpoint_dry=0"
     },
     {
       "test": "quad-side.ac3",
@@ -159,7 +159,7 @@
       "lfe": 0,
       "peak_error": 3.725290298461914e-08,
       "snr_db": 138.4,
-      "stats": "codec=11 rate=48000 channels=4 bits=0 frames=72192 underruns=0 decode_error=0 audio_error=0 elapsed_ms=108 cpu_us=107502 endpoint_dry=0"
+      "stats": "codec=11 rate=48000 channels=4 bits=0 frames=72192 underruns=0 decode_error=0 audio_error=0 elapsed_ms=110 cpu_us=111156 endpoint_dry=0"
     },
     {
       "test": "5.0-side.ac3",
@@ -169,7 +169,7 @@
       "lfe": 0,
       "peak_error": 4.470348358154297e-08,
       "snr_db": 138.4,
-      "stats": "codec=11 rate=48000 channels=5 bits=0 frames=72192 underruns=0 decode_error=0 audio_error=0 elapsed_ms=120 cpu_us=121885 endpoint_dry=0"
+      "stats": "codec=11 rate=48000 channels=5 bits=0 frames=72192 underruns=0 decode_error=0 audio_error=0 elapsed_ms=123 cpu_us=125161 endpoint_dry=0"
     },
     {
       "test": "5.1-side.ac3",
@@ -179,7 +179,7 @@
       "lfe": 1,
       "peak_error": 4.470348358154297e-08,
       "snr_db": 138.2,
-      "stats": "codec=11 rate=48000 channels=6 bits=0 frames=72192 underruns=0 decode_error=0 audio_error=0 elapsed_ms=137 cpu_us=138741 endpoint_dry=0"
+      "stats": "codec=11 rate=48000 channels=6 bits=0 frames=72192 underruns=0 decode_error=0 audio_error=0 elapsed_ms=147 cpu_us=147922 endpoint_dry=0"
     },
     {
       "test": "5.1-44k.ac3",
@@ -189,7 +189,7 @@
       "lfe": 1,
       "peak_error": 4.470348358154297e-08,
       "snr_db": 138.3,
-      "stats": "codec=11 rate=44100 channels=6 bits=0 frames=67584 underruns=0 decode_error=0 audio_error=0 elapsed_ms=134 cpu_us=135111 endpoint_dry=0"
+      "stats": "codec=11 rate=44100 channels=6 bits=0 frames=67584 underruns=0 decode_error=0 audio_error=0 elapsed_ms=490 cpu_us=496342 endpoint_dry=0"
     },
     {
       "test": "4.1-32k.ac3",
@@ -199,7 +199,7 @@
       "lfe": 1,
       "peak_error": 4.470348358154297e-08,
       "snr_db": 138.4,
-      "stats": "codec=11 rate=32000 channels=5 bits=0 frames=49152 underruns=0 decode_error=0 audio_error=0 elapsed_ms=98 cpu_us=100092 endpoint_dry=0"
+      "stats": "codec=11 rate=32000 channels=5 bits=0 frames=49152 underruns=0 decode_error=0 audio_error=0 elapsed_ms=132 cpu_us=132197 endpoint_dry=0"
     },
     {
       "test": "model on rematrix.ac3",
@@ -266,7 +266,7 @@
       "lfe": 0,
       "peak_error": 8.940696716308594e-08,
       "snr_db": 138.7,
-      "stats": "codec=9 rate=44100 channels=2 bits=0 frames=67328 underruns=0 decode_error=0 audio_error=0 elapsed_ms=108 cpu_us=111805 endpoint_dry=0"
+      "stats": "codec=9 rate=44100 channels=2 bits=0 frames=67328 underruns=0 decode_error=0 audio_error=0 elapsed_ms=124 cpu_us=123314 endpoint_dry=0"
     },
     {
       "test": "tagged.ac3",
@@ -286,7 +286,7 @@
       "lfe": 0,
       "peak_error": 3.0517578125e-05,
       "snr_db": 138.9,
-      "stats": "codec=11 rate=48000 channels=2 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=36 cpu_us=38536 endpoint_dry=0"
+      "stats": "codec=11 rate=48000 channels=2 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=38 cpu_us=36460 endpoint_dry=0"
     },
     {
       "test": "written-1.ac3",
@@ -296,7 +296,7 @@
       "lfe": 1,
       "peak_error": 1.1444091796875e-05,
       "snr_db": 138.8,
-      "stats": "codec=11 rate=48000 channels=3 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=47 cpu_us=48126 endpoint_dry=0"
+      "stats": "codec=11 rate=48000 channels=3 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=84 cpu_us=84036 endpoint_dry=0"
     },
     {
       "test": "written-2.ac3",
@@ -306,7 +306,7 @@
       "lfe": 0,
       "peak_error": 1.52587890625e-05,
       "snr_db": 139.0,
-      "stats": "codec=11 rate=48000 channels=1 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=42 cpu_us=55571 endpoint_dry=0"
+      "stats": "codec=11 rate=48000 channels=1 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=52 cpu_us=44132 endpoint_dry=0"
     },
     {
       "test": "written-3.ac3",
@@ -316,7 +316,7 @@
       "lfe": 1,
       "peak_error": 1.1444091796875e-05,
       "snr_db": 139.0,
-      "stats": "codec=11 rate=44100 channels=2 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=32 cpu_us=35444 endpoint_dry=0"
+      "stats": "codec=11 rate=44100 channels=2 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=70 cpu_us=70638 endpoint_dry=0"
     },
     {
       "test": "written-4.ac3",
@@ -326,7 +326,7 @@
       "lfe": 0,
       "peak_error": 3.0517578125e-05,
       "snr_db": 138.9,
-      "stats": "codec=11 rate=48000 channels=2 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=49 cpu_us=44567 endpoint_dry=0"
+      "stats": "codec=11 rate=48000 channels=2 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=112 cpu_us=114860 endpoint_dry=0"
     },
     {
       "test": "written-5.ac3",
@@ -336,7 +336,7 @@
       "lfe": 1,
       "peak_error": 7.62939453125e-06,
       "snr_db": 139.0,
-      "stats": "codec=11 rate=32000 channels=3 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=51 cpu_us=64031 endpoint_dry=0"
+      "stats": "codec=11 rate=32000 channels=3 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=49 cpu_us=51688 endpoint_dry=0"
     },
     {
       "test": "written-6.ac3",
@@ -346,7 +346,7 @@
       "lfe": 0,
       "peak_error": 1.1444091796875e-05,
       "snr_db": 138.4,
-      "stats": "codec=11 rate=48000 channels=3 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=36 cpu_us=38575 endpoint_dry=0"
+      "stats": "codec=11 rate=48000 channels=3 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=49 cpu_us=47416 endpoint_dry=0"
     },
     {
       "test": "written-7.ac3",
@@ -356,7 +356,7 @@
       "lfe": 1,
       "peak_error": 7.62939453125e-06,
       "snr_db": 138.6,
-      "stats": "codec=11 rate=44100 channels=4 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=41 cpu_us=45206 endpoint_dry=0"
+      "stats": "codec=11 rate=44100 channels=4 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=72 cpu_us=72537 endpoint_dry=0"
     },
     {
       "test": "written-8.ac3",
@@ -366,7 +366,7 @@
       "lfe": 0,
       "peak_error": 2.288818359375e-05,
       "snr_db": 138.5,
-      "stats": "codec=11 rate=48000 channels=3 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=49 cpu_us=57097 endpoint_dry=0"
+      "stats": "codec=11 rate=48000 channels=3 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=53 cpu_us=52372 endpoint_dry=0"
     },
     {
       "test": "written-9.ac3",
@@ -376,7 +376,7 @@
       "lfe": 1,
       "peak_error": 8.58306884765625e-06,
       "snr_db": 138.6,
-      "stats": "codec=11 rate=32000 channels=4 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=76 cpu_us=86941 endpoint_dry=0"
+      "stats": "codec=11 rate=32000 channels=4 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=149 cpu_us=141555 endpoint_dry=0"
     },
     {
       "test": "written-10.ac3",
@@ -386,7 +386,7 @@
       "lfe": 0,
       "peak_error": 1.1444091796875e-05,
       "snr_db": 138.5,
-      "stats": "codec=11 rate=48000 channels=4 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=33 cpu_us=35326 endpoint_dry=0"
+      "stats": "codec=11 rate=48000 channels=4 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=70 cpu_us=75361 endpoint_dry=0"
     },
     {
       "test": "written-11.ac3",
@@ -396,7 +396,7 @@
       "lfe": 1,
       "peak_error": 1.9073486328125e-05,
       "snr_db": 138.6,
-      "stats": "codec=11 rate=48000 channels=5 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=49 cpu_us=57284 endpoint_dry=0"
+      "stats": "codec=11 rate=48000 channels=5 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=68 cpu_us=71456 endpoint_dry=0"
     },
     {
       "test": "written-12.ac3",
@@ -406,7 +406,7 @@
       "lfe": 0,
       "peak_error": 1.52587890625e-05,
       "snr_db": 139.3,
-      "stats": "codec=11 rate=44100 channels=4 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=44 cpu_us=46948 endpoint_dry=0"
+      "stats": "codec=11 rate=44100 channels=4 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=47 cpu_us=49221 endpoint_dry=0"
     },
     {
       "test": "written-13.ac3",
@@ -416,7 +416,7 @@
       "lfe": 1,
       "peak_error": 1.52587890625e-05,
       "snr_db": 138.9,
-      "stats": "codec=11 rate=48000 channels=5 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=54 cpu_us=58053 endpoint_dry=0"
+      "stats": "codec=11 rate=48000 channels=5 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=51 cpu_us=53408 endpoint_dry=0"
     },
     {
       "test": "written-14.ac3",
@@ -426,7 +426,7 @@
       "lfe": 0,
       "peak_error": 1.71661376953125e-05,
       "snr_db": 138.8,
-      "stats": "codec=11 rate=32000 channels=5 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=53 cpu_us=57377 endpoint_dry=0"
+      "stats": "codec=11 rate=32000 channels=5 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=68 cpu_us=70414 endpoint_dry=0"
     },
     {
       "test": "written-15.ac3",
@@ -436,7 +436,7 @@
       "lfe": 1,
       "peak_error": 1.1444091796875e-05,
       "snr_db": 138.7,
-      "stats": "codec=11 rate=48000 channels=6 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=57 cpu_us=60055 endpoint_dry=0"
+      "stats": "codec=11 rate=48000 channels=6 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=54 cpu_us=55825 endpoint_dry=0"
     },
     {
       "test": "written-16.ac3",
@@ -446,7 +446,7 @@
       "lfe": 0,
       "peak_error": 1.52587890625e-05,
       "snr_db": 138.7,
-      "stats": "codec=11 rate=24000 channels=2 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=29 cpu_us=32267 endpoint_dry=0"
+      "stats": "codec=11 rate=24000 channels=2 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=35 cpu_us=34860 endpoint_dry=0"
     },
     {
       "test": "written-17.ac3",
@@ -456,7 +456,7 @@
       "lfe": 1,
       "peak_error": 2.002716064453125e-05,
       "snr_db": 138.5,
-      "stats": "codec=11 rate=22050 channels=6 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=111 cpu_us=122000 endpoint_dry=0"
+      "stats": "codec=11 rate=22050 channels=6 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=82 cpu_us=83066 endpoint_dry=0"
     },
     {
       "test": "written-18.ac3",
@@ -466,7 +466,7 @@
       "lfe": 0,
       "peak_error": 1.52587890625e-05,
       "snr_db": 139.0,
-      "stats": "codec=11 rate=8000 channels=2 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=30 cpu_us=36703 endpoint_dry=0"
+      "stats": "codec=11 rate=8000 channels=2 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=57 cpu_us=60408 endpoint_dry=0"
     },
     {
       "test": "written-19.ac3",
@@ -476,7 +476,7 @@
       "lfe": 0,
       "peak_error": 2.288818359375e-05,
       "snr_db": 138.8,
-      "stats": "codec=11 rate=12000 channels=1 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=23 cpu_us=26105 endpoint_dry=0"
+      "stats": "codec=11 rate=12000 channels=1 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=27 cpu_us=27894 endpoint_dry=0"
     },
     {
       "test": "written-20.ac3",
@@ -486,7 +486,7 @@
       "lfe": 0,
       "peak_error": 2.288818359375e-05,
       "snr_db": 138.8,
-      "stats": "codec=11 rate=44100 channels=2 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=27 cpu_us=29498 endpoint_dry=0"
+      "stats": "codec=11 rate=44100 channels=2 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=30 cpu_us=31435 endpoint_dry=0"
     },
     {
       "test": "written-21.ac3",
@@ -496,7 +496,7 @@
       "lfe": 1,
       "peak_error": 2.288818359375e-05,
       "snr_db": 138.7,
-      "stats": "codec=11 rate=48000 channels=5 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=71 cpu_us=83049 endpoint_dry=0"
+      "stats": "codec=11 rate=48000 channels=5 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=68 cpu_us=69788 endpoint_dry=0"
     },
     {
       "test": "written-22.ac3",
@@ -506,7 +506,7 @@
       "lfe": 1,
       "peak_error": 7.62939453125e-06,
       "snr_db": 138.9,
-      "stats": "codec=11 rate=48000 channels=6 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=94 cpu_us=91695 endpoint_dry=0"
+      "stats": "codec=11 rate=48000 channels=6 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=85 cpu_us=88196 endpoint_dry=0"
     },
     {
       "test": "written-23.ac3",
@@ -516,7 +516,7 @@
       "lfe": 1,
       "peak_error": 1.9073486328125e-05,
       "snr_db": 138.5,
-      "stats": "codec=11 rate=48000 channels=3 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=65 cpu_us=64240 endpoint_dry=0"
+      "stats": "codec=11 rate=48000 channels=3 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=58 cpu_us=61633 endpoint_dry=0"
     },
     {
       "test": "coverage",
@@ -591,7 +591,7 @@
       "lfe": 1,
       "peak_error": 5.7220458984375e-06,
       "snr_db": 138.9,
-      "stats": "codec=11 rate=48000 channels=3 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=40 cpu_us=42565 endpoint_dry=0"
+      "stats": "codec=11 rate=48000 channels=3 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=40 cpu_us=40195 endpoint_dry=0"
     },
     {
       "test": "corrupt-1.ac3",
@@ -601,7 +601,7 @@
       "lfe": 1,
       "peak_error": 1.1444091796875e-05,
       "snr_db": 138.5,
-      "stats": "codec=11 rate=48000 channels=6 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=66 cpu_us=70014 endpoint_dry=0"
+      "stats": "codec=11 rate=48000 channels=6 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=58 cpu_us=60025 endpoint_dry=0"
     },
     {
       "test": "corrupt-2.ac3",
@@ -611,7 +611,7 @@
       "lfe": 0,
       "peak_error": 3.0517578125e-05,
       "snr_db": 138.1,
-      "stats": "codec=11 rate=48000 channels=2 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=36 cpu_us=35635 endpoint_dry=0"
+      "stats": "codec=11 rate=48000 channels=2 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=30 cpu_us=32166 endpoint_dry=0"
     },
     {
       "test": "corrupt-3.ac3",
@@ -621,7 +621,7 @@
       "lfe": 0,
       "peak_error": 7.62939453125e-06,
       "snr_db": 138.8,
-      "stats": "codec=11 rate=48000 channels=3 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=53 cpu_us=52714 endpoint_dry=0"
+      "stats": "codec=11 rate=48000 channels=3 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=53 cpu_us=53925 endpoint_dry=0"
     },
     {
       "test": "corrupt-4.ac3",
@@ -631,7 +631,7 @@
       "lfe": 1,
       "peak_error": 1.1444091796875e-05,
       "snr_db": 138.5,
-      "stats": "codec=11 rate=48000 channels=3 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=58 cpu_us=60650 endpoint_dry=0"
+      "stats": "codec=11 rate=48000 channels=3 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=40 cpu_us=42441 endpoint_dry=0"
     },
     {
       "test": "corrupt-5.ac3",
@@ -641,7 +641,7 @@
       "lfe": 1,
       "peak_error": 7.62939453125e-06,
       "snr_db": 138.9,
-      "stats": "codec=11 rate=48000 channels=6 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=75 cpu_us=75931 endpoint_dry=0"
+      "stats": "codec=11 rate=48000 channels=6 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=82 cpu_us=86532 endpoint_dry=0"
     },
     {
       "test": "corrupt-6.ac3",
@@ -651,7 +651,7 @@
       "lfe": 0,
       "peak_error": 3.0517578125e-05,
       "snr_db": 138.9,
-      "stats": "codec=11 rate=48000 channels=2 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=32 cpu_us=34592 endpoint_dry=0"
+      "stats": "codec=11 rate=48000 channels=2 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=39 cpu_us=41199 endpoint_dry=0"
     },
     {
       "test": "corrupt-7.ac3",
@@ -661,7 +661,7 @@
       "lfe": 0,
       "peak_error": 1.1444091796875e-05,
       "snr_db": 138.4,
-      "stats": "codec=11 rate=48000 channels=3 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=98 cpu_us=110245 endpoint_dry=0"
+      "stats": "codec=11 rate=48000 channels=3 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=44 cpu_us=49072 endpoint_dry=0"
     },
     {
       "test": "corrupt-8.ac3",
@@ -671,7 +671,7 @@
       "lfe": 1,
       "peak_error": 9.5367431640625e-06,
       "snr_db": 138.8,
-      "stats": "codec=11 rate=48000 channels=3 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=95 cpu_us=98006 endpoint_dry=0"
+      "stats": "codec=11 rate=48000 channels=3 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=44 cpu_us=44703 endpoint_dry=0"
     },
     {
       "test": "corrupt-9.ac3",
@@ -681,7 +681,7 @@
       "lfe": 1,
       "peak_error": 1.1444091796875e-05,
       "snr_db": 138.6,
-      "stats": "codec=11 rate=48000 channels=6 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=102 cpu_us=108187 endpoint_dry=0"
+      "stats": "codec=11 rate=48000 channels=6 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=75 cpu_us=80075 endpoint_dry=0"
     },
     {
       "test": "corrupt-10.ac3",
@@ -691,7 +691,7 @@
       "lfe": 0,
       "peak_error": 3.0517578125e-05,
       "snr_db": 138.9,
-      "stats": "codec=11 rate=48000 channels=2 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=53 cpu_us=52269 endpoint_dry=0"
+      "stats": "codec=11 rate=48000 channels=2 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=56 cpu_us=64042 endpoint_dry=0"
     },
     {
       "test": "corrupt-11.ac3",
@@ -701,7 +701,7 @@
       "lfe": 0,
       "peak_error": 1.1444091796875e-05,
       "snr_db": 138.4,
-      "stats": "codec=11 rate=48000 channels=3 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=81 cpu_us=82053 endpoint_dry=0"
+      "stats": "codec=11 rate=48000 channels=3 bits=0 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=41 cpu_us=43233 endpoint_dry=0"
     },
     {
       "test": "60 heavily corrupted streams",
@@ -754,7 +754,7 @@
     {
       "test": "AC-3 playback",
       "result": "played",
-      "stats": "Playing. Space: pause / resume. N / P: next / previous file. Left / Right: -5 / +5 s. Down / Up: -60 / +60 s. R: repeat. Q or Ctrl+C: stop. codec=11 rate=48000 channels=6 bits=0 frames=72192 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3488 cpu_us=217341 endpoint_dry=0"
+      "stats": "Playing. Space: pause / resume. N / P: next / previous file. Left / Right: -5 / +5 s. Down / Up: -60 / +60 s. R: repeat. Q or Ctrl+C: stop. codec=11 rate=48000 channels=6 bits=0 frames=72192 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3368 cpu_us=172019 endpoint_dry=0"
     }
   ],
   "rejections": 4,

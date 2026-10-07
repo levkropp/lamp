@@ -1,0 +1,37 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "spx.ec3",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 50,
+      "decoded": 33,
+      "rejected_or_damaged": 17
+    },
+    {
+      "test": "spx.mka",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 50,
+      "decoded": 23,
+      "rejected_or_damaged": 27
+    },
+    {
+      "test": "spx.mp4",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 50,
+      "decoded": 23,
+      "rejected_or_damaged": 27
+    },
+    {
+      "test": "spx.ts",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 50,
+      "decoded": 34,
+      "rejected_or_damaged": 16
+    }
+  ],
+  "mutations": 200,
+  "decoded": 113,
+  "wine_debug": "err+all",
+  "scope": "4 container/codec sources, 500 mutations each (every tenth under Wine), seed 20261006: byte flips, zero/0xff runs, cuts, removed and duplicated spans, large length fields; --check, every fourth from a random --start."
+}

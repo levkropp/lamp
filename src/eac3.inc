@@ -1,7 +1,7 @@
 # E-AC-3 independent/AC-3-converted substream 0, conventional mantissas.
 # Handwritten ATSC A/52:2018 Annex E parser; shared AC-3 DSP and allocation.
-# AHT, spectral extension and enhanced coupling report AC3_UNSUPPORTED.
-# Numeric tables: normative Tables E2.10 and E2.12, see generator/provenance.
+# AHT and enhanced coupling report AC3_UNSUPPORTED.
+# Numeric tables: normative exponents, bands and attenuation; see provenance.
 RODATA
 .include "eac3_tables.inc"
 eac3_block_counts: .byte 1, 2, 3, 6
@@ -463,16 +463,24 @@ LOCALFN eac3_bsi
     dec ebx
     jnz .Leac3_bsi_transient_channel
 .Leac3_bsi_attenuation:
-    cmp dword ptr [rsp + 44], 0
-    je .Leac3_bsi_block_start
-    mov ebx, r12d
+    mov ebx, 1
 .Leac3_bsi_attenuation_channel:
+    mov edi, -1
+    cmp dword ptr [rsp + 44], 0
+    je .Leac3_bsi_attenuation_store
     mov ecx, 1
     call ac3_get
-    imul eax, eax, 5
-    add [rip + ac3_bitpos], eax
-    dec ebx
-    jnz .Leac3_bsi_attenuation_channel
+    test eax, eax
+    jz .Leac3_bsi_attenuation_store
+    mov ecx, 5
+    call ac3_get
+    mov edi, eax
+.Leac3_bsi_attenuation_store:
+    AC3_SLOT rcx, eac3_spx_atten_code, rbx
+    mov [rcx], edi
+    inc ebx
+    cmp ebx, r12d
+    jbe .Leac3_bsi_attenuation_channel
 .Leac3_bsi_block_start:
     cmp r14d, 1
     je .Leac3_bsi_init
@@ -488,11 +496,24 @@ LOCALFN eac3_bsi
     imul eax, ecx
     add [rip + ac3_bitpos], eax
 .Leac3_bsi_init:
+    mov dword ptr [rip + eac3_spx_active], 0
+    lea rcx, [rip + eac3_spx_ch]
+    xorps xmm0, xmm0
+    movups [rcx], xmm0
+    movups [rcx + 16], xmm0
+    lea rcx, [rip + eac3_spx_struct]
+    lea rdx, [rip + eac3_default_spx_bands]
+    movups xmm0, [rdx]
+    movups [rcx], xmm0
+    mov al, [rdx + 16]
+    mov [rcx + 16], al
     mov dword ptr [rip + eac3_first_leak], 1
     lea rcx, [rip + eac3_first_coords]
     xor edx, edx
 .Leac3_bsi_init_coords:
     mov dword ptr [rcx + rdx*4], 1
+    lea rax, [rip + eac3_spx_first]
+    mov dword ptr [rax + rdx*4], 1
     inc edx
     cmp edx, 8
     jb .Leac3_bsi_init_coords

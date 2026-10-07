@@ -21,7 +21,7 @@ A file is recognised by a leading `ftyp`, `moov`, `mdat`, `wide`, `free` or `ski
 | `ima4` | QuickTime IMA ADPCM; 34 bytes per channel decode to 64 frames, 1–8 channels |
 | `agsm` | GSM 06.10 full-rate speech; 33-byte mono frames, bit-exact with libgsm |
 
-AAC object types other than LC, SBR and PS reject when the track is opened. E-AC-3 (`ec-3`) supports the partial [conventional-mantissa profile](eac3.md); AHT/SPX/dependent substreams reject. Other sample entries are skipped.
+AAC object types other than LC, SBR and PS reject when the track is opened. E-AC-3 (`ec-3`) supports the partial [conventional-mantissa profile](eac3.md); AHT/enhanced coupling/dependent substreams reject. Other sample entries are skipped.
 
 ## Samples and timing
 
