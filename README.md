@@ -2,20 +2,20 @@
 
 # LAMP — Lev's Assembly Media Player
 
-A small Windows x86-64 media player with handwritten assembly decoders and a native assembly UI. Audio comes first. The long-term goal is to support the relevant formats and playback features people use in **mpv**, with a small runtime and low CPU use.
+A small Windows x86-64 and Apple Silicon macOS media player with assembly decoders and native assembly interfaces. Audio comes first. The long-term goal is to support the relevant formats and playback features people use in **mpv**, with a small runtime and low CPU use.
 
 **Current source: 0.4.0-dev, an early audio prototype.** WAV, AIFF/AIFC, native FLAC, MP3, Ogg/Vorbis and Ogg/Opus play in source builds. Opus supports family 0 mono/stereo and family 1 layouts with 1–8 speaker channels, downmixed to stereo. Its elementary decoders include RFC 8251 updates and pass all 120 official vector checks across five output rates and mono/stereo. Video, subtitles and network streaming are future work. The published v0.3.0 prerelease contains WAV, native FLAC, MP3 and Ogg/Vorbis.
 
-[Website](https://levkropp.github.io/lamp/) · [Download v0.3.0](https://github.com/levkropp/lamp/releases/tag/v0.3.0) · [Roadmap](ROADMAP.md) · [Compatibility matrix](docs/compatibility.md) · [Technical details and limits](docs/technical.md)
+[Website](https://levkropp.github.io/lamp/) · [Download v0.3.0](https://github.com/levkropp/lamp/releases/tag/v0.3.0) · [Roadmap](ROADMAP.md) · [Compatibility matrix](docs/compatibility.md) · [Technical details and limits](docs/technical.md) · [Apple Silicon build](docs/macos.md)
 
 ![LAMP's assembly playback controls](site/assets/player.png)
 
 ## Why LAMP?
 
-- MASM x86-64 runtime, including the working audio decoders; SSE2 baseline.
-- Event-driven WASAPI playback, a decode worker, and buffered PCM to absorb short scheduling stalls.
+- Shared MASM x86-64 decoder sources; Windows runs them directly, and macOS builds translate them into native ARM64 assembly using Rhun’s approach.
+- Windows uses event-driven WASAPI and a decode worker. macOS uses Core Audio queues with three bounded PCM buffers and an AppKit interface written in ARM64 assembly.
 - A compact mpv-inspired UI, with Rhun's assembly UI approach and minimalist visual style as references.
-- No codec DLL, C runtime, FFmpeg subprocess, or mpv engine in the player. Normal Windows system DLLs provide platform services.
+- No external codec library, FFmpeg subprocess, or mpv engine in the player. Windows system DLLs and macOS libSystem/AppKit/AudioToolbox provide platform services; no C, Objective-C or Swift runtime source is compiled into the Mac player.
 - MIT project license, with preserved MIT/MIT-0/CC0/BSD notices for reference-derived algorithms and data.
 
 LAMP aims to reduce stutters. It cannot guarantee uninterrupted playback during arbitrary system or driver stalls. [Same-machine headless playback measurements](docs/playback-benchmark.md) compare its assembly engine with mpv and VLC; shipping-GUI, wakeup and audible-latency measurements remain pending.
@@ -30,6 +30,18 @@ Windows 10/11 x64 and a working default audio output are the intended targets. B
 .\bin\lamp-cli.exe --check 'C:\Music\track.mp3'
 .\bin\lamp-cli.exe --decode 'C:\Music\track.ogg' '.\track.f32'
 ```
+
+Apple Silicon Macs need macOS 12 or later. Build with Python 3 and Xcode command line tools, then open the native app bundle:
+
+```sh
+./build.sh
+open build/macos/LAMP.app
+build/macos/lamp-cli 'Music/track.flac'
+build/macos/lamp-cli --check 'Music/track.opus'
+build/macos/lamp-cli --decode 'Music/track.ogg' 'track.f32'
+```
+
+The Mac app has Open, Finder file-open/drop handlers, pause/replay, stop, timeline seeking and volume controls. Cmd+O opens; Cmd+Q quits. The local bundle is ad-hoc signed. See [Mac build strategy, controls, verification and limits](docs/macos.md). The published v0.3.0 download remains Windows-only.
 
 `--check` decodes without an audio device. `--decode` writes little-endian float32 PCM with two interleaved channels; mono is duplicated. Opus output is 48 kHz; AIFF/AIFC rates round to integer hertz; other formats use their source rate. The destination must be new. Failed exports can leave partial output.
 
@@ -62,11 +74,11 @@ Vorbis now decodes 1–255 native channels. Standard 1–8-channel layouts use t
 | M | Mute/unmute to 100% |
 | Q | Close |
 
-The controls hide after 2.5 seconds of inactivity during playback. Seeking runs on a worker. WAV and AIFF/AIFC jump directly to the sample; native FLAC uses a validated seek table or a bounded frame search, including files with unknown duration. Exhausting the search budget falls back to sequential decoding. MP3 restores an indexed reservoir and decodes two frames of pre-roll before the target. Vorbis restores an Ogg packet boundary and decodes one packet to rebuild overlap. Opus restores a packet boundary at least 80 ms before the target to rebuild decoder state; near the beginning it applies normal pre-skip. These indexes are built from headers when opening a file. Paused seeking keeps audio stopped until resume. The console accepts Space to pause and Q/Ctrl+C to stop.
+On Windows, the controls hide after 2.5 seconds of inactivity during playback and seeking runs on a worker. The Mac interface uses persistent native controls; seeking currently reopens/repositions synchronously. Mac keyboard bindings also include F for fullscreen and Escape to leave fullscreen. WAV and AIFF/AIFC jump directly to the sample; native FLAC uses a validated seek table or a bounded frame search, including files with unknown duration. Exhausting the search budget falls back to sequential decoding. MP3 restores an indexed reservoir and decodes two frames of pre-roll before the target. Vorbis restores an Ogg packet boundary and decodes one packet to rebuild overlap. Opus restores a packet boundary at least 80 ms before the target to rebuild decoder state; near the beginning it applies normal pre-skip. These indexes are built from headers when opening a file. Paused seeking keeps audio stopped until resume. The console accepts Space to pause and Q/Ctrl+C to stop.
 
 ## Build and verify
 
-Install **Visual Studio 2022 Build Tools**, its x64 C++ tools, and a **Windows SDK**. Build scripts locate `ml64`, `link`, and `rc` automatically:
+For Windows, install **Visual Studio 2022 Build Tools**, its x64 C++ tools, and a **Windows SDK**. Build scripts locate `ml64`, `link`, and `rc` automatically:
 
 ```powershell
 .\build.ps1
@@ -76,7 +88,16 @@ node .\tests\smoke.js
 .\package.ps1
 ```
 
-The prebuilt ICO and decoder tables are included. A normal build needs no codec library or reference C compiler. Both players use custom assembly entry points and `/NODEFAULTLIB`. The development build measures **205,312 bytes for `lamp.exe`** and **197,632 bytes for `lamp-cli.exe`**, including icon resources; release manifests record exact sizes and hashes.
+For Apple Silicon, `./build.sh --release` builds the ARM64 app and CLI. Python is used only during the build. `tools/arm64.py` is the pinned MIT Rhun translator; `tools/masm.py` normalizes the authoritative MASM sources, and `tools/arm64_lamp.py` adds the instructions used by LAMP. No translated code is interpreted at runtime.
+
+```sh
+python3 tests/verify-macos.py --layouts --opus --audio --ui
+python3 tools/package-mac.py
+```
+
+Mac verification additionally needs Python 3.12+, Node.js and FFmpeg with libmp3lame/libopus. It builds the bundled, hash-verified Xiph/Opus references into test artifacts only. Audio/UI checks need a desktop session and working output device. Generated reports, translation artifacts and binaries live under `build/macos`. The package contains the app, CLI, notices and a SHA-256 manifest. [Mac verification scope](docs/macos.md#verification) is separate from the Windows results below.
+
+The prebuilt ICO and decoder tables are included. A normal build needs no codec library or reference C compiler. Both Windows players use custom assembly entry points and `/NODEFAULTLIB`. The development build measures **205,312 bytes for `lamp.exe`** and **197,632 bytes for `lamp-cli.exe`**, including icon resources; release manifests record exact sizes and hashes.
 
 To build while the player is open, use `./build.ps1 -OutputDirectory ./bin/verify-build`. Pass that directory to `node ./tests/verify-runtime.js ./bin/verify-build` and `node ./tests/smoke.js ./bin/verify-build` to check the new binaries, or `./package.ps1 -BinaryDirectory ./bin/verify-build` to package them. Packaging rejects a binary version that differs from `VERSION`.
 
@@ -96,7 +117,7 @@ Keep runtime and codec code in assembly. Use original implementations or careful
 
 ## License and references
 
-Original LAMP code and brand assets are [MIT licensed](LICENSE). See [THIRD_PARTY_NOTICES](THIRD_PARTY_NOTICES) for reference-derived code/data and test reference sources. No Rhun source or logo assets are included.
+Original LAMP code and brand assets are [MIT licensed](LICENSE). See [THIRD_PARTY_NOTICES](THIRD_PARTY_NOTICES) for reference-derived code/data and test reference sources. The Mac translator and native helper macros/routines derive from the MIT-licensed Rhun revision recorded in those notices; Rhun branding and assets are not included.
 
 - [Rhun](https://rhun.app/) / [assembly UI reference](https://github.com/vshvedov/rhun)
 - [mpv](https://mpv.io/) / [feature reference](https://mpv.io/manual/stable/)
