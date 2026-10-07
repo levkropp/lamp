@@ -1283,12 +1283,33 @@ LOCALFN flac_next_frame
     test rax, rax
     jz .Lfo_frame_return
     test edx, edx
-    jz .Lfo_frame_bad
+    jnz .Lfo_frame_audio
+    # FFmpeg's Ogg muxer can terminate FLAC with an empty EOS packet.
+    # It is a terminator only after every sample, on the final page.
+    cmp dword ptr [rip + ogg_eos], 1
+    jne .Lfo_frame_bad
+    cmp dword ptr [rip + ogg_packet_page_end], 1
+    jne .Lfo_frame_bad
+    mov rax, [rip + flac_next_sample]
+    cmp rax, [rip + total_frames]
+    jne .Lfo_frame_bad
+    xor eax, eax
+    jmp .Lfo_frame_return
+.Lfo_frame_audio:
     mov [rip + input_cursor], rax
     add rdx, rax
     mov [rip + input_end], rdx
     mov [rip + flac_bit_end], rdx
-    mov eax, [rip + ogg_eos]
+    # The final audio frame may precede a separate empty EOS packet. Use
+    # the validated frame positions, as the open-time scan does, to allow
+    # its short block without relaxing intermediate-frame bounds.
+    mov rcx, [rip + input_cursor]
+    mov edx, [rip + ogg_packet_length]
+    call flac_frame_extent
+    add rax, rdx
+    cmp rax, [rip + total_frames]
+    sete al
+    movzx eax, al
     mov [rip + flac_packet_final], eax
     call decode_frame
     jmp .Lfo_frame_return
@@ -1445,6 +1466,16 @@ FN flac_ogg_open
     call ogg_next
     test rax, rax
     jz .Lfo_scan_end
+    test edx, edx
+    jnz .Lfo_scan_audio
+    cmp dword ptr [rip + ogg_eos], 1
+    jne .Lfo_open_bad
+    cmp dword ptr [rip + ogg_packet_page_end], 1
+    jne .Lfo_open_bad
+    cmp r12, [rip + ogg_granule]
+    jne .Lfo_open_bad
+    jmp .Lfo_scan_end
+.Lfo_scan_audio:
     mov rcx, rax
     call flac_frame_extent               # RAX=position, RDX=block size
     test rdx, rdx
@@ -1722,7 +1753,8 @@ FN flac_ogg_read
 ENDFN flac_ogg_read
 
 # Track mode for container PCM: ECX=channels (1-8), EDX=bits (8/16/24/32,
-# or 32/64 float), R8D=flags (1 big-endian, 2 float, 4 signed 8-bit) -> EAX=1.
+# or 32/64 float), R8D=flags (1 big-endian, 2 float, 4 signed 8-bit,
+# 8 A-law, 16 mu-law, both stored in 8-bit containers) -> EAX=1.
 FN pcm_track_open
     sub rsp, 40
     xor eax, eax
@@ -1760,6 +1792,19 @@ FN pcm_track_open
     and eax, 1
     mov [rip + pcm_signed8], eax
     mov dword ptr [rip + pcm_g711], 0
+    test r8d, 24
+    jz .Lpcm_track_align
+    xor eax, eax
+    cmp edx, 8
+    jne .Lpcm_track_return
+    mov eax, r8d
+    shr eax, 3
+    and eax, 3
+    cmp eax, 2
+    ja .Lpcm_track_bad_g711
+    mov [rip + pcm_g711], eax
+    mov dword ptr [rip + source_bits], 16
+.Lpcm_track_align:
     mov eax, edx
     shr eax, 3
     imul eax, ecx
@@ -1772,9 +1817,16 @@ FN pcm_track_open
     jz .Lpcm_track_return
     mov eax, 128
     sub eax, [rip + wav_container_bits]
+    cmp dword ptr [rip + pcm_g711], 0
+    je .Lpcm_track_scale
+    mov eax, 128 - 16
+.Lpcm_track_scale:
     shl eax, 23
     mov [rip + float_scale], eax
     mov eax, 1
+    jmp .Lpcm_track_return
+.Lpcm_track_bad_g711:
+    xor eax, eax
 .Lpcm_track_return:
     add rsp, 40
     ret

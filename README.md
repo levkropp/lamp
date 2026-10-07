@@ -4,7 +4,7 @@
 
 A small media player for Windows and Linux x86-64 and Apple Silicon macOS with handwritten assembly decoders and a native assembly UI. Audio comes first. The long-term goal is to support the relevant formats and playback features people use in **mpv**, with a small runtime and low CPU use.
 
-**Current source: 0.4.0-dev, an early audio prototype.** WAV, AIFF/AIFC, native FLAC, MP3, MP2/MP1, Ogg/Vorbis, Ogg/Opus and FLAC in Ogg play in source builds, including chained and multiplexed Ogg files, WavPack (`.wv`, lossless and hybrid), Monkey's Audio (`.ape`, versions 3930–3990), Matroska/WebM files with Opus, Vorbis, FLAC, ALAC, AAC, AC-3, WavPack, MPEG audio or PCM tracks, MP4/M4A/MOV files with AAC-LC or HE-AAC, AC-3, ALAC, MPEG audio, Opus, FLAC or PCM tracks (including the audio of video files and fragmented MP4), raw ADTS and LOAS/LATM AAC and raw AC-3, and the audio of MPEG transport and program streams (`.ts`, `.m2ts`, `.mpg`, `.vob`) with MPEG audio, AAC (ADTS or LATM), AC-3 or DVD and Blu-ray LPCM. Opus supports family 0 mono/stereo and family 1 layouts with 1–8 speaker channels, downmixed to stereo. Its elementary decoders include RFC 8251 updates and pass all 120 official vector checks across five output rates and mono/stereo. Video, subtitles and network streaming are future work. The published v0.3.0 prerelease contains WAV, native FLAC, MP3 and Ogg/Vorbis.
+**Current source: 0.4.0-dev, an early audio prototype.** WAV, AIFF/AIFC, native FLAC, MP3, MP2/MP1, Ogg/Vorbis, Ogg/Opus and FLAC in Ogg play in source builds, including chained and multiplexed Ogg files, WavPack (`.wv`, lossless and hybrid), Monkey's Audio (`.ape`, versions 3930–3990), Matroska/WebM files with Opus, Vorbis, FLAC, ALAC, AAC, AC-3, WavPack, MPEG audio or PCM tracks, MP4/M4A/MOV files with AAC-LC or HE-AAC, AC-3, ALAC, MPEG audio, Opus, FLAC, PCM, G.711, IMA4 or GSM tracks (including the audio of video files and fragmented MP4), raw ADTS and LOAS/LATM AAC and raw AC-3, and the audio of MPEG transport and program streams (`.ts`, `.m2ts`, `.mpg`, `.vob`) with MPEG audio, AAC (ADTS or LATM), AC-3 or DVD and Blu-ray LPCM. Opus supports family 0 mono/stereo and family 1 layouts with 1–8 speaker channels, downmixed to stereo. Its elementary decoders include RFC 8251 updates and pass all 120 official vector checks across five output rates and mono/stereo. Video, subtitles and network streaming are future work. The published v0.3.0 prerelease contains WAV, native FLAC, MP3 and Ogg/Vorbis.
 
 [Website](https://levkropp.github.io/lamp/) · [Download v0.3.0](https://github.com/levkropp/lamp/releases/tag/v0.3.0) · [Roadmap](ROADMAP.md) · [Compatibility matrix](docs/compatibility.md) · [Technical details and limits](docs/technical.md) · [Apple Silicon build](docs/macos.md)
 
@@ -23,6 +23,8 @@ LAMP aims to reduce stutters. It cannot guarantee uninterrupted playback during 
 ## Run
 
 Windows 10/11 x64 with a working default audio output is the primary desktop target. Build from source for Opus and AIFF/AIFC support, or download the earlier [v0.3.0 Windows prerelease](https://github.com/levkropp/lamp/releases/tag/v0.3.0). Open `bin\lamp.exe` and drop audio files or folders onto the window; they play as a gapless list.
+
+In the Windows player, F/F11 toggles fullscreen, C toggles compact mode and Esc restores the preceding mode. Tab/Shift+Tab moves through the named buttons and sliders; Enter/Space activates buttons, and arrows or Home/End adjust a focused slider. See the [control table](docs/technical.md#run) for all shortcuts and the remaining native Windows accessibility checks.
 
 ```powershell
 .\bin\lamp.exe 'C:\Music\track.ogg'
@@ -66,7 +68,7 @@ Several files play, check or export as one gapless stream at the first file's ra
 | --- | --- |
 | AIFF / AIFC | Signed PCM 1–32-bit, AIFC byte-order/fixed-container variants, float32/64, G.711, IMA4 and GSM 06.10; 1–8 channels, ordered Core Audio layouts, rounded 8–192 kHz output |
 | WAV | Little-endian RIFF/RF64/BW64, Sony Wave64 and big-endian RIFX audio framing, PCM 8/16/24/32-bit or float32/64; 1–8 channels, extensible valid bits/layouts, 8–192 kHz; G.711 A-law/µ-law, IMA and Microsoft ADPCM, G.726, G.722 and GSM 06.10, MPEG audio and AC-3 data; [details](docs/wav.md#compressed-audio) |
-| GSM 06.10 | Full-rate speech in WAVE (Microsoft's blocks), AIFF-C and raw `.gsm`, bit-exact with libgsm; exact seeks; [details](docs/wav.md#gsm-0610) |
+| GSM 06.10 | Full-rate speech in WAVE (Microsoft's blocks), AIFF-C, QuickTime MOV and raw `.gsm`, bit-exact with libgsm; exact seeks; [details](docs/wav.md#gsm-0610) |
 | Native FLAC | 1–8 channels, 4–32-bit, 8–192 kHz; CRC checks; speaker-mask-aware stereo downmix |
 | MP3 | MPEG-1/2/2.5 Layer III, mono/stereo, CBR/VBR, encoder trimming when tagged |
 | MP2 / MP1 | MPEG-1 and MPEG-2 (16–24 kHz) Layers II and I: all allocation tables, stereo/joint/dual/mono, CRC checks; exact seeks |
@@ -74,7 +76,7 @@ Several files play, check or export as one gapless stream at the first file's ra
 | Ogg/Opus | Development source: family 0 mono/stereo or family 1 with 1–8 speaker channels downmixed to stereo; 48 kHz output, header gain/pre-skip/end trimming |
 | FLAC in Ogg | FLAC-in-Ogg 1.0 mapping with the native FLAC limits; exact seeks |
 | Matroska / WebM | Audio track with Opus, Vorbis, FLAC, ALAC, AAC (LC, HE-AAC), AC-3, WavPack, MPEG Layers I–III or PCM; lacing, unknown sizes, DiscardPadding; video and other tracks skipped; [details](docs/matroska.md) |
-| MP4 / M4A / MOV | Audio track with AAC (LC, HE-AAC), AC-3, Apple Lossless (16–32-bit, 1–8 channels), MPEG Layers I–III, Opus, FLAC or QuickTime/ISO PCM; progressive or fragmented; edit lists and sample durations trim the start and end; [details](docs/mp4.md) |
+| MP4 / M4A / MOV | Audio track with AAC (LC, HE-AAC), AC-3, Apple Lossless (16–32-bit, 1–8 channels), MPEG Layers I–III, Opus, FLAC, QuickTime/ISO PCM, G.711, IMA4 or GSM; progressive or fragmented; edit lists and sample durations trim the start and end; [details](docs/mp4.md) |
 | MPEG-TS / PS | First supported audio stream of transport streams (188/192/204-byte packets, PAT/PMT, DVB AC-3 descriptors) and MPEG-1/MPEG-2 program streams (VOB AC-3 substreams): MPEG audio, ADTS or LATM AAC or AC-3, decoded and seeked as the raw stream; DVD LPCM (16/20/24-bit, 1–8 channels) and Blu-ray LPCM (16/24-bit, mono to 7.1); [details](docs/mpegts.md) |
 | AAC | AAC-LC (object type 2), 8–96 kHz, mono to 7.1, M/S, intensity, PNS, TNS and pulses; HE-AAC spectral band replication (explicit, backward-compatible or implicit signalling, 16–96 kHz output) and HE-AAC v2 parametric stereo; in MP4, Matroska, ADTS `.aac` or [LOAS/LATM](docs/latm.md) (`.loas`, `.latm`, DVB transport streams); [details](docs/aac.md) |
 | AC-3 | Dolby Digital (ATSC A/52, bsid 0–10 including half and quarter rates), 32–48 kHz, every channel mode with LFE, block switching, coupling, rematrixing, delta bit allocation, dynamic range; CRC checks with FFmpeg-style concealment; in raw `.ac3`, Matroska or MP4; E-AC-3 not yet; [details](docs/ac3.md) |
@@ -144,7 +146,7 @@ python3 tools/package-mac.py
 
 Mac verification additionally needs Python 3.12+, Node.js and FFmpeg with libmp3lame/libopus. It builds the bundled, hash-verified Xiph/Opus references into test artifacts only. Audio/UI checks need a desktop session and working output device. Generated reports, translation artifacts and binaries live under `build/macos`. The package contains the app, CLI, notices and a SHA-256 manifest. [Mac verification scope](docs/macos.md#verification) is separate from the Windows results below.
 
-The prebuilt ICO and decoder tables are included. A normal build needs no codec library or reference C compiler; import libraries come from `src/win/*.def`. Both Windows players use custom assembly entry points and no default libraries. The development build measures **398,336 bytes for `lamp.exe`** and **382,976 bytes for `lamp-cli.exe`**, including icon resources; release manifests record exact sizes and hashes.
+The prebuilt ICO and decoder tables are included. A normal build needs no codec library or reference C compiler; import libraries come from `src/win/*.def`. Both Windows players use custom assembly entry points and no default libraries. The development build measures **426,496 bytes for `lamp.exe`** and **404,480 bytes for `lamp-cli.exe`**, including icon resources; release manifests record exact sizes and hashes.
 
 To build while the player is open, use `./build.ps1 -OutputDirectory ./bin/verify-build`. Pass that directory to `node ./tests/verify-runtime.js ./bin/verify-build` and `node ./tests/smoke.js ./bin/verify-build` to check the new binaries, or `./package.ps1 -BinaryDirectory ./bin/verify-build` to package them. Packaging rejects a binary version that differs from `VERSION`. Test runners honour `LAMP_OUT` for a different output directory.
 

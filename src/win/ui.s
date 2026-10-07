@@ -183,7 +183,7 @@ FN ui_start
     xor ecx, ecx
     lea rdx, [rip + ui_class]
     lea r8, [rip + ui_title]
-    mov r9d, 0x0cf0000
+    mov r9d, 0x02cf0000                   # OVERLAPPEDWINDOW | CLIPCHILDREN
     mov qword ptr [rsp + 32], -0x80000000
     mov qword ptr [rsp + 40], -0x80000000
     mov qword ptr [rsp + 48], 820
@@ -214,6 +214,7 @@ FN ui_start
     mov qword ptr [rsp + 48], 0x16        # NOMOVE | NOZORDER | NOACTIVATE
     call SetWindowPos
 .Lui_sized:
+    call ui_controls_create
     mov rcx, [rip + ui_hwnd]
     mov edx, 1
     call DragAcceptFiles
@@ -259,6 +260,10 @@ FN ui_start
     call GetMessageW
     test eax, eax
     jle .Lui_exit
+    lea rcx, [rip + ui_message]
+    call ui_controls_key
+    test eax, eax
+    jnz .Lui_message_loop
     lea rcx, [rip + ui_message]
     call TranslateMessage
     lea rcx, [rip + ui_message]
@@ -347,6 +352,15 @@ FN ui_layout
     add r8, 8
     jmp .Lui_layout_entry
 .Lui_layout_fonts:
+    cmp dword ptr [rip + ui_compact], 0
+    je .Lui_layout_release
+    mov ecx, 220
+    call ui_px
+    mov [rip + px_min_h], eax
+    mov ecx, 20
+    call ui_px
+    mov [rip + px_big_font], eax
+.Lui_layout_release:
     call ui_release_buffer                # fonts and canvas again
     mov dword ptr [rip + ui_buffer_width], 0
     xor ecx, ecx
@@ -443,6 +457,12 @@ LOCALFN ui_window_proc
     je .Lui_wm_context
     cmp edx, 0x111
     je .Lui_wm_menu
+    cmp edx, 0x2b                        # WM_DRAWITEM
+    je .Lui_wm_draw_control
+    cmp edx, 0x114                       # WM_HSCROLL
+    je .Lui_wm_slider
+    cmp edx, 0x4e                        # WM_NOTIFY, native trackbar painting
+    je .Lui_wm_notify
     cmp edx, 0x10
     je .Lui_wm_close
     cmp edx, 2
@@ -483,6 +503,7 @@ LOCALFN ui_window_proc
     call ui_invalidate
     jmp .Lui_handled
 .Lui_wm_mouse:
+    mov dword ptr [rip + ui_keyboard_focus], 0
     call ui_activity
     jmp .Lui_handled
 .Lui_wm_timer:
@@ -492,6 +513,15 @@ LOCALFN ui_window_proc
     jne .Lui_timer_quiet
     cmp dword ptr [rip + pause_requested], 0
     jne .Lui_timer_paused
+    cmp dword ptr [rip + ui_keyboard_focus], 0
+    je .Lui_timer_mouse_focus
+    call GetFocus
+    mov rdx, rax
+    mov rcx, [rip + ui_hwnd]
+    call IsChild
+    test eax, eax
+    jnz .Lui_timer_quiet                 # keyboard controls remain visible
+.Lui_timer_mouse_focus:
     call GetTickCount64
     sub rax, [rip + ui_last_activity]
     cmp rax, 2500
@@ -499,6 +529,15 @@ LOCALFN ui_window_proc
     cmp dword ptr [rip + engine_ready], 0
     je .Lui_timer_quiet
     mov dword ptr [rip + ui_controls], 0
+    call GetFocus
+    mov rdx, rax
+    mov rcx, [rip + ui_hwnd]
+    call IsChild
+    test eax, eax
+    jz .Lui_timer_hidden
+    mov rcx, [rip + ui_hwnd]             # a hidden slider must not retain focus
+    call SetFocus
+.Lui_timer_hidden:
     mov rcx, [rip + ui_hwnd]
     mov edx, 1
     call KillTimer
@@ -527,8 +566,56 @@ LOCALFN ui_window_proc
     call ui_menu
     jmp .Lui_handled
 .Lui_wm_menu:
+    test r9, r9
+    jz .Lui_wm_menu_activate
+    mov eax, r8d
+    shr eax, 16
+    test eax, eax                        # only BN_CLICKED activates
+    jnz .Lui_handled
+.Lui_wm_menu_activate:
     movzx ecx, r8w                        # WM_COMMAND: a menu item
     call ui_menu_command
+    jmp .Lui_handled
+.Lui_wm_draw_control:
+    mov rcx, r9
+    call ui_control_draw
+    jmp .Lui_wm_return
+.Lui_wm_notify:
+    mov rcx, r9
+    call ui_slider_draw
+    jmp .Lui_wm_return
+.Lui_wm_slider:
+    cmp r9, [rip + ui_control_hwnds + 5*8]
+    je .Lui_wm_seek_slider
+    cmp r9, [rip + ui_control_hwnds + 6*8]
+    jne .Lui_handled
+    mov rcx, r9
+    mov edx, 0x400                       # TBM_GETPOS
+    xor r8d, r8d
+    xor r9d, r9d
+    call SendMessageW
+    jmp .Lui_set_volume
+.Lui_wm_seek_slider:
+    mov rcx, r9
+    mov edx, 0x400
+    xor r8d, r8d
+    xor r9d, r9d
+    call SendMessageW
+    mov ecx, [rip + queue_rate]
+    test ecx, ecx
+    jz .Lui_handled
+    mov r8, [rip + ui_shown_frames]
+    test r8, r8
+    jz .Lui_handled
+    # Convert the slider's 0-10000 position to presentation milliseconds.
+    mul r8
+    mov ecx, 10000
+    div rcx
+    mov ecx, 1000
+    mul rcx
+    mov ecx, [rip + queue_rate]
+    div rcx
+    call ui_seek
     jmp .Lui_handled
 .Lui_wm_command:
     # WM_APPCOMMAND from media keys and remotes.
@@ -557,6 +644,14 @@ LOCALFN ui_window_proc
 .Lui_wm_key:
     call ui_activity
     mov r8, [rsp + 112]
+    cmp r8d, 0x7a                        # F11
+    je .Lui_fullscreen_key
+    cmp r8d, 0x46                        # F
+    je .Lui_fullscreen_key
+    cmp r8d, 0x43                        # C
+    je .Lui_compact_key
+    cmp r8d, 0x1b                        # Escape restores a windowed mode
+    je .Lui_escape_key
     cmp r8d, 0x20
     je .Lui_toggle_pause
     cmp r8d, 0xb3                         # VK_MEDIA_PLAY_PAUSE
@@ -587,6 +682,18 @@ LOCALFN ui_window_proc
     je .Lui_mute
     cmp r8d, 0x51
     je .Lui_wm_close
+    jmp .Lui_handled
+.Lui_fullscreen_key:
+    call ui_fullscreen_toggle
+    jmp .Lui_handled
+.Lui_compact_key:
+    call ui_compact_toggle
+    jmp .Lui_handled
+.Lui_escape_key:
+    cmp dword ptr [rip + ui_fullscreen], 0
+    jne .Lui_fullscreen_key
+    cmp dword ptr [rip + ui_compact], 0
+    jne .Lui_compact_key
     jmp .Lui_handled
 .Lui_open_key:
     call ui_open_dialog
@@ -644,6 +751,7 @@ LOCALFN ui_window_proc
     call ui_toggle
     jmp .Lui_handled
 .Lui_wm_click:
+    mov dword ptr [rip + ui_keyboard_focus], 0
     call ui_activity
     mov r9, [rsp + 120]
     mov eax, r9d
@@ -799,6 +907,7 @@ LOCALFN ui_window_proc
     call BeginPaint
     mov [rsp + 128], rax
     call ui_draw
+    call ui_controls_sync
     mov rcx, [rsp + 128]
     xor edx, edx
     xor r8d, r8d
@@ -823,4 +932,6 @@ ENDFN ui_window_proc
 .include "ui_draw.inc"
 .include "ui_cover.inc"
 .include "ui_queue.inc"
+.include "ui_modes.inc"
 .include "ui_menu.inc"
+.include "ui_controls.inc"

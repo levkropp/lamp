@@ -44,6 +44,24 @@ LOCALFN ui_menu
     lea r9, [rip + ui_menu_open]
     call AppendMenuW
     xor edx, edx
+    cmp dword ptr [rip + ui_fullscreen], 0
+    je .Lui_menu_fullscreen
+    mov edx, 8
+.Lui_menu_fullscreen:
+    mov rcx, rbx
+    mov r8d, ID_FULLSCREEN
+    lea r9, [rip + ui_menu_fullscreen]
+    call AppendMenuW
+    xor edx, edx
+    cmp dword ptr [rip + ui_compact], 0
+    je .Lui_menu_compact
+    mov edx, 8
+.Lui_menu_compact:
+    mov rcx, rbx
+    mov r8d, ID_COMPACT
+    lea r9, [rip + ui_menu_compact]
+    call AppendMenuW
+    xor edx, edx
     cmp dword ptr [rip + queue_repeat], 0
     je .Lui_menu_repeat
     mov edx, 8                            # MF_CHECKED
@@ -190,6 +208,31 @@ ENDFN ui_device_found
 # ECX=menu command (WM_COMMAND's identifier).
 LOCALFN ui_menu_command
     sub rsp, 40
+    cmp ecx, 110
+    jne .Lui_command_play
+    call ui_previous
+    jmp .Lui_menu_command_return
+.Lui_command_play:
+    cmp ecx, 111
+    jne .Lui_command_next_button
+    call ui_toggle
+    jmp .Lui_menu_command_return
+.Lui_command_next_button:
+    cmp ecx, 112
+    jne .Lui_command_mode
+    call ui_next
+    jmp .Lui_menu_command_return
+.Lui_command_mode:
+    cmp ecx, ID_FULLSCREEN
+    jne .Lui_command_compact
+    call ui_fullscreen_toggle
+    jmp .Lui_menu_command_return
+.Lui_command_compact:
+    cmp ecx, ID_COMPACT
+    jne .Lui_command_open
+    call ui_compact_toggle
+    jmp .Lui_menu_command_return
+.Lui_command_open:
     cmp ecx, ID_OPEN
     jne .Lui_command_repeat
     call ui_open_dialog

@@ -30,7 +30,7 @@
         <p class="subtitle">Lev's Assembly Media Player.</p>
         <p class="intro">A small audio player with handwritten assembly decoders and a quiet, compact interface. Built to use fewer resources. Growing toward the media you play in mpv.</p>
         <div class="actions"><a class="button primary" href="https://github.com/levkropp/lamp/releases">Get LAMP <span>↓</span></a><a class="button" href="https://github.com/levkropp/lamp#build-and-verify">Build from source <span>↗</span></a></div>
-        <p class="fine">Source builds: WAV, AIFF/AIFC, FLAC, MP3, Vorbis and development Opus. Apple Silicon source builds include native AppKit/Core Audio support. Downloaded v0.3.0 is Windows-only and includes WAV, FLAC, MP3 and Vorbis.</p>
+        <p class="fine">Source builds add Opus, AAC/HE-AAC, ALAC, AC-3, WavPack, APE and audio from MP4/MOV, Matroska, MPEG-TS/PS and other containers. Apple Silicon source builds include native AppKit/Core Audio support. Downloaded v0.3.0 is Windows-only and includes WAV, FLAC, MP3 and Vorbis.</p>
       </div>
       <div class="hero-art"><img src="assets/lamp.png" width="440" height="440" alt="A geometric lamp with a teal shade and an ivory stem and base"><span class="art-caption">LAMP / 001</span></div>
     </section>
@@ -39,9 +39,9 @@
       <figure class="player"><img src="assets/player.png" width="800" height="450" alt="LAMP's dark playback canvas with a track title, seek bar, pause control and volume"><figcaption>Windows assembly renderer, shown with synthetic playback state. Inspired by mpv's compact controls and Rhun's assembly UI approach.</figcaption></figure>
     </section>
     <section class="shell principles" aria-label="Design goals">
-      <article><span class="number">01 / SMALL</span><h2>200.5 KiB GUI.</h2><p>The development Windows executable includes its icon and Opus decoder. Windows system services handle audio output and the window; the player brings its own assembly decoders.</p></article>
-      <article><span class="number">02 / BUFFERED</span><h2>Let audio breathe.</h2><p>Windows uses a separate decode worker and event-driven WASAPI. The Mac backend feeds bounded Core Audio buffers from its queue callback, keeping decode work out of AppKit playback updates.</p></article>
-      <article><span class="number">03 / FOCUSED</span><h2>Just press play.</h2><p>Drop a file, pause with Space, seek with the arrows. Windows controls fade during playback. macOS uses native buttons and sliders, with Cmd+O and Cmd+Q.</p></article>
+      <article><span class="number">01 / SMALL</span><h2>416.5 KiB GUI.</h2><p>The development Windows executable includes its icon and assembly audio decoders. Windows system services handle audio output, the window and accessible controls.</p></article>
+      <article><span class="number">02 / BUFFERED</span><h2>Let audio breathe.</h2><p>A separate decoder feeds a PCM queue. Event-driven WASAPI playback absorbs short scheduling stalls, with no decoder work in the audio refill path. The Mac backend feeds bounded Core Audio buffers from its queue callback.</p></article>
+      <article><span class="number">03 / FOCUSED</span><h2>Just press play.</h2><p>Drop files or folders, pause with Space, seek with the arrows. F11 fills the screen, C opens compact mode and Tab reaches the named controls. Redraw timers stop while idle or paused. macOS uses native buttons and sliders, with Cmd+O and Cmd+Q.</p></article>
     </section>
     <section id="formats" class="shell formats">
       <div class="section-label"><h2>What plays today.</h2><span>AUDIO FIRST</span></div>
@@ -54,8 +54,8 @@
       <p class="roadmap-intro">The goal is to support everything relevant that mpv supports: formats, playback, rendering, subtitles, streaming and automation, while keeping the runtime small and measuring every performance claim.</p>
       <ol>
         <li><span>01</span><div><h3>Opus foundation</h3><p>Ogg family 0 playback and all 120 official vector checks pass.</p></div><em>done</em></li>
-        <li><span>02</span><div><h3>Everyday audio</h3><p>Indexed seeking and Opus multistream stereo downmix are in source. Playlists, broader multichannel support and device changes remain.</p></div><em>in progress</em></li>
-        <li><span>03</span><div><h3>More formats</h3><p>RF64/BW64 and AIFF/AIFC audio are in source. AAC, ALAC and broader containers remain.</p></div></li>
+        <li><span>02</span><div><h3>Everyday audio</h3><p>Indexed seeks, Ogg chains, gapless queues, metadata, cover art, resume, output selection and window modes are in source. Native Windows accessibility and surround output still need work.</p></div><em>in progress</em></li>
+        <li><span>03</span><div><h3>More formats</h3><p>AAC/HE-AAC, ALAC, AC-3, WavPack, APE and broader audio containers are in source, including QuickTime G.711, IMA4 and GSM. E-AC-3, DTS and further legacy formats remain.</p></div><em>in progress</em></li>
         <li><span>04</span><div><h3>Video &amp; sync</h3><p>Modern video formats, hardware decode and efficient presentation.</p></div></li>
         <li><span>05</span><div><h3>Subtitles &amp; streaming</h3><p>Timed text, styled subtitles, HTTP, HLS and DASH.</p></div></li>
         <li><span>06</span><div><h3>mpv-relevant coverage</h3><p>Configurable controls, IPC and the relevant long tail of media.</p></div></li>

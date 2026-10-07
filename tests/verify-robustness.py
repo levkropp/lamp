@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Malformed input across every container and codec: no crash, hang or runaway memory.
 
-usage: python3 tests/verify-robustness.py [--count N] [--seed S] [--wine]
+usage: python3 tests/verify-robustness.py [--count N] [--seed S] [--wine] [--only NAME,...]
 One small file per supported container/codec pairing, written by FFmpeg (or,
 for Monkey's Audio, tests/ape_vectors.py), is mutated N times (500 by
 default) each:
@@ -16,6 +16,7 @@ so a runaway allocation fails it too. --wine runs every tenth mutation with
 bin/lamp-cli.exe under Wine, where a crash is an exception exit code.
 Writes <out>/robustness-verification.json (robustness-wine-verification.json
 with --wine).
+--only selects source filenames and writes robustness-selected[-wine]-verification.json.
 """
 import argparse
 import math
@@ -75,6 +76,10 @@ SOURCES = [
     ('opus.mp4', NOISE + ['-c:a', 'libopus']),
     ('flac.mp4', NOISE + ['-c:a', 'flac', '-strict', '-2']),
     ('pcm.mov', NOISE + ['-c:a', 'pcm_s16le']),
+    ('alaw.mov', NOISE + ['-c:a', 'pcm_alaw']),
+    ('ulaw.mov', NOISE + ['-c:a', 'pcm_mulaw']),
+    ('ima4.mov', NOISE + ['-c:a', 'adpcm_ima_qt']),
+    ('gsm.mov', PHONE + ['-c:a', 'libgsm']),
     ('tone.ac3', SURROUND + ['-c:a', 'ac3']),
     ('ac3.mka', SURROUND + ['-c:a', 'ac3']),
     ('vorbis.mka', NOISE + ['-c:a', 'libvorbis']),
@@ -162,7 +167,17 @@ def main():
     parser.add_argument('--count', type=int, default=500)
     parser.add_argument('--seed', type=int, default=20261006)
     parser.add_argument('--wine', action='store_true')
+    parser.add_argument('--only', help='comma-separated source filenames')
     args = parser.parse_args()
+    if args.count < 1:
+        parser.error('--count must be positive')
+    selected = SOURCES
+    if args.only:
+        names = set(args.only.split(','))
+        unknown = names - {name for name, _ in SOURCES}
+        if unknown:
+            parser.error(f'unknown sources: {", ".join(sorted(unknown))}')
+        selected = [(name, options) for name, options in SOURCES if name in names]
     build_lamp()
     work = scratch('robustness-wine' if args.wine else 'robustness')
     rng = random.Random(args.seed)
@@ -180,7 +195,7 @@ def main():
         step = 1
     checks = []
     total = decoded = 0
-    for name, options in SOURCES:
+    for name, options in selected:
         source = work / name
         if not source.exists():
             if options is None:
@@ -198,7 +213,7 @@ def main():
             path = work / f'mutated{Path(name).suffix}'
             path.write_bytes(data)
             options = ['--check']
-            if n % 4 == 3:
+            if (n // step) % 4 == 3:
                 options += ['--start', f'{rng.uniform(0, 1.4):.3f}']
             try:
                 result = subprocess.run([*command, *options, str(path)], stdout=subprocess.PIPE,
@@ -217,13 +232,16 @@ def main():
         checks.append({'test': name, 'result': 'no crash, hang or runaway memory', 'mutations': counts[0] + counts[2],
                        'decoded': counts[0], 'rejected_or_damaged': counts[2]})
         print(f'{name}: {counts[0] + counts[2]} mutations, {counts[0]} decoded, {counts[2]} rejected', flush=True)
-    write_report('robustness-wine' if args.wine else 'robustness', {
+    report = 'robustness-selected' if args.only else 'robustness'
+    if args.wine:
+        report += '-wine'
+    write_report(report, {
         'result': 'passed', 'checks': checks, 'mutations': total, 'decoded': decoded,
-        'scope': f'{len(SOURCES)} container/codec sources, {args.count} mutations each '
+        'scope': f'{len(selected)} container/codec sources, {args.count} mutations each '
                  f'({"every tenth under Wine" if args.wine else "Linux, 2 GiB address space"}), seed {args.seed}: '
                  'byte flips, zero/0xff runs, cuts, removed and duplicated spans, large length fields; --check, '
                  'every fourth from a random --start.'})
-    print(f'Passed: {total} mutated files across {len(SOURCES)} sources, none crashed, hung or ran away.')
+    print(f'Passed: {total} mutated files across {len(selected)} sources, none crashed, hung or ran away.')
 
 
 if __name__ == '__main__':

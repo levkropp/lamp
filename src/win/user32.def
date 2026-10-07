@@ -1,5 +1,6 @@
 LIBRARY USER32.dll
 EXPORTS
+    GetClassNameW
     BeginPaint
     CreateWindowExW
     DefWindowProcW
@@ -31,3 +32,21 @@ EXPORTS
     DestroyMenu
     TrackPopupMenu
     GetDpiForWindow
+    GetWindowLongPtrW
+    SetWindowLongPtrW
+    GetWindowPlacement
+    SetWindowPlacement
+    MonitorFromWindow
+    GetMonitorInfoW
+    GetFocus
+    SetFocus
+    GetKeyState
+    SendMessageW
+    GetDlgItem
+    DrawFocusRect
+    IsChild
+    GetCapture
+    GetGUIThreadInfo
+    SetForegroundWindow
+    SendInput
+    CallWindowProcW

@@ -11,6 +11,13 @@
 #   t        print the window's title
 #   pN       print the title whenever it changes, for N milliseconds
 #   c        close the window and wait until it is gone (up to 20 s)
+#   f        print the focused child control's name
+#   vXX      press key XX on the focused child control
+#   nN       print child N's screen-reader name, role (MSAA), and native class
+#   g        print the window's placement (show state and normal rectangle)
+#   b        press Shift+Tab through the input queue
+#   hN       print trackbar N's current position
+#   uN       move the pointer over child N (through its native procedure)
 # Titles print in UTF-8, one per line. Exit code 1 when the window is missing.
 .include "lamp.inc"
 .data
@@ -20,12 +27,41 @@ driver_stdout: .quad 0
 driver_hwnd: .quad 0
 driver_class: .short 'L', 'a', 'm', 'p', 'W', 'i', 'n', 'd', 'o', 'w', 0
 driver_newline: .byte 10
+driver_iaccessible: .long 0x618736e0
+    .short 0x3c3d,0x11cf
+    .byte 0x81,0x0c,0x00,0xaa,0x00,0x38,0x9b,0x71
+.p2align 3
+driver_shift_tab:
+    # Four x64 INPUT structures: Shift down, Tab down/up, Shift up.
+    .long 1,0
+    .short 0x10,0
+    .long 0,0,0
+    .quad 0,0
+    .long 1,0
+    .short 9,0
+    .long 0,0,0
+    .quad 0,0
+    .long 1,0
+    .short 9,0
+    .long 2,0,0
+    .quad 0,0
+    .long 1,0
+    .short 0x10,0
+    .long 2,0,0
+    .quad 0,0
 .bss
 driver_rect: .zero 16
 driver_title: .zero 2048*2
 driver_last: .zero 2048*2
 driver_utf8: .zero 8192
 driver_digits: .zero 24
+driver_gui: .zero 72
+driver_accessible: .zero 8
+driver_control: .zero 8
+driver_bstr: .zero 8
+driver_variant: .zero 24
+driver_role: .zero 24
+driver_placement: .zero 44
 
 .text
 FN driver_start
@@ -72,6 +108,20 @@ FN driver_start
     je .Ldriver_poll
     cmp eax, 'c'
     je .Ldriver_close
+    cmp eax, 'f'
+    je .Ldriver_focus
+    cmp eax, 'v'
+    je .Ldriver_focus_key
+    cmp eax, 'n'
+    je .Ldriver_accessible
+    cmp eax, 'g'
+    je .Ldriver_placement
+    cmp eax, 'b'
+    je .Ldriver_shift_tab
+    cmp eax, 'h'
+    je .Ldriver_slider_position
+    cmp eax, 'u'
+    je .Ldriver_control_mouse
     jmp .Ldriver_bad
 .Ldriver_wait:
     mov r12d, 1200
@@ -103,6 +153,162 @@ FN driver_start
     mov edx, 0x100                        # WM_KEYDOWN
     mov r9d, 1
     call PostMessageW
+    jmp .Ldriver_command
+.Ldriver_focus:
+    call driver_focus_window
+    test rax, rax
+    jz .Ldriver_bad
+    mov rcx, rax
+    lea rdx, [rip + driver_title]
+    mov r8d, 2048
+    call GetWindowTextW
+    lea rcx, [rip + driver_title]
+    call driver_print_title
+    jmp .Ldriver_command
+.Ldriver_shift_tab:
+    mov rcx, [rip + driver_hwnd]
+    call SetForegroundWindow
+    mov ecx, 4
+    lea rdx, [rip + driver_shift_tab]
+    mov r8d, 40
+    call SendInput
+    cmp eax, 4
+    jne .Ldriver_bad
+    jmp .Ldriver_command
+.Ldriver_slider_position:
+    mov rcx, rsi
+    mov edx, 10
+    call driver_number
+    mov edx, eax
+    mov rcx, [rip + driver_hwnd]
+    call GetDlgItem
+    test rax, rax
+    jz .Ldriver_bad
+    mov rcx, rax
+    mov edx, 0x400                       # TBM_GETPOS
+    xor r8d, r8d
+    xor r9d, r9d
+    call SendMessageW
+    call driver_print_number
+    jmp .Ldriver_command
+.Ldriver_control_mouse:
+    mov rcx, rsi
+    mov edx, 10
+    call driver_number
+    mov edx, eax
+    mov rcx, [rip + driver_hwnd]
+    call GetDlgItem
+    test rax, rax
+    jz .Ldriver_bad
+    mov rcx, rax
+    mov edx, 0x200                       # WM_MOUSEMOVE
+    xor r8d, r8d
+    xor r9d, r9d
+    call PostMessageW
+    jmp .Ldriver_command
+.Ldriver_placement:
+    mov dword ptr [rip + driver_placement], 44
+    mov rcx, [rip + driver_hwnd]
+    lea rdx, [rip + driver_placement]
+    call GetWindowPlacement
+    test eax, eax
+    jz .Ldriver_bad
+    mov eax, [rip + driver_placement + 8]
+    call driver_print_number
+    xor r12d, r12d
+.Ldriver_placement_rect:
+    lea rax, [rip + driver_placement + 28]
+    mov eax, [rax + r12*4]
+    call driver_print_number
+    inc r12d
+    cmp r12d, 4
+    jb .Ldriver_placement_rect
+    jmp .Ldriver_command
+.Ldriver_focus_key:
+    mov rcx, rsi
+    mov edx, 16
+    call driver_number
+    mov r12d, eax
+    call driver_focus_window
+    test rax, rax
+    jz .Ldriver_bad
+    mov rcx, rax
+    mov edx, 0x100
+    mov r8d, r12d
+    mov r9d, 1
+    call PostMessageW
+    call driver_focus_window
+    mov rcx, rax
+    mov edx, 0x101                       # buttons activate on Space key-up
+    mov r8d, r12d
+    mov r9d, 0xc0000001
+    call PostMessageW
+    jmp .Ldriver_command
+.Ldriver_accessible:
+    mov rcx, rsi
+    mov edx, 10
+    call driver_number
+    mov edx, eax
+    mov rcx, [rip + driver_hwnd]
+    call GetDlgItem
+    test rax, rax
+    jz .Ldriver_bad
+    mov [rip + driver_control], rax
+    mov rcx, rax
+    mov edx, -4                         # OBJID_CLIENT
+    lea r8, [rip + driver_iaccessible]
+    lea r9, [rip + driver_accessible]
+    call AccessibleObjectFromWindow
+    test eax, eax
+    js .Ldriver_bad
+    mov word ptr [rip + driver_variant], 3 # VT_I4, CHILDID_SELF = 0
+    mov dword ptr [rip + driver_variant + 8], 0
+    mov rcx, [rip + driver_accessible]
+    mov rax, [rcx]
+    lea rdx, [rip + driver_variant]
+    lea r8, [rip + driver_bstr]
+    call qword ptr [rax + 10*8]          # get_accName
+    test eax, eax
+    js .Ldriver_bad
+    mov rcx, [rip + driver_bstr]
+    test rcx, rcx
+    jz .Ldriver_bad
+    xor eax, eax
+    lea rdx, [rip + driver_title]
+.Ldriver_accessible_name:
+    movzx r8d, word ptr [rcx + rax*2]
+    mov [rdx + rax*2], r8w
+    test r8d, r8d
+    jz .Ldriver_accessible_print
+    inc eax
+    cmp eax, 2047
+    jb .Ldriver_accessible_name
+    mov word ptr [rdx + 2047*2], 0
+.Ldriver_accessible_print:
+    call driver_print_title
+    mov rcx, [rip + driver_bstr]
+    call SysFreeString
+    mov rcx, [rip + driver_accessible]
+    mov rax, [rcx]
+    lea rdx, [rip + driver_variant]
+    lea r8, [rip + driver_role]
+    call qword ptr [rax + 13*8]          # get_accRole
+    test eax, eax
+    js .Ldriver_bad
+    cmp word ptr [rip + driver_role], 3
+    jne .Ldriver_bad
+    mov rcx, [rip + driver_accessible]
+    mov rax, [rcx]
+    call qword ptr [rax + 2*8]           # Release
+    mov eax, [rip + driver_role + 8]
+    call driver_print_number
+    mov rcx, [rip + driver_control]
+    lea rdx, [rip + driver_title]
+    mov r8d, 2048
+    call GetClassNameW
+    test eax, eax
+    jz .Ldriver_bad
+    call driver_print_title
     jmp .Ldriver_command
 .Ldriver_appcommand:
     mov rcx, rsi
@@ -244,6 +450,42 @@ FN driver_start
     mov ecx, 1
     call ExitProcess
 ENDFN driver_start
+
+LOCALFN driver_focus_window
+    sub rsp, 40
+    mov dword ptr [rip + driver_gui], 72
+    xor ecx, ecx
+    lea rdx, [rip + driver_gui]
+    call GetGUIThreadInfo
+    test eax, eax
+    jz .Ldriver_focus_missing
+    mov rax, [rip + driver_gui + 16]
+    jmp .Ldriver_focus_found
+.Ldriver_focus_missing:
+    xor eax, eax
+.Ldriver_focus_found:
+    add rsp, 40
+    ret
+ENDFN driver_focus_window
+
+LOCALFN driver_print_number
+    push rdi
+    sub rsp, 48
+    lea rdi, [rip + driver_utf8]
+    call driver_decimal
+    mov byte ptr [rdi], 10
+    inc rdi
+    mov rcx, [rip + driver_stdout]
+    lea rdx, [rip + driver_utf8]
+    mov r8, rdi
+    sub r8, rdx
+    lea r9, [rip + driver_written]
+    mov qword ptr [rsp + 32], 0
+    call WriteFile
+    add rsp, 48
+    pop rdi
+    ret
+ENDFN driver_print_number
 
 # EAX=value, RDI=destination -> its decimal digits, RDI past them.
 LOCALFN driver_decimal

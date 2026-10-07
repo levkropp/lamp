@@ -1,0 +1,36 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "alaw.mov",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 500,
+      "decoded": 266,
+      "rejected_or_damaged": 234
+    },
+    {
+      "test": "ulaw.mov",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 500,
+      "decoded": 303,
+      "rejected_or_damaged": 197
+    },
+    {
+      "test": "ima4.mov",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 500,
+      "decoded": 220,
+      "rejected_or_damaged": 280
+    },
+    {
+      "test": "gsm.mov",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 500,
+      "decoded": 156,
+      "rejected_or_damaged": 344
+    }
+  ],
+  "mutations": 2000,
+  "decoded": 945,
+  "scope": "4 container/codec sources, 500 mutations each (Linux, 2 GiB address space), seed 20261006: byte flips, zero/0xff runs, cuts, removed and duplicated spans, large length fields; --check, every fourth from a random --start."
+}

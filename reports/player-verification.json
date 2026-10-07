@@ -5,23 +5,23 @@
       "test": "folder",
       "result": "natural order, folders in place, others left out",
       "list": [
-        "Z:\\home\\user\\lamp\\tests\\generated\\player\\tree\\Album\\1 one.flac",
-        "Z:\\home\\user\\lamp\\tests\\generated\\player\\tree\\Album\\2 two.MP3",
-        "Z:\\home\\user\\lamp\\tests\\generated\\player\\tree\\Album\\10 ten.flac",
-        "Z:\\home\\user\\lamp\\tests\\generated\\player\\tree\\Album\\disc 1\\z.wav",
-        "Z:\\home\\user\\lamp\\tests\\generated\\player\\tree\\Album\\Disc 2\\a.wv",
-        "Z:\\home\\user\\lamp\\tests\\generated\\player\\tree\\Album\\Disc 2\\b.ogg",
-        "Z:\\home\\user\\lamp\\tests\\generated\\player\\tree\\Album\\\u00dcn\u00efcode.opus"
+        "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\1 one.flac",
+        "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\2 two.MP3",
+        "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\10 ten.flac",
+        "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\disc 1\\z.wav",
+        "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\Disc 2\\a.wv",
+        "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\Disc 2\\b.ogg",
+        "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\\u00dcn\u00efcode.opus"
       ]
     },
     {
       "test": "command line and drop",
       "result": "files as named, folders expanded",
       "list": [
-        "Z:\\home\\user\\lamp\\tests\\generated\\player\\tree\\Album\\notes.txt",
+        "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\notes.txt",
         "Z:\\no such file.flac",
-        "Z:\\home\\user\\lamp\\tests\\generated\\player\\tree\\Album\\Disc 2\\a.wv",
-        "Z:\\home\\user\\lamp\\tests\\generated\\player\\tree\\Album\\Disc 2\\b.ogg"
+        "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\Disc 2\\a.wv",
+        "Z:\\home\\lamp\\lamp\\tests\\generated\\player\\tree\\Album\\Disc 2\\b.ogg"
       ]
     },
     {
@@ -38,6 +38,7 @@
       "test": "command-line list",
       "result": "in order, titled as heard",
       "titles": [
+        "LAMP - Lev's Assembly Media Player",
         "LAMP Test \u2013 First - LAMP",
         "LAMP Test \u2013 Second - LAMP",
         "LAMP Test \u2013 Third - LAMP"
@@ -45,7 +46,7 @@
       "segments": [
         [
           "First",
-          288,
+          78,
           120000
         ],
         [
@@ -78,48 +79,48 @@
       "segments": [
         [
           "One",
-          288,
-          113280
+          157,
+          130080
         ],
         [
           "Two",
-          82,
-          71280
+          98,
+          67920
         ],
         [
           "One",
-          71,
-          191280
+          178,
+          189120
         ],
         [
           "One",
-          107,
-          71280
+          233,
+          66480
         ],
         [
           "Two",
-          94,
-          71520
+          62,
+          65760
         ],
         [
           "Three",
-          154,
-          71520
+          16,
+          68880
         ],
         [
           "Three",
-          311058,
+          307837,
           432000
         ],
         [
           "Four",
           0,
-          190800
+          185520
         ],
         [
           "One",
-          98,
-          70560
+          178,
+          68640
         ]
       ]
     },
@@ -137,7 +138,7 @@
       "segments": [
         [
           "Track 1",
-          288,
+          102,
           72000
         ],
         [
@@ -168,23 +169,33 @@
       "runs": [
         [
           "Long",
-          288,
-          912
+          32,
+          207568
         ],
         [
           "Long",
-          23040,
-          55200
+          206574,
+          93426
         ],
         [
           "Long",
-          78240,
-          106080
+          300134,
+          4906
         ],
         [
           "Long",
-          176270,
-          207730
+          305068,
+          1172
+        ],
+        [
+          "Long",
+          306462,
+          1458
+        ],
+        [
+          "Long",
+          307991,
+          76009
         ]
       ]
     },
@@ -194,20 +205,20 @@
       "default": [
         [
           "Output",
-          288,
-          153600
+          92,
+          152400
         ],
         [
           "Output",
-          300503,
-          399360
+          311612,
+          440640
         ]
       ],
       "chosen": [
         [
           "Output",
-          153724,
-          300720
+          151237,
+          312960
         ]
       ]
     },
@@ -217,14 +228,114 @@
       "client": [
         [
           812,
-          476
+          483
         ],
         [
           1220,
-          716
+          727
         ]
       ]
+    },
+    {
+      "test": "fullscreen and compact modes",
+      "result": "restored through keys and menu",
+      "dimensions": [
+        [
+          812,
+          483
+        ],
+        [
+          1280,
+          1024
+        ],
+        [
+          812,
+          483
+        ],
+        [
+          632,
+          233
+        ],
+        [
+          1280,
+          1024
+        ],
+        [
+          632,
+          233
+        ],
+        [
+          812,
+          483
+        ],
+        [
+          1280,
+          1024
+        ],
+        [
+          812,
+          483
+        ]
+      ]
+    },
+    {
+      "test": "keyboard and accessibility",
+      "result": "MSAA names and native control classes; Tab/Shift+Tab cycle, Enter and Space activation, slider keys, global mode shortcuts, keyboard focus preservation and mouse auto-hide/reveal",
+      "names_roles_classes": [
+        "Open files",
+        "10",
+        "Button",
+        "Previous track",
+        "10",
+        "Button",
+        "Pause",
+        "10",
+        "Button",
+        "Next track",
+        "10",
+        "Button",
+        "Repeat off",
+        "10",
+        "Button",
+        "Playback position",
+        "10",
+        "msctls_trackbar32",
+        "Volume",
+        "10",
+        "msctls_trackbar32"
+      ],
+      "focus": [
+        "Open files",
+        "Previous track",
+        "Pause",
+        "Play",
+        "10",
+        "Button",
+        "Pause",
+        "10",
+        "Button",
+        "Next track",
+        "Repeat off",
+        "Repeat on",
+        "10",
+        "Button",
+        "Playback position",
+        "Volume",
+        "Volume",
+        "10",
+        "msctls_trackbar32",
+        "0",
+        "Open files",
+        "Volume",
+        "Playback position",
+        "632 233",
+        "812 483",
+        "Volume",
+        "LAMP Test \u2013 Accessible A - LAMP",
+        "Open files"
+      ],
+      "limit": "Wine 8 exposes generic client roles; native Windows screen-reader testing remains."
     }
   ],
-  "scope": "lamp.exe list building (folders, command line, drops, the open dialog), gapless list playback with the title following the file heard, N/P, the media next command, the next button, seeking, repeat, playlists, reopening a killed stream, choosing outputs and 144 DPI, under Wine on Xvfb."
+  "scope": "lamp.exe list building (folders, command line, drops, the open dialog), gapless list playback with the title following the file heard, N/P, the media next command, the next button, seeking, repeat, playlists, reopening a killed stream, choosing outputs, 144 DPI, fullscreen/compact restoration, Tab/Shift+Tab focus, slider values and MSAA names/native control classes, under Wine on Xvfb; native Windows screen-reader roles remain unverified."
 }

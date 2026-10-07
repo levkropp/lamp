@@ -1,0 +1,50 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "alaw.mov",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 50,
+      "decoded": 24,
+      "rejected_or_damaged": 26
+    },
+    {
+      "test": "ulaw.mov",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 50,
+      "decoded": 28,
+      "rejected_or_damaged": 22
+    },
+    {
+      "test": "ima4.mov",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 50,
+      "decoded": 14,
+      "rejected_or_damaged": 36
+    },
+    {
+      "test": "gsm.mov",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 50,
+      "decoded": 16,
+      "rejected_or_damaged": 34
+    },
+    {
+      "test": "gsm.wav",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 50,
+      "decoded": 33,
+      "rejected_or_damaged": 17
+    },
+    {
+      "test": "tone.gsm",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 50,
+      "decoded": 26,
+      "rejected_or_damaged": 24
+    }
+  ],
+  "mutations": 300,
+  "decoded": 141,
+  "scope": "6 container/codec sources, 500 mutations each (every tenth under Wine), seed 20261006: byte flips, zero/0xff runs, cuts, removed and duplicated spans, large length fields; --check, every fourth from a random --start."
+}

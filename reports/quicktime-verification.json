@@ -1,0 +1,432 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "pcm_alaw-1-8000.mov",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "stats": "codec=9 rate=8000 channels=1 bits=16 frames=25600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=30 cpu_us=33199 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_alaw-1-44100.mov",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "stats": "codec=9 rate=44100 channels=1 bits=16 frames=141120 underruns=0 decode_error=0 audio_error=0 elapsed_ms=48 cpu_us=49696 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_alaw-2-8000.mov",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "stats": "codec=9 rate=8000 channels=2 bits=16 frames=25600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=21 cpu_us=22523 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_alaw-2-44100.mov",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "stats": "codec=9 rate=44100 channels=2 bits=16 frames=141120 underruns=0 decode_error=0 audio_error=0 elapsed_ms=73 cpu_us=75423 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_mulaw-1-8000.mov",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "stats": "codec=9 rate=8000 channels=1 bits=16 frames=25600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=20 cpu_us=20981 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_mulaw-1-44100.mov",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "stats": "codec=9 rate=44100 channels=1 bits=16 frames=141120 underruns=0 decode_error=0 audio_error=0 elapsed_ms=56 cpu_us=57653 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_mulaw-2-8000.mov",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "stats": "codec=9 rate=8000 channels=2 bits=16 frames=25600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=28 cpu_us=29319 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_mulaw-2-44100.mov",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "stats": "codec=9 rate=44100 channels=2 bits=16 frames=141120 underruns=0 decode_error=0 audio_error=0 elapsed_ms=69 cpu_us=70982 endpoint_dry=0"
+    },
+    {
+      "test": "adpcm_ima_qt-1-8000.mov",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "stats": "codec=9 rate=8000 channels=1 bits=4 frames=25600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=20 cpu_us=20952 endpoint_dry=0"
+    },
+    {
+      "test": "adpcm_ima_qt-1-8000-legacy.mov",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "stats": "codec=9 rate=8000 channels=1 bits=4 frames=25600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=17250 endpoint_dry=0"
+    },
+    {
+      "test": "adpcm_ima_qt-1-44100.mov",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "stats": "codec=9 rate=44100 channels=1 bits=4 frames=141120 underruns=0 decode_error=0 audio_error=0 elapsed_ms=32 cpu_us=33898 endpoint_dry=0"
+    },
+    {
+      "test": "adpcm_ima_qt-1-44100-legacy.mov",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "stats": "codec=9 rate=44100 channels=1 bits=4 frames=141120 underruns=0 decode_error=0 audio_error=0 elapsed_ms=34 cpu_us=35086 endpoint_dry=0"
+    },
+    {
+      "test": "adpcm_ima_qt-2-8000.mov",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "stats": "codec=9 rate=8000 channels=2 bits=4 frames=25600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=17 cpu_us=19167 endpoint_dry=0"
+    },
+    {
+      "test": "adpcm_ima_qt-2-8000-legacy.mov",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "stats": "codec=9 rate=8000 channels=2 bits=4 frames=25600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=30 cpu_us=38092 endpoint_dry=0"
+    },
+    {
+      "test": "adpcm_ima_qt-2-44100.mov",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "stats": "codec=9 rate=44100 channels=2 bits=4 frames=141120 underruns=0 decode_error=0 audio_error=0 elapsed_ms=44 cpu_us=45995 endpoint_dry=0"
+    },
+    {
+      "test": "adpcm_ima_qt-2-44100-legacy.mov",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "stats": "codec=9 rate=44100 channels=2 bits=4 frames=141120 underruns=0 decode_error=0 audio_error=0 elapsed_ms=72 cpu_us=75947 endpoint_dry=0"
+    },
+    {
+      "test": "libgsm-1-8000.mov",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "stats": "codec=9 rate=8000 channels=1 bits=0 frames=25600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=25 cpu_us=27920 endpoint_dry=0"
+    },
+    {
+      "test": "libgsm-1-8000-legacy.mov",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "stats": "codec=9 rate=8000 channels=1 bits=0 frames=25600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=17 cpu_us=16383 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_alaw-1-8000.mov seeks",
+      "tolerance": "0/32768",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 10,
+      "discarded_frames": 12029,
+      "maximum_discarded": 4095,
+      "maximum_probes": 0,
+      "index_points": 0,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
+      "maximum_deviation": 0
+    },
+    {
+      "test": "pcm_alaw-1-44100.mov seeks",
+      "tolerance": "0/32768",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 10,
+      "discarded_frames": 15773,
+      "maximum_discarded": 4095,
+      "maximum_probes": 0,
+      "index_points": 0,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
+      "maximum_deviation": 0
+    },
+    {
+      "test": "pcm_alaw-2-8000.mov seeks",
+      "tolerance": "0/32768",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 10,
+      "discarded_frames": 12029,
+      "maximum_discarded": 4095,
+      "maximum_probes": 0,
+      "index_points": 0,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
+      "maximum_deviation": 0
+    },
+    {
+      "test": "pcm_alaw-2-44100.mov seeks",
+      "tolerance": "0/32768",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 10,
+      "discarded_frames": 15773,
+      "maximum_discarded": 4095,
+      "maximum_probes": 0,
+      "index_points": 0,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
+      "maximum_deviation": 0
+    },
+    {
+      "test": "pcm_mulaw-1-8000.mov seeks",
+      "tolerance": "0/32768",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 10,
+      "discarded_frames": 12029,
+      "maximum_discarded": 4095,
+      "maximum_probes": 0,
+      "index_points": 0,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
+      "maximum_deviation": 0
+    },
+    {
+      "test": "pcm_mulaw-1-44100.mov seeks",
+      "tolerance": "0/32768",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 10,
+      "discarded_frames": 15773,
+      "maximum_discarded": 4095,
+      "maximum_probes": 0,
+      "index_points": 0,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
+      "maximum_deviation": 0
+    },
+    {
+      "test": "pcm_mulaw-2-8000.mov seeks",
+      "tolerance": "0/32768",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 10,
+      "discarded_frames": 12029,
+      "maximum_discarded": 4095,
+      "maximum_probes": 0,
+      "index_points": 0,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
+      "maximum_deviation": 0
+    },
+    {
+      "test": "pcm_mulaw-2-44100.mov seeks",
+      "tolerance": "0/32768",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 10,
+      "discarded_frames": 15773,
+      "maximum_discarded": 4095,
+      "maximum_probes": 0,
+      "index_points": 0,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
+      "maximum_deviation": 0
+    },
+    {
+      "test": "adpcm_ima_qt-1-8000.mov seeks",
+      "tolerance": "127/32768",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 7933,
+      "maximum_discarded": 1280,
+      "maximum_probes": 0,
+      "index_points": 0,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
+      "maximum_deviation": 0.00302124023
+    },
+    {
+      "test": "adpcm_ima_qt-1-8000-legacy.mov seeks",
+      "tolerance": "127/32768",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 7933,
+      "maximum_discarded": 1280,
+      "maximum_probes": 0,
+      "index_points": 0,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
+      "maximum_deviation": 0.00302124023
+    },
+    {
+      "test": "adpcm_ima_qt-1-44100.mov seeks",
+      "tolerance": "127/32768",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 4253,
+      "maximum_discarded": 768,
+      "maximum_probes": 0,
+      "index_points": 0,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
+      "maximum_deviation": 0.00302124023
+    },
+    {
+      "test": "adpcm_ima_qt-1-44100-legacy.mov seeks",
+      "tolerance": "127/32768",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 4253,
+      "maximum_discarded": 768,
+      "maximum_probes": 0,
+      "index_points": 0,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
+      "maximum_deviation": 0.00302124023
+    },
+    {
+      "test": "adpcm_ima_qt-2-8000.mov seeks",
+      "tolerance": "127/32768",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 7933,
+      "maximum_discarded": 1280,
+      "maximum_probes": 0,
+      "index_points": 0,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
+      "maximum_deviation": 0.00341796875
+    },
+    {
+      "test": "adpcm_ima_qt-2-8000-legacy.mov seeks",
+      "tolerance": "127/32768",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 7933,
+      "maximum_discarded": 1280,
+      "maximum_probes": 0,
+      "index_points": 0,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
+      "maximum_deviation": 0.00341796875
+    },
+    {
+      "test": "adpcm_ima_qt-2-44100.mov seeks",
+      "tolerance": "127/32768",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 4253,
+      "maximum_discarded": 768,
+      "maximum_probes": 0,
+      "index_points": 0,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
+      "maximum_deviation": 0.00366210938
+    },
+    {
+      "test": "adpcm_ima_qt-2-44100-legacy.mov seeks",
+      "tolerance": "127/32768",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 4253,
+      "maximum_discarded": 768,
+      "maximum_probes": 0,
+      "index_points": 0,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
+      "maximum_deviation": 0.00366210938
+    },
+    {
+      "test": "libgsm-1-8000.mov seeks",
+      "tolerance": "0/32768",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 23293,
+      "maximum_discarded": 3200,
+      "maximum_probes": 0,
+      "index_points": 0,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
+      "maximum_deviation": 0
+    },
+    {
+      "test": "libgsm-1-8000-legacy.mov seeks",
+      "tolerance": "0/32768",
+      "result": "passed",
+      "checks": 15,
+      "advanced": 11,
+      "discarded_frames": 23293,
+      "maximum_discarded": 3200,
+      "maximum_probes": 0,
+      "index_points": 0,
+      "maximum_skimmed_headers": 0,
+      "maximum_stride": 0,
+      "maximum_preroll": 0,
+      "maximum_deviation": 0
+    },
+    {
+      "test": "zero-channels",
+      "result": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":90}"
+    },
+    {
+      "test": "nine-channels",
+      "result": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":90}"
+    },
+    {
+      "test": "zero-rate",
+      "result": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "short-description",
+      "result": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":90}"
+    },
+    {
+      "test": "partial-block",
+      "result": "{\"result\":\"rejected\",\"stage\":\"read\",\"decode_error\":100}"
+    },
+    {
+      "test": "offset-past-end",
+      "result": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":90}"
+    },
+    {
+      "test": "legacy-partial-block",
+      "result": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":90}"
+    },
+    {
+      "test": "cancel-open",
+      "result": "{\"result\":\"cancelled\"}"
+    },
+    {
+      "test": "cancel-read",
+      "result": "{\"result\":\"cancelled\",\"frames_before_cancel\":16384}"
+    },
+    {
+      "test": "track 1",
+      "result": "exact"
+    },
+    {
+      "test": "track 2",
+      "result": "exact"
+    },
+    {
+      "test": "IMA4 playback",
+      "result": "Playing. Space: pause / resume. N / P: next / previous file. Left / Right: -5 / +5 s. Down / Up: -60 / +60 s. R: repeat. Q or Ctrl+C: stop. codec=9 rate=44100 channels=2 bits=4 frames=141120 underruns=0 decode_error=0 audio_error=0 elapsed_ms=5203 cpu_us=79706 endpoint_dry=0"
+    }
+  ],
+  "scope": "QuickTime ulaw/alaw/ima4/agsm, mono/stereo, 8/44.1 kHz; exact FFmpeg PCM and presentation lengths; old sample-count tables; seeking (IMA4 predictor tolerance 127/32768), track selection, malformed descriptions/blocks/tables and cancellation."
+}
