@@ -90,7 +90,7 @@ def merge(found):
 def main():
     scenarios = [list_checks, list_playback, keys, folder_playback, killed_stream, output_menu, dpi,
                  modes, accessibility, eac3_playback, chapter_navigation, dense_queue, track_switching, track_queue,
-                 asf_metadata]
+                 asf_metadata, asf_chapter_navigation]
     only = sys.argv[sys.argv.index('--only') + 1].split(',') if '--only' in sys.argv else None
     if only is not None:
         unknown = set(only) - {scenario.__name__ for scenario in scenarios}
@@ -126,6 +126,7 @@ def main():
          'src/win/ui_tracks.inc', 'src/win/ui_draw.inc', 'tests/ui-driver.s')})
     source_hashes.update({name: hashlib.sha256((ROOT / name).read_bytes()).hexdigest() for name in
         ('src/tags.s', 'src/tags_asf.inc', 'src/cover.inc', 'src/asf.s',
+         'src/chapters_asf.inc', 'src/chapters.inc', 'tests/verify-asf-chapters.py',
          'tests/asf-metadata-player-oracle.c', 'tests/verify-asf-metadata.py')})
     if only is not None:
         write_report('player-selected', {'result': 'passed', 'checks': checks,
@@ -519,20 +520,27 @@ def accessibility(work, env, wine, checks):
     print('MSAA names, native classes, Tab order, Enter/Space and focused mode shortcuts pass', flush=True)
 
 
-def chapter_navigation(work, env, wine, checks):
+def chapter_navigation(work, env, wine, checks, container='flac'):
     """Bracket keys and menu while paused, using chapters of the heard file."""
-    path=work/'chapter-a.flac'
+    path=work/('chapter-a.'+container)
     comments=[]
     for index,start in enumerate([6500,0,3250,1250,3250,12000]):
         comments+=['-metadata',f'CHAPTER{index:03}=00:00:{start//1000:02}.{start%1000:03}']
     ffmpeg('-f','lavfi','-i',f'anoisesrc=r={RATE}:d=9:seed=9102:a=0.25','-ac','2',
-           '-metadata','artist=LAMP Test','-metadata','title=Chapter A',*comments,'-c:a','flac',path)
+           '-metadata','artist=LAMP Test','-metadata','title=Chapter A',
+           *(comments if container=='flac' else []),'-c:a','flac' if container=='flac' else 'pcm_s16le',path)
+    if container=='asf':
+        spec=importlib.util.spec_from_file_location('asf_chapter_writer',ROOT/'tests/verify-asf-chapters.py')
+        writer=importlib.util.module_from_spec(spec);spec.loader.exec_module(writer)
+        marker=writer.markers([writer.entry(31000000+start*10000,'Part '+str(i))
+            for i,start in enumerate([6500,0,3250,1250,3250,12000])])
+        path.write_bytes(writer.insert(path.read_bytes(),[marker],3100,True))
     later=work/'chapter-b.flac'
     ffmpeg('-f','lavfi','-i',f'anoisesrc=r={RATE}:d=9:seed=9103:a=0.25','-ac','2',
            '-metadata','artist=LAMP Test','-metadata','title=Chapter B',
            '-metadata','CHAPTER001=00:00:07.000','-c:a','flac',later)
     references={'A':_nav.linux_decode(work,path),'B':_nav.linux_decode(work,later)}
-    session=Session(work,env,wine,'chapters',windows_path(path),windows_path(later))
+    session=Session(work,env,wine,'chapters-'+container,windows_path(path),windows_path(later))
     try:
         # Pause before 3.25 s, then keep it paused through every restart.
         before=session.drive('s2500','k20','s1000','n111','h113')
@@ -558,6 +566,7 @@ def chapter_navigation(work, env, wine, checks):
         restored=session.drive('o105','s1500','o105','s1500','o105','s1500','t','n111','h113')
         if restored[0]!=title('Chapter A') or restored[1]!='Play' or abs(int(restored[-1])-6500*10000//9000)>2:
             raise Failure(f'Paused chapter restoration after relative seeking: {restored}')
+        assert_paused(session)
         session.drive('k20','s2000','c')
     finally:
         capture=session.finish()
@@ -566,11 +575,20 @@ def chapter_navigation(work, env, wine, checks):
             segments[0][1]>RATE//2 or segments[0][2]>=3250*48 or \
             not 6500*48<=segments[1][1]<7000*48 or segments[1][2]>9000*48:
         raise Failure(f'Chapter seeks played while paused or chose wrong PCM: {segments}')
-    checks.append(dict(test='chapter navigation',result='brackets and menu choose heard-file chapters; pause preserved',
+    checks.append(dict(test=container+' chapter navigation',result='brackets and menu choose heard-file chapters; pause preserved',
         paused_targets_ms=expected,controls=sequence,segments=segments,
         paused_relative_targets_ms=[0,5000,0],relative_controls=relative,
+        fixture_sha256=hashlib.sha256(path.read_bytes()).hexdigest(),
+        reference_pcm_sha256={name:hashlib.sha256(pcm).hexdigest() for name,pcm in references.items()},
+        player_sha256=hashlib.sha256((BIN/'lamp.exe').read_bytes()).hexdigest(),
+        driver_sha256=hashlib.sha256((BIN/'ui-driver.exe').read_bytes()).hexdigest(),
+        silent_paused_window_frames=RATE//2,
         limit='Wine playback; native Windows remains unverified'))
     print('Chapter keys, menu, heard-file snapshots and paused seeks pass',flush=True)
+
+
+def asf_chapter_navigation(work, env, wine, checks):
+    chapter_navigation(work,env,wine,checks,container='asf')
 
 
 def dense_queue(work, env, wine, checks):

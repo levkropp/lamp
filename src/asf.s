@@ -20,6 +20,7 @@ asf_stream_guid: .quad 0x11cfa9b7b7dc0791, 0x6553200cc000e68e
 asf_audio_guid: .quad 0x11cf5b4df8699e40, 0x2b445c5f8000fda8
 asf_data_guid: .quad 0x11cf668e75b22636, 0x6cce6200aa00d9a6
 asf_extension_guid: .quad 0x11cfa92e5fbf03b5, 0x6553200cc000e38e
+asf_marker_guid: .quad 0x11cfa951f487cd01, 0x6553200cc000e68e
 asf_encrypt_guid: .quad 0x11d2bd232211b3fb, 0x6efc55c9a000b7b4
 asf_ext_encrypt_guid: .quad 0x4c172622298ae614, 0x9c28e97ee0da35b9
 
@@ -32,6 +33,7 @@ asf_min_packet: .long 0
 asf_max_packet: .long 0
 asf_file_seen: .long 0
 asf_top_objects: .long 0
+asf_top_markers: .long 0
 asf_all_objects: .long 0
 asf_broadcast: .long 0
 asf_stream: .long 0                 # stream id 1..127, 0 when none
@@ -251,6 +253,15 @@ LOCALFN asf_objects
     lea rdx, [rip + asf_ext_encrypt_guid]
     call asf_guid
     jz .Lasf_objects_unsupported
+    test r12d, r12d
+    jnz .Lasf_objects_advance
+    cmp rbx, 48
+    jb .Lasf_objects_advance
+    mov rcx, rsi
+    lea rdx, [rip + asf_marker_guid]
+    call asf_guid
+    jnz .Lasf_objects_advance
+    inc dword ptr [rip + asf_top_markers]
     jmp .Lasf_objects_advance
 .Lasf_objects_file:
     cmp dword ptr [rip + asf_file_seen], 0
@@ -638,6 +649,7 @@ FN asf_open
     mov [rip + asf_end], rdx
     mov dword ptr [rip + asf_file_seen], 0
     mov dword ptr [rip + asf_top_objects], 0
+    mov dword ptr [rip + asf_top_markers], 0
     mov dword ptr [rip + asf_all_objects], 0
     mov dword ptr [rip + asf_stream], 0
     mov dword ptr [rip + asf_pending], 0
@@ -679,7 +691,16 @@ FN asf_open
     mov rax, [rip + asf_file]
     mov eax, [rax + 24]
     cmp eax, [rip + asf_top_objects]
+    je .Lasf_open_header_counted
+    # FFmpeg 9.0.1's ASF muxer omits its single Marker Object from this
+    # count. Permit only that exact undercount with one top-level marker;
+    # all object sizes, the header end and the work cap remain validated.
+    cmp dword ptr [rip + asf_top_markers], 1
     jne .Lasf_open_bad
+    inc eax
+    cmp eax, [rip + asf_top_objects]
+    jne .Lasf_open_bad
+.Lasf_open_header_counted:
     cmp dword ptr [rip + asf_file_seen], 1
     jne .Lasf_open_bad
     cmp dword ptr [rip + asf_stream], 0

@@ -1,0 +1,296 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "flac.mka",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "chapters": 5,
+      "note": "FFmpeg-written"
+    },
+    {
+      "test": "opus.webm",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "chapters": 5,
+      "note": "FFmpeg-written"
+    },
+    {
+      "test": "aac.m4a",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "chapters": 5,
+      "note": "FFmpeg-written"
+    },
+    {
+      "test": "aac.m4b",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "chapters": 5,
+      "note": "FFmpeg-written"
+    },
+    {
+      "test": "alac.mov",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "chapters": 5,
+      "note": "FFmpeg-written"
+    },
+    {
+      "test": "id3v24.mp3",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "chapters": 5,
+      "note": "FFmpeg-written"
+    },
+    {
+      "test": "id3v23.mp3",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "chapters": 5,
+      "note": "FFmpeg-written"
+    },
+    {
+      "test": "adts.aac",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "chapters": 5,
+      "note": "FFmpeg-written"
+    },
+    {
+      "test": "id3.aiff",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "chapters": 5,
+      "note": "FFmpeg-written"
+    },
+    {
+      "test": "opus.opus",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "chapters": 5,
+      "note": "FFmpeg-written"
+    },
+    {
+      "test": "comments.flac",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "chapters": 10,
+      "note": "chapter comments in every form"
+    },
+    {
+      "test": "comments.ogg",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "chapters": 2,
+      "note": "Vorbis comments in Ogg"
+    },
+    {
+      "test": "cuesheet.flac",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "chapters": 3,
+      "note": "CUESHEET tracks but the lead-out"
+    },
+    {
+      "test": "comments-cuesheet.flac",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "chapters": 3,
+      "note": "a cue sheet track moves the comment chapter with its number"
+    },
+    {
+      "test": "cuesheet-no-index.flac",
+      "result": "equal",
+      "comparator": "expected values",
+      "note": "a track without index points ends the cue sheet (FFmpeg rejects the file)"
+    },
+    {
+      "test": "chap-v23.mp3",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "chapters": 11,
+      "note": "ID3v2.3 CHAP frames"
+    },
+    {
+      "test": "chap-v24.mp3",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "chapters": 11,
+      "note": "ID3v2.4 CHAP frames"
+    },
+    {
+      "test": "chap-unsync.mp3",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "chapters": 1,
+      "note": "an unsynchronised ID3v2.3 tag"
+    },
+    {
+      "test": "chap-two-tags.mp3",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "chapters": 2,
+      "note": "chapters in two tags in a row"
+    },
+    {
+      "test": "chap-layer2.mp2",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "chapters": 11,
+      "note": "before MPEG Layer II"
+    },
+    {
+      "test": "chap-chunk.wav",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "chapters": 11,
+      "note": "a WAVE id3 chunk"
+    },
+    {
+      "test": "chap-before.ac3",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "chapters": 0,
+      "note": "FFmpeg reads no ID3v2 chapters before AC-3"
+    },
+    {
+      "test": "chap-long-title.mp3",
+      "result": "equal",
+      "comparator": "expected values",
+      "note": "a sub-frame over 127 bytes with a synchsafe size (FFmpeg drops it)"
+    },
+    {
+      "test": "chapters.mka",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "chapters": 8,
+      "note": "editions, skipped atoms, a repeated UID, two displays and a second Chapters element"
+    },
+    {
+      "test": "indexed-at-end.mka",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "chapters": 2,
+      "note": "Chapters after the clusters, named by the SeekHead"
+    },
+    {
+      "test": "unindexed-at-end.mka",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "chapters": 0,
+      "note": "Chapters after the clusters that no SeekHead names"
+    },
+    {
+      "test": "front-and-end.mka",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "chapters": 40,
+      "note": "Chapters before the clusters and another, indexed, after them"
+    },
+    {
+      "test": "zero-starts.mka",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "chapters": 3,
+      "note": "starts at 0 do not count as the last start"
+    },
+    {
+      "test": "chpl-only.m4a",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "chapters": 5,
+      "note": "Nero chpl alone"
+    },
+    {
+      "test": "track-only.m4a",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "chapters": 4,
+      "note": "a chapter text track alone"
+    },
+    {
+      "test": "longer-chpl.m4a",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "chapters": 7,
+      "note": "chpl entries past the track remain"
+    },
+    {
+      "test": "two-ids.m4a",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "chapters": 5,
+      "note": "tref/chap naming a missing track first"
+    },
+    {
+      "test": "video-track.m4a",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "chapters": 5,
+      "note": "a video chapter track gives no titles"
+    },
+    {
+      "test": "long-length.m4a",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "chapters": 5,
+      "note": "a sample whose length runs past it keeps chpl's chapter"
+    },
+    {
+      "test": "utf16.m4a",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "chapters": 5,
+      "note": "UTF-16BE and UTF-16LE titles"
+    },
+    {
+      "test": "none.flac",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "chapters": 0,
+      "note": "no chapters"
+    },
+    {
+      "test": "none.ogg",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "chapters": 0,
+      "note": "no chapters"
+    },
+    {
+      "test": "none.wav",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "chapters": 0,
+      "note": "no chapters"
+    },
+    {
+      "test": "none.m4a",
+      "result": "equal",
+      "comparator": "ffprobe",
+      "chapters": 0,
+      "note": "no chapters"
+    },
+    {
+      "test": "mutated chapters",
+      "result": "no crash or hang",
+      "files": 1100,
+      "opened": 708
+    }
+  ],
+  "scope": "Chapters (Vorbis comments, FLAC CUESHEET, ID3v2 CHAP, Matroska, MP4 chpl and chapter tracks) against ffprobe; mutated files.",
+  "chapter_regression_provenance": {
+    "cli_sha256": "b71dad39b2e3535e62f2c6b8ad9d5572e1169ea319a9792bbf607a1247b655b2",
+    "runtime_sources": {
+      "src/tags.s": "c3826724e4e67d7b840b6bbb38d7af4b60e370ad2a354a78cc85551ea5224de1",
+      "src/tags_asf.inc": "179a413a2fae216f5448953f2457e17bbf631203a3e2a10d45f2a86ba4d203a0",
+      "src/chapters_asf.inc": "ec504ed49f0f9eb72b4cd2398c36a4bfdd1acc710061188c24b1b35da3d6b651",
+      "src/chapters.inc": "d1c07f752c20f3772c737d2959e3a94525d582efb0807a8d9921cd234db2dc59",
+      "src/asf.s": "bd086a94a63fa76e3309e8081a3288f6780bb99916012621e57c3a9b1f690997",
+      "src/decoder.s": "44e88449c121f6d67f1805555f15663fe2d3883531fce2dbf5a8587e58f1d8f8"
+    },
+    "runner_sha256": "e17088a0dde7330ef0303b874dd508a34353b1557958dd880984e5012821f0ac",
+    "playback_skipped": "reader suite without playback"
+  }
+}

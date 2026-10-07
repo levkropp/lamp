@@ -15,6 +15,7 @@ astag_content: .quad 0x11cf668e75b22633, 0x6cce6200aa00d9a6
 astag_extended: .quad 0x11d2e307d2d0a440, 0x50a85ec9a000f097
 astag_metadata: .quad 0x48775bafc5f8cbea, 0xca4cfa448caa6784
 astag_library: .quad 0x49d1949844231c94, 0x5470454e131d41a1
+astag_marker: .quad 0x11cfa951f487cd01, 0x6553200cc000e68e
 astag_basic_keys: .byte TAG_TITLE, TAG_ARTIST, 255, TAG_COMMENT, 255
 astag_keys:
     .byte 6, TAG_ARTIST
@@ -448,6 +449,10 @@ LOCALFN astag_objects
     cmp dword ptr [rip + astag_scope], 0
     jne .Lastag_objects_advance
     mov rcx, rsi
+    lea rdx, [rip + astag_marker]
+    call astag_guid
+    jz .Lastag_objects_marker
+    mov rcx, rsi
     lea rdx, [rip + astag_content]
     call astag_guid
     jz .Lastag_objects_basic
@@ -468,6 +473,11 @@ LOCALFN astag_objects
     lea rcx, [rsi + 24]
     mov rdx, r13
     call astag_basic
+    jmp .Lastag_objects_advance
+.Lastag_objects_marker:
+    lea rcx, [rsi + 24]
+    mov rdx, r13
+    call aschap_markers
     jmp .Lastag_objects_advance
 .Lastag_objects_extension:
     cmp rbx, 46
@@ -516,6 +526,9 @@ LOCALFN asf_tags
     cmp rbx, rax
     ja .Lastag_done
     add rbx, rsi
+    lea rcx, [rsi + 30]
+    mov rdx, rbx
+    call aschap_setup
     xor eax, eax
     lea rdi, [rip + astag_lengths]
     mov ecx, TAG_KEYS
@@ -648,3 +661,5 @@ LOCALFN astag_picture
     pop rbx
     ret
 ENDFN astag_picture
+
+.include "chapters_asf.inc"

@@ -15,6 +15,8 @@
 #   tref/chap box names (QuickTime chapters: one sample per chapter, a 16-bit
 #   length then UTF-8 or UTF-16 text). Both number their chapters from 0, so
 #   a track's chapters replace chpl's.
+# - ASF: Marker Objects, presentation times adjusted by file preroll and
+#   counted UTF-16LE descriptions (see chapters_asf.inc).
 .equ CHAP_MAX, 1024
 .equ CHAP_TEXT, 1 << 18
 .equ CHAP_TITLE_MAX, 1024
