@@ -5,85 +5,85 @@
       "test": "spx-clean.ec3",
       "result": "byte-exact sequential model PCM",
       "failed_block": null,
-      "stats": "codec=20 rate=48000 channels=6 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=48 cpu_us=60872 endpoint_dry=0"
+      "stats": "codec=20 rate=48000 channels=6 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=30 cpu_us=41531 endpoint_dry=0"
     },
     {
       "test": "spx-bad-block-0.ec3",
       "result": "byte-exact sequential model PCM",
       "failed_block": 0,
-      "stats": "codec=20 rate=48000 channels=6 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=22 cpu_us=32724 endpoint_dry=0"
+      "stats": "codec=20 rate=48000 channels=6 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=26 cpu_us=37128 endpoint_dry=0"
     },
     {
       "test": "spx-bad-block-1.ec3",
       "result": "byte-exact sequential model PCM",
       "failed_block": 1,
-      "stats": "codec=20 rate=48000 channels=6 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=23 cpu_us=35464 endpoint_dry=0"
+      "stats": "codec=20 rate=48000 channels=6 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=26 cpu_us=38082 endpoint_dry=0"
     },
     {
       "test": "spx-bad-block-2.ec3",
       "result": "byte-exact sequential model PCM",
       "failed_block": 2,
-      "stats": "codec=20 rate=48000 channels=6 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=25 cpu_us=35167 endpoint_dry=0"
+      "stats": "codec=20 rate=48000 channels=6 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=27 cpu_us=38172 endpoint_dry=0"
     },
     {
       "test": "spx-bad-block-3.ec3",
       "result": "byte-exact sequential model PCM",
       "failed_block": 3,
-      "stats": "codec=20 rate=48000 channels=6 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=22 cpu_us=33042 endpoint_dry=0"
+      "stats": "codec=20 rate=48000 channels=6 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=27 cpu_us=36009 endpoint_dry=0"
     },
     {
       "test": "spx-bad-block-4.ec3",
       "result": "byte-exact sequential model PCM",
       "failed_block": 4,
-      "stats": "codec=20 rate=48000 channels=6 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=23 cpu_us=33889 endpoint_dry=0"
+      "stats": "codec=20 rate=48000 channels=6 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=29 cpu_us=41959 endpoint_dry=0"
     },
     {
       "test": "spx-bad-block-5.ec3",
       "result": "byte-exact sequential model PCM",
       "failed_block": 5,
-      "stats": "codec=20 rate=48000 channels=6 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=26 cpu_us=33638 endpoint_dry=0"
+      "stats": "codec=20 rate=48000 channels=6 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=31 cpu_us=42681 endpoint_dry=0"
     },
     {
       "test": "aht-spx-clean.ec3",
       "result": "byte-exact sequential model PCM",
       "failed_block": null,
-      "stats": "codec=20 rate=48000 channels=6 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=38 cpu_us=48291 endpoint_dry=0"
+      "stats": "codec=20 rate=48000 channels=6 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=29 cpu_us=40056 endpoint_dry=0"
     },
     {
       "test": "aht-spx-bad-block-0.ec3",
       "result": "byte-exact sequential model PCM",
       "failed_block": 0,
-      "stats": "codec=20 rate=48000 channels=6 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=46 cpu_us=57888 endpoint_dry=0"
+      "stats": "codec=20 rate=48000 channels=6 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=24 cpu_us=37034 endpoint_dry=0"
     },
     {
       "test": "aht-spx-bad-block-1.ec3",
       "result": "byte-exact sequential model PCM",
       "failed_block": 1,
-      "stats": "codec=20 rate=48000 channels=6 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=39 cpu_us=60606 endpoint_dry=0"
+      "stats": "codec=20 rate=48000 channels=6 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=26 cpu_us=33410 endpoint_dry=0"
     },
     {
       "test": "aht-spx-bad-block-2.ec3",
       "result": "byte-exact sequential model PCM",
       "failed_block": 2,
-      "stats": "codec=20 rate=48000 channels=6 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=54 cpu_us=67041 endpoint_dry=0"
+      "stats": "codec=20 rate=48000 channels=6 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=28 cpu_us=35909 endpoint_dry=0"
     },
     {
       "test": "aht-spx-bad-block-3.ec3",
       "result": "byte-exact sequential model PCM",
       "failed_block": 3,
-      "stats": "codec=20 rate=48000 channels=6 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=27 cpu_us=40309 endpoint_dry=0"
+      "stats": "codec=20 rate=48000 channels=6 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=37 cpu_us=48746 endpoint_dry=0"
     },
     {
       "test": "aht-spx-bad-block-4.ec3",
       "result": "byte-exact sequential model PCM",
       "failed_block": 4,
-      "stats": "codec=20 rate=48000 channels=6 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=27 cpu_us=35380 endpoint_dry=0"
+      "stats": "codec=20 rate=48000 channels=6 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=27 cpu_us=38873 endpoint_dry=0"
     },
     {
       "test": "aht-spx-bad-block-5.ec3",
       "result": "byte-exact sequential model PCM",
       "failed_block": 5,
-      "stats": "codec=20 rate=48000 channels=6 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=27 cpu_us=37039 endpoint_dry=0"
+      "stats": "codec=20 rate=48000 channels=6 bits=0 frames=6144 underruns=0 decode_error=0 audio_error=0 elapsed_ms=28 cpu_us=38750 endpoint_dry=0"
     }
   ],
   "scope": "Sequential normative model; CRC-valid bad SPX ranges in each of six blocks, AHT/SPX dither and recovery",

@@ -1,0 +1,432 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "aht-spx.ec3",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "aht-spx.frag.mp4",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "aht-spx.mka",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "aht-spx.mp4",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "aht-spx.ts",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "aht.ec3",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "all-ranges.ec3",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "bad-block-0.ec3",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "bad-block-2.ec3",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "bad-block-4.ec3",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "bad-block-5.ec3",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "bad-crc.ec3",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "begin-00.ec3",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "begin-01.ec3",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "begin-02.ec3",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "begin-03.ec3",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "begin-04.ec3",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "begin-05.ec3",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "begin-06.ec3",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "begin-07.ec3",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "begin-08.ec3",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "begin-09.ec3",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "begin-10.ec3",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "begin-11.ec3",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "begin-12.ec3",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "begin-13.ec3",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "begin-14.ec3",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "begin-15.ec3",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "frame-transitions.ec3",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "frame-transitions.frag.mp4",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "frame-transitions.mka",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "frame-transitions.mp4",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "frame-transitions.ts",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "noisy.ec3",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "noisy.ec3 --start 17 ms",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "noisy.ec3 --start 38 ms",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "seek.ec3",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "seek.ec3 --start 17 ms",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "seek.ec3 --start 60 ms",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "seek.ec3 --start 150 ms",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "seek.frag.mp4",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "seek.frag.mp4 --start 17 ms",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "seek.frag.mp4 --start 60 ms",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "seek.frag.mp4 --start 150 ms",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "seek.mka",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "seek.mka --start 17 ms",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "seek.mka --start 60 ms",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "seek.mka --start 150 ms",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "seek.mp4",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "seek.mp4 --start 17 ms",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "seek.mp4 --start 60 ms",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "seek.mp4 --start 150 ms",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "seek.ts",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "seek.ts --start 17 ms",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "seek.ts --start 60 ms",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "seek.ts --start 150 ms",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "single-band.ec3",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "spx.ec3",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "transitions.ec3",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "truncated.ec3",
+      "result": "exact Linux PCM"
+    },
+    {
+      "test": "seek.ec3 guarded packets",
+      "result": {
+        "result": "exact guarded split/joined/reopen PCM and bounded capacity",
+        "packets": 50,
+        "frames": 30720,
+        "invalid_neighbor_cases": 4,
+        "borrowed_lifetime": "one decode call"
+      }
+    },
+    {
+      "test": "noisy.ec3 guarded packets",
+      "result": {
+        "result": "exact guarded split/joined/reopen PCM and bounded capacity",
+        "packets": 12,
+        "frames": 3072,
+        "invalid_neighbor_cases": 4,
+        "borrowed_lifetime": "one decode call"
+      }
+    },
+    {
+      "test": "aht-spx.ec3 guarded packets",
+      "result": {
+        "result": "exact guarded split/joined/reopen PCM and bounded capacity",
+        "packets": 6,
+        "frames": 9216,
+        "invalid_neighbor_cases": 4,
+        "borrowed_lifetime": "one decode call"
+      }
+    },
+    {
+      "test": "bad-crc.ec3 guarded packets",
+      "result": {
+        "result": "exact guarded split/joined/reopen PCM and bounded capacity",
+        "packets": 8,
+        "frames": 6144,
+        "invalid_neighbor_cases": 4,
+        "borrowed_lifetime": "one decode call"
+      }
+    },
+    {
+      "test": "bad-block-0.ec3 guarded packets",
+      "result": {
+        "result": "exact guarded split/joined/reopen PCM and bounded capacity",
+        "packets": 6,
+        "frames": 9216,
+        "invalid_neighbor_cases": 4,
+        "borrowed_lifetime": "one decode call"
+      }
+    }
+  ],
+  "wine_version": "wine-8.0 (Debian 8.0~repack-4)",
+  "model_source_sha256": {
+    "ac3_model.py": "8dd6003e3587832b3aa5ba1dbbdeef38e146867afdc9bff9cc9a472316fa39c5",
+    "eac3_model.py": "7d52e564a8b1551f3c90c43964e6694b72b40e9a740d694ee4b9bb6282afc01d",
+    "eac3_ecpl_model.py": "cbbfec4793e04727acf2f368e689d448f9711b2c66941df69275564a42ecda27",
+    "ac3_vectors.py": "01367df6bb590f50700a004c0dbb639a932667b9d18a065387c2488d41186fca",
+    "eac3_vectors.py": "3a1522ab3360dfb3da97b9c56d73f12587b81b120418492f57e25a589a76916a",
+    "generate-eac3-ecpl-tables.py": "6660f57a5b8badec39db5bbecf5883196e9a80cc0f71e5d73f3ce581562ca862"
+  },
+  "fixture_hashes": {
+    "begin-00.ec3": {
+      "begin-00.ec3": "955f4786b3b536cc17428123ba6d319627d006a86be49fd5abbd3b11cac05162",
+      "begin-00.ec3.model.f32": "7a16a8e27d7b762f84b7221c65a26b48b137c653667bdb82346ff6ff41b4a47c"
+    },
+    "begin-01.ec3": {
+      "begin-01.ec3": "058451ff30787d090f263eb02caf92f12fc528ac60a58abee6b1fa627fe244c6",
+      "begin-01.ec3.model.f32": "d8f7175c88264410f00c422f43416cbe35ba582d7b515313dc2023e30f054c7f"
+    },
+    "begin-02.ec3": {
+      "begin-02.ec3": "e028eec37c1a9d8deb254ea49dfb1c6dd2627959c49a95262597b9d56200414e",
+      "begin-02.ec3.model.f32": "b8de6392782e15238fed7d71f7364b66fef386af5e6d24b9c1cb180ed8fd7668"
+    },
+    "begin-03.ec3": {
+      "begin-03.ec3": "7bfe297ddb8c4d2a32de9bdf75c861c14d66d6645b182dc4cb765c029e6945fa",
+      "begin-03.ec3.model.f32": "e59097ba70eaa1df3b358cded8a0140fcf62f099733f1293f92dd74cfd5f1bd8"
+    },
+    "begin-04.ec3": {
+      "begin-04.ec3": "67d6aa0b270b0d32e6b9e33d4bc7f070edc69f6dfcb4ef184921f99fa4049ffe",
+      "begin-04.ec3.model.f32": "f06ee3d02ec035328dce021fe1cfd643cf1c5dc0c935c3f3b0837bd2cc163dd6"
+    },
+    "begin-05.ec3": {
+      "begin-05.ec3": "76cbc8484608e8d567686825281a0138f20c6fb2f6033f3e39f144e7d5528d55",
+      "begin-05.ec3.model.f32": "641065603122b9234545c4a59f9f0c1c4eb094f2e3a19a0bf552b2c1919aea40"
+    },
+    "begin-06.ec3": {
+      "begin-06.ec3": "f7511cb796390606666e074b406785f4900962c3c4ffebf9bac647696cbd2be1",
+      "begin-06.ec3.model.f32": "7a278bf957ed5646b1beac3d132ee7fe812665536f2da7624755367b74fbd0a3"
+    },
+    "begin-07.ec3": {
+      "begin-07.ec3": "9ad3da679f83136293e4da0c7141fd7d99e83a02370261ab15460f04532f81e0",
+      "begin-07.ec3.model.f32": "b1967ee87d846eeef2ba4a65f23099e09c16b3455e75782a3de28a9f2a68b0d0"
+    },
+    "begin-08.ec3": {
+      "begin-08.ec3": "9fcba3cf137944051cd36979f49a742ab663cc8a19ce48d0f151626ac2441262",
+      "begin-08.ec3.model.f32": "347581fad0bb6383084ad78e9ceff17fc893165e479f4b669bbde8ed18deb31a"
+    },
+    "begin-09.ec3": {
+      "begin-09.ec3": "3a5c24bccaf86367e037ed2c8212e622f5780010c95168a7399b7acccc678d37",
+      "begin-09.ec3.model.f32": "3680f9745d9136a03ce35fcc5101a02c0f431217302673df76e0823ed2357c4d"
+    },
+    "begin-10.ec3": {
+      "begin-10.ec3": "88d56484f3a7ed42dd6980368472049debb78c197de92523dff243006b46be14",
+      "begin-10.ec3.model.f32": "940885d717ed2eee2ef47c5f6450750d841ce6a896214f54837623b1a98b16dc"
+    },
+    "begin-11.ec3": {
+      "begin-11.ec3": "c5393ce0595cc953bb3e789fb5d921431754d7ec41c0413794c91d29a017ed36",
+      "begin-11.ec3.model.f32": "70e5f260977dc722221abe49c79e0ccde939603b2a6c7002ca5b604110cddcfd"
+    },
+    "begin-12.ec3": {
+      "begin-12.ec3": "3cce43c546eeec4406a6803915d5b60cb866e9346d9e7f240155f1c3eb3265e2",
+      "begin-12.ec3.model.f32": "168be05b057a7b99ae5c0d3cb57ee897adf79fc4aeea8196d26d4184794a33f9"
+    },
+    "begin-13.ec3": {
+      "begin-13.ec3": "191a14ab83cbfb3cc72cc53334fbdcf5147756c8717a9e2ed63abf427383aa3b",
+      "begin-13.ec3.model.f32": "f8669dd5962e519eb0f62f7ad5c7874a1b50cfe31d32f1de8d5eef0bf73a670b"
+    },
+    "begin-14.ec3": {
+      "begin-14.ec3": "d31137f29b5dd157ed6d2f0b48a30a290cb0abdd735348388a5b243b3fc6862f",
+      "begin-14.ec3.model.f32": "5ac78fa23da27f2ca095786310d164472cf189c46ae55fd7fb288fa59a5004da"
+    },
+    "begin-15.ec3": {
+      "begin-15.ec3": "0cebe28d1d5d422f329bdc60fc14b4a74a6cff4ab4cd28c7998b91958a7ee0dc",
+      "begin-15.ec3.model.f32": "10d7094ce540f53d66c386979e76596fa5e22b50130c8c078476a3ebf21b21a4"
+    },
+    "transitions.ec3": {
+      "transitions.ec3": "0816d0e76365e5335c463406fe03427a7c3abcdcf3c54fa2935c5c9173fe42ec",
+      "transitions.ec3.model.f32": "2d86c5b22a074b331b2b98e1d798a4d1e91255ff719f913b5b6645e557658dfa"
+    },
+    "frame-transitions.ec3": {
+      "frame-transitions.ec3": "ff4f6894153dbae8eff17d3c74b3b700f51a1ce361f91b35597646dcc82dcc07",
+      "frame-transitions.ec3.model.f32": "437a3d358ab402f5f3c7a3044279bd6a85ce5a7865d5152d2025e714698f9efd"
+    },
+    "spx.ec3": {
+      "spx.ec3": "71f84790c7b2b4fd2f2401312e1efe20ce8652065ea29008dddb00e74bf27e5a",
+      "spx.ec3.model.f32": "c9be16620802ef5397964e03345e75e194f67bea3d6fb7ba1b761adbe78dee67"
+    },
+    "aht.ec3": {
+      "aht.ec3": "829c13dbfb0c7e748dde36ee723b3b87a94b864d80ce7ef29aa98afc1133ab6e",
+      "aht.ec3.model.f32": "f3838d40c0e960b97ab9e9998eed02d48499622081a55dbae49bf683a4d5dfba"
+    },
+    "aht-spx.ec3": {
+      "aht-spx.ec3": "e6677e6e1f9ee829e3ab40804575eb513a79f8b1b191d5e45b81d8510d6c85f9",
+      "aht-spx.ec3.model.f32": "a06356dee537acebb1faffd23319d4ef7eddf527a6c6c2251ada559f6623a968"
+    },
+    "single-band.ec3": {
+      "single-band.ec3": "1afef92e0ff7c074cee363aac20310f9d1d37abf0154cb9dbc46ffe24f143d67",
+      "single-band.ec3.model.f32": "e20e0016677e2a5e75d28d1dad6f7b06f63d65399199520d8dc973186e144cf0"
+    },
+    "all-ranges.ec3": {
+      "all-ranges.ec3": "a3fdacc6efbd3258b336c26f7beb13dd377b86dcc29287fccb1134e66d2789bf",
+      "all-ranges.ec3.model.f32": "b1485323c8cf6fa61740a9bdf0f93702c8bd071b6fe68b9b259ae2cce75fd174"
+    },
+    "seek.ec3": {
+      "seek.ec3": "ab5c14f7a680dd73e2f8304734916b0e9122b805fd04efe5f67488972edaec1b",
+      "seek.ec3.model.f32": "095405e944854903f5b4093d43e45efee5472b512b11edbd2a7cb7167bfb1b16"
+    },
+    "noisy.ec3": {
+      "noisy.ec3": "1c98457e2986ab747ca4ae624875ba5c63794b51c2b51e7f7ba86232a40ed128",
+      "noisy.ec3.model.f32": "64c9033318e335ba9d5fb84b5ec5dd529f166893b52111c91901fb484f08e5a6"
+    },
+    "bad-block-0.ec3": {
+      "bad-block-0.ec3": "93e7d3d5d64118a68ff14758c0271c67a3df5dbf7588cd5b14825725b6286df3",
+      "bad-block-0.ec3.model.f32": "80a6728a081469ad1066566ab56f71ab693141c4b15625ef2cd11a0c1ba770d6"
+    },
+    "bad-block-2.ec3": {
+      "bad-block-2.ec3": "7ce511d37fd9a5d873989108a32c005a8cde0e1c11cd4972fb09bec7f37b119d",
+      "bad-block-2.ec3.model.f32": "d32de8ca99fe106d80598789f163c39d879b2717acaa8f06fc7a8fb6e063c8dc"
+    },
+    "bad-block-4.ec3": {
+      "bad-block-4.ec3": "377fb912f7624ffef94dc221f9db053eb5bf99d8d61ac534d0c220f734cb30fa",
+      "bad-block-4.ec3.model.f32": "1d88c06e35c3691eef91384041ddebbb1ead535fa1b5db1bf8ad3b0ff6dc349d"
+    },
+    "bad-block-5.ec3": {
+      "bad-block-5.ec3": "5ae935f3dce4db48483779b614b2e5971e563a23df86243c38605999ac2f17e2",
+      "bad-block-5.ec3.model.f32": "91576caa70bfe771ba842ffe65360a2880417559bb7d46393aa94db7f770cc77"
+    },
+    "bad-crc.ec3": {
+      "bad-crc.ec3": "c0d3f8669a6e44d3441b126d4edf0c3f63f7c67cd470878e9594973e94ee933c",
+      "bad-crc.ec3.model.f32": "3b71b80205585cef44fc05c1fc8a450e718f9d033a8cd599900d97a874f0253a"
+    },
+    "truncated.ec3": {
+      "truncated.ec3": "05cc43a41dc02e6c7c0b031e2e24838e62397c9ccd4da71b25e60dc581c22ac3",
+      "truncated.ec3.model.f32": "fe4abc53079b6b182c329ec851de49f4cc95665fcf69a8200f7fb2500414d771"
+    }
+  },
+  "packet_oracle_source_sha256": "230b3577788ccbbba39f8fe2c9bfcde1f75827e0a2f3db4388527c86ee5374ab",
+  "scope": "Shipping PE vs native enhanced coupling PCM/starts and guarded packets"
+}

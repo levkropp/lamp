@@ -1214,7 +1214,7 @@
   },
   "scope": "ECPL carrier and channel DSP only; guarded inputs/outputs; all numeric codes and interpolation boundaries",
   "limitations": [
-    "ECPL bitstream parsing and cross-frame lookahead are not enabled by these kernels",
+    "This kernel suite does not validate bitstream parsing or cross-frame lookahead",
     "Random arrays are supplied by the test; decoder RNG lifetime is not tested"
   ]
 }

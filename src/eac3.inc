@@ -1,11 +1,13 @@
 # E-AC-3 independent/AC-3-converted substream 0, conventional/AHT mantissas.
 # Handwritten ATSC A/52:2018 Annex E parser; shared AC-3 DSP and allocation.
-# Enhanced coupling reports AC3_UNSUPPORTED; AHT is in eac3_aht.inc.
+# AHT is in eac3_aht.inc; experimental ECPL uses the literal A/52 DSP.
 # Numeric tables: normative exponents, bands and attenuation; see provenance.
 RODATA
 .include "eac3_tables.inc"
 eac3_block_counts: .byte 1, 2, 3, 6
 .data
+.p2align 3
+eac3_frame_data:
 eac3_type: .long 0
 eac3_snr_strategy: .long 0
 eac3_switch_syntax: .long 0
@@ -15,11 +17,19 @@ eac3_gain_syntax: .long 0
 eac3_dba_syntax: .long 0
 eac3_skip_syntax: .long 0
 eac3_first_leak: .long 1
+.p2align 3
+eac3_frame_data_end:
+.equ EAC3_FRAME_DATA_WORDS, (eac3_frame_data_end-eac3_frame_data)/8
 .bss
+.p2align 3
+eac3_frame_arrays:
 eac3_expstr: .zero 6*8*4
 eac3_cplstre: .zero 6*4
 eac3_cplinu: .zero 6*4
 eac3_first_coords: .zero 8*4
+.p2align 3
+eac3_frame_arrays_end:
+.equ EAC3_FRAME_ARRAY_WORDS, (eac3_frame_arrays_end-eac3_frame_arrays)/8
 .text
 # Same result as ac3_header, with R11D=blocks and key bit 8 marking E-AC-3.
 # Only accepted frame types/rates fit the shared six-channel DSP.
@@ -499,6 +509,15 @@ LOCALFN eac3_bsi
     imul eax, ecx
     add [rip + ac3_bitpos], eax
 .Leac3_bsi_init:
+    mov dword ptr [rip + eac3_ecpl_active], 0
+    lea rdi, [rip + eac3_ecpl_struct]
+    lea rsi, [rip + eac3_default_ecpl_bands]
+    mov ecx, 22
+    rep movsb
+    lea rdi, [rip + ac3_bndstrc]
+    lea rsi, [rip + eac3_default_cpl_bands]
+    mov ecx, 18
+    rep movsb
     mov dword ptr [rip + eac3_spx_active], 0
     lea rcx, [rip + eac3_spx_ch]
     xorps xmm0, xmm0

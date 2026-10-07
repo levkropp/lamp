@@ -167,7 +167,7 @@ def main():
     write_report('eac3-aht',dict(result='passed',checks=checks,coverage=manifest['coverage'],
         reference_exception=EXCEPTION,fixture_model_environment=manifest['model_environment'],
         scope='Six-block AHT, VQ, scalar/escape GAQ, FBW/coupling/LFE and spectral extension',
-        limitations=['enhanced coupling and dependent/additional substreams remain unsupported',
+        limitations=['ECPL experimental normalization has separate validation; dependent/additional substreams remain unsupported',
             'AHT zero-bit bins always dither; noisy seeks restart the shared LFG']))
     print(f'Passed {len(checks)} AHT checks.',flush=True)
 

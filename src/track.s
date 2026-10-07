@@ -274,6 +274,7 @@ ENDFN track_samples
 # RCX=packet entry -> EAX=frames decoded into track_buffer, or -1.
 LOCALFN track_decode
     sub rsp, 40
+    mov [rsp + 32], rcx
     mov edx, [rcx + TK_BYTES]
     mov rcx, [rcx + TK_POINTER]
     mov r8, [rip + track_buffer]
@@ -324,6 +325,26 @@ LOCALFN track_decode
     mov eax, -1
     jmp .Ltk_decode_return
 .Ltk_decode_ac3:
+    mov rax, [rip + track_count]
+    imul rax, rax, TK_ENTRY
+    add rax, [rip + track_packets]
+    mov rdx, [rsp + 32]
+    add rdx, TK_ENTRY
+    xor ecx, ecx
+    cmp rdx, rax
+    jae .Ltk_decode_ac3_no_next
+    mov rcx, [rdx + TK_POINTER]
+    mov edx, [rdx + TK_BYTES]
+    jmp .Ltk_decode_ac3_next_ready
+.Ltk_decode_ac3_no_next:
+    xor edx, edx
+.Ltk_decode_ac3_next_ready:
+    call ac3_track_lookahead
+    mov rax, [rsp + 32]
+    mov rcx, [rax + TK_POINTER]
+    mov edx, [rax + TK_BYTES]
+    mov r8, [rip + track_buffer]
+    mov r9d, TK_BUFFER
     call ac3_track_decode
     test eax, eax
     jnz .Ltk_decode_return
@@ -775,7 +796,21 @@ FN track_seek
     cmp eax, TK_AAC
     je .Ltk_seek_primer
     cmp eax, TK_AC3
+    jne .Ltk_seek_after_ac3
+    # One extra packet covers the preceding ECPL carrier for a one-block
+    # E-AC-3 frame. The usual primer below rebuilds the channel overlap.
+    cmp dword ptr [rip + ac3_enhanced], 0
     je .Ltk_seek_primer
+    test rbx, rbx
+    jz .Ltk_seek_restart
+    lea rax, [rbx - 1]
+    imul rax, rax, TK_ENTRY
+    add rax, [rip + track_packets]
+    cmp dword ptr [rax + TK_SAMPLES], 256
+    jne .Ltk_seek_primer
+    dec rbx
+    jmp .Ltk_seek_primer
+.Ltk_seek_after_ac3:
     cmp eax, TK_ADPCM
     jne .Ltk_seek_restart
     cmp dword ptr [rip + adpcm_primer], 0  # IMA4 headers continue the state

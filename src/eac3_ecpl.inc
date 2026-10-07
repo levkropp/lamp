@@ -1,6 +1,6 @@
 # Enhanced-coupling DSP, handwritten from ATSC A/52:2018 E.3.5.5.
 # Three adjacent spectra -> non-aliased complex carrier -> channel spectrum.
-# These bounded kernels do not yet enable ECPL bitstream acceptance.
+# Encoded-stream integration and borrowed lookahead are separate modules.
 RODATA
 .include "eac3_ecpl_tables.inc"
 eac3_ecpl_norm: .double 0.001953125       # 1/512 (DFT normalization)

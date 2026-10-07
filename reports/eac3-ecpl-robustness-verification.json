@@ -1,0 +1,41 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "ecpl.ec3",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 200,
+      "decoded": 140,
+      "rejected_or_damaged": 60,
+      "repaired_frame_crcs": 950
+    },
+    {
+      "test": "ecpl.mka",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 200,
+      "decoded": 109,
+      "rejected_or_damaged": 91,
+      "repaired_frame_crcs": 0
+    },
+    {
+      "test": "ecpl.mp4",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 200,
+      "decoded": 94,
+      "rejected_or_damaged": 106,
+      "repaired_frame_crcs": 0
+    },
+    {
+      "test": "ecpl.ts",
+      "result": "no crash, hang or runaway memory",
+      "mutations": 200,
+      "decoded": 153,
+      "rejected_or_damaged": 47,
+      "repaired_frame_crcs": 0
+    }
+  ],
+  "mutations": 800,
+  "decoded": 496,
+  "crc_policy": "Alternating raw ECPL mutations repair CRCs of complete frames; other mutations retain damage",
+  "scope": "4 container/codec sources, 200 mutations each (Linux, 2 GiB address space), seed 20261013: byte flips, zero/0xff runs, cuts, removed and duplicated spans, large length fields; --check, every fourth from a random --start."
+}
