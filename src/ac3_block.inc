@@ -801,6 +801,7 @@ LOCALFN ac3_block
     shl eax, 3
     add [rip + ac3_bitpos], eax
 .Lac3_block_coefficients:
+    mov [rip + eac3_current_block], ebx
     call ac3_coefficients
     cmp dword ptr [rip + ac3_enhanced], 0
     je .Lac3_block_coefficients_valid
@@ -1355,6 +1356,12 @@ LOCALFN ac3_calc_bap
     movzx r11d, byte ptr [r10 + rsi]      # band
     lea r10, [rip + ac3_band_start]
     lea r14, [rip + ac3_baptab]
+    cmp dword ptr [rip + ac3_enhanced], 0
+    je .Lac3_bap_band
+    AC3_SLOT rcx, eac3_aht_ch, rbx
+    cmp dword ptr [rcx], 0
+    je .Lac3_bap_band
+    lea r14, [rip + eac3_hebap]
 .Lac3_bap_band:
     movsx eax, word ptr [r9 + r11*2]
     sub eax, r12d
@@ -1488,6 +1495,12 @@ ENDFN ac3_coefficients
 # quantizers for bap 1, 2 and 4 (groups shared across the block's channels),
 # dither for bap 0 where enabled, two's complement for bap 6..15.
 LOCALFN ac3_mantissas
+    cmp dword ptr [rip + ac3_enhanced], 0
+    je .Lac3_mant_ordinary
+    AC3_SLOT rax, eac3_aht_ch, rcx
+    cmp dword ptr [rax], 0
+    jne eac3_aht_mantissas
+.Lac3_mant_ordinary:
     push rbx
     push rsi
     push rdi

@@ -1,7 +1,7 @@
 """Test-only E-AC-3 streams sized by the independent decoder model.
 
 Covers 1/2/3/6 blocks, both exponent syntaxes, optional fields and reuse.
-AHT/enhanced coupling are deliberately reserved for later decoder work.
+Conventional and AHT mantissas are supported; enhanced coupling is rejected.
 """
 import copy
 import random
@@ -17,6 +17,22 @@ class Writer(ac3_vectors.Writer):
             # Opaque metadata must not advertise an object extension without
             # its mandatory complexity byte (a one-byte field is possible).
             return r.getrandbits(n) & ~(1 << (n-8))
+        if label=='ahtinu':return int(context[0] in c.get('aht_channels',range(7))) if c.get('ahtinu') else 0
+        if label=='gaqmod':return c.get(label,r.randrange(4))
+        if label in ('gaqgain','ahtlarge'):return r.getrandbits(n)
+        if label=='gaqgroup':return c.get(label,r.randrange(27))
+        if label=='ahtvq':
+            if c.get('aht_vq_cycle'):
+                indices=c.setdefault('_vq_indices',{})
+                bap=context[0];index=indices.get(bap,0)
+                indices[bap]=index+1
+                return index%(1<<n)
+            return c.get(label,r.randrange(1<<n))
+        if label in ('csnroffst','frmcsnroffst') and 'csnroffst' in c:return c['csnroffst']
+        if label=='chbwcod' and label in c:return c[label]
+        if label=='ahtmant':
+            # Include escape tags as well as small and sign extremes.
+            return 1<<(n-1) if r.random()<c.get('gaq_escape',0.4) else r.getrandbits(n)
         if label in ('spxstrtf','spxbegf','spxendf','spxbndstrce','spxbndstrc','spxcoe',
                      'spxblnd','mstrspxco','spxcoexp','spxcomant','spxattencod','spxattencode'):
             return c[label] if label in c else r.getrandbits(n)
@@ -44,6 +60,9 @@ class Writer(ac3_vectors.Writer):
                      'blkstrtinfoe', 'convexpstre', 'lfemixlevcode'):
             return r.randrange(2)
         if label in ('frame_expstr', 'frame_lfe_expstr'):
+            channel=context[1] if len(context)>1 else ac3.CHANNELS[c['acmod']]+1
+            if c.get('ahtinu') and channel in c.get('aht_channels',range(7)):
+                return (1 if n==1 else r.randrange(1,4)) if context[0]==0 else 0
             if c.get('spxinu') and c.get('expstre',1):
                 return 1 if n == 1 else r.randrange(1,4)
             blk = context[0]
@@ -123,7 +142,11 @@ def stream(seed, frames=12, acmod=2, lfe=0, blocks=6, fscod=0, typ=0, size=4096,
         config['_index'] = index
         nb = blocks[index % len(blocks)] if isinstance(blocks, (list, tuple)) else blocks
         h = dict(fscod=fscod, acmod=acmod, lfe=lfe, bsid=16, bytes=size, shift=0, blocks=nb, typ=typ)
+        vq_indices=dict(config.get('_vq_indices',{}))
         for attempt in range(100):
+            # A rejected oversized attempt must not skip codebook entries
+            # in the accepted stream used for exhaustive VQ coverage.
+            if config.get('aht_vq_cycle'):config['_vq_indices']=dict(vq_indices)
             trial = copy.deepcopy(decoder)
             writer = Writer(r, config, snr, index == 0)
             trial.decode_frame(writer, h, strict=True)

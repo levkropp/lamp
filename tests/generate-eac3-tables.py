@@ -21,7 +21,7 @@ TARGET = ROOT / 'src/eac3_tables.inc'
 DEFAULT_CPL = [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1]
 
 
-def tables():
+def specification_text():
     pdf = ROOT / 'tests/reference/A52-2018.pdf'
     if not pdf.exists():
         pdf.parent.mkdir(parents=True, exist_ok=True)
@@ -29,7 +29,11 @@ def tables():
             pdf.write_bytes(response.read())
     if hashlib.sha256(pdf.read_bytes()).hexdigest() != SHA256:
         raise SystemExit('A52-2018.pdf SHA-256 mismatch')
-    text = subprocess.check_output(['pdftotext', '-layout', str(pdf), '-']).decode()
+    return subprocess.check_output(['pdftotext', '-layout', str(pdf), '-']).decode()
+
+
+def tables():
+    text = specification_text()
     section = text.split('Table E2.10 Frame Exponent Strategy Combinations')[-1].split('2.3.2.16')[0]
     rows = re.findall(r'^\s*(\d+)\s+((?:D15|D25|D45|R)(?:\s+(?:D15|D25|D45|R)){5})\s*$', section, re.M)
     assert [int(k) for k, _ in rows] == list(range(32))

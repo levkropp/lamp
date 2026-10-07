@@ -155,7 +155,7 @@ def main():
     write_report('eac3-spx',dict(result='passed',checks=checks,coverage=manifest['coverage'],
         fixture_model_environment=manifest['model_environment'],
         scope='Spectral extension in conventional independent/converted E-AC-3 substream 0',
-        limitations=['AHT, enhanced coupling, dependent/additional substreams and reduced rates remain unsupported',
+        limitations=['enhanced coupling, dependent/additional substreams and reduced rates remain unsupported',
                      'noisy SPX seeks restart the shared LFG; exact seeks use nonzero signal with zero noise blend']))
     print(f'Passed {len(checks)} E-AC-3 SPX checks.',flush=True)
 

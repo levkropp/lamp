@@ -1,6 +1,6 @@
-# E-AC-3 independent/AC-3-converted substream 0, conventional mantissas.
+# E-AC-3 independent/AC-3-converted substream 0, conventional/AHT mantissas.
 # Handwritten ATSC A/52:2018 Annex E parser; shared AC-3 DSP and allocation.
-# AHT and enhanced coupling report AC3_UNSUPPORTED.
+# Enhanced coupling reports AC3_UNSUPPORTED; AHT is in eac3_aht.inc.
 # Numeric tables: normative exponents, bands and attenuation; see provenance.
 RODATA
 .include "eac3_tables.inc"
@@ -401,6 +401,9 @@ LOCALFN eac3_bsi
     imul eax, r12d, 5
     add [rip + ac3_bitpos], eax
 .Leac3_bsi_aht:
+    xorps xmm0, xmm0
+    movups [rip + eac3_aht_ch], xmm0
+    movups [rip + eac3_aht_ch + 16], xmm0
     cmp dword ptr [rsp + 36], 0
     je .Leac3_bsi_snr
     xor esi, esi
@@ -426,8 +429,8 @@ LOCALFN eac3_bsi
     jb .Leac3_bsi_aht_eligible
     mov ecx, 1
     call ac3_get
-    test eax, eax
-    jnz .Leac3_bsi_unsupported
+    AC3_SLOT rcx, eac3_aht_ch, rsi
+    mov [rcx], eax
 .Leac3_bsi_aht_next:
     inc esi
     cmp esi, r13d

@@ -1,0 +1,258 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "bad-crc.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "clamped-groups.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "converted.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "gaq-0.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "gaq-1.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "gaq-2.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "gaq-3.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "layout-0-0.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "layout-0-1.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "layout-1-0.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "layout-1-1.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "layout-2-0.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "layout-2-1.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "layout-3-0.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "layout-3-1.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "layout-4-0.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "layout-4-1.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "layout-5-0.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "layout-5-1.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "layout-6-0.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "layout-6-1.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "layout-7-0.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "layout-7-1.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "lut.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "noise-primer-3.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "noise-primer-7.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "noisy.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "noisy.ec3 --start 106 ms",
+      "result": "exact PCM"
+    },
+    {
+      "test": "noisy.ec3 --start 234 ms",
+      "result": "exact PCM"
+    },
+    {
+      "test": "partial.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "rate-1.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "rate-2.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "seek.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "seek.ec3 --start 17 ms",
+      "result": "exact PCM"
+    },
+    {
+      "test": "seek.ec3 --start 60 ms",
+      "result": "exact PCM"
+    },
+    {
+      "test": "seek.ec3 --start 150 ms",
+      "result": "exact PCM"
+    },
+    {
+      "test": "seek.frag.mp4",
+      "result": "exact PCM"
+    },
+    {
+      "test": "seek.frag.mp4 --start 17 ms",
+      "result": "exact PCM"
+    },
+    {
+      "test": "seek.frag.mp4 --start 60 ms",
+      "result": "exact PCM"
+    },
+    {
+      "test": "seek.frag.mp4 --start 150 ms",
+      "result": "exact PCM"
+    },
+    {
+      "test": "seek.mka",
+      "result": "exact PCM"
+    },
+    {
+      "test": "seek.mka --start 17 ms",
+      "result": "exact PCM"
+    },
+    {
+      "test": "seek.mka --start 60 ms",
+      "result": "exact PCM"
+    },
+    {
+      "test": "seek.mka --start 150 ms",
+      "result": "exact PCM"
+    },
+    {
+      "test": "seek.mp4",
+      "result": "exact PCM"
+    },
+    {
+      "test": "seek.mp4 --start 17 ms",
+      "result": "exact PCM"
+    },
+    {
+      "test": "seek.mp4 --start 60 ms",
+      "result": "exact PCM"
+    },
+    {
+      "test": "seek.mp4 --start 150 ms",
+      "result": "exact PCM"
+    },
+    {
+      "test": "seek.ts",
+      "result": "exact PCM"
+    },
+    {
+      "test": "seek.ts --start 17 ms",
+      "result": "exact PCM"
+    },
+    {
+      "test": "seek.ts --start 60 ms",
+      "result": "exact PCM"
+    },
+    {
+      "test": "seek.ts --start 150 ms",
+      "result": "exact PCM"
+    },
+    {
+      "test": "spx.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "spx.frag.mp4",
+      "result": "exact PCM"
+    },
+    {
+      "test": "spx.mka",
+      "result": "exact PCM"
+    },
+    {
+      "test": "spx.mp4",
+      "result": "exact PCM"
+    },
+    {
+      "test": "spx.ts",
+      "result": "exact PCM"
+    },
+    {
+      "test": "transitions.ec3",
+      "result": "exact PCM"
+    },
+    {
+      "test": "transitions.frag.mp4",
+      "result": "exact PCM"
+    },
+    {
+      "test": "transitions.mka",
+      "result": "exact PCM"
+    },
+    {
+      "test": "transitions.mp4",
+      "result": "exact PCM"
+    },
+    {
+      "test": "transitions.ts",
+      "result": "exact PCM"
+    },
+    {
+      "test": "truncated.ec3",
+      "result": "exact PCM"
+    }
+  ],
+  "scope": "Shipping PE vs Linux AHT PCM and starts"
+}

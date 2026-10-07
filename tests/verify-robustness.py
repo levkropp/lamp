@@ -89,6 +89,10 @@ SOURCES = [
     ('spx.mka', []),
     ('spx.mp4', []),
     ('spx.ts', []),
+    ('aht.ec3', []),
+    ('aht.mka', []),
+    ('aht.mp4', []),
+    ('aht.ts', []),
     ('eac3.mka', SURROUND + ['-c:a', 'eac3']),
     ('eac3.mp4', SURROUND + ['-c:a', 'eac3']),
     ('eac3.ts', SURROUND + ['-c:a', 'eac3']),
@@ -221,7 +225,16 @@ def main():
     for name, options in selected:
         source = work / name
         if not source.exists():
-            if name.startswith('spx.'):
+            if name.startswith('aht.'):
+                import eac3_vectors
+                raw=work/'aht.ec3'
+                if not raw.exists():
+                    data,_=eac3_vectors.stream(20261009,12,7,1,ahte=1,ahtinu=1,
+                        coupling=1,cplstre=0,spxinu=1,spxstre=0,spxbegf=4,spxendf=7,
+                        spxstrtf=0,short=0.25)
+                    raw.write_bytes(data)
+                if source!=raw:ffmpeg('-i',raw,'-c','copy',source)
+            elif name.startswith('spx.'):
                 import eac3_vectors
                 raw=work/'spx.ec3'
                 if not raw.exists():
