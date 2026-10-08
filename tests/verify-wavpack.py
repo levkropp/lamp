@@ -72,7 +72,8 @@ def ffmpeg_native(path, output, tolerated=None):
     result = subprocess.run(['ffmpeg', '-hide_banner', '-loglevel', 'error', '-y', '-err_detect', 'crccheck', '-i',
                              str(path), '-f', 'f32le', str(output)], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     text = result.stdout.decode('utf-8', 'replace')
-    lines = [line for line in text.splitlines() if not (tolerated and line.endswith(tolerated.split(': ')[-1]))]
+    endings = (tolerated,) if isinstance(tolerated, str) else tolerated or ()
+    lines = [line for line in text.splitlines() if not line.endswith(endings)]
     if result.returncode or 'error' in '\n'.join(lines).lower():
         raise Failure(f'FFmpeg on {Path(path).name}: {text.strip()[:300]}')
     return Path(output).read_bytes()
@@ -320,8 +321,11 @@ def main():
         checks.append({'test': name, 'result': 'exact', 'comparator': 'long.wv', 'stats': stats})
     truncated = work / 'truncated.wv'
     truncated.write_bytes(long[:len(long) * 2 // 3])
-    suite.against_ffmpeg(truncated, 'cut inside a frame: the complete frames play',
-                         tolerated='Input/output error')
+    prefix = suite.against_ffmpeg(truncated, 'cut inside a frame: the complete frames play',
+                                  tolerated=('Input/output error',
+                                             'Error during demuxing: Invalid data found when processing input'))
+    if not prefix or len(prefix) >= len(reference) or not reference.startswith(prefix):
+        raise Failure('truncated.wv: expected a nonempty proper prefix of the intact stereo stream')
 
     # Rejections.
     def blocks_of(data):

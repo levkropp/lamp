@@ -23,6 +23,6 @@ for(const [file,symbol,label,count]of tables){
  if(values.length!==count||values.some(x=>x>255))throw Error('Invalid table '+symbol);
  output+=rows(label,'db',values);
 }
-output+='op_silk_shell_ptr: .quad op_silk_shell0, op_silk_shell1, op_silk_shell2, op_silk_shell3\n';
+output+='.p2align 3\nop_silk_shell_ptr: .quad op_silk_shell0, op_silk_shell1, op_silk_shell2, op_silk_shell3\n';
 fs.writeFileSync(path.join(root,'src','opus_silk_tables.inc'),output);
 console.log('Extracted nine normative SILK probability tables.');

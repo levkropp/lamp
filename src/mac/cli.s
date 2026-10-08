@@ -79,7 +79,7 @@ cli_done:
     ADR x9, codec_kind
     ldr w9, [x9]
     str x9, [sp]
-    ADR x9, sample_rate
+    ADR x9, output_rate
     ldr w9, [x9]
     str x9, [sp, #8]
     ADR x9, source_channels
@@ -246,7 +246,7 @@ version_opt: .asciz "--version"
 usage: .asciz "LAMP macOS ARM64\nUsage: lamp-cli FILE\n       lamp-cli --check FILE\n       lamp-cli --decode FILE NEW.f32"
 playing_message: .asciz "LAMP: Core Audio playback. Space pauses/resumes; Q or Ctrl+C stops."
 bad_message: .asciz "LAMP: cannot open, decode or write this file."
-decode_message: .asciz "Unsupported, malformed, or inaccessible file. Supports WAV, AIFF/AIFC, FLAC, MP3, Vorbis and Opus."
+decode_message: .asciz "Unsupported, malformed, or inaccessible audio file. See docs/compatibility.md for codec and container limits."
 done_format: .asciz "codec=%u rate=%u channels=%u bits=%u frames=%llu decode_error=%u\n"
 .bss
 .p2align 3

@@ -2,6 +2,7 @@
 # Builds the static Linux x86-64 lamp-cli with GNU as and ld; no C library.
 # usage: ./build.sh [release] [output-directory]
 # Windows binaries: python3 tools/build-windows.py (LLVM; any host).
+# On macOS: ./build.sh [--release] [--output directory] builds native ARM64.
 set -e
 cd "$(dirname "$0")"
 if [ "$(uname -s)" = Darwin ]; then

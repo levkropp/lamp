@@ -56,7 +56,15 @@ static inline int lamp_sparse_close(lamp_file h, const lamp_char *path, uint64_t
 #include <sys/stat.h>
 #include <time.h>
 #include <unistd.h>
+#ifdef __APPLE__
+#include <malloc/malloc.h>
+#endif
+#if defined(__APPLE__) && defined(__aarch64__)
+/* The Mac library exports Apple ABI bridges to the shared decoder machine. */
+#define LAMP_ABI
+#else
 #define LAMP_ABI __attribute__((ms_abi))
+#endif
 typedef char lamp_char;
 #define LT(text) text
 #define lamp_main main
@@ -112,6 +120,14 @@ typedef PROCESS_MEMORY_COUNTERS_EX PROCESS_MEMORY_COUNTERS;
 static inline HANDLE GetCurrentProcess(void) { return (HANDLE)(intptr_t)-1; }
 static inline BOOL GetProcessMemoryInfo(HANDLE process, PROCESS_MEMORY_COUNTERS *counters, DWORD bytes) {
     (void)process; (void)bytes;
+#ifdef __APPLE__
+    extern uint64_t lamp_allocated_bytes;
+    malloc_statistics_t stats;
+    malloc_zone_statistics(NULL, &stats);
+    counters->PrivateUsage = counters->PagefileUsage = stats.size_in_use + (SIZE_T)lamp_allocated_bytes;
+    counters->WorkingSetSize = counters->PeakWorkingSetSize = 0;
+    return 1;
+#else
     FILE *status = fopen("/proc/self/status", "r");
     char line[256];
     unsigned long long data = 0, rss = 0, peak = 0;
@@ -126,6 +142,7 @@ static inline BOOL GetProcessMemoryInfo(HANDLE process, PROCESS_MEMORY_COUNTERS 
     counters->WorkingSetSize = (SIZE_T)rss * 1024;
     counters->PeakWorkingSetSize = (SIZE_T)peak * 1024;
     return data != 0;
+#endif
 }
 
 static inline BOOL QueryPerformanceFrequency(LARGE_INTEGER *frequency) { frequency->QuadPart = 1000000000; return 1; }

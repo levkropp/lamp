@@ -31,11 +31,13 @@ The public repository includes build/test tooling, a Windows prerelease and a we
 - [x] AppKit shell written in assembly: Open, Finder open/drop handlers, native controls, keyboard shortcuts and fullscreen.
 - [x] App bundle, Retina icon, local ad-hoc signing and ZIP packaging with notices and hashes.
 - [x] Native six-format PCM/regression checks and all 35 Opus oracle suites.
+- [x] Current GNU shared decoder tree on ARM64: native layout/seek suites, translation instruction checks, WavPack references and 594 cross-architecture fixtures; coverage is recorded in the Mac guide.
+- [ ] Mac CLI/player parity with current shared functionality: queues/playlists, navigation/repeat/resume, metadata/chapters/cover, track/rate/device selection and queue editing.
 - [ ] Complete manual Open/drop/focus, fullscreen and Retina/multiple-display testing.
 - [ ] Asynchronous seeking, output-device selection/reconnection and Mac performance measurements.
 - [ ] Developer ID signing/notarization and published macOS releases.
 
-[Mac build and verification notes](docs/macos.md) record the native coverage and platform differences. Windows benchmark and official-vector reports retain their original platform scope. Linux/Windows x86-64 roadmap work on `claude` remains separate from this main-based Mac backend.
+[Mac build and verification notes](docs/macos.md) record the native coverage and platform differences. Windows benchmark and official-vector reports retain their original platform scope. The working branch is rebased on the Mac foundation and uses one current shared decoder tree. Milestones 2 and 3 now include Mac parity for existing and future features; Windows/Linux reports retain their platform scope.
 
 ## 1 — Finish Opus
 

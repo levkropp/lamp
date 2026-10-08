@@ -1,6 +1,6 @@
 # Apple Silicon macOS
 
-LAMP builds a native ARM64 command-line player and AppKit app bundle for Apple Silicon. The deployment target is macOS 12.0; verification was performed on macOS 26.4.1. Intel Macs and other operating systems are not targets of this build.
+LAMP builds a native ARM64 command-line player and AppKit app bundle for Apple Silicon. The deployment target is macOS 12.0; verification was performed on macOS 26.4.1. Intel Macs and other operating systems are not targets of this build. The current shared decoder tree builds on all three platforms; the Mac CLI and app still need the additional controls listed below.
 
 ## Build and run
 
@@ -39,10 +39,10 @@ Focused native controls retain their usual keyboard behavior. The CLI accepts Sp
 
 This port follows [Rhun's macOS model](https://github.com/vshvedov/rhun/blob/main/docs/guide.md#macos): translate the shared x86-64 assembly during the build, then link native ARM64 platform adapters. It retains the decoder implementation in one authoritative source rather than maintaining another copy of every codec algorithm.
 
-1. `tools/masm.py` normalizes LAMP's MASM syntax, declarations, includes and macros into GNU Intel syntax under the build directory. The Windows sources and build are unchanged.
-2. The pinned MIT `tools/arm64.py` translator, extended by `tools/arm64_lamp.py`, emits AArch64 instructions. Extensions cover LAMP's scalar/packed floating point, address forms, shift/carry flags, string operations and Vorbis initialization math. Unsupported constructs fail the build.
+1. `tools/build-mac.py` reads the same GNU Intel sources and includes in `src/` that Windows and Linux use. It discovers exported functions and data after expanding includes and generates native ABI bridges and data aliases. The historical `tools/masm.py` normalizer is no longer part of the build.
+2. The pinned MIT `tools/arm64.py` translator, extended by `tools/arm64_lamp.py`, emits AArch64 instructions. Extensions cover LAMP's scalar/packed floating point, address forms, shift/carry/borrow flags, loops, string operations, GNU data directives and initialization math. Data layout follows the source exactly; pointer tables explicitly specify their alignment. Unsupported constructs fail the build.
 3. Apple clang's integrated assembler assembles the generated `.s` files. `src/mac/bridge.s` maps Apple's calling convention to the shared decoder convention, including shadow space and stack arguments. Translated code uses Rhun's private register mapping and a guarded 16 MiB stack. Apple's reserved x18 is untouched.
-4. `src/mac/platform.s` implements the decoder's file/mapping/allocation services through libSystem. The zeroed arena reservation uses lazy calloc pages; later commit calls honor the existing address instead of allocating another block. Tracked allocation bytes must return to zero after closing a decoder. `runtime.s` supplies the translated string/division helpers. Vorbis initialization uses libSystem sin/cos/ldexp, rather than a system codec.
+4. `src/mac/platform.s` implements the decoder's file/mapping/allocation services through libSystem. Zeroed, page-aligned arenas use `mmap`; reservations initially protect payload pages, and commits use `mprotect` at the existing address. Each file mapping carries its own size, so nested playlists and containers can hold several mappings. Tracked allocation bytes must return to zero after closing a decoder. `runtime.s` supplies the translated string/division helpers. Vorbis initialization uses libSystem sin/cos/ldexp, rather than a system codec.
 5. Native ARM64 `audio.s`, `ui.s` and `cli.s` provide Core Audio, AppKit and console behavior. The AppKit shell invokes Objective-C runtime services directly from assembly; no C, Objective-C or Swift application source is compiled into the player.
 
 The shipped code is ARM64 Mach-O and executes directly on Apple Silicon. Translation happens once at build time; it does not interpret/emulate x86 instructions at runtime. No system media decoder, external codec library, FFmpeg subprocess or mpv engine performs decoding.
@@ -76,7 +76,24 @@ The baseline checks 80 files across 8/44.1/48/96 kHz, mono/stereo, integer/float
 
 The 35 Opus suites compile the hash-verified RFC 6716 reference with RFC 8251 updates. They exercise integer/entropy math, SILK/CELT transforms and history, packet-to-PCM dispatch, mode/rate/layout transitions, protected output, multistream stereo routing and 1,032 reset-reference seeks. Test adapters import shared globals, use Apple's page size and define the reference's otherwise undefined `isqrt32(0)` result as zero. Reference C is confined to test artifacts. The earlier official-vector report remains a Windows result; it is not presented as a new Mac official-vector run.
 
-The optional layout checks reuse the existing numeric/fixture/reference oracles for WAV, FLAC, RF64/BW64, AIFF/AIFC and Vorbis. Native test adapters replace UTF-16 paths with UTF-8, use Apple ABI entry points and protected-page sizes, create sparse APFS files instead of issuing NTFS sparse ioctls, and measure live malloc bytes for allocation-release checks instead of Windows process private commit. If FFmpeg lacks libvorbis, the pinned Xiph test encoder creates its Vorbis fixtures. The suite reports identify these adaptations.
+The optional layout checks reuse the existing numeric/fixture/reference oracles for WAV, FLAC, RF64/BW64, AIFF/AIFC and Vorbis. Native test adapters replace UTF-16 paths with UTF-8, use Apple ABI entry points and protected-page sizes, create sparse APFS files instead of issuing NTFS sparse ioctls, and measure live malloc bytes plus tracked decoder mappings for allocation-release checks instead of Windows process private commit. If FFmpeg lacks libvorbis, the pinned Xiph test encoder creates its Vorbis fixtures. The suite reports identify these adaptations.
+
+The [current shared-tree release report](../reports/macos-shared-tree-verification.json) records the baseline, all 35 Opus suites, 4,681 layout files, 83,838 layout seeks, 677 rejected layouts, Core Audio lifecycle checks and the AppKit smoke test. The earlier `macos-verification.json` and `macos-release-verification.json` reports describe the original six-format foundation.
+
+The [cross-architecture report](../reports/macos-shared-verification.json) checks 594 retained fixtures from the AAC PCE, GSM, MP4/QuickTime, LATM, HE-AAC, AC-3, CAF/WAVE64, compressed WAVE and MPEG-TS/PS suites against a fresh Linux x86 build of identical shared sources: 497 successful decodes are byte-exact and 97 reject consistently. It also records 735 continuous-PCM seek comparisons and eight protected-page PCE/LATM oracles (12,839 prefixes and 4,800 mutations). Exact seek checks use the original suites' policies, including the IMA4 tolerance; HE-AAC approximate reconstruction seeks are outside their scope. This is a translation regression check; the independent reference reports retain their original platform and coverage.
+
+To reproduce that comparison, generate the original suites' fixtures on Linux, then record and copy the corpus directory to the Mac:
+
+```sh
+# Linux, after generating the format-suite fixtures:
+python3 tests/verify-macos-shared.py --record --binary build/lamp-cli --corpus build/mac-corpus
+# Mac, using the copied corpus and a native build:
+python3 tests/verify-macos-shared.py --corpus build/mac-corpus --binary-directory build/macos --seeks
+python3 tests/verify-macos-translation.py --binary-directory build/macos
+LAMP_OUT=build/macos-wavpack python3 tests/verify-wavpack.py --skip-playback
+```
+
+The [translation instruction oracle](../reports/macos-translation-verification.json) covers 40,000 deterministic cases of packed multiply/add, borrow/loop flags, floating-point rounding/overflow and packed data layout. The [native WavPack report](../reports/macos-wavpack-verification.json) records 104 checks against FFmpeg, the written-stream model and continuous decoding. Neither requires an external codec at runtime.
 
 Real-device tests exercise three open/pause/paused-seek/resume/EOF/stop cycles, natural EOF and failed-open recovery for each of the six formats. Pseudo-terminal checks keep playback paused past its original duration, then verify Q/Ctrl+C exit and restoration of terminal settings. The comparison excludes only Darwin’s transient PENDIN input-state bit; configuration flags, speeds and control characters are checked. The UI smoke check verifies native launch, playback, timer updates and exit. Open-panel, Finder/drop, focused-control shortcuts, fullscreen, accessibility, Retina and multiple-display interactions still need comprehensive manual desktop testing. These checks do not establish complete conformance, universal performance, audible latency, device-reconnection behavior or immunity to system stalls.
 
@@ -92,4 +109,4 @@ The ZIP contains the app, CLI, notices, this guide and a manifest of file sizes/
 
 The default signature is local/ad-hoc. Developer ID signing, hardened-runtime/notarization, release CI and a published macOS download remain future distribution work. This port does not modify the published Windows prerelease.
 
-Current Mac differences are explicit: native controls stay visible; seeks/open/index construction can block the UI; the default audio device and Core Audio's sample-rate conversion are used; output remains stereo. Asynchronous seek/open, output-device selection/reconnection, exclusive output, sleep/wake recovery and measured Mac CPU/wakeup/latency comparisons remain roadmap work. Codec/container limits remain those documented in the repository; Linux/Windows x86-64 roadmap work on `claude` continues independently.
+Current Mac differences are explicit: native controls stay visible; seeks/open/index construction can block the UI; the default audio device and Core Audio's sample-rate conversion are used; output remains stereo. Asynchronous seek/open, output-device selection/reconnection, exclusive output, sleep/wake recovery and measured Mac CPU/wakeup/latency comparisons remain roadmap work. Codec/container limits remain those documented in the repository. The rebased branch now shares the current decoder tree across all three platforms. Mac CLI/player parity is part of the pre-video goal: queues/playlists and editing, navigation/repeat/resume, tags/chapters/cover presentation, track/rate/device selection, and asynchronous transport still need native front-end integration and checks. New shared features must include Mac validation; a successful translation build alone does not establish feature parity.
