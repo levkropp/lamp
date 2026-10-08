@@ -71,18 +71,22 @@ def ffmpeg(*args):
     run([os.environ.get('FFMPEG', 'ffmpeg'), '-hide_banner', '-loglevel', 'error', '-y', *args])
 
 
-def metadata_vorbis_encoder():
-    """Metadata fixtures only: allow FFmpeg builds without libvorbis.
+def fixture_vorbis_encoder():
+    """Allow fixture generation with FFmpeg builds without libvorbis.
 
     This changes fixture encoding, never a PCM reference decoder or tolerance.
     Select explicitly so reports can record the choice.
     """
-    name = os.environ.get('LAMP_METADATA_VORBIS_ENCODER', 'libvorbis')
+    name = os.environ.get('LAMP_FIXTURE_VORBIS_ENCODER',
+                          os.environ.get('LAMP_METADATA_VORBIS_ENCODER', 'libvorbis'))
     if name not in ('libvorbis', 'vorbis'):
-        raise Failure('LAMP_METADATA_VORBIS_ENCODER must be libvorbis or vorbis')
-    # FFmpeg's experimental encoder only accepts stereo; these suites compare
-    # metadata, so its explicit override also records the fixture channel count.
+        raise Failure('LAMP_FIXTURE_VORBIS_ENCODER must be libvorbis or vorbis')
+    # FFmpeg's experimental encoder only accepts stereo. Only suites whose
+    # fixtures permit that channel count opt into this helper.
     return ['-c:a', name] + (['-strict', '-2', '-ac', '2'] if name == 'vorbis' else [])
+
+
+metadata_vorbis_encoder = fixture_vorbis_encoder
 
 
 def write_report(name, report):

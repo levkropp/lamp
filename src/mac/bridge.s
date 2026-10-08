@@ -1,5 +1,6 @@
 // Native Apple ABI -> shared decoder ABI. One decoder instance, one owner thread.
 .include "mac.inc"
+.include "abi.inc"
 
 FN _lamp_init
     ENTER
@@ -59,6 +60,13 @@ FN _\name
     .ifc \name,op_celt_renormalize
     ins v2.s[0], v0.s[0]
     .endif
+    .ifc \name,resample_open
+    cbz x4, Lresample_native_none\@
+    ADR x9, native_resample_source
+    str x4, [x9]
+    ADR x4, mac_resample_source
+Lresample_native_none\@:
+    .endif
     XCALL \name
     mov x0, x8
     ldp q8, q9, [sp]
@@ -73,6 +81,17 @@ BRIDGE decoder_open
 BRIDGE decoder_read
 BRIDGE decoder_seek
 BRIDGE decoder_close
+
+// The public resampler bridge accepts an Apple ABI source callback. Internal
+// translated queue/chain callbacks already use the private convention.
+FN mac_resample_source
+    WIN_ENTER
+    mov x0, x3
+    mov w1, w2
+    ADR x9, native_resample_source
+    ldr x9, [x9]
+    blr x9
+    WIN_LEAVE
 
 // These leaf getters return several private-ABI registers. Give native callers
 // explicit output pointers; the generic C bridges remain single-result calls.
@@ -105,7 +124,52 @@ FN _lamp_cover_info
     LEAVE
     ret
 
+// Integer-only helpers with additional private-ABI results.
+// lamp_parse_time(text, uint64_t *milliseconds) -> 1 for a valid time.
+FN _lamp_parse_time
+    ENTER
+    mov x19, x1
+    mov x3, x0
+    ADR x9, _lamp_stack_top
+    ldr x28, [x9]
+    sub x28, x28, #32
+    XCALL parse_time
+    cset w0, hs // the private x86 carry is the inverse of ARM C
+    str x8, [x19]
+    LEAVE
+    ret
+
+// lamp_playlist_expand(paths, count, uint32_t *expanded_count) -> paths.
+FN _lamp_playlist_expand
+    ENTER
+    mov x19, x2
+    mov x3, x0
+    mov w2, w1
+    ADR x9, _lamp_stack_top
+    ldr x28, [x9]
+    sub x28, x28, #32
+    XCALL playlist_expand
+    str w2, [x19]
+    mov x0, x8
+    LEAVE
+    ret
+
+// lamp_queue_heard(frame, uint64_t *boundary) -> signed file index.
+FN _lamp_queue_heard
+    ENTER
+    mov x19, x1
+    mov x3, x0
+    ADR x9, _lamp_stack_top
+    ldr x28, [x9]
+    sub x28, x28, #32
+    XCALL queue_heard
+    str x2, [x19]
+    mov w0, w8
+    LEAVE
+    ret
+
 .data
 .p2align 3
 .globl _lamp_stack_top
 _lamp_stack_top: .quad 0
+native_resample_source: .quad 0

@@ -79,6 +79,16 @@ class Translator(a.Translator):
         super().__init__(*args)
         self.fp_stack = []
 
+    def analyze(self):
+        # Native adapters consume this public function's carry result. Its
+        # callers are outside the translated unit, invisible to Rhun's local
+        # flag liveness analysis.
+        for name in ('parse_time',):
+            target = self.target(name, 0)
+            if target is not None:
+                self.mark_exports(target, {'C'})
+        return super().analyze()
+
     def layout(self):
         # Shared GNU sources already specify their alignment. Inserting padding
         # before every .quad corrupts packed structures and table-relative offsets.

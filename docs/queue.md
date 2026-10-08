@@ -1,5 +1,7 @@
 # Playing several files
 
+The shared queue/playlist, explicit rate, start-position and track policies also apply to the native Mac CLI. Mac playback currently has Space/Q controls and `--repeat`; the navigation keys, resume, per-entry tag announcements and additional AppKit queue controls below remain Windows/Linux features. See [Mac coverage](macos.md).
+
 `lamp-cli` accepts several files and plays, checks or exports them as one gapless stream:
 
 ```sh

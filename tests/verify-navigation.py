@@ -26,19 +26,21 @@ Writes <out>/navigation-verification.json (navigation-wine-verification.json
 with --wine).
 """
 import array
+import hashlib
 import math
 import os
 from pathlib import Path
 import pty
 import select
 import signal
+import shutil
 import subprocess
 import sys
 import time
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from lamp_test import (ROOT, WINDOWS, Failure, audio_environment, decode_f32, ffmpeg, lamp_cli, main_guard, run,
-                       scratch, stats_frames, write_report)
+                       scratch, stats_frames, write_report, fixture_vorbis_encoder)
 
 WINE = '--wine' in sys.argv[1:]
 WINE_ENV = dict(os.environ, WINEPREFIX=os.environ.get('WINEPREFIX', str(Path.home() / '.wine')), WINEDEBUG='-all',
@@ -265,15 +267,21 @@ def main():
     playback = '--skip-playback' not in sys.argv[1:] and not WINDOWS
     work = scratch('navigation-wine' if WINE else 'navigation')
     checks = []
+    fixture_directory = os.environ.get('LAMP_NAVIGATION_START_FIXTURES')
+    fixture_hashes = {}
 
     # --start: exact against the whole decode.
-    sources = {'flac': ['-c:a', 'flac'], 'mp3': ['-c:a', 'libmp3lame'], 'ogg': ['-c:a', 'libvorbis'],
+    sources = {'flac': ['-c:a', 'flac'], 'mp3': ['-c:a', 'libmp3lame'], 'ogg': fixture_vorbis_encoder(),
                'opus': ['-c:a', 'libopus'], 'm4a': ['-c:a', 'aac', '-aac_pns', '0'], 'wav': ['-c:a', 'pcm_s24le'],
                'wv': ['-c:a', 'wavpack'], 'mka': ['-c:a', 'alac'], 'ac3': ['-c:a', 'ac3'], 'mp2': ['-c:a', 'mp2']}
     for n, (extension, coding) in enumerate(sources.items()):
         path = work / f'start.{extension}'
         tones = f'0.3*sin(2*PI*{220 + 37 * n}*t)*sin(2*PI*0.7*t)+0.2*sin(2*PI*{1500 + 91 * n}*t)'  # no PNS in AAC
-        ffmpeg('-f', 'lavfi', '-i', f'aevalsrc={tones}|{tones.replace("0.7", "0.9")}:s=44100:d=4.2', *coding, path)
+        if fixture_directory:
+            shutil.copyfile(Path(fixture_directory) / path.name, path)
+        else:
+            ffmpeg('-f', 'lavfi', '-i', f'aevalsrc={tones}|{tones.replace("0.7", "0.9")}:s=44100:d=4.2', *coding, path)
+        fixture_hashes[path.name] = hashlib.sha256(path.read_bytes()).hexdigest()
         whole, stats = decode(work, [path])
         if WINE and whole != linux_decode(work, path):
             raise Failure(f'{path.name}: the Windows decode differs from the Linux one')
@@ -477,9 +485,12 @@ def main():
         if not result.stdout.startswith(b'LAMP '):
             raise Failure('--resume with --check did not print the usage')
 
-    write_report('navigation-wine' if WINE else 'navigation', {'result': 'passed', 'checks': checks,
+    write_report('navigation-wine' if WINE else 'navigation', {'result': 'passed', 'vorbis_fixture_encoder': fixture_vorbis_encoder(), 'checks': checks,
+                                'start_fixture_source': fixture_directory or 'generated with local FFmpeg',
+                                'start_fixture_sha256': fixture_hashes, 'playback_checked': playback,
                                 'scope': '--start against whole decodes in ten formats, queues and option errors; '
-                                         'keys N/P, arrows, R and --repeat through the null sink.'})
+                                         + ('keys N/P, arrows, R and --repeat through the null sink.' if playback
+                                            else 'interactive playback and resume not requested.')})
     print(f'Passed {len(checks)} navigation checks.')
 
 

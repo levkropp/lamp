@@ -103,7 +103,8 @@ def build(out, release=False):
                  'CFBundleDocumentTypes':[{'CFBundleTypeName':'Audio','CFBundleTypeRole':'Viewer',
                     'LSHandlerRank':'Alternate','CFBundleTypeExtensions':['wav','w64','aiff','aif','aifc','caf','au','snd','flac','wv','ape',
                         'mp1','mp2','mp3','aac','loas','latm','ac3','eac3','gsm','ogg','oga','opus',
-                        'm4a','mp4','mov','mka','mkv','webm','ts','m2ts','mpg','mpeg','vob','avi','flv','asf']} ]}
+                        'm4a','mp4','mov','mka','mkv','webm','ts','m2ts','mpg','mpeg','vob','avi','flv','asf',
+                        'm3u','m3u8','pls']} ]}
         (contents/'Info.plist').write_bytes(plistlib.dumps(plist))
         run('codesign','--force','--sign','-',out/'LAMP.app')
     print(out/'lamp-cli')

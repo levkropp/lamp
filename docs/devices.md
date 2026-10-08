@@ -1,5 +1,7 @@
 # Output devices
 
+Device enumeration/selection and `--rate device` below currently apply to Windows and Linux. The Mac CLI supports `--rate HZ` through the shared resampler and uses the default Core Audio output; its device controls remain pending. See [Mac coverage](macos.md).
+
 `lamp-cli` plays on the system's default output unless `--device` names another one:
 
 ```sh
