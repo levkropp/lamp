@@ -202,9 +202,8 @@ cli_play:
     b.eq 3f
     cmp w9, #3
     b.eq 3f
-    cmp w9, #32
-    b.ne 2f
-    bl _lamp_pause
+    mov w0, w9
+    bl cli_key
     b 2f
 4:  ADR x9, poll_input
     mov w10, #-1 // no interactive input; keep playing to EOF
@@ -287,6 +286,7 @@ cli_interrupt:
 
 .include "cli_metadata.inc"
 .include "cli_options.inc"
+.include "cli_controls.inc"
 
 .section __TEXT,__cstring,cstring_literals
 check_opt: .asciz "--check"
@@ -296,7 +296,7 @@ tags_opt: .asciz "--tags"
 chapters_opt: .asciz "--chapters"
 cover_opt: .asciz "--cover"
 usage: .asciz "LAMP macOS ARM64\nUsage: lamp-cli [--repeat] [--start TIME] [--rate HZ] [--track N] FILE [MORE...]\n       lamp-cli --check [--start TIME] [--rate HZ] [--track N] FILE [MORE...]\n       lamp-cli --decode [--start TIME] [--rate HZ] [--track N] FILE [MORE...] NEW.f32\n       lamp-cli --tags FILE\n       lamp-cli --chapters FILE\n       lamp-cli --cover FILE NEW-IMAGE"
-playing_message: .asciz "LAMP: Core Audio playback. Space pauses/resumes; Q or Ctrl+C stops."
+playing_message: .asciz "LAMP: Core Audio playback. Space pauses/resumes; N/P next/previous; arrows seek; [/] chapters; R repeat; Q or Ctrl+C stops."
 bad_message: .asciz "LAMP: cannot open, decode or write this file."
 decode_message: .asciz "Unsupported, malformed, or inaccessible audio file. See docs/compatibility.md for codec and container limits."
 done_format: .asciz "codec=%u rate=%u channels=%u bits=%u frames=%llu decode_error=%u\n"

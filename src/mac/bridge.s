@@ -168,6 +168,32 @@ FN _lamp_queue_heard
     LEAVE
     ret
 
+// command, heard index, milliseconds, seek seconds, *start milliseconds.
+// Navigation opens a decoder, so preserve the native SIMD callee-saved bank.
+FN _lamp_queue_navigate
+    ENTER 128
+    stp q8, q9, [sp]
+    stp q10, q11, [sp, #32]
+    stp q12, q13, [sp, #64]
+    stp q14, q15, [sp, #96]
+    mov x19, x4
+    mov x5, x3
+    mov x4, x2
+    mov x2, x1
+    mov x3, x0
+    ADR x9, _lamp_stack_top
+    ldr x28, [x9]
+    sub x28, x28, #32
+    XCALL queue_navigate
+    str x2, [x19]
+    mov w0, w8
+    ldp q8, q9, [sp]
+    ldp q10, q11, [sp, #32]
+    ldp q12, q13, [sp, #64]
+    ldp q14, q15, [sp, #96]
+    LEAVE
+    ret
+
 .data
 .p2align 3
 .globl _lamp_stack_top

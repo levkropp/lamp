@@ -1,6 +1,6 @@
 # Playing several files
 
-The shared queue/playlist, explicit rate, start-position and track policies also apply to the native Mac CLI. Mac playback currently has Space/Q controls and `--repeat`; the navigation keys, resume, per-entry tag announcements and additional AppKit queue controls below remain Windows/Linux features. See [Mac coverage](macos.md).
+The shared queue/playlist, explicit rate, start-position, track and keyboard navigation policies also apply to the native Mac CLI. Resume, per-entry tag announcements and the additional graphical queue controls below remain Windows/Linux features. See [Mac coverage](macos.md).
 
 `lamp-cli` accepts several files and plays, checks or exports them as one gapless stream:
 
@@ -42,7 +42,7 @@ Options come before the files, and `--` ends them:
 - `--start TIME` takes seconds, `M:S` or `H:M:S`, the seconds with an optional fraction (`90`, `1:30`, `0:01:30.250`). The first file of a playback, `--check` or `--decode` begins there; later files begin at their start. `--check` and `--decode` read from TIME exactly, as the decoder's seek (`queue_start`, a seek then the frames before TIME read and dropped) equals continuous decoding. A start past the first file's known end gives nothing of it.
 - `--repeat` plays the list again from its first file after the last, gaplessly, until a key stops it. It applies to playback only.
 
-During console playback (Linux and Windows):
+During console playback (Linux, Windows and macOS):
 
 | Key | Action |
 | --- | --- |
@@ -67,7 +67,7 @@ During console playback (Linux and Windows):
 
 The queue notes where each file starts in its output, to the frame, so a key acts on the file being heard rather than on one the decoder already reads ahead. A key stops the stream with a command; the CLI then reopens the queue at the target (`queue_navigate`, `queue_goto`) and starts a new stream, as the Windows player restarts for its seeks. Natural transitions stay gapless; a key's transition is a new stream. Seeks keep the session rate. In a resampled file the decoder seeks a filter half-width before the target and the resampler restarts there, so the output from the target on equals continuous decoding. `--rate` sets the session rate for every file, the first included (see [device notes](devices.md#rates-and-channels)).
 
-The shared timeline retains 524,288 distinct file boundaries in 8 MiB of zero-initialized storage, twice the PCM ring's frame capacity. Normal queues write only the entries used. Empty opens at the same output frame replace the last boundary, so empty files cannot evict audible history. Lookup uses binary search over a chronological ring and 64-bit publication ordinals. A version sampled before and after lookup detects concurrent overwrite and retries, keeping a record’s start and index coherent. Both consoles use the same sampled position for the lookup and elapsed time. Windows relative seeks carry that paired file index into the restart; timeline clicks use the displayed file index. Seeks preserve pause. If an unusually large output backlog exceeds retained history, lookup reports an unknown file; relative navigation ignores that position and resume does not save it.
+The shared timeline retains 524,288 distinct file boundaries in 8 MiB of zero-initialized storage, twice the PCM ring's frame capacity. Normal queues write only the entries used. Empty opens at the same output frame replace the last boundary, so empty files cannot evict audible history. Lookup uses binary search over a chronological ring and 64-bit publication ordinals. A version sampled before and after lookup detects concurrent overwrite and retries, keeping a record’s start and index coherent. All three consoles use the same sampled position for the lookup and elapsed time. Windows relative seeks carry that paired file index into the restart; timeline clicks use the displayed file index. Seeks preserve pause. If an unusually large output backlog exceeds retained history, lookup reports an unknown file; relative navigation ignores that position and resume does not save it.
 
 ## The Windows player
 

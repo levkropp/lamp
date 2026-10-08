@@ -10,6 +10,15 @@ static pthread_mutex_t lock=PTHREAD_MUTEX_INITIALIZER;
 static unsigned char *pcm;
 static size_t used,capacity;
 static int failed;
+// Optional subprocess capture for real terminal-key tests. Only the test
+// observer reads this variable; exported artifacts never contain this code.
+__attribute__((destructor)) static void save_capture(void) {
+    const char *path=getenv("LAMP_TEST_PCM_OUTPUT");if(!path)return;
+    FILE *out=fopen(path,"wbx");if(!out)return;
+    pthread_mutex_lock(&lock);
+    if(!failed)fwrite(pcm,1,used,out);
+    pthread_mutex_unlock(&lock);fclose(out);
+}
 void probe_reset(void) {pthread_mutex_lock(&lock);used=0;failed=0;pthread_mutex_unlock(&lock);}
 size_t probe_bytes(void) {pthread_mutex_lock(&lock);size_t n=used;pthread_mutex_unlock(&lock);return n;}
 int probe_equal(const void *reference,size_t bytes,int prefix) {

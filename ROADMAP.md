@@ -34,7 +34,8 @@ The public repository includes build/test tooling, a Windows prerelease and a we
 - [x] Current GNU shared decoder tree on ARM64: native layout/seek suites, translation instruction checks, WavPack references and 594 cross-architecture fixtures; coverage is recorded in the Mac guide.
 - [x] Mac CLI tags, chapter listing and exclusive cover export; native metadata suites and mutation checks.
 - [x] Mac shared queues/playlists, gapless Core Audio buffers, CLI repeat/start/rate/track options, and paused seeks in the heard entry; native queue, filter, track and submitted-PCM checks.
-- [ ] Remaining Mac CLI/player parity: interactive navigation/repeat/resume, AppKit multi-file/queue editing, metadata/chapters/cover and track/rate controls, and output-device selection.
+- [x] Mac CLI next/previous, relative/chapter seeks and repeat toggling, preserving pause; real terminal keys and submitted PCM verified.
+- [ ] Remaining Mac CLI/player parity: resume, AppKit multi-file/queue editing and navigation/repeat, metadata/chapters/cover and track/rate controls, and output-device selection.
 - [ ] Complete manual Open/drop/focus, fullscreen and Retina/multiple-display testing.
 - [ ] Asynchronous seeking, output-device selection/reconnection and Mac performance measurements.
 - [ ] Developer ID signing/notarization and published macOS releases.
