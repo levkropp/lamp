@@ -1,0 +1,1085 @@
+{
+  "result": "passed",
+  "platform": "macOS-26.4.1-arm64-arm-64bit-Mach-O",
+  "base_commit": "d0d60ec",
+  "scope": "Native Mac transport navigation and CLI keys. AppKit navigation/repeat, multi-file selection and resume remain pending. Shared queue algorithms and other platforms are unchanged.",
+  "release_navigation": {
+    "result": "passed",
+    "platform": "macOS-26.4.1-arm64-arm-64bit-Mach-O",
+    "backend": {
+      "result": "passed",
+      "scope": "real Core Audio next/previous, restart threshold, repeat wrap and late toggle, exact resampled relative/chapter seeks, pause retention and navigation EOF"
+    },
+    "terminal": [
+      {
+        "test": "next-previous",
+        "result": "exact submitted PCM",
+        "frames": 6144,
+        "terminal_restored": true
+      },
+      {
+        "test": "previous-restart",
+        "result": "exact submitted PCM",
+        "frames": 6144,
+        "terminal_restored": true
+      },
+      {
+        "test": "seek-right",
+        "result": "exact submitted PCM",
+        "frames": 6144,
+        "terminal_restored": true
+      },
+      {
+        "test": "seek-left",
+        "result": "exact submitted PCM",
+        "frames": 6144,
+        "terminal_restored": true
+      },
+      {
+        "test": "seek-up",
+        "result": "exact submitted PCM",
+        "frames": 2400,
+        "terminal_restored": true
+      },
+      {
+        "test": "seek-down",
+        "result": "exact submitted PCM",
+        "frames": 6144,
+        "terminal_restored": true
+      },
+      {
+        "test": "home",
+        "result": "exact submitted PCM",
+        "frames": 6144,
+        "terminal_restored": true
+      },
+      {
+        "test": "chapters",
+        "result": "exact submitted PCM",
+        "frames": 6144,
+        "terminal_restored": true
+      },
+      {
+        "test": "next-at-end",
+        "result": "exact submitted PCM",
+        "frames": 0,
+        "terminal_restored": true
+      },
+      {
+        "test": "late-repeat",
+        "result": "exact submitted PCM",
+        "frames": 19200,
+        "terminal_restored": true
+      }
+    ],
+    "binary_sha256": "726e08fd324894958b028294112607a5f058a0b033e0fb0a855eaf2986ca8f12",
+    "library_sha256": "5b99e9d3425d998b0cceea188765fa6da2f077bfd48cdd403620eb0151f2fcc9",
+    "scope": "Real default Core Audio and pseudo-terminal keys. Observer compares submitted float PCM; it does not measure physical output or transition latency."
+  },
+  "release_queue_regression": {
+    "result": "passed",
+    "checks": 7,
+    "scope": "real Core Audio; exact submitted queue PCM, paused heard-file and resampled seeks, EOF, borrowed-list replacement, error drain, gapless repeat",
+    "platform": "macOS-26.4.1-arm64-arm-64bit-Mach-O",
+    "binary_sha256": "726e08fd324894958b028294112607a5f058a0b033e0fb0a855eaf2986ca8f12",
+    "library_sha256": "5b99e9d3425d998b0cceea188765fa6da2f077bfd48cdd403620eb0151f2fcc9"
+  },
+  "release_baseline": {
+    "result": "passed",
+    "platform": "macOS-26.4.1-arm64-arm-64bit-Mach-O",
+    "architecture": "arm64",
+    "runtime": {
+      "architecture": "arm64",
+      "system_imports_only": true,
+      "bundle_signature": "verified ad-hoc",
+      "minimum_macos": "12.0",
+      "binaries": [
+        {
+          "file": "lamp",
+          "bytes": 675240,
+          "sha256": "822b0d8681d1b27df4fb9ee183aae3019a97c192dc02ee930af70abeceffb424",
+          "imports": [
+            "/System/Library/Frameworks/AudioToolbox.framework/Versions/A/AudioToolbox",
+            "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit",
+            "/usr/lib/libSystem.B.dylib",
+            "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation",
+            "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation",
+            "/usr/lib/libobjc.A.dylib"
+          ]
+        },
+        {
+          "file": "lamp-cli",
+          "bytes": 674352,
+          "sha256": "726e08fd324894958b028294112607a5f058a0b033e0fb0a855eaf2986ca8f12",
+          "imports": [
+            "/System/Library/Frameworks/AudioToolbox.framework/Versions/A/AudioToolbox",
+            "/usr/lib/libSystem.B.dylib"
+          ]
+        }
+      ]
+    },
+    "decoder": {
+      "files": [
+        {
+          "file": "tone.aiff",
+          "sha256": "41b68536a701084ec4483420cb75f17234f693c09dc3f43e2aef510ce33ecee8",
+          "rate": 48000,
+          "channels": 2,
+          "frames": 12000,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "tone.flac",
+          "sha256": "733a88b19ccdad9cf6e700f969987c68398114ddad780b15e540284728adb444",
+          "rate": 48000,
+          "channels": 2,
+          "frames": 12000,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "tone.mp3",
+          "sha256": "44176cfe4881e20abf57839f885275c011f3f606bbfc4b09b9945476e0975008",
+          "rate": 48000,
+          "channels": 2,
+          "frames": 12000,
+          "peak_error": 1.564621925354004e-07,
+          "tolerance": 2e-05,
+          "snr_db": 128.94829808700254
+        },
+        {
+          "file": "tone.ogg",
+          "sha256": "e2f69b537d63dc67ef253e0ad7b33216dc9d84f191299b6328e832f3f88f3155",
+          "rate": 48000,
+          "channels": 2,
+          "frames": 12000,
+          "peak_error": 2.9802322387695312e-08,
+          "tolerance": 2e-06,
+          "snr_db": 138.01557109889674
+        },
+        {
+          "file": "tone.opus",
+          "sha256": "1d6de85cc220ba52f5a6e154477896a95f7b4603536e7f79a0a75eaad2a83690",
+          "rate": 48000,
+          "channels": 2,
+          "frames": 12000,
+          "peak_error": 1.6033649444580078e-05,
+          "tolerance": 2e-05,
+          "snr_db": 77.03047735104575
+        },
+        {
+          "file": "tone.wav",
+          "sha256": "6a3f467fe95967eb6aea2145db808df86c8b6235b39cf79ae9dcd7af625b78fd",
+          "rate": 48000,
+          "channels": 2,
+          "frames": 12000,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "8000-1-pcm_s16le.wav",
+          "sha256": "e9eb8cc24b92810ca2a512e31b19ef18d6c3075009002a7bc853ac948d9d9014",
+          "rate": 8000,
+          "channels": 1,
+          "frames": 2960,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "8000-1-pcm_s24le.wav",
+          "sha256": "4dab7c82e9341ed1a1b0befd78177bfb74e5b88a7e4da9530a89d52209171e5e",
+          "rate": 8000,
+          "channels": 1,
+          "frames": 2960,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "8000-1-pcm_s32le.wav",
+          "sha256": "22dd8d03c1125d4d92cb4b20129c1b44a0029b2d3dfe50ba5074bb17cba8272b",
+          "rate": 8000,
+          "channels": 1,
+          "frames": 2960,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "8000-1-pcm_f32le.wav",
+          "sha256": "40f29e721b2a2f06b73cc46e153b41dc91e58e4e76d378591870332f448a3c25",
+          "rate": 8000,
+          "channels": 1,
+          "frames": 2960,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "8000-1-pcm_f64le.wav",
+          "sha256": "761b8d5c026151df53672e222d9ed0d6a76fb6f0d2b677260b9998553a70edf2",
+          "rate": 8000,
+          "channels": 1,
+          "frames": 2960,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "8000-1-pcm_s24be.aiff",
+          "sha256": "a51bb9e77a3c8d26f6fff2e68497ae7e5327d2f3cf0a24c0a6ef3fc9109acd96",
+          "rate": 8000,
+          "channels": 1,
+          "frames": 2960,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "8000-1-flac.flac",
+          "sha256": "aa1c1f1ef70fab0b0e152ffc256ab67c3ddd16f7eaae5b56dc2368e922a5f696",
+          "rate": 8000,
+          "channels": 1,
+          "frames": 2960,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "8000-1-libmp3lame.mp3",
+          "sha256": "66aab02a7ca8fe3ef162cfc27103dcb18fec5101b5627b7725af19f5c1c4de9d",
+          "rate": 8000,
+          "channels": 1,
+          "frames": 2960,
+          "peak_error": 2.1606683731079102e-07,
+          "tolerance": 2e-05,
+          "snr_db": 125.90365509559417
+        },
+        {
+          "file": "8000-1-libvorbis.ogg",
+          "sha256": "fce931997ea5a0b9f49073b31e5a5d09647a345996b0eb9704cd5b860afd1666",
+          "rate": 8000,
+          "channels": 1,
+          "frames": 2960,
+          "peak_error": 4.470348358154297e-08,
+          "tolerance": 2e-06,
+          "snr_db": 140.20621235086767
+        },
+        {
+          "file": "8000-1-libopus.opus",
+          "sha256": "e9681dc5fc9051f100b52391ee6f94b8c85fd3b4eff139a946ddab9fab1318da",
+          "rate": 48000,
+          "channels": 1,
+          "frames": 17760,
+          "peak_error": 1.6629695892333984e-05,
+          "tolerance": 2e-05,
+          "snr_db": 80.04076607346076
+        },
+        {
+          "file": "8000-2-pcm_s16le.wav",
+          "sha256": "33ed47d1bc913cdeb00face881df4dd6fa6729d46c61244f0ca8fa01315bede0",
+          "rate": 8000,
+          "channels": 2,
+          "frames": 2960,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "8000-2-pcm_s24le.wav",
+          "sha256": "346f50e090b535bb3610121744b7705e583c644daaa4c4bfb29ecef4061a658b",
+          "rate": 8000,
+          "channels": 2,
+          "frames": 2960,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "8000-2-pcm_s32le.wav",
+          "sha256": "5dc50b0fb50c39b539b0471e74ff1f1a09a2099dd3e30781938fc47d1735e843",
+          "rate": 8000,
+          "channels": 2,
+          "frames": 2960,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "8000-2-pcm_f32le.wav",
+          "sha256": "54123d54808ba59e93e52ab33bee6ef62ef244f23148a671ec4f770ac33f2471",
+          "rate": 8000,
+          "channels": 2,
+          "frames": 2960,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "8000-2-pcm_f64le.wav",
+          "sha256": "2c5ed2689117c87978cb862b3485a505f266845e6d545b3cbdf97ec49f5e9792",
+          "rate": 8000,
+          "channels": 2,
+          "frames": 2960,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "8000-2-pcm_s24be.aiff",
+          "sha256": "c0c59749986bb8879247090efd0926b198793db91f859aff7b846ca9b812f115",
+          "rate": 8000,
+          "channels": 2,
+          "frames": 2960,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "8000-2-flac.flac",
+          "sha256": "67d071c1c8440a2954ea506d9f0708129fbe5e848c93ae08a4bb879e3f8e04b1",
+          "rate": 8000,
+          "channels": 2,
+          "frames": 2960,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "8000-2-libmp3lame.mp3",
+          "sha256": "61630f3136979e8e92b476980d692498690ec77329f69367546151eaf9b0cbc2",
+          "rate": 8000,
+          "channels": 2,
+          "frames": 2960,
+          "peak_error": 1.7508864402770996e-07,
+          "tolerance": 2e-05,
+          "snr_db": 124.97775218240955
+        },
+        {
+          "file": "8000-2-libvorbis.ogg",
+          "sha256": "318cd93e4c2a89714c52f35a33f2f3b814202e075b04f11952f42667fdc3f9a3",
+          "rate": 8000,
+          "channels": 2,
+          "frames": 2960,
+          "peak_error": 4.470348358154297e-08,
+          "tolerance": 2e-06,
+          "snr_db": 139.39109555170492
+        },
+        {
+          "file": "8000-2-libopus.opus",
+          "sha256": "9e8313885a54fd7b4e53da7ce510803c7826dd29bfdb5985c74499348d153f4b",
+          "rate": 48000,
+          "channels": 2,
+          "frames": 17760,
+          "peak_error": 1.6070902347564697e-05,
+          "tolerance": 2e-05,
+          "snr_db": 76.99260957026644
+        },
+        {
+          "file": "44100-1-pcm_s16le.wav",
+          "sha256": "b34635574f0e2b514cb9c44abddf79eebd240434bff81691fb72cc9e77cbfe77",
+          "rate": 44100,
+          "channels": 1,
+          "frames": 16317,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "44100-1-pcm_s24le.wav",
+          "sha256": "3f1f1c096d0920d4ff2b5d3cc536d376e108050fde9be51dce8e5456b66dcb05",
+          "rate": 44100,
+          "channels": 1,
+          "frames": 16317,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "44100-1-pcm_s32le.wav",
+          "sha256": "5d964a2e1bc394d1b8240909070714b81e11d00095aa116b0bec8c3e6952bd8e",
+          "rate": 44100,
+          "channels": 1,
+          "frames": 16317,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "44100-1-pcm_f32le.wav",
+          "sha256": "32e42f025e137c5430f11e74a8321fbde2abaf8833fdd451d22f2826aeb71075",
+          "rate": 44100,
+          "channels": 1,
+          "frames": 16317,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "44100-1-pcm_f64le.wav",
+          "sha256": "0505cd2d4064d32d4a495a66127611dce09763da9282e0bfbcc9db26333e70c3",
+          "rate": 44100,
+          "channels": 1,
+          "frames": 16317,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "44100-1-pcm_s24be.aiff",
+          "sha256": "3c1a153e4c8f81e3e5c5f75bbdbb3773ee2e2757039d620dd99be75c8f41a2b5",
+          "rate": 44100,
+          "channels": 1,
+          "frames": 16317,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "44100-1-flac.flac",
+          "sha256": "fcaa5fc6b51630e3d690774ec1252132d69b0df771bac0666c8fa58dccff6d5f",
+          "rate": 44100,
+          "channels": 1,
+          "frames": 16317,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "44100-1-libmp3lame.mp3",
+          "sha256": "ba6a4224947e3c65f641708be1ddd1e7b8a34aa737e25537d4ca2a6581cf54b0",
+          "rate": 44100,
+          "channels": 1,
+          "frames": 16317,
+          "peak_error": 2.1420419216156006e-07,
+          "tolerance": 2e-05,
+          "snr_db": 128.6036721318386
+        },
+        {
+          "file": "44100-1-libvorbis.ogg",
+          "sha256": "07727cd39d2dcfe7059cb774b2112c5aa079d6b5528973b6332cf8bdab919418",
+          "rate": 44100,
+          "channels": 1,
+          "frames": 16317,
+          "peak_error": 6.705522537231445e-08,
+          "tolerance": 2e-06,
+          "snr_db": 137.179753738006
+        },
+        {
+          "file": "44100-2-pcm_s16le.wav",
+          "sha256": "14a199c09cddd4aaf91d91974b79ef85cb68c45f60c4d16220ba359eaa443427",
+          "rate": 44100,
+          "channels": 2,
+          "frames": 16317,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "44100-2-pcm_s24le.wav",
+          "sha256": "151defdeed1d16c48fe0a5b559610e4bbce3f4ddc367f6723a69340d90cc04bf",
+          "rate": 44100,
+          "channels": 2,
+          "frames": 16317,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "44100-2-pcm_s32le.wav",
+          "sha256": "3492a3be72353a260e651afcca004cc9c5d7626e59740d8ecd1b8c46e6f2eb38",
+          "rate": 44100,
+          "channels": 2,
+          "frames": 16317,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "44100-2-pcm_f32le.wav",
+          "sha256": "dbbdad0df725315995f7b3f4148181f2d92d25ea94e14999cc08c2122307a834",
+          "rate": 44100,
+          "channels": 2,
+          "frames": 16317,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "44100-2-pcm_f64le.wav",
+          "sha256": "395570016d9b3ffa92aa499cf16488a68aebe435428504f5a244fe4cd197d7b1",
+          "rate": 44100,
+          "channels": 2,
+          "frames": 16317,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "44100-2-pcm_s24be.aiff",
+          "sha256": "b7204fa33f1fd8c00cd40fee43bad8f056e71000300feb4eef63fe3a5cc399bc",
+          "rate": 44100,
+          "channels": 2,
+          "frames": 16317,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "44100-2-flac.flac",
+          "sha256": "9f527eebfe3cd89d21d9fd68669955673b9b568a2cda41a81266552a10432170",
+          "rate": 44100,
+          "channels": 2,
+          "frames": 16317,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "44100-2-libmp3lame.mp3",
+          "sha256": "0c66c11ab9d27d46574352d0ce7fe996201fc773ca793640ed796dfb6e1e371e",
+          "rate": 44100,
+          "channels": 2,
+          "frames": 16317,
+          "peak_error": 1.7881393432617188e-07,
+          "tolerance": 2e-05,
+          "snr_db": 128.68142177241796
+        },
+        {
+          "file": "44100-2-libvorbis.ogg",
+          "sha256": "03cd27bc206f6cc1d41732a869c920738ded512eb3ed6673e8188d9c6c745d8e",
+          "rate": 44100,
+          "channels": 2,
+          "frames": 16317,
+          "peak_error": 6.705522537231445e-08,
+          "tolerance": 2e-06,
+          "snr_db": 137.67514038419841
+        },
+        {
+          "file": "48000-1-pcm_s16le.wav",
+          "sha256": "e19b689a4e50b550e62fa68f2191dd58a13766c8dc2aadcb05828ba6ba5c7f99",
+          "rate": 48000,
+          "channels": 1,
+          "frames": 17760,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "48000-1-pcm_s24le.wav",
+          "sha256": "26a5a5943d0b5981cc2a4ef4f965e999465afb5b43ef7809bcf1c0ac83cd33e4",
+          "rate": 48000,
+          "channels": 1,
+          "frames": 17760,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "48000-1-pcm_s32le.wav",
+          "sha256": "11ccc0b775e34cd0c4140a880777674cef2b17babbd31df0f5c1c912670800d3",
+          "rate": 48000,
+          "channels": 1,
+          "frames": 17760,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "48000-1-pcm_f32le.wav",
+          "sha256": "b8390a55b16b4dd2e4a030e1e0efe082f180344de29a458b5f9ee29ae60b4dde",
+          "rate": 48000,
+          "channels": 1,
+          "frames": 17760,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "48000-1-pcm_f64le.wav",
+          "sha256": "bfa506dd0232a1efc8947141ca4de8afb07072df51bbc6c1165f7afaea770a13",
+          "rate": 48000,
+          "channels": 1,
+          "frames": 17760,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "48000-1-pcm_s24be.aiff",
+          "sha256": "e9195190b7e15df3f9ed3b0e56838be2f2f412a3d1260e3ba8c91265bdbb60b1",
+          "rate": 48000,
+          "channels": 1,
+          "frames": 17760,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "48000-1-flac.flac",
+          "sha256": "a53925227f92170be0404f2745f7a09e120f19569b14f11e873c78494c08d176",
+          "rate": 48000,
+          "channels": 1,
+          "frames": 17760,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "48000-1-libmp3lame.mp3",
+          "sha256": "e9dd3cd8d07488d17720a2d7cd026fb019c1be94bf355f8338b1385242e2ecb4",
+          "rate": 48000,
+          "channels": 1,
+          "frames": 17760,
+          "peak_error": 1.4901161193847656e-07,
+          "tolerance": 2e-05,
+          "snr_db": 130.50044520172332
+        },
+        {
+          "file": "48000-1-libvorbis.ogg",
+          "sha256": "6c39edd975dfd9cc225ab5e14e1cd6f51337d4e8116af5331203eadb02e1703f",
+          "rate": 48000,
+          "channels": 1,
+          "frames": 17760,
+          "peak_error": 5.960464477539063e-08,
+          "tolerance": 2e-06,
+          "snr_db": 137.68739417587443
+        },
+        {
+          "file": "48000-1-libopus.opus",
+          "sha256": "5842c1a6c904f50648983c668c6d5f0328f8eec815430d1120d73f9d3a5b7361",
+          "rate": 48000,
+          "channels": 1,
+          "frames": 17760,
+          "peak_error": 1.6629695892333984e-05,
+          "tolerance": 2e-05,
+          "snr_db": 80.02627955434119
+        },
+        {
+          "file": "48000-2-pcm_s16le.wav",
+          "sha256": "4c06e1cba04812207e6deb4eaf2c696e55579576df3b548597a217b298ed96e4",
+          "rate": 48000,
+          "channels": 2,
+          "frames": 17760,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "48000-2-pcm_s24le.wav",
+          "sha256": "2ccb15a7b9bcfbba4f319d5a86ba30c0e21f32572c3dea06e6ac99f3855a5762",
+          "rate": 48000,
+          "channels": 2,
+          "frames": 17760,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "48000-2-pcm_s32le.wav",
+          "sha256": "8948c3213f418c32a93a81387ae85584ff69159c71fe4987bc302e9d0452ba01",
+          "rate": 48000,
+          "channels": 2,
+          "frames": 17760,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "48000-2-pcm_f32le.wav",
+          "sha256": "da8466b1220176c35a76516aab3b739e7c19b06021ec0f281fee82187b5231f4",
+          "rate": 48000,
+          "channels": 2,
+          "frames": 17760,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "48000-2-pcm_f64le.wav",
+          "sha256": "9f02041bfa39e5044d9b40a521926a3ef2ff032b6b2783392ec94886a92eef0f",
+          "rate": 48000,
+          "channels": 2,
+          "frames": 17760,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "48000-2-pcm_s24be.aiff",
+          "sha256": "a9ec395fc765b5c01cc3aaf98f079686eb027c12d34df83a40ca9742e0d50065",
+          "rate": 48000,
+          "channels": 2,
+          "frames": 17760,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "48000-2-flac.flac",
+          "sha256": "e480442928564b5daaf46f969d68b71e004665b853b94bc11603bf2018401f58",
+          "rate": 48000,
+          "channels": 2,
+          "frames": 17760,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "48000-2-libmp3lame.mp3",
+          "sha256": "a652eb8d408176630b75c73412b36e26c6eb302fc7344a3af4aa6124fe270da5",
+          "rate": 48000,
+          "channels": 2,
+          "frames": 17760,
+          "peak_error": 1.4901161193847656e-07,
+          "tolerance": 2e-05,
+          "snr_db": 129.91308727142604
+        },
+        {
+          "file": "48000-2-libvorbis.ogg",
+          "sha256": "14637777c4f8144846f8aa83aa43b746fb4c9049b8c5d67d8ff18e41f1a7daf1",
+          "rate": 48000,
+          "channels": 2,
+          "frames": 17760,
+          "peak_error": 5.960464477539063e-08,
+          "tolerance": 2e-06,
+          "snr_db": 137.7569899958486
+        },
+        {
+          "file": "48000-2-libopus.opus",
+          "sha256": "7da12c47f69f1ee23c588c877d9f5f3543883338ebfea064f70a1c171459f61d",
+          "rate": 48000,
+          "channels": 2,
+          "frames": 17760,
+          "peak_error": 1.615285873413086e-05,
+          "tolerance": 2e-05,
+          "snr_db": 77.01441890402131
+        },
+        {
+          "file": "96000-1-pcm_s16le.wav",
+          "sha256": "933c7f0fb1a7d2aa13c72c46777df82ca0dd48999726b674cd9dd77f0683c85a",
+          "rate": 96000,
+          "channels": 1,
+          "frames": 35520,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "96000-1-pcm_s24le.wav",
+          "sha256": "718195adaceecb7b07fde48f15fd5eecb559523e1b15f37d20c5b7b21285dfa0",
+          "rate": 96000,
+          "channels": 1,
+          "frames": 35520,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "96000-1-pcm_s32le.wav",
+          "sha256": "a183626cb486198e47e0add053160879f519f04c3f14c0a53fbfb377c45b6a15",
+          "rate": 96000,
+          "channels": 1,
+          "frames": 35520,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "96000-1-pcm_f32le.wav",
+          "sha256": "28b3dec0111d54c2939f098567cc392314de20f99cf5c04720173375f5ac833e",
+          "rate": 96000,
+          "channels": 1,
+          "frames": 35520,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "96000-1-pcm_f64le.wav",
+          "sha256": "df5b87155a841b617b5a9bf0e025cb0d31edc9313cabd89d3ad6f3911833eb2d",
+          "rate": 96000,
+          "channels": 1,
+          "frames": 35520,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "96000-1-pcm_s24be.aiff",
+          "sha256": "d3cd665a2e8e3f9c178b566d2f1cde2d8052a3d5d594786a7ec26506a210b2ac",
+          "rate": 96000,
+          "channels": 1,
+          "frames": 35520,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "96000-1-flac.flac",
+          "sha256": "3ca9dd9eda8ceda6e1c9ab517f25a2fb132fdfbe1cec78f7d8c950296db0fd98",
+          "rate": 96000,
+          "channels": 1,
+          "frames": 35520,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "96000-1-libvorbis.ogg",
+          "sha256": "d4b079429410470ef136f3f3d4654c4eca6185f7a0cf795b761de51ae4526218",
+          "rate": 96000,
+          "channels": 1,
+          "frames": 35520,
+          "peak_error": 7.450580596923828e-08,
+          "tolerance": 2e-06,
+          "snr_db": 137.3102374573586
+        },
+        {
+          "file": "96000-2-pcm_s16le.wav",
+          "sha256": "797eb47a8a51340ce39fe16082757cf97376ff80686492f123286b27e1ae68cf",
+          "rate": 96000,
+          "channels": 2,
+          "frames": 35520,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "96000-2-pcm_s24le.wav",
+          "sha256": "5b5a0916619876a19982939a4493bcb6b37b1c8c6979be1a8cae82266f8c8244",
+          "rate": 96000,
+          "channels": 2,
+          "frames": 35520,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "96000-2-pcm_s32le.wav",
+          "sha256": "6623d3c2434a12fe268173490ff63ce9d13b69ec2759e7d000bac6012d568d36",
+          "rate": 96000,
+          "channels": 2,
+          "frames": 35520,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "96000-2-pcm_f32le.wav",
+          "sha256": "6d4c10d82ed17198ca85a547340ef0ab605c9d0b9c8029cda8b975c54deeaaa2",
+          "rate": 96000,
+          "channels": 2,
+          "frames": 35520,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "96000-2-pcm_f64le.wav",
+          "sha256": "6d72dbb775e2b662d23ea10e010ff407d08e11d05755a3bfae1e05c236cc4b20",
+          "rate": 96000,
+          "channels": 2,
+          "frames": 35520,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "96000-2-pcm_s24be.aiff",
+          "sha256": "d6796865665295c1e1daf54c19a23cd19461ded0b561a1d73edcd23ec91bd593",
+          "rate": 96000,
+          "channels": 2,
+          "frames": 35520,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "96000-2-flac.flac",
+          "sha256": "2c675b46383f3144e22edea678d6561d0ebde442dd1a8c497621e8d4516500f0",
+          "rate": 96000,
+          "channels": 2,
+          "frames": 35520,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "96000-2-libvorbis.ogg",
+          "sha256": "9649f64fd7d2ad192b5ed9c006f36d748e83a4b9fb8205b2767d84c12b0982be",
+          "rate": 96000,
+          "channels": 2,
+          "frames": 35520,
+          "peak_error": 7.450580596923828e-08,
+          "tolerance": 2e-06,
+          "snr_db": 137.30563370996228
+        }
+      ],
+      "seek_checks": 375,
+      "mutations_without_crash_or_hang": 192,
+      "unicode_paths": true,
+      "existing_export_preserved": true,
+      "ffmpeg": "ffmpeg version 9.0.1 Copyright (c) 2000-2026 the FFmpeg developers",
+      "opus_reference": "FFmpeg libopus decoder, selected explicitly",
+      "vorbis_reference_scope": "Hash-verified Xiph 1.3.7, full PCM including terminal granule"
+    },
+    "audio": [
+      {
+        "format": "wav",
+        "stats": "Core Audio: 3 open/pause/paused-seek/resume/EOF/stop cycles, natural EOF and failed-open recovery passed."
+      },
+      {
+        "format": "aiff",
+        "stats": "Core Audio: 3 open/pause/paused-seek/resume/EOF/stop cycles, natural EOF and failed-open recovery passed."
+      },
+      {
+        "format": "flac",
+        "stats": "Core Audio: 3 open/pause/paused-seek/resume/EOF/stop cycles, natural EOF and failed-open recovery passed."
+      },
+      {
+        "format": "mp3",
+        "stats": "Core Audio: 3 open/pause/paused-seek/resume/EOF/stop cycles, natural EOF and failed-open recovery passed."
+      },
+      {
+        "format": "ogg",
+        "stats": "Core Audio: 3 open/pause/paused-seek/resume/EOF/stop cycles, natural EOF and failed-open recovery passed."
+      },
+      {
+        "format": "opus",
+        "stats": "Core Audio: 3 open/pause/paused-seek/resume/EOF/stop cycles, natural EOF and failed-open recovery passed."
+      }
+    ],
+    "terminal": [
+      {
+        "stop": "q",
+        "pause_past_duration": true,
+        "terminal_restored": true,
+        "excluded_kernel_state": "Darwin PENDIN; all configuration/control fields checked"
+      },
+      {
+        "stop": "sigint",
+        "pause_past_duration": true,
+        "terminal_restored": true,
+        "excluded_kernel_state": "Darwin PENDIN; all configuration/control fields checked"
+      }
+    ],
+    "audio_empty": "Core Audio: zero-frame open/pause/seek/stop passed.",
+    "ui": {
+      "launch_playback_timer_and_exit": "passed",
+      "desktop_interactions": "Open dialog, Finder drops and Retina interaction need manual verification"
+    }
+  },
+  "debug_navigation": {
+    "result": "passed",
+    "platform": "macOS-26.4.1-arm64-arm-64bit-Mach-O",
+    "backend": {
+      "result": "passed",
+      "scope": "real Core Audio next/previous, restart threshold, repeat wrap and late toggle, exact resampled relative/chapter seeks, pause retention and navigation EOF"
+    },
+    "terminal": [
+      {
+        "test": "next-previous",
+        "result": "exact submitted PCM",
+        "frames": 6144,
+        "terminal_restored": true
+      },
+      {
+        "test": "previous-restart",
+        "result": "exact submitted PCM",
+        "frames": 6144,
+        "terminal_restored": true
+      },
+      {
+        "test": "seek-right",
+        "result": "exact submitted PCM",
+        "frames": 6144,
+        "terminal_restored": true
+      },
+      {
+        "test": "seek-left",
+        "result": "exact submitted PCM",
+        "frames": 6144,
+        "terminal_restored": true
+      },
+      {
+        "test": "seek-up",
+        "result": "exact submitted PCM",
+        "frames": 2400,
+        "terminal_restored": true
+      },
+      {
+        "test": "seek-down",
+        "result": "exact submitted PCM",
+        "frames": 6144,
+        "terminal_restored": true
+      },
+      {
+        "test": "home",
+        "result": "exact submitted PCM",
+        "frames": 6144,
+        "terminal_restored": true
+      },
+      {
+        "test": "chapters",
+        "result": "exact submitted PCM",
+        "frames": 6144,
+        "terminal_restored": true
+      },
+      {
+        "test": "next-at-end",
+        "result": "exact submitted PCM",
+        "frames": 0,
+        "terminal_restored": true
+      },
+      {
+        "test": "late-repeat",
+        "result": "exact submitted PCM",
+        "frames": 19200,
+        "terminal_restored": true
+      }
+    ],
+    "binary_sha256": "a3152adc500471aed632fce0760e4e39ec50dd70ec42464a607dad7009f41cb6",
+    "library_sha256": "d123c8322ec0a4199f1ea4d5ffffcb4c7b6f23c0f58f9914893e571926cbb28a",
+    "scope": "Real default Core Audio and pseudo-terminal keys. Observer compares submitted float PCM; it does not measure physical output or transition latency."
+  },
+  "debug_queue_regression": {
+    "result": "passed",
+    "checks": 7,
+    "scope": "real Core Audio; exact submitted queue PCM, paused heard-file and resampled seeks, EOF, borrowed-list replacement, error drain, gapless repeat",
+    "platform": "macOS-26.4.1-arm64-arm-64bit-Mach-O",
+    "binary_sha256": "a3152adc500471aed632fce0760e4e39ec50dd70ec42464a607dad7009f41cb6",
+    "library_sha256": "d123c8322ec0a4199f1ea4d5ffffcb4c7b6f23c0f58f9914893e571926cbb28a"
+  },
+  "package": {
+    "file": "build/packages/LAMP-0.4.0-dev-macOS-arm64.zip",
+    "sha256": "1330577894d760187b5945a26e255f79ae703224c629635f11ae1b6d02c49cb7",
+    "signature": "verified ad-hoc; not notarized or published"
+  },
+  "source_sha256": {
+    "src/chapters.inc": "d1c07f752c20f3772c737d2959e3a94525d582efb0807a8d9921cd234db2dc59",
+    "src/mac/abi.inc": "9980ab2ab3f6672a9d7a77e62a820497d502b5c440f919830e0ca13ad68b9c0a",
+    "src/mac/audio.s": "8b7616801aa318ee25f5eb2147bd137794287c4e562cb81b37b37b96dbc10baf",
+    "src/mac/bridge.s": "8e59639b16376079fed664633b54101b7e7bf57e1da92d7388d1a8d4b9183a53",
+    "src/mac/cli.s": "319f75a28e3c4baa510ad8380c5e172aeeece17ec904800b32a9cab005257194",
+    "src/mac/cli_controls.inc": "4e1b2501c4f54596209de6aa95cc07119b11d3196592e1a0a8fe758b60a52cf3",
+    "src/mac/cli_metadata.inc": "92cbbe3ef04f395403388ef3b18d2e2d68322fd4b11e85a4a563947c2c3cefe4",
+    "src/mac/cli_options.inc": "43db5a731f712d0caf366659f812bc0d5cfb00aa5f72599f2b4d522758e11f09",
+    "src/mac/mac.inc": "77fcb466297d9f53a8bc2214086b660a1ca1c0016a3240d1dbe6e50100f4202d",
+    "src/mac/paths.s": "700620570f3f20c6be605dcc1ce6cf7e2f33a0e9fb63d6c3455f3b4c1d0aa29f",
+    "src/mac/platform.s": "504785c6c7badad01cdee42cb957d787cd0910a1a05028c591bb80b1e2af23c5",
+    "src/mac/runtime.s": "cc0a2597dca12ebc012894323214268a3ef0409458f113d63393f0122772f4dc",
+    "src/mac/ui.s": "906bcfb07e8a364211ebe36907f2e566aca7c97210b85805481d9491eb1d6b38",
+    "src/queue.s": "18b7b6ead963997cd3341af2deecc143bcb7ca5637c1558b0e9fc6204165b223",
+    "tests/mac-navigation-playback.c": "f9cd656f92aef93c69b9be2ad9bd345c77b042113c68772758b5dd7b98838c77",
+    "tests/mac-queue-observer.c": "79efa37c5c25040e4a0c09dd36393ee3d76a2eb1a09b637f26e775e1c7a217c1",
+    "tests/verify-macos-navigation.py": "e2b644e16fd990cdd1508ec390efd4a74d18a8d89841db71591550eab82ac6f5",
+    "tools/arm64_lamp.py": "37e4a515283ef441f9d1ee647377716efbe0d6a3aae27ef7c62faf53118f35d0",
+    "tools/build-mac.py": "293de34debe92ed89ce64fa2a1b2e8de192f9ef05d9333c147d685acd6fd3ea2"
+  }
+}

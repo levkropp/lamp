@@ -313,10 +313,21 @@ FN _lamp_set_volume
     ret
 
 FN _lamp_seek
-    ENTER
+    ENTER 16
+    mov w25, #0
+    mov x19, x0
+    b reposition
+
+// Shared navigation commands: next, previous, relative seek, replay, chapters.
+// Sample the heard entry and position together after callback refills stop.
+FN _lamp_navigate
+    ENTER 16
+    mov w25, w0
+    mov w26, w1
+    mov x19, #0
+reposition:
     ADR x9, _lamp_error
     str wzr, [x9]
-    mov x19, x0
     ADR x9, queue
     ldr x0, [x9]
     cbz x0, 4f
@@ -335,6 +346,7 @@ FN _lamp_seek
     ADR x0, mutex
     bl _pthread_mutex_lock
     bl update_heard
+    cbnz w25, navigate
     ADR x9, _lamp_index
     ldr w0, [x9]
     tbnz w0, #31, 9f
@@ -359,6 +371,26 @@ FN _lamp_seek
     add x23, x23, x0
     b 5b
 6:
+    b prime_position
+navigate:
+    mov w0, w25
+    ADR x9, _lamp_index
+    ldr w1, [x9]
+    ADR x9, _lamp_position
+    ldr x2, [x9]
+    mov x9, #1000
+    mul x2, x2, x9
+    ADR x9, _lamp_rate
+    ldr w9, [x9]
+    udiv x2, x2, x9
+    mov w3, w26
+    mov x4, sp
+    bl _lamp_queue_navigate
+    cbz w0, navigation_end
+    bl note_first_entry
+    ldr x0, [sp]
+    bl _queue_start
+prime_position:
     ADR x9, _queue_output
     ldr x10, [x9]
     ADR x9, heard_output
@@ -399,6 +431,18 @@ FN _lamp_seek
     mov w10, #1
     str w10, [x9]
     b 4f
+navigation_end:
+    ADR x9, decode_error
+    ldr w10, [x9]
+    ADR x9, _lamp_decode_error
+    str w10, [x9]
+    ADR x9, _lamp_eof
+    mov w10, #1
+    str w10, [x9]
+    bl publish_finished
+    ADR x0, mutex
+    bl _pthread_mutex_unlock
+    b 4f
 9:  mov w0, #-1
 10: ADR x9, _lamp_error
     str w0, [x9]
@@ -416,6 +460,22 @@ FN _lamp_seek
     mov w10, #4
     str w10, [x9]
 4:  LEAVE
+    ret
+
+// Change the policy under the callback lock. If decoding already reached EOF,
+// tick restarts the list after submitted audio drains, like the other engines.
+FN _lamp_toggle_repeat
+    ENTER
+    ADR x0, mutex
+    bl _pthread_mutex_lock
+    ADR x9, _queue_repeat
+    ldr w19, [x9]
+    eor w19, w19, #1
+    str w19, [x9]
+    ADR x0, mutex
+    bl _pthread_mutex_unlock
+    mov w0, w19
+    LEAVE
     ret
 
 FN _lamp_tick
@@ -444,6 +504,20 @@ FN _lamp_tick
     ldr w10, [x9]
     cmp w10, #4
     b.eq 2f
+    ADR x9, _lamp_decode_error
+    ldr w10, [x9]
+    cbnz w10, 1f
+    ADR x9, _queue_repeat
+    ldr w10, [x9]
+    cbz w10, 1f
+    ADR x9, heard_output
+    ldr x10, [x9]
+    cbz x10, 1f // an empty list cannot create a restart loop
+    mov w0, #4
+    mov w1, #0
+    bl _lamp_navigate
+    b 2f
+1:
     bl publish_finished
 2:  ADR x9, _lamp_state
     ldr w0, [x9]

@@ -9,7 +9,7 @@ $ ./build/lamp-cli --chapters audiobook.m4b
 00:24:03.105 Chapter 2
 ```
 
-A file without chapters prints nothing. During playback, `]` seeks to the next chapter and `[` seeks to the previous chapter in the file being heard, in both consoles and the Windows player. The Windows context menu also offers Previous chapter and Next chapter. Chapter seeks preserve pause.
+A file without chapters prints nothing. During playback, `]` seeks to the next chapter and `[` seeks to the previous chapter in the file being heard, in the Windows, Linux and Mac consoles and the Windows player. The Windows context menu also offers Previous chapter and Next chapter. Chapter seeks preserve pause.
 
 Navigation uses chronological start times, rounding down to the millisecond, while `--chapters` retains the original list order. Duplicate times form one boundary. Previous restarts the current chapter after more than three seconds of it; within three seconds it goes to the preceding boundary. The file's beginning is an implicit boundary. Starts at or past the known audio duration are ignored. A positive duration below one millisecond remains known and permits only a zero-millisecond boundary. With no usable chapters or no next boundary, the heard position stays unchanged. Chapter navigation stays in the heard file, including with repeat enabled.
 
