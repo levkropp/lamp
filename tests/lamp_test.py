@@ -71,6 +71,20 @@ def ffmpeg(*args):
     run([os.environ.get('FFMPEG', 'ffmpeg'), '-hide_banner', '-loglevel', 'error', '-y', *args])
 
 
+def metadata_vorbis_encoder():
+    """Metadata fixtures only: allow FFmpeg builds without libvorbis.
+
+    This changes fixture encoding, never a PCM reference decoder or tolerance.
+    Select explicitly so reports can record the choice.
+    """
+    name = os.environ.get('LAMP_METADATA_VORBIS_ENCODER', 'libvorbis')
+    if name not in ('libvorbis', 'vorbis'):
+        raise Failure('LAMP_METADATA_VORBIS_ENCODER must be libvorbis or vorbis')
+    # FFmpeg's experimental encoder only accepts stereo; these suites compare
+    # metadata, so its explicit override also records the fixture channel count.
+    return ['-c:a', name] + (['-strict', '-2', '-ac', '2'] if name == 'vorbis' else [])
+
+
 def write_report(name, report):
     """Writes <out>/<name>-verification.json, as the PowerShell suites did."""
     path = out_dir() / f'{name}-verification.json'

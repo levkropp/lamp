@@ -35,7 +35,8 @@ import subprocess
 import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from lamp_test import Failure, build_lamp, ffmpeg, lamp_cli, main_guard, scratch, write_report
+from lamp_test import (Failure, build_lamp, ffmpeg, lamp_cli, main_guard, scratch, write_report,
+                       metadata_vorbis_encoder)
 
 _spec = importlib.util.spec_from_file_location('verify_tags', Path(__file__).resolve().parent / 'verify-tags.py')
 _tags = importlib.util.module_from_spec(_spec)
@@ -299,7 +300,7 @@ def main():
     path.write_bytes(flac_file(streaminfo + [[4, vorbis_comment([c.encode('utf-8') for c in comments])]], frames))
     compare(path, 'chapter comments in every form')
     path = work / 'comments.ogg'
-    ffmpeg(*source(2), *[a for c in comments[1:5] + comments[13:16] for a in ('-metadata', c)], '-c:a', 'libvorbis',
+    ffmpeg(*source(2), *[a for c in comments[1:5] + comments[13:16] for a in ('-metadata', c)], *metadata_vorbis_encoder(),
            path)
     compare(path, 'Vorbis comments in Ogg')
 
@@ -506,10 +507,10 @@ def main():
     compare(path, 'UTF-16BE and UTF-16LE titles')
 
     # Files without chapters.
-    for name, coding in (('none.flac', ['-c:a', 'flac']), ('none.ogg', ['-c:a', 'libvorbis']),
+    for name, coding in (('none.flac', ['-c:a', 'flac']), ('none.ogg', metadata_vorbis_encoder()),
                          ('none.wav', ['-c:a', 'pcm_s16le']), ('none.m4a', ['-c:a', 'aac'])):
         path = work / name
-        ffmpeg(*source(1), '-c:a', coding[1], path)
+        ffmpeg(*source(1), *coding, path)
         compare(path, 'no chapters', empty=True)
 
     # Robustness: mutated chapters never crash or hang.
@@ -549,7 +550,7 @@ def main():
     checks.append({'test': 'mutated chapters', 'result': 'no crash or hang', 'files': mutated, 'opened': opened})
     print(f'{mutated} mutated files: no crash or hang ({opened} opened)', flush=True)
 
-    write_report('chapters', {'result': 'passed', 'checks': checks,
+    write_report('chapters', {'result': 'passed', 'vorbis_fixture_encoder': metadata_vorbis_encoder(), 'checks': checks,
                               'scope': 'Chapters (Vorbis comments, FLAC CUESHEET, ID3v2 CHAP, Matroska, MP4 chpl '
                                        'and chapter tracks) against ffprobe; mutated files.'})
     print(f'Passed {len(checks)} chapter checks.')

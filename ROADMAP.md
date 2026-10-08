@@ -32,7 +32,8 @@ The public repository includes build/test tooling, a Windows prerelease and a we
 - [x] App bundle, Retina icon, local ad-hoc signing and ZIP packaging with notices and hashes.
 - [x] Native six-format PCM/regression checks and all 35 Opus oracle suites.
 - [x] Current GNU shared decoder tree on ARM64: native layout/seek suites, translation instruction checks, WavPack references and 594 cross-architecture fixtures; coverage is recorded in the Mac guide.
-- [ ] Mac CLI/player parity with current shared functionality: queues/playlists, navigation/repeat/resume, metadata/chapters/cover, track/rate/device selection and queue editing.
+- [x] Mac CLI tags, chapter listing and exclusive cover export; native metadata suites and mutation checks.
+- [ ] Mac CLI/player parity with current shared functionality: queues/playlists, navigation/repeat/resume, AppKit metadata/chapters/cover, track/rate/device selection and queue editing.
 - [ ] Complete manual Open/drop/focus, fullscreen and Retina/multiple-display testing.
 - [ ] Asynchronous seeking, output-device selection/reconnection and Mac performance measurements.
 - [ ] Developer ID signing/notarization and published macOS releases.

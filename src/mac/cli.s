@@ -12,7 +12,13 @@ FN _main
     ldr x0, [x20, #8]
     ADR x1, version_opt
     bl _strcmp
-    cbnz w0, cli_play
+    cbz w0, 2f
+    ldr x0, [x20, #8]
+    ldrb w9, [x0]
+    cmp w9, #45 // a lone option is not a playback path
+    b.eq cli_usage
+    b cli_play
+2:
     ADR x0, _lamp_version
     bl _puts
     mov w0, #0
@@ -20,6 +26,21 @@ FN _main
 1:
     cmp x19, #3
     b.lo cli_usage
+    mov w21, #3
+    ldr x0, [x20, #8]
+    ADR x1, tags_opt
+    bl _strcmp
+    cbz w0, cli_metadata
+    mov w21, #4
+    ldr x0, [x20, #8]
+    ADR x1, chapters_opt
+    bl _strcmp
+    cbz w0, cli_metadata
+    mov w21, #5
+    ldr x0, [x20, #8]
+    ADR x1, cover_opt
+    bl _strcmp
+    cbz w0, cli_metadata
     ldr x0, [x20, #8]
     ADR x1, check_opt
     bl _strcmp
@@ -124,6 +145,35 @@ cli_bad:
     b cli_return
 cli_usage:
     ADR x0, usage
+    bl _puts
+    mov w0, #2
+    b cli_return
+cli_metadata:
+    cmp w21, #5
+    mov x9, #3
+    cinc x9, x9, eq
+    cmp x19, x9
+    b.ne cli_usage
+    ldr x0, [x20, #16]
+    bl _decoder_open
+    cbz w0, cli_metadata_bad
+    cmp w21, #3
+    b.ne 1f
+    bl cli_print_tags
+    b 3f
+1:  cmp w21, #4
+    b.ne 2f
+    bl cli_print_chapters
+    b 3f
+2:  ldr x0, [x20, #24]
+    bl cli_export_cover
+3:  mov w19, w0
+    bl _decoder_close
+    mov w0, w19
+    b cli_return
+cli_metadata_bad:
+    bl _decoder_close
+    ADR x0, decode_message
     bl _puts
     mov w0, #2
     b cli_return
@@ -239,11 +289,16 @@ cli_interrupt:
     str w10, [x9]
     ret
 
+.include "cli_metadata.inc"
+
 .section __TEXT,__cstring,cstring_literals
 check_opt: .asciz "--check"
 decode_opt: .asciz "--decode"
 version_opt: .asciz "--version"
-usage: .asciz "LAMP macOS ARM64\nUsage: lamp-cli FILE\n       lamp-cli --check FILE\n       lamp-cli --decode FILE NEW.f32"
+tags_opt: .asciz "--tags"
+chapters_opt: .asciz "--chapters"
+cover_opt: .asciz "--cover"
+usage: .asciz "LAMP macOS ARM64\nUsage: lamp-cli FILE\n       lamp-cli --check FILE\n       lamp-cli --decode FILE NEW.f32\n       lamp-cli --tags FILE\n       lamp-cli --chapters FILE\n       lamp-cli --cover FILE NEW-IMAGE"
 playing_message: .asciz "LAMP: Core Audio playback. Space pauses/resumes; Q or Ctrl+C stops."
 bad_message: .asciz "LAMP: cannot open, decode or write this file."
 decode_message: .asciz "Unsupported, malformed, or inaccessible audio file. See docs/compatibility.md for codec and container limits."

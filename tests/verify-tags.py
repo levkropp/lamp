@@ -26,7 +26,8 @@ import subprocess
 import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from lamp_test import Failure, build_lamp, ffmpeg, lamp_cli, main_guard, scratch, write_report
+from lamp_test import (Failure, build_lamp, ffmpeg, lamp_cli, main_guard, scratch, write_report,
+                       metadata_vorbis_encoder)
 
 KEYS = ('title', 'artist', 'album', 'album_artist', 'date', 'track', 'disc', 'genre', 'comment', 'composer')
 ALIASES = {'albumartist': 'album_artist', 'tracknumber': 'track', 'discnumber': 'disc', 'description': 'comment',
@@ -271,7 +272,7 @@ def main():
                          ('id3v1.mp3', ['-c:a', 'libmp3lame', '-id3v2_version', '0', '-write_id3v1', '1']),
                          ('adts.aac', ['-c:a', 'aac', '-f', 'adts', '-write_id3v2', '1']),
                          ('native.flac', ['-c:a', 'flac']),
-                         ('vorbis.ogg', ['-c:a', 'libvorbis']),
+                         ('vorbis.ogg', metadata_vorbis_encoder()),
                          ('opus.opus', ['-c:a', 'libopus']),
                          ('flac.oga', ['-c:a', 'flac', '-f', 'ogg']),
                          ('aac.m4a', ['-c:a', 'aac']),
@@ -405,7 +406,7 @@ def main():
     path.write_bytes(flac_file(blocks, frames))
     compare(path, note='repeated, cased and malformed comments')
     path = work / 'long.ogg'
-    ffmpeg(*source(), '-metadata', 'comment=' + 'Lóng ' * 14000, '-metadata', 'title=Long', '-c:a', 'libvorbis', path)
+    ffmpeg(*source(), '-metadata', 'comment=' + 'Lóng ' * 14000, '-metadata', 'title=Long', *metadata_vorbis_encoder(), path)
     compare(path, 'stream', note='a comment packet over two pages, cut at 4096 bytes')
 
     # MP4 items.
@@ -467,7 +468,7 @@ def main():
     checks.append({'test': 'mutated tags', 'result': 'no crash or hang', 'files': mutated, 'opened': opened})
     print(f'{mutated} mutated files: no crash or hang ({opened} opened)', flush=True)
 
-    write_report('tags', {'result': 'passed', 'checks': checks,
+    write_report('tags', {'result': 'passed', 'vorbis_fixture_encoder': metadata_vorbis_encoder(), 'checks': checks,
                           'scope': 'Metadata tags (ID3v2.2-2.4, ID3v1, APEv2, Vorbis comments, MP4 ilst, Matroska, '
                                    'RIFF INFO, AIFF, CAF) against ffprobe; mutated tags.'})
     print(f'Passed {len(checks)} tag checks.')

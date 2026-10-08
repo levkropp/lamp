@@ -74,6 +74,37 @@ BRIDGE decoder_read
 BRIDGE decoder_seek
 BRIDGE decoder_close
 
+// These leaf getters return several private-ABI registers. Give native callers
+// explicit output pointers; the generic C bridges remain single-result calls.
+// lamp_tag_info(index, uint32_t *length) -> UTF-8 pointer.
+FN _lamp_tag_info
+    ENTER
+    mov x19, x1
+    mov x3, x0
+    ADR x9, _lamp_stack_top
+    ldr x28, [x9]
+    sub x28, x28, #32
+    XCALL tags_get
+    str w2, [x19]
+    mov x0, x8
+    LEAVE
+    ret
+
+// lamp_cover_info(uint64_t *bytes, uint32_t *kind) -> borrowed image pointer.
+FN _lamp_cover_info
+    ENTER
+    mov x19, x0
+    mov x20, x1
+    ADR x9, _lamp_stack_top
+    ldr x28, [x9]
+    sub x28, x28, #32
+    XCALL cover_get
+    str x2, [x19]
+    str w4, [x20]
+    mov x0, x8
+    LEAVE
+    ret
+
 .data
 .p2align 3
 .globl _lamp_stack_top

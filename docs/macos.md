@@ -12,10 +12,15 @@ open build/macos/LAMP.app
 build/macos/lamp-cli ~/Music/track.flac
 build/macos/lamp-cli --check ~/Music/track.opus
 build/macos/lamp-cli --decode ~/Music/track.ogg ./track.f32
+build/macos/lamp-cli --tags ~/Music/track.mp3
+build/macos/lamp-cli --chapters ~/Music/book.m4a
+build/macos/lamp-cli --cover ~/Music/album.flac ./cover-image
 build/macos/lamp-cli --version
 ```
 
 `--check` runs without an audio device. Export writes interleaved little-endian float32 stereo to a new destination; it never overwrites an existing file. Mono is duplicated, multichannel streams follow the existing documented stereo routing, and Opus output is 48 kHz. Malformed/inaccessible input returns status 2; export/output failures return 1. A failed export can leave a partial file.
+
+`--tags`, `--chapters` and `--cover` also run without an audio device. Tags use the shared ten normalized keys and print `key=value` lines in UTF-8; chapters print `HH:MM:SS.mmm title`. Control characters in displayed text become spaces. Cover export preserves the original embedded bytes, creates a new destination and prints its MIME type and byte count. It returns 2 without creating a file when no picture exists, or 4 on an output failure; it never replaces an existing destination. The native getter adapters preserve the shared metadata readers' additional length/type results explicitly across the ABI boundary.
 
 `./build.sh --release` strips local symbols. `--output PATH` builds into a separate directory. The build produces `lamp-cli`, `lamp`, and `LAMP.app`, including the LAMP icon at standard/Retina sizes, audio document associations, project licenses and an ad-hoc signature. The scripts use Python and Apple command line tools; building the player needs no Homebrew codec package, FFmpeg, Node.js, Rosetta or Wine. Python is not a runtime dependency.
 
@@ -95,6 +100,8 @@ LAMP_OUT=build/macos-wavpack python3 tests/verify-wavpack.py --skip-playback
 
 The [translation instruction oracle](../reports/macos-translation-verification.json) covers 40,000 deterministic cases of packed multiply/add, borrow/loop flags, floating-point rounding/overflow and packed data layout. The [native WavPack report](../reports/macos-wavpack-verification.json) records 104 checks against FFmpeg, the written-stream model and continuous decoding. Neither requires an external codec at runtime.
 
+The [native CLI metadata report](../reports/macos-metadata-verification.json) records 50 tag, 40 chapter and 51 cover checks, including 3,300 mutated inputs, exclusive cover export and missing/extra argument rejection. These reuse the original suites' ffprobe/FFmpeg and written-value comparisons. Run `tests/verify-tags.py`, `tests/verify-chapters.py` and `tests/verify-cover.py` with Python. For FFmpeg builds lacking libvorbis, explicitly set `LAMP_METADATA_VORBIS_ENCODER=vorbis`; this uses FFmpeg's experimental stereo encoder solely to create metadata fixtures, records that choice in the report and does not change a reference decoder or PCM tolerance.
+
 Real-device tests exercise three open/pause/paused-seek/resume/EOF/stop cycles, natural EOF and failed-open recovery for each of the six formats. Pseudo-terminal checks keep playback paused past its original duration, then verify Q/Ctrl+C exit and restoration of terminal settings. The comparison excludes only Darwin’s transient PENDIN input-state bit; configuration flags, speeds and control characters are checked. The UI smoke check verifies native launch, playback, timer updates and exit. Open-panel, Finder/drop, focused-control shortcuts, fullscreen, accessibility, Retina and multiple-display interactions still need comprehensive manual desktop testing. These checks do not establish complete conformance, universal performance, audible latency, device-reconnection behavior or immunity to system stalls.
 
 ## Packaging and remaining platform work
@@ -109,4 +116,4 @@ The ZIP contains the app, CLI, notices, this guide and a manifest of file sizes/
 
 The default signature is local/ad-hoc. Developer ID signing, hardened-runtime/notarization, release CI and a published macOS download remain future distribution work. This port does not modify the published Windows prerelease.
 
-Current Mac differences are explicit: native controls stay visible; seeks/open/index construction can block the UI; the default audio device and Core Audio's sample-rate conversion are used; output remains stereo. Asynchronous seek/open, output-device selection/reconnection, exclusive output, sleep/wake recovery and measured Mac CPU/wakeup/latency comparisons remain roadmap work. Codec/container limits remain those documented in the repository. The rebased branch now shares the current decoder tree across all three platforms. Mac CLI/player parity is part of the pre-video goal: queues/playlists and editing, navigation/repeat/resume, tags/chapters/cover presentation, track/rate/device selection, and asynchronous transport still need native front-end integration and checks. New shared features must include Mac validation; a successful translation build alone does not establish feature parity.
+Current Mac differences are explicit: native controls stay visible; seeks/open/index construction can block the UI; the default audio device and Core Audio's sample-rate conversion are used; output remains stereo. Asynchronous seek/open, output-device selection/reconnection, exclusive output, sleep/wake recovery and measured Mac CPU/wakeup/latency comparisons remain roadmap work. Codec/container limits remain those documented in the repository. The rebased branch now shares the current decoder tree across all three platforms. Mac CLI/player parity is part of the pre-video goal: queues/playlists and editing, navigation/repeat/resume, AppKit tags/chapters/cover presentation, track/rate/device selection, and asynchronous transport still need native front-end integration and checks. New shared features must include Mac validation; a successful translation build alone does not establish feature parity.
