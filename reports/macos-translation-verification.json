@@ -1,0 +1,8 @@
+{
+  "result": "passed",
+  "cases": 40000,
+  "checks_per_case": 17,
+  "platform": "macOS-26.4.1-arm64-arm-64bit-Mach-O",
+  "oracle_sha256": "388b731388b495c37547c0d46d4583c0b6fa9443b00bda2b166cb4ed5a28ba07",
+  "scope": "Packed multiply/add wrap, 32/64-bit nearest/truncated double conversion including NaN/overflow, borrow arithmetic and flags, LOOP flag preservation, exact GNU data layout"
+}

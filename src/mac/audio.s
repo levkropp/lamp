@@ -54,7 +54,7 @@ FN _lamp_play
     bl _decoder_open
     cbz w0, audio_fail
     ADR x19, format
-    ADR x9, sample_rate
+    ADR x9, output_rate
     ldr w9, [x9]
     ucvtf d0, w9
     str d0, [x19]
@@ -248,7 +248,7 @@ FN _lamp_seek
     ADR x9, _lamp_error
     str wzr, [x9]
     mov x19, x0
-    ADR x9, total_frames
+    ADR x9, output_frames
     ldr x9, [x9]
     cbz x9, 7f
     cmp x19, x9
@@ -309,7 +309,7 @@ FN _lamp_seek
     ldr x9, [x21]
     ldr w9, [x9, #16]
     cbz w9, 12f
-    ADR x9, total_frames
+    ADR x9, output_frames
     ldr x9, [x9]
     cbz x9, 8f
     cmp x19, x9

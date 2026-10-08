@@ -60,4 +60,5 @@ op_silk_sign_pdf: .byte 254, 49, 67, 77, 82, 93, 99, 198, 11, 18, 24, 31, 36, 45
     .byte 66, 78, 87, 94, 104, 208, 14, 21, 32, 42, 51, 66, 255, 94, 104, 109
     .byte 112, 115, 118, 248, 53, 69, 80, 88, 95, 102
 op_silk_lsb_pdf: .byte 120, 0
+.p2align 3
 op_silk_shell_ptr: .quad op_silk_shell0, op_silk_shell1, op_silk_shell2, op_silk_shell3

@@ -1,10 +1,11 @@
-"""Shared helpers for LAMP's verification suites on Linux and Windows.
+"""Shared helpers for LAMP's verification suites on Linux, Windows and macOS.
 
 Reference C code and oracles are compiled only into test executables. The
 assembly under test comes from the same objects as the shipping build: the
 static Linux objects from build.sh, or the COFF objects from
-tools/build-windows.py. Suites link one static library of those objects, so
-each oracle pulls in only the assembly it calls.
+tools/build-windows.py, or native ARM64 objects from tools/build-mac.py.
+Linux/Windows oracles link a static library; Mac oracles use a test-only
+dynamic library and initialize its private decoder stack before main.
 """
 import hashlib
 import json
@@ -20,6 +21,7 @@ import tarfile
 ROOT = Path(__file__).resolve().parent.parent
 TESTS = ROOT / 'tests'
 WINDOWS = os.name == 'nt'
+MACOS = sys.platform == 'darwin'
 GENERATED = TESTS / 'generated'
 GENERATED_INCLUDE = GENERATED / 'include'
 OPUS_ARCHIVE_SHA1 = '86a927223e73d2476646a1b933fcd3fffb6ecc8c'
@@ -36,7 +38,7 @@ def out_dir():
     configured = os.environ.get('LAMP_OUT')
     if configured:
         return Path(configured).resolve()
-    return ROOT / ('bin' if WINDOWS else 'build')
+    return ROOT / ('bin' if WINDOWS else 'build/macos' if MACOS else 'build')
 
 
 def exe(name):
@@ -121,8 +123,18 @@ def opus_reference(original=False):
 
 # ---------------------------------------------------------------- assembly
 def build_lamp():
-    """Builds lamp-cli and the assembly objects; returns the static library path."""
+    """Builds lamp-cli and returns the library of its assembly objects for tests."""
     out = out_dir()
+    if MACOS:
+        run([sys.executable, ROOT / 'tools/build-mac.py', '--output', out], capture=False)
+        objects = [p for p in sorted((out / 'obj').glob('*.o'))
+                   if p.name not in ('mac_cli.o', 'mac_ui.o')]
+        library = out / 'liblamp-test.dylib'
+        temporary = library.with_name(f'{library.stem}.{os.getpid()}.dylib')
+        run(['xcrun', 'clang', '-arch', 'arm64', '-dynamiclib', '-o', temporary,
+             '-Wl,-install_name,' + str(library), *objects, '-framework', 'AudioToolbox'])
+        os.replace(temporary, library)
+        return library
     if WINDOWS:
         python = sys.executable or 'python'
         run([python, ROOT / 'tools/build-windows.py', '--out', out, '--tests'], capture=False)
@@ -208,6 +220,13 @@ def compile_c(output, sources, objects=(), defines=(), includes=(), fp='precise'
             run([tool, *flags, '-c', source, '-o', obj])
             produced.append(obj)
         return produced
+    sources = list(sources)
+    if MACOS and any(Path(p).name == 'liblamp-test.dylib' for p in (*objects, *libraries)):
+        init = output.parent / 'mac-oracle-init.c'
+        init.write_text('extern int lamp_init(void);\n'
+                        '__attribute__((constructor)) static void init(void) {\n'
+                        '    if (!lamp_init()) __builtin_trap();\n}\n')
+        sources.append(init)
     run([tool, *flags, '-o', output, *sources, *objects, *libraries, '-lm'])
     return output
 

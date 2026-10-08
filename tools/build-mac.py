@@ -10,9 +10,7 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'tools'))
-import arm64
-from arm64_lamp import Translator
-from masm import normalize, procedures
+from arm64_lamp import Source, Translator
 
 
 def run(*args):
@@ -22,31 +20,35 @@ def run(*args):
 def build(out, release=False):
     if sys.platform != 'darwin':
         raise SystemExit('The macOS build requires Xcode command line tools on macOS.')
-    gnu, a64, obj = (out / x for x in ('gnu', 'a64', 'obj'))
-    for p in (gnu, a64, obj): p.mkdir(parents=True, exist_ok=True)
+    a64, obj = (out / x for x in ('a64', 'obj'))
+    for p in (a64, obj): p.mkdir(parents=True, exist_ok=True)
     compiler = ['xcrun', 'clang', '-arch', 'arm64', '-mmacosx-version-min=12.0']
     if not release: compiler.append('-g')
     version = (ROOT/'VERSION').read_text().strip()
     if not re.fullmatch(r'\d+\.\d+\.\d+(?:-[A-Za-z0-9.]+)?', version):
         raise SystemExit('VERSION is not a supported bundle version.')
-    for p in sorted((ROOT/'src').iterdir()):
-        if p.suffix in ('.inc', '.asm'):
-            (gnu/p.name).write_text(normalize(p))
     objects = []
     functions = []
-    for p in sorted(gnu.glob('*.asm')):
-        if p.stem in ('player', 'ui'): continue
-        source = arm64.Source([str(gnu)], {})
+    for p in sorted((ROOT/'src').glob('*.s')):
+        source = Source([str(ROOT/'src')], {})
         source.run(str(p))
+        # Darwin C callers need underscored data aliases and native ABI function
+        # bridges. Inspect the expanded source so included modules count too.
+        labels = {s.name for s in source.stmts if s.kind == 'label'}
+        public = {n.strip() for s in source.stmts
+                  if s.kind == 'dir' and s.name in ('.globl', '.global')
+                  for n in s.args.split(',')} & labels
+        proc = {s.args.split(',')[0].strip() for s in source.stmts
+                if s.kind == 'dir' and s.name == '.type' and '@function' in s.args}
+        functions.extend(public & proc)
+        for name in sorted(public - proc):
+            source.statement('.globl _' + name, (str(p), 1))
+            source.statement('.set _%s, %s' % (name, name), (str(p), 1))
         target = a64 / (p.stem + '.s')
         target.write_text(Translator(source, str(p)).run())
         o = obj / (p.stem + '.o')
         run(*compiler, '-c', target, '-o', o)
         objects.append(o)
-        text = (ROOT/'src'/p.name).read_text()
-        proc = procedures(ROOT/'src'/p.name)
-        public = re.findall(r'^PUBLIC\s+([^\n]+)', text, re.M | re.I)
-        functions += [s.strip() for line in public for s in line.split(',') if s.strip() in proc]
     # Export the same callable decoder API to native test oracles.
     bridge = a64 / 'bridge.s'
     bridge.write_text((ROOT/'src/mac/bridge.s').read_text() + '\n' +
@@ -99,7 +101,9 @@ def build(out, release=False):
                  'CFBundleVersion':version.split('-')[0], 'LSMinimumSystemVersion':'12.0',
                  'NSHighResolutionCapable':True,
                  'CFBundleDocumentTypes':[{'CFBundleTypeName':'Audio','CFBundleTypeRole':'Viewer',
-                    'LSHandlerRank':'Alternate','CFBundleTypeExtensions':['wav','aiff','aif','aifc','flac','mp3','ogg','opus']} ]}
+                    'LSHandlerRank':'Alternate','CFBundleTypeExtensions':['wav','w64','aiff','aif','aifc','caf','au','snd','flac','wv','ape',
+                        'mp1','mp2','mp3','aac','loas','latm','ac3','eac3','gsm','ogg','oga','opus',
+                        'm4a','mp4','mov','mka','mkv','webm','ts','m2ts','mpg','mpeg','vob','avi','flv','asf']} ]}
         (contents/'Info.plist').write_bytes(plistlib.dumps(plist))
         run('codesign','--force','--sign','-',out/'LAMP.app')
     print(out/'lamp-cli')

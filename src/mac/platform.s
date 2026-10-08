@@ -1,4 +1,4 @@
-// macOS services for main's shared assembly decoders. UTF-8 paths on macOS.
+// macOS services for shared assembly decoders. UTF-8 paths on macOS.
 .include "mac.inc"
 
 // Preserve Windows nonvolatile registers, the SIMD machine, and x87 temporaries
@@ -38,123 +38,131 @@
     XRET
 .endm
 
-FN CreateFileW
+// The shared service ABI uses UTF-8 paths, matching the Linux source branch.
+// A mapping owns its length; several decoder/playlist mappings may coexist.
+FN file_map
     WIN_ENTER
     mov x0, x3
     mov w1, #0
     bl _open
-    sxtw x0, w0
-    WIN_LEAVE
-
-FN GetFileSizeEx
-    WIN_ENTER
-    mov x19, x2
-    mov x0, x3
-    mov x1, #0
-    mov w2, #2
-    bl _lseek
-    cmp x0, #0
-    b.lt 1f
-    str x0, [x19]
-    mov w0, #1
-    b 2f
-1:  mov w0, #0
-2:  WIN_LEAVE
-
-FN CreateFileMappingW
-    WIN_ENTER
-    mov x0, x3
-    bl _dup
     cmp w0, #0
-    b.lt 1f
-    add x0, x0, #1
-    orr x0, x0, #0x100000000
-    b 2f
-1:  mov x0, #0
-2:  WIN_LEAVE
-
-FN MapViewOfFile
-    WIN_ENTER
-    sub w19, w3, #1
-    mov x0, x19
+    b.lt 3f
+    mov w19, w0
     mov x1, #0
     mov w2, #2
     bl _lseek
+    mov x20, x0
     cmp x0, #0
-    b.le 1f
+    b.le 2f
     mov x1, x0
-    ADR x9, mapped_size
-    str x1, [x9]
     mov x0, #0
     mov w2, #1
     mov w3, #2
-    mov x4, x19
+    mov w4, w19
+    mov x5, #0
+    bl _mmap
+    mov x21, x0
+    mov w0, w19
+    bl _close
+    cmn x21, #1
+    b.eq 3f
+    mov x0, x21
+    mov x2, x20
+    mov x4, #0
+    WIN_LEAVE
+2:  mov w0, w19
+    bl _close
+3:  mov x0, #0
+    mov x2, #0
+    mov x4, #0
+    WIN_LEAVE
+
+FN file_unmap
+    WIN_ENTER
+    mov x0, x3
+    mov x1, x2
+    bl _munmap
+    WIN_LEAVE
+
+// Reserve/allocate page-aligned memory with a private header page. Commit
+// changes protection inside a reservation, preserving its existing contents.
+// Apple Silicon uses 16 KiB pages; the deployment target is ARM64 macOS only.
+FN mem_alloc
+    mov w2, #3
+    b mem_map
+FN mem_reserve
+    mov w2, #0
+mem_map:
+    WIN_ENTER
+    mov x19, x3
+    mov w20, w2
+    adds x21, x19, #0x4000
+    b.cs 3f
+    mov x9, #0x3fff
+    adds x21, x21, x9
+    b.cs 3f
+    and x21, x21, #0xffffffffffffc000
+    mov x0, #0
+    mov x1, x21
+    mov w2, #3
+    mov w3, #0x1002
+    mov w4, #-1
     mov x5, #0
     bl _mmap
     cmn x0, #1
-    b.ne 2f
-1:  mov x0, #0
-2:  WIN_LEAVE
-
-FN UnmapViewOfFile
-    WIN_ENTER
-    mov x0, x3
-    ADR x9, mapped_size
-    ldr x1, [x9]
-    bl _munmap
-    cmp w0, #0
-    cset w0, eq
-    WIN_LEAVE
-
-FN CloseHandle
-    WIN_ENTER
-    // The mapping fd is tagged with bit 32 to distinguish it from file fd.
-    mov x0, x3
-    tbnz x3, #32, 1f
-    b 2f
-1:  sub w0, w3, #1
-2:  bl _close
-    cmp w0, #0
-    cset w0, eq
-    WIN_LEAVE
-
-FN VirtualAlloc
-    WIN_ENTER
-    // Vorbis reserves one zeroed arena, then commits successive ranges inside
-    // it. calloc supplies lazy zero pages for the entire reservation. A commit
-    // at an existing address must return that address, never allocate a block.
-    cbz x3, 3f
-    tbz x4, #12, 2f // MEM_COMMIT
-    mov x0, x3
-    b 1f
-3:
-    adds x1, x2, #16
-    b.cs 2f
-    mov x19, x2
-    mov x0, #1
-    bl _calloc
-    cbz x0, 1f
-    str x19, [x0]
-    ADR x9, _lamp_allocated_bytes
+    b.eq 3f
+    mov x22, x0
+    stp x21, x19, [x22]
+    cbnz w20, 1f
+    sub x1, x21, #0x4000
+    cbz x1, 1f
+    add x0, x22, #0x4000
+    mov w2, #0
+    bl _mprotect
+    cbnz w0, 2f
+1:  ADR x9, _lamp_allocated_bytes
     ldr x10, [x9]
     add x10, x10, x19
     str x10, [x9]
-    add x0, x0, #16
-    b 1f
-2:  mov x0, #0
-1:  WIN_LEAVE
-
-FN VirtualFree
-    WIN_ENTER
-    sub x0, x3, #16
-    ldr x10, [x0]
-    ADR x9, _lamp_allocated_bytes
-    ldr x11, [x9]
-    sub x11, x11, x10
-    str x11, [x9]
-    bl _free
-    mov w0, #1
+    add x0, x22, #0x4000
     WIN_LEAVE
+2:  mov x0, x22
+    mov x1, x21
+    bl _munmap
+3:  mov x0, #0
+    WIN_LEAVE
+
+FN mem_commit
+    WIN_ENTER
+    mov x19, x3
+    and x0, x3, #0xffffffffffffc000
+    adds x1, x3, x2
+    b.cs 1f
+    mov x9, #0x3fff
+    adds x1, x1, x9
+    b.cs 1f
+    and x1, x1, #0xffffffffffffc000
+    sub x1, x1, x0
+    mov w2, #3
+    bl _mprotect
+    cmp w0, #0
+    csel x0, x19, xzr, eq
+    WIN_LEAVE
+1:  mov x0, #0
+    WIN_LEAVE
+
+FN mem_free
+    WIN_ENTER
+    cbz x3, 1f
+    sub x0, x3, #0x4000
+    ldp x1, x19, [x0]
+    bl _munmap
+    cbnz w0, 1f
+    ADR x9, _lamp_allocated_bytes
+    ldr x10, [x9]
+    sub x10, x10, x19
+    str x10, [x9]
+1:  WIN_LEAVE
 
 // Math helpers used solely to initialize Vorbis tables. Native libSystem math,
 // preserving all decoder GPRs and vectors; d24/d25 carry their results.
@@ -203,6 +211,5 @@ FN lamp_fp_ldexp
 
 .data
 .p2align 3
-mapped_size: .quad 0
 .globl _lamp_allocated_bytes
 _lamp_allocated_bytes: .quad 0

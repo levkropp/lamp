@@ -525,7 +525,7 @@ on_seek:
     ENTER
     mov x0, x2
     MSG doubleValue
-    ADR x9, total_frames
+    ADR x9, output_frames
     ldr x9, [x9]
     ucvtf d1, x9
     fmul d0, d0, d1
@@ -633,14 +633,14 @@ on_key:
 4:  mov x20, #-5
     b 11f
 5:  mov x20, #5
-11: ADR x9, sample_rate
+11: ADR x9, output_rate
     ldr w9, [x9]
     ADR x10, _lamp_position
     ldr x10, [x10]
     madd x0, x9, x20, x10
     cmp x0, #0
     csel x0, x0, xzr, ge
-    ADR x9, total_frames
+    ADR x9, output_frames
     ldr x9, [x9]
     cmp x0, x9
     csel x0, x0, x9, lo
@@ -693,7 +693,7 @@ on_tick:
     bl on_quit
 1:  ADR x9, _lamp_position
     ldr x20, [x9]
-    ADR x9, total_frames
+    ADR x9, output_frames
     ldr x21, [x9]
     cbz x21, 2f
     ucvtf d0, x20
@@ -708,7 +708,7 @@ on_tick:
     fcvt d0, s0
     LOAD x0, volume_slider
     MSG setDoubleValue_
-    ADR x9, sample_rate
+    ADR x9, output_rate
     ldr w9, [x9]
     cbz w9, 4f
     udiv x20, x20, x9

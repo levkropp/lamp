@@ -262,7 +262,7 @@ def opus_checks(libpath):
     for name in SUITES:
         target=OUT/f'opus-{name}-oracle'
         extra=[ROOT/'bin/silk-packet-reference.c'] if name in ('silk-packet','silk-decoder','mode','stream','ogg','multistream') else []
-        run([*flags,'-I',ROOT/'bin','-I',TESTS,'-I',TESTS/'mac',generated/f'opus-{name}-oracle.c',
+        run([*flags,'-I',ROOT/'bin','-I',TESTS/'generated/include','-I',TESTS,'-I',TESTS/'mac',generated/f'opus-{name}-oracle.c',
              *extra,init,reference,libpath,'-o',target])
         result=run([target,TESTS/'fixtures/tone.opus'])
         print(f'Opus {name}: passed',flush=True)
@@ -285,8 +285,8 @@ def layout_checks(libpath, vorbis_encoder, suites=None):
         return text
     for name in ('seek-oracle','pcm-bounds-oracle','vorbis-native-oracle','aiff-sparse-oracle','rf64-sparse-oracle'):
         source=generated/f'{name}.c'; source.write_text(portable((TESTS/f'{name}.c').read_text()))
-        run(['xcrun','clang','-arch','arm64','-O2','-ffp-contract=off','-I',TESTS/'mac',source,
-             init,libpath,'-o',generated/f'{name}.exe'])
+        run(['xcrun','clang','-arch','arm64','-O2','-ffp-contract=off','-I',TESTS/'mac','-I',TESTS,source,
+             init,libpath,'-o',generated/name])
     base=OUT/'reference'; v=base/'libvorbis-1.3.7'; o=base/'libogg-1.3.6'
     names=('mdct smallft block envelope window lsp lpc analysis synthesis psy info floor1 floor0 '
            'res0 mapping0 registry codebook sharedbook lookup bitrate vorbisfile').split()
@@ -294,13 +294,14 @@ def layout_checks(libpath, vorbis_encoder, suites=None):
     source=generated/'vorbis-native-reference.c'
     source.write_text(portable((TESTS/'vorbis-native-reference.c').read_text()))
     run(['xcrun','clang','-arch','arm64','-O2','-ffp-contract=off','-Wno-cpp',
-         '-I',v/'include','-I',v/'lib','-I',o/'include',source,*sources,'-o',generated/'vorbis-native-reference.exe'])
+         '-I',v/'include','-I',v/'lib','-I',o/'include','-I',TESTS,source,*sources,'-o',generated/'vorbis-native-reference'])
     records=[]
     # Keep the authoritative JS tests unchanged; only adapt test-artifact paths
     # and the optional Vorbis encoder when FFmpeg was built without libvorbis.
     has_vorbis='libvorbis' in run(['ffmpeg','-hide_banner','-encoders'])
     for name in suites or ('wav-layout','flac-layout','rf64','aiff','vorbis-multichannel'):
         script=(TESTS/f'{name}-fixtures.js').read_text()
+        script=script.replace("require('./platform')", "require("+json.dumps(str(TESTS/'platform.js'))+")")
         script=script.replace("path.join(__dirname,'reference','vorbis-reference-hashes.json')",
                               json.dumps(str(TESTS/'reference/vorbis-reference-hashes.json')))
         script=script.replace("name+'.obj'","'obj/'+name+'.o'")
@@ -318,7 +319,7 @@ def layout_checks(libpath, vorbis_encoder, suites=None):
             script=script.replace(old,new).replace('modern libvorbis encoder','pinned Xiph libvorbis 1.3.7 encoder')
         path=generated/f'{name}-fixtures.js'; path.write_text(script)
         fixtures=OUT/'layout-fixtures'/name
-        args=[OUT/'lamp-cli',generated/'seek-oracle.exe',fixtures,generated/'pcm-bounds-oracle.exe']\
+        args=[OUT/'lamp-cli',generated/'seek-oracle',fixtures,generated/'pcm-bounds-oracle']\
              if name in ('wav-layout','flac-layout') else [OUT/'lamp-cli',generated,fixtures]
         run(['node',path,*args],timeout=1800,live=True)
         report=next(fixtures.glob('*-verification.json'))
