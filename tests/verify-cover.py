@@ -28,7 +28,8 @@ import subprocess
 import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from lamp_test import Failure, build_lamp, ffmpeg, lamp_cli, main_guard, scratch, write_report
+from lamp_test import (Failure, build_lamp, ffmpeg, lamp_cli, main_guard, scratch, write_report,
+                       metadata_vorbis_encoder)
 
 _spec = importlib.util.spec_from_file_location('verify_tags', Path(__file__).resolve().parent / 'verify-tags.py')
 _tags = importlib.util.module_from_spec(_spec)
@@ -222,7 +223,7 @@ def main():
     picture = base64.b64encode(flac_picture(3, b'image/jpeg', large)).decode()
     metadata = work / 'picture.txt'
     metadata.write_text(';FFMETADATA1\nMETADATA_BLOCK_PICTURE=' + picture.replace('=', '\\=') + '\n')
-    for name, coding in (('vorbis.ogg', ['-c:a', 'libvorbis']), ('opus.opus', ['-c:a', 'libopus'])):
+    for name, coding in (('vorbis.ogg', metadata_vorbis_encoder()), ('opus.opus', ['-c:a', 'libopus'])):
         path = work / name
         ffmpeg(*source(), '-i', metadata, '-map', '0', '-map_metadata', '1', *coding, path)
         compare(path, 'a comment over many Ogg pages')
@@ -286,6 +287,21 @@ def main():
     for name in ('base.mp3', 'base.wav', 'base.m4a', 'base.wv'):
         compare(work / name, 'no picture', empty=True)
 
+    # Exclusive output and failures must preserve existing destinations. A file
+    # with no cover must not create one, even when the destination is valid.
+    destination = work / 'protected-cover.bin'
+    sentinel = b'existing cover destination\0\xff'
+    destination.write_bytes(sentinel)
+    for name, output, status in (
+            ('id3v24.mp3', destination, 4),
+            ('base.mp3', destination, 2),
+            ('id3v24.mp3', destination / 'cannot-be-a-child', 4)):
+        result = subprocess.run([str(lamp_cli()), '--cover', str(work / name), str(output)],
+                                stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=30)
+        if result.returncode != status or destination.read_bytes() != sentinel:
+            raise Failure(f'{name}: cover output did not preserve its destination: {result.returncode}')
+    checks.append({'test': 'exclusive cover export', 'result': 'passed', 'cases': 3})
+
     # Robustness: mutated pictures never crash or hang.
     sources = [work / n for n in ('id3v24.mp3', 'unsync-v24.mp3', 'native.flac', 'comment-picture.flac', 'aac.m4a',
                                   'covr-types.m4a', 'attachments.mka', 'ape-cover.wv', 'id3-chunk.wav', 'vorbis.ogg')]
@@ -316,7 +332,7 @@ def main():
     checks.append({'test': 'mutated pictures', 'result': 'no crash or hang', 'files': mutated, 'written': opened})
     print(f'{mutated} mutated files: no crash or hang ({opened} pictures written)', flush=True)
 
-    write_report('cover', {'result': 'passed', 'checks': checks,
+    write_report('cover', {'result': 'passed', 'vorbis_fixture_encoder': metadata_vorbis_encoder(), 'checks': checks,
                            'scope': 'Embedded cover art (ID3v2 APIC/PIC, FLAC PICTURE, METADATA_BLOCK_PICTURE, MP4 '
                                     'covr, Matroska attachments, APEv2 binary items) against FFmpeg attached '
                                     'pictures; mutated files.'})
