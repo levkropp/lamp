@@ -12,6 +12,8 @@ open build/macos/LAMP.app
 build/macos/lamp-cli ~/Music/track.flac
 build/macos/lamp-cli --check ~/Music/track.opus
 build/macos/lamp-cli --decode ~/Music/track.ogg ./track.f32
+build/macos/lamp-cli --decode --rate 48000 --start 1:30 ~/Music/list.m3u8 ./queue.f32
+build/macos/lamp-cli --repeat --track 2 one.mkv two.mp4
 build/macos/lamp-cli --tags ~/Music/track.mp3
 build/macos/lamp-cli --chapters ~/Music/book.m4a
 build/macos/lamp-cli --cover ~/Music/album.flac ./cover-image
@@ -20,11 +22,13 @@ build/macos/lamp-cli --version
 
 `--check` runs without an audio device. Export writes interleaved little-endian float32 stereo to a new destination; it never overwrites an existing file. Mono is duplicated, multichannel streams follow the existing documented stereo routing, and Opus output is 48 kHz. Malformed/inaccessible input returns status 2; export/output failures return 1. A failed export can leave a partial file.
 
+Playback, `--check` and `--decode` accept several files and M3U/M3U8/PLS playlists, using the shared [queue policies](queue.md). The default session rate is the first playable file's; later files are resampled to it. `--rate HZ` explicitly selects 1,000–768,000 Hz using LAMP's filter, `--start TIME` begins the first playable entry later, and `--track N` selects that audio ordinal in every file. `--repeat` loops playback only. Options precede paths; `--` ends them. The final `--decode` argument is the new output path. Core Audio may still convert the session rate to the device's rate. `--rate device`, output selection, navigation keys and resume remain pending on Mac.
+
 `--tags`, `--chapters` and `--cover` also run without an audio device. Tags use the shared ten normalized keys and print `key=value` lines in UTF-8; chapters print `HH:MM:SS.mmm title`. Control characters in displayed text become spaces. Cover export preserves the original embedded bytes, creates a new destination and prints its MIME type and byte count. It returns 2 without creating a file when no picture exists, or 4 on an output failure; it never replaces an existing destination. The native getter adapters preserve the shared metadata readers' additional length/type results explicitly across the ABI boundary.
 
 `./build.sh --release` strips local symbols. `--output PATH` builds into a separate directory. The build produces `lamp-cli`, `lamp`, and `LAMP.app`, including the LAMP icon at standard/Retina sizes, audio document associations, project licenses and an ad-hoc signature. The scripts use Python and Apple command line tools; building the player needs no Homebrew codec package, FFmpeg, Node.js, Rosetta or Wine. Python is not a runtime dependency.
 
-The native app implements Open and Finder file-open/drop handlers; opening several files selects the first one. Standard AppKit buttons and sliders expose native accessibility and focus behavior. Keyboard shortcuts on the player view are:
+The native app implements Open and Finder file-open/drop handlers; opening several files selects the first one. Opening a playlist plays its expanded entries, and the title/timeline follow the entry being heard. Standard AppKit buttons and sliders expose native accessibility and focus behavior. Keyboard shortcuts on the player view are:
 
 | Control | Action |
 | --- | --- |
@@ -58,7 +62,7 @@ Rhun is pinned at `4d11f81019617e6e3a3922c81f5dedc3025d7884`. Its translator and
 
 The backend uses three AudioQueue buffers of 2,048 interleaved float stereo frames. Core Audio owns the callback thread. It advances consumed position and decodes the next buffer; AppKit timer updates do not decode playback audio. At 48 kHz the queued capacity is 128 ms. This is a capacity, not a measurement of audible latency or an underrun guarantee.
 
-The shared decoder has one instance and a private stack. A mutex serializes callback decoding and repositioning. Stop/reset first suppresses callback refills: AudioQueue returns discarded buffers through its callback, and those buffers must neither advance position nor enqueue replacement PCM. Seeking reopens the decoder, restores its preceding index point, discards to the requested frame and primes the stopped queue. Seeking while paused leaves playback paused; seeking to EOF finishes without starting an empty queue. Natural EOF drains queued output. Zero-frame streams finish without starting an empty queue. Disposal waits for the callback before closing the decoder.
+The shared decoder has one instance and a private stack. A mutex serializes callback decoding and repositioning. Stop/reset first suppresses callback refills: AudioQueue returns discarded buffers through its callback, and those buffers must neither advance position nor enqueue replacement PCM. Each session owns copies of the expanded UTF-8 paths. The shared queue fills buffers across file boundaries and records when each entry starts; the native backend caches entry durations so files decoded ahead cannot change the heard file's title, position or seek target. Seeking reopens that heard entry, restores its preceding index point (and resampler history), discards to the requested frame and primes the stopped queue. Seeking while paused leaves playback paused. An entry's end proceeds into the next entry; the list's EOF finishes without starting an empty queue. Natural EOF and late decode failures drain submitted PCM before reporting completion/error. Disposal waits for the callback before closing the decoder and freeing the owned paths.
 
 ## Verification
 
@@ -102,6 +106,17 @@ The [translation instruction oracle](../reports/macos-translation-verification.j
 
 The [native CLI metadata report](../reports/macos-metadata-verification.json) records 50 tag, 40 chapter and 51 cover checks, including 3,300 mutated inputs, exclusive cover export and missing/extra argument rejection. These reuse the original suites' ffprobe/FFmpeg and written-value comparisons. Run `tests/verify-tags.py`, `tests/verify-chapters.py` and `tests/verify-cover.py` with Python. For FFmpeg builds lacking libvorbis, explicitly set `LAMP_METADATA_VORBIS_ENCODER=vorbis`; this uses FFmpeg's experimental stereo encoder solely to create metadata fixtures, records that choice in the report and does not change a reference decoder or PCM tolerance.
 
+The [native queue report](../reports/macos-queue-verification.json) records 15 offline queue checks, 11 explicit-rate checks, 12 start/option checks over ten formats, 13 track checks plus 60 track-catalog cases, and 51 independent resampler checks. The metadata suites also pass with the new argument parser. Seven real Core Audio scenarios compare every submitted PCM sample with offline output, including boundaries inside buffers, paused seeks while decoding is ahead, exact resampled seeks, list replacement, late-error draining and repeat. A test-only interposer records AudioQueue submissions; it does not measure the physical output or audible latency and is never included in the app/package.
+
+```sh
+LAMP_FIXTURE_VORBIS_ENCODER=vorbis python3 tests/verify-queue.py
+LAMP_FIXTURE_VORBIS_ENCODER=vorbis python3 tests/verify-rate.py --skip-playback
+python3 tests/verify-resample.py
+python3 tests/verify-macos-queue.py
+```
+
+The recorded track run uses a retained Linux-generated `speex-opus.ogg` through `LAMP_TRACK_FIXTURES=PATH` because the local FFmpeg lacks libspeex. The start run uses the original FFmpeg 5 fixture set via `LAMP_NAVIGATION_START_FIXTURES=PATH`; fixture hashes are recorded. One newly generated FFmpeg 9 Opus stream disproves the older navigation test's assumption of byte-exact convergence after half a second: both current Linux and Mac produce identical whole and seek decodes, but their seek tails differ from continuous decoding by up to 5.96e-8 after that interval. The test's exact policy is retained; that new fixture is recorded as a comparison limitation, not a passing continuous-PCM case. The normative reset-reference Opus checks remain separate.
+
 Real-device tests exercise three open/pause/paused-seek/resume/EOF/stop cycles, natural EOF and failed-open recovery for each of the six formats. Pseudo-terminal checks keep playback paused past its original duration, then verify Q/Ctrl+C exit and restoration of terminal settings. The comparison excludes only Darwin’s transient PENDIN input-state bit; configuration flags, speeds and control characters are checked. The UI smoke check verifies native launch, playback, timer updates and exit. Open-panel, Finder/drop, focused-control shortcuts, fullscreen, accessibility, Retina and multiple-display interactions still need comprehensive manual desktop testing. These checks do not establish complete conformance, universal performance, audible latency, device-reconnection behavior or immunity to system stalls.
 
 ## Packaging and remaining platform work
@@ -116,4 +131,4 @@ The ZIP contains the app, CLI, notices, this guide and a manifest of file sizes/
 
 The default signature is local/ad-hoc. Developer ID signing, hardened-runtime/notarization, release CI and a published macOS download remain future distribution work. This port does not modify the published Windows prerelease.
 
-Current Mac differences are explicit: native controls stay visible; seeks/open/index construction can block the UI; the default audio device and Core Audio's sample-rate conversion are used; output remains stereo. Asynchronous seek/open, output-device selection/reconnection, exclusive output, sleep/wake recovery and measured Mac CPU/wakeup/latency comparisons remain roadmap work. Codec/container limits remain those documented in the repository. The rebased branch now shares the current decoder tree across all three platforms. Mac CLI/player parity is part of the pre-video goal: queues/playlists and editing, navigation/repeat/resume, AppKit tags/chapters/cover presentation, track/rate/device selection, and asynchronous transport still need native front-end integration and checks. New shared features must include Mac validation; a successful translation build alone does not establish feature parity.
+Current Mac differences are explicit: native controls stay visible; seeks/open/index construction can block the UI; the default audio device is used; output remains stereo. Asynchronous seek/open, output-device selection/reconnection, exclusive output, sleep/wake recovery and measured Mac CPU/wakeup/latency comparisons remain roadmap work. Codec/container limits remain those documented in the repository. Mac CLI/player parity is part of the pre-video goal: interactive navigation/repeat controls and resume, AppKit multiple-file selection/queue editing, AppKit tags/chapters/cover and track/rate controls, device selection and asynchronous transport still need integration and checks. New shared features must include Mac validation; a successful translation build alone does not establish feature parity.

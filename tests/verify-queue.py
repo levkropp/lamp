@@ -30,7 +30,7 @@ import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from lamp_test import (Failure, build_lamp, build_oracles, decode_f32, exe, ffmpeg, lamp_cli, main_guard, out_dir, run,
-                       scratch, write_report)
+                       scratch, write_report, fixture_vorbis_encoder)
 
 
 def lamp(*args, expect=0):
@@ -91,7 +91,7 @@ def main():
     files = []
     for k, (name, coding) in enumerate((('a.flac', ['-c:a', 'flac']), ('b.wav', ['-c:a', 'pcm_s24le']),
                                         ('c.mp3', ['-c:a', 'libmp3lame']), ('d.m4a', ['-c:a', 'aac']),
-                                        ('e.wv', ['-c:a', 'wavpack']), ('f.ogg', ['-c:a', 'libvorbis']),
+                                        ('e.wv', ['-c:a', 'wavpack']), ('f.ogg', fixture_vorbis_encoder()),
                                         ('g.m4a', ['-c:a', 'alac']), ('h.wav', ['-c:a', 'pcm_u8']))):
         path = work / name
         ffmpeg(*source(44100, 0.4 + 0.1 * k, k + 1, 1 if name == 'h.wav' else 2), *coding, path)
@@ -109,7 +109,7 @@ def main():
                                               ('r22.mp3', 22050, ['-c:a', 'libmp3lame']),
                                               ('r96.flac', 96000, ['-c:a', 'flac']),
                                               ('r8.wav', 8000, ['-c:a', 'pcm_s16le']),
-                                              ('r32.ogg', 32000, ['-c:a', 'libvorbis']))):
+                                              ('r32.ogg', 32000, fixture_vorbis_encoder()))):
         path = work / name
         ffmpeg(*source(rate, 0.5, 40 + k), *coding, path)
         others.append((path, 48000 if name.endswith('.opus') else rate))
@@ -128,7 +128,7 @@ def main():
 
     # Chained Ogg files.
     links = []
-    for k, (name, rate, coding) in enumerate((('link1.ogg', 48000, ['-c:a', 'libvorbis']),
+    for k, (name, rate, coding) in enumerate((('link1.ogg', 48000, fixture_vorbis_encoder()),
                                               ('link2.opus', 48000, ['-c:a', 'libopus']),
                                               ('link3.oga', 32000, ['-c:a', 'flac']))):
         path = work / name
@@ -212,7 +212,7 @@ def main():
         raise Failure(f'unreadable: {text[-300:]}')
     record('unreadable-playlist', ours, own(files[6]), 'a playlist that does not exist is skipped', text)
 
-    write_report('queue', {'result': 'passed', 'checks': checks,
+    write_report('queue', {'result': 'passed', 'vorbis_fixture_encoder': fixture_vorbis_encoder(), 'checks': checks,
                            'scope': 'Gapless queues of several files: exact concatenation at one rate, resampling '
                                     'to the first file\'s rate against the resampler oracle, chained Ogg files, '
                                     'skipped and failing files, M3U/M3U8/PLS playlists.'})

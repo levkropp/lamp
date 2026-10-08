@@ -28,7 +28,7 @@ import time
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from lamp_test import (Failure, audio_environment, build_lamp, build_oracles, exe, ffmpeg, main_guard, out_dir,
-                       playback_requested, run, scratch, write_report)
+                       playback_requested, run, scratch, write_report, fixture_vorbis_encoder)
 from lamp_test import lamp_cli as lamp_cli_linux
 
 _spec = importlib.util.spec_from_file_location('verify_navigation',
@@ -77,7 +77,7 @@ def main():
 
     files = {}
     for name, coding in (('flac', ['-c:a', 'flac']), ('wav', ['-c:a', 'pcm_s16le']),
-                         ('mp3', ['-c:a', 'libmp3lame', '-b:a', '256k']), ('ogg', ['-c:a', 'libvorbis']),
+                         ('mp3', ['-c:a', 'libmp3lame', '-b:a', '256k']), ('ogg', fixture_vorbis_encoder()),
                          ('m4a', ['-c:a', 'aac', '-aac_pns', '0'])):
         path = work / f'tone.{name}'
         ffmpeg('-f', 'lavfi', '-i', f'anoisesrc=r=44100:d=6:seed={len(files) + 3}:a=0.25', '-ac', '2', *coding, path)
@@ -134,9 +134,11 @@ def main():
     if playback_requested(sys.argv[1:]):
         playback(work, files['flac'], references['flac'], checks)
     write_report('rate-wine' if WINE else 'rate', {
-        'result': 'passed', 'checks': checks,
+        'result': 'passed', 'vorbis_fixture_encoder': fixture_vorbis_encoder(), 'checks': checks,
+        'playback_checked': playback_requested(sys.argv[1:]),
         'scope': '--rate decodes of five formats against the resampler oracle, lists, --start in resampled files, '
-                 '--check, misuse, and --rate device playback on the private null sink.'})
+                 '--check and misuse. ' + ('Also --rate device playback on the private null sink.'
+                                          if playback_requested(sys.argv[1:]) else 'Playback not requested.')})
     print(f'Passed {len(checks)} rate checks.')
 
 

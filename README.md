@@ -43,7 +43,7 @@ build/macos/lamp-cli --check 'Music/track.opus'
 build/macos/lamp-cli --decode 'Music/track.ogg' 'track.f32'
 ```
 
-The Mac app has Open, Finder file-open/drop handlers, pause/replay, stop, timeline seeking and volume controls. Cmd+O opens; Cmd+Q quits. The CLI also supports `--tags`, `--chapters` and `--cover`. The current shared decoders build natively on ARM64; Mac queue, track, rate and device controls and metadata presentation in AppKit remain in progress. The local bundle is ad-hoc signed. See [Mac build strategy, controls, verification and limits](docs/macos.md). The published v0.3.0 download remains Windows-only.
+The Mac app has Open, Finder file-open/drop handlers, playlist playback, pause/replay, stop, timeline seeking and volume controls. Cmd+O opens; Cmd+Q quits. The CLI supports multi-file queues, `--repeat`, `--start`, `--rate HZ`, `--track`, `--tags`, `--chapters` and `--cover`. Interactive queue navigation/resume, device controls and additional AppKit controls remain in progress. The current shared decoders build natively on ARM64, and the local bundle is ad-hoc signed. See [Mac build strategy, controls, verification and limits](docs/macos.md). The published v0.3.0 download remains Windows-only.
 
 On Linux x86-64, `./build.sh` produces a static `build/lamp-cli` with the same decoders, playback, checks and export. It plays through PulseAudio or PipeWire's pulse server by speaking their native protocol directly:
 

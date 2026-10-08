@@ -1,0 +1,3687 @@
+{
+  "result": "passed scoped checks; one separately recorded fresh-fixture comparison limitation",
+  "platform": "macOS-26.4.1-arm64-arm-64bit-Mach-O",
+  "architecture": "arm64",
+  "scope": "Shared queue/playlists, native CLI start/rate/track/repeat and exact submitted Core Audio PCM. Interactive queue navigation, resume, AppKit multi-file/metadata/device controls and physical-output fidelity are outside this change.",
+  "base_commit": "040b268352e5412187799e0400cd55ee663f1856",
+  "rebased_main": "3ae47f34cb0ee36104e0291cf32b3742bbe4a462",
+  "release": {
+    "result": "passed",
+    "platform": "macOS-26.4.1-arm64-arm-64bit-Mach-O",
+    "architecture": "arm64",
+    "runtime": {
+      "architecture": "arm64",
+      "system_imports_only": true,
+      "bundle_signature": "verified ad-hoc",
+      "minimum_macos": "12.0",
+      "binaries": [
+        {
+          "file": "lamp",
+          "bytes": 675064,
+          "sha256": "6dd954ae7773ee862e7871d6937698883c656fd93916a9a293435ba8c215b9ad",
+          "imports": [
+            "/System/Library/Frameworks/AudioToolbox.framework/Versions/A/AudioToolbox",
+            "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit",
+            "/usr/lib/libSystem.B.dylib",
+            "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation",
+            "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation",
+            "/usr/lib/libobjc.A.dylib"
+          ]
+        },
+        {
+          "file": "lamp-cli",
+          "bytes": 657664,
+          "sha256": "a56b4e46ddfed6d7bdda8c62e53be7b76f2609b7711a41760a8b8b1301857a70",
+          "imports": [
+            "/System/Library/Frameworks/AudioToolbox.framework/Versions/A/AudioToolbox",
+            "/usr/lib/libSystem.B.dylib"
+          ]
+        }
+      ]
+    },
+    "decoder": {
+      "files": [
+        {
+          "file": "tone.aiff",
+          "sha256": "41b68536a701084ec4483420cb75f17234f693c09dc3f43e2aef510ce33ecee8",
+          "rate": 48000,
+          "channels": 2,
+          "frames": 12000,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "tone.flac",
+          "sha256": "733a88b19ccdad9cf6e700f969987c68398114ddad780b15e540284728adb444",
+          "rate": 48000,
+          "channels": 2,
+          "frames": 12000,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "tone.mp3",
+          "sha256": "44176cfe4881e20abf57839f885275c011f3f606bbfc4b09b9945476e0975008",
+          "rate": 48000,
+          "channels": 2,
+          "frames": 12000,
+          "peak_error": 1.564621925354004e-07,
+          "tolerance": 2e-05,
+          "snr_db": 128.94829808700254
+        },
+        {
+          "file": "tone.ogg",
+          "sha256": "e2f69b537d63dc67ef253e0ad7b33216dc9d84f191299b6328e832f3f88f3155",
+          "rate": 48000,
+          "channels": 2,
+          "frames": 12000,
+          "peak_error": 2.9802322387695312e-08,
+          "tolerance": 2e-06,
+          "snr_db": 138.01557109889674
+        },
+        {
+          "file": "tone.opus",
+          "sha256": "1d6de85cc220ba52f5a6e154477896a95f7b4603536e7f79a0a75eaad2a83690",
+          "rate": 48000,
+          "channels": 2,
+          "frames": 12000,
+          "peak_error": 1.6033649444580078e-05,
+          "tolerance": 2e-05,
+          "snr_db": 77.03047735104575
+        },
+        {
+          "file": "tone.wav",
+          "sha256": "6a3f467fe95967eb6aea2145db808df86c8b6235b39cf79ae9dcd7af625b78fd",
+          "rate": 48000,
+          "channels": 2,
+          "frames": 12000,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "8000-1-pcm_s16le.wav",
+          "sha256": "e9eb8cc24b92810ca2a512e31b19ef18d6c3075009002a7bc853ac948d9d9014",
+          "rate": 8000,
+          "channels": 1,
+          "frames": 2960,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "8000-1-pcm_s24le.wav",
+          "sha256": "4dab7c82e9341ed1a1b0befd78177bfb74e5b88a7e4da9530a89d52209171e5e",
+          "rate": 8000,
+          "channels": 1,
+          "frames": 2960,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "8000-1-pcm_s32le.wav",
+          "sha256": "22dd8d03c1125d4d92cb4b20129c1b44a0029b2d3dfe50ba5074bb17cba8272b",
+          "rate": 8000,
+          "channels": 1,
+          "frames": 2960,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "8000-1-pcm_f32le.wav",
+          "sha256": "40f29e721b2a2f06b73cc46e153b41dc91e58e4e76d378591870332f448a3c25",
+          "rate": 8000,
+          "channels": 1,
+          "frames": 2960,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "8000-1-pcm_f64le.wav",
+          "sha256": "761b8d5c026151df53672e222d9ed0d6a76fb6f0d2b677260b9998553a70edf2",
+          "rate": 8000,
+          "channels": 1,
+          "frames": 2960,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "8000-1-pcm_s24be.aiff",
+          "sha256": "a51bb9e77a3c8d26f6fff2e68497ae7e5327d2f3cf0a24c0a6ef3fc9109acd96",
+          "rate": 8000,
+          "channels": 1,
+          "frames": 2960,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "8000-1-flac.flac",
+          "sha256": "aa1c1f1ef70fab0b0e152ffc256ab67c3ddd16f7eaae5b56dc2368e922a5f696",
+          "rate": 8000,
+          "channels": 1,
+          "frames": 2960,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "8000-1-libmp3lame.mp3",
+          "sha256": "66aab02a7ca8fe3ef162cfc27103dcb18fec5101b5627b7725af19f5c1c4de9d",
+          "rate": 8000,
+          "channels": 1,
+          "frames": 2960,
+          "peak_error": 2.1606683731079102e-07,
+          "tolerance": 2e-05,
+          "snr_db": 125.90365509559417
+        },
+        {
+          "file": "8000-1-libvorbis.ogg",
+          "sha256": "fce931997ea5a0b9f49073b31e5a5d09647a345996b0eb9704cd5b860afd1666",
+          "rate": 8000,
+          "channels": 1,
+          "frames": 2960,
+          "peak_error": 4.470348358154297e-08,
+          "tolerance": 2e-06,
+          "snr_db": 140.20621235086767
+        },
+        {
+          "file": "8000-1-libopus.opus",
+          "sha256": "d432bfbec7aa741e8acf2658dd5ab01ac0eadc1f3bd596fbd9731fd553d1cdbe",
+          "rate": 48000,
+          "channels": 1,
+          "frames": 17760,
+          "peak_error": 1.6629695892333984e-05,
+          "tolerance": 2e-05,
+          "snr_db": 80.04076607346076
+        },
+        {
+          "file": "8000-2-pcm_s16le.wav",
+          "sha256": "33ed47d1bc913cdeb00face881df4dd6fa6729d46c61244f0ca8fa01315bede0",
+          "rate": 8000,
+          "channels": 2,
+          "frames": 2960,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "8000-2-pcm_s24le.wav",
+          "sha256": "346f50e090b535bb3610121744b7705e583c644daaa4c4bfb29ecef4061a658b",
+          "rate": 8000,
+          "channels": 2,
+          "frames": 2960,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "8000-2-pcm_s32le.wav",
+          "sha256": "5dc50b0fb50c39b539b0471e74ff1f1a09a2099dd3e30781938fc47d1735e843",
+          "rate": 8000,
+          "channels": 2,
+          "frames": 2960,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "8000-2-pcm_f32le.wav",
+          "sha256": "54123d54808ba59e93e52ab33bee6ef62ef244f23148a671ec4f770ac33f2471",
+          "rate": 8000,
+          "channels": 2,
+          "frames": 2960,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "8000-2-pcm_f64le.wav",
+          "sha256": "2c5ed2689117c87978cb862b3485a505f266845e6d545b3cbdf97ec49f5e9792",
+          "rate": 8000,
+          "channels": 2,
+          "frames": 2960,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "8000-2-pcm_s24be.aiff",
+          "sha256": "c0c59749986bb8879247090efd0926b198793db91f859aff7b846ca9b812f115",
+          "rate": 8000,
+          "channels": 2,
+          "frames": 2960,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "8000-2-flac.flac",
+          "sha256": "67d071c1c8440a2954ea506d9f0708129fbe5e848c93ae08a4bb879e3f8e04b1",
+          "rate": 8000,
+          "channels": 2,
+          "frames": 2960,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "8000-2-libmp3lame.mp3",
+          "sha256": "61630f3136979e8e92b476980d692498690ec77329f69367546151eaf9b0cbc2",
+          "rate": 8000,
+          "channels": 2,
+          "frames": 2960,
+          "peak_error": 1.7508864402770996e-07,
+          "tolerance": 2e-05,
+          "snr_db": 124.97775218240955
+        },
+        {
+          "file": "8000-2-libvorbis.ogg",
+          "sha256": "318cd93e4c2a89714c52f35a33f2f3b814202e075b04f11952f42667fdc3f9a3",
+          "rate": 8000,
+          "channels": 2,
+          "frames": 2960,
+          "peak_error": 4.470348358154297e-08,
+          "tolerance": 2e-06,
+          "snr_db": 139.39109555170492
+        },
+        {
+          "file": "8000-2-libopus.opus",
+          "sha256": "409b9858a1ae6ed9bd7afd3b35dba61b743abe6f0f8763e02e734752682f2646",
+          "rate": 48000,
+          "channels": 2,
+          "frames": 17760,
+          "peak_error": 1.6070902347564697e-05,
+          "tolerance": 2e-05,
+          "snr_db": 76.99260957026644
+        },
+        {
+          "file": "44100-1-pcm_s16le.wav",
+          "sha256": "b34635574f0e2b514cb9c44abddf79eebd240434bff81691fb72cc9e77cbfe77",
+          "rate": 44100,
+          "channels": 1,
+          "frames": 16317,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "44100-1-pcm_s24le.wav",
+          "sha256": "3f1f1c096d0920d4ff2b5d3cc536d376e108050fde9be51dce8e5456b66dcb05",
+          "rate": 44100,
+          "channels": 1,
+          "frames": 16317,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "44100-1-pcm_s32le.wav",
+          "sha256": "5d964a2e1bc394d1b8240909070714b81e11d00095aa116b0bec8c3e6952bd8e",
+          "rate": 44100,
+          "channels": 1,
+          "frames": 16317,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "44100-1-pcm_f32le.wav",
+          "sha256": "32e42f025e137c5430f11e74a8321fbde2abaf8833fdd451d22f2826aeb71075",
+          "rate": 44100,
+          "channels": 1,
+          "frames": 16317,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "44100-1-pcm_f64le.wav",
+          "sha256": "0505cd2d4064d32d4a495a66127611dce09763da9282e0bfbcc9db26333e70c3",
+          "rate": 44100,
+          "channels": 1,
+          "frames": 16317,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "44100-1-pcm_s24be.aiff",
+          "sha256": "3c1a153e4c8f81e3e5c5f75bbdbb3773ee2e2757039d620dd99be75c8f41a2b5",
+          "rate": 44100,
+          "channels": 1,
+          "frames": 16317,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "44100-1-flac.flac",
+          "sha256": "fcaa5fc6b51630e3d690774ec1252132d69b0df771bac0666c8fa58dccff6d5f",
+          "rate": 44100,
+          "channels": 1,
+          "frames": 16317,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "44100-1-libmp3lame.mp3",
+          "sha256": "ba6a4224947e3c65f641708be1ddd1e7b8a34aa737e25537d4ca2a6581cf54b0",
+          "rate": 44100,
+          "channels": 1,
+          "frames": 16317,
+          "peak_error": 2.1420419216156006e-07,
+          "tolerance": 2e-05,
+          "snr_db": 128.6036721318386
+        },
+        {
+          "file": "44100-1-libvorbis.ogg",
+          "sha256": "07727cd39d2dcfe7059cb774b2112c5aa079d6b5528973b6332cf8bdab919418",
+          "rate": 44100,
+          "channels": 1,
+          "frames": 16317,
+          "peak_error": 6.705522537231445e-08,
+          "tolerance": 2e-06,
+          "snr_db": 137.179753738006
+        },
+        {
+          "file": "44100-2-pcm_s16le.wav",
+          "sha256": "14a199c09cddd4aaf91d91974b79ef85cb68c45f60c4d16220ba359eaa443427",
+          "rate": 44100,
+          "channels": 2,
+          "frames": 16317,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "44100-2-pcm_s24le.wav",
+          "sha256": "151defdeed1d16c48fe0a5b559610e4bbce3f4ddc367f6723a69340d90cc04bf",
+          "rate": 44100,
+          "channels": 2,
+          "frames": 16317,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "44100-2-pcm_s32le.wav",
+          "sha256": "3492a3be72353a260e651afcca004cc9c5d7626e59740d8ecd1b8c46e6f2eb38",
+          "rate": 44100,
+          "channels": 2,
+          "frames": 16317,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "44100-2-pcm_f32le.wav",
+          "sha256": "dbbdad0df725315995f7b3f4148181f2d92d25ea94e14999cc08c2122307a834",
+          "rate": 44100,
+          "channels": 2,
+          "frames": 16317,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "44100-2-pcm_f64le.wav",
+          "sha256": "395570016d9b3ffa92aa499cf16488a68aebe435428504f5a244fe4cd197d7b1",
+          "rate": 44100,
+          "channels": 2,
+          "frames": 16317,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "44100-2-pcm_s24be.aiff",
+          "sha256": "b7204fa33f1fd8c00cd40fee43bad8f056e71000300feb4eef63fe3a5cc399bc",
+          "rate": 44100,
+          "channels": 2,
+          "frames": 16317,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "44100-2-flac.flac",
+          "sha256": "9f527eebfe3cd89d21d9fd68669955673b9b568a2cda41a81266552a10432170",
+          "rate": 44100,
+          "channels": 2,
+          "frames": 16317,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "44100-2-libmp3lame.mp3",
+          "sha256": "0c66c11ab9d27d46574352d0ce7fe996201fc773ca793640ed796dfb6e1e371e",
+          "rate": 44100,
+          "channels": 2,
+          "frames": 16317,
+          "peak_error": 1.7881393432617188e-07,
+          "tolerance": 2e-05,
+          "snr_db": 128.68142177241796
+        },
+        {
+          "file": "44100-2-libvorbis.ogg",
+          "sha256": "03cd27bc206f6cc1d41732a869c920738ded512eb3ed6673e8188d9c6c745d8e",
+          "rate": 44100,
+          "channels": 2,
+          "frames": 16317,
+          "peak_error": 6.705522537231445e-08,
+          "tolerance": 2e-06,
+          "snr_db": 137.67514038419841
+        },
+        {
+          "file": "48000-1-pcm_s16le.wav",
+          "sha256": "e19b689a4e50b550e62fa68f2191dd58a13766c8dc2aadcb05828ba6ba5c7f99",
+          "rate": 48000,
+          "channels": 1,
+          "frames": 17760,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "48000-1-pcm_s24le.wav",
+          "sha256": "26a5a5943d0b5981cc2a4ef4f965e999465afb5b43ef7809bcf1c0ac83cd33e4",
+          "rate": 48000,
+          "channels": 1,
+          "frames": 17760,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "48000-1-pcm_s32le.wav",
+          "sha256": "11ccc0b775e34cd0c4140a880777674cef2b17babbd31df0f5c1c912670800d3",
+          "rate": 48000,
+          "channels": 1,
+          "frames": 17760,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "48000-1-pcm_f32le.wav",
+          "sha256": "b8390a55b16b4dd2e4a030e1e0efe082f180344de29a458b5f9ee29ae60b4dde",
+          "rate": 48000,
+          "channels": 1,
+          "frames": 17760,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "48000-1-pcm_f64le.wav",
+          "sha256": "bfa506dd0232a1efc8947141ca4de8afb07072df51bbc6c1165f7afaea770a13",
+          "rate": 48000,
+          "channels": 1,
+          "frames": 17760,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "48000-1-pcm_s24be.aiff",
+          "sha256": "e9195190b7e15df3f9ed3b0e56838be2f2f412a3d1260e3ba8c91265bdbb60b1",
+          "rate": 48000,
+          "channels": 1,
+          "frames": 17760,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "48000-1-flac.flac",
+          "sha256": "a53925227f92170be0404f2745f7a09e120f19569b14f11e873c78494c08d176",
+          "rate": 48000,
+          "channels": 1,
+          "frames": 17760,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "48000-1-libmp3lame.mp3",
+          "sha256": "e9dd3cd8d07488d17720a2d7cd026fb019c1be94bf355f8338b1385242e2ecb4",
+          "rate": 48000,
+          "channels": 1,
+          "frames": 17760,
+          "peak_error": 1.4901161193847656e-07,
+          "tolerance": 2e-05,
+          "snr_db": 130.50044520172332
+        },
+        {
+          "file": "48000-1-libvorbis.ogg",
+          "sha256": "6c39edd975dfd9cc225ab5e14e1cd6f51337d4e8116af5331203eadb02e1703f",
+          "rate": 48000,
+          "channels": 1,
+          "frames": 17760,
+          "peak_error": 5.960464477539063e-08,
+          "tolerance": 2e-06,
+          "snr_db": 137.68739417587443
+        },
+        {
+          "file": "48000-1-libopus.opus",
+          "sha256": "79f31cd356afcd5b3e1b8f443f4d3b740bb63df266a438cbbd52802cc0fc67aa",
+          "rate": 48000,
+          "channels": 1,
+          "frames": 17760,
+          "peak_error": 1.6629695892333984e-05,
+          "tolerance": 2e-05,
+          "snr_db": 80.02627955434119
+        },
+        {
+          "file": "48000-2-pcm_s16le.wav",
+          "sha256": "4c06e1cba04812207e6deb4eaf2c696e55579576df3b548597a217b298ed96e4",
+          "rate": 48000,
+          "channels": 2,
+          "frames": 17760,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "48000-2-pcm_s24le.wav",
+          "sha256": "2ccb15a7b9bcfbba4f319d5a86ba30c0e21f32572c3dea06e6ac99f3855a5762",
+          "rate": 48000,
+          "channels": 2,
+          "frames": 17760,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "48000-2-pcm_s32le.wav",
+          "sha256": "8948c3213f418c32a93a81387ae85584ff69159c71fe4987bc302e9d0452ba01",
+          "rate": 48000,
+          "channels": 2,
+          "frames": 17760,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "48000-2-pcm_f32le.wav",
+          "sha256": "da8466b1220176c35a76516aab3b739e7c19b06021ec0f281fee82187b5231f4",
+          "rate": 48000,
+          "channels": 2,
+          "frames": 17760,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "48000-2-pcm_f64le.wav",
+          "sha256": "9f02041bfa39e5044d9b40a521926a3ef2ff032b6b2783392ec94886a92eef0f",
+          "rate": 48000,
+          "channels": 2,
+          "frames": 17760,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "48000-2-pcm_s24be.aiff",
+          "sha256": "a9ec395fc765b5c01cc3aaf98f079686eb027c12d34df83a40ca9742e0d50065",
+          "rate": 48000,
+          "channels": 2,
+          "frames": 17760,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "48000-2-flac.flac",
+          "sha256": "e480442928564b5daaf46f969d68b71e004665b853b94bc11603bf2018401f58",
+          "rate": 48000,
+          "channels": 2,
+          "frames": 17760,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "48000-2-libmp3lame.mp3",
+          "sha256": "a652eb8d408176630b75c73412b36e26c6eb302fc7344a3af4aa6124fe270da5",
+          "rate": 48000,
+          "channels": 2,
+          "frames": 17760,
+          "peak_error": 1.4901161193847656e-07,
+          "tolerance": 2e-05,
+          "snr_db": 129.91308727142604
+        },
+        {
+          "file": "48000-2-libvorbis.ogg",
+          "sha256": "14637777c4f8144846f8aa83aa43b746fb4c9049b8c5d67d8ff18e41f1a7daf1",
+          "rate": 48000,
+          "channels": 2,
+          "frames": 17760,
+          "peak_error": 5.960464477539063e-08,
+          "tolerance": 2e-06,
+          "snr_db": 137.7569899958486
+        },
+        {
+          "file": "48000-2-libopus.opus",
+          "sha256": "b90efacbca8f00715f956d3e4cb99e0588e9662130ba39ad3eae2609ab23c6ac",
+          "rate": 48000,
+          "channels": 2,
+          "frames": 17760,
+          "peak_error": 1.615285873413086e-05,
+          "tolerance": 2e-05,
+          "snr_db": 77.01441890402131
+        },
+        {
+          "file": "96000-1-pcm_s16le.wav",
+          "sha256": "933c7f0fb1a7d2aa13c72c46777df82ca0dd48999726b674cd9dd77f0683c85a",
+          "rate": 96000,
+          "channels": 1,
+          "frames": 35520,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "96000-1-pcm_s24le.wav",
+          "sha256": "718195adaceecb7b07fde48f15fd5eecb559523e1b15f37d20c5b7b21285dfa0",
+          "rate": 96000,
+          "channels": 1,
+          "frames": 35520,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "96000-1-pcm_s32le.wav",
+          "sha256": "a183626cb486198e47e0add053160879f519f04c3f14c0a53fbfb377c45b6a15",
+          "rate": 96000,
+          "channels": 1,
+          "frames": 35520,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "96000-1-pcm_f32le.wav",
+          "sha256": "28b3dec0111d54c2939f098567cc392314de20f99cf5c04720173375f5ac833e",
+          "rate": 96000,
+          "channels": 1,
+          "frames": 35520,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "96000-1-pcm_f64le.wav",
+          "sha256": "df5b87155a841b617b5a9bf0e025cb0d31edc9313cabd89d3ad6f3911833eb2d",
+          "rate": 96000,
+          "channels": 1,
+          "frames": 35520,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "96000-1-pcm_s24be.aiff",
+          "sha256": "d3cd665a2e8e3f9c178b566d2f1cde2d8052a3d5d594786a7ec26506a210b2ac",
+          "rate": 96000,
+          "channels": 1,
+          "frames": 35520,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "96000-1-flac.flac",
+          "sha256": "3ca9dd9eda8ceda6e1c9ab517f25a2fb132fdfbe1cec78f7d8c950296db0fd98",
+          "rate": 96000,
+          "channels": 1,
+          "frames": 35520,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "96000-1-libvorbis.ogg",
+          "sha256": "d4b079429410470ef136f3f3d4654c4eca6185f7a0cf795b761de51ae4526218",
+          "rate": 96000,
+          "channels": 1,
+          "frames": 35520,
+          "peak_error": 7.450580596923828e-08,
+          "tolerance": 2e-06,
+          "snr_db": 137.3102374573586
+        },
+        {
+          "file": "96000-2-pcm_s16le.wav",
+          "sha256": "797eb47a8a51340ce39fe16082757cf97376ff80686492f123286b27e1ae68cf",
+          "rate": 96000,
+          "channels": 2,
+          "frames": 35520,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "96000-2-pcm_s24le.wav",
+          "sha256": "5b5a0916619876a19982939a4493bcb6b37b1c8c6979be1a8cae82266f8c8244",
+          "rate": 96000,
+          "channels": 2,
+          "frames": 35520,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "96000-2-pcm_s32le.wav",
+          "sha256": "6623d3c2434a12fe268173490ff63ce9d13b69ec2759e7d000bac6012d568d36",
+          "rate": 96000,
+          "channels": 2,
+          "frames": 35520,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "96000-2-pcm_f32le.wav",
+          "sha256": "6d4c10d82ed17198ca85a547340ef0ab605c9d0b9c8029cda8b975c54deeaaa2",
+          "rate": 96000,
+          "channels": 2,
+          "frames": 35520,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "96000-2-pcm_f64le.wav",
+          "sha256": "6d72dbb775e2b662d23ea10e010ff407d08e11d05755a3bfae1e05c236cc4b20",
+          "rate": 96000,
+          "channels": 2,
+          "frames": 35520,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "96000-2-pcm_s24be.aiff",
+          "sha256": "d6796865665295c1e1daf54c19a23cd19461ded0b561a1d73edcd23ec91bd593",
+          "rate": 96000,
+          "channels": 2,
+          "frames": 35520,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "96000-2-flac.flac",
+          "sha256": "2c675b46383f3144e22edea678d6561d0ebde442dd1a8c497621e8d4516500f0",
+          "rate": 96000,
+          "channels": 2,
+          "frames": 35520,
+          "peak_error": 0.0,
+          "tolerance": 2e-06,
+          "snr_db": null
+        },
+        {
+          "file": "96000-2-libvorbis.ogg",
+          "sha256": "9649f64fd7d2ad192b5ed9c006f36d748e83a4b9fb8205b2767d84c12b0982be",
+          "rate": 96000,
+          "channels": 2,
+          "frames": 35520,
+          "peak_error": 7.450580596923828e-08,
+          "tolerance": 2e-06,
+          "snr_db": 137.30563370996228
+        }
+      ],
+      "seek_checks": 375,
+      "mutations_without_crash_or_hang": 192,
+      "unicode_paths": true,
+      "existing_export_preserved": true,
+      "ffmpeg": "ffmpeg version 9.0.1 Copyright (c) 2000-2026 the FFmpeg developers",
+      "opus_reference": "FFmpeg libopus decoder, selected explicitly",
+      "vorbis_reference_scope": "Hash-verified Xiph 1.3.7, full PCM including terminal granule"
+    },
+    "audio": [
+      {
+        "format": "wav",
+        "stats": "Core Audio: 3 open/pause/paused-seek/resume/EOF/stop cycles, natural EOF and failed-open recovery passed."
+      },
+      {
+        "format": "aiff",
+        "stats": "Core Audio: 3 open/pause/paused-seek/resume/EOF/stop cycles, natural EOF and failed-open recovery passed."
+      },
+      {
+        "format": "flac",
+        "stats": "Core Audio: 3 open/pause/paused-seek/resume/EOF/stop cycles, natural EOF and failed-open recovery passed."
+      },
+      {
+        "format": "mp3",
+        "stats": "Core Audio: 3 open/pause/paused-seek/resume/EOF/stop cycles, natural EOF and failed-open recovery passed."
+      },
+      {
+        "format": "ogg",
+        "stats": "Core Audio: 3 open/pause/paused-seek/resume/EOF/stop cycles, natural EOF and failed-open recovery passed."
+      },
+      {
+        "format": "opus",
+        "stats": "Core Audio: 3 open/pause/paused-seek/resume/EOF/stop cycles, natural EOF and failed-open recovery passed."
+      }
+    ],
+    "terminal": [
+      {
+        "stop": "q",
+        "pause_past_duration": true,
+        "terminal_restored": true,
+        "excluded_kernel_state": "Darwin PENDIN; all configuration/control fields checked"
+      },
+      {
+        "stop": "sigint",
+        "pause_past_duration": true,
+        "terminal_restored": true,
+        "excluded_kernel_state": "Darwin PENDIN; all configuration/control fields checked"
+      }
+    ],
+    "audio_empty": "Core Audio: zero-frame open/pause/seek/stop passed.",
+    "ui": {
+      "launch_playback_timer_and_exit": "passed",
+      "desktop_interactions": "Open dialog, Finder drops and Retina interaction need manual verification"
+    }
+  },
+  "release_queue_playback": {
+    "result": "passed",
+    "checks": 7,
+    "scope": "real Core Audio; exact submitted queue PCM, paused heard-file and resampled seeks, EOF, borrowed-list replacement, error drain, gapless repeat",
+    "platform": "macOS-26.4.1-arm64-arm-64bit-Mach-O",
+    "binary_sha256": "a56b4e46ddfed6d7bdda8c62e53be7b76f2609b7711a41760a8b8b1301857a70",
+    "library_sha256": "3e836794cc64ef7b2e39d48ec483f394f4c96e11fb8ea4b2e73f0dd770e11cda"
+  },
+  "offline_suites": {
+    "queue": {
+      "report": {
+        "result": "passed",
+        "vorbis_fixture_encoder": [
+          "-c:a",
+          "vorbis",
+          "-strict",
+          "-2",
+          "-ac",
+          "2"
+        ],
+        "checks": [
+          {
+            "test": "same-rate",
+            "result": "exact",
+            "frames": 264654,
+            "note": "eight formats at 44.1 kHz",
+            "stats": "codec=1 rate=44100 channels=1 bits=8 frames=264654 decode_error=0"
+          },
+          {
+            "test": "--check same rate",
+            "result": "frames match",
+            "stats": "codec=1 rate=44100 channels=1 bits=8 frames=264654 decode_error=0"
+          },
+          {
+            "test": "mixed-rates",
+            "result": "exact",
+            "frames": 176400,
+            "note": "Opus 48, MP3 22.05, FLAC 96, WAV 8 and Vorbis 32 kHz resampled to 44.1",
+            "stats": "codec=3 rate=44100 channels=2 bits=0 frames=176400 decode_error=0"
+          },
+          {
+            "test": "from-48k",
+            "result": "exact",
+            "frames": 67200,
+            "note": "a 48 kHz session",
+            "stats": "codec=1 rate=48000 channels=2 bits=16 frames=67200 decode_error=0"
+          },
+          {
+            "test": "chain-resampled",
+            "result": "exact",
+            "frames": 52920,
+            "note": "a 48 kHz chain resampled to 44.1 kHz",
+            "stats": "codec=5 rate=44100 channels=2 bits=32 frames=52920 decode_error=0"
+          },
+          {
+            "test": "chain-own-rate",
+            "result": "exact",
+            "frames": 62400,
+            "note": "a chain resampling its own links at the session's rate",
+            "stats": "codec=7 rate=48000 channels=2 bits=24 frames=62400 decode_error=0"
+          },
+          {
+            "test": "chain-skipped",
+            "result": "exact",
+            "frames": 39690,
+            "note": "a chain whose links change rate, at another rate",
+            "stats": "codec=1 rate=44100 channels=2 bits=24 frames=39690 decode_error=6"
+          },
+          {
+            "test": "unopenable",
+            "result": "exact",
+            "frames": 39690,
+            "note": "two files skipped, exit 2",
+            "stats": "codec=1 rate=44100 channels=2 bits=24 frames=39690 decode_error=6"
+          },
+          {
+            "test": "broken-middle",
+            "result": "exact",
+            "frames": 55678,
+            "note": "a truncated file in the middle",
+            "stats": "codec=3 rate=44100 channels=2 bits=0 frames=55678 decode_error=6"
+          },
+          {
+            "test": "broken-last",
+            "result": "exact",
+            "frames": 29218,
+            "note": "the last file's own error kept",
+            "stats": "codec=2 rate=44100 channels=2 bits=24 frames=29218 decode_error=3"
+          },
+          {
+            "test": "nothing opens",
+            "result": "rejected",
+            "output": "Unsupported, malformed, or inaccessible audio file. See docs/compatibility.md for codec and container limits."
+          },
+          {
+            "test": "--check with a skipped file",
+            "result": "exit 2",
+            "stats": "codec=2 rate=44100 channels=2 bits=24 frames=17640 decode_error=6"
+          },
+          {
+            "test": "playlists",
+            "result": "exact",
+            "frames": 167580,
+            "note": "PLS with a file:// URI, a nested M3U8 (BOM, CRLF, comments, a missing entry and a URL) and a Latin-1 M3U",
+            "stats": "codec=12 rate=44100 channels=2 bits=32 frames=167580 decode_error=6"
+          },
+          {
+            "test": "loop",
+            "result": "exact",
+            "frames": 158976,
+            "note": "a playlist naming itself expands to a depth of four",
+            "stats": "codec=4 rate=44100 channels=2 bits=32 frames=158976 decode_error=0"
+          },
+          {
+            "test": "unreadable-playlist",
+            "result": "exact",
+            "frames": 44100,
+            "note": "a playlist that does not exist is skipped",
+            "stats": "codec=9 rate=44100 channels=2 bits=24 frames=44100 decode_error=6"
+          }
+        ],
+        "scope": "Gapless queues of several files: exact concatenation at one rate, resampling to the first file's rate against the resampler oracle, chained Ogg files, skipped and failing files, M3U/M3U8/PLS playlists."
+      },
+      "retained_build": {
+        "build/macos-queue-offline/lamp-cli": "a9e955be6722a01291690602e578544035e21978dd6546fa8ec2b62f74233d4f",
+        "build/macos-queue-offline/liblamp-test.dylib": "c5f0de03e4e547bcc3868a82bb2a81c589388c88fa69427d3a26d43d7c1c4061"
+      }
+    },
+    "rate": {
+      "report": {
+        "result": "passed",
+        "vorbis_fixture_encoder": [
+          "-c:a",
+          "vorbis",
+          "-strict",
+          "-2",
+          "-ac",
+          "2"
+        ],
+        "checks": [
+          {
+            "test": "--rate 48000 flac",
+            "result": "exact",
+            "frames": 288000
+          },
+          {
+            "test": "--rate 48000 wav",
+            "result": "exact",
+            "frames": 288000
+          },
+          {
+            "test": "--rate 48000 mp3",
+            "result": "exact",
+            "frames": 288000
+          },
+          {
+            "test": "--rate 48000 ogg",
+            "result": "exact",
+            "frames": 288044
+          },
+          {
+            "test": "--rate 48000 m4a",
+            "result": "exact",
+            "frames": 288000
+          },
+          {
+            "test": "own rate and a list",
+            "result": "exact"
+          },
+          {
+            "test": "--start in a resampled flac",
+            "result": "exact from 0.5 s and 3.7 s"
+          },
+          {
+            "test": "--start in a resampled mp3",
+            "result": "exact from 0.5 s and 3.7 s"
+          },
+          {
+            "test": "--start in a resampled ogg",
+            "result": "exact from 0.5 s and 3.7 s"
+          },
+          {
+            "test": "--start in a resampled m4a",
+            "result": "exact from 0.5 s and 3.7 s"
+          },
+          {
+            "test": "--check and usage",
+            "result": "frames counted; 8 misuses print the usage"
+          }
+        ],
+        "scope": "--rate decodes of five formats against the resampler oracle, lists, --start in resampled files, --check and misuse. Playback not requested.",
+        "playback_checked": false
+      },
+      "retained_build": {
+        "build/macos-rate/lamp-cli": "c19be3c40eb2ce6054e68eed0a312fc4eb18492710c6d6b4e52c54a0f9dd38c7",
+        "build/macos-rate/liblamp-test.dylib": "ea9f3ac214a741d5ffbb536d112febe6a803a4cacaef269b86db64c5a51554de"
+      }
+    },
+    "start": {
+      "report": {
+        "result": "passed",
+        "vorbis_fixture_encoder": [
+          "-c:a",
+          "libvorbis"
+        ],
+        "checks": [
+          {
+            "test": "start.flac --start",
+            "result": "exact",
+            "starts": 5
+          },
+          {
+            "test": "start.mp3 --start",
+            "result": "exact",
+            "starts": 5
+          },
+          {
+            "test": "start.ogg --start",
+            "result": "exact",
+            "starts": 5
+          },
+          {
+            "test": "start.opus --start",
+            "result": "exact after 24000 frames",
+            "starts": 5
+          },
+          {
+            "test": "start.m4a --start",
+            "result": "exact",
+            "starts": 5
+          },
+          {
+            "test": "start.wav --start",
+            "result": "exact",
+            "starts": 5
+          },
+          {
+            "test": "start.wv --start",
+            "result": "exact",
+            "starts": 5
+          },
+          {
+            "test": "start.mka --start",
+            "result": "exact",
+            "starts": 5
+          },
+          {
+            "test": "start.ac3 --start",
+            "result": "within the dither (50 dB or more)",
+            "starts": 5
+          },
+          {
+            "test": "start.mp2 --start",
+            "result": "exact",
+            "starts": 5
+          },
+          {
+            "test": "queue --start",
+            "result": "exact",
+            "note": "only the first file starts late"
+          },
+          {
+            "test": "option errors",
+            "result": "usage",
+            "cases": 9
+          }
+        ],
+        "start_fixture_source": "build/macos-start-fixtures",
+        "start_fixture_sha256": {
+          "start.flac": "1dcb08374b01881d11e7698ae3a53d271ffd3cef417021957e3d300e0f425fe1",
+          "start.mp3": "9189b4a13873fc0af284d9b71a9195304c7c6720e6f7c69dd3481e1194781620",
+          "start.ogg": "eed985a54bd36897a62c4957e9a81c59537cc0ad74efdff1a6e1c95dd4206036",
+          "start.opus": "18ac65126846a931b3a8ad3c805b4784c33d3aee152c4eebb00795a50caa690a",
+          "start.m4a": "1a728d7a8da91498902aaaadbbe385433e623d2cf7fecf332d21f6b4a5e8f8eb",
+          "start.wav": "8e615d8ce214b965e3ceb0934647cd7c5fa66fe076ace3606bb8535492db26d1",
+          "start.wv": "20082b0f5476d5f19792bdb4fb1c3e6bacea212717d85bc9830a1119b46261a7",
+          "start.mka": "c3b3aebb7dc9cff4c5f938892d521b9fc768b39eea731aa91be96b4b83d455c1",
+          "start.ac3": "8641e1cd8f27959b7d4ba95299f680640cb40f2bc3c2b7ee8c41ad9ced84c759",
+          "start.mp2": "23645d067120942741ec50bca985101372490a5fd4199796caee721f05231383"
+        },
+        "playback_checked": false,
+        "scope": "--start against whole decodes in ten formats, queues and option errors; interactive playback and resume not requested."
+      },
+      "retained_build": {
+        "build/macos-queue/lamp-cli": "57ba1f5aaadd9bedf377c8a569b7629319aef7fb3bfa2f8a3faa54d8a6b0fb97",
+        "build/macos-queue/liblamp-test.dylib": "dae272b0c6563dbd82b31cb6b28d72d0bda4f856f1e58b3ae045fbe4985aefbc"
+      }
+    },
+    "tracks": {
+      "report": {
+        "result": "passed",
+        "vorbis_fixture_encoder": [
+          "-c:a",
+          "vorbis",
+          "-strict",
+          "-2",
+          "-ac",
+          "2"
+        ],
+        "checks": [
+          {
+            "test": "three.mkv",
+            "result": "exact",
+            "tracks": 3,
+            "automatic": 2,
+            "comparator": "FFmpeg -map 0:a:N -c copy"
+          },
+          {
+            "test": "three.mp4",
+            "result": "exact",
+            "tracks": 3,
+            "automatic": 1,
+            "comparator": "FFmpeg -map 0:a:N -c copy"
+          },
+          {
+            "test": "three.ts",
+            "result": "exact",
+            "tracks": 3,
+            "automatic": 1,
+            "comparator": "FFmpeg -map 0:a:N -c copy"
+          },
+          {
+            "test": "two.vob",
+            "result": "exact",
+            "tracks": 2,
+            "automatic": 1,
+            "comparator": "FFmpeg -map 0:a:N -c copy"
+          },
+          {
+            "test": "two.avi",
+            "result": "exact",
+            "tracks": 2,
+            "automatic": 1,
+            "comparator": "FFmpeg -map 0:a:N -c copy"
+          },
+          {
+            "test": "three.ogg",
+            "result": "exact",
+            "tracks": 3,
+            "automatic": 1,
+            "comparator": "FFmpeg -map 0:a:N -c copy"
+          },
+          {
+            "test": "chained.ogg --track 2",
+            "result": "exact",
+            "note": "track 2 of each link"
+          },
+          {
+            "test": "speex-opus.ogg",
+            "result": "exact",
+            "automatic": 2,
+            "note": "Speex (track 1) is counted and rejects; Opus begins on the second BOS page"
+          },
+          {
+            "test": "queue --track 3",
+            "result": "exact",
+            "files": 2
+          },
+          {
+            "test": "eac3.ts track 2",
+            "result": "exact",
+            "comparator": "isolated E-AC-3 track"
+          },
+          {
+            "test": "unsupported and missing tracks",
+            "result": "rejected",
+            "files": [
+              "wma.mkv track 2",
+              "one.wav track 2",
+              "one.mp3 track 2",
+              "one.flv track 2",
+              "three.mkv track 4",
+              "three.mp4 track 4",
+              "three.ts track 4",
+              "two.vob track 3",
+              "two.avi track 3",
+              "three.ogg track 4"
+            ]
+          },
+          {
+            "test": "catalog-65.mpg",
+            "result": "exact",
+            "tracks": 65,
+            "automatic": 65,
+            "selected": 65,
+            "comparator": "catalog-65.mp2",
+            "note": "64 synthetic unsupported private IDs; remaining audio payloads are independently encoded"
+          },
+          {
+            "test": "catalog-104.mpg",
+            "result": "exact",
+            "tracks": 104,
+            "automatic": 65,
+            "selected": 104,
+            "comparator": "catalog-65.mp2",
+            "note": "64 synthetic unsupported private IDs; remaining audio payloads are independently encoded"
+          }
+        ],
+        "speex_fixture_source": "build/macos-track-fixtures",
+        "speex_fixture_sha256": "2dbc8b63bca3416066b06e20c230bdf6f963120b519d7ac24efd42498265cd06",
+        "catalog_checks": [
+          {
+            "file": "three.mkv",
+            "choice": 1,
+            "count": 3,
+            "selected": 1,
+            "sha256": "fc3664cb358c3ffdb587123393bc026893b70467b4232a20d1df532dc01cd9af"
+          },
+          {
+            "file": "three.mkv",
+            "choice": 2,
+            "count": 3,
+            "selected": 2,
+            "sha256": "fc3664cb358c3ffdb587123393bc026893b70467b4232a20d1df532dc01cd9af"
+          },
+          {
+            "file": "three.mkv",
+            "choice": 3,
+            "count": 3,
+            "selected": 3,
+            "sha256": "fc3664cb358c3ffdb587123393bc026893b70467b4232a20d1df532dc01cd9af"
+          },
+          {
+            "file": "three.mkv",
+            "choice": 0,
+            "count": 3,
+            "selected": 2,
+            "sha256": "fc3664cb358c3ffdb587123393bc026893b70467b4232a20d1df532dc01cd9af"
+          },
+          {
+            "file": "three.mkv",
+            "choice": 4,
+            "count": 0,
+            "selected": 0,
+            "sha256": "fc3664cb358c3ffdb587123393bc026893b70467b4232a20d1df532dc01cd9af"
+          },
+          {
+            "file": "three.mp4",
+            "choice": 1,
+            "count": 3,
+            "selected": 1,
+            "sha256": "6d5b76ddd5bbc2c8bfb7c9e6c985fbd162bcf25a78ad1455fe361ab040d61e9f"
+          },
+          {
+            "file": "three.mp4",
+            "choice": 2,
+            "count": 3,
+            "selected": 2,
+            "sha256": "6d5b76ddd5bbc2c8bfb7c9e6c985fbd162bcf25a78ad1455fe361ab040d61e9f"
+          },
+          {
+            "file": "three.mp4",
+            "choice": 3,
+            "count": 3,
+            "selected": 3,
+            "sha256": "6d5b76ddd5bbc2c8bfb7c9e6c985fbd162bcf25a78ad1455fe361ab040d61e9f"
+          },
+          {
+            "file": "three.mp4",
+            "choice": 0,
+            "count": 3,
+            "selected": 1,
+            "sha256": "6d5b76ddd5bbc2c8bfb7c9e6c985fbd162bcf25a78ad1455fe361ab040d61e9f"
+          },
+          {
+            "file": "three.mp4",
+            "choice": 4,
+            "count": 0,
+            "selected": 0,
+            "sha256": "6d5b76ddd5bbc2c8bfb7c9e6c985fbd162bcf25a78ad1455fe361ab040d61e9f"
+          },
+          {
+            "file": "three.ts",
+            "choice": 1,
+            "count": 3,
+            "selected": 1,
+            "sha256": "8b92ffc2e0be4e938cea537081cf2b55c33deea190411a45713b39c8045e148b"
+          },
+          {
+            "file": "three.ts",
+            "choice": 2,
+            "count": 3,
+            "selected": 2,
+            "sha256": "8b92ffc2e0be4e938cea537081cf2b55c33deea190411a45713b39c8045e148b"
+          },
+          {
+            "file": "three.ts",
+            "choice": 3,
+            "count": 3,
+            "selected": 3,
+            "sha256": "8b92ffc2e0be4e938cea537081cf2b55c33deea190411a45713b39c8045e148b"
+          },
+          {
+            "file": "three.ts",
+            "choice": 0,
+            "count": 3,
+            "selected": 1,
+            "sha256": "8b92ffc2e0be4e938cea537081cf2b55c33deea190411a45713b39c8045e148b"
+          },
+          {
+            "file": "three.ts",
+            "choice": 4,
+            "count": 0,
+            "selected": 0,
+            "sha256": "8b92ffc2e0be4e938cea537081cf2b55c33deea190411a45713b39c8045e148b"
+          },
+          {
+            "file": "two.vob",
+            "choice": 1,
+            "count": 2,
+            "selected": 1,
+            "sha256": "d57780b7e81dec35dd9f43e3bbe60291f5d661fe52523b193790241ddd48624c"
+          },
+          {
+            "file": "two.vob",
+            "choice": 2,
+            "count": 2,
+            "selected": 2,
+            "sha256": "d57780b7e81dec35dd9f43e3bbe60291f5d661fe52523b193790241ddd48624c"
+          },
+          {
+            "file": "two.vob",
+            "choice": 0,
+            "count": 2,
+            "selected": 1,
+            "sha256": "d57780b7e81dec35dd9f43e3bbe60291f5d661fe52523b193790241ddd48624c"
+          },
+          {
+            "file": "two.vob",
+            "choice": 3,
+            "count": 0,
+            "selected": 0,
+            "sha256": "d57780b7e81dec35dd9f43e3bbe60291f5d661fe52523b193790241ddd48624c"
+          },
+          {
+            "file": "two.avi",
+            "choice": 1,
+            "count": 2,
+            "selected": 1,
+            "sha256": "644235a06b88b3a2954916039863d3253f15cf0d09e39db283c2bd8246b8704d"
+          },
+          {
+            "file": "two.avi",
+            "choice": 2,
+            "count": 2,
+            "selected": 2,
+            "sha256": "644235a06b88b3a2954916039863d3253f15cf0d09e39db283c2bd8246b8704d"
+          },
+          {
+            "file": "two.avi",
+            "choice": 0,
+            "count": 2,
+            "selected": 1,
+            "sha256": "644235a06b88b3a2954916039863d3253f15cf0d09e39db283c2bd8246b8704d"
+          },
+          {
+            "file": "two.avi",
+            "choice": 3,
+            "count": 0,
+            "selected": 0,
+            "sha256": "644235a06b88b3a2954916039863d3253f15cf0d09e39db283c2bd8246b8704d"
+          },
+          {
+            "file": "three.ogg",
+            "choice": 1,
+            "count": 3,
+            "selected": 1,
+            "sha256": "8467ab2bf5238ebf685ff18dc628480bb3b1f06113bb334b28175a158d91cf6d"
+          },
+          {
+            "file": "three.ogg",
+            "choice": 2,
+            "count": 3,
+            "selected": 2,
+            "sha256": "8467ab2bf5238ebf685ff18dc628480bb3b1f06113bb334b28175a158d91cf6d"
+          },
+          {
+            "file": "three.ogg",
+            "choice": 3,
+            "count": 3,
+            "selected": 3,
+            "sha256": "8467ab2bf5238ebf685ff18dc628480bb3b1f06113bb334b28175a158d91cf6d"
+          },
+          {
+            "file": "three.ogg",
+            "choice": 0,
+            "count": 3,
+            "selected": 1,
+            "sha256": "8467ab2bf5238ebf685ff18dc628480bb3b1f06113bb334b28175a158d91cf6d"
+          },
+          {
+            "file": "three.ogg",
+            "choice": 4,
+            "count": 0,
+            "selected": 0,
+            "sha256": "8467ab2bf5238ebf685ff18dc628480bb3b1f06113bb334b28175a158d91cf6d"
+          },
+          {
+            "file": "chained.ogg",
+            "choice": 0,
+            "count": 2,
+            "selected": 1,
+            "sha256": "f9a66996f77d028064a697f0e1448661018d8a1749287e420d6c9dbb7b70d0dd"
+          },
+          {
+            "file": "chained.ogg",
+            "choice": 2,
+            "count": 2,
+            "selected": 2,
+            "sha256": "f9a66996f77d028064a697f0e1448661018d8a1749287e420d6c9dbb7b70d0dd"
+          },
+          {
+            "file": "speex-opus.ogg",
+            "choice": 0,
+            "count": 2,
+            "selected": 2,
+            "sha256": "2dbc8b63bca3416066b06e20c230bdf6f963120b519d7ac24efd42498265cd06"
+          },
+          {
+            "file": "speex-opus.ogg",
+            "choice": 2,
+            "count": 2,
+            "selected": 2,
+            "sha256": "2dbc8b63bca3416066b06e20c230bdf6f963120b519d7ac24efd42498265cd06"
+          },
+          {
+            "file": "speex-opus.ogg",
+            "choice": 1,
+            "count": 0,
+            "selected": 0,
+            "sha256": "2dbc8b63bca3416066b06e20c230bdf6f963120b519d7ac24efd42498265cd06"
+          },
+          {
+            "file": "wma.mkv",
+            "choice": 0,
+            "count": 2,
+            "selected": 1,
+            "sha256": "a782b6dea5c4cf934e7ac11bb5a66682b52b348aab47b04868d52d7123104317"
+          },
+          {
+            "file": "wma.mkv",
+            "choice": 2,
+            "count": 0,
+            "selected": 0,
+            "sha256": "a782b6dea5c4cf934e7ac11bb5a66682b52b348aab47b04868d52d7123104317"
+          },
+          {
+            "file": "eac3.ts",
+            "choice": 0,
+            "count": 2,
+            "selected": 1,
+            "sha256": "b4b3a370f2522c2408273266eb86e7b1e21735ea518483a7ab82ca85548c81b1"
+          },
+          {
+            "file": "eac3.ts",
+            "choice": 2,
+            "count": 2,
+            "selected": 2,
+            "sha256": "b4b3a370f2522c2408273266eb86e7b1e21735ea518483a7ab82ca85548c81b1"
+          },
+          {
+            "file": "one.wav",
+            "choice": 0,
+            "count": 1,
+            "selected": 1,
+            "sha256": "81fd3fb74688f7a9d9cd5392d1e4dfa68354ced183bb074c8d263eecb7089128"
+          },
+          {
+            "file": "one.wav",
+            "choice": 1,
+            "count": 1,
+            "selected": 1,
+            "sha256": "81fd3fb74688f7a9d9cd5392d1e4dfa68354ced183bb074c8d263eecb7089128"
+          },
+          {
+            "file": "one.wav",
+            "choice": 2,
+            "count": 0,
+            "selected": 0,
+            "sha256": "81fd3fb74688f7a9d9cd5392d1e4dfa68354ced183bb074c8d263eecb7089128"
+          },
+          {
+            "file": "one.mp3",
+            "choice": 0,
+            "count": 1,
+            "selected": 1,
+            "sha256": "d8243856715a053f9c43df4a04cc0a7cc247c2c2f622a5f6e70ddcb869d3478b"
+          },
+          {
+            "file": "one.mp3",
+            "choice": 1,
+            "count": 1,
+            "selected": 1,
+            "sha256": "d8243856715a053f9c43df4a04cc0a7cc247c2c2f622a5f6e70ddcb869d3478b"
+          },
+          {
+            "file": "one.mp3",
+            "choice": 2,
+            "count": 0,
+            "selected": 0,
+            "sha256": "d8243856715a053f9c43df4a04cc0a7cc247c2c2f622a5f6e70ddcb869d3478b"
+          },
+          {
+            "file": "one.flv",
+            "choice": 0,
+            "count": 1,
+            "selected": 1,
+            "sha256": "2a55a74ccfac4accecae4de479ad0fc8c1b46a9e3af7f338a10ba886710bdee1"
+          },
+          {
+            "file": "one.flv",
+            "choice": 1,
+            "count": 1,
+            "selected": 1,
+            "sha256": "2a55a74ccfac4accecae4de479ad0fc8c1b46a9e3af7f338a10ba886710bdee1"
+          },
+          {
+            "file": "one.flv",
+            "choice": 2,
+            "count": 0,
+            "selected": 0,
+            "sha256": "2a55a74ccfac4accecae4de479ad0fc8c1b46a9e3af7f338a10ba886710bdee1"
+          },
+          {
+            "file": "disabled-first.mp4",
+            "choice": 0,
+            "count": 3,
+            "selected": 2,
+            "sha256": "b40d38dcb15b77ddc81acebc86f73c98ef7e400f50979b4e83e3515a75c0ea78"
+          },
+          {
+            "file": "disabled-first.mp4",
+            "choice": 1,
+            "count": 3,
+            "selected": 1,
+            "sha256": "b40d38dcb15b77ddc81acebc86f73c98ef7e400f50979b4e83e3515a75c0ea78"
+          },
+          {
+            "file": "unequal.ogg",
+            "choice": 0,
+            "count": 1,
+            "selected": 2,
+            "sha256": "660ba29b3987d57a78a1f04e243a979048f57c7eb62c6afb6960e37787159f7c"
+          },
+          {
+            "file": "unequal.ogg",
+            "choice": 2,
+            "count": 0,
+            "selected": 0,
+            "sha256": "660ba29b3987d57a78a1f04e243a979048f57c7eb62c6afb6960e37787159f7c"
+          },
+          {
+            "file": "catalog-65.mpg",
+            "choice": 0,
+            "count": 65,
+            "selected": 65,
+            "sha256": "af59d9e50edc829e89a6d4f1afc31f8383d83fc9461fa8a8ccca1b80690e9305"
+          },
+          {
+            "file": "catalog-65.mpg",
+            "choice": 65,
+            "count": 65,
+            "selected": 65,
+            "sha256": "af59d9e50edc829e89a6d4f1afc31f8383d83fc9461fa8a8ccca1b80690e9305"
+          },
+          {
+            "file": "catalog-65.mpg",
+            "choice": 64,
+            "count": 0,
+            "selected": 0,
+            "sha256": "af59d9e50edc829e89a6d4f1afc31f8383d83fc9461fa8a8ccca1b80690e9305"
+          },
+          {
+            "file": "catalog-65.mpg",
+            "choice": 66,
+            "count": 0,
+            "selected": 0,
+            "sha256": "af59d9e50edc829e89a6d4f1afc31f8383d83fc9461fa8a8ccca1b80690e9305"
+          },
+          {
+            "file": "catalog-104.mpg",
+            "choice": 0,
+            "count": 104,
+            "selected": 65,
+            "sha256": "be87b262e25c666f081ee0238adc038d83626f50765120cbc2964db00715a21d"
+          },
+          {
+            "file": "catalog-104.mpg",
+            "choice": 104,
+            "count": 104,
+            "selected": 104,
+            "sha256": "be87b262e25c666f081ee0238adc038d83626f50765120cbc2964db00715a21d"
+          },
+          {
+            "file": "catalog-104.mpg",
+            "choice": 64,
+            "count": 0,
+            "selected": 0,
+            "sha256": "be87b262e25c666f081ee0238adc038d83626f50765120cbc2964db00715a21d"
+          },
+          {
+            "file": "catalog-104.mpg",
+            "choice": 105,
+            "count": 0,
+            "selected": 0,
+            "sha256": "be87b262e25c666f081ee0238adc038d83626f50765120cbc2964db00715a21d"
+          },
+          {
+            "file": "catalog-104.mpg",
+            "choice": 65,
+            "count": 104,
+            "selected": 65,
+            "sha256": "be87b262e25c666f081ee0238adc038d83626f50765120cbc2964db00715a21d"
+          },
+          {
+            "file": "catalog-104.mpg",
+            "choice": 73,
+            "count": 104,
+            "selected": 73,
+            "sha256": "be87b262e25c666f081ee0238adc038d83626f50765120cbc2964db00715a21d"
+          }
+        ],
+        "sources": {
+          "src/decoder.s": "44e88449c121f6d67f1805555f15663fe2d3883531fce2dbf5a8587e58f1d8f8",
+          "src/mp4.s": "d498c8f74f2b157ad6a3e42984d8694667cb64b62074347c56a65cf7da3c622d",
+          "src/mkv.s": "4bfb6643338674c5597d1944f302b9435b065b5b7f559cf78e0f8a61c36fd05d",
+          "src/avi.s": "56f1336d789997c4e4d2d11946129f8f2a1d22ee46c653cd40dacacb4ebeac59",
+          "src/mpegts.s": "5dafcb58db5d634684462207d45e55ff088d5bf032f62d8302adc39be6ef125e",
+          "src/ogg_chain.s": "55d83b35ea390605b27a88f427f3871bd20fb5a51f4a0d83895dd54923708e10",
+          "tests/track-catalog-oracle.c": "93175cde74b34ab85aeb8838c5a428cd39955adf45fdd6407229ad45488e652f",
+          "tests/verify-tracks.py": "57225ccee699bad2255e1abab3fb7c7e9f1ab229fdab1b8b91123582af481143"
+        },
+        "scope": "lamp-cli --track N in Matroska, MP4, MPEG-TS/PS, AVI and Ogg (multiplexed and chained) against FFmpeg -map 0:a:N copies; queues; unsupported, missing and single tracks."
+      },
+      "retained_build": {
+        "build/macos-tracks/lamp-cli": "09a6eb86cbe9a015d4b5a0567ffb9aa0943392e402fe7425359b4eeba3c59629",
+        "build/macos-tracks/liblamp-test.dylib": "e62fda55c998548e638dc294ebea58e40270a116b627b019c054ce737579ca99"
+      }
+    },
+    "resampler": {
+      "report": {
+        "result": "passed",
+        "pairs": 11,
+        "checks": [
+          {
+            "test": "44100 -> 48000 reference and restarts",
+            "result": "{\"in\":44100,\"out\":48000,\"input_frames\":8820,\"output_frames\":9600,\"half_width\":64,\"maximum_reference_error\":1.43e-07,\"restarts\":5}"
+          },
+          {
+            "test": "44100 -> 48000 tone 1102 Hz",
+            "result": "matched",
+            "error_db": 104.8
+          },
+          {
+            "test": "44100 -> 48000 tone 11025 Hz",
+            "result": "matched",
+            "error_db": 117.3
+          },
+          {
+            "test": "44100 -> 48000 tone 19404 Hz",
+            "result": "matched",
+            "error_db": 93.4
+          },
+          {
+            "test": "48000 -> 44100 reference and restarts",
+            "result": "{\"in\":48000,\"out\":44100,\"input_frames\":9600,\"output_frames\":8820,\"half_width\":70,\"maximum_reference_error\":1.22e-07,\"restarts\":5}"
+          },
+          {
+            "test": "48000 -> 44100 tone 1102 Hz",
+            "result": "matched",
+            "error_db": 110.0
+          },
+          {
+            "test": "48000 -> 44100 tone 11025 Hz",
+            "result": "matched",
+            "error_db": 113.1
+          },
+          {
+            "test": "48000 -> 44100 tone 19404 Hz",
+            "result": "matched",
+            "error_db": 94.0
+          },
+          {
+            "test": "48000 -> 44100 rejects 22491 Hz",
+            "result": "rejected",
+            "attenuation_db": 93.3
+          },
+          {
+            "test": "8000 -> 48000 reference and restarts",
+            "result": "{\"in\":8000,\"out\":48000,\"input_frames\":2000,\"output_frames\":12000,\"half_width\":64,\"maximum_reference_error\":1.29e-07,\"restarts\":5}"
+          },
+          {
+            "test": "8000 -> 48000 tone 200 Hz",
+            "result": "matched",
+            "error_db": 104.4
+          },
+          {
+            "test": "8000 -> 48000 tone 2000 Hz",
+            "result": "matched",
+            "error_db": 117.2
+          },
+          {
+            "test": "8000 -> 48000 tone 3520 Hz",
+            "result": "matched",
+            "error_db": 93.4
+          },
+          {
+            "test": "48000 -> 8000 reference and restarts",
+            "result": "{\"in\":48000,\"out\":8000,\"input_frames\":9600,\"output_frames\":1600,\"half_width\":384,\"maximum_reference_error\":9.1e-08,\"restarts\":5}"
+          },
+          {
+            "test": "48000 -> 8000 tone 200 Hz",
+            "result": "matched",
+            "error_db": 104.7
+          },
+          {
+            "test": "48000 -> 8000 tone 2000 Hz",
+            "result": "matched",
+            "error_db": 118.5
+          },
+          {
+            "test": "48000 -> 8000 tone 3520 Hz",
+            "result": "matched",
+            "error_db": 94.2
+          },
+          {
+            "test": "48000 -> 8000 rejects 4080 Hz",
+            "result": "rejected",
+            "attenuation_db": 92.8
+          },
+          {
+            "test": "48000 -> 8000 rejects 6000 Hz",
+            "result": "rejected",
+            "attenuation_db": 118.9
+          },
+          {
+            "test": "22050 -> 44100 reference and restarts",
+            "result": "{\"in\":22050,\"out\":44100,\"input_frames\":4410,\"output_frames\":8820,\"half_width\":64,\"maximum_reference_error\":1.15e-07,\"restarts\":5}"
+          },
+          {
+            "test": "22050 -> 44100 tone 551 Hz",
+            "result": "matched",
+            "error_db": 104.1
+          },
+          {
+            "test": "22050 -> 44100 tone 5512 Hz",
+            "result": "matched",
+            "error_db": 118.2
+          },
+          {
+            "test": "22050 -> 44100 tone 9702 Hz",
+            "result": "matched",
+            "error_db": 93.4
+          },
+          {
+            "test": "96000 -> 44100 reference and restarts",
+            "result": "{\"in\":96000,\"out\":44100,\"input_frames\":19200,\"output_frames\":8820,\"half_width\":140,\"maximum_reference_error\":9.42e-08,\"restarts\":5}"
+          },
+          {
+            "test": "96000 -> 44100 tone 1102 Hz",
+            "result": "matched",
+            "error_db": 111.5
+          },
+          {
+            "test": "96000 -> 44100 tone 11025 Hz",
+            "result": "matched",
+            "error_db": 115.9
+          },
+          {
+            "test": "96000 -> 44100 tone 19404 Hz",
+            "result": "matched",
+            "error_db": 94.1
+          },
+          {
+            "test": "96000 -> 44100 rejects 22491 Hz",
+            "result": "rejected",
+            "attenuation_db": 93.4
+          },
+          {
+            "test": "96000 -> 44100 rejects 33075 Hz",
+            "result": "rejected",
+            "attenuation_db": 109.3
+          },
+          {
+            "test": "192000 -> 8000 reference and restarts",
+            "result": "{\"in\":192000,\"out\":8000,\"input_frames\":38400,\"output_frames\":1600,\"half_width\":1536,\"maximum_reference_error\":1.1e-07,\"restarts\":5}"
+          },
+          {
+            "test": "192000 -> 8000 tone 200 Hz",
+            "result": "matched",
+            "error_db": 105.0
+          },
+          {
+            "test": "192000 -> 8000 tone 2000 Hz",
+            "result": "matched",
+            "error_db": 116.9
+          },
+          {
+            "test": "192000 -> 8000 tone 3520 Hz",
+            "result": "matched",
+            "error_db": 94.2
+          },
+          {
+            "test": "192000 -> 8000 rejects 4080 Hz",
+            "result": "rejected",
+            "attenuation_db": 92.9
+          },
+          {
+            "test": "192000 -> 8000 rejects 6000 Hz",
+            "result": "rejected",
+            "attenuation_db": 117.8
+          },
+          {
+            "test": "11025 -> 48000 reference and restarts",
+            "result": "{\"in\":11025,\"out\":48000,\"input_frames\":2205,\"output_frames\":9600,\"half_width\":64,\"maximum_reference_error\":1.23e-07,\"restarts\":5}"
+          },
+          {
+            "test": "11025 -> 48000 tone 276 Hz",
+            "result": "matched",
+            "error_db": 104.8
+          },
+          {
+            "test": "11025 -> 48000 tone 2756 Hz",
+            "result": "matched",
+            "error_db": 117.3
+          },
+          {
+            "test": "11025 -> 48000 tone 4851 Hz",
+            "result": "matched",
+            "error_db": 93.4
+          },
+          {
+            "test": "32000 -> 48000 reference and restarts",
+            "result": "{\"in\":32000,\"out\":48000,\"input_frames\":6400,\"output_frames\":9600,\"half_width\":64,\"maximum_reference_error\":1.23e-07,\"restarts\":5}"
+          },
+          {
+            "test": "32000 -> 48000 tone 800 Hz",
+            "result": "matched",
+            "error_db": 104.2
+          },
+          {
+            "test": "32000 -> 48000 tone 8000 Hz",
+            "result": "matched",
+            "error_db": 117.1
+          },
+          {
+            "test": "32000 -> 48000 tone 14080 Hz",
+            "result": "matched",
+            "error_db": 93.4
+          },
+          {
+            "test": "44100 -> 44101 reference and restarts",
+            "result": "{\"in\":44100,\"out\":44101,\"input_frames\":8820,\"output_frames\":8821,\"half_width\":64,\"maximum_reference_error\":2.16e-07,\"restarts\":5}"
+          },
+          {
+            "test": "44100 -> 44101 tone 1102 Hz",
+            "result": "matched",
+            "error_db": 108.4
+          },
+          {
+            "test": "44100 -> 44101 tone 11025 Hz",
+            "result": "matched",
+            "error_db": 119.4
+          },
+          {
+            "test": "44100 -> 44101 tone 19404 Hz",
+            "result": "matched",
+            "error_db": 97.1
+          },
+          {
+            "test": "48000 -> 47999 reference and restarts",
+            "result": "{\"in\":48000,\"out\":47999,\"input_frames\":9600,\"output_frames\":9600,\"half_width\":66,\"maximum_reference_error\":1.63e-07,\"restarts\":5}"
+          },
+          {
+            "test": "48000 -> 47999 tone 1200 Hz",
+            "result": "matched",
+            "error_db": 110.9
+          },
+          {
+            "test": "48000 -> 47999 tone 12000 Hz",
+            "result": "matched",
+            "error_db": 107.7
+          },
+          {
+            "test": "48000 -> 47999 tone 21120 Hz",
+            "result": "matched",
+            "error_db": 94.2
+          }
+        ],
+        "scope": "Assembly windowed-sinc resampler: per-frame comparison with a direct long-double evaluation of the specified filter, exact restarts, passband tones within 0.88 of the lower Nyquist frequency at least 85 dB below the ideal sine, and tones above the output Nyquist frequency attenuated at least 85 dB. Pairs include exact-phase tables and interpolated tables for rates without a small common divisor."
+      },
+      "retained_build": {
+        "build/macos-resample/lamp-cli": "8371b752d01f97bad158c4fc6cff34473f760ecad8b91ca46e4f2e731b3e60dd",
+        "build/macos-resample/liblamp-test.dylib": "aac34156cd42157d997703b99578f911635fd3b539ee62a5735e524e37ef60ef"
+      }
+    },
+    "tags": {
+      "report": {
+        "result": "passed",
+        "vorbis_fixture_encoder": [
+          "-c:a",
+          "vorbis",
+          "-strict",
+          "-2",
+          "-ac",
+          "2"
+        ],
+        "checks": [
+          {
+            "test": "id3v24.mp3",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "keys": [
+              "album",
+              "album_artist",
+              "artist",
+              "comment",
+              "composer",
+              "date",
+              "disc",
+              "genre",
+              "title",
+              "track"
+            ],
+            "note": ""
+          },
+          {
+            "test": "id3v23.mp3",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "keys": [
+              "album",
+              "album_artist",
+              "artist",
+              "comment",
+              "composer",
+              "date",
+              "disc",
+              "genre",
+              "title",
+              "track"
+            ],
+            "note": ""
+          },
+          {
+            "test": "id3v2-and-v1.mp3",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "keys": [
+              "album",
+              "album_artist",
+              "artist",
+              "comment",
+              "composer",
+              "date",
+              "disc",
+              "genre",
+              "title",
+              "track"
+            ],
+            "note": ""
+          },
+          {
+            "test": "id3v1.mp3",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "keys": [
+              "comment"
+            ],
+            "note": ""
+          },
+          {
+            "test": "adts.aac",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "keys": [
+              "album",
+              "album_artist",
+              "artist",
+              "comment",
+              "composer",
+              "date",
+              "disc",
+              "genre",
+              "title",
+              "track"
+            ],
+            "note": ""
+          },
+          {
+            "test": "native.flac",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "keys": [
+              "album",
+              "album_artist",
+              "artist",
+              "comment",
+              "composer",
+              "date",
+              "disc",
+              "genre",
+              "title",
+              "track"
+            ],
+            "note": ""
+          },
+          {
+            "test": "vorbis.ogg",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "keys": [
+              "album",
+              "album_artist",
+              "artist",
+              "comment",
+              "composer",
+              "date",
+              "disc",
+              "genre",
+              "title",
+              "track"
+            ],
+            "note": ""
+          },
+          {
+            "test": "opus.opus",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "keys": [
+              "album",
+              "album_artist",
+              "artist",
+              "comment",
+              "composer",
+              "date",
+              "disc",
+              "genre",
+              "title",
+              "track"
+            ],
+            "note": ""
+          },
+          {
+            "test": "flac.oga",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "keys": [
+              "album",
+              "album_artist",
+              "artist",
+              "comment",
+              "composer",
+              "date",
+              "disc",
+              "genre",
+              "title",
+              "track"
+            ],
+            "note": ""
+          },
+          {
+            "test": "aac.m4a",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "keys": [
+              "album",
+              "album_artist",
+              "artist",
+              "comment",
+              "composer",
+              "date",
+              "disc",
+              "genre",
+              "title",
+              "track"
+            ],
+            "note": ""
+          },
+          {
+            "test": "alac.mov",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "keys": [
+              "album",
+              "artist",
+              "comment",
+              "date",
+              "genre",
+              "title"
+            ],
+            "note": ""
+          },
+          {
+            "test": "audio.mka",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "keys": [
+              "album",
+              "album_artist",
+              "artist",
+              "comment",
+              "composer",
+              "date",
+              "disc",
+              "genre",
+              "title",
+              "track"
+            ],
+            "note": ""
+          },
+          {
+            "test": "opus.webm",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "keys": [
+              "album",
+              "album_artist",
+              "artist",
+              "comment",
+              "composer",
+              "date",
+              "disc",
+              "genre",
+              "title",
+              "track"
+            ],
+            "note": ""
+          },
+          {
+            "test": "pcm.wav",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "keys": [
+              "album",
+              "artist",
+              "comment",
+              "date",
+              "genre",
+              "title",
+              "track"
+            ],
+            "note": ""
+          },
+          {
+            "test": "pcm.avi",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "keys": [
+              "artist",
+              "comment",
+              "date",
+              "genre",
+              "title",
+              "track"
+            ],
+            "note": ""
+          },
+          {
+            "test": "pcm.caf",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "keys": [
+              "album",
+              "album_artist",
+              "artist",
+              "comment",
+              "composer",
+              "date",
+              "disc",
+              "genre",
+              "title",
+              "track"
+            ],
+            "note": ""
+          },
+          {
+            "test": "wavpack.wv",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "keys": [
+              "album",
+              "album_artist",
+              "artist",
+              "comment",
+              "composer",
+              "date",
+              "disc",
+              "genre",
+              "title",
+              "track"
+            ],
+            "note": ""
+          },
+          {
+            "test": "id3.aiff",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "keys": [
+              "album",
+              "album_artist",
+              "artist",
+              "comment",
+              "composer",
+              "date",
+              "disc",
+              "genre",
+              "title",
+              "track"
+            ],
+            "note": ""
+          },
+          {
+            "test": "text.aiff",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "keys": [
+              "artist",
+              "comment",
+              "title"
+            ],
+            "note": ""
+          },
+          {
+            "test": "annotation.au",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "keys": [
+              "album",
+              "artist",
+              "genre",
+              "title",
+              "track"
+            ],
+            "note": ""
+          },
+          {
+            "test": "id3v24.mp2",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "keys": [
+              "album",
+              "album_artist",
+              "artist",
+              "comment",
+              "composer",
+              "date",
+              "disc",
+              "genre",
+              "title",
+              "track"
+            ],
+            "note": "FFmpeg's ID3v2.4 tag on Layer II"
+          },
+          {
+            "test": "v22.mp3",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "keys": [
+              "album",
+              "artist",
+              "comment",
+              "composer",
+              "date",
+              "genre",
+              "title",
+              "track"
+            ],
+            "note": "ID3v2 written here"
+          },
+          {
+            "test": "v23-encodings.mp3",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "keys": [
+              "album",
+              "album_artist",
+              "artist",
+              "comment",
+              "date",
+              "disc",
+              "genre",
+              "title"
+            ],
+            "note": "ID3v2 written here"
+          },
+          {
+            "test": "v23-unsync.mp3",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "keys": [
+              "artist",
+              "title"
+            ],
+            "note": "ID3v2 written here"
+          },
+          {
+            "test": "v23-extended.mp3",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "keys": [
+              "title"
+            ],
+            "note": "ID3v2 written here"
+          },
+          {
+            "test": "v24-frame-unsync.mp3",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "keys": [
+              "album",
+              "artist",
+              "title"
+            ],
+            "note": "ID3v2 written here"
+          },
+          {
+            "test": "v24-extended.mp3",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "keys": [
+              "title"
+            ],
+            "note": "ID3v2 written here"
+          },
+          {
+            "test": "v24-encrypted.mp3",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "keys": [
+              "artist",
+              "title"
+            ],
+            "note": "ID3v2 written here"
+          },
+          {
+            "test": "v24-txxx.mp3",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "keys": [
+              "album_artist",
+              "comment",
+              "genre",
+              "title",
+              "track"
+            ],
+            "note": "ID3v2 written here"
+          },
+          {
+            "test": "v24-genres.mp3",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "keys": [
+              "genre",
+              "title"
+            ],
+            "note": "ID3v2 written here"
+          },
+          {
+            "test": "two-tags.mp3",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "keys": [
+              "artist",
+              "title"
+            ],
+            "note": "ID3v2 written here"
+          },
+          {
+            "test": "genre-raw.mp3",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "keys": [
+              "genre"
+            ],
+            "note": "genre '(200)'"
+          },
+          {
+            "test": "genre-word.mp3",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "keys": [
+              "genre"
+            ],
+            "note": "genre 'abc'"
+          },
+          {
+            "test": "genre-negative.mp3",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "keys": [
+              "genre"
+            ],
+            "note": "genre '-3'"
+          },
+          {
+            "test": "genre-text.mp3",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "keys": [
+              "genre"
+            ],
+            "note": "genre '17abc'"
+          },
+          {
+            "test": "ID3v1 genres 0-191 in TCON",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "note": "genre 133 is \"Afro-Punk\""
+          },
+          {
+            "test": "v11.mp3",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "keys": [
+              "album",
+              "artist",
+              "comment",
+              "date",
+              "genre",
+              "title",
+              "track"
+            ],
+            "note": "ID3v1.1 with a track and genre"
+          },
+          {
+            "test": "v1-latin1.mp3",
+            "result": "equal",
+            "comparator": "expected values",
+            "note": "ID3v1 Latin-1 text (FFmpeg passes the bytes through)"
+          },
+          {
+            "test": "v1-genre.mp3",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "keys": [
+              "title"
+            ],
+            "note": "ID3v1 without a genre"
+          },
+          {
+            "test": "id3-ape.mp3",
+            "result": "equal",
+            "comparator": "expected values",
+            "note": "APEv2 fills keys ID3v2 left empty"
+          },
+          {
+            "test": "ape-only.mp3",
+            "result": "equal",
+            "comparator": "expected values",
+            "note": "APEv2 alone, binary items skipped"
+          },
+          {
+            "test": "ape-v1.mp3",
+            "result": "equal",
+            "comparator": "expected values",
+            "note": "APEv2 before ID3v1 (FFmpeg 6.1 reads no APEv2 in MP3)"
+          },
+          {
+            "test": "comments.flac",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "keys": [
+              "album",
+              "album_artist",
+              "artist",
+              "comment",
+              "date",
+              "disc",
+              "genre",
+              "title",
+              "track"
+            ],
+            "note": "repeated, cased and malformed comments"
+          },
+          {
+            "test": "long.ogg",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "keys": [
+              "comment",
+              "title"
+            ],
+            "note": "a comment packet over two pages, cut at 4096 bytes"
+          },
+          {
+            "test": "items.m4a",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "keys": [
+              "album_artist",
+              "comment",
+              "composer",
+              "date",
+              "disc",
+              "genre",
+              "title",
+              "track"
+            ],
+            "note": "genre number, track without total"
+          },
+          {
+            "test": "items-qt.m4a",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "keys": [
+              "album_artist",
+              "comment",
+              "composer",
+              "date",
+              "disc",
+              "genre",
+              "title",
+              "track"
+            ],
+            "note": "genre number, track without total, QuickTime meta"
+          },
+          {
+            "test": "track-tags.mka",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "keys": [
+              "artist",
+              "title"
+            ],
+            "note": "track-targeted tags skipped"
+          },
+          {
+            "test": "id3-chunk.wav",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "keys": [
+              "genre",
+              "title"
+            ],
+            "note": "an id3 chunk"
+          },
+          {
+            "test": "apple.caf",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "keys": [
+              "artist",
+              "comment",
+              "date",
+              "title",
+              "track"
+            ],
+            "note": "Apple's info keys"
+          },
+          {
+            "test": "mutated tags",
+            "result": "no crash or hang",
+            "files": 1200,
+            "opened": 810
+          }
+        ],
+        "scope": "Metadata tags (ID3v2.2-2.4, ID3v1, APEv2, Vorbis comments, MP4 ilst, Matroska, RIFF INFO, AIFF, CAF) against ffprobe; mutated tags."
+      },
+      "retained_build": {
+        "build/macos-tags-queue/lamp-cli": "c4fe0131a69a645ac6542bd1d9fe58b21affc5e2c1350ccc204b97703142e292",
+        "build/macos-tags-queue/liblamp-test.dylib": "a32d8fa1eeef6b4429e0b344f03564dff99cca466efb26d0dc2d9225723cb7eb"
+      }
+    },
+    "chapters": {
+      "report": {
+        "result": "passed",
+        "vorbis_fixture_encoder": [
+          "-c:a",
+          "vorbis",
+          "-strict",
+          "-2",
+          "-ac",
+          "2"
+        ],
+        "checks": [
+          {
+            "test": "flac.mka",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "chapters": 5,
+            "note": "FFmpeg-written"
+          },
+          {
+            "test": "opus.webm",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "chapters": 5,
+            "note": "FFmpeg-written"
+          },
+          {
+            "test": "aac.m4a",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "chapters": 5,
+            "note": "FFmpeg-written"
+          },
+          {
+            "test": "aac.m4b",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "chapters": 5,
+            "note": "FFmpeg-written"
+          },
+          {
+            "test": "alac.mov",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "chapters": 5,
+            "note": "FFmpeg-written"
+          },
+          {
+            "test": "id3v24.mp3",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "chapters": 5,
+            "note": "FFmpeg-written"
+          },
+          {
+            "test": "id3v23.mp3",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "chapters": 5,
+            "note": "FFmpeg-written"
+          },
+          {
+            "test": "adts.aac",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "chapters": 5,
+            "note": "FFmpeg-written"
+          },
+          {
+            "test": "id3.aiff",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "chapters": 5,
+            "note": "FFmpeg-written"
+          },
+          {
+            "test": "opus.opus",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "chapters": 5,
+            "note": "FFmpeg-written"
+          },
+          {
+            "test": "comments.flac",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "chapters": 10,
+            "note": "chapter comments in every form"
+          },
+          {
+            "test": "comments.ogg",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "chapters": 2,
+            "note": "Vorbis comments in Ogg"
+          },
+          {
+            "test": "cuesheet.flac",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "chapters": 3,
+            "note": "CUESHEET tracks but the lead-out"
+          },
+          {
+            "test": "comments-cuesheet.flac",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "chapters": 3,
+            "note": "a cue sheet track moves the comment chapter with its number"
+          },
+          {
+            "test": "cuesheet-no-index.flac",
+            "result": "equal",
+            "comparator": "expected values",
+            "note": "a track without index points ends the cue sheet (FFmpeg rejects the file)"
+          },
+          {
+            "test": "chap-v23.mp3",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "chapters": 11,
+            "note": "ID3v2.3 CHAP frames"
+          },
+          {
+            "test": "chap-v24.mp3",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "chapters": 11,
+            "note": "ID3v2.4 CHAP frames"
+          },
+          {
+            "test": "chap-unsync.mp3",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "chapters": 1,
+            "note": "an unsynchronised ID3v2.3 tag"
+          },
+          {
+            "test": "chap-two-tags.mp3",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "chapters": 2,
+            "note": "chapters in two tags in a row"
+          },
+          {
+            "test": "chap-layer2.mp2",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "chapters": 11,
+            "note": "before MPEG Layer II"
+          },
+          {
+            "test": "chap-chunk.wav",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "chapters": 11,
+            "note": "a WAVE id3 chunk"
+          },
+          {
+            "test": "chap-before.ac3",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "chapters": 0,
+            "note": "FFmpeg reads no ID3v2 chapters before AC-3"
+          },
+          {
+            "test": "chap-long-title.mp3",
+            "result": "equal",
+            "comparator": "expected values",
+            "note": "a sub-frame over 127 bytes with a synchsafe size (FFmpeg drops it)"
+          },
+          {
+            "test": "chapters.mka",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "chapters": 8,
+            "note": "editions, skipped atoms, a repeated UID, two displays and a second Chapters element"
+          },
+          {
+            "test": "indexed-at-end.mka",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "chapters": 2,
+            "note": "Chapters after the clusters, named by the SeekHead"
+          },
+          {
+            "test": "unindexed-at-end.mka",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "chapters": 0,
+            "note": "Chapters after the clusters that no SeekHead names"
+          },
+          {
+            "test": "front-and-end.mka",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "chapters": 40,
+            "note": "Chapters before the clusters and another, indexed, after them"
+          },
+          {
+            "test": "zero-starts.mka",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "chapters": 3,
+            "note": "starts at 0 do not count as the last start"
+          },
+          {
+            "test": "chpl-only.m4a",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "chapters": 5,
+            "note": "Nero chpl alone"
+          },
+          {
+            "test": "track-only.m4a",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "chapters": 4,
+            "note": "a chapter text track alone"
+          },
+          {
+            "test": "longer-chpl.m4a",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "chapters": 7,
+            "note": "chpl entries past the track remain"
+          },
+          {
+            "test": "two-ids.m4a",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "chapters": 5,
+            "note": "tref/chap naming a missing track first"
+          },
+          {
+            "test": "video-track.m4a",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "chapters": 5,
+            "note": "a video chapter track gives no titles"
+          },
+          {
+            "test": "long-length.m4a",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "chapters": 5,
+            "note": "a sample whose length runs past it keeps chpl's chapter"
+          },
+          {
+            "test": "utf16.m4a",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "chapters": 5,
+            "note": "UTF-16BE and UTF-16LE titles"
+          },
+          {
+            "test": "none.flac",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "chapters": 0,
+            "note": "no chapters"
+          },
+          {
+            "test": "none.ogg",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "chapters": 0,
+            "note": "no chapters"
+          },
+          {
+            "test": "none.wav",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "chapters": 0,
+            "note": "no chapters"
+          },
+          {
+            "test": "none.m4a",
+            "result": "equal",
+            "comparator": "ffprobe",
+            "chapters": 0,
+            "note": "no chapters"
+          },
+          {
+            "test": "mutated chapters",
+            "result": "no crash or hang",
+            "files": 1100,
+            "opened": 706
+          }
+        ],
+        "scope": "Chapters (Vorbis comments, FLAC CUESHEET, ID3v2 CHAP, Matroska, MP4 chpl and chapter tracks) against ffprobe; mutated files."
+      },
+      "retained_build": {
+        "build/macos-chapters-queue/lamp-cli": "3e3b5463bbf6ac1fb42220160d50cf849596a0f176a26a78c6b9a4b096d794e1",
+        "build/macos-chapters-queue/liblamp-test.dylib": "83ba69c25f4135f9c563cf089a038d4189d9667855900f3dcc01edeb926bf868"
+      }
+    },
+    "cover": {
+      "report": {
+        "result": "passed",
+        "vorbis_fixture_encoder": [
+          "-c:a",
+          "vorbis",
+          "-strict",
+          "-2",
+          "-ac",
+          "2"
+        ],
+        "checks": [
+          {
+            "test": "id3v24.mp3",
+            "result": "equal",
+            "comparator": "FFmpeg attached picture",
+            "picture": "image/jpeg, 1980 bytes",
+            "note": "FFmpeg-written"
+          },
+          {
+            "test": "id3v23.mp3",
+            "result": "equal",
+            "comparator": "FFmpeg attached picture",
+            "picture": "image/jpeg, 1980 bytes",
+            "note": "FFmpeg-written"
+          },
+          {
+            "test": "native.flac",
+            "result": "equal",
+            "comparator": "FFmpeg attached picture",
+            "picture": "image/jpeg, 1980 bytes",
+            "note": "FFmpeg-written"
+          },
+          {
+            "test": "aac.m4a",
+            "result": "equal",
+            "comparator": "FFmpeg attached picture",
+            "picture": "image/png, 607 bytes",
+            "note": "FFmpeg-written"
+          },
+          {
+            "test": "id3.aiff",
+            "result": "equal",
+            "comparator": "FFmpeg attached picture",
+            "picture": "image/jpeg, 1980 bytes",
+            "note": "FFmpeg-written"
+          },
+          {
+            "test": "attachments.mka",
+            "result": "equal",
+            "comparator": "FFmpeg attached picture",
+            "picture": "image/jpeg, 1980 bytes",
+            "note": "FFmpeg-written attachments"
+          },
+          {
+            "test": "upper-mime.mp3",
+            "result": "equal",
+            "comparator": "FFmpeg attached picture",
+            "picture": "image/jpeg, 1980 bytes",
+            "note": "ID3v2"
+          },
+          {
+            "test": "jpg-mime.mp3",
+            "result": "equal",
+            "comparator": "FFmpeg attached picture",
+            "picture": "image/jpeg, 1980 bytes",
+            "note": "ID3v2"
+          },
+          {
+            "test": "unknown-mime.mp3",
+            "result": "equal",
+            "comparator": "FFmpeg attached picture",
+            "picture": "image/png, 607 bytes",
+            "note": "ID3v2"
+          },
+          {
+            "test": "no-mime.mp3",
+            "result": "equal",
+            "comparator": "FFmpeg attached picture",
+            "picture": null,
+            "note": "ID3v2"
+          },
+          {
+            "test": "png-as-jpeg.mp3",
+            "result": "equal",
+            "comparator": "FFmpeg attached picture",
+            "picture": "image/png, 607 bytes",
+            "note": "ID3v2"
+          },
+          {
+            "test": "type-99.mp3",
+            "result": "equal",
+            "comparator": "FFmpeg attached picture",
+            "picture": "image/jpeg, 1980 bytes",
+            "note": "ID3v2"
+          },
+          {
+            "test": "two-fronts.mp3",
+            "result": "equal",
+            "comparator": "FFmpeg attached picture",
+            "picture": "image/gif, 967 bytes",
+            "note": "ID3v2"
+          },
+          {
+            "test": "bmp.mp3",
+            "result": "equal",
+            "comparator": "FFmpeg attached picture",
+            "picture": "image/bmp, 1206 bytes",
+            "note": "ID3v2"
+          },
+          {
+            "test": "empty-picture.mp3",
+            "result": "equal",
+            "comparator": "FFmpeg attached picture",
+            "picture": "image/png, 607 bytes",
+            "note": "ID3v2"
+          },
+          {
+            "test": "v22.mp3",
+            "result": "equal",
+            "comparator": "FFmpeg attached picture",
+            "picture": "image/jpeg, 1980 bytes",
+            "note": "ID3v2"
+          },
+          {
+            "test": "v22-gif.mp3",
+            "result": "equal",
+            "comparator": "FFmpeg attached picture",
+            "picture": null,
+            "note": "ID3v2"
+          },
+          {
+            "test": "big-v24.mp3",
+            "result": "equal",
+            "comparator": "FFmpeg attached picture",
+            "picture": "image/jpeg, 223741 bytes",
+            "note": "ID3v2"
+          },
+          {
+            "test": "unsync-v23.mp3",
+            "result": "equal",
+            "comparator": "FFmpeg attached picture",
+            "picture": "image/jpeg, 222775 bytes",
+            "note": "an unsynchronised ID3v2.3 tag"
+          },
+          {
+            "test": "unsync-v24.mp3",
+            "result": "equal",
+            "comparator": "FFmpeg attached picture",
+            "picture": "image/jpeg, 223741 bytes",
+            "note": "an unsynchronised ID3v2.4 frame with a data length indicator"
+          },
+          {
+            "test": "id3.aac",
+            "result": "equal",
+            "comparator": "FFmpeg attached picture",
+            "picture": "image/png, 607 bytes",
+            "note": "before ADTS"
+          },
+          {
+            "test": "id3.ac3",
+            "result": "equal",
+            "comparator": "FFmpeg attached picture",
+            "picture": null,
+            "note": "FFmpeg reads no pictures before AC-3"
+          },
+          {
+            "test": "id3-chunk.wav",
+            "result": "equal",
+            "comparator": "FFmpeg attached picture",
+            "picture": "image/jpeg, 1980 bytes",
+            "note": "a WAVE id3 chunk"
+          },
+          {
+            "test": "case-sensitive.flac",
+            "result": "equal",
+            "comparator": "FFmpeg attached picture",
+            "picture": "image/png, 607 bytes",
+            "note": "FLAC"
+          },
+          {
+            "test": "png-as-jpeg.flac",
+            "result": "equal",
+            "comparator": "FFmpeg attached picture",
+            "picture": "image/png, 607 bytes",
+            "note": "FLAC"
+          },
+          {
+            "test": "type-99.flac",
+            "result": "equal",
+            "comparator": "FFmpeg attached picture",
+            "picture": "image/jpeg, 1980 bytes",
+            "note": "FLAC"
+          },
+          {
+            "test": "link.flac",
+            "result": "equal",
+            "comparator": "FFmpeg attached picture",
+            "picture": null,
+            "note": "FLAC"
+          },
+          {
+            "test": "empty-picture.flac",
+            "result": "equal",
+            "comparator": "FFmpeg attached picture",
+            "picture": null,
+            "note": "FLAC"
+          },
+          {
+            "test": "comment-picture.flac",
+            "result": "equal",
+            "comparator": "FFmpeg attached picture",
+            "picture": "image/jpeg, 1980 bytes",
+            "note": "FLAC"
+          },
+          {
+            "test": "block-then-comment.flac",
+            "result": "equal",
+            "comparator": "FFmpeg attached picture",
+            "picture": "image/jpeg, 1980 bytes",
+            "note": "FLAC"
+          },
+          {
+            "test": "short-length.flac",
+            "result": "equal",
+            "comparator": "FFmpeg attached picture",
+            "picture": null,
+            "note": "FLAC"
+          },
+          {
+            "test": "vorbis.ogg",
+            "result": "equal",
+            "comparator": "FFmpeg attached picture",
+            "picture": "image/jpeg, 223741 bytes",
+            "note": "a comment over many Ogg pages"
+          },
+          {
+            "test": "opus.opus",
+            "result": "equal",
+            "comparator": "FFmpeg attached picture",
+            "picture": "image/jpeg, 223741 bytes",
+            "note": "a comment over many Ogg pages"
+          },
+          {
+            "test": "covr-types.m4a",
+            "result": "equal",
+            "comparator": "FFmpeg attached picture",
+            "picture": "image/bmp, 1206 bytes",
+            "note": "MP4 covr"
+          },
+          {
+            "test": "covr-png-as-jpeg.m4a",
+            "result": "equal",
+            "comparator": "FFmpeg attached picture",
+            "picture": "image/png, 607 bytes",
+            "note": "MP4 covr"
+          },
+          {
+            "test": "covr-jpeg-as-png.m4a",
+            "result": "equal",
+            "comparator": "FFmpeg attached picture",
+            "picture": "image/jpeg, 1980 bytes",
+            "note": "MP4 covr"
+          },
+          {
+            "test": "covr-later.m4a",
+            "result": "equal",
+            "comparator": "FFmpeg attached picture",
+            "picture": "image/jpeg, 1980 bytes",
+            "note": "MP4 covr"
+          },
+          {
+            "test": "font-first.mka",
+            "result": "equal",
+            "comparator": "FFmpeg attached picture",
+            "picture": "image/png, 607 bytes",
+            "note": "a font and a MIME type with parameters"
+          },
+          {
+            "test": "upper-mime.mka",
+            "result": "equal",
+            "comparator": "FFmpeg attached picture",
+            "picture": null,
+            "note": "Matroska MIME types are case-sensitive"
+          },
+          {
+            "test": "indexed-at-end.mka",
+            "result": "equal",
+            "comparator": "FFmpeg attached picture",
+            "picture": "image/png, 607 bytes",
+            "note": "Attachments after the clusters, named by the SeekHead"
+          },
+          {
+            "test": "unindexed-at-end.mka",
+            "result": "equal",
+            "comparator": "FFmpeg attached picture",
+            "picture": null,
+            "note": "Attachments after the clusters that no SeekHead names"
+          },
+          {
+            "test": "ape-cover.wv",
+            "result": "equal",
+            "comparator": "FFmpeg attached picture",
+            "picture": "image/jpeg, 1980 bytes",
+            "note": "APEv2 binary items"
+          },
+          {
+            "test": "ape-other.wv",
+            "result": "equal",
+            "comparator": "FFmpeg attached picture",
+            "picture": "image/bmp, 1206 bytes",
+            "note": "APEv2 binary items"
+          },
+          {
+            "test": "ape-no-name.wv",
+            "result": "equal",
+            "comparator": "FFmpeg attached picture",
+            "picture": null,
+            "note": "APEv2 binary items"
+          },
+          {
+            "test": "ape-in.mp3",
+            "result": "equal",
+            "comparator": "FFmpeg attached picture",
+            "picture": null,
+            "note": "FFmpeg reads no APEv2 tags in MP3"
+          },
+          {
+            "test": "base.mp3",
+            "result": "equal",
+            "comparator": "FFmpeg attached picture",
+            "picture": null,
+            "note": "no picture"
+          },
+          {
+            "test": "base.wav",
+            "result": "equal",
+            "comparator": "FFmpeg attached picture",
+            "picture": null,
+            "note": "no picture"
+          },
+          {
+            "test": "base.m4a",
+            "result": "equal",
+            "comparator": "FFmpeg attached picture",
+            "picture": null,
+            "note": "no picture"
+          },
+          {
+            "test": "base.wv",
+            "result": "equal",
+            "comparator": "FFmpeg attached picture",
+            "picture": null,
+            "note": "no picture"
+          },
+          {
+            "test": "exclusive cover export",
+            "result": "passed",
+            "cases": 3
+          },
+          {
+            "test": "mutated pictures",
+            "result": "no crash or hang",
+            "files": 1000,
+            "written": 741
+          }
+        ],
+        "scope": "Embedded cover art (ID3v2 APIC/PIC, FLAC PICTURE, METADATA_BLOCK_PICTURE, MP4 covr, Matroska attachments, APEv2 binary items) against FFmpeg attached pictures; mutated files."
+      },
+      "retained_build": {
+        "build/macos-cover-queue/lamp-cli": "b3a468cb9e7d359d0f14cfdd2b124f6f90ce86cb79e1beeeeb9452aa8858c163",
+        "build/macos-cover-queue/liblamp-test.dylib": "e548965066998b0812f38906cf9b61b6553a877d1e8ab5517b130f3e36e28a15"
+      }
+    }
+  },
+  "build_scope": "Offline suites ran in their individual debug build directories. Retained artifact hashes identify those builds; they are not represented as release runs. The final release passed the baseline, six-format lifecycle, terminal, empty-queue, AppKit smoke and seven submitted-PCM scenarios after the null native resampler-callback guard and failed-open exit-status fixes.",
+  "release_exit_smoke": {
+    "result": "passed",
+    "checks": [
+      "missing playback input returns 2",
+      "missing track 99 returns 2",
+      "invalid rate 999 returns 2",
+      "--tags succeeds on a bare WAV",
+      "--check --start 0:00.025 yields 3600 frames from a 4800-frame WAV"
+    ]
+  },
+  "shared_playlist_cleanup_regression": {
+    "linux": {
+      "result": "passed",
+      "vorbis_fixture_encoder": [
+        "-c:a",
+        "libvorbis"
+      ],
+      "checks": [
+        {
+          "test": "same-rate",
+          "result": "exact",
+          "frames": 264600,
+          "note": "eight formats at 44.1 kHz",
+          "stats": "codec=1 rate=44100 channels=1 bits=8 frames=264600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=224 cpu_us=231628 endpoint_dry=0"
+        },
+        {
+          "test": "--check same rate",
+          "result": "frames match",
+          "stats": "codec=1 rate=44100 channels=1 bits=8 frames=264600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=150 cpu_us=156772 endpoint_dry=0"
+        },
+        {
+          "test": "mixed-rates",
+          "result": "exact",
+          "frames": 176400,
+          "note": "Opus 48, MP3 22.05, FLAC 96, WAV 8 and Vorbis 32 kHz resampled to 44.1",
+          "stats": "codec=3 rate=44100 channels=2 bits=0 frames=176400 underruns=0 decode_error=0 audio_error=0 elapsed_ms=443 cpu_us=450316 endpoint_dry=0"
+        },
+        {
+          "test": "from-48k",
+          "result": "exact",
+          "frames": 67200,
+          "note": "a 48 kHz session",
+          "stats": "codec=1 rate=48000 channels=2 bits=16 frames=67200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=126 cpu_us=136558 endpoint_dry=0"
+        },
+        {
+          "test": "chain-resampled",
+          "result": "exact",
+          "frames": 52920,
+          "note": "a 48 kHz chain resampled to 44.1 kHz",
+          "stats": "codec=5 rate=44100 channels=2 bits=32 frames=52920 underruns=0 decode_error=0 audio_error=0 elapsed_ms=153 cpu_us=159483 endpoint_dry=0"
+        },
+        {
+          "test": "chain-own-rate",
+          "result": "exact",
+          "frames": 62400,
+          "note": "a chain resampling its own links at the session's rate",
+          "stats": "codec=7 rate=48000 channels=2 bits=24 frames=62400 underruns=0 decode_error=0 audio_error=0 elapsed_ms=234 cpu_us=253305 endpoint_dry=0"
+        },
+        {
+          "test": "chain-skipped",
+          "result": "exact",
+          "frames": 39690,
+          "note": "a chain whose links change rate, at another rate",
+          "stats": "codec=1 rate=44100 channels=2 bits=24 frames=39690 underruns=0 decode_error=6 audio_error=0 elapsed_ms=71 cpu_us=85882 endpoint_dry=0"
+        },
+        {
+          "test": "unopenable",
+          "result": "exact",
+          "frames": 39690,
+          "note": "two files skipped, exit 2",
+          "stats": "codec=1 rate=44100 channels=2 bits=24 frames=39690 underruns=0 decode_error=6 audio_error=0 elapsed_ms=44 cpu_us=58129 endpoint_dry=0"
+        },
+        {
+          "test": "broken-middle",
+          "result": "exact",
+          "frames": 53118,
+          "note": "a truncated file in the middle",
+          "stats": "codec=3 rate=44100 channels=2 bits=0 frames=53118 underruns=0 decode_error=6 audio_error=0 elapsed_ms=66 cpu_us=81013 endpoint_dry=0"
+        },
+        {
+          "test": "broken-last",
+          "result": "exact",
+          "frames": 26658,
+          "note": "the last file's own error kept",
+          "stats": "codec=2 rate=44100 channels=2 bits=24 frames=26658 underruns=0 decode_error=3 audio_error=0 elapsed_ms=40 cpu_us=46949 endpoint_dry=0"
+        },
+        {
+          "test": "nothing opens",
+          "result": "rejected",
+          "output": "Unsupported, malformed, or inaccessible file. Supports WAV/W64, AIFF/AIFC, CAF, AU, FLAC, WavPack, Monkey's Audio, MP1/MP2/MP3, AAC (LC, HE), AC-3/E-AC-3, Ogg (Vorbis, Opus, FLAC), Matroska/WebM, MP4/MOV, AVI, FLV, ASF and MPEG-TS/PS audio."
+        },
+        {
+          "test": "--check with a skipped file",
+          "result": "exit 2",
+          "stats": "codec=2 rate=44100 channels=2 bits=24 frames=17640 underruns=0 decode_error=6 audio_error=0 elapsed_ms=26 cpu_us=39559 endpoint_dry=0"
+        },
+        {
+          "test": "playlists",
+          "result": "exact",
+          "frames": 167580,
+          "note": "PLS with a file:// URI, a nested M3U8 (BOM, CRLF, comments, a missing entry and a URL) and a Latin-1 M3U",
+          "stats": "codec=12 rate=44100 channels=2 bits=32 frames=167580 underruns=0 decode_error=6 audio_error=0 elapsed_ms=236 cpu_us=252320 endpoint_dry=0"
+        },
+        {
+          "test": "loop",
+          "result": "exact",
+          "frames": 158760,
+          "note": "a playlist naming itself expands to a depth of four",
+          "stats": "codec=4 rate=44100 channels=2 bits=32 frames=158760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=631 cpu_us=643853 endpoint_dry=0"
+        },
+        {
+          "test": "unreadable-playlist",
+          "result": "exact",
+          "frames": 44100,
+          "note": "a playlist that does not exist is skipped",
+          "stats": "codec=9 rate=44100 channels=2 bits=24 frames=44100 underruns=0 decode_error=6 audio_error=0 elapsed_ms=49 cpu_us=63511 endpoint_dry=0"
+        }
+      ],
+      "scope": "Gapless queues of several files: exact concatenation at one rate, resampling to the first file's rate against the resampler oracle, chained Ogg files, skipped and failing files, M3U/M3U8/PLS playlists."
+    },
+    "linux_binary_sha256": "37208c129025c133ce00aa3006fcd287140ec91b5ad22a46d50879e32d2c1efd",
+    "windows_llvm_wine": {
+      "result": "passed",
+      "checks": [
+        {
+          "paths": [
+            "/home/lamp/lamp/tests/generated/queue/a.flac",
+            "/home/lamp/lamp/tests/generated/queue/b.wav",
+            "/home/lamp/lamp/tests/generated/queue/r22.mp3"
+          ],
+          "byte_exact": true,
+          "frames": 60000,
+          "sha256": "452e64f98dae9a1cf6f83155c3ac9b9742f3df84678f8190389da8f52745d682"
+        },
+        {
+          "paths": [
+            "/home/lamp/lamp/tests/generated/queue/\u00e9 queue.m3u8"
+          ],
+          "byte_exact": true,
+          "frames": 60000,
+          "sha256": "452e64f98dae9a1cf6f83155c3ac9b9742f3df84678f8190389da8f52745d682"
+        }
+      ]
+    },
+    "windows_binary_sha256": "058de8101d720206f7949fbd56ee29e45102420d2403c63a8f032618be1f97ba",
+    "scope": "Linux x86 queue suite and Windows LLVM/Wine mixed-rate and Unicode-playlist offline exports. Native Windows hardware playback was not tested."
+  },
+  "known_comparison_limit": {
+    "binary_sha256": "37208c129025c133ce00aa3006fcd287140ec91b5ad22a46d50879e32d2c1efd",
+    "fixture_sha256": "d791660062b7315e3d5bcd24b8c249be04bf3acb61a9d15e96ca131739bb5efc",
+    "source": "Fresh FFmpeg 9 start.opus retained on x86 guest before original-fixture navigation rerun",
+    "outputs": {
+      "whole": "996346df8a0741f47ca44504f5db7cd16654a5b3153938e6e89e8c8d1b2d5862",
+      "start": "8425151cea890cdf13d0c20563244d9e2c27731ffc3343f7b004b88dd3874aa9"
+    },
+    "result": "known comparison limitation",
+    "native_binary_sha256": "a56b4e46ddfed6d7bdda8c62e53be7b76f2609b7711a41760a8b8b1301857a70",
+    "whole_frames": 201600,
+    "seek_frames": 99600,
+    "start_frames": 102000,
+    "warmup_frames": 24000,
+    "tail_maximum_error": 5.960464477539063e-08,
+    "differing_tail_float_samples": 665,
+    "x86_and_arm64_whole_and_seek_byte_exact": true,
+    "policy": "The existing navigation suite requires an exact tail after 0.5 s. This fresh FFmpeg 9 Opus fixture fails that continuous-decoding comparison identically on x86 and ARM64. The original retained ten-format fixture set passes the unchanged policy. Normative reset-reference Opus tests are separate."
+  },
+  "package": {
+    "file": "build/packages/LAMP-0.4.0-dev-macOS-arm64.zip",
+    "sha256": "8da0b4858e3c8a8e83adf7cfb46bd7438dab0420bbc78a6be51ae3388d05fc5a",
+    "signature": "ad-hoc verified by package script; not notarized or published"
+  },
+  "source_sha256": {
+    "src/aac.s": "f1b6dab445c30b50572182be8799f7bb96f643938bfd47ccb36cf3a52d166743",
+    "src/aac_pce.inc": "fc523d39a21cb006cc3bdceec3106abb8400d5111cef46426c0decb18e99edd6",
+    "src/aac_sbr.inc": "057caca4c1a3ffa372e5aa86156ed1239fffa2ea9898788cd1bf9830f0bf9121",
+    "src/aac_tables.inc": "177ffa22f1090d1c227d8f66b5c7f70d009cecc7141a21e3dc1e3ad14180b97d",
+    "src/ac3.s": "c56957924617e7a9820f7e9395280e0ab2a9ae5e9fa4e24b20d61ea04ffa9623",
+    "src/ac3_block.inc": "26ed13c6a84f0ed8f96518b0b0f4fb4104b90c2dde0c308b1223d32c82711472",
+    "src/ac3_tables.inc": "e15f08a3e49e8f2b045ea014e8bc13d71cb7efaef764e5d76faf791f659c078d",
+    "src/adpcm.s": "49fc245ffa8e0ca6a517df9b1b06b8ea746128ca6caf1bc997b4814291a17bdf",
+    "src/adpcm_duck.inc": "2bd1c8c8598eecf850f58b1f91d365e0a676463e8a8cc7140bd1bfc671914a23",
+    "src/adpcm_tables.inc": "d0422b828759b312ada2aa0ad9763fe1bcdca9ce8768c57d17aadee9072818d2",
+    "src/aiff.inc": "85a4ae9216ac28b958867243647015791071cf1736b173cd9ca3ebf8adaae2e1",
+    "src/alac.s": "b1f888000f80c378b212b7703aef5befd79e1b6487d83ee280f999ac95e8b5d8",
+    "src/ape.s": "fde4a5d3a1fb6e65d6dde3c6db6fb78ebbc83b4df5d9536835dee86b0b3effcd",
+    "src/asf.s": "e82d9c9e864eae694320d5bae237e9714c63f9ef73111369d988eed5bd10e6b7",
+    "src/asf_extended.inc": "f4a41d6572b245d8acc44fd93ace28a94ffa1deee5e71eab0a0eb4391abf296f",
+    "src/asf_spread.inc": "29af589bc2f54e64db22fffa882ebf6045a8d1e31114ceedfc512dd6b076a608",
+    "src/au.inc": "d5bbec39ff860f891a910daca0a0e2803fe6112c51a9e2a057c15b6e949e5249",
+    "src/avi.s": "56f1336d789997c4e4d2d11946129f8f2a1d22ee46c653cd40dacacb4ebeac59",
+    "src/caf.inc": "4567dc707fc82408f16492d398e38af38d89b2eef57a49a65ea85809c48a7fd2",
+    "src/chapters.inc": "d1c07f752c20f3772c737d2959e3a94525d582efb0807a8d9921cd234db2dc59",
+    "src/chapters_asf.inc": "ec504ed49f0f9eb72b4cd2398c36a4bfdd1acc710061188c24b1b35da3d6b651",
+    "src/cover.inc": "4c6a2398bdd6d9dab885f7b01ac37e7bce6c1979f8de99ca9fd450ad6f0b4a71",
+    "src/decoder.s": "44e88449c121f6d67f1805555f15663fe2d3883531fce2dbf5a8587e58f1d8f8",
+    "src/eac3.inc": "01b80314e52e5a5e8b627970a60a86155845382b5c3b7011b5db4b81c3a362b5",
+    "src/eac3_aht.inc": "f380c9a8ac7108a2122a5286c4827290e565d9b31cb52fbd7d80bb1a74ee70f6",
+    "src/eac3_aht_tables.inc": "10bdeb011fd9047818da16139851c51a21c686f19ab4926b31e1090efc4e5fe0",
+    "src/eac3_blocks.inc": "61968516460b4f84f4174e42e3c5b31ae8105f97c0506dd24830e9814d9751ab",
+    "src/eac3_ecpl.inc": "09d47e51cb8f70ddef57b989752eb25ace4d674422a0bf8ceeeea1643b233bb9",
+    "src/eac3_ecpl_stream.inc": "ee19525b092634397a8bde00cb1d8a097335423f6f1a062a2fb1bd4111a90711",
+    "src/eac3_ecpl_tables.inc": "5d59aafad190fe35975342a92aebb88bb879076c6d4c18c350505f1413ece016",
+    "src/eac3_lookahead.inc": "0fd9dd5db628e0662666c9103bf307a885ad173512545046bde35d593053a255",
+    "src/eac3_spx.inc": "81d5829a9bf28b89167fdba66c377bc153f31c6ba3f7d822b145378541ce85ea",
+    "src/eac3_tables.inc": "9406e55d98b6b338f760313c702c8497d48bd64266297e7bc447e18074a57b33",
+    "src/flv.s": "3741646689aefff5bf16831ec55bf2abe5647b31d9952b2d4e280391eec44cbb",
+    "src/g72x.s": "e692afa835bf1f2b64763725a98fb91a36cb1b609fc8d2615c5398c73bf517ab",
+    "src/gsm.s": "87881b2df7bb53d304ecf1344566d1abf427333046ff2a414430c34b1a0d3374",
+    "src/lamp.inc": "ed759a291785c99591cf8d31eecfec23d036ffae950d21eb1608eaf70611676a",
+    "src/latm.s": "3418f1e329b1bc37828ebef0ed574f12f5720d7627e2376064a678a8f785e9d2",
+    "src/linux/cli.s": "e5d364076ef9a01c98b45debae1f66fe9bb39d9280dfa61d48c7de3671d3beff",
+    "src/linux/engine.s": "8659ff796d7a37e52902e7eccce2ce7202b74a735f1cf0e6504720f69944c3db",
+    "src/linux/linux.inc": "fb54e9dd9d270e6e249c2f33b61cb3a3f1f341b453779e1b5a557a070e3e3263",
+    "src/linux/platform.s": "8a8b54cf391c0e9ca9631c671f23e3546035f6e72f9132f61025a3dcc1a6bfe3",
+    "src/linux/pulse.s": "9be541705baf1ca47f7a99afbf8feabed566112772538cc49e6831df9df76e5a",
+    "src/linux/thread.s": "8edec9156dff9a25e6594c94e9da818ac4de4c7a77776d09efc94219decc96aa",
+    "src/lpcm.s": "5c10bf039fcddd967ee71f6c03477d767ab1382505bd902822e9e5a06d0df1aa",
+    "src/mac/abi.inc": "9980ab2ab3f6672a9d7a77e62a820497d502b5c440f919830e0ca13ad68b9c0a",
+    "src/mac/audio.s": "461f0b2ea368cf2c8a4d487bda77adba12a60c40adf50b7185d99ebbb3f55cd7",
+    "src/mac/bridge.s": "cda58507bc97483523b44c06952117e28a30bb28a7232ca793ae0f7c9f24f7b1",
+    "src/mac/cli.s": "dc3edb0d576fcf38c5b868a9e797460423ab8d24436f5e5d42adc7bfd50da198",
+    "src/mac/cli_metadata.inc": "92cbbe3ef04f395403388ef3b18d2e2d68322fd4b11e85a4a563947c2c3cefe4",
+    "src/mac/cli_options.inc": "43db5a731f712d0caf366659f812bc0d5cfb00aa5f72599f2b4d522758e11f09",
+    "src/mac/mac.inc": "77fcb466297d9f53a8bc2214086b660a1ca1c0016a3240d1dbe6e50100f4202d",
+    "src/mac/paths.s": "700620570f3f20c6be605dcc1ce6cf7e2f33a0e9fb63d6c3455f3b4c1d0aa29f",
+    "src/mac/platform.s": "504785c6c7badad01cdee42cb957d787cd0910a1a05028c591bb80b1e2af23c5",
+    "src/mac/runtime.s": "cc0a2597dca12ebc012894323214268a3ef0409458f113d63393f0122772f4dc",
+    "src/mac/ui.s": "906bcfb07e8a364211ebe36907f2e566aca7c97210b85805481d9491eb1d6b38",
+    "src/mkv.s": "4bfb6643338674c5597d1944f302b9435b065b5b7f559cf78e0f8a61c36fd05d",
+    "src/mp2.s": "8283cf58e2e0f8fa1aa6486f7349f5684865640f5b09fd24d730594bddd2fcbd",
+    "src/mp3.s": "d90563f76c38f5aa610eb295572846c5f76d85502ac29ae2b87f920296886f66",
+    "src/mp3_layout.inc": "b80ca17551bbc45499691eccfb5baa63aaec2e0e6786ee55bbbfd83b734be9bf",
+    "src/mp3_synthesis.s": "0577622b26154e9e097fca17253452d534deafe882a0e02d698b34b3711275d4",
+    "src/mp3_tables.inc": "b55f1e333385d27a4ecaa0765406f72d669525a6bb964fcaa9de5582500a016f",
+    "src/mp4.s": "d498c8f74f2b157ad6a3e42984d8694667cb64b62074347c56a65cf7da3c622d",
+    "src/mpegts.s": "5dafcb58db5d634684462207d45e55ff088d5bf032f62d8302adc39be6ef125e",
+    "src/ogg.s": "a283038a93b15d0f6d4c573105b6998d09d88168ea2d6ed5d6549fe06a0bd842",
+    "src/ogg_chain.s": "55d83b35ea390605b27a88f427f3871bd20fb5a51f4a0d83895dd54923708e10",
+    "src/opus.s": "511684ace8cfeca9c2e5b6190d4f9707c160012d2a6c0bfa2c103efb697f2659",
+    "src/opus_allocation.s": "41597b26d03502f225a6163a62eda9f28f4a8c9b97eee6cbef21f85026e50ca0",
+    "src/opus_band.s": "917fe9fcb88a1f7b3ff386cb8a0c6afa0dfaa0ee585350548b2fcd65c82f5963",
+    "src/opus_band_layout.inc": "84b45dce6d33086ea0a81d3805abfc221ac0121e6852c75cb2e2197559bda32e",
+    "src/opus_band_transform.s": "79e2ccfa8888c8764ed308ced36142056e14e4fab43848c2d76cda1cb8c0eec0",
+    "src/opus_bands.s": "c484f1f9dba467d85b4abd74bade064f5e8505db91a619329e9d9e5a766bb099",
+    "src/opus_bands_layout.inc": "63f3bf7167d69886bff0c7ce0d9050fbad851cef01976be95e3fe0bdf2c5193e",
+    "src/opus_celt_layout.inc": "338ca69e1e2db5b5741cd16fe2229e5a6ed83f59e58a3fd7956b9859312a005c",
+    "src/opus_celt_tables.inc": "58bdde9e9fe75789a3d2cb7ef6deb324b4f3b5a1e16d999f896cf94262db6716",
+    "src/opus_controls.s": "fecc42728f1f62f1e827b06099814eb76795978507287d71c78f946f40432bd8",
+    "src/opus_controls_layout.inc": "1dba9c9f7909a3fe7473fa3373415c0cd1a828a74cbf369c8ab60e734df754ad",
+    "src/opus_cwrs.s": "d01cde7cab8d3fb003316b70cc0b2ef0ae5934cac80d5723c5f5f17d6b1b43c1",
+    "src/opus_decoder.s": "df45409ade79e2656b407d949477f7d2a5feb8ee4d4ceefa8879aca680253dab",
+    "src/opus_decoder_layout.inc": "9bd6217ec65c65a2ad85a05526c259839b411e8be0548b8cfb3028f29b950443",
+    "src/opus_energy.s": "5729149b1ec415d3700edea2af1a2f1398b94a6007b790b9df69f662b45c90b8",
+    "src/opus_fft.s": "76cc54f5602ffaa2f2ff849805dc7bd12507347374fc6011c1ea00831f074367",
+    "src/opus_fft_tables.inc": "caa1729eb2f85ce6d2cbcca2a5aaea66e3de3dddc2b8e808089e099868505252",
+    "src/opus_filter.s": "48fbc00ba6296b488a33a737c0de279ba2953d830bcfdd0bc6535aa2aecaab1c",
+    "src/opus_filter_layout.inc": "354496d9e7dcedd2eaa3431710015e3a7333273c6f935a583a63511518665748",
+    "src/opus_lpc.s": "8d282443729937df4ee9ca57d379b834c6ee297e9483e2db848e5fab39447daa",
+    "src/opus_lpc_layout.inc": "ba4260b59b6636aa2201e01aa8bb15451ae8b9cd5ba4d3d60952639e67533682",
+    "src/opus_mdct.s": "18a1cc590953c2cb0be8d7df74b5fc2a49e9fd39177b081fd42e2283ac72c233",
+    "src/opus_mdct_layout.inc": "e506e51e15d8ec64af3b42f011537a4b79ff39b0214e4d00ee55673b71d704c4",
+    "src/opus_mdct_tables.inc": "83fd08edf4a408d02663b823b936a38626f499099301e36c3f73ea6ddefbf973",
+    "src/opus_mode.s": "496fdf0d51c2364ee52cb2c8d55c4298242bfd836c27bb4219b619e8833c08e4",
+    "src/opus_mode_layout.inc": "6172b4400470198ffc6fdefeaaed8414a9850d2ced5e6da007ab373d68540388",
+    "src/opus_packet.s": "d64c28cd23e6b921ddd8d94c243fdd6f471a65fa5ba1ed0100f3083c1d3ff408",
+    "src/opus_pitch.s": "242175c341ce6c94d0541df7bee4ee3daf42d130d38b155cb04f6031ee0db5e6",
+    "src/opus_pitch_layout.inc": "41b8f742ed34006cb147625aa22af2cf135ae18d071efe029b8cb7b6a72d8ab5",
+    "src/opus_plc.s": "51b2fdd8f0fc818fa026360240b46e19b71eab5bf6c8fa84befe429801cdcbc1",
+    "src/opus_range.s": "3f5e584a02496053f47a10be5f5de9a397f7b63e08a925e821e8a8ebcf489d8c",
+    "src/opus_silk_cng.s": "24c8f11515600d7b5127b06d570a394d85af2b9ba6d3f63f97409d90dd2e310c",
+    "src/opus_silk_cng_layout.inc": "521e569cf264e55af43bcd293aa45041ca9fb9a35ed8051e631414c555576856",
+    "src/opus_silk_decoder.s": "25980cf255cbef19a7bbe7acd82db968aa9c20a14bee2d155bee00f61d770595",
+    "src/opus_silk_decoder_layout.inc": "1fe2beb3805c0319f02ce68b889d758ecdef1bdadbf1b2b98135190c42b54aaa",
+    "src/opus_silk_frame.s": "39eebf5a09db47f7a45482018cef6b45d0e9ceba348f6be79e4bb3c9bf77670b",
+    "src/opus_silk_frame_layout.inc": "fe73b218ec01fac476df55f59d4f64525c6ae92554cbe07733927c992b9e0055",
+    "src/opus_silk_indices.s": "b587def21c69cae52eac9f8459d908bc1f0f6cefcc9a27f6ad65997d678445ec",
+    "src/opus_silk_indices_layout.inc": "09ed9af770f22a9ae1a5b15748d5ff1e491e22a277b94e355b7afb139ec11bb4",
+    "src/opus_silk_indices_tables.inc": "78eacaf84f487642b3d97ae3e17ee09cdd3418fdd5996ebd63d0a5afe8f3134a",
+    "src/opus_silk_lpc.s": "43d08843d65b9c4c8da5d118052b58bdb9c4c72c3ce678c1f41dfc3ec7df2434",
+    "src/opus_silk_lpc_layout.inc": "3cd5dc495dddd8461d9b4f69cf92970f9bc5df2b2356b4f01764c75b08ab628c",
+    "src/opus_silk_lpc_tables.inc": "d3b53ef78b2917c2747b6c6dd9aa2c54d1b2f69ff084026436e583170e9777a8",
+    "src/opus_silk_nlsf.s": "d29afbc3360f33cac9c2f60b82286876263c51882a9c70d1d3d6929f72da4dba",
+    "src/opus_silk_nlsf_layout.inc": "d1361bdcff747b194f84bc429cb2023db0840d5dd0570c9aac9374d513c81e09",
+    "src/opus_silk_nlsf_tables.inc": "4ab385ac36f91237d027322cbe35dc6a54ebca52c35ee3a2b16c88f82ce0e7ab",
+    "src/opus_silk_packet.s": "007b57e3d813a6daa8726f68287b76258934b548d7938ee5fd0bbd99139fd8f3",
+    "src/opus_silk_packet_layout.inc": "1b4fbae77e83f34e96d65ba35cbc81db17f336bf4bd6fb1574c8c928db2290d0",
+    "src/opus_silk_packet_tables.inc": "6a24204c3aee046ff2c3a7d0c0191aadfdb6f918d29e8921fd577c75d73a23ea",
+    "src/opus_silk_parameters.s": "188a0b589a9e7db1fafdfa72ae85075d4b8855ceab3cb6aaca1baa311c313b01",
+    "src/opus_silk_parameters_layout.inc": "ebdfbca52baa0fa440d1991ee7855b9596ae62dac0ef7abe840b5a652e63caa1",
+    "src/opus_silk_parameters_tables.inc": "8dbb2a4944b966c5361ceb062fb45c66eae7d6b42a890d073bb6e21809efb3e7",
+    "src/opus_silk_plc.s": "3ab1f1ce484754d9c086009ac9abc71483f05675d7e0097c6042a92c28c4c833",
+    "src/opus_silk_plc_layout.inc": "6f4324801a5e186aec507cf629c96dafa0be3bdf6256acd6f7f630c368f067b4",
+    "src/opus_silk_prediction.s": "82bb77ed8ffabbda734ddf2bd87402f38000e9f209f0e513ebdbc45f2170eafc",
+    "src/opus_silk_prediction_layout.inc": "bd0ef1090a5ed817f58e032ba5932585a858ae408addc3640894daecd778b323",
+    "src/opus_silk_pulses.s": "2246d8a54016ad05c8906babf16fd5b7ff812174fde0b3600c431fa4a362abbb",
+    "src/opus_silk_resampler.s": "22199f1c27a2fc0f0c8ce0ec684a1ff93f104e162f80a00e827c1c38a7748572",
+    "src/opus_silk_resampler_layout.inc": "42fc81a358e5d1bb9c8f7a5f410895cd09342eb0af1f36086a086566e04ff8ff",
+    "src/opus_silk_resampler_tables.inc": "99a4d8054c0b9d353153bf785c4ab358eb9a34066a6d575fda4afd1832cb68f8",
+    "src/opus_silk_state.s": "e21e861b34283266de8c232e435db8668ac253525cada5047fd75e05e8b3aa52",
+    "src/opus_silk_state_layout.inc": "843620d05decb395e53d0880f4fdebde08d7869bd6acc36c7bf165363c83b929",
+    "src/opus_silk_stereo.s": "31822435bfbf096601c10cad52a7699e2110b5ce749b9d26c247702cccb53bb4",
+    "src/opus_silk_stereo_layout.inc": "38c770df9d7e674c1c7adf1fb7dc4b6eaa499692c066f4d9d2c000d8e2180afa",
+    "src/opus_silk_stereo_tables.inc": "a60e186bbb61e00f3e382d9394fd78c5daa449e9687b3514b047db783e3ba5a0",
+    "src/opus_silk_synthesis.s": "39e146e7bdf16aa3f4b10c806394435da3ca8247cce5e0bd32b7d0741144847f",
+    "src/opus_silk_synthesis_layout.inc": "3e028a02d63b1a27de347a6a3f0b87e1752fc90c1f21cb040dd3fd9cbbcf94ea",
+    "src/opus_silk_tables.inc": "81cac9a3d1b8152e2f9cbcabe0d97a2dafe4cc8cfa184a412f126b893988742c",
+    "src/opus_spectral.s": "8c12607b7ef9b4a5642117e0f6d956bf9d57de328346050e7ac6bb0a701f12bc",
+    "src/opus_spectral_layout.inc": "58e40abe72faeb9692b895a8a63f200ba5fe8d7dd41c5e608a92f276e282bcd8",
+    "src/opus_spectral_tables.inc": "06673c494a39cfd4f607c41b49e7c74bbf041a5c417e5c1713cd6df4a234df05",
+    "src/opus_stream.s": "f94c47b3ff88090e4ebcb4189ebc2fbaaead89413b2d82c7d06ceefd22c630a2",
+    "src/opus_stream_layout.inc": "e7625bfc726897e836fe470ac4e4f588752f68c6197a6da932c9ea08c6e0c05e",
+    "src/opus_theta.s": "98f2555fb9af7ef0b8b363b325e78bfa7f344f7b3ae12810ef67575256c6e83e",
+    "src/opus_theta_layout.inc": "6e8cf89cc5235d128ededf4e2b73a8f4f77dd83efca93cf482a35d934ec2d46d",
+    "src/opus_vq.s": "ec9f69cb6db1406338067d19f8a435cadc093ba7ae6fe30fde3bda4ba1a62518",
+    "src/playlist.s": "028ad2970f7e842f051fb582bcf793cae3d6020cf2839c0103ff31b23947fbc1",
+    "src/queue.s": "18b7b6ead963997cd3341af2deecc143bcb7ca5637c1558b0e9fc6204165b223",
+    "src/resample.s": "4e71ff42317680167aceb90881530e36030e550f290f1acc68963f5b4ac1d9a9",
+    "src/resume.s": "d7be291cb21afaaacf14eacb128932cf3f132dd20b728562ae79f4f759b3e551",
+    "src/sbr_tables.inc": "7e769f4d01d0e5b0b2abc2e40c4633132b1e776aa9c3de02ffa253673fc93250",
+    "src/tags.s": "c3826724e4e67d7b840b6bbb38d7af4b60e370ad2a354a78cc85551ea5224de1",
+    "src/tags_asf.inc": "179a413a2fae216f5448953f2457e17bbf631203a3e2a10d45f2a86ba4d203a0",
+    "src/tags_genres.inc": "3879b2a70d26d3f00c246c1ba525f01ca295756f8d451a644ef30a7ea79eeb49",
+    "src/track.s": "a0ab0586b55a7ca052e9d457733eb6bdb160f90c04b9e5359b76e401a85ae91d",
+    "src/vorbis.s": "1a3be3b642e9087fc59dc93d7e81dd7b5f6a6e4875df1e3b4aa2d23f13955ede",
+    "src/vorbis_decode.inc": "4c7ce9b60b6f48d4a94f5dc0f44cf7c0dfd6653507e218274f747eca8a48456b",
+    "src/vorbis_layout.inc": "06013844caa14eaae59c7882a0ab1f9ee2144cac833ffdfe9f390128a27294fb",
+    "src/vorbis_setup.inc": "3a3479a192a3f1ef96cd2256fb3312b0edecf1ee2803215e6c91e2c60b034258",
+    "src/vorbis_tables.inc": "24aee0f4436e8f3f40c39fa9b1db59a106fe80bd16d37841c4e8af0d7792639b",
+    "src/vorbis_transform.s": "bed89d960bb6bc5f7ac0aad64d50fecd19441c78b6daa841625e7a0a9dda2dc1",
+    "src/wavpack.s": "595096a89fdf1ef94472bb511f31b1ceba5ed2bad7929de6db9ccb9fa0fc18d0",
+    "src/wavpack_block.inc": "dcb4ad1f655b15c3c5656f0d288dc09b0c636a5870f203da1e6d8f9288c89a60",
+    "src/wavpack_tables.inc": "f6b8abc3c4969903dfb043effa96a26a6f097a4e86192ab83b8cee153e99f0e7",
+    "src/win/platform.s": "1cb78a5df6163a2046926876cf884f886b5264e494b815cfa42426f952c4eb30",
+    "src/win/player.s": "5f0a4c482830f4c50a893ab06b3f0ab549fa2a8f4cb15f2e325748c031897a90",
+    "src/win/resume_state.inc": "94ae5ad64c811b465f21089807b2475c1d78028895d8b027f1861de2192e8d79",
+    "src/win/ui.s": "16e381d29f9064f6592aad995ffa99d6f71cd9f108fae84a42d3c64211bea7cc",
+    "src/win/ui_controls.inc": "0adba9d09e50ce205c6984575cd40fa08a85e9b84385cbef447bee814787d9ea",
+    "src/win/ui_cover.inc": "93be6039a5288388465c3aace2b678f3bdf6edba11473afc6e625387e94808d3",
+    "src/win/ui_draw.inc": "1ad8f1c2de90f92428b8a740511137b02d66654a3e1a289b613c2d4e032160b1",
+    "src/win/ui_menu.inc": "b055ff00cc54c3cc73bc1e7990db1b489e1986e3e082be562cd64a4fe537d3df",
+    "src/win/ui_modes.inc": "118215276682fb48fe1afcf57a730ed87f26faaa55331642ba5860caefcde280",
+    "src/win/ui_queue.inc": "8133dcb55c45ed199ea4e34590d6a28a8952bf0473ccc0b34851e129722892bb",
+    "src/win/ui_queue_view.inc": "037980489e6cb212bef0bef2e0474feeedf6c242f61cc218848815e52fdfcfdb",
+    "src/win/ui_resume.inc": "e279cb7af72e9e37e64d6c44932578770f49caf647c92ba01c0f754cc52452a6",
+    "src/win/ui_tracks.inc": "6ac6e03627d4d6d9654d3dc3c796ff515d46288b20ed5133d45b955af1013f4e",
+    "tests/mac-queue-observer.c": "0c0b238956b2da08ca991cf8bc62e2d3a7ef63a13dd19bd36eafceb0753d8129",
+    "tests/mac-queue-playback.c": "419f41b2d1e3811c72ed632fa34002af78ccefce94083b2634a5d2b5f9489ee2",
+    "tests/verify-macos-queue.py": "98c8cbbb4407ffd59141d8d6d1ac6ee093632fd081b2049e3224f9ef4a53e2e3",
+    "tools/arm64_lamp.py": "37e4a515283ef441f9d1ee647377716efbe0d6a3aae27ef7c62faf53118f35d0",
+    "tools/build-mac.py": "293de34debe92ed89ce64fa2a1b2e8de192f9ef05d9333c147d685acd6fd3ea2"
+  }
+}

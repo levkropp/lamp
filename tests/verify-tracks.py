@@ -23,17 +23,24 @@ import hashlib
 import importlib.util
 import json
 import os
+import shutil
 from pathlib import Path
 import subprocess
 import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from lamp_test import (ROOT, Failure, build_lamp, build_oracles, exe, ffmpeg, lamp_cli, main_guard, out_dir, run, scratch,
-                       write_report)
+                       write_report, fixture_vorbis_encoder)
 
 SOURCES = ['-f', 'lavfi', '-i', 'sine=f=440:d=2', '-f', 'lavfi', '-i', 'anoisesrc=r=44100:d=2:a=0.2:seed=3',
            '-f', 'lavfi', '-i', 'sine=f=880:d=2:sample_rate=48000']
 VIDEO = ['-f', 'lavfi', '-i', 'testsrc=size=96x64:rate=10:duration=2']
+
+
+def vorbis_track(index):
+    """Apply the recorded fixture encoder choice to one multiplexed stream."""
+    flags = {'-c:a': f'-c:a:{index}', '-strict': f'-strict:a:{index}', '-ac': f'-ac:a:{index}'}
+    return [flags.get(value, value) for value in fixture_vorbis_encoder()]
 
 
 def catalog_wine():
@@ -181,7 +188,7 @@ def main():
                                         '-c:a:0', 'mp2', '-c:a:1', 'ac3', '-c:a:2', 'aac'], 3, 1),
         'two.vob': (SOURCES, ['-map', '0', '-map', '1', '-c:a:0', 'mp2', '-c:a:1', 'ac3', '-f', 'vob'], 2, 1),
         'two.avi': (SOURCES, ['-map', '0', '-map', '1', '-c:a:0', 'pcm_s16le', '-c:a:1', 'libmp3lame'], 2, 1),
-        'three.ogg': (SOURCES, ['-map', '0', '-map', '1', '-map', '2', '-c:a:0', 'libvorbis', '-c:a:1', 'libopus',
+        'three.ogg': (SOURCES, ['-map', '0', '-map', '1', '-map', '2', *vorbis_track(0), '-c:a:1', 'libopus',
                                 '-c:a:2', 'flac'], 3, 1),
     }
     for name, (inputs, maps, count, automatic) in files.items():
@@ -218,7 +225,7 @@ def main():
     links = []
     for k in range(2):
         link = work / f'link{k}.ogg'
-        ffmpeg(*SOURCES[:8], '-map', '0', '-map', '1', '-c:a:0', 'libopus', '-c:a:1', 'libvorbis', '-ar', '48000',
+        ffmpeg(*SOURCES[:8], '-map', '0', '-map', '1', '-c:a:0', 'libopus', *vorbis_track(1), '-ar', '48000',
                '-metadata', f'title=link {k}', link)
         links.append(link.read_bytes())
     chained = work / 'chained.ogg'
@@ -237,7 +244,11 @@ def main():
 
     # Speex counts as a track: Opus second in its link plays automatically.
     speex = work / 'speex-opus.ogg'
-    ffmpeg(*SOURCES[:8], '-map', '0', '-map', '1', '-c:a:0', 'libspeex', '-ar:a:0', '16000', '-c:a:1', 'libopus', speex)
+    retained = os.environ.get('LAMP_TRACK_FIXTURES')
+    if retained:
+        shutil.copyfile(Path(retained) / speex.name, speex)
+    else:
+        ffmpeg(*SOURCES[:8], '-map', '0', '-map', '1', '-c:a:0', 'libspeex', '-ar:a:0', '16000', '-c:a:1', 'libopus', speex)
     single = work / 'speex-opus-a2.ogg'
     ffmpeg('-i', speex, '-map', '0:a:1', '-c', 'copy', single)
     reference = decode(single)[2]
@@ -359,7 +370,9 @@ def main():
         print(f'{name}: {count} IDs counted, automatic {automatic} and track {selected} exact', flush=True)
     (work / 'wide-pcm-cases.json').write_text(json.dumps(wide_pcm_cases, indent=2) + '\n')
     (work / 'catalog-cases.json').write_text(json.dumps(catalog_cases, indent=2) + '\n')
-    write_report('tracks', {'result': 'passed', 'checks': checks,
+    write_report('tracks', {'result': 'passed', 'vorbis_fixture_encoder': fixture_vorbis_encoder(), 'checks': checks,
+                            'speex_fixture_source': retained or 'generated with local FFmpeg',
+                            'speex_fixture_sha256': hashlib.sha256(speex.read_bytes()).hexdigest(),
                             'catalog_checks': catalog_cases, 'sources': catalog_sources(),
                             'scope': 'lamp-cli --track N in Matroska, MP4, MPEG-TS/PS, AVI and Ogg (multiplexed '
                                      'and chained) against FFmpeg -map 0:a:N copies; queues; unsupported, '

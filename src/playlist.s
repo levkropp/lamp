@@ -10,7 +10,7 @@
 # unchanged (and are skipped as unplayable). Playlists inside playlists
 # expand to a depth of four. Paths are UTF-8 on Linux and UTF-16 on Windows.
 .include "lamp.inc"
-.globl playlist_expand
+.globl playlist_expand, playlist_clear
 
 .equ PL_ENTRIES, 65536
 .equ PL_ARENA, 1 << 22              # path characters
@@ -49,6 +49,21 @@ pl_used: .quad 0                    # arena characters used
 pl_bytes: .zero PL_ENTRY_MAX
 
 .text
+# Releases an expanded list. Call only after its paths are no longer borrowed.
+FN playlist_clear
+    sub rsp, 40
+    xor ecx, ecx
+    xchg rcx, [rip + pl_list]
+    call mem_free
+    xor ecx, ecx
+    xchg rcx, [rip + pl_arena]
+    call mem_free
+    mov dword ptr [rip + pl_count], 0
+    mov qword ptr [rip + pl_used], 0
+    add rsp, 40
+    ret
+ENDFN playlist_clear
+
 # RCX=paths, EDX=count -> RAX=paths with playlists expanded, EDX=count. The
 # original list returns when memory is short. Each call frees the list the
 # previous call returned.
@@ -60,12 +75,7 @@ FN playlist_expand
     sub rsp, 40
     mov rsi, rcx
     mov edi, edx
-    xor ecx, ecx                          # an earlier expansion's list
-    xchg rcx, [rip + pl_list]
-    call mem_free
-    xor ecx, ecx
-    xchg rcx, [rip + pl_arena]
-    call mem_free
+    call playlist_clear
     mov ecx, PL_ENTRIES*8
     call mem_alloc
     test rax, rax
