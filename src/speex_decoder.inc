@@ -1,8 +1,10 @@
-# Opaque complete mono Speex frame decoder arena, all three bands.
+# Opaque complete mono/stereo Speex frame decoder arena, all three bands.
 # First 16384 bytes are live; the rest is shadow and bounded scratch.
 .equ SPXD_SIZE, 65536
 .equ SPXD_LIVE, 16384
 .equ SPXD_MAGIC_VALUE, 0x44585053
+.equ SPXD_CHANNELS, 16364
+.equ SPXD_STEREO, 15872
 .equ SPXD_MODE, 16368
 .equ SPXD_FLAGS, 16372
 .equ SPXD_MAGIC, 16376
@@ -32,3 +34,5 @@
 .equ SPXD_EXC, 36928
 .equ SPXD_INNOV2, 37248
 .equ SPXD_QMF, 37632
+.equ SPXD_STEREO_WORK, 44032
+.equ SPXD_STEREO_OUT, 50176

@@ -1,10 +1,11 @@
-# Original complete mono NB/WB/UWB frame orchestration. MIT + retained BSD.
+# Original complete mono/stereo NB/WB/UWB frames. MIT + retained BSD.
 # Speex 1.2.1 sb_celp.c and modes_wb.c reference; see THIRD_PARTY_NOTICES.
 .include "lamp.inc"
 .include "speex_packet.inc"
 .include "speex_nb.inc"
 .include "speex_qmf.inc"
 .include "speex_decoder.inc"
+.include "speex_stereo.inc"
 RODATA
 .include "speex_high_tables.inc"
 .p2align 3
@@ -47,6 +48,12 @@ FN spx_decoder_init
     test eax, eax
     jz .Lspxd_init_bad
     mov [rbx+SPXD_MODE], esi
+    mov dword ptr [rbx+SPXD_CHANNELS], 1
+    mov eax, [rip+spxd_one]
+    mov [rbx+SPXD_STEREO], eax
+    mov [rbx+SPXD_STEREO+8], eax
+    mov [rbx+SPXD_STEREO+12], eax
+    mov dword ptr [rbx+SPXD_STEREO+4], 0x3f000000
     mov dword ptr [rbx+SPXD_FLAGS], 3
     mov dword ptr [rbx+SPXD_MAGIC], SPXD_MAGIC_VALUE
     mov dword ptr [rbx+SPXD_WB+SPXH_FIRST], 1
@@ -94,6 +101,24 @@ FN spx_decoder_set_flags
     xor eax, eax
     ret
 ENDFN spx_decoder_set_flags
+
+# RCX=initialized decoder, EDX=channels1/2 ->1/0. Preserve stereo smoothing.
+FN spx_decoder_set_channels
+    test rcx, rcx
+    jz .Lspxd_channels_bad
+    cmp dword ptr [rcx+SPXD_MAGIC], SPXD_MAGIC_VALUE
+    jne .Lspxd_channels_bad
+    cmp edx, 1
+    jb .Lspxd_channels_bad
+    cmp edx, 2
+    ja .Lspxd_channels_bad
+    mov [rcx+SPXD_CHANNELS], edx
+    mov eax, 1
+    ret
+.Lspxd_channels_bad:
+    xor eax, eax
+    ret
+ENDFN spx_decoder_set_channels
 
 # RCX=4 begin/end pairs ->1 if pairwise disjoint. Empty spans are ignored.
 LOCALFN spxd_ranges
@@ -185,9 +210,16 @@ FN spx_decoder_frame
     ja .Lspxd_bad_plain
     mov eax, 160
     shl eax, cl
+    mov [rsp+112], eax                # final sample count
+    mov edx, [rbx+SPXD_CHANNELS]
+    cmp edx, 1
+    jb .Lspxd_bad_plain
+    cmp edx, 2
+    ja .Lspxd_bad_plain
+    imul eax, edx
     cmp r9d, eax
     jb .Lspxd_bad_plain
-    mov [rsp+112], eax                # final sample count
+    mov [rsp+136], eax               # final float count (frames*channels)
     cmp dword ptr [rbx+SPXD_FLAGS], 3
     ja .Lspxd_bad_plain
     lea edx, [rax*4]
@@ -277,6 +309,7 @@ FN spx_decoder_frame
     lea r12, [rbx+SPXD_LIVE]
     lea r13, [rbx+SPXD_BITS]
     lea r14, [rbx+SPXD_OUT]
+    mov [rsp+128], r14               # selected audio scratch
     xor eax, eax
 .Lspxd_copy_live:
     mov rdx, [rbx+rax]
@@ -303,7 +336,7 @@ FN spx_decoder_frame
     test eax, eax
     js .Lspxd_bad
     mov [rsp+116], eax                # zero means clean packet end
-    jz .Lspxd_commit
+    jz .Lspxd_stereo_stage
     mov dword ptr [rsp+64], 1
 .Lspxd_layer:
     mov eax, [rsp+64]
@@ -704,6 +737,39 @@ FN spx_decoder_frame
 .Lspxd_frame_done:
     mov eax, [rsp+112]
     mov [rsp+116], eax
+.Lspxd_stereo_stage:
+    movups xmm0, [r12+SPXD_STEREO]
+    movups [rbx+SPXD_STEREO_WORK], xmm0
+    mov rax, [r12+SPXD_STEREO+16]
+    mov [rbx+SPXD_STEREO_WORK+16], rax
+    mov edx, [r12+SPXN_STEREO_CODE]
+    cmp edx, -1
+    je .Lspxd_stereo_control_ready
+    lea rcx, [rbx+SPXD_STEREO_WORK]
+    call spx_stereo_control
+    test eax, eax
+    jz .Lspxd_bad
+.Lspxd_stereo_control_ready:
+    cmp dword ptr [rsp+116], 0
+    je .Lspxd_stereo_save
+    cmp dword ptr [r12+SPXD_CHANNELS], 2
+    jne .Lspxd_stereo_save
+    lea rcx, [rbx+SPXD_STEREO_WORK]
+    mov rdx, r14
+    lea r8, [rbx+SPXD_STEREO_OUT]
+    mov r9d, [rsp+112]
+    mov eax, [rsp+136]
+    mov [rsp+32], eax
+    call spx_stereo_apply
+    cmp eax, [rsp+112]
+    jne .Lspxd_bad
+    lea rax, [rbx+SPXD_STEREO_OUT]
+    mov [rsp+128], rax
+.Lspxd_stereo_save:
+    movups xmm0, [rbx+SPXD_STEREO_WORK]
+    movups [r12+SPXD_STEREO], xmm0
+    mov rax, [rbx+SPXD_STEREO_WORK+16]
+    mov [r12+SPXD_STEREO+16], rax
 .Lspxd_commit:
     xor eax, eax
 .Lspxd_commit_live:
@@ -717,12 +783,13 @@ FN spx_decoder_frame
     mov eax, [r13+SPXB_POS]
     mov [rsi+SPXB_POS], eax
 .Lspxd_commit_audio:
-    mov edx, [rsp+116]
-    test edx, edx
+    cmp dword ptr [rsp+116], 0
     jz .Lspxd_success
+    mov edx, [rsp+136]
+    mov r8, [rsp+128]
     xor eax, eax
 .Lspxd_commit_output:
-    mov ecx, [r14+rax*4]
+    mov ecx, [r8+rax*4]
     mov [rdi+rax*4], ecx
     inc eax
     cmp eax, edx

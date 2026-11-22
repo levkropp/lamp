@@ -102,7 +102,9 @@ David Rowe authorship (created 24 February 1993) and Jean-Marc Valin's
 ltp.c and cb_search.c are Copyright (C) 2002-2006 Jean-Marc Valin;
 math_approx.h is Copyright (C) 2002 Jean-Marc Valin. nb_celp.c, sb_celp.c
 and modes.c are Copyright (C) 2002-2006 Jean-Marc Valin; modes_wb.c is
-Copyright (C) 2002-2007 Jean-Marc Valin. Frame synthesis, comb enhancement,
+Copyright (C) 2002-2007 Jean-Marc Valin. stereo.c is Copyright (C) 2002
+Jean-Marc Valin; intensity-stereo controls, gain reconstruction and smoothing
+follow that file. Frame synthesis, comb enhancement,
 high-band folding/innovation and gains, QMF reconstruction, DTX and
 lost-frame/recovery orchestration follow those files and filters.c. The
 64 float QMF coefficients and high-band gain entries derive from sb_celp.c.

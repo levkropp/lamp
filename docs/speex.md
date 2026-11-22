@@ -1,13 +1,13 @@
 # Speex decoder development
 
 Speex playback is **not implemented yet**. The source now contains assembly
-decoder components and mono frame paths for all three bands, checked against the BSD
+decoder components and mono/stereo frame paths for all three bands, checked against the BSD
 Speex 1.2.1 reference:
 bounded bit access, identification headers, canonical packet inspection,
 the three spectral codebook reconstruction paths, LSP interpolation/LPC
 reconstruction, bandwidth expansion, IIR synthesis, high-pass filtering,
-pitch/gain reconstruction, split innovation and seeded noise, plus a connected
-mono narrowband/wideband/ultra-wideband frame decoding, comb enhancement,
+pitch/gain reconstruction, split innovation and seeded noise, plus connected
+mono/stereo narrowband/wideband/ultra-wideband frame decoding, comb enhancement,
 high-band folding/innovation and QMF synthesis, DTX, packet-loss concealment
 and recovery.
 The CLI and window still
@@ -15,7 +15,7 @@ reject Speex files; no container mapping or audio format claim is added.
 
 The intended decoder covers narrowband, wideband and ultra-wideband, all
 their submodes, mono and in-band stereo, packet grouping, VBR/VAD/DTX and
-stateful recovery. It still needs stereo reconstruction, container integration,
+stateful recovery. It still needs container integration,
 granule/delay trimming, exact seeking and playback lifecycle verification.
 The eventual format gate is PCM and playback, not packet inspection alone.
 
@@ -48,6 +48,11 @@ and `modes_wb.c`; `src/speex_qmf.s` follows the synthesis operation in
 before extracting 64 float QMF coefficients and 16 high-band gain entries.
 It also generates the 32 mathematical folding-gain lookups. Every generated
 float is stored with an explicit bit pattern and LF line endings.
+`src/speex_stereo.s` follows the intensity-stereo control and float smoothing
+path in `stereo.c`, retaining Jean-Marc Valin's 2002 BSD attribution. Its
+64 mathematical float balance values are generated from `exp(+/- .25*q)`
+by `tests/generate-speex-stereo-tables.py`, with every control byte compared
+against the original callback.
 `tests/generate-speex-tables.py` extracts exactly 2,944 signed-byte codebook
 coefficients from `lsp_tables_nb.c` and `high_lsp_tables.c`; `--check` verifies
 the tracked include. The project and separate codebook-author BSD notices are
@@ -435,8 +440,8 @@ contains 17,920 grouped packets; all nine narrowband modes are observed.
 Another 3,597 rejected/no-frame cases verify the failure and capacity rules.
 
 ARM64 macOS translation and assembly pass; native execution is unverified.
-The three-band API below now connects the higher layers. Stereo synthesis,
-container mapping, granule/delay trimming, seeking and actual player lifecycle
+The three-band API below now connects the higher layers and stereo synthesis.
+Container mapping, granule/delay trimming, seeking and actual player lifecycle
 checks remain necessary before advertising Speex file playback.
 
 ## Wideband and ultra-wideband frame synthesis
@@ -454,9 +459,15 @@ and high-pass output filtering (bit 1), default 3. Embedded-wideband high-pass
 coefficients are selected automatically for modes 1 and 2. Flags can change
 between frames without resetting history.
 
-`spx_decoder_frame(arena, bits, output, capacity)` returns one frame of
-160/320/640 floats, zero at a clean packet end, or -1 on failure. Capacity is
-in floats. A null reader means one lost or DTX frame. The opaque arena,
+`spx_decoder_set_channels(arena, channels)` selects one or two output channels,
+default one, preserving stereo smoothing across changes. It rejects other
+counts and uninitialized state. Stereo controls update balance even while
+mono output is selected; smoothing advances only when stereo is rendered.
+
+`spx_decoder_frame(arena, bits, output, capacity)` returns 160/320/640 frames
+per channel, zero at a clean packet end, or -1 on failure. Capacity counts
+floats and must hold `frames * channels`; stereo output is interleaved.
+A null reader means one lost or DTX frame. The opaque arena,
 output, reader and its complete source must be disjoint. Failed frames leave
 all live decoder data, audio output and the original reader position intact,
 including when the narrowband frame succeeds and a higher layer is truncated.
@@ -529,5 +540,75 @@ including 161,024,095 bit-exact float comparisons:
 
 The new frame and QMF modules translate and assemble for Apple Silicon;
 native Mac execution remains unverified. These tests establish mono frame
-decoding, not stereo reconstruction, file/container support, granule/delay
-trimming, seeking or player lifecycle behavior.
+decoding. The separate stereo checks below establish stereo reconstruction;
+file/container support, granule/delay trimming, seeking and player lifecycle
+behavior remain pending.
+
+## Intensity stereo reconstruction
+
+The full frame decoder now connects in-band stereo controls to left/right
+gain reconstruction and persistent smoothing in NB, WB and UWB. Its live
+stereo record occupies a private 24-byte slot within the existing arena.
+The complete mono/high-band decode and stereo expansion share one atomic
+commit: a malformed higher layer or a late stereo failure preserves all
+decoder histories, original bit position and caller audio output. Truncation
+sets only sticky reader error. Control-only clean packet ends may update
+balance without producing audio. Missing controls retain previous balance;
+loss and DTX frames continue smoothing when stereo output is selected.
+
+`spx_stereo_init(arena, bytes)` initializes a standalone 6,144-byte stereo
+arena and returns 1/0. Its first 24 bytes contain balance, energy ratio,
+left/right smoothed gains and two preserved reserved words.
+`spx_stereo_control(state, byte)` updates only balance and energy ratio from
+one complete 0–255 control byte, returning 1/0. This operation needs only the
+24-byte live prefix. Balance uses a separately rounded mathematical float
+lookup, including all 32 positive and negative logarithmic balance choices.
+
+`spx_stereo_apply(arena, mono, output, frames, capacity)` accepts 1–640 mono
+samples and capacity for twice that many floats. It returns the frame count
+or zero on failure. Complete source/output overlap, including exact in-place
+expansion, is supported; both spans must be disjoint from the entire arena.
+The live state and interleaved output commit together. Scratch may change on
+failure. Nonfinite active state, nonpositive balance/ratio, nonfinite input,
+pointer/size/alias faults and nonfinite results reject. Reserved words are
+preserved without interpretation.
+
+The target gains retain the reference's double response/square-root
+operations and its explicit float casts before division and multiplication.
+Smoothing uses float 0.98/0.02 products and addition, visiting samples in
+reverse order exactly as `speex_decode_stereo` does. No clipping or output
+normalization is added here. There is no reference C or libm runtime link.
+
+### Stereo verification
+
+After building the corresponding objects, run:
+
+```sh
+python3 tests/verify-speex-stereo.py --bin build/speex-check
+python3 tests/generate-speex-stereo-tables.py --check
+```
+
+Use `python` and `--bin bin/speex-check` on native Windows. Both the
+[Linux stereo report](../reports/speex-stereo-linux-verification.json) and
+[native Windows report](../reports/speex-stereo-windows-verification.json)
+pass 54,716,002 checks and 19,416,100 bit-exact float comparisons:
+
+- 1,024 control cases cover all 256 bytes at four initial smoothing states.
+  The unchanged reference callback determines balance and energy ratio.
+- 25,088 standalone stereo cases cover lengths 1/2/17/40/80/160/320/640,
+  persistent smoothing, signed zero, minimum subnormals, large finite gains,
+  exact in-place and partial overlap, plus protected source/output/state ends.
+- 15,637 complete NB/WB/UWB frames across qualities 0–10, CBR/VBR/VAD+DTX,
+  grouped packets, varying balance/coherence, missing and repeated controls,
+  1,759 losses and 198 DTX frames. Mono/stereo transitions include 1,083 mono
+  output frames while preserving callback state. Every output sample and all
+  stereo state words agree with the reference decoder plus stereo callback.
+- 34 invalid/rollback cases cover capacities, sizes, null/overflow pointers,
+  state/output/source aliases, damaged numeric state, late sample overflow,
+  invalid channels and a stereo-control-plus-truncated-high-band packet.
+  A control-only terminator updates balance and leaves output untouched.
+
+The previous 104,141-frame mono three-band suite also passes against the
+updated shared decoder. Apple Silicon translation/assembly passes; native
+Mac execution is unverified. Actual Speex file playback, container mapping,
+delay/granule trimming, seeking and player lifecycle checks remain open.

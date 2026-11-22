@@ -15,12 +15,12 @@
   "uwb_mode_mask": 3,
   "rejections": 5205,
   "platform": "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
-  "recorded_utc": "2026-11-22T23:02:09.931069+00:00",
-  "scope": "Connected mono NB/WB/UWB frame synthesis and histories. Stereo reconstruction, file/container mapping, trim, seek and player integration remain open; native Mac execution is unverified.",
+  "recorded_utc": "2026-11-22T23:13:48.849578+00:00",
+  "scope": "Connected mono NB/WB/UWB frame synthesis and histories. This suite does not establish stereo output, file/container mapping, trim, seek or player integration; native Mac execution is unverified.",
   "reference": "Unmodified Speex 1.2.1 floating-point, test-only",
   "archive_url": "https://downloads.xiph.org/releases/speex/speex-1.2.1.tar.gz",
   "archive_sha256": "4b44d4f2b38a370a2d98a78329fefc56a0cf93d1c1be70029217baae6628feea",
-  "oracle_sha256": "105683df8227570f204347bf048e7d396195f25188beaadb01068362997f5740",
+  "oracle_sha256": "1869bcb68deadd1b8e53ada08ca39fecf33a7881a07311b52fc92cf04093c904",
   "sources": {
     "src/speex_packet.s": "8ffa7d5f4b870b816dcaa92c552787b79ad0ea7cec637969adc5c062cc3a72aa",
     "src/speex_lsp.s": "67d490a7e3f92fb55eccd0a97c4bfdeb3c6af64f43a8f0ca9183b5a8cf6ffe95",
@@ -28,10 +28,13 @@
     "src/speex_excitation.s": "b1607cc525979bf9f347c8a32a7d3fd46634cf6d11f24ab2401b1a316b3e55b7",
     "src/speex_nb.s": "7b612375ed47a8a025b8a6418ae507b78ebf1e55fcddfbd893c5a8e237999e0f",
     "src/speex_qmf.s": "503aeb0868ac1b56f231e6db4b95b296ad74a1acb93bea70713fd0246da2e049",
-    "src/speex_decoder.s": "55e3beecf286e247c668d73efb8027ead489455f62899e86de208d247858c636",
-    "src/speex_decoder.inc": "6b3d06b721ed1caf0a822df4cdf0b18b233d4375be7b8138ad207d5077f01779",
+    "src/speex_decoder.s": "7e44f2ba1d2498d2f96deacbf69d4ac175f0d65fcb3a933dc302d2a1aeb7e1ac",
+    "src/speex_stereo.s": "5a68eb469747877172544e611556e0597df72bfea918404b707482b34b2462d1",
+    "src/speex_decoder.inc": "5df329affaef557ab8de77308e5882d9d05ced301e65228a729771e18131a213",
     "src/speex_qmf.inc": "ec31599fe85dc6598f7827a634d5654176a9195f13dd6917977eff40de87e643",
+    "src/speex_stereo.inc": "d3ca5a00c588fcaf02fdb1b764a3e61cc919676330c5fad2c284db2da42f9c81",
     "src/speex_high_tables.inc": "3decf51e2aa82919a2e297289a98bb92af196ae84bee9b8ff48e8a6276e69bfb",
+    "src/speex_stereo_tables.inc": "a6ad7ff9360c8f2b9249008002193bc5646277d268f50dec1ed244fcde17ca2a",
     "src/speex_nb.inc": "438d7b6a039adc4ee316524e46e5b1a81d9bb8e0f00790c401535b4f763584a4",
     "src/speex_nb_math.inc": "c209c1265d720f7c18b3f6191276b0ba9656b8a6078b650090f8add5a188a8c9",
     "src/speex_nb_tables.inc": "7cc6a912b16e694ecea16c340bd26d536c46f1167b75e4588aa891b70ec58751",
@@ -43,6 +46,6 @@
     "tests/speex-wideband-oracle.c": "87f18059519f90700f5ca10e9bc2c028350c70dbd319e77ee4c17d39c0592476",
     "tests/build-speex-reference.py": "d1bd105ba2b9ce038859d208d94e07ef0e1e50a0dc93b487b3dc61b99c76bf04",
     "tests/generate-speex-high-tables.py": "e0bd831b5137e8ca5174990ea8ba77bceac67ba8f1e56c29dda6747ef15cd630",
-    "tests/verify-speex-wideband.py": "5d586cc6149ae0572c8764ba379b2e970ee5584e7c96ef65ef54f0a844c2e9f5"
+    "tests/verify-speex-wideband.py": "61555c8b51f7dce1baa77c535f20fb788adf852448e3db09b1235598543caa05"
   }
 }
