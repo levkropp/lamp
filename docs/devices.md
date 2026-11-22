@@ -36,6 +36,8 @@ In the Windows player (`lamp.exe`) the context menu chooses the output:
 
 ## Rates and channels
 
+Shared mode remains the only available Windows playback mode. The [exclusive-output foundation](exclusive-output.md) has separate native component checks; it is not connected to the player yet.
+
 LAMP never reconfigures an output. Its stream is float32 stereo at the session rate:
 
 - **Session rate:** by default, the first file's rate. Later files at another rate pass through LAMP's windowed-sinc resampler (see [queue notes](queue.md)).
