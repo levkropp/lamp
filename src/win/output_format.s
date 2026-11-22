@@ -1,5 +1,5 @@
 # Original WASAPI exclusive-format and bounded stereo packing primitives. MIT.
-# Component stage: playback still uses the existing shared float32 path.
+# Used by the optional exclusive path; shared output retains its float32 path.
 .include "lamp.inc"
 RODATA
 fmt_bytes: .byte 4,4,4,3,2,4,4,3,2

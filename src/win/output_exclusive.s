@@ -1,4 +1,4 @@
-# Original bounded WASAPI exclusive setup. MIT. Not yet used by playback.
+# Original bounded WASAPI exclusive setup, rendering and device clock. MIT.
 .include "lamp.inc"
 RODATA
 .p2align 2
@@ -11,6 +11,9 @@ ex_iid_render: .long 0xf294acfc
 ex_iid_clock: .long 0xcd63314f
     .short 0x3fba, 0x4a1b
     .byte 0x81, 0x2c, 0xef, 0x96, 0x35, 0x87, 0x28, 0xe7
+ex_block_bytes: .byte 8,8,8,6,4,8,8,6,4
+.p2align 2
+ex_one: .float 1.0
 .text
 # State (96 bytes): profile[48], client*, render*, clock*, frequency QWORD,
 # buffer frames DWORD, reserved DWORD, requested period QWORD (100 ns).
@@ -264,3 +267,167 @@ FN output_exclusive_open
     pop rbx
     ret
 ENDFN output_exclusive_open
+
+# RCX=state, RDX=contiguous float stereo input, R8D=real frames,
+# XMM3=volume. Writes/releases exactly state.buffer_frames, padding the last
+# block with silence. Zero real frames uses SILENT without touching ppData.
+# No Start/Stop, heap or waits. EAX=HRESULT; caller advances its queue only
+# after S_OK. BUFFER_ERROR is returned unchanged, without ReleaseBuffer.
+FN output_exclusive_write
+    push rbx
+    push rsi
+    push rdi
+    push r12
+    push r13
+    sub rsp, 96
+    mov rbx, rcx
+    mov rsi, rdx
+    mov r12d, r8d
+    movss dword ptr [rsp+56], xmm3
+    test rbx, rbx
+    jz .Lex_write_invalid
+    cmp qword ptr [rbx+56], 0
+    je .Lex_write_invalid
+    mov r13d, [rbx+80]
+    test r13d, r13d
+    jz .Lex_write_invalid
+    cmp r13d, 262144
+    ja .Lex_write_invalid
+    cmp r12d, r13d
+    ja .Lex_write_invalid
+    test r12d, r12d
+    jz .Lex_write_input_valid
+    test rsi, rsi
+    jz .Lex_write_invalid
+.Lex_write_input_valid:
+    mov eax, [rbx+40]
+    cmp eax, 9
+    jae .Lex_write_invalid
+    lea rdx, [rip+ex_block_bytes]
+    movzx eax, byte ptr [rdx+rax]
+    cmp ax, [rbx+12]
+    jne .Lex_write_invalid
+    imul eax, r13d
+    mov [rsp+72], rax
+    pxor xmm0, xmm0
+    ucomiss xmm3, xmm0
+    jp .Lex_write_invalid
+    jb .Lex_write_invalid
+    ucomiss xmm3, dword ptr [rip+ex_one]
+    ja .Lex_write_invalid
+    mov qword ptr [rsp+64], 0
+    mov rcx, [rbx+56]
+    mov edx, r13d
+    lea r8, [rsp+64]
+    mov rax, [rcx]
+    call qword ptr [rax+24]
+    test eax, eax
+    jne .Lex_write_status
+    test r12d, r12d
+    jz .Lex_write_silent
+    cmp qword ptr [rsp+64], 0
+    je .Lex_write_pack_failed
+    mov rcx, [rsp+64]
+    mov rdx, rsi
+    mov r8d, r12d
+    mov r9d, [rbx+40]
+    mov rax, [rsp+72]
+    mov [rsp+32], rax
+    mov eax, [rsp+56]
+    mov [rsp+40], eax
+    call output_format_pack
+    test eax, eax
+    jz .Lex_write_pack_failed
+    movzx eax, word ptr [rbx+12]
+    imul eax, r12d
+    mov rdi, [rsp+64]
+    add rdi, rax
+    mov rcx, [rsp+72]
+    sub rcx, rax
+    xor eax, eax
+    rep stosb                          # final/starved partial block is explicit zero
+    xor r8d, r8d
+    jmp .Lex_write_release
+.Lex_write_silent:
+    mov r8d, 2                         # AUDCLNT_BUFFERFLAGS_SILENT
+.Lex_write_release:
+    mov rcx, [rbx+56]
+    mov edx, r13d
+    mov rax, [rcx]
+    call qword ptr [rax+32]
+    jmp .Lex_write_status
+.Lex_write_pack_failed:
+    mov rcx, [rbx+56]                  # pair even a defensive packing failure
+    mov edx, r13d
+    mov r8d, 2
+    mov rax, [rcx]
+    call qword ptr [rax+32]
+.Lex_write_invalid:
+    mov eax, 0x80070057
+    jmp .Lex_write_return
+.Lex_write_status:
+    test eax, eax
+    jle .Lex_write_return
+    mov eax, 0x8000ffff
+.Lex_write_return:
+    add rsp, 96
+    pop r13
+    pop r12
+    pop rdi
+    pop rsi
+    pop rbx
+    ret
+ENDFN output_exclusive_write
+
+# RCX=state, RDX=QWORD result in session frames. Failure leaves it untouched.
+# GetPosition's S_FALSE is a valid, less precise reading, not a reason to spin.
+# Exact 128-bit integer multiply/divide handles arbitrary clock frequencies.
+FN output_exclusive_position
+    push rbx
+    push rsi
+    sub rsp, 40
+    mov rbx, rcx
+    mov rsi, rdx
+    test rbx, rbx
+    jz .Lex_position_invalid
+    test rsi, rsi
+    jz .Lex_position_invalid
+    cmp qword ptr [rbx+64], 0
+    je .Lex_position_invalid
+    cmp qword ptr [rbx+72], 0
+    je .Lex_position_invalid
+    mov eax, [rbx+4]
+    cmp eax, 8000
+    jb .Lex_position_invalid
+    cmp eax, 192000
+    ja .Lex_position_invalid
+    mov rcx, [rbx+64]
+    lea rdx, [rsp+32]
+    xor r8d, r8d
+    mov rax, [rcx]
+    call qword ptr [rax+32]
+    test eax, eax
+    js .Lex_position_return
+    cmp eax, 1
+    ja .Lex_position_unexpected
+    mov rax, [rsp+32]
+    mov ecx, [rbx+4]
+    mul rcx
+    mov rcx, [rbx+72]
+    cmp rdx, rcx
+    jae .Lex_position_unexpected
+    div rcx
+    mov [rsi], rax
+    xor eax, eax
+    jmp .Lex_position_return
+.Lex_position_unexpected:
+    mov eax, 0x8000ffff
+    jmp .Lex_position_return
+.Lex_position_invalid:
+    mov eax, 0x80070057
+.Lex_position_return:
+    add rsp, 40
+    pop rsi
+    pop rbx
+    ret
+ENDFN output_exclusive_position

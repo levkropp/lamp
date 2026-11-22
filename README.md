@@ -31,7 +31,10 @@ In the Windows player, F/F11 toggles fullscreen, C toggles compact mode and Esc 
 .\bin\lamp-cli.exe 'C:\Music\track.flac'
 .\bin\lamp-cli.exe --check 'C:\Music\track.mp3'
 .\bin\lamp-cli.exe --decode 'C:\Music\track.ogg' '.\track.f32'
+.\bin\lamp-cli.exe --exclusive --rate device 'C:\Music\track.flac'
 ```
+
+Current Windows source builds offer [exclusive stereo WASAPI output](docs/exclusive-output.md) with `--exclusive`. It reserves the endpoint and requires a supported session rate; omit the option for shared playback. Native checks cover six audio families, pause/seek/restart, exact final tails and busy-device rejection. The graphical player uses shared mode.
 
 Apple Silicon Macs need macOS 12 or later. Build with Python 3 and Xcode command line tools, then open the native app bundle:
 

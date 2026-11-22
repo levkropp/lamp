@@ -1,0 +1,183 @@
+{
+  "result": "passed",
+  "recorded_utc": "2026-11-22T20:05:58.174324+00:00",
+  "platform": "Windows-11-10.0.26300-SP0",
+  "exclusive_playback": true,
+  "scope": "Silent native default-endpoint WASAPI, six codec/source-layout lifecycle cases at a 48 kHz session, synthetic paused/active notification restarts, exact clock-mapped natural EOF tails, mixed-rate queue/start, CLI misuse, queried unsupported rates and busy endpoint. No system device selection changes or desktop input. Physical device changes, captured hardware PCM, glitches and latency/performance remain unverified.",
+  "lifecycle_checks": [
+    {
+      "codec": "wav",
+      "source_rate": 48000,
+      "source_layout": "stereo",
+      "session_rate": 48000,
+      "result": "passed"
+    },
+    {
+      "codec": "flac",
+      "source_rate": 44100,
+      "source_layout": "5.1",
+      "session_rate": 48000,
+      "result": "passed"
+    },
+    {
+      "codec": "mp3",
+      "source_rate": 44100,
+      "source_layout": "stereo",
+      "session_rate": 48000,
+      "result": "passed"
+    },
+    {
+      "codec": "vorbis",
+      "source_rate": 48000,
+      "source_layout": "7.1",
+      "session_rate": 48000,
+      "result": "passed"
+    },
+    {
+      "codec": "opus",
+      "source_rate": 48000,
+      "source_layout": "5.1",
+      "session_rate": 48000,
+      "result": "passed"
+    },
+    {
+      "codec": "aiff",
+      "source_rate": 48000,
+      "source_layout": "5.1",
+      "session_rate": 48000,
+      "result": "passed"
+    }
+  ],
+  "eof_checks": [
+    {
+      "frames": 0,
+      "heard_frames": 0,
+      "output_bits": 16,
+      "output_valid_bits": 16,
+      "buffer_frames": 480,
+      "result": "passed"
+    },
+    {
+      "frames": 1,
+      "heard_frames": 1,
+      "output_bits": 16,
+      "output_valid_bits": 16,
+      "buffer_frames": 480,
+      "result": "passed"
+    },
+    {
+      "frames": 2,
+      "heard_frames": 2,
+      "output_bits": 16,
+      "output_valid_bits": 16,
+      "buffer_frames": 480,
+      "result": "passed"
+    },
+    {
+      "frames": 3,
+      "heard_frames": 3,
+      "output_bits": 16,
+      "output_valid_bits": 16,
+      "buffer_frames": 480,
+      "result": "passed"
+    },
+    {
+      "frames": 17,
+      "heard_frames": 17,
+      "output_bits": 16,
+      "output_valid_bits": 16,
+      "buffer_frames": 480,
+      "result": "passed"
+    },
+    {
+      "frames": 257,
+      "heard_frames": 257,
+      "output_bits": 16,
+      "output_valid_bits": 16,
+      "buffer_frames": 480,
+      "result": "passed"
+    },
+    {
+      "frames": 511,
+      "heard_frames": 511,
+      "output_bits": 16,
+      "output_valid_bits": 16,
+      "buffer_frames": 480,
+      "result": "passed"
+    },
+    {
+      "frames": 512,
+      "heard_frames": 512,
+      "output_bits": 16,
+      "output_valid_bits": 16,
+      "buffer_frames": 480,
+      "result": "passed"
+    },
+    {
+      "frames": 513,
+      "heard_frames": 513,
+      "output_bits": 16,
+      "output_valid_bits": 16,
+      "buffer_frames": 480,
+      "result": "passed"
+    },
+    {
+      "frames": 1023,
+      "heard_frames": 1023,
+      "output_bits": 16,
+      "output_valid_bits": 16,
+      "buffer_frames": 480,
+      "result": "passed"
+    },
+    {
+      "frames": 1024,
+      "heard_frames": 1024,
+      "output_bits": 16,
+      "output_valid_bits": 16,
+      "buffer_frames": 480,
+      "result": "passed"
+    },
+    {
+      "frames": 1025,
+      "heard_frames": 1025,
+      "output_bits": 16,
+      "output_valid_bits": 16,
+      "buffer_frames": 480,
+      "result": "passed"
+    },
+    {
+      "frames": 14400,
+      "heard_frames": 14400,
+      "output_bits": 16,
+      "output_valid_bits": 16,
+      "buffer_frames": 480,
+      "result": "passed"
+    }
+  ],
+  "mixed_rate_queue": {
+    "frames_stat": 1454400,
+    "heard_frames": 1454400,
+    "start_frame": 1416000,
+    "played_frames_after_start": 38400,
+    "result": "passed"
+  },
+  "invalid_option_cases": 4,
+  "unsupported_rates": [
+    8000,
+    44100,
+    96000,
+    192000
+  ],
+  "busy_endpoint": {
+    "result": "passed",
+    "primary_frames": 144000,
+    "secondary_exit": 3,
+    "secondary_audio_error": "0x8889000a"
+  },
+  "component_report_sha256": "df539ca84629b44476b2b6dc930d5ec7d959e53f02826b63b3f65a7bb5e89049",
+  "cli_sha256": "cf04c801f4d26199abbfc9f8276808a594aed2290b35fbbd57daf44506eede09",
+  "gui_sha256": "965fd987d4acf324a558b3ac35143a6509d190dc27489218e9baaf69d9a3960d",
+  "engine_probe_sha256": "dd2d4fbe55106491947428c72db67eb4a16ac185849fa3444fd9b63e388d88d7",
+  "player_source_sha256": "51a22cf8601800359b8cbf64f5d40efd3b8a1f448c058aa11d533f11838c69d0",
+  "ffmpeg": "ffmpeg version 8.0.1-essentials_build-www.gyan.dev Copyright (c) 2000-2025 the FFmpeg developers"
+}

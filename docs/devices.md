@@ -36,9 +36,9 @@ In the Windows player (`lamp.exe`) the context menu chooses the output:
 
 ## Rates and channels
 
-Shared mode remains the only available Windows playback mode. The [exclusive-output foundation](exclusive-output.md) has separate native component checks; it is not connected to the player yet.
+Shared mode is the default. Current Windows CLI source builds also offer [`--exclusive`](exclusive-output.md), with exact-rate negotiation, float/integer stereo packing, device-clock position/draining and separate native component/playback reports. It reserves the selected endpoint; the graphical player still uses shared mode.
 
-LAMP never reconfigures an output. Its stream is float32 stereo at the session rate:
+In shared mode, LAMP never reconfigures an output. Its stream is float32 stereo at the session rate:
 
 - **Session rate:** by default, the first file's rate. Later files at another rate pass through LAMP's windowed-sinc resampler (see [queue notes](queue.md)).
 - **Output conversion:** when the session rate differs from the output's, the sound server converts it with its own resampler. That is PulseAudio's configured method (PipeWire's on PipeWire), or the Windows audio engine's sample-rate converter at default quality.
@@ -53,7 +53,7 @@ Seeking in a resampled file is exact. The decoder seeks a filter half-width befo
 
 Windows console and graphical playback now subscribe to `IMMNotificationClient` when using **Default output**. A change to the default render endpoint for the console role (the role used to open WASAPI) wakes the playback owner, which reopens the queue in the heard file at its recorded millisecond position. Paused playback stays paused; active playback resumes after prebuffering. Notifications received during startup are checked before starting the client. This is a restart, not a seamless handoff or a latency guarantee.
 
-An explicitly selected endpoint remains pinned. Capture-device changes, other endpoint roles and property/state notifications do not cause a default-output restart. If a selected endpoint disappears and the existing recovery path falls back to the default, subsequent default changes are followed. The session rate is retained across automatic restarts; `--rate device` chooses the initial output's rate, and Windows converts when a later output has a different mix rate. Linux/Mac following behavior remains separate platform work.
+An explicitly selected endpoint remains pinned. Capture-device changes, other endpoint roles and property/state notifications do not cause a default-output restart. If a selected endpoint disappears and the existing recovery path falls back to the default, subsequent default changes are followed. The session rate is retained across automatic restarts; `--rate device` chooses the initial output's rate, and Windows converts in shared mode when a later output has a different mix rate. Exclusive mode keeps its explicit request and reports an error if the new endpoint cannot accept that rate. Linux/Mac following behavior remains separate platform work.
 
 The original assembly callback in `src/win/output_notifications.s` only sets a coalescing flag and signals the audio event. It does not allocate, wait, decode or call COM. The playback owner consumes the flag, preserving an already pending user command. During cleanup it detaches the event, unregisters the static callback and drains in-flight signalers before the event can close. This avoids signaling a stale or recycled handle. Registration failure leaves the existing invalidated-endpoint recovery available.
 

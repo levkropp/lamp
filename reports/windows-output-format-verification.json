@@ -1,7 +1,7 @@
 {
   "result": "passed",
-  "checks": 1223,
-  "sample_values": 20404016,
+  "checks": 2132,
+  "sample_values": 63704348,
   "formats": 9,
   "exclusive_playback": false,
   "device_probe_hresult": "0x00000000",
@@ -42,15 +42,15 @@
       "valid_bits": 0
     }
   ],
-  "scope": "Guarded descriptors, mock exclusive negotiation/setup, fresh-client alignment recovery and cleanup at every COM failure; independent numeric packing model, gain/clipping and exact buffers. Optional real device queries never Initialize/Start a stream; no exclusive playback.",
+  "scope": "Guarded descriptors, mock exclusive negotiation/setup, fresh-client alignment recovery, cleanup at every COM failure, whole-buffer render/release and arbitrary-frequency device-clock conversion; independent numeric packing model, gain/clipping, exact buffers, tail silence and rejected requests. Optional real device queries never Initialize/Start a stream. This component oracle does not perform exclusive playback; see the separate native playback report.",
   "platform": "Microsoft Windows NT 10.0.26300.0",
   "object_sha256": "957567EC80045B61084C7CF4A29948F0D526702987DCBE1EBFC24E8DDE4D5C8A",
-  "setup_object_sha256": "942537B184DE92301F06C1DE02BE7377D6ED1D51E75E535C037C3948AB4B043F",
-  "test_sha256": "1C7D9B75926DCE3EBB67741A69AC0D5D941D2268C693093C11DF4AC73D1CA1AE",
-  "format_source_sha256": "3D7E434E17DC48BEEBFEF58C55C5202E2A14CCA437873975E4DF2496401C0609",
-  "setup_source_sha256": "14889273354D60C337FD4656492D7D08B871DBCE977B966BCFEB23EF9FCDDD4E",
-  "oracle_source_sha256": "BCC8B94117E6D1F274512B20BDB61B7EE37FB30E6675B30E269C2EE0D4987CDA",
+  "setup_object_sha256": "D2AA4A88E8D64CD6EF537D65055DB6DBD19449329633D2FDA68C0778B1E11516",
+  "test_sha256": "9E1D7D01F048ACB7E8F80AE2F2C74FE7E2F03B734AECBCF70470E72A64DD6C19",
+  "format_source_sha256": "81B5298ED2E6A82E01876C33083FBF3E1697B953029B8A03A173B95307598D1B",
+  "setup_source_sha256": "DBB955A497B9404DDCB67D3F0E0705A893F8EC515ED9BEB9BC896705AF12B417",
+  "oracle_source_sha256": "84E4C5E1D8EE0E73C0701FFD13B131A3AFFAA67F507E1FB8F1C24EABBCF672F9",
   "msvc": "14.44.35207",
   "windows_sdk": "10.0.26100.0",
-  "recorded_utc": "2026-11-22T19:46:00.1449860Z"
+  "recorded_utc": "2026-11-22T19:59:06.0279838Z"
 }

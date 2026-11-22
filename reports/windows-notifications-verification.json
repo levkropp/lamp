@@ -8,7 +8,10 @@
   "scope": "Native callback ABI, render/console filtering, coalescing, explicit selection, failure cleanup, registration ownership and concurrent event teardown; mock server plus 32 real MMDevice registrations, no physical output switches or system selection changes.",
   "platform": "Microsoft Windows NT 10.0.26300.0",
   "object_sha256": "7E7766746502FA750D16539F5F3AF262B8324F6CCD206B3E727FB5652CEC3440",
-  "engine_probe_sha256": "334CE895B3DC287EA3E00BFC83BB39DC78C861DAD4B235EEE81B2CD5F8F52449",
+  "player_object_sha256": "457203FD5CFE503D053CBC055AD35ECE45A6E146016C9E18B41D98203ECD12BE",
+  "cli_sha256": "3F291FD63E87A641C2F10D63DFD4F9FCB5B18FBC87CDB6C8CFEF55C95DEEF0C6",
+  "gui_sha256": "E22C2018C68435AD92424F05E4C071461BFB078B136085A582A760C3184300F0",
+  "engine_probe_sha256": "A0118FF089123FDB289B8C1C915D9A5F04D7C285614238F7885E648F8200297E",
   "playback_checks": [
     {
       "codec": "wav",
@@ -52,8 +55,5 @@
       "result": "passed",
       "scope": "Silent native WASAPI; synthetic callback into this process, paused/active heard-position restart and pending user-command preservation; pause/resume/stop/reopen/seek/cancel regression; system default unchanged."
     }
-  ],
-  "player_object_sha256": "4351B06A05D9EC13FD139D3BE54C8C179B3BF4A49CB8844827AB1414706F3677",
-  "cli_sha256": "632F9647CB4C2874340305499DDEA1B9404DF52B96E7841BABF0FD0C45FFD56A",
-  "gui_sha256": "4EA01D97DC7B46D238DCC5214094C8C5CF102E27DE40CE68BE0BADABBA2F1C9B"
+  ]
 }

@@ -11,7 +11,7 @@ if($LASTEXITCODE){throw 'Output format oracle compilation failed'}
 $result=if($DeviceProbe){& "$out\verify-windows-output-format.exe" --device-probe}else{& "$out\verify-windows-output-format.exe"}
 if($LASTEXITCODE){throw 'Output format verification failed'}
 $report=$result | ConvertFrom-Json
-$report | Add-Member -NotePropertyName scope -NotePropertyValue 'Guarded descriptors, mock exclusive negotiation/setup, fresh-client alignment recovery and cleanup at every COM failure; independent numeric packing model, gain/clipping and exact buffers. Optional real device queries never Initialize/Start a stream; no exclusive playback.'
+$report | Add-Member -NotePropertyName scope -NotePropertyValue 'Guarded descriptors, mock exclusive negotiation/setup, fresh-client alignment recovery, cleanup at every COM failure, whole-buffer render/release and arbitrary-frequency device-clock conversion; independent numeric packing model, gain/clipping, exact buffers, tail silence and rejected requests. Optional real device queries never Initialize/Start a stream. This component oracle does not perform exclusive playback; see the separate native playback report.'
 $report | Add-Member -NotePropertyName platform -NotePropertyValue ([Environment]::OSVersion.VersionString)
 $report | Add-Member -NotePropertyName object_sha256 -NotePropertyValue ((Get-FileHash -LiteralPath "$out\obj\output_format.obj").Hash)
 $report | Add-Member -NotePropertyName setup_object_sha256 -NotePropertyValue ((Get-FileHash -LiteralPath "$out\obj\output_exclusive.obj").Hash)

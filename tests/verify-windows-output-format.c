@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include <stddef.h>
 #include <xmmintrin.h>
+#include <intrin.h>
 typedef struct {WAVEFORMATEXTENSIBLE format;uint32_t kind,reserved;} Profile;
 int output_format_make(Profile *,unsigned,unsigned,size_t);
 HRESULT output_format_choose(IAudioClient *,unsigned,Profile *,size_t);
@@ -17,6 +18,8 @@ int output_format_pack(void *,const float *,unsigned,unsigned,size_t,float);
 typedef struct {Profile profile;IAudioClient*client;IAudioRenderClient*render;IAudioClock*clock;uint64_t frequency;uint32_t frames,reserved;int64_t period;} Stream;
 HRESULT output_exclusive_open(IMMDevice*,unsigned,HANDLE,Stream*);
 void output_exclusive_close(Stream*);
+HRESULT output_exclusive_write(Stream*,const float*,unsigned,float);
+HRESULT output_exclusive_position(Stream*,uint64_t*);
 #define CHECK(x) do{if(!(x)){fprintf(stderr,"Output-format assertion %d: %s\n",__LINE__,#x);return 1;}}while(0)
 static unsigned checks;static uint64_t values;
 static unsigned width(unsigned k){return k==3||k==7?3:k==4||k==8?2:4;}
@@ -108,6 +111,50 @@ static int setup_tests(void){
  s->client=(IAudioClient*)1;CHECK(output_exclusive_open(&setup_device,48000,(HANDLE)123,s)==E_INVALIDARG&&!setup.calls);checks++;s->client=NULL;
  output_exclusive_close(NULL);VirtualFree(area,0,MEM_RELEASE);return 0;
 }
+static struct {unsigned get,release,frames,flags;int pending,null_data,valid;unsigned char*data;HRESULT get_hr,release_hr;} packet;
+static HRESULT STDMETHODCALLTYPE packet_get(IAudioRenderClient*self,UINT32 frames,BYTE**data){
+ if(self!=&setup_render||frames!=packet.frames||packet.pending)packet.valid=0;packet.get++;
+ if(packet.get_hr!=S_OK)return packet.get_hr;packet.pending=1;*data=packet.null_data?NULL:packet.data;return S_OK;
+}
+static HRESULT STDMETHODCALLTYPE packet_release(IAudioRenderClient*self,UINT32 frames,DWORD flags){
+ if(self!=&setup_render||frames!=packet.frames||!packet.pending)packet.valid=0;packet.pending=0;packet.release++;packet.flags=flags;return packet.release_hr;
+}
+static struct {uint64_t position;unsigned calls;HRESULT status;int valid;} position_case;
+static HRESULT STDMETHODCALLTYPE packet_position(IAudioClock*self,UINT64*position,UINT64*qpc){if(self!=&setup_clock||qpc)position_case.valid=0;position_case.calls++;if(SUCCEEDED(position_case.status))*position=position_case.position;return position_case.status;}
+static int packet_tests(void){
+ unsigned char *input_area,*output_area;size_t body;unsigned char*input_end=guarded(262144*8+64,&input_area,&body),*output_end=guarded(262144*8+64,&output_area,&body),*expected=malloc(262144*8);CHECK(input_end&&output_end&&expected);
+ render_table.GetBuffer=packet_get;render_table.ReleaseBuffer=packet_release;clock_table.GetPosition=packet_position;
+ const unsigned sizes[]={1,2,3,17,511,512,4096,262144};const float gains[]={0,.5f,1};
+ for(unsigned k=0;k<9;k++)for(unsigned si=0;si<8;si++)for(unsigned tail=0;tail<3;tail++)for(unsigned gain=0;gain<3;gain++){
+  unsigned total=sizes[si],real=tail==0?0:tail==1?total-1:total;size_t bytes=(size_t)total*width(k)*2;
+  float*input=(float*)(input_end-real*8);for(unsigned j=0;j<real*2;j++)input[j]=(float)((int)(j%313)-156)/128;
+  Stream s={0};CHECK(output_format_make(&s.profile,48000,k,48));s.render=&setup_render;s.frames=total;
+  memset(&packet,0,sizeof(packet));packet.valid=1;packet.frames=total;packet.data=output_end-bytes;memset(packet.data-64,0xa5,bytes+64);
+  memset(expected,0,bytes);reference(expected,input,real,k,gains[gain]);
+  CHECK(output_exclusive_write(&s,real?input:NULL,real,gains[gain])==S_OK&&packet.valid&&packet.get==1&&packet.release==1&&!packet.pending&&packet.flags==(real?0:2));
+  if(real)CHECK(!memcmp(packet.data,expected,bytes));else for(size_t j=0;j<bytes;j++)CHECK(packet.data[j]==0xa5);
+  for(unsigned j=0;j<64;j++)CHECK(packet.data[(ptrdiff_t)j-64]==0xa5);checks++;values+=(uint64_t)total*2;
+ }
+ Stream s={0};CHECK(output_format_make(&s.profile,48000,0,48));s.render=&setup_render;s.frames=17;float*input=(float*)(input_end-17*8);
+ for(unsigned failure=0;failure<6;failure++){
+  memset(&packet,0,sizeof(packet));packet.valid=1;packet.frames=17;packet.data=output_end-17*8;
+  HRESULT want;switch(failure){case 0:packet.get_hr=AUDCLNT_E_BUFFER_ERROR;want=packet.get_hr;break;case 1:packet.get_hr=2;want=E_UNEXPECTED;break;case 2:packet.release_hr=AUDCLNT_E_DEVICE_INVALIDATED;want=packet.release_hr;break;case 3:packet.release_hr=2;want=E_UNEXPECTED;break;case 4:packet.null_data=1;want=E_INVALIDARG;break;default:want=E_INVALIDARG;break;}
+  CHECK(output_exclusive_write(&s,failure==5?(float*)packet.data:input,17,1)==want&&packet.valid&&packet.get==1&&packet.release==(failure<2?0:1)&&!packet.pending);
+  if(failure>=4)CHECK(packet.flags==AUDCLNT_BUFFERFLAGS_SILENT);checks++;
+ }
+ memset(&packet,0,sizeof(packet));CHECK(output_exclusive_write(NULL,input,1,1)==E_INVALIDARG&&output_exclusive_write(&s,NULL,1,1)==E_INVALIDARG&&output_exclusive_write(&s,input,18,1)==E_INVALIDARG&&output_exclusive_write(&s,input,1,NAN)==E_INVALIDARG&&output_exclusive_write(&s,input,1,-1)==E_INVALIDARG&&output_exclusive_write(&s,input,1,2)==E_INVALIDARG&&!packet.get);checks++;
+ s.frames=0;CHECK(output_exclusive_write(&s,input,1,1)==E_INVALIDARG&&!packet.get);s.frames=262145;CHECK(output_exclusive_write(&s,input,1,1)==E_INVALIDARG&&!packet.get);s.frames=17;s.profile.kind=9;CHECK(output_exclusive_write(&s,input,1,1)==E_INVALIDARG&&!packet.get);s.profile.kind=0;s.profile.format.Format.nBlockAlign=6;CHECK(output_exclusive_write(&s,input,1,1)==E_INVALIDARG&&!packet.get);checks++;
+ const uint64_t frequencies[]={1,17,44100,48000,10000000,1000000000,UINT64_MAX};const uint64_t offsets[]={0,1,17,47999,48000,UINT32_MAX,UINT64_MAX/192000,UINT64_MAX/2,UINT64_MAX};const HRESULT statuses[]={S_OK,S_FALSE,E_FAIL,2};
+ s.clock=&setup_clock;s.profile.format.Format.nSamplesPerSec=48000;
+ for(unsigned fi=0;fi<7;fi++)for(unsigned pi=0;pi<9;pi++)for(unsigned hi=0;hi<4;hi++){
+  s.frequency=frequencies[fi];position_case.position=offsets[pi];position_case.status=statuses[hi];position_case.calls=0;position_case.valid=1;
+  uint64_t high,low=_umul128(offsets[pi],48000,&high),result=0xa5a5a5a5a5a5a5a5ull,expected_frames=result,rem;HRESULT want;
+  if(FAILED(statuses[hi]))want=statuses[hi];else if(statuses[hi]>1||high>=s.frequency)want=E_UNEXPECTED;else{want=S_OK;expected_frames=_udiv128(high,low,s.frequency,&rem);}
+  CHECK(output_exclusive_position(&s,&result)==want&&result==expected_frames&&position_case.calls==1&&position_case.valid);checks++;
+ }
+ position_case.calls=0;uint64_t result=123;s.frequency=0;CHECK(output_exclusive_position(&s,&result)==E_INVALIDARG&&result==123&&!position_case.calls);s.frequency=48000;s.profile.format.Format.nSamplesPerSec=0;CHECK(output_exclusive_position(&s,&result)==E_INVALIDARG&&!position_case.calls);s.profile.format.Format.nSamplesPerSec=48000;s.clock=NULL;CHECK(output_exclusive_position(&s,&result)==E_INVALIDARG&&!position_case.calls);CHECK(output_exclusive_position(NULL,&result)==E_INVALIDARG&&output_exclusive_position(&s,NULL)==E_INVALIDARG&&!position_case.calls);checks++;
+ VirtualFree(input_area,0,MEM_RELEASE);VirtualFree(output_area,0,MEM_RELEASE);free(expected);return 0;
+}
 int main(int argc,char**argv){
  CHECK(argc==1||(argc==2&&!strcmp(argv[1],"--device-probe")));
  unsigned char*area;size_t body;unsigned char*end=guarded(4096,&area,&body);CHECK(end);Profile*p=(Profile*)(end-48);
@@ -163,7 +210,7 @@ int main(int argc,char**argv){
  CHECK(!output_format_pack(out,input,1,9,8,1)&&!output_format_pack(out,input,262145,0,SIZE_MAX,1));checks++;
  CHECK(!output_format_pack(input,input,1,0,8,1)&&!output_format_pack(NULL,input,1,0,8,1)&&!output_format_pack(out,NULL,1,0,8,1));checks++;
  VirtualFree(source_area,0,MEM_RELEASE);VirtualFree(dest_area,0,MEM_RELEASE);free(expected);
- CHECK(!setup_tests());
+ CHECK(!setup_tests()&&!packet_tests());
  printf("{\"result\":\"passed\",\"checks\":%u,\"sample_values\":%llu,\"formats\":9,\"exclusive_playback\":false",checks,(unsigned long long)values);
  if(argc==2){
   const CLSID cls={0xbcde0395,0xe52f,0x467c,{0x8e,0x3d,0xc4,0x57,0x92,0x91,0x69,0x2e}};

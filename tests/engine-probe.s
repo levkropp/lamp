@@ -19,10 +19,18 @@ probe_pass: .ascii "Passed: playback, pause, resume, stop, reopen, seek, paused 
     .ascii "Default-device callback: paused and active restart passed; pending command preserved."
     .byte 13, 10
 .endif
+.ifdef PROBE_EXCLUSIVE
+    .ascii "Exclusive output: 48000 Hz session lifecycle passed."
+    .byte 13, 10
+.endif
 .equ probe_pass_length, . - probe_pass
 .text
 FN probe_start
     sub rsp, 72
+    .ifdef PROBE_EXCLUSIVE
+    mov dword ptr [rip + engine_exclusive], 1
+    mov dword ptr [rip + queue_target], 48000
+    .endif
     call GetCommandLineW
     mov rcx, rax
     lea rdx, [rip + probe_argc]
@@ -59,7 +67,7 @@ FN probe_start
     .endif
     call engine_pause
     mov rax, [rip + engine_position]
-    mov edx, [rip + output_rate]
+    mov edx, [rip + queue_rate]
     add rax, rdx
     mov [rip + probe_expected], rax
     call probe_wait_position
@@ -76,7 +84,7 @@ FN probe_start
     jz .Lprobe_bad
     mov dword ptr [rip + engine_seek_seconds], 7
     mov dword ptr [rip + probe_start_paused], 1
-    mov eax, [rip + output_rate]
+    mov eax, [rip + queue_rate]
     imul rax, 7
     mov [rip + probe_expected], rax
     call probe_launch
@@ -94,7 +102,7 @@ FN probe_start
     cmp rax, [rip + probe_pause_position]
     jne .Lprobe_bad
     call engine_pause
-    mov eax, [rip + output_rate]
+    mov eax, [rip + queue_rate]
     imul rax, 8
     mov [rip + probe_expected], rax
     call probe_wait_position
@@ -106,7 +114,7 @@ FN probe_start
     jz .Lprobe_bad
     mov dword ptr [rip + engine_seek_seconds], 5
     mov dword ptr [rip + probe_start_paused], 0
-    mov eax, [rip + output_rate]
+    mov eax, [rip + queue_rate]
     imul rax, 6
     mov [rip + probe_expected], rax
     call probe_launch
@@ -184,7 +192,7 @@ LOCALFN probe_default_active
     mov rax, [rip + engine_position]
     imul rax, 1000
     xor edx, edx
-    mov ecx, [rip + output_rate]
+    mov ecx, [rip + queue_rate]
     div rcx
     cmp rax, [rip + engine_heard_ms]
     jne .Lprobe_active_bad
@@ -195,7 +203,7 @@ LOCALFN probe_default_active
     xor edx, edx
     mov ecx, 1000
     div rcx
-    mov edx, [rip + output_rate]
+    mov edx, [rip + queue_rate]
     add rax, rdx
     mov [rip + probe_expected], rax
     call probe_launch
@@ -231,7 +239,7 @@ LOCALFN probe_default_active
     mov qword ptr [rip + probe_restart_ms], 271
     mov dword ptr [rip + probe_default_restart], 1
     mov dword ptr [rip + probe_start_paused], 1
-    mov eax, [rip + output_rate]
+    mov eax, [rip + queue_rate]
     imul rax, 271
     xor edx, edx
     mov ecx, 1000
@@ -266,7 +274,7 @@ LOCALFN probe_default_change
     mov rax, [rip + probe_pause_position]
     imul rax, 1000
     xor edx, edx
-    mov ecx, [rip + output_rate]
+    mov ecx, [rip + queue_rate]
     div rcx
     cmp rax, [rip + engine_heard_ms]
     jne .Lprobe_default_bad
@@ -333,7 +341,7 @@ LOCALFN probe_wait_position
     mov rax, [rip + probe_expected]
     test rax, rax
     jnz .Lprobe_position_target
-    mov eax, [rip + output_rate]
+    mov eax, [rip + queue_rate]
     test eax, eax
     jz .Lprobe_position_timeout
 .Lprobe_position_target:

@@ -7,6 +7,7 @@
 .globl engine_position, engine_seek_seconds, engine_volume, pause_requested
 .globl engine_ready, engine_opened, engine_play_list, engine_command, engine_heard_index, engine_heard_ms
 .globl read_count, device_chosen, device_id, devices_callback
+.globl engine_exclusive
 .globl exit_code, underruns, endpoint_dry
 
 .equ RING_FRAMES, 262144
@@ -25,7 +26,7 @@ usage: .ascii "LAMP 0.4.0-dev - Lev's Assembly Media Player"
       .byte 13, 10
       .ascii "Usage: lamp-cli.exe [--start TIME] [--repeat] [--resume] [--device NAME] [--rate HZ|device]"
       .byte 13, 10
-      .ascii "                    [--track N] file.mp3 [more files...]"
+      .ascii "                    [--track N] [--exclusive] file.mp3 [more files...]"
       .byte 13, 10
       .ascii "       lamp-cli.exe --check [--start TIME] [--rate HZ] [--track N] file.flac [more files...]"
       .byte 13, 10
@@ -47,6 +48,10 @@ usage: .ascii "LAMP 0.4.0-dev - Lev's Assembly Media Player"
       .byte 13, 10
       .ascii "in the container's order."
       .byte 13, 10
+      .ascii "--exclusive (Windows CLI) requests direct stereo output; the device must support the"
+      .byte 13, 10
+      .ascii "session rate. Use --rate device or --rate HZ if needed. Omit it for shared output."
+      .byte 13, 10
       .ascii "Playback: Space pauses/resumes; N/P next/previous file; [/] previous/next chapter; Q or Ctrl+C stops."
       .byte 13, 10
       .ascii "RIFF/RF64/BW64 WAV: 1..8 channels, PCM 8/16/24/32 or float32/64."
@@ -60,6 +65,8 @@ usage: .ascii "LAMP 0.4.0-dev - Lev's Assembly Media Player"
 open_error: .ascii "Unsupported, malformed, or inaccessible file. Supports WAV/W64, AIFF/AIFC, CAF, AU, FLAC, WavPack, Monkey's Audio, MP1/MP2/MP3, AAC (LC, HE), AC-3/E-AC-3, Ogg (Vorbis, Opus, FLAC), Matroska/WebM, MP4/MOV, AVI, FLV, ASF and MPEG-TS/PS audio."
 .byte 13, 10, 0
 audio_error: .ascii "Audio endpoint unavailable or WASAPI failed. Try --check to verify decoding."
+.byte 13, 10, 0
+exclusive_error: .ascii "Exclusive output unavailable at this rate, disabled or busy. Try --rate device, another --rate HZ, or omit --exclusive."
 .byte 13, 10, 0
 output_error: .ascii "Cannot create output file."
 .byte 13, 10, 0
@@ -95,6 +102,10 @@ stats_j: .ascii " cpu_us="
 .byte 0
 stats_k: .ascii " endpoint_dry="
 .byte 0
+stats_exclusive: .asciz " output_mode=exclusive output_bits="
+stats_valid_bits: .asciz " output_valid_bits="
+stats_buffer_frames: .asciz " buffer_frames="
+stats_heard_frames: .asciz " heard_frames="
 newline: .byte 13, 10, 0
 check_arg: .short '-', '-', 'c', 'h', 'e', 'c', 'k', 0
 decode_arg: .short '-', '-', 'd', 'e', 'c', 'o', 'd', 'e', 0
@@ -109,6 +120,7 @@ list_devices_arg: .short '-', '-', 'l', 'i', 's', 't', '-', 'd', 'e', 'v', 'i', 
 rate_arg: .short '-', '-', 'r', 'a', 't', 'e', 0
 rate_device: .short 'd', 'e', 'v', 'i', 'c', 'e', 0
 track_arg: .short '-', '-', 't', 'r', 'a', 'c', 'k', 0
+exclusive_arg: .short '-', '-', 'e', 'x', 'c', 'l', 'u', 's', 'i', 'v', 'e', 0
 unknown_device: .ascii "Unknown audio device."
 .byte 13, 10, 0
 devices_failed: .ascii "Audio devices unavailable."
@@ -191,6 +203,7 @@ stop_event: .quad 0
 data_event: .quad 0
 space_event: .quad 0
 audio_event: .quad 0
+exclusive_event: .quad 0            # device-only wake; audio_event is control-only in exclusive mode
 producer_thread: .quad 0
 control_thread: .quad 0
 .p2align 4
@@ -221,7 +234,19 @@ console_mode: .long 0
 console_original_mode: .long 0
 console_changed: .long 0
 com_initialized: .long 0
-events: .quad 0, 0
+events: .quad 0, 0, 0
+audio_event_count: .long 2
+audio_wake: .long 0
+engine_exclusive: .long 0
+.p2align 3
+exclusive_submitted: .quad 0
+exclusive_tail: .quad 0             # device-frame position of the last real sample's end
+exclusive_clock_frame: .quad 0
+exclusive_map_head: .quad 0
+exclusive_map_tail: .quad 0
+exclusive_buffer_retries: .long 0
+.p2align 3
+exclusive_state: .zero 96
 start_tick: .quad 0
 elapsed_ms: .quad 0
 cpu_us: .quad 0
@@ -255,6 +280,8 @@ device_store: .quad 0
 device_string: .quad 0               # an endpoint ID from GetId
 ring_pcm: .zero RING_FRAMES*8
 offline_pcm: .zero CHUNK_FRAMES*8
+exclusive_pcm: .zero RING_FRAMES*8
+exclusive_map: .zero 64*24           # bounded device-start, PCM-start, real-frame intervals
 bytes_written: .zero 4
 input_record: .zero 20
 number_buffer: .zero 32
@@ -394,6 +421,14 @@ FN start
     mov [rip + operation], eax
     jmp .Lopt_next
 .Lopt_other:
+    mov rcx, [rsp + 64]
+    lea rdx, [rip + exclusive_arg]
+    call equal_wide
+    test eax, eax
+    jz .Lopt_repeat
+    mov dword ptr [rip + engine_exclusive], 1
+    jmp .Lopt_next
+.Lopt_repeat:
     mov rcx, [rsp + 64]
     lea rdx, [rip + repeat_arg]
     call equal_wide
@@ -539,6 +574,7 @@ FN start
     mov eax, [rip + operation]
     mov ecx, [rip + cli_repeat]
     or ecx, [rip + cli_resume]
+    or ecx, [rip + engine_exclusive]
     or rcx, [rip + cli_device]
     jz .Lopt_repeat_checked
     test eax, eax
@@ -775,6 +811,14 @@ FN start
     mov dword ptr [rip + exit_code], 2
     jmp .Lreport_finish
 start_playback:
+    xor eax, eax
+    mov [rip + exclusive_submitted], rax
+    mov [rip + exclusive_tail], rax
+    mov [rip + exclusive_clock_frame], rax
+    mov [rip + exclusive_map_head], rax
+    mov [rip + exclusive_map_tail], rax
+    mov [rip + exclusive_buffer_retries], eax
+    mov dword ptr [rip + audio_event_count], 2
     xor ecx, ecx
     mov edx, 1
     xor r8d, r8d
@@ -807,6 +851,18 @@ start_playback:
     mov [rip + audio_event], rax
     test rax, rax
     jz .Lbad_audio
+    cmp dword ptr [rip + engine_exclusive], 0
+    je .Laudio_events_ready
+    xor ecx, ecx
+    xor edx, edx
+    xor r8d, r8d
+    xor r9d, r9d
+    call CreateEventW
+    mov [rip + exclusive_event], rax
+    test rax, rax
+    jz .Lbad_audio
+    mov dword ptr [rip + audio_event_count], 3
+.Laudio_events_ready:
     cmp dword ptr [rip + engine_mode], 0
     jne .Lskip_console_handler
     cmp dword ptr [rip + console_greeted], 0
@@ -860,6 +916,8 @@ start_playback:
 .Laudio_device_opened:
     test eax, eax
     js .Lbad_audio
+    cmp dword ptr [rip + engine_exclusive], 0
+    jne .Laudio_open_exclusive
     mov rcx, [rip + device_obj]
     lea rdx, [rip + iid_client]
     mov r8d, 1
@@ -905,6 +963,7 @@ start_playback:
     call qword ptr [rax + 112]
     test eax, eax
     js .Lbad_audio
+.Laudio_output_ready:
     # Start decoder worker before joining MMCSS on this rendering thread.
     xor ecx, ecx
     xor edx, edx
@@ -995,6 +1054,8 @@ start_playback:
     jne .Lbad_audio_saved
     mov rax, [rip + audio_event]
     mov [rip + events + 8], rax
+    mov rax, [rip + exclusive_event]
+    mov [rip + events + 16], rax
     cmp dword ptr [rip + pause_requested], 0
     je .Linitial_audio_start
     # A seek while paused must never start the new endpoint before resume.
@@ -1010,15 +1071,22 @@ start_playback:
     test eax, eax
     js .Lbad_audio
 .Laudio_wait:
-    mov ecx, 2
+    mov ecx, [rip + audio_event_count]
     lea rdx, [rip + events]
     xor r8d, r8d
     mov r9d, 2000
     call WaitForMultipleObjects
     cmp eax, 0
     je .Lplayback_stopped
-    cmp eax, 1
-    jne .Lbad_audio_timeout
+    cmp eax, [rip + audio_event_count]
+    jae .Lbad_audio_timeout
+    mov dword ptr [rip + audio_wake], 1
+    cmp dword ptr [rip + engine_exclusive], 0
+    je .Laudio_wake_ready
+    cmp eax, 2
+    je .Laudio_wake_ready
+    mov dword ptr [rip + audio_wake], 0
+.Laudio_wake_ready:
     call output_notifications_take
     test eax, eax
     jnz .Laudio_default_changed
@@ -1032,6 +1100,11 @@ start_playback:
     test eax, eax
     js .Lbad_audio
     mov dword ptr [rip + was_paused], 1
+    cmp dword ptr [rip + engine_exclusive], 0
+    je .Lpause_wait
+    call exclusive_update_position
+    test eax, eax
+    js .Lbad_audio
 .Lpause_wait:
     # keyboard signals audio_event on each pause/resume, so wait has no polling.
     mov ecx, 2
@@ -1056,7 +1129,11 @@ start_playback:
     test eax, eax
     js .Lbad_audio
     mov dword ptr [rip + was_paused], 0
+    cmp dword ptr [rip + engine_exclusive], 0
+    jne .Laudio_wait                    # wait for a device wake after Start
 .Laudio_fill:
+    cmp dword ptr [rip + engine_exclusive], 0
+    jne .Laudio_fill_exclusive
     # At EOF, drain queued PCM and the endpoint padding before exiting.
     cmp dword ptr [rip + producer_done], 0
     je .Laudio_more
@@ -1090,6 +1167,37 @@ start_playback:
     cmp dword ptr [rip + audio_hresult], 0
     jne .Lbad_audio_saved
     jmp .Laudio_wait
+.Laudio_fill_exclusive:
+    call exclusive_update_position
+    test eax, eax
+    js .Lbad_audio
+    cmp dword ptr [rip + producer_done], 0
+    je .Laudio_exclusive_more
+    mov rax, [rip + read_count]
+    cmp rax, [rip + write_count]
+    jne .Laudio_exclusive_more
+    mov rax, [rip + exclusive_clock_frame]
+    cmp rax, [rip + exclusive_tail]
+    jae .Laudio_drained
+.Laudio_exclusive_more:
+    cmp dword ptr [rip + audio_wake], 0
+    je .Laudio_wait                    # notifications/controls never request a device packet
+    jmp .Laudio_more
+.Laudio_open_exclusive:
+    mov rcx, [rip + device_obj]
+    mov edx, [rip + queue_rate]
+    mov r8, [rip + exclusive_event]
+    lea r9, [rip + exclusive_state]
+    call output_exclusive_open
+    test eax, eax
+    js .Lbad_audio                    # busy/unsupported/disabled: keep the selected device
+    mov rax, [rip + exclusive_state+48]
+    mov [rip + client_obj], rax
+    mov rax, [rip + exclusive_state+56]
+    mov [rip + render_obj], rax
+    mov eax, [rip + exclusive_state+80]
+    mov [rip + buffer_frames], eax
+    jmp .Laudio_output_ready
 .Laudio_device_failed:
     # --device's endpoint would not activate or initialize (it may have gone
     # since it was chosen): the default endpoint from now on.
@@ -1140,6 +1248,10 @@ start_playback:
 .Lbad_audio_report:
     mov dword ptr [rip + exit_code], 3
     lea rcx, [rip + audio_error]
+    cmp dword ptr [rip + engine_exclusive], 0
+    je .Lbad_audio_print
+    lea rcx, [rip + exclusive_error]
+.Lbad_audio_print:
     call print_text
 .Lplayback_stopped:
     mov rcx, [rip + stop_event]
@@ -1226,10 +1338,7 @@ cleanup:
     mov edx, [rip + console_original_mode]
     call SetConsoleMode
 .Lcleanup_console:
-    lea rcx, [rip + render_obj]
-    call release_com
-    lea rcx, [rip + client_obj]
-    call release_com
+    call close_audio_output
     lea rcx, [rip + device_obj]
     call release_com
     lea rcx, [rip + enum_obj]
@@ -1249,6 +1358,8 @@ cleanup:
     lea rcx, [rip + space_event]
     call close_pointer
     lea rcx, [rip + audio_event]
+    call close_pointer
+    lea rcx, [rip + exclusive_event]
     call close_pointer
     mov rcx, [rip + output_file]
     cmp rcx, -1
@@ -1365,6 +1476,8 @@ LOCALFN producer
 ENDFN producer
 
 LOCALFN fill_render
+    cmp dword ptr [rip + engine_exclusive], 0
+    jne exclusive_fill_render
     push rbp
     mov rbp, rsp
     push rbx
@@ -1499,6 +1612,179 @@ LOCALFN fill_render
     pop rbp
     ret
 ENDFN fill_render
+
+# The exclusive state owns the aliases in client_obj/render_obj. Clear them
+# before closing it so shared cleanup and repeated cleanup cannot double-release.
+LOCALFN close_audio_output
+    sub rsp, 40
+    cmp qword ptr [rip + exclusive_state+48], 0
+    je .Lclose_shared_audio
+    mov qword ptr [rip + render_obj], 0
+    mov qword ptr [rip + client_obj], 0
+    lea rcx, [rip + exclusive_state]
+    call output_exclusive_close
+    jmp .Lclose_audio_done
+.Lclose_shared_audio:
+    lea rcx, [rip + render_obj]
+    call release_com
+    lea rcx, [rip + client_obj]
+    call release_com
+.Lclose_audio_done:
+    add rsp, 40
+    ret
+ENDFN close_audio_output
+
+# Map the device clock onto real queue frames. Silence inserted at starvation
+# and after a final partial block must not move the media position. A bounded
+# interval FIFO retains real submissions until their device-frame end passes.
+LOCALFN exclusive_update_position
+    push rbx
+    sub rsp, 48
+    mov rax, [rip + exclusive_clock_frame]
+    mov [rsp+40], rax
+    lea rcx, [rip + exclusive_state]
+    lea rdx, [rsp+32]
+    call output_exclusive_position
+    test eax, eax
+    js .Lex_update_done
+    mov rax, [rsp+32]
+    cmp rax, [rsp+40]
+    jb .Lex_update_bad
+    mov [rip + exclusive_clock_frame], rax
+.Lex_update_next:
+    mov rbx, [rip + exclusive_map_head]
+    cmp rbx, [rip + exclusive_map_tail]
+    je .Lex_update_ok
+    mov ecx, ebx
+    and ecx, 63
+    lea rcx, [rcx+rcx*2]
+    lea rdx, [rip + exclusive_map]
+    lea rdx, [rdx+rcx*8]
+    mov rax, [rip + exclusive_clock_frame]
+    sub rax, [rdx]
+    jb .Lex_update_ok
+    cmp rax, [rdx+16]
+    jb .Lex_update_partial
+    mov rax, [rdx+8]
+    add rax, [rdx+16]
+    add rax, [rip + engine_seek_frames]
+    mov [rip + engine_position], rax
+    inc rbx
+    mov [rip + exclusive_map_head], rbx
+    jmp .Lex_update_next
+.Lex_update_partial:
+    add rax, [rdx+8]
+    add rax, [rip + engine_seek_frames]
+    mov [rip + engine_position], rax
+.Lex_update_ok:
+    xor eax, eax
+    jmp .Lex_update_done
+.Lex_update_bad:
+    mov eax, 0x8000ffff
+.Lex_update_done:
+    add rsp, 48
+    pop rbx
+    ret
+ENDFN exclusive_update_position
+
+LOCALFN exclusive_fill_render
+    push rbx
+    push rsi
+    push rdi
+    push r12
+    push r13
+    sub rsp, 48
+    mov rbx, [rip + read_count]
+    mov r12, [rip + write_count]
+    sub r12, rbx
+    mov eax, [rip + buffer_frames]
+    cmp r12, rax
+    cmova r12, rax
+    cmp r12, rax
+    je .Lex_fill_count_ready
+    cmp dword ptr [rip + producer_done], 0
+    jne .Lex_fill_count_ready
+    inc qword ptr [rip + underruns]
+.Lex_fill_count_ready:
+    test r12d, r12d
+    jz .Lex_fill_copy
+    mov rax, [rip + exclusive_map_tail]
+    sub rax, [rip + exclusive_map_head]
+    cmp rax, 64
+    jae .Lex_fill_stalled_clock
+.Lex_fill_copy:
+    mov ecx, ebx
+    and ecx, RING_MASK
+    lea rsi, [rip + ring_pcm]
+    lea rsi, [rsi+rcx*8]
+    mov edx, RING_FRAMES
+    sub edx, ecx
+    cmp rdx, r12
+    cmova rdx, r12
+    mov r13, r12
+    sub r13, rdx
+    mov rcx, rdx
+    lea rdi, [rip + exclusive_pcm]
+    rep movsq
+    lea rsi, [rip + ring_pcm]
+    mov rcx, r13
+    rep movsq
+    lea rcx, [rip + exclusive_state]
+    lea rdx, [rip + exclusive_pcm]
+    mov r8d, r12d
+    movss xmm3, dword ptr [rip + engine_volume]
+    call output_exclusive_write
+    test eax, eax
+    jz .Lex_fill_submitted
+    cmp eax, 0x88890018                  # BUFFER_ERROR: no packet this processing pass
+    jne .Lex_fill_error
+    inc dword ptr [rip + exclusive_buffer_retries]
+    cmp dword ptr [rip + exclusive_buffer_retries], 16
+    jbe .Lex_fill_done
+.Lex_fill_stalled_clock:
+    mov eax, 0x800705b4
+    jmp .Lex_fill_error
+.Lex_fill_submitted:
+    mov dword ptr [rip + exclusive_buffer_retries], 0
+    test r12d, r12d
+    jz .Lex_fill_silence
+    mov rax, [rip + exclusive_map_tail]
+    mov ecx, eax
+    and ecx, 63
+    lea rcx, [rcx+rcx*2]
+    lea rdx, [rip + exclusive_map]
+    lea rdx, [rdx+rcx*8]
+    mov rcx, [rip + exclusive_submitted]
+    mov [rdx], rcx
+    mov [rdx+8], rbx
+    mov [rdx+16], r12
+    inc rax
+    mov [rip + exclusive_map_tail], rax
+    add rcx, r12
+    mov [rip + exclusive_tail], rcx
+.Lex_fill_silence:
+    mov eax, [rip + buffer_frames]
+    add [rip + exclusive_submitted], rax
+    add rbx, r12
+    mov [rip + read_count], rbx           # publish only after successful ReleaseBuffer
+    mov rax, [rip + write_count]
+    sub rax, rbx
+    cmp rax, REFILL_FRAMES
+    ja .Lex_fill_done
+    mov rcx, [rip + space_event]
+    call SetEvent
+    jmp .Lex_fill_done
+.Lex_fill_error:
+    mov [rip + audio_hresult], eax
+.Lex_fill_done:
+    add rsp, 48
+    pop r13
+    pop r12
+    pop rdi
+    pop rsi
+    pop rbx
+    ret
+ENDFN exclusive_fill_render
 
 # Console keys: Space pauses, Q stops, R toggles repeat; N or >, P or <
 # and the arrow/bracket keys stop playback with an engine_command, noting the file
@@ -1666,10 +1952,7 @@ ENDFN console_seek
 LOCALFN console_restart
     sub rsp, 40
     call output_notifications_stop
-    lea rcx, [rip + render_obj]
-    call release_com
-    lea rcx, [rip + client_obj]
-    call release_com
+    call close_audio_output
     lea rcx, [rip + device_obj]
     call release_com
     lea rcx, [rip + enum_obj]
@@ -1690,6 +1973,8 @@ LOCALFN console_restart
     lea rcx, [rip + space_event]
     call close_pointer
     lea rcx, [rip + audio_event]
+    call close_pointer
+    lea rcx, [rip + exclusive_event]
     call close_pointer
     mov ecx, [rip + engine_command]
     mov edx, [rip + engine_heard_index]
@@ -1965,6 +2250,31 @@ LOCALFN report_stats
     call print_text
     mov rcx, [rip + endpoint_dry]
     call print_number
+    cmp dword ptr [rip + engine_exclusive], 0
+    je .Lstats_no_exclusive
+    cmp dword ptr [rip + operation], 0
+    jne .Lstats_no_exclusive
+    lea rcx, [rip + stats_exclusive]
+    call print_text
+    movzx ecx, word ptr [rip + exclusive_state+14]
+    call print_number
+    lea rcx, [rip + stats_valid_bits]
+    call print_text
+    movzx ecx, word ptr [rip + exclusive_state+18]
+    test ecx, ecx
+    jnz .Lstats_exclusive_valid
+    movzx ecx, word ptr [rip + exclusive_state+14]
+.Lstats_exclusive_valid:
+    call print_number
+    lea rcx, [rip + stats_buffer_frames]
+    call print_text
+    mov ecx, [rip + buffer_frames]
+    call print_number
+    lea rcx, [rip + stats_heard_frames]
+    call print_text
+    mov rcx, [rip + engine_position]
+    call print_number
+.Lstats_no_exclusive:
     lea rcx, [rip + newline]
     call print_text
     leave
