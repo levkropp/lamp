@@ -963,7 +963,20 @@ LOCALFN decoder_open_format
     mov ecx, [rip + wav_align]
     div rcx
     test edx, edx
+    jz .Lwav_data_whole_frames
+    # FFmpeg's Wave64 writer includes its 0..7 alignment bytes in the
+    # data size. Ignore a partial final frame only for such aligned chunks;
+    # ordinary RIFF/RF64 and genuinely unaligned Wave64 data stay strict.
+    cmp dword ptr [rip + wav_layout], 2
+    jne .Lopen_bad
+    cmp edx, 8
+    jae .Lopen_bad
+    mov r9, [rip + wav_end]
+    sub r9, [rip + wav_begin]
+    test r9, 7
     jnz .Lopen_bad
+    sub [rip + wav_end], rdx
+.Lwav_data_whole_frames:
     mov [rip + total_frames], rax
     jmp .Lwav_next
 .Lwav_fact:

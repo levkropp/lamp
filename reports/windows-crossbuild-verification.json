@@ -1,0 +1,562 @@
+{
+  "result": "passed",
+  "scope": "Compare native Windows and WSL Linux exports from the same source checkout.\n\nRun on Windows after building both targets. Requires FFmpeg and WSL Ubuntu.\nThis checks platform parity, not independent codec conformance or audio devices.",
+  "ffmpeg": "ffmpeg version 8.0.1-essentials_build-www.gyan.dev Copyright (c) 2000-2025 the FFmpeg developers",
+  "binaries": [
+    {
+      "file": "bin\\caught-up\\lamp-cli.exe",
+      "sha256": "56a2cf43c62c8146a8c5f6e31ac76b8eac6c3e660f0f6bb99e57d036e21e4988"
+    },
+    {
+      "file": "build\\caught-up\\lamp-cli",
+      "sha256": "31cfa84e4be8bb03c221daeab08835dfeb57cb91a47600ee1f52089d3aa0619b"
+    }
+  ],
+  "checks": [
+    {
+      "file": "pcm16.wav",
+      "codec": "pcm_s16le",
+      "source_rate": 48000,
+      "source_channels": 2,
+      "frames": 8304,
+      "pcm_sha256": "3d8120b34f804996b5129e35b9886f4b89c93d2304c125a6ac217320d351a1a5",
+      "result": "passed"
+    },
+    {
+      "file": "float64.wav",
+      "codec": "pcm_f64le",
+      "source_rate": 44100,
+      "source_channels": 1,
+      "frames": 7629,
+      "pcm_sha256": "67fa912758bf91425a3f73f134871da31d7b243ae86c06613291f73e28839164",
+      "result": "passed"
+    },
+    {
+      "file": "signed.aiff",
+      "codec": "pcm_s24be",
+      "source_rate": 48000,
+      "source_channels": 2,
+      "frames": 8304,
+      "pcm_sha256": "ae4dd54c16cdf597eff83fa09aad84d6e6f5b7d132d97178bf354ed44d224f15",
+      "result": "passed"
+    },
+    {
+      "file": "lossless.flac",
+      "codec": "flac",
+      "source_rate": 44100,
+      "source_channels": 2,
+      "frames": 7629,
+      "pcm_sha256": "b6b098f865cf6a7b2e70ba57aa27b8105751953ff12c439ca427d66e9851c606",
+      "result": "passed"
+    },
+    {
+      "file": "mpeg.mp3",
+      "codec": "libmp3lame",
+      "source_rate": 44100,
+      "source_channels": 2,
+      "frames": 7629,
+      "pcm_sha256": "e8bdf0d2bdd0c5d6cb3ebf6cfaab2831f69b8c9b6aa78fac07e3f6a00c6989a5",
+      "result": "passed"
+    },
+    {
+      "file": "vorbis.ogg",
+      "codec": "libvorbis",
+      "source_rate": 48000,
+      "source_channels": 2,
+      "frames": 8304,
+      "pcm_sha256": "6ea7ba65de24cb86abde12d23ed961f24f34752de7ee839cfd7be990a545052e",
+      "result": "passed"
+    },
+    {
+      "file": "opus.opus",
+      "codec": "libopus",
+      "source_rate": 48000,
+      "source_channels": 2,
+      "frames": 8304,
+      "pcm_sha256": "a29a91a42170309e1823d394e77fc0bfc4cedab650cc59082b86fb572da7837c",
+      "result": "passed"
+    },
+    {
+      "file": "aac.m4a",
+      "codec": "aac",
+      "source_rate": 44100,
+      "source_channels": 2,
+      "frames": 7629,
+      "pcm_sha256": "f37345dbb8e19b5057e202a6452cfc1c235c9697f3feaec870e402b26020ff85",
+      "result": "passed"
+    },
+    {
+      "file": "aac.adts",
+      "codec": "aac",
+      "source_rate": 48000,
+      "source_channels": 1,
+      "frames": 10240,
+      "pcm_sha256": "edd86e27ec533990b9d74e210bca1d611697baa4f53aee29b6a21c4bb70c407f",
+      "result": "passed"
+    },
+    {
+      "file": "alac.m4a",
+      "codec": "alac",
+      "source_rate": 48000,
+      "source_channels": 2,
+      "frames": 8304,
+      "pcm_sha256": "3d8120b34f804996b5129e35b9886f4b89c93d2304c125a6ac217320d351a1a5",
+      "result": "passed"
+    },
+    {
+      "file": "mpeg2.mp2",
+      "codec": "mp2",
+      "source_rate": 48000,
+      "source_channels": 2,
+      "frames": 9216,
+      "pcm_sha256": "3745933116ad4f529969a685cd9ecf9c7917cb2728db486371bc2c238a9a3043",
+      "result": "passed"
+    },
+    {
+      "file": "dolby.ac3",
+      "codec": "ac3",
+      "source_rate": 48000,
+      "source_channels": 2,
+      "frames": 9216,
+      "pcm_sha256": "0e9db3d6bf61ceee9f257a5da0a1ac460a6aab7534b3e5ca97d40d30a45cb89d",
+      "result": "passed"
+    },
+    {
+      "file": "enhanced.eac3",
+      "codec": "eac3",
+      "source_rate": 48000,
+      "source_channels": 2,
+      "frames": 9216,
+      "pcm_sha256": "8278c423a0c158daf22c4ebf275421b9c21de21c698b35da841fdcd9f76f108d",
+      "result": "passed"
+    },
+    {
+      "file": "alaw.wav",
+      "codec": "pcm_alaw",
+      "source_rate": 8000,
+      "source_channels": 1,
+      "frames": 1384,
+      "pcm_sha256": "c2a8fbae64e707190c2eb1a573c5b82b471a8b426eef7128db10fddbb839b54b",
+      "result": "passed"
+    },
+    {
+      "file": "mulaw.au",
+      "codec": "pcm_mulaw",
+      "source_rate": 8000,
+      "source_channels": 1,
+      "frames": 1384,
+      "pcm_sha256": "3409511fb82b72b76e30060c335749395468a9c2897b240f49d14ddcb6e54764",
+      "result": "passed"
+    },
+    {
+      "file": "ima.wav",
+      "codec": "adpcm_ima_wav",
+      "source_rate": 22050,
+      "source_channels": 2,
+      "frames": 3815,
+      "pcm_sha256": "6d135651d4339f009c4e53e2248c01b10034c4ac64538bc1d7ef86ab253cef9b",
+      "result": "passed"
+    },
+    {
+      "file": "ms.wav",
+      "codec": "adpcm_ms",
+      "source_rate": 22050,
+      "source_channels": 2,
+      "frames": 3815,
+      "pcm_sha256": "0fa1d3c361af6075b61c455b0a9af9bb70b685cfe8b18b903f8a4c8683ddfaea",
+      "result": "passed"
+    },
+    {
+      "file": "ima.caf",
+      "codec": "adpcm_ima_qt",
+      "source_rate": 44100,
+      "source_channels": 2,
+      "frames": 7680,
+      "pcm_sha256": "983ff760edd87612205d4da869562fac7aa7412cf5eb7c328b93448edacafcf5",
+      "result": "passed"
+    },
+    {
+      "file": "alac.caf",
+      "codec": "alac",
+      "source_rate": 48000,
+      "source_channels": 2,
+      "frames": 8304,
+      "pcm_sha256": "3d8120b34f804996b5129e35b9886f4b89c93d2304c125a6ac217320d351a1a5",
+      "result": "passed"
+    },
+    {
+      "file": "wave64.w64",
+      "codec": "pcm_s24le",
+      "source_rate": 44100,
+      "source_channels": 2,
+      "frames": 7629,
+      "pcm_sha256": "63082be65242ae12513488de1bbdfe9427f840a7a8376fa4f42ded786a72b3a3",
+      "result": "passed"
+    },
+    {
+      "file": "flash.flv",
+      "codec": "adpcm_swf",
+      "source_rate": 22050,
+      "source_channels": 2,
+      "frames": 4096,
+      "pcm_sha256": "d845f4173d743127977cc8cb7c01e8277801f5a7fc3de5b74935d41db90c3292",
+      "result": "passed"
+    },
+    {
+      "file": "matroska.mka",
+      "codec": "flac",
+      "source_rate": 48000,
+      "source_channels": 2,
+      "frames": 8304,
+      "pcm_sha256": "3d8120b34f804996b5129e35b9886f4b89c93d2304c125a6ac217320d351a1a5",
+      "result": "passed"
+    },
+    {
+      "file": "webm.webm",
+      "codec": "libopus",
+      "source_rate": 48000,
+      "source_channels": 2,
+      "frames": 8304,
+      "pcm_sha256": "a29a91a42170309e1823d394e77fc0bfc4cedab650cc59082b86fb572da7837c",
+      "result": "passed"
+    },
+    {
+      "file": "avi.avi",
+      "codec": "pcm_s16le",
+      "source_rate": 44100,
+      "source_channels": 2,
+      "frames": 7629,
+      "pcm_sha256": "b6b098f865cf6a7b2e70ba57aa27b8105751953ff12c439ca427d66e9851c606",
+      "result": "passed"
+    },
+    {
+      "file": "asf.asf",
+      "codec": "libmp3lame",
+      "source_rate": 44100,
+      "source_channels": 2,
+      "frames": 9216,
+      "pcm_sha256": "b6ebc8a4a982c28277ce2e0300c1e0155571fcd573b8d4832dc0219d5d532e7f",
+      "result": "passed"
+    },
+    {
+      "file": "fragmented.mp4",
+      "codec": "aac",
+      "source_rate": 48000,
+      "source_channels": 2,
+      "frames": 9328,
+      "pcm_sha256": "2aac009feaf6d986003ac2ceb5347245484aebdcaa0bcc3399e2e4eef48ead7f",
+      "result": "passed"
+    },
+    {
+      "file": "padding-1-1.w64",
+      "codec": "pcm_s24le",
+      "source_rate": 44100,
+      "source_channels": 1,
+      "frames": 2,
+      "pcm_sha256": "374708fff7719dd5979ec875d56cd2286f6d3cf7ec317a3b25632aab28ec37bb",
+      "result": "passed"
+    },
+    {
+      "file": "padding-1-2.w64",
+      "codec": "pcm_s24le",
+      "source_rate": 44100,
+      "source_channels": 1,
+      "frames": 2,
+      "pcm_sha256": "c7e000f2a54df49ac66eff8db26417339200b24eaa4c5ce83895fcfa51b53e05",
+      "result": "passed"
+    },
+    {
+      "file": "padding-1-3.w64",
+      "codec": "pcm_s24le",
+      "source_rate": 44100,
+      "source_channels": 1,
+      "frames": 5,
+      "pcm_sha256": "ef340cf7169dee9aa19e3da2af5326c7d72c4eb5e8a9d17dfe3a980d4f1beda2",
+      "result": "passed"
+    },
+    {
+      "file": "padding-1-4.w64",
+      "codec": "pcm_s24le",
+      "source_rate": 44100,
+      "source_channels": 1,
+      "frames": 5,
+      "pcm_sha256": "f7d9934402bbcb6bee860e060248742d575d3d67f75e09db7aceef9bc024d7c0",
+      "result": "passed"
+    },
+    {
+      "file": "padding-1-5.w64",
+      "codec": "pcm_s24le",
+      "source_rate": 44100,
+      "source_channels": 1,
+      "frames": 5,
+      "pcm_sha256": "7280d9a2c0e927bcf7cad91e45fd16a8d31eade25d18801ee3183576517b6570",
+      "result": "passed"
+    },
+    {
+      "file": "padding-1-6.w64",
+      "codec": "pcm_s24le",
+      "source_rate": 44100,
+      "source_channels": 1,
+      "frames": 8,
+      "pcm_sha256": "eb0e524bf0ef1177c35e995215aa0beec4aeab6ff0c1d7e5b23953b495523d42",
+      "result": "passed"
+    },
+    {
+      "file": "padding-1-7.w64",
+      "codec": "pcm_s24le",
+      "source_rate": 44100,
+      "source_channels": 1,
+      "frames": 8,
+      "pcm_sha256": "7e98508f50b9b99f12abbfb7dd010dde1bb2806c74cad9b3c6f68f3165e2ce90",
+      "result": "passed"
+    },
+    {
+      "file": "padding-1-8.w64",
+      "codec": "pcm_s24le",
+      "source_rate": 44100,
+      "source_channels": 1,
+      "frames": 8,
+      "pcm_sha256": "f581ad9eecbe982edd7fabb82fa5dd4f92d7ed3e40bb76fbe38b5a89ebbf0f30",
+      "result": "passed"
+    },
+    {
+      "file": "padding-1-9.w64",
+      "codec": "pcm_s24le",
+      "source_rate": 44100,
+      "source_channels": 1,
+      "frames": 10,
+      "pcm_sha256": "23de438876007e1ff5a58b509cbd51a02fd907f5d7ed3f01e746060f8cc1e667",
+      "result": "passed"
+    },
+    {
+      "file": "padding-1-10.w64",
+      "codec": "pcm_s24le",
+      "source_rate": 44100,
+      "source_channels": 1,
+      "frames": 10,
+      "pcm_sha256": "39d31f6749206ed418f690de9831509b04a06bd14e8f510280c1138f0cdaefff",
+      "result": "passed"
+    },
+    {
+      "file": "padding-1-11.w64",
+      "codec": "pcm_s24le",
+      "source_rate": 44100,
+      "source_channels": 1,
+      "frames": 13,
+      "pcm_sha256": "524626f6c95f7bb0cab7f565beeb7de92397f7801c62516dfd1b4bd41bb19b1f",
+      "result": "passed"
+    },
+    {
+      "file": "padding-1-12.w64",
+      "codec": "pcm_s24le",
+      "source_rate": 44100,
+      "source_channels": 1,
+      "frames": 13,
+      "pcm_sha256": "8a083016c1d0a9042b9c3595d78bd19bcaa4df32f032f7e794b25cab3adce79d",
+      "result": "passed"
+    },
+    {
+      "file": "padding-1-13.w64",
+      "codec": "pcm_s24le",
+      "source_rate": 44100,
+      "source_channels": 1,
+      "frames": 13,
+      "pcm_sha256": "051866ebaa46a58f95c9ccde99b2769e0b70dfa771a4847a3de80af5fd80bbdd",
+      "result": "passed"
+    },
+    {
+      "file": "padding-1-14.w64",
+      "codec": "pcm_s24le",
+      "source_rate": 44100,
+      "source_channels": 1,
+      "frames": 16,
+      "pcm_sha256": "5bdbed6f739f60f13784b91a951cb39c48714d1dfd7545b666c976ee03d8fd57",
+      "result": "passed"
+    },
+    {
+      "file": "padding-1-15.w64",
+      "codec": "pcm_s24le",
+      "source_rate": 44100,
+      "source_channels": 1,
+      "frames": 16,
+      "pcm_sha256": "0cc86221d168c92898b222fc28636e3c1cffb077aa5420fffcbb35104d2fee45",
+      "result": "passed"
+    },
+    {
+      "file": "padding-1-16.w64",
+      "codec": "pcm_s24le",
+      "source_rate": 44100,
+      "source_channels": 1,
+      "frames": 16,
+      "pcm_sha256": "e683bdc39a64decbbfd815a0d831b8b150d53ca75917b92c0f602d7b678036d4",
+      "result": "passed"
+    },
+    {
+      "file": "padding-1-17.w64",
+      "codec": "pcm_s24le",
+      "source_rate": 44100,
+      "source_channels": 1,
+      "frames": 18,
+      "pcm_sha256": "7812a5ff2aad9149528cd4913e2d5a8284ed411948ad16cef1739924ebc1c6d2",
+      "result": "passed"
+    },
+    {
+      "file": "padding-2-1.w64",
+      "codec": "pcm_s24le",
+      "source_rate": 44100,
+      "source_channels": 2,
+      "frames": 1,
+      "pcm_sha256": "af5570f5a1810b7af78caf4bc70a660f0df51e42baf91d4de5b2328de0e83dfc",
+      "result": "passed"
+    },
+    {
+      "file": "padding-2-2.w64",
+      "codec": "pcm_s24le",
+      "source_rate": 44100,
+      "source_channels": 2,
+      "frames": 2,
+      "pcm_sha256": "0ccdc131a6e1bbd1c59017377cc739777f25b6ce8fd511039495a06a91756125",
+      "result": "passed"
+    },
+    {
+      "file": "padding-2-3.w64",
+      "codec": "pcm_s24le",
+      "source_rate": 44100,
+      "source_channels": 2,
+      "frames": 4,
+      "pcm_sha256": "a0ca5baa81b9a94ee6eeb233cb62f95409c888d2cbf7d63ecee2539799f2d1c6",
+      "result": "passed"
+    },
+    {
+      "file": "padding-2-4.w64",
+      "codec": "pcm_s24le",
+      "source_rate": 44100,
+      "source_channels": 2,
+      "frames": 4,
+      "pcm_sha256": "6436891d73a42e8f21bf8d6e301bd0c49e16efb86b4972d08d65f709fe8a3903",
+      "result": "passed"
+    },
+    {
+      "file": "padding-2-5.w64",
+      "codec": "pcm_s24le",
+      "source_rate": 44100,
+      "source_channels": 2,
+      "frames": 5,
+      "pcm_sha256": "d97ba6e506bc817c5752f1dfa1dd4c6a4bb0c38cd59b90030be5bda74699f19b",
+      "result": "passed"
+    },
+    {
+      "file": "padding-2-6.w64",
+      "codec": "pcm_s24le",
+      "source_rate": 44100,
+      "source_channels": 2,
+      "frames": 6,
+      "pcm_sha256": "ef0d08c58b00c0e5e65482f7922a5fa150eff5f6819428d23e44013cce601f4f",
+      "result": "passed"
+    },
+    {
+      "file": "padding-2-7.w64",
+      "codec": "pcm_s24le",
+      "source_rate": 44100,
+      "source_channels": 2,
+      "frames": 8,
+      "pcm_sha256": "db8879a134d3a128e34718b02e4831203932dae57a8ea4717aec6813daf9a585",
+      "result": "passed"
+    },
+    {
+      "file": "padding-2-8.w64",
+      "codec": "pcm_s24le",
+      "source_rate": 44100,
+      "source_channels": 2,
+      "frames": 8,
+      "pcm_sha256": "841ee03c4fe8c8e5ddeadec1a705c9df102045177400c78117e7d07a701a624c",
+      "result": "passed"
+    },
+    {
+      "file": "padding-2-9.w64",
+      "codec": "pcm_s24le",
+      "source_rate": 44100,
+      "source_channels": 2,
+      "frames": 9,
+      "pcm_sha256": "03cebe91470ab00d4f669b533ac0a8a9252d9d13b45a231aa78039b4b77a2611",
+      "result": "passed"
+    },
+    {
+      "file": "padding-2-10.w64",
+      "codec": "pcm_s24le",
+      "source_rate": 44100,
+      "source_channels": 2,
+      "frames": 10,
+      "pcm_sha256": "3b669ff1837b49f0e80ebb6b0cdb7feda49053ba29210630914192cf9a2a8172",
+      "result": "passed"
+    },
+    {
+      "file": "padding-2-11.w64",
+      "codec": "pcm_s24le",
+      "source_rate": 44100,
+      "source_channels": 2,
+      "frames": 12,
+      "pcm_sha256": "8f469cb5515d917c5a6597f521df2c28be621d101cd955b8233596014d87e7cd",
+      "result": "passed"
+    },
+    {
+      "file": "padding-2-12.w64",
+      "codec": "pcm_s24le",
+      "source_rate": 44100,
+      "source_channels": 2,
+      "frames": 12,
+      "pcm_sha256": "0cad88ea1cf2e622a03ef9ebc91eabd7cbe2ff7a61cf03adc76ab6f8a691693c",
+      "result": "passed"
+    },
+    {
+      "file": "padding-2-13.w64",
+      "codec": "pcm_s24le",
+      "source_rate": 44100,
+      "source_channels": 2,
+      "frames": 13,
+      "pcm_sha256": "dfe2a91c85a22bb7bec35dbcaa21bf1a0b3510ecea4cb50ba91de83f38256585",
+      "result": "passed"
+    },
+    {
+      "file": "padding-2-14.w64",
+      "codec": "pcm_s24le",
+      "source_rate": 44100,
+      "source_channels": 2,
+      "frames": 14,
+      "pcm_sha256": "8de82303f9a9a68653807edaf41fd8045d5c53b933a7898ef85fe20f47d33d9a",
+      "result": "passed"
+    },
+    {
+      "file": "padding-2-15.w64",
+      "codec": "pcm_s24le",
+      "source_rate": 44100,
+      "source_channels": 2,
+      "frames": 16,
+      "pcm_sha256": "af7b471b82ab49d5a1c6ced4cd6e3ddf8f92374fd150477546ec6f35c9a8ebd6",
+      "result": "passed"
+    },
+    {
+      "file": "padding-2-16.w64",
+      "codec": "pcm_s24le",
+      "source_rate": 44100,
+      "source_channels": 2,
+      "frames": 16,
+      "pcm_sha256": "a86a7562162cc09bd4206d96dfd27e4a4ec7d7b845f840e130b872988f77f060",
+      "result": "passed"
+    },
+    {
+      "file": "padding-2-17.w64",
+      "codec": "pcm_s24le",
+      "source_rate": 44100,
+      "source_channels": 2,
+      "frames": 17,
+      "pcm_sha256": "f7893a5e4849498cfac64c540ef02fa6d93784cb071737fe4997f0b7451c5c84",
+      "result": "passed"
+    }
+  ],
+  "rejections": [
+    "incomplete-frame.wav",
+    "unaligned-partial.w64"
+  ],
+  "exact_seek_checks": 8
+}

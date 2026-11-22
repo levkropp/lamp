@@ -38,6 +38,8 @@ Sony Wave64 (`.w64`) replaces RIFF's FourCCs with GUIDs and its sizes with 64-bi
 
 RIFX is RIFF with every integer big-endian: chunk sizes, fmt fields (basic or extensible) and the PCM and float samples, as the RIFF specification and libsndfile define it. G.711 is byte-sized; compressed tags reject in RIFX. FFmpeg 6.1 reads RIFX sample data as little-endian and accepts only 16-byte fmt chunks, so RIFX is checked against the WAVE files it was converted from.
 
+Wave64 data sizes that include alignment padding can leave a partial final PCM frame, notably for 24-bit mono/stereo. LAMP drops that partial frame when the declared data length is eight-byte aligned and the remainder is at most seven bytes. Whole frames formed from declared padding remain audible data unless a fact count trims them, matching FFmpeg. RIFF/RF64 incomplete frames and unaligned partial Wave64 data still reject. The [native Windows/Linux cross-build report](../reports/windows-crossbuild-verification.json) checks 60 files including 34 tiny Wave64 padding cases, exact PCM against FFmpeg for Wave64, eight exact seeks and the two rejection cases on both builds. This run checks offline decoding; device playback and native ARM64 execution were not rerun.
+
 `python3 tests/verify-caf-wave64.py` ([report](../reports/caf-wave64-verification.json)) checks 11 Wave64 files from FFmpeg's muxer (8-32-bit PCM, float32/64, G.711, IMA and Microsoft ADPCM, mono to 5.1), exact against FFmpeg up to the fact count; a Wave64 file with an unknown chunk and an unpadded last chunk; eight RIFX files converted from FFmpeg's WAVE files (8-32-bit PCM, float32/64, G.711, mono to 5.1, extensible headers) decoding exactly as the originals; seeks; and malformed GUIDs, sizes and truncation.
 
 ## Compressed audio
