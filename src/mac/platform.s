@@ -5,13 +5,14 @@
 
 // The shared service ABI uses UTF-8 paths, matching the Linux source branch.
 // A mapping owns its length; several decoder/playlist mappings may coexist.
+// R9 (x5) status: 0 mapped, 1 missing path, 2 other failure including empty.
 FN file_map
     WIN_ENTER
     mov x0, x3
     mov w1, #0
     bl _open
     cmp w0, #0
-    b.lt 3f
+    b.lt Lfile_map_open_failed
     mov w19, w0
     mov x1, #0
     mov w2, #2
@@ -34,10 +35,23 @@ FN file_map
     mov x0, x21
     mov x2, x20
     mov x4, #0
+    mov w5, #0
     WIN_LEAVE
 2:  mov w0, w19
     bl _close
-3:  mov x0, #0
+3:  mov w5, #2
+    b Lfile_map_zero
+Lfile_map_open_failed:
+    bl ___error
+    ldr w9, [x0]
+    mov w5, #1
+    cmp w9, #2
+    b.eq Lfile_map_zero
+    cmp w9, #20
+    b.eq Lfile_map_zero
+    mov w5, #2
+Lfile_map_zero:
+    mov x0, #0
     mov x2, #0
     mov x4, #0
     WIN_LEAVE

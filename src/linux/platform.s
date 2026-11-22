@@ -109,6 +109,7 @@ ENDFN mem_free
 # RCX=NUL-terminated UTF-8 path -> RAX=read-only view or 0, RDX=bytes, R8=0.
 # Only nonempty regular files map. A file truncated by another process while
 # mapped raises SIGBUS, as with other mmap readers.
+# R9D=status: 0 mapped, 1 missing path, 2 other failure (including empty).
 FN file_map
     push rdi
     push rsi
@@ -121,7 +122,7 @@ FN file_map
     mov eax, SYS_open
     syscall
     test eax, eax
-    js .Lfile_map_fail
+    js .Lfile_map_open_failed
     mov ebx, eax
     mov edi, eax
     mov rsi, rsp
@@ -152,11 +153,21 @@ FN file_map
     syscall
     mov rax, rsi
     mov rdx, r12
+    xor r9d, r9d
     jmp .Lfile_map_done
+.Lfile_map_open_failed:
+    mov r9d, 1
+    cmp rax, -2                         # ENOENT
+    je .Lfile_map_fail
+    cmp rax, -20                        # ENOTDIR
+    je .Lfile_map_fail
+    mov r9d, 2
+    jmp .Lfile_map_fail
 .Lfile_map_close:
     mov edi, ebx
     mov eax, SYS_close
     syscall
+    mov r9d, 2
 .Lfile_map_fail:
     xor eax, eax
     xor edx, edx

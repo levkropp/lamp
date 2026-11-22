@@ -52,6 +52,7 @@ LOCALFN wv_iter_next
     lea r9, [r8 + 8]
     cmp r9, rdx
     ja .Lwv_next_return
+    mov [rip+wv_block_header], rcx
     mov eax, [rcx + 20]
     mov [rip + wv_samples], eax
     mov eax, [rcx + 24]
@@ -234,6 +235,7 @@ LOCALFN wv_parse_block
     mov [rip + wv_block_rate], eax
     mov [rip + wv_block_chan], eax
     mov [rip + wv_block_mask], eax
+    mov [rip + wv_corr_active], eax
     # Channel arrangement and modes.
     mov ebx, [rip + wv_flags]
     test ebx, F_MONO
@@ -585,6 +587,8 @@ LOCALFN wv_parse_block
     # Lossy 32-bit audio clips as 24-bit (as the WavPack library does).
     cmp dword ptr [rip + wv_hybrid], 0
     je .Lwv_meta_next
+    cmp dword ptr [rip + wv_pair_mode], 0
+    jne .Lwv_meta_next
     cmp dword ptr [rip + wv_block_bits], 32
     jne .Lwv_meta_next
     cmp dword ptr [rip + wv_post_shift], 8
@@ -779,6 +783,12 @@ LOCALFN wv_decode_frame
     je .Lwv_frame_unsupported
     test eax, eax
     jz .Lwv_frame_bad
+    cmp dword ptr [rip+wv_pair_mode], 0
+    je .Lwv_frame_correction_done
+    call wv_correction_block
+    test eax, eax
+    jz .Lwv_frame_bad
+.Lwv_frame_correction_done:
     test edi, edi
     jnz .Lwv_frame_place
     call wv_block_rate_of
@@ -1165,6 +1175,7 @@ ENDFN wv_track_open
 
 FN wv_track_close
     sub rsp, 40
+    call wv_correction_file_close
     mov rcx, [rip + wv_buffers]
     test rcx, rcx
     jz .Lwv_track_close_done
@@ -1230,6 +1241,63 @@ ENDFN wv_track_samples
 # RCX=packet, EDX=bytes, R8=stereo float output, R9D=capacity -> EAX=frames,
 # or -1 with decode_error set.
 FN wv_track_decode
+    cmp qword ptr [rip+wv_file_count], 0
+    je .Lwv_decode_unpaired
+    sub rsp, 72
+    mov [rsp+32], rcx
+    mov [rsp+40], edx
+    mov [rsp+48], r8
+    mov [rsp+56], r9d
+    call wv_correction_lookup
+    test rax, rax
+    jz .Lwv_decode_no_companion
+    mov r8, rax
+    mov r9d, edx
+    mov rcx, [rsp+32]
+    mov edx, [rsp+40]
+    mov rax, [rsp+48]
+    mov [rsp+32], rax
+    mov eax, [rsp+56]
+    mov [rsp+40], eax
+    call wv_track_decode_pair
+    add rsp, 72
+    ret
+.Lwv_decode_no_companion:
+    mov dword ptr [rip+decode_error], WV_MALFORMED
+    mov eax, -1
+    add rsp, 72
+    ret
+.Lwv_decode_unpaired:
+    mov dword ptr [rip+wv_pair_mode], 0
+    jmp wv_decode_emit
+ENDFN wv_track_decode
+
+# Paired native frames. RCX=main, EDX=main bytes, R8=correction frame,
+# R9D=correction bytes, [rsp+40]=stereo output, [rsp+48]=capacity.
+# Frame/block headers must correspond exactly. No filesystem discovery here.
+FN wv_track_decode_pair
+    test r8, r8
+    jz .Lwv_pair_invalid
+    cmp r9d, 32
+    jb .Lwv_pair_invalid
+    cmp dword ptr [rip+wv_matroska], 0
+    jne .Lwv_pair_invalid
+    mov r10, r8
+    add r10, r9
+    jc .Lwv_pair_invalid
+    mov [rip+wv_pair_cursor], r8
+    mov [rip+wv_pair_end], r10
+    mov dword ptr [rip+wv_pair_mode], 1
+    mov r8, [rsp+40]
+    mov r9d, [rsp+48]
+    jmp wv_decode_emit
+.Lwv_pair_invalid:
+    mov dword ptr [rip+decode_error], WV_MALFORMED
+    mov eax, -1
+    ret
+ENDFN wv_track_decode_pair
+
+LOCALFN wv_decode_emit
     push rbx
     push rsi
     sub rsp, 40
@@ -1238,6 +1306,12 @@ FN wv_track_decode
     call wv_decode_frame
     test eax, eax
     jz .Lwv_decode_bad
+    cmp dword ptr [rip+wv_pair_mode], 0
+    je .Lwv_decode_pair_complete
+    mov r10, [rip+wv_pair_cursor]
+    cmp r10, [rip+wv_pair_end]
+    jne .Lwv_decode_bad
+.Lwv_decode_pair_complete:
     cmp eax, esi
     ja .Lwv_decode_bad
     mov rcx, rbx
@@ -1251,8 +1325,9 @@ FN wv_track_decode
 .Lwv_decode_failed:
     mov eax, -1
 .Lwv_decode_return:
+    mov dword ptr [rip+wv_pair_mode], 0
     add rsp, 40
     pop rsi
     pop rbx
     ret
-ENDFN wv_track_decode
+ENDFN wv_decode_emit

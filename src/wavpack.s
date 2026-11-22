@@ -1,5 +1,5 @@
 # Original WavPack decoder in x86-64 assembly. MIT, see LICENSE.
-# WavPack 4 and 5 blocks (versions 0x402-0x410): lossless and hybrid lossy
+# WavPack 4 and 5 blocks (versions 0x402-0x410): lossless and hybrid
 # integer audio of 1-32 bits, 32-bit float, extra-bit streams, shifted and
 # "and/or" padded integers, false stereo and multichannel frames of mono and
 # stereo blocks. Decorrelation, entropy decoding and output conversion follow
@@ -7,8 +7,9 @@
 # are src/wavpack_tables.inc. Track mode: native .wv files (frames of blocks
 # from an initial to a final block) and Matroska A_WAVPACK4 frames (block
 # headers reduced to sample count, flags and CRC) give one frame per packet.
-# A failed CRC stops decoding. DSD blocks and correction (.wvc) data are not
-# decoded.
+# Native .wvc companions restore hybrid audio through separate corrected
+# prediction and noise-shaping paths. A failed CRC stops decoding. DSD and
+# container correction side data remain unsupported.
 .include "lamp.inc"
 .globl wv_probe, wv_open, wv_track_open, wv_track_samples, wv_track_decode, wv_track_reset, wv_track_close
 
@@ -22,6 +23,9 @@
 .equ F_MONO, 4
 .equ F_HYBRID, 8
 .equ F_JOINT, 0x10
+.equ F_CROSS, 0x20
+.equ F_SHAPE, 0x40
+.equ F_NEW_SHAPE, 0x20000000
 .equ F_FLOAT, 0x80
 .equ F_HYBRID_BITRATE, 0x200
 .equ F_INITIAL, 0x800
@@ -107,6 +111,17 @@ wv_block_chan: .zero 4              # ID_CHANNEL_INFO
 wv_block_mask: .zero 4
 wv_iter: .zero 32                   # block iterator: position, end, frame samples
 wv_out: .zero 16                    # left and right output channels
+wv_pair_mode: .zero 4
+wv_corr_active: .zero 4
+wv_pair_cursor: .zero 8
+wv_pair_end: .zero 8
+wv_block_header: .zero 8
+wv_corr_bits: .zero 16
+wv_corr_values: .zero 8
+wv_corrected: .zero 8
+wv_shape_error: .zero 8
+wv_shape_acc: .zero 8
+wv_shape_delta: .zero 8
 
 .text
 # ECX=signed 16-bit value -> EAX=FFmpeg wp_exp2. Clobbers RCX, RDX, R8.
@@ -340,8 +355,10 @@ LOCALFN wv_get_value
     push rdi
     push r12
     push r13
-    sub rsp, 32
+    sub rsp, 48
     mov r12d, edx
+    lea rax, [rip+wv_corr_values]
+    mov dword ptr [rax+rdx*4], 0
     imul eax, edx, CH_SIZE
     lea rbx, [rip + wv_ch]
     add rbx, rax                          # channel state
@@ -559,12 +576,34 @@ LOCALFN wv_get_value
     mov esi, eax
     jmp .Lwv_value_bisect_step
 .Lwv_value_bisect_done:
+    mov [rsp+32], edi                    # final low/range for correction tail
+    mov [rsp+36], r13d
     mov edi, esi
 .Lwv_value_sign:
     lea rcx, [rip + wv_main]
     mov edx, 1
     call wv_read
     mov esi, eax
+    cmp dword ptr [rip+wv_corr_active], 0
+    je .Lwv_value_slow
+    cmp dword ptr [rbx+CH_LIMIT], 0
+    je .Lwv_value_slow
+    lea rcx, [rip+wv_corr_bits]
+    mov edx, [rsp+36]
+    call wv_tail
+    add eax, [rsp+32]
+    sub eax, edi
+    test esi, esi
+    jz .Lwv_value_correction_sign
+    neg eax
+.Lwv_value_correction_sign:
+    lea rcx, [rip+wv_corr_values]
+    mov [rcx+r12*4], eax
+    lea rcx, [rip+wv_corr_bits]
+    call wv_left
+    test eax, eax
+    js .Lwv_value_error
+.Lwv_value_slow:
     cmp dword ptr [rip + wv_bitrate], 0
     je .Lwv_value_signed
     mov ecx, edi
@@ -586,7 +625,7 @@ LOCALFN wv_get_value
     xor eax, eax
     mov edx, 1
 .Lwv_value_return:
-    add rsp, 32
+    add rsp, 48
     pop r13
     pop r12
     pop rdi
@@ -727,6 +766,8 @@ LOCALFN wv_integer
     sub edx, eax
     cmp dword ptr [rip + wv_hybrid], 0
     je .Lwv_int_post
+    cmp dword ptr [rip + wv_corr_active], 0
+    jne .Lwv_int_post
     cmp edx, [rip + wv_maxclip]
     cmovg edx, [rip + wv_maxclip]
     cmp edx, [rip + wv_minclip]
@@ -966,6 +1007,17 @@ LOCALFN wv_unpack_stereo
     test edx, edx
     jnz .Lwv_st_last
     mov ebx, eax                          # R
+    cmp dword ptr [rip+wv_corr_active], 0
+    je .Lwv_st_decorrelate
+    test dword ptr [rip+wv_flags], F_CROSS
+    jz .Lwv_st_decorrelate
+    mov ecx, r15d
+    mov edx, ebx
+    mov r8d, r13d
+    call wv_correction_preview
+    mov [rip+wv_corrected], eax
+    mov [rip+wv_corrected+4], edx
+.Lwv_st_decorrelate:
     lea rsi, [rip + wv_decorr]
     xor edi, edi
 .Lwv_st_term:
@@ -1141,6 +1193,24 @@ LOCALFN wv_unpack_stereo
     cmp rax, 1 << 19
     ja .Lwv_st_fail
 .Lwv_st_position:
+    cmp dword ptr [rip+wv_corr_active], 0
+    je .Lwv_st_position_advance
+    test dword ptr [rip+wv_flags], F_CROSS
+    jnz .Lwv_st_position_advance
+    mov eax, r15d
+    add eax, [rip+wv_corr_values]
+    mov edx, ebx
+    add edx, [rip+wv_corr_values+4]
+    test dword ptr [rip+wv_flags], F_JOINT
+    jz .Lwv_st_corrected_joint_done
+    mov ecx, eax
+    sar ecx, 1
+    sub edx, ecx
+    add eax, edx
+.Lwv_st_corrected_joint_done:
+    mov [rip+wv_corrected], eax
+    mov [rip+wv_corrected+4], edx
+.Lwv_st_position_advance:
     inc r13d
     and r13d, 7
     test dword ptr [rip + wv_flags], F_JOINT
@@ -1150,6 +1220,19 @@ LOCALFN wv_unpack_stereo
     sub ebx, eax
     add r15d, ebx
 .Lwv_st_crc:
+    cmp dword ptr [rip+wv_corr_active], 0
+    je .Lwv_st_corrected_done
+    xor ecx, ecx
+    mov edx, r15d
+    mov r8d, [rip+wv_corrected]
+    call wv_correction_shape
+    mov r15d, eax
+    mov ecx, 1
+    mov edx, ebx
+    mov r8d, [rip+wv_corrected+4]
+    call wv_correction_shape
+    mov ebx, eax
+.Lwv_st_corrected_done:
     lea eax, [r14 + r14*2]
     add eax, r15d
     lea eax, [rax + rax*2]
@@ -1276,6 +1359,15 @@ LOCALFN wv_unpack_mono
     inc edi
     jmp .Lwv_mono_term
 .Lwv_mono_terms_done:
+    cmp dword ptr [rip+wv_corr_active], 0
+    je .Lwv_mono_corrected_done
+    xor ecx, ecx
+    mov edx, r15d
+    mov r8d, r15d
+    add r8d, [rip+wv_corr_values]
+    call wv_correction_shape
+    mov r15d, eax
+.Lwv_mono_corrected_done:
     inc r13d
     and r13d, 7
     lea eax, [r14 + r14*2]
@@ -1322,3 +1414,5 @@ LOCALFN wv_unpack_mono
 ENDFN wv_unpack_mono
 
 .include "wavpack_block.inc"
+.include "wavpack_correction.inc"
+.include "wavpack_file.inc"

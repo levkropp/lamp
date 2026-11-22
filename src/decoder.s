@@ -184,6 +184,19 @@ FN decoder_open
     mov dword ptr [rip + audio_tracks_count], 1
     mov dword ptr [rip + audio_track_selected], 1
 .Lopen_tracks_known:
+    cmp dword ptr [rip+codec_kind], 12   # native WavPack; containers stay self-contained
+    jne .Lopen_read_tags
+    mov rcx, [rsp+32]
+    mov rdx, [rip+map_base]
+    mov r8, rdx
+    add r8, [rip+file_size]
+    call wv_correction_file_open
+    test eax, eax
+    jnz .Lopen_read_tags
+    call decoder_close
+    xor eax, eax
+    jmp .Lopen_published
+.Lopen_read_tags:
     mov rcx, [rip + map_base]           # metadata, from the whole file
     mov rdx, rcx
     add rdx, [rip + file_size]

@@ -54,6 +54,7 @@ ENDFN mem_free
 # RCX=UTF-16 path -> RAX=read-only view or 0, RDX=bytes, R8=token for file_unmap.
 # The read-shared file handle stays open as the token, so other processes cannot
 # open the file for writing while it plays. Empty files fail.
+# R9D=status: 0 mapped, 1 missing path, 2 other failure (including empty).
 FN file_map
     push rbx
     push rsi
@@ -70,7 +71,7 @@ FN file_map
     mov qword ptr [rsp + 48], 0
     call CreateFileW
     cmp rax, -1
-    je .Lfile_map_fail
+    je .Lfile_map_open_failed
     mov rbx, rax
     mov rcx, rax
     lea rdx, [rsp + 56]
@@ -104,12 +105,23 @@ FN file_map
     mov rax, rsi
     mov rdx, rdi
     mov r8, rbx
+    xor r9d, r9d
     jmp .Lfile_map_done
+.Lfile_map_open_failed:
+    call GetLastError
+    mov r9d, 1
+    cmp eax, 2                          # ERROR_FILE_NOT_FOUND
+    je .Lfile_map_failed
+    cmp eax, 3                          # ERROR_PATH_NOT_FOUND
+    je .Lfile_map_failed
+    mov r9d, 2
+    jmp .Lfile_map_failed
 .Lfile_map_fail:
     cmp rbx, -1
     je .Lfile_map_failed
     mov rcx, rbx
     call CloseHandle
+    mov r9d, 2
 .Lfile_map_failed:
     xor eax, eax
     xor edx, edx

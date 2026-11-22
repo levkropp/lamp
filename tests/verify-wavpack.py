@@ -323,6 +323,7 @@ def main():
     truncated.write_bytes(long[:len(long) * 2 // 3])
     prefix = suite.against_ffmpeg(truncated, 'cut inside a frame: the complete frames play',
                                   tolerated=('Input/output error',
+                                             'Error during demuxing: I/O error',
                                              'Error during demuxing: Invalid data found when processing input'))
     if not prefix or len(prefix) >= len(reference) or not reference.startswith(prefix):
         raise Failure('truncated.wv: expected a nonempty proper prefix of the intact stereo stream')
