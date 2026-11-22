@@ -1,19 +1,21 @@
 # Speex decoder development
 
-Speex playback is **not implemented yet**. The source now contains the first
-assembly decoder components, checked against the BSD Speex 1.2.1 reference:
+Speex playback is **not implemented yet**. The source now contains assembly
+decoder components and a narrowband frame path, checked against the BSD
+Speex 1.2.1 reference:
 bounded bit access, identification headers, canonical packet inspection,
 the three spectral codebook reconstruction paths, LSP interpolation/LPC
 reconstruction, bandwidth expansion, IIR synthesis, high-pass filtering,
-pitch/gain reconstruction, split innovation and seeded noise.
+pitch/gain reconstruction, split innovation and seeded noise, plus a connected
+mono narrowband frame decoder with comb enhancement, DTX, packet-loss
+concealment and recovery.
 The CLI and window still
 reject Speex files; no container mapping or audio format claim is added.
 
 The intended decoder covers narrowband, wideband and ultra-wideband, all
 their submodes, mono and in-band stereo, packet grouping, VBR/VAD/DTX and
-stateful recovery. It still needs frame parameter/gain orchestration,
-complete frame synthesis, comb enhancement,
-high-band folding and QMF, stereo reconstruction, container integration,
+stateful recovery. It still needs high-band frame synthesis,
+folding and QMF, stereo reconstruction, container integration,
 granule/delay trimming, exact seeking and playback lifecycle verification.
 The eventual format gate is PCM and playback, not packet inspection alone.
 
@@ -34,6 +36,12 @@ and `speex_callbacks.c`. `src/speex_lsp.s` follows `quant_lsp.c`.
 including David Rowe's original LPC reconstruction and Valin's modifications.
 `src/speex_excitation.s` follows `ltp.c`, `cb_search.c` and the reference noise
 generator in `math_approx.h`.
+`src/speex_nb.s` and `speex_nb_math.inc` connect those components following
+`nb_celp.c`, `modes.c` and `filters.c`. The mathematical gain lookup generator
+stores separately rounded float global/voicing gains without a runtime libm
+dependency. The recovery exponential uses a bounded double Taylor series
+and squaring before its final float conversion; complete decoded PCM and
+history are compared with the reference's libm path.
 `tests/generate-speex-tables.py` extracts exactly 2,944 signed-byte codebook
 coefficients from `lsp_tables_nb.c` and `high_lsp_tables.c`; `--check` verifies
 the tracked include. The project and separate codebook-author BSD notices are
@@ -138,9 +146,8 @@ changing caller output or persistent memory.
 The spectral interpolator prepares each next subframe's LPC coefficients;
 the narrowband reference intentionally synthesizes with the previously active
 LPC before installing those new coefficients. Full decoder orchestration must
-preserve that ordering. Packet/frame orchestration, comb and high-band
-paths still belong to the remaining
-implementation.
+preserve that ordering. The narrowband frame decoder now does so; high-band
+synthesis remains pending.
 
 ## Pitch and innovation contracts
 
@@ -247,7 +254,8 @@ Input ends and output ends are protected by inaccessible memory pages; leading
 output canaries are checked. These are component checks, not a claim of Speex
 PCM playback, seek correctness or packet-loss concealment. The changed
 modules translate and assemble for ARM64 macOS; native Mac execution remains
-unverified. Complete frame synthesis and file/player integration remain open.
+unverified. Those packet/spectral tests alone do not establish frame synthesis
+or file/player integration.
 
 ### LPC and filter verification
 
@@ -346,6 +354,82 @@ record source, oracle and wrapper hashes and pass:
   compares 20,078,855 float words bit for bit.
 
 The module also translates and assembles for Apple Silicon; native Mac
-execution remains unverified. Full frame parameter/global-gain orchestration,
-comb/QMF/stereo, loss-state synthesis, containers, trimming, exact seeking and
-player lifecycle checks still remain before Speex playback can be claimed.
+execution remains unverified. These component tests alone do not establish
+frame or file playback; the separate connected narrowband tests follow.
+
+## Connected narrowband frame decoder
+
+`spx_nb_init(arena, bytes)` initializes or completely resets an 8,192-byte
+caller-owned arena. Capacity below 8,192, null pointers and address overflow
+fail before writes. The first 2,912 bytes are defined live history; the rest
+holds a complete shadow state and bounded working buffers. The layout is
+private and callers must retain it unchanged between decoder calls.
+
+`spx_nb_set_flags(arena, flags)` selects comb enhancement (bit 0), output
+high-pass filtering (bit 1), and embedded-wideband high-pass coefficients
+(bit 2). The default is 3. The embedded flag does not implement wideband
+audio. Flags outside 0–7 and uninitialized state reject. As in Speex, the
+lost-frame path always uses the narrowband output high-pass filter.
+
+`spx_nb_frame(arena, bits, output, capacity)` returns 160 samples, zero for
+a clean packet end, or -1 for malformed/unsupported input or damaged state.
+Capacity counts floats. Samples retain Speex's signed-16-bit amplitude units;
+this API does not normalize them to [-1,1]. A null bit reader synthesizes DTX
+comfort noise when DTX is enabled, otherwise one lost frame. Coded modes
+0–8 include low-rate vocoder synthesis, both subframe-gain layouts, double
+innovation, pitch selection, comb enhancement, the one-subframe LPC delay,
+activity levels, gain-ring history and recovery memory/excitation scaling.
+
+The reader, its whole source buffer, output and arena must be pairwise
+disjoint. Inputs are bounded before access. A failed frame preserves all
+live history, output and the original reader position; truncation only sets
+the reader's sticky error. Shadow/work bytes may change on failure. A clean
+end may consume framing controls and record the last stereo control byte,
+without producing audio. Stereo reconstruction is pending. At most two
+higher-band layers and 1,024 in-band controls are skipped while searching for
+a narrowband frame; four-bit null upper layers are handled explicitly.
+
+Numeric history must remain finite, stored old LSP magnitudes may not exceed
+16, and structural fields are checked. The loss counter is bounded at
+1,000,000,000 before a call, keeping the reference's random-pitch float-to-int
+conversion within signed range. Initialization restores all history and seeds.
+This is a mono frame API; the player still rejects Speex files.
+
+### Connected frame verification
+
+After building the assembly objects, run:
+
+```sh
+python3 tests/verify-speex-nb.py --bin build/speex-check
+python3 tests/generate-speex-nb-tables.py --check
+```
+
+Use `python` and `--bin bin/speex-check` on native Windows. Unlike the earlier
+component verifiers, this links the unchanged official decoder beside the
+assembly frame decoder and compares their actual output and independent
+histories. The full narrowband assembly path executes all its own kernels.
+It compares first/mode/loss/DTX flags, seed, pitch and gain histories, vocoder
+memory, LSP/LPC/filter state, all 500 excitation-buffer samples, innovation
+and all 160 output PCM samples. The reference encoder is test-only too.
+
+The [Linux frame report](../reports/speex-nb-linux-verification.json) and
+[native Windows frame report](../reports/speex-nb-windows-verification.json)
+record source and executable hashes. Coverage includes all qualities 0–10,
+all nine modes, all eight enhancement/high-pass flag combinations,
+CBR/VBR/VAD+DTX, mono and stereo-control packets, grouping 1/2/5/64 frames,
+silence, tones, noise, loss bursts up to 16 frames and recovery. All 32 global
+gain codes and 16 voicing codes are independently swept. Every truncated bit
+prefix of each coded mode is tested at protected memory boundaries, along
+with late overflow, aliases, corrupt history, invalid modes and controls.
+
+Each platform passes 69,413,735 checks, comparing 66,271,746 float words
+exactly across 76,438 frames. These include 11,774 DTX null frames, 11,896
+lost frames, 1,448 recoveries, 4,096 explicit gain/voicing sweeps and 288
+standard/user-control and upper-layer compatibility cases. The sequence
+contains 17,920 grouped packets; all nine narrowband modes are observed.
+Another 3,597 rejected/no-frame cases verify the failure and capacity rules.
+
+ARM64 macOS translation and assembly pass; native execution is unverified.
+Full wideband/ultra-wideband and stereo synthesis, container mapping,
+granule/delay trimming, seeking and actual player lifecycle checks remain
+necessary before advertising Speex file playback.
