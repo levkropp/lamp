@@ -80,6 +80,8 @@ Passed in 0.4.0-dev source: 34 updated-reference suites, 51 independent modern-l
 
 ## 2 — Reliable daily audio use
 
+Native Windows accessibility progress: playback-position and volume trackbars now receive explicit MSAA names through Windows annotation services. A native inspection exposed unnamed sliders despite their window text. Hidden-control tests pass 452 checks for names, Unicode replacement, values, cleanup and COM apartment balance; [scope and remaining interactive checks](docs/accessibility.md) stay explicit. Full native screen-reader and mixed-monitor validation remain open.
+
 - [ ] Indexed seeking for existing formats; quick reopen/seek without blocking the UI.
 - [ ] Ogg chaining, multichannel Vorbis/Opus/FLAC and channel-layout handling.
 - [ ] WASAPI device selection/reconnection; explicit resampling and mixing policy; shared/exclusive output options where useful.

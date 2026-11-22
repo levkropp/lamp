@@ -72,6 +72,10 @@ LOCALFN ui_controls_create
     cmp ebx, 5
     jb .Lui_control_created
     mov rcx, [rsi + rbx*8]
+    lea rax, [rip + ui_control_names]
+    mov rdx, [rax + rbx*8]
+    call control_access_name
+    mov rcx, [rsi + rbx*8]
     mov edx, 0x408                       # TBM_SETRANGEMAX
     xor r8d, r8d
     mov r9d, 100

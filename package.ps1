@@ -12,7 +12,7 @@ if(@($runtime | Where-Object {$_.version -ne $version}).Count) {throw 'Binary ve
 $zipPath = Join-Path $out "lamp-windows-x64-v$version.zip"
 $files = @('README.md','ROADMAP.md','VERSION','LICENSE','THIRD_PARTY_NOTICES','build.ps1','build.sh','package.ps1','.gitignore','.gitattributes','bin\lamp.exe','bin\lamp-cli.exe')
 foreach ($directory in @('src','assets','scripts','tools','docs','reports','site','.github')) {
-    $files += Get-ChildItem -LiteralPath (Join-Path $root $directory) -File -Recurse -Force | ForEach-Object { $_.FullName.Substring($root.Length+1) }
+    $files += Get-ChildItem -LiteralPath (Join-Path $root $directory) -File -Recurse -Force | Where-Object { $_.FullName -notmatch '[\\/]__pycache__[\\/]' } | ForEach-Object { $_.FullName.Substring($root.Length+1) }
 }
 $files += Get-ChildItem -LiteralPath (Join-Path $root 'tests') -File | ForEach-Object { $_.FullName.Substring($root.Length+1) }
 $files += Get-ChildItem -LiteralPath (Join-Path $root 'tests\fixtures') -File | ForEach-Object { $_.FullName.Substring($root.Length+1) }

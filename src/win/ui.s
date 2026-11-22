@@ -934,6 +934,12 @@ LOCALFN ui_window_proc
     call engine_stop
     jmp .Lui_handled
 .Lui_destroy_now:
+    mov rcx, [rip + ui_control_hwnds + 5*8]
+    xor edx, edx
+    call control_access_name
+    mov rcx, [rip + ui_control_hwnds + 6*8]
+    xor edx, edx
+    call control_access_name
     mov rcx, [rip + ui_hwnd]
     call DestroyWindow
     jmp .Lui_handled

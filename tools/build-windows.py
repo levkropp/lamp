@@ -118,13 +118,14 @@ def main():
         run(command)
 
     executable('lamp-cli.exe', 'start', 'console', common, resource(rc, obj_dir, True))
-    executable('lamp.exe', 'ui_start', 'windows', common + [objects[ROOT / 'src/win/ui.s']], resource(rc, obj_dir, False))
+    ui_objects = [objects[ROOT / f'src/win/{name}.s'] for name in ('ui', 'accessibility')]
+    executable('lamp.exe', 'ui_start', 'windows', common + ui_objects, resource(rc, obj_dir, False))
     if args.tests:
         executable('engine-probe.exe', 'probe_start', 'console', [objects[ROOT / 'tests/engine-probe.s']] + common)
         executable('ui-preview.exe', 'preview_start', 'console',
-                   [objects[ROOT / 'tests/ui-preview.s']] + common + [objects[ROOT / 'src/win/ui.s']])
+                   [objects[ROOT / 'tests/ui-preview.s']] + common + ui_objects)
         executable('ui-list.exe', 'list_start', 'console',
-                   [objects[ROOT / 'tests/ui-list.s']] + common + [objects[ROOT / 'src/win/ui.s']])
+                   [objects[ROOT / 'tests/ui-list.s']] + common + ui_objects)
         executable('ui-driver.exe', 'driver_start', 'console', [objects[ROOT / 'tests/ui-driver.s']] + common)
     for name in ('lamp.exe', 'lamp-cli.exe'):
         print(f'{name} {(out / name).stat().st_size}')

@@ -1,0 +1,12 @@
+{
+  "result": "passed",
+  "checks": 452,
+  "apartments": 2,
+  "control_cycles": 64,
+  "repeated_clear_invalidarg": 64,
+  "desktop_input": false,
+  "scope": "Native hidden trackbars: MSAA names, replacement/Unicode/cleanup, retained values and balanced COM initialization; no desktop input or screen-reader session.",
+  "platform": "Microsoft Windows NT 10.0.26300.0",
+  "object_sha256": "AE36F494C0F9CB58AEC9C82487D3D23EAE5757456D137156748E8AD54BDCD37D",
+  "gui_sha256": "FAE4AE7558DF7B46FFACB08E3E07DAFF7F5F3ACEC859392F9C7CF56BF2C494D0"
+}
