@@ -130,6 +130,8 @@ LOCALFN ui_menu
     call AppendMenuW
     mov rcx, rbx
     call ui_tracks_menu
+    mov rcx, rbx
+    call ui_output_settings_menu
     call CreatePopupMenu
     test rax, rax
     jz .Lui_menu_place
@@ -283,6 +285,11 @@ ENDFN ui_device_found
 # ECX=menu command (WM_COMMAND's identifier).
 LOCALFN ui_menu_command
     sub rsp, 40
+    mov [rsp+32], ecx
+    call ui_output_settings_command
+    test eax, eax
+    jnz .Lui_menu_command_return
+    mov ecx, [rsp+32]
     cmp ecx, 110
     jne .Lui_command_play
     call ui_previous
@@ -387,16 +394,8 @@ ENDFN ui_menu_command
 # The output chosen: playing, playback continues on it from the file heard
 # at the heard position; otherwise the next launch uses it.
 LOCALFN ui_output
-    sub rsp, 40
     mov dword ptr [rip + ui_device_pending], 1
-    cmp qword ptr [rip + ui_thread], 0
-    je .Lui_output_return
-    call ui_heard_position
-    mov ecx, eax
-    call ui_play_at
-.Lui_output_return:
-    add rsp, 40
-    ret
+    jmp ui_output_restart
 ENDFN ui_output
 
 # At a launch, with no playback thread: a chosen output becomes the one the

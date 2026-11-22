@@ -66,6 +66,8 @@ def main():
                         help='engine-probe checks default-device notifications during paused and active playback')
     parser.add_argument('--probe-exclusive', action='store_true',
                         help='engine-probe uses exclusive output with a 48000 Hz session')
+    parser.add_argument('--probe-ui-output', action='store_true',
+                        help='assemble ui-output-probe.obj for native hidden output-menu tests')
     parser.add_argument('--preview-tags', action='store_true', help='ui-preview.exe shows a tagged title')
     parser.add_argument('--preview-cover', action='store_true',
                         help='ui-preview.exe shows a tagged title with cover art (use --preview-codec 3)')
@@ -83,9 +85,13 @@ def main():
     windows = sorted((ROOT / 'src/win').glob('*.s'))
     tests = [ROOT / f'tests/{name}.s' for name in ('engine-probe', 'ui-preview', 'ui-list', 'ui-driver')] \
         if args.tests else []
+    if args.probe_ui_output:
+        tests.append(ROOT / 'tests/ui-output-probe.s')
 
     def assemble(path):
-        obj = obj_dir / (path.stem + '.obj')
+        # Keep the full-UI test copy out of obj/, whose decoder objects are
+        # also collected into codec-oracle libraries by existing suites.
+        obj = (out if path.stem == 'ui-output-probe' else obj_dir) / (path.stem + '.obj')
         defines = ['-defsym=WINDOWS=1']
         if path.stem == 'engine-probe' and args.probe_default_device:
             defines.append('-defsym=PROBE_DEFAULT_DEVICE=1')

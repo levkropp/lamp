@@ -1,0 +1,38 @@
+{
+  "result": "passed",
+  "checks": 8269,
+  "rapid_staged_changes": 1000,
+  "rate_choices": 15,
+  "hidden_window": true,
+  "desktop_input": false,
+  "system_default_changed": false,
+  "native_playback": true,
+  "unsupported_rate": 44100,
+  "scope": "Native hidden Win32 menu checks, staged settings and immutable worker ownership, pause-preserving output restarts, mode-specific error hints. Optional silent native shipping-window shared/exclusive/rate/device/default-notification lifecycle and unsupported-rate paused recovery; no visible test window, desktop input or system default changes.",
+  "platform": "Microsoft Windows NT 10.0.26300.0",
+  "recorded_utc": "2026-11-22T20:22:10.3135788Z",
+  "msvc": "14.44.35207",
+  "windows_sdk": "10.0.26100.0",
+  "fixture": {
+    "name": "silent-44100-5.1.flac",
+    "source_rate": 44100,
+    "source_layout": "5.1",
+    "duration_seconds": 30,
+    "sha256": "5126E3BC8C47DCE3418B48CA66796A8092E4CF78A13F2FC887CBB01D7495122B"
+  },
+  "sources": {
+    "src/win/ui.s": "92D09FA25326D7FBEED24DB736AC5717B65F38C252995419871A344B0A77FD7A",
+    "src/win/ui_output.inc": "21FC16E96D84DCF70EF9D1DFC494C53B5FA2C8D0B3618524BF51E980F69A39AD",
+    "src/win/ui_menu.inc": "77E53972C3725652D74B0464355DD4E04348B27F479DA455BED5E0C8F06B22EC",
+    "src/win/ui_queue.inc": "BD5E24889793AA5128F3A10BCC2020A0CA71A1F330D59BFF861BD7BFD608C6EC",
+    "src/win/ui_tracks.inc": "9CAB99D9152E91BF8340043678D77B6270EC3DD02D6F5B4BAD107B237CCCDD7F",
+    "src/win/ui_draw.inc": "F7D365DFE7AE8193EDFDBD85AA50BB33BD9A2526C0F2D87E0B0DB5E08EA02AE3",
+    "src/win/player.s": "21DEE2B1DCC182560F8BD5B12E66AA55026D8071ABBF7956959B7DE4B889C552",
+    "tests/ui-output-probe.s": "EFA7EE78B4048AA2B7970C202E6AD1E561619A97B44F07AF1AB747C85079A285",
+    "tests/verify-windows-ui-output.c": "AE4BC5A6C833FE4F1B79FFDE19868E521F371284D49328845D97E263376F94D7",
+    "tests/verify-windows-ui-output.ps1": "84C78937698E3AA1EF48310820E0960D7D62F0D3DB8E1A811D4B0F357380A7AC",
+    "tools/build-windows.py": "99C32ADEF3B9086A5E09D52D5462F4288590B3936506213E4108301897A29AAE"
+  },
+  "gui_sha256": "8E7E9F040360DD9050384B5C35E234182EB019297FE4E17B9C6DFEE4EA35F35A",
+  "oracle_sha256": "D83F1EC068F1A378C6CBDEB8F47478667C4A137714E4F0C40B7E8EBEDE142704"
+}

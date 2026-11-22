@@ -2312,7 +2312,7 @@ ENDFN close_pointer
 
 # -> EAX=the shared-mode mix rate of the endpoint playback opens
 # (device_chosen or the default), 0 when it cannot be read.
-LOCALFN audio_mix_rate
+FN audio_mix_rate
     push rbx
     push rsi
     push rdi

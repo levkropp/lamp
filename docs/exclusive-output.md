@@ -1,7 +1,8 @@
 # Windows exclusive audio output
 
 Current Windows source builds support explicit exclusive WASAPI output in the
-CLI. Shared mode remains the default and the Windows graphical player's mode.
+CLI and through the window's **Output mode** context submenu. Shared mode
+remains the default.
 This option is not in the older published v0.3.0 prerelease.
 
 ```powershell
@@ -114,7 +115,11 @@ absolute queue position including the initial seek).
 Pause, seek, queue navigation and default-output restarts reuse existing owner
 paths. A default-output restart keeps the session rate and exclusive request;
 a new endpoint that cannot accept them reports an error. This is not a seamless
-handoff. The graphical player has no exclusive-mode menu yet.
+handoff. The window's [mode/rate controls](devices.md#windows-output-mode-and-rate-controls)
+capture settings only after the previous worker joins. Its rate is resolved
+for each worker, with pause-preserving mode/rate/endpoint and default-output
+restarts. Unsupported exclusive output has a specific error hint and a new
+setting retries the same paused position.
 
 ## Native verification
 
@@ -169,5 +174,6 @@ load/glitches, long-run clocks, latency/CPU/wakeups and a wider hardware matrix
 remain unverified. Full-buffer mock PCM and silent native lifecycle checks do
 not prove audible hardware accuracy or low latency. Disabled-mode behavior is
 covered by setup error propagation rather than changing Windows settings.
-GUI controls, releasing ownership while paused/inactive and equivalent platform
-output choices remain separate work.
+The GUI has a separate [native hidden-window report](../reports/windows-ui-output-verification.json).
+Persisting output preferences, releasing ownership automatically while
+paused/inactive and equivalent platform output choices remain separate work.

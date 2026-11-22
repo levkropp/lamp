@@ -517,16 +517,25 @@ ENDFN ui_actual_position
 LOCALFN ui_play_at
     test ecx, ecx
     js .Lui_play_at_unknown
+    mov dword ptr [rip + pause_requested], 0
+    jmp ui_reopen_at
+.Lui_play_at_unknown:
+    ret
+ENDFN ui_play_at
+
+# Output/mode/rate changes and output-loss recovery retain pause.
+LOCALFN ui_reopen_at
+    test ecx, ecx
+    js .Lui_reopen_at_unknown
     mov dword ptr [rip + ui_chapter_pending], 0
     mov dword ptr [rip + ui_track_pending], -1
     mov dword ptr [rip + ui_track_error_index], -1
     mov [rip + ui_start_index], ecx
     mov [rip + ui_start_ms], rdx
-    mov dword ptr [rip + pause_requested], 0
     jmp ui_request
-.Lui_play_at_unknown:
+.Lui_reopen_at_unknown:
     ret
-ENDFN ui_play_at
+ENDFN ui_reopen_at
 
 # N: the file after the one heard (the first again with repeat).
 LOCALFN ui_next
@@ -716,6 +725,7 @@ LOCALFN ui_request
     call engine_stop
     jmp .Lui_request_done
 .Lui_launch:
+    mov dword ptr [rip + ui_output_error], 0
     call ui_resume_commit
     call ui_device_apply                  # an output chosen meanwhile
     cmp dword ptr [rip + ui_list_new], 0
@@ -815,6 +825,7 @@ ENDFN ui_time_frames
 
 LOCALFN ui_audio_thread
     sub rsp, 40
+    call ui_output_worker_apply
     lea rax, [rip + ui_track_for_file]
     mov [rip + queue_track_choice], rax
     lea rax, [rip + engine_stop_requested]

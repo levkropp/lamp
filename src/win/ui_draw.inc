@@ -565,9 +565,11 @@ FN ui_draw
     lea rcx, [rip + ui_drop]
     cmp dword ptr [rip + ui_state], 0
     je .Lui_draw_title
-    lea rcx, [rip + ui_error]
     cmp dword ptr [rip + ui_state], 3
-    je .Lui_draw_title
+    jne .Lui_draw_file_title
+    call ui_output_error_title
+    jmp .Lui_draw_title
+.Lui_draw_file_title:
     lea rcx, [rip + ui_shown_title]       # "Artist - Title" or its name
     cmp word ptr [rcx], 0
     jne .Lui_draw_title
@@ -589,7 +591,7 @@ FN ui_draw
     call SelectObject
     cmp dword ptr [rip + ui_state], 3
     jne .Lui_draw_center_hint
-    lea rcx, [rip + ui_error_detail]
+    call ui_output_error_detail
     mov edx, [rip + ui_height]
     shr edx, 1
     call ui_center_text

@@ -45,7 +45,7 @@ LOCALFN ui_worker_capture
     mov [rip + ui_worker_track], eax
     mov eax, [rip + ui_track_pending_choice]
     mov [rip + ui_worker_track_choice], eax
-    ret
+    jmp ui_output_capture
 ENDFN ui_worker_capture
 
 LOCALFN ui_tracks_reset

@@ -888,7 +888,7 @@ LOCALFN ui_window_proc
     test ecx, ecx
     js .Lui_done_state                  # no retained heard position: finish with the error
     mov rdx, [rip + engine_heard_ms]
-    call ui_play_at
+    call ui_reopen_at
     jmp .Lui_handled
 .Lui_done_repeat:
     # Repeat turned on after the queue read the last file: the list again.
@@ -913,6 +913,8 @@ LOCALFN ui_window_proc
     cmp qword ptr [rip + read_count], 0
     jne .Lui_done_position
 .Lui_done_error:
+    mov ecx, [rsp+112]
+    call ui_output_note_error
     mov dword ptr [rip + ui_state], 3
     jmp .Lui_done_repaint
 .Lui_done_position:
@@ -987,5 +989,6 @@ ENDFN ui_window_proc
 .include "ui_resume.inc"
 .include "ui_tracks.inc"
 .include "ui_modes.inc"
+.include "ui_output.inc"
 .include "ui_menu.inc"
 .include "ui_controls.inc"
