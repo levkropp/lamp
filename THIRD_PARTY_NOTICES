@@ -93,8 +93,13 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Speex packet/bit-access and spectral reconstruction references:
 Speex 1.2.1, https://downloads.xiph.org/releases/speex/speex-1.2.1.tar.gz
 SHA-256: 4b44d4f2b38a370a2d98a78329fefc56a0cf93d1c1be70029217baae6628feea
-Runtime bit access, header/packet inspection and spectral codebook decoding
-are original assembly following the BSD reference. The signed-byte spectral
+Runtime bit access, header/packet inspection, spectral codebook decoding,
+LSP interpolation/LPC reconstruction and stateful speech filters are original
+assembly following the BSD reference. LPC conversion retains lsp.c's original
+David Rowe authorship (created 24 February 1993) and Jean-Marc Valin's
+2002-2006 modifications. filters.c is Copyright (C) 2002-2006 Jean-Marc Valin;
+math_approx.h is Copyright (C) 2002 Jean-Marc Valin. These use the same
+Xiph-form BSD notice reproduced below. The signed-byte spectral
 codebooks are generated from libspeex/lsp_tables_nb.c and high_lsp_tables.c.
 The original C library is compiled only for tests, never linked into LAMP.
 The project COPYING notice follows; the separate author notice retained in

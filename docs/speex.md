@@ -2,13 +2,16 @@
 
 Speex playback is **not implemented yet**. The source now contains the first
 assembly decoder components, checked against the BSD Speex 1.2.1 reference:
-bounded bit access, identification headers, canonical packet inspection and
-the three spectral codebook reconstruction paths. The CLI and window still
+bounded bit access, identification headers, canonical packet inspection,
+the three spectral codebook reconstruction paths, LSP interpolation/LPC
+reconstruction, bandwidth expansion, IIR synthesis and high-pass filtering.
+The CLI and window still
 reject Speex files; no container mapping or audio format claim is added.
 
 The intended decoder covers narrowband, wideband and ultra-wideband, all
 their submodes, mono and in-band stereo, packet grouping, VBR/VAD/DTX and
-stateful recovery. It still needs LPC/pitch/innovation synthesis, enhancement,
+stateful recovery. It still needs pitch/innovation decoding, frame synthesis
+orchestration, comb enhancement,
 high-band folding and QMF, stereo reconstruction, container integration,
 granule/delay trimming, exact seeking and playback lifecycle verification.
 The eventual format gate is PCM and playback, not packet inspection alone.
@@ -26,6 +29,8 @@ Its extracted C files are test-only and never linked into the player.
 `src/speex_packet.s` follows the published format and bit-access contracts in
 `bits.c`, `speex_header.c`, `nb_celp.c`, `sb_celp.c`, `modes.c`, `modes_wb.c`
 and `speex_callbacks.c`. `src/speex_lsp.s` follows `quant_lsp.c`.
+`src/speex_filters.s` follows `lsp.c`, `math_approx.h` and `filters.c`,
+including David Rowe's original LPC reconstruction and Valin's modifications.
 `tests/generate-speex-tables.py` extracts exactly 2,944 signed-byte codebook
 coefficients from `lsp_tables_nb.c` and `high_lsp_tables.c`; `--check` verifies
 the tracked include. The project and separate codebook-author BSD notices are
@@ -81,6 +86,54 @@ LSP output cannot overlap the reader or its complete source buffer. All
 capacities are caller responsibilities; source bytes and fields are bounded
 before access, and failed parses do not write summaries.
 
+## LPC and stateful filter contracts
+
+`src/speex_filters.s` provides these additional caller-owned kernels. The
+floating-point contract is ordinary masked-exception SSE2 round-to-nearest
+arithmetic, retaining the reference's individual float rounding and absence
+of fused multiply-add. It does not change the caller's floating-point mode.
+
+- `spx_lsp_interpolate(old, current, output, order, subframe, total, margin)`
+  supports orders 8 and 10, 1–64 subframes, `subframe < total` and a finite
+  margin from 0 to 0.25. Finite input values with magnitude at most 16 cover
+  every supported codebook sum. The weighting, first/last endpoint clamps and
+  sequential interior margin adjustments follow the reference, including the
+  double-precision `pi - margin` comparison and its later float assignment.
+- `spx_lsp_to_lpc(lsp, output, order, capacity)` supports orders 8 and 10 and
+  finite angles between zero and float(pi). It uses Speex's published float
+  polynomial cosine approximation, its double-precision reflection above
+  pi/2, and the reference's paired P/Q impulse reconstruction. It needs no
+  libm calls. Output capacity must hold the selected order.
+- `spx_bw_lpc(input, output, order, gamma)` applies successive float powers of
+  finite gamma in [0,1] to 8 or 10 finite coefficients. Interpolation, LPC
+  conversion and bandwidth expansion read all input before committing output,
+  so their source/output ranges may overlap. Failed calls leave output intact.
+- `spx_iir_mem(input, denominator, output, samples, order, memory)` filters up
+  to 640 samples with order 8 or 10 and that many persistent memory floats.
+  It retains the float path's unsaturated samples and per-tap update order.
+- `spx_highpass(input, output, samples, filterId, memory)` supports the five
+  reference filters (IDs 0–4) and two persistent memory floats, also up to
+  640 samples. IDs outside 0–4 reject, unlike the reference helper's clamp
+  of positive larger IDs; codec callers use only defined IDs.
+
+The stateful filters accept exact input/output aliasing, reject other partial
+input/output overlaps, and require persistent state to be disjoint from input,
+output and coefficients. Output cannot overlap coefficients. All source,
+coefficient and state values must be finite; arithmetic producing nonfinite
+output or state fails too. The entire block and state commit together only
+after successful computation. A 2,720-byte local frame holds bounded scratch
+output and history without allocating a heap buffer or skipping a Windows
+stack guard page. Zero samples is a successful no-op for valid order/filter
+selection and does not inspect pointers. Invalid sizes, null pointers,
+arithmetic overflow, forbidden overlaps and nonfinite values fail without
+changing caller output or persistent memory.
+
+The spectral interpolator prepares each next subframe's LPC coefficients;
+the narrowband reference intentionally synthesizes with the previously active
+LPC before installing those new coefficients. Full decoder orchestration must
+preserve that ordering. The packet, pitch, innovation, comb and high-band
+paths still belong to the remaining implementation.
+
 ## Verification and remaining gate
 
 After a Windows test build in `bin/speex-check`:
@@ -127,4 +180,53 @@ Input ends and output ends are protected by inaccessible memory pages; leading
 output canaries are checked. These are component checks, not a claim of Speex
 PCM playback, seek correctness or packet-loss concealment. The changed
 modules translate and assemble for ARM64 macOS; native Mac execution remains
-unverified. Complete synthesis and file/player integration remain open.
+unverified. Complete frame synthesis and file/player integration remain open.
+
+### LPC and filter verification
+
+After building the corresponding assembly objects, run:
+
+```sh
+python3 tests/verify-speex-filters.py --bin build/speex-check
+```
+
+Use `python` and `--bin bin/speex-check` for native Windows. The verifier
+compiles the original pinned `lsp.c` and `filters.c` through two generated
+test-only wrappers. Only their exported definitions are renamed; the original
+source bytes stay untouched. Real codec callers reach wrappers that save
+inputs, execute the reference operation and independently run the assembly
+kernel, comparing every output and persistent-memory word. Internal calls
+inside those two included translation units are not intercepted. The encoder,
+pitch/innovation, comb, QMF and outer decoder remain the reference C code.
+This establishes connected component behavior, not a complete LAMP decoder.
+
+The [Linux filter report](../reports/speex-filter-linux-verification.json) and
+[native Windows filter report](../reports/speex-filter-windows-verification.json)
+record source, wrapper and executable hashes. Both pass:
+
+- 32,768 cases each for interpolation/margins, cosine/LPC reconstruction and
+  bandwidth expansion, including exact in-place operation, both orders,
+  interval endpoints, pi/2 and randomized spectra.
+- 19,456 IIR and 6,080 high-pass cases, with lengths from 1 through 640,
+  subframe boundaries, all five high-pass filters, persistent histories,
+  split-call equivalence, exact in-place processing and protected input/output
+  ends. Output and state canaries stay intact.
+- 128 finite-edge vectors for positive/negative zero, minimum and maximum
+  subnormals and minimum normal values. Negative-zero interpolation and
+  bandwidth factors retain their reference bit patterns.
+- 306 invalid-input cases: null/overflow pointers, sizes, unsupported
+  orders/IDs, subframe/margin bounds, nonfinite input/coefficients/history,
+  forbidden overlaps and late arithmetic overflow. Failed blocks leave
+  output and caller-owned history unchanged, even after earlier samples were
+  computed successfully in scratch storage.
+- 19,008 real reference encoder/decoder frames across all three bands,
+  qualities 0–10, mono/in-band stereo and CBR/VBR/VAD+DTX. The sequence includes
+  2,376 lost packets with recovery, 198 resets and enhancement toggles.
+  It mirrors 354,494 interpolation calls, 358,284 LPC conversions, 271,686
+  bandwidth expansions, 359,501 IIR calls and 34,358 high-pass calls, covering
+  23,954,320 filter samples. The combined suite compares 51,670,804 float
+  words bit for bit, including the evolving histories.
+
+The new filter module also translates and assembles for Apple Silicon; native
+Mac execution remains unverified. No file playback, seeking, container trimming
+or full pitch/innovation/comb/QMF implementation is established by these tests.

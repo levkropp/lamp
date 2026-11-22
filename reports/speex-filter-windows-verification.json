@@ -1,0 +1,43 @@
+{
+  "finite_edge_vectors": 128,
+  "result": "passed",
+  "checks": 66979109,
+  "compared_float_words": 51670804,
+  "interpolation_cases": 32768,
+  "lpc_cases": 32768,
+  "bandwidth_cases": 32768,
+  "iir_cases": 19456,
+  "highpass_cases": 6080,
+  "rejections": 306,
+  "reference_codec_frames": 19008,
+  "reference_losses": 2376,
+  "reference_resets": 198,
+  "mirrored_calls": {
+    "interpolation": 354494,
+    "lpc": 358284,
+    "bandwidth": 271686,
+    "iir": 359501,
+    "highpass": 34358,
+    "filter_samples": 23954320
+  },
+  "pcm_decoder_implemented": false,
+  "platform": "Windows-11-10.0.26300-SP0",
+  "recorded_utc": "2026-11-22T21:50:21.862780+00:00",
+  "scope": "Exact floating-point Speex interpolation/margins, approximate-cosine LSP-to-LPC, bandwidth expansion, stateful IIR and all five high-pass filters. Real NB/WB/UWB reference encoder/decoder calls, including DTX, PLC/recovery, enhancement toggles and resets, are mirrored through assembly and compared. Pitch/innovation/QMF/complete LAMP Speex playback remain unimplemented. Native Mac execution is unverified.",
+  "reference": "Speex 1.2.1 floating-point C, test-only interception of original unmodified source",
+  "archive_url": "https://downloads.xiph.org/releases/speex/speex-1.2.1.tar.gz",
+  "archive_sha256": "4b44d4f2b38a370a2d98a78329fefc56a0cf93d1c1be70029217baae6628feea",
+  "oracle_sha256": "7ff2944a983fd4490157eefadd381503a11623ecd69a19619e3482723914f57b",
+  "sources": {
+    "src/speex_filters.s": "6ce29bec1ab410adcf52e8c3f933897c44f6d00f0b2cff3a0e12268685097191",
+    "src/lamp.inc": "d79c75543ab0d78863010b32e46faf23fda5b9cb54ec624e9dce0acfcabf03e6",
+    "tests/speex-filter-test.h": "b380726a0db2ee8cf9dfcb15f62f4efd1ed9b70b86dea9c50a16e3c9ee998531",
+    "tests/speex-filter-oracle.c": "fae06fcd4c9628137e15e58a0df12b2d481f39c6333b662a536e1f77de57639f",
+    "tests/build-speex-reference.py": "d1bd105ba2b9ce038859d208d94e07ef0e1e50a0dc93b487b3dc61b99c76bf04",
+    "tests/verify-speex-filters.py": "0c6314b7657aefc3b4e1767aceb92ae6ab8e6e46fb19c486a6ba792dbf623f0a"
+  },
+  "reference_wrappers": {
+    "lsp": "df08d6b35caa72d0d4dc3e550d2db26ce81f2bc7aaf48a9add69df7c39d05f7a",
+    "filters": "a6ad252cef68336f874f5a60eca4d4df709161e610d24d9cb5b95672af241856"
+  }
+}
