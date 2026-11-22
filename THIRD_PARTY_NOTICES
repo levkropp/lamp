@@ -95,16 +95,18 @@ Speex 1.2.1, https://downloads.xiph.org/releases/speex/speex-1.2.1.tar.gz
 SHA-256: 4b44d4f2b38a370a2d98a78329fefc56a0cf93d1c1be70029217baae6628feea
 Runtime bit access, header/packet inspection, spectral codebook decoding,
 LSP interpolation/LPC reconstruction, stateful speech filters and pitch,
-  innovation, seeded-noise and connected narrowband frame reconstruction are original
+innovation, seeded-noise and connected NB/WB/UWB frame reconstruction are original
 assembly following the BSD reference. LPC conversion retains lsp.c's original
 David Rowe authorship (created 24 February 1993) and Jean-Marc Valin's
 2002-2006 modifications. filters.c is Copyright (C) 2002-2006 Jean-Marc Valin;
 ltp.c and cb_search.c are Copyright (C) 2002-2006 Jean-Marc Valin;
-  math_approx.h is Copyright (C) 2002 Jean-Marc Valin. nb_celp.c and modes.c
-  are Copyright (C) 2002-2006 Jean-Marc Valin. Narrowband synthesis, comb
-  enhancement, DTX and lost-frame/recovery orchestration follow those files
-  and filters.c. These use the Xiph-form BSD notice reproduced below.
-  The signed-byte spectral
+math_approx.h is Copyright (C) 2002 Jean-Marc Valin. nb_celp.c, sb_celp.c
+and modes.c are Copyright (C) 2002-2006 Jean-Marc Valin; modes_wb.c is
+Copyright (C) 2002-2007 Jean-Marc Valin. Frame synthesis, comb enhancement,
+high-band folding/innovation and gains, QMF reconstruction, DTX and
+lost-frame/recovery orchestration follow those files and filters.c. The
+64 float QMF coefficients and high-band gain entries derive from sb_celp.c.
+These use the Xiph-form BSD notice reproduced below. The signed-byte spectral
 codebooks are generated from libspeex/lsp_tables_nb.c and high_lsp_tables.c.
 Pitch/innovation books additionally come from gain_table.c, gain_table_lbr.c,
 exc_10_16_table.c, exc_20_32_table.c, exc_10_32_table.c, exc_5_64_table.c,

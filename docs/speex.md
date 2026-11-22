@@ -1,21 +1,21 @@
 # Speex decoder development
 
 Speex playback is **not implemented yet**. The source now contains assembly
-decoder components and a narrowband frame path, checked against the BSD
+decoder components and mono frame paths for all three bands, checked against the BSD
 Speex 1.2.1 reference:
 bounded bit access, identification headers, canonical packet inspection,
 the three spectral codebook reconstruction paths, LSP interpolation/LPC
 reconstruction, bandwidth expansion, IIR synthesis, high-pass filtering,
 pitch/gain reconstruction, split innovation and seeded noise, plus a connected
-mono narrowband frame decoder with comb enhancement, DTX, packet-loss
-concealment and recovery.
+mono narrowband/wideband/ultra-wideband frame decoding, comb enhancement,
+high-band folding/innovation and QMF synthesis, DTX, packet-loss concealment
+and recovery.
 The CLI and window still
 reject Speex files; no container mapping or audio format claim is added.
 
 The intended decoder covers narrowband, wideband and ultra-wideband, all
 their submodes, mono and in-band stereo, packet grouping, VBR/VAD/DTX and
-stateful recovery. It still needs high-band frame synthesis,
-folding and QMF, stereo reconstruction, container integration,
+stateful recovery. It still needs stereo reconstruction, container integration,
 granule/delay trimming, exact seeking and playback lifecycle verification.
 The eventual format gate is PCM and playback, not packet inspection alone.
 
@@ -42,6 +42,12 @@ stores separately rounded float global/voicing gains without a runtime libm
 dependency. The recovery exponential uses a bounded double Taylor series
 and squaring before its final float conversion; complete decoded PCM and
 history are compared with the reference's libm path.
+`src/speex_decoder.s` connects the NB, WB and UWB layers following `sb_celp.c`
+and `modes_wb.c`; `src/speex_qmf.s` follows the synthesis operation in
+`filters.c`. `tests/generate-speex-high-tables.py` verifies the release hash
+before extracting 64 float QMF coefficients and 16 high-band gain entries.
+It also generates the 32 mathematical folding-gain lookups. Every generated
+float is stored with an explicit bit pattern and LF line endings.
 `tests/generate-speex-tables.py` extracts exactly 2,944 signed-byte codebook
 coefficients from `lsp_tables_nb.c` and `high_lsp_tables.c`; `--check` verifies
 the tracked include. The project and separate codebook-author BSD notices are
@@ -146,8 +152,7 @@ changing caller output or persistent memory.
 The spectral interpolator prepares each next subframe's LPC coefficients;
 the narrowband reference intentionally synthesizes with the previously active
 LPC before installing those new coefficients. Full decoder orchestration must
-preserve that ordering. The narrowband frame decoder now does so; high-band
-synthesis remains pending.
+preserve that ordering. The connected frame decoders now do so in every band.
 
 ## Pitch and innovation contracts
 
@@ -430,6 +435,99 @@ contains 17,920 grouped packets; all nine narrowband modes are observed.
 Another 3,597 rejected/no-frame cases verify the failure and capacity rules.
 
 ARM64 macOS translation and assembly pass; native execution is unverified.
-Full wideband/ultra-wideband and stereo synthesis, container mapping,
-granule/delay trimming, seeking and actual player lifecycle checks remain
-necessary before advertising Speex file playback.
+The three-band API below now connects the higher layers. Stereo synthesis,
+container mapping, granule/delay trimming, seeking and actual player lifecycle
+checks remain necessary before advertising Speex file playback.
+
+## Wideband and ultra-wideband frame synthesis
+
+`spx_decoder_init(arena, bytes, mode)` initializes or fully resets a 65,536-byte
+opaque caller-owned decoder. Mode 0/1/2 chooses narrowband/wideband/
+ultra-wideband output and returns 160/320/640 samples per frame, or zero on
+invalid initialization. The first 16,384 bytes hold live decoder data;
+the rest is a complete shadow and bounded scratch. No heap, system calls,
+mutable globals, reference C or runtime libm are used. Frames retain the
+reference's signed-16-bit amplitude units; file normalization comes later.
+
+`spx_decoder_set_flags(arena, flags)` accepts 0–3: comb enhancement (bit 0)
+and high-pass output filtering (bit 1), default 3. Embedded-wideband high-pass
+coefficients are selected automatically for modes 1 and 2. Flags can change
+between frames without resetting history.
+
+`spx_decoder_frame(arena, bits, output, capacity)` returns one frame of
+160/320/640 floats, zero at a clean packet end, or -1 on failure. Capacity is
+in floats. A null reader means one lost or DTX frame. The opaque arena,
+output, reader and its complete source must be disjoint. Failed frames leave
+all live decoder data, audio output and the original reader position intact,
+including when the narrowband frame succeeds and a higher layer is truncated.
+Short input sets only the original reader's sticky error. Scratch may change.
+Clean packet ends may consume controls without producing audio. The caller
+still needs packet grouping and stream metadata; this is not a file reader.
+
+All five WB modes and both UWB modes are implemented. Active layers decode
+their 12-bit spectra, interpolate with the high-band margin, compute low/high
+filter response ratios, reconstruct folded or split-codebook excitation and
+gain, and synthesize using the previous subframe's excitation and LPCs.
+WB's double-innovation mode and UWB's sparse WB-innovation folding are
+included. Per-layer RMS, energy, seed, spectra, filter memory and synthesis
+history persist. Missing higher layers synthesize their null mode; coded
+DTX and lost packets follow the reference's distinct energy/filter behavior.
+Input bands may change while retaining the chosen output band.
+
+Every layer checks new numeric history before it commits, including final
+subframe excitation and energy that will not reach audio synthesis until the
+next call. Nonfinite old/new data, invalid modes and structural state reject.
+Old stored LSP magnitudes are limited to 16 as in the component contracts.
+
+### QMF contract
+
+`spx_qmf_init(arena, bytes)` initializes a 6,144-byte synthesis arena;
+`spx_qmf_synth(arena, low, high, output, samples, capacity)` returns 1/0.
+Samples must be 4–640 and divisible by four. Each input contains half that
+many floats. The fixed 64-tap filter preserves the reference's tap order,
+separate float operations, factor-of-two output normalization and odd-slot
+history updates. The first 512 bytes are live low/high histories, with even
+slots retained unchanged. All input/history values and computed output must
+be finite. Input/output ranges may overlap freely because both complete
+inputs are copied to scratch before output commits. The full arena must be
+disjoint from them. On failure, output and live history are unchanged.
+
+### Three-band verification
+
+After building the matching assembly objects, run:
+
+```sh
+python3 tests/verify-speex-wideband.py --bin build/speex-check
+python3 tests/generate-speex-high-tables.py --check
+```
+
+Use `python` and `--bin bin/speex-check` on native Windows. The
+[Linux three-band report](../reports/speex-wideband-linux-verification.json)
+and [native Windows report](../reports/speex-wideband-windows-verification.json)
+compare independent complete decoders, with unchanged Speex 1.2.1 compiled
+only into the test executable. Each platform passes 170,909,073 checks,
+including 161,024,095 bit-exact float comparisons:
+
+- 104,141 complete frames over all qualities, bands, submodes and four filter
+  flag combinations, with CBR/VBR/VAD+DTX, stereo-control packets, silence,
+  tones/noise and 1/2/5/64-frame grouping across 27,280 encoder packets.
+- 17,944 lost frames, 5,685 DTX frames and 2,180 recoveries, with loss bursts
+  through 16 frames. PCM and every reference-owned NB and SB numeric history
+  are checked, including all excitation buffers, LPC/filter/energy/RMS data,
+  both complete QMF histories and outer saved innovation.
+- 640 explicit folding/codebook gain cases and 6,912 compatibility frames
+  changing source bands and filter flags while keeping decoder histories,
+  including skipped higher layers between grouped lower-band output frames.
+- 6,400 QMF cases covering every permitted length, sequential histories,
+  arbitrary nonzero even/odd history slots, exact in-place and partially
+  overlapping source/output ranges.
+- 5,205 rejected/no-frame cases: every protected bit prefix of the four WB
+  coded modes and UWB folding, null/capacity/alias/overflow pointers, invalid
+  modes, corrupted structural or numeric history, and late synthesis overflow.
+  Exact lower-layer boundaries correctly succeed with missing upper layers;
+  truncated higher layers roll back the whole decoder and preserve output.
+
+The new frame and QMF modules translate and assemble for Apple Silicon;
+native Mac execution remains unverified. These tests establish mono frame
+decoding, not stereo reconstruction, file/container support, granule/delay
+trimming, seeking or player lifecycle behavior.
