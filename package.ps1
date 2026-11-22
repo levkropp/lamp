@@ -10,14 +10,13 @@ if($LASTEXITCODE) {throw 'Runtime verification failed before packaging'}
 $runtime=Get-Content -LiteralPath (Join-Path $binaryRoot 'runtime-verification.json') -Raw -Encoding UTF8 | ConvertFrom-Json
 if(@($runtime | Where-Object {$_.version -ne $version}).Count) {throw 'Binary version differs from VERSION; rebuild before packaging'}
 $zipPath = Join-Path $out "lamp-windows-x64-v$version.zip"
-$files = @('README.md','ROADMAP.md','VERSION','LICENSE','THIRD_PARTY_NOTICES','build.ps1','package.ps1','.gitignore','.gitattributes','bin\lamp.exe','bin\lamp-cli.exe')
-foreach ($directory in @('src','assets','scripts','docs','reports','site','.github')) {
+$files = @('README.md','ROADMAP.md','VERSION','LICENSE','THIRD_PARTY_NOTICES','build.ps1','build.sh','package.ps1','.gitignore','.gitattributes','bin\lamp.exe','bin\lamp-cli.exe')
+foreach ($directory in @('src','assets','scripts','tools','docs','reports','site','.github')) {
     $files += Get-ChildItem -LiteralPath (Join-Path $root $directory) -File -Recurse -Force | ForEach-Object { $_.FullName.Substring($root.Length+1) }
 }
 $files += Get-ChildItem -LiteralPath (Join-Path $root 'tests') -File | ForEach-Object { $_.FullName.Substring($root.Length+1) }
 $files += Get-ChildItem -LiteralPath (Join-Path $root 'tests\fixtures') -File | ForEach-Object { $_.FullName.Substring($root.Length+1) }
-$files += @('tests\reference\dr_mp3.h','tests\reference\stb_vorbis.c','tests\reference\opus-rfc6716.tar.gz','tests\reference\opus-rfc8251.patch','tests\reference\opus-rfc8251-LICENSE.txt','tests\reference\opus-rfc8251-vector-hashes.json','tests\reference\opus-1.5.2-packet.h')
-$files += @('tests\reference\libvorbis-1.3.7.tar.gz','tests\reference\libogg-1.3.6.tar.gz','tests\reference\vorbis-reference-hashes.json')
+$files += Get-ChildItem -LiteralPath (Join-Path $root 'tests\reference') -File | ForEach-Object { $_.FullName.Substring($root.Length+1) }
 $files += Get-ChildItem -LiteralPath $root -Filter '*.json' -File | Where-Object Name -ne 'manifest.json' | ForEach-Object Name
 $files = $files | Sort-Object -Unique
 $manifest = @()
