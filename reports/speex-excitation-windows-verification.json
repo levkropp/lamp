@@ -1,0 +1,46 @@
+{
+  "result": "passed",
+  "checks": 46812085,
+  "compared_float_words": 20078855,
+  "pitch_cases": 61536,
+  "forced_cases": 7056,
+  "innovation_cases": 2448,
+  "noise_samples": 9681344,
+  "noise_mantissas_exhausted": 8388608,
+  "rejections": 332,
+  "reference_codec_frames": 19008,
+  "reference_losses": 2376,
+  "pitch_kind_mask": 15,
+  "innovation_book_mask": 255,
+  "mirrored_calls": {
+    "pitch": 35660,
+    "forced_pitch": 18612,
+    "innovation": 68208,
+    "noise": 9020
+  },
+  "pcm_decoder_implemented": false,
+  "platform": "Windows-11-10.0.26300-SP0",
+  "recorded_utc": "2026-11-22T22:11:32.122856+00:00",
+  "scope": "Pitch/gain decode for three books and forced recursion; eight additive split innovation books; seeded float noise. Real reference NB/WB/UWB codec calls including loss/recovery are mirrored through assembly. Complete Speex frame synthesis, comb/QMF/stereo/container/seek/player integration are not established. Native Mac execution is unverified.",
+  "reference": "Speex 1.2.1 floating-point, test-only wrappers of unmodified C source",
+  "archive_url": "https://downloads.xiph.org/releases/speex/speex-1.2.1.tar.gz",
+  "archive_sha256": "4b44d4f2b38a370a2d98a78329fefc56a0cf93d1c1be70029217baae6628feea",
+  "oracle_sha256": "11fa819d96ce76b81e3087ab3f0b99deb02af5259212bbb33607ea43a55e05a9",
+  "sources": {
+    "src/speex_packet.s": "8ffa7d5f4b870b816dcaa92c552787b79ad0ea7cec637969adc5c062cc3a72aa",
+    "src/speex_packet.inc": "d222f4982343f5c4874ee37bb2cedf226d7e84ce9a06f11d7f4a78298eb94620",
+    "src/speex_excitation.s": "b1607cc525979bf9f347c8a32a7d3fd46634cf6d11f24ab2401b1a316b3e55b7",
+    "src/speex_excitation.inc": "91df5c8c4302be8053ddb25a30ef61940116ab25c7d7655c8e085097fc590a76",
+    "src/speex_excitation_tables.inc": "4b4f7b8fef8becf4149ac29131a70fe61c843a21fc35d53a67dd7df8405b7783",
+    "src/lamp.inc": "d79c75543ab0d78863010b32e46faf23fda5b9cb54ec624e9dce0acfcabf03e6",
+    "tests/speex-excitation-test.h": "eba3b646439c9658ed1763882c0bbd1da999c1ee12f647989f1dd1cf928f6771",
+    "tests/speex-excitation-oracle.c": "2b7780c28abaf3e334ffa932233b68bb17433748b117ad0353d5c29a877ca8cb",
+    "tests/build-speex-reference.py": "d1bd105ba2b9ce038859d208d94e07ef0e1e50a0dc93b487b3dc61b99c76bf04",
+    "tests/generate-speex-excitation-tables.py": "9b45ad5f59e50f776a11086b903f186de4e1e81c8806b28f0677d027e0f2fc4f",
+    "tests/verify-speex-excitation.py": "c01adb6a15e8bf291e5fa257dafa8c7859c4e2cdbf65fa3cf7fcabc5eb4ac463"
+  },
+  "reference_wrappers": {
+    "ltp": "4f272bb5423e73867d9e0afa0a1cbbf49b4a57f0130cb65c73507ff42b153543",
+    "cb_search": "82348e83cd2e144179b1ce9e9c578017249d5831baa25f390b52393b53ea20d1"
+  }
+}

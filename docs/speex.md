@@ -4,14 +4,15 @@ Speex playback is **not implemented yet**. The source now contains the first
 assembly decoder components, checked against the BSD Speex 1.2.1 reference:
 bounded bit access, identification headers, canonical packet inspection,
 the three spectral codebook reconstruction paths, LSP interpolation/LPC
-reconstruction, bandwidth expansion, IIR synthesis and high-pass filtering.
+reconstruction, bandwidth expansion, IIR synthesis, high-pass filtering,
+pitch/gain reconstruction, split innovation and seeded noise.
 The CLI and window still
 reject Speex files; no container mapping or audio format claim is added.
 
 The intended decoder covers narrowband, wideband and ultra-wideband, all
 their submodes, mono and in-band stereo, packet grouping, VBR/VAD/DTX and
-stateful recovery. It still needs pitch/innovation decoding, frame synthesis
-orchestration, comb enhancement,
+stateful recovery. It still needs frame parameter/gain orchestration,
+complete frame synthesis, comb enhancement,
 high-band folding and QMF, stereo reconstruction, container integration,
 granule/delay trimming, exact seeking and playback lifecycle verification.
 The eventual format gate is PCM and playback, not packet inspection alone.
@@ -31,10 +32,16 @@ Its extracted C files are test-only and never linked into the player.
 and `speex_callbacks.c`. `src/speex_lsp.s` follows `quant_lsp.c`.
 `src/speex_filters.s` follows `lsp.c`, `math_approx.h` and `filters.c`,
 including David Rowe's original LPC reconstruction and Valin's modifications.
+`src/speex_excitation.s` follows `ltp.c`, `cb_search.c` and the reference noise
+generator in `math_approx.h`.
 `tests/generate-speex-tables.py` extracts exactly 2,944 signed-byte codebook
 coefficients from `lsp_tables_nb.c` and `high_lsp_tables.c`; `--check` verifies
 the tracked include. The project and separate codebook-author BSD notices are
 retained in `THIRD_PARTY_NOTICES` and included in source/binary packages.
+`tests/generate-speex-excitation-tables.py` similarly extracts 5,728 signed
+bytes for the two pitch gain books and eight innovation books, retaining
+both the original Xiph-form and separate author-form notices. Both table
+generators support `--check` and write identical LF output on every host.
 
 ## Assembly contracts
 
@@ -131,8 +138,68 @@ changing caller output or persistent memory.
 The spectral interpolator prepares each next subframe's LPC coefficients;
 the narrowband reference intentionally synthesizes with the previously active
 LPC before installing those new coefficients. Full decoder orchestration must
-preserve that ordering. The packet, pitch, innovation, comb and high-band
-paths still belong to the remaining implementation.
+preserve that ordering. Packet/frame orchestration, comb and high-band
+paths still belong to the remaining
+implementation.
+
+## Pitch and innovation contracts
+
+`src/speex_excitation.s` uses the shared 24-byte bit reader and caller-owned
+buffers. It has no mutable global decoder state, heap or operating-system
+calls. Its public entry points are:
+
+- `spx_pitch_decode(bits, request)` accepts the 80-byte request/result layout
+  in `src/speex_excitation.inc`. It supports the full narrowband gain/pitch
+  books (7/7 bits), low-rate books (5/7), very-low-rate fixed delay (5/0), and
+  forced pitch. The request supplies the current excitation pointer, separate
+  output, available negative-index history (1–512 floats), 1–80 output samples,
+  start/end delays in 1–144, kind, lost-frame count, subframe offset,
+  last pitch gain, forced-pitch coefficient and output capacity.
+  Success returns one and writes decoded pitch, three gains, their reference
+  one-tap-equivalent sum and a zero reserved word. Three-tap decoding reads
+  only preceding history and leaves the excitation buffer unchanged. Forced
+  pitch recursively reconstructs current excitation and commits it together
+  with the separate output. A three-tap request needs at least `pitch+1`
+  history floats; forced pitch needs `pitch`. The full reference bit-consumption
+  order, tap accumulation order and lost-frame gain limiting are retained.
+  The decoded delay must fit the declared end; unsupported metadata rejects.
+- `spx_innovation_decode(bits, excitation, book, capacity)` adds one of eight
+  split-vector codebooks to exactly 40 finite excitation floats, returning
+  40 on success or zero. Capacity must hold 40 floats. Indices and optional
+  signs are read before any output commits; addition retains the reference's
+  double scale and final float rounding. The book IDs below describe every
+  split innovation configuration used by the supported Speex modes.
+- `spx_noise_decode(output, samples, seed, deviation)` overwrites up to 640
+  samples and advances a caller-owned 32-bit seed, returning one or zero.
+  It preserves the reference LCG's unsigned wrap, low-23-bit mantissa,
+  centering and double `3.4642 * deviation * centered` calculation before
+  each float conversion. Deviation is finite and nonnegative, including
+  signed zero; output and seed must be disjoint. Zero samples succeeds without
+  inspecting pointers. Nonfinite arithmetic rejects the whole block.
+
+| Innovation book ID | Reference table | Subvector width × count | Index bits | Sign bit |
+| --- | --- | --- | --- | --- |
+| 0 | `exc_10_16_table` | 10 × 4 | 4 | No |
+| 1 | `exc_20_32_table` | 20 × 2 | 5 | No |
+| 2 | `exc_10_32_table` | 10 × 4 | 5 | No |
+| 3 | `exc_5_64_table` | 5 × 8 | 6 | No |
+| 4 | `exc_8_128_table` | 8 × 5 | 7 | No |
+| 5 | `exc_5_256_table` | 5 × 8 | 8 | No |
+| 6 | `hexc_10_32_table` | 10 × 4 | 5 | No |
+| 7 | `hexc_table` | 8 × 5 | 7 | Yes |
+
+Pitch requests, bit-reader state, the reader's complete source byte range,
+excitation/history range and separate output must be pairwise disjoint.
+The current excitation range must be writable for forced pitch; three-tap
+decoding does not access current samples. Innovation excitation cannot overlap
+the bit reader or its source. Null pointers, address overflow, insufficient
+capacities, unsupported metadata, forbidden aliases and nonfinite referenced
+history/additive excitation fail without committing output or results.
+Bit position commits only after successful reconstruction. With otherwise
+valid arguments, short coded input sets the original reader's sticky error
+without advancing it. Late numeric failure also preserves the request result,
+current excitation, output and seed. Scratch remains bounded: 576 bytes for
+pitch, 384 for innovation and 2,640 for noise, before saved registers.
 
 ## Verification and remaining gate
 
@@ -229,4 +296,56 @@ record source, wrapper and executable hashes. Both pass:
 
 The new filter module also translates and assembles for Apple Silicon; native
 Mac execution remains unverified. No file playback, seeking, container trimming
-or full pitch/innovation/comb/QMF implementation is established by these tests.
+or full frame/comb/QMF implementation is established by these tests.
+
+### Pitch, innovation and noise verification
+
+After building the assembly objects, run:
+
+```sh
+python3 tests/verify-speex-excitation.py --bin build/speex-check
+python3 tests/generate-speex-excitation-tables.py --check
+```
+
+Use `python` and `--bin bin/speex-check` on native Windows. The verifier
+includes the original pinned `ltp.c` and `cb_search.c` in test-only wrappers,
+renaming their four decoder entry points and mirroring real codec calls into
+the assembly kernels. The surrounding packet parser, spectral reconstruction,
+comb, synthesis, QMF and stereo paths in this verifier remain reference C.
+This is connected excitation verification, not full LAMP Speex playback.
+
+Both the [Linux excitation report](../reports/speex-excitation-linux-verification.json)
+and [native Windows excitation report](../reports/speex-excitation-windows-verification.json)
+record source, oracle and wrapper hashes and pass:
+
+- 61,536 three-tap cases: every pitch/gain index pair for all three layouts,
+  with loss-free, short-loss and long-loss gain limiting, varied subframe
+  offsets and lengths 1/2/17/39/40/41/80. Guarded history starts/ends and
+  output ends check negative-index access and output bounds. Output samples,
+  pitch, all gains, the gain sum and unchanged source history match reference.
+- 7,056 forced-pitch cases: all delays 1–144, seven coefficients including
+  signed zero and clamp cases, every tested length, recursive current-history
+  updates and exact final state.
+- 2,448 split-innovation cases, covering every codebook index at each relevant
+  subvector position, both high-band signs and zero/negative-zero/nonzero
+  additive excitation. Coded-bit positions and output floats match exactly.
+- 9,681,344 seeded noise samples across arbitrary seeds and deviations. One
+  complete 2²³-step mantissa cycle is checked with a visited-value bitset:
+  all 8,388,608 mantissas occur once, with exact output floats and final seed.
+  Partial output lengths leave the unused destination tail unchanged.
+- 332 malformed/invalid cases, including every short coded-bit prefix,
+  capacities, delay/history bounds, ownership aliases, malformed reader
+  position, nonfinite referenced history or excitation, invalid gain metadata,
+  and late pitch/noise overflow. Failed calls preserve results, samples,
+  history, seed and bit position; short valid-input reads set only sticky error.
+- 19,008 real NB/WB/UWB reference codec frames at all qualities with
+  mono/in-band stereo and CBR/VBR/VAD+DTX, including 2,376 lost frames with
+  recovery and decoder resets. The wrappers compare 35,660 three-tap,
+  18,612 forced-pitch, 68,208 innovation and 9,020 noise calls. All four pitch
+  kinds and all eight innovation books are observed. The combined suite
+  compares 20,078,855 float words bit for bit.
+
+The module also translates and assembles for Apple Silicon; native Mac
+execution remains unverified. Full frame parameter/global-gain orchestration,
+comb/QMF/stereo, loss-state synthesis, containers, trimming, exact seeking and
+player lifecycle checks still remain before Speex playback can be claimed.
