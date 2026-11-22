@@ -47,6 +47,25 @@ LAMP never reconfigures an output. Its stream is float32 stereo at the session r
 
 Seeking in a resampled file is exact. The decoder seeks a filter half-width before the target's input span, and the resampler restarts there, so the output from the target on equals continuous decoding.
 
+## Following the Windows default output
+
+Windows console and graphical playback now subscribe to `IMMNotificationClient` when using **Default output**. A change to the default render endpoint for the console role (the role used to open WASAPI) wakes the playback owner, which reopens the queue in the heard file at its recorded millisecond position. Paused playback stays paused; active playback resumes after prebuffering. Notifications received during startup are checked before starting the client. This is a restart, not a seamless handoff or a latency guarantee.
+
+An explicitly selected endpoint remains pinned. Capture-device changes, other endpoint roles and property/state notifications do not cause a default-output restart. If a selected endpoint disappears and the existing recovery path falls back to the default, subsequent default changes are followed. The session rate is retained across automatic restarts; `--rate device` chooses the initial output's rate, and Windows converts when a later output has a different mix rate. Linux/Mac following behavior remains separate platform work.
+
+The original assembly callback in `src/win/output_notifications.s` only sets a coalescing flag and signals the audio event. It does not allocate, wait, decode or call COM. The playback owner consumes the flag, preserving an already pending user command. During cleanup it detaches the event, unregisters the static callback and drains in-flight signalers before the event can close. This avoids signaling a stale or recycled handle. Registration failure leaves the existing invalidated-endpoint recovery available.
+
+### Native notification checks
+
+```powershell
+python tools/build-windows.py --out bin/default-check --tests --probe-default-device
+.\tests\verify-windows-notifications.ps1 -OutputDirectory .\bin\default-check -Playback
+```
+
+Normal builds require LLVM/Python. The optional oracle also needs Visual Studio x64 C++ Build Tools, a Windows SDK and FFmpeg; playback checks need a working default endpoint. The [native report](../reports/windows-notifications-verification.json) passes 6,102 callback/ownership checks, including 2,000 lifecycles, 1,000 concurrent teardowns, callbacks during unregister, registration replacement/failure and 32 registrations with Windows' real enumerator. Mock notifications exercise role filtering, explicit selection, coalescing and late callbacks without changing the system output.
+
+Six native WASAPI scenarios add silent WAV, FLAC, MP3, Vorbis, Opus and AIFF playback. Each injects the callback into its own process during paused and active playback, requires the restart command and exact captured millisecond position, and reopens through the same engine entry point while checking pause retention or renewed progress. A pending user seek command and its paired file/time snapshot must survive a notification unchanged. Existing pause/resume, stop/reopen, indexed/paused seek and cancelled-open checks also run. This verifies the callback-to-restart path; moving between two physical devices, loopback PCM accuracy across such a move, actual handoff latency and default changes in dense queues remain unverified. No system output selection or desktop input is changed by these tests.
+
 ## Losing the output
 
 LAMP reopens the output when it fails during console playback:

@@ -4,6 +4,7 @@ Current 0.4.0-dev reports cover native Apple Silicon verification and the Window
 
 | Report | Recorded coverage |
 | --- | --- |
+| [windows-notifications-verification.json](windows-notifications-verification.json) | 6,102 native callback/ownership checks, 2,000 lifecycles, 1,000 concurrent teardowns, role/pinning/coalescing/failure/late-callback cases and 32 real MMDevice registrations; six silent native WASAPI paused/active callback-to-restart scenarios; no system default changes or physical-device handoff claim |
 | [windows-accessibility-verification.json](windows-accessibility-verification.json) | 452 native hidden-trackbar checks: actual MSAA names, Unicode replacement/removal, values, 64 STA/MTA lifecycles and balanced COM initialization; no desktop input or full screen-reader session; repeated-clear platform HRESULTs retained |
 | [windows-crossbuild-verification.json](windows-crossbuild-verification.json) | 60 native Windows versus WSL Linux PCM comparisons across codecs/containers, including 34 tiny Wave64 alignment regressions checked independently against FFmpeg; eight exact Wave64 seeks and rejection of incomplete RIFF and unaligned partial Wave64 on both targets; offline decoding only |
 | [macos-verification.json](macos-verification.json) | Native ARM64 runtime/system imports, 80 PCM files, 375 indexed seeks, 192 mutations, Unicode/protected exports, all 35 Opus oracles, full native layout suites and real Core Audio/terminal/AppKit checks |

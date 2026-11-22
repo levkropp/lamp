@@ -848,6 +848,10 @@ start_playback:
     mov qword ptr [rip + device_chosen], 0   # gone: the default from now on
     mov rcx, [rip + enum_obj]
 .Laudio_default_device:
+    mov rcx, [rip + enum_obj]
+    mov rdx, [rip + audio_event]
+    call output_notifications_start
+    mov rcx, [rip + enum_obj]
     xor edx, edx
     xor r8d, r8d
     lea r9, [rip + device_obj]
@@ -997,6 +1001,9 @@ start_playback:
     mov dword ptr [rip + was_paused], 1
     jmp .Lpause_wait
 .Linitial_audio_start:
+    call output_notifications_take
+    test eax, eax
+    jnz .Laudio_default_changed
     mov rcx, [rip + client_obj]
     mov rax, [rcx]
     call qword ptr [rax + 80]
@@ -1012,6 +1019,9 @@ start_playback:
     je .Lplayback_stopped
     cmp eax, 1
     jne .Lbad_audio_timeout
+    call output_notifications_take
+    test eax, eax
+    jnz .Laudio_default_changed
     cmp dword ptr [rip + pause_requested], 0
     je .Lresume_check
     cmp dword ptr [rip + was_paused], 0
@@ -1033,6 +1043,9 @@ start_playback:
     jz .Lplayback_stopped
     jmp .Lresume_check
 .Lresume_check:
+    call output_notifications_take
+    test eax, eax
+    jnz .Laudio_default_changed
     cmp dword ptr [rip + pause_requested], 0
     jne .Lpause_wait
     cmp dword ptr [rip + was_paused], 0
@@ -1089,6 +1102,15 @@ start_playback:
     call release_com
     mov rcx, [rip + enum_obj]
     jmp .Laudio_default_device
+.Laudio_default_changed:
+    xor eax, eax
+    mov edx, 5
+    lock cmpxchg [rip + engine_command], edx
+    jne .Lplayback_stopped             # do not overwrite a user's pending command
+    call console_note_heard
+    cmp dword ptr [rip + engine_heard_index], 0
+    js .Lbad_audio_report              # cannot recover without a retained heard file
+    jmp .Lplayback_stopped
 .Lbad_audio_timeout:
     mov eax, 0x800705b4
 .Lbad_audio:
@@ -1196,6 +1218,7 @@ bad_input:
     lea rcx, [rip + usage]
     call print_text
 cleanup:
+    call output_notifications_stop
     call decoder_close
     cmp dword ptr [rip + console_changed], 0
     je .Lcleanup_console
@@ -1642,6 +1665,7 @@ ENDFN console_seek
 # the engine for start_playback -> EAX=1 to play again, 0 to finish.
 LOCALFN console_restart
     sub rsp, 40
+    call output_notifications_stop
     lea rcx, [rip + render_obj]
     call release_com
     lea rcx, [rip + client_obj]

@@ -80,6 +80,8 @@ Passed in 0.4.0-dev source: 34 updated-reference suites, 51 independent modern-l
 
 ## 2 — Reliable daily audio use
 
+Windows default-output progress: a nonblocking `IMMNotificationClient` now wakes the playback owner when its default render/console endpoint changes, reusing heard-file/millisecond recovery while preserving pause and explicit selections. Native tests pass 6,102 callback/ownership checks, including concurrent teardown and 32 real registrations, plus six silent WASAPI paused/active restart scenarios across the audio families. [Notification scope](docs/devices.md#following-the-windows-default-output) distinguishes synthetic callbacks from unverified physical handoffs, latency, dense queues and Linux/Mac parity. Exclusive mode and native surround remain open.
+
 Native Windows accessibility progress: playback-position and volume trackbars now receive explicit MSAA names through Windows annotation services. A native inspection exposed unnamed sliders despite their window text. Hidden-control tests pass 452 checks for names, Unicode replacement, values, cleanup and COM apartment balance; [scope and remaining interactive checks](docs/accessibility.md) stay explicit. Full native screen-reader and mixed-monitor validation remain open.
 
 - [ ] Indexed seeking for existing formats; quick reopen/seek without blocking the UI.

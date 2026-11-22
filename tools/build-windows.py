@@ -62,6 +62,8 @@ def main():
     parser.add_argument('--tests', action='store_true',
                         help='also build engine-probe.exe, ui-preview.exe, ui-list.exe and ui-driver.exe')
     parser.add_argument('--preview-codec', type=int, default=None, help='codec kind shown by ui-preview.exe')
+    parser.add_argument('--probe-default-device', action='store_true',
+                        help='engine-probe checks default-device notifications during paused and active playback')
     parser.add_argument('--preview-tags', action='store_true', help='ui-preview.exe shows a tagged title')
     parser.add_argument('--preview-cover', action='store_true',
                         help='ui-preview.exe shows a tagged title with cover art (use --preview-codec 3)')
@@ -83,6 +85,8 @@ def main():
     def assemble(path):
         obj = obj_dir / (path.stem + '.obj')
         defines = ['-defsym=WINDOWS=1']
+        if path.stem == 'engine-probe' and args.probe_default_device:
+            defines.append('-defsym=PROBE_DEFAULT_DEVICE=1')
         if path.stem == 'ui-preview' and args.preview_codec is not None:
             defines.append(f'-defsym=PREVIEW_CODEC={args.preview_codec}')
         if path.stem == 'ui-preview' and args.preview_tags:
@@ -105,7 +109,8 @@ def main():
         run([dlltool, '-m', 'i386:x86-64', '-d', definition, '-l', lib])
         libraries.append(lib)
 
-    common = [objects[p] for p in shared] + [objects[ROOT / 'src/win/platform.s'], objects[ROOT / 'src/win/player.s']]
+    common = [objects[p] for p in shared] + [objects[ROOT / f'src/win/{name}.s']
+                                          for name in ('platform', 'player', 'output_notifications')]
 
     def executable(name, entry, subsystem, objs, res=None):
         command = [link, '/nologo', '/nodefaultlib', f'/entry:{entry}', f'/subsystem:{subsystem}',

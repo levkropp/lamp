@@ -11,8 +11,14 @@ probe_expected: .quad 0
 probe_result: .long 0
 probe_start_paused: .long 0
 probe_written: .long 0
+probe_default_restart: .long 0
+probe_restart_ms: .quad 0
 probe_pass: .ascii "Passed: playback, pause, resume, stop, reopen, seek, paused seek and cancelled open."
 .byte 13, 10
+.ifdef PROBE_DEFAULT_DEVICE
+    .ascii "Default-device callback: paused and active restart passed; pending command preserved."
+    .byte 13, 10
+.endif
 .equ probe_pass_length, . - probe_pass
 .text
 FN probe_start
@@ -46,6 +52,11 @@ FN probe_start
     mov rax, [rip + engine_position]
     cmp rax, [rip + probe_pause_position]
     jne .Lprobe_bad
+    .ifdef PROBE_DEFAULT_DEVICE
+    call probe_default_change
+    test eax, eax
+    jz .Lprobe_bad
+    .endif
     call engine_pause
     mov rax, [rip + engine_position]
     mov edx, [rip + output_rate]
@@ -54,6 +65,11 @@ FN probe_start
     call probe_wait_position
     test eax, eax
     jz .Lprobe_bad
+    .ifdef PROBE_DEFAULT_DEVICE
+    call probe_default_active
+    test eax, eax
+    jz .Lprobe_bad
+    .endif
     call engine_stop
     call probe_join
     test eax, eax
@@ -129,12 +145,163 @@ FN probe_start
 ENDFN probe_start
 LOCALFN probe_worker
     sub rsp, 40
+    xor eax, eax
+    xchg [rip + probe_default_restart], eax
+    test eax, eax
+    jz .Lprobe_normal_worker
+    lea rcx, [rip + probe_path]
+    mov edx, 1
+    xor r8d, r8d
+    mov r9, [rip + probe_restart_ms]
+    call engine_play_list
+    jmp .Lprobe_worker_done
+.Lprobe_normal_worker:
     mov rcx, [rip + probe_path]
     call engine_play
+.Lprobe_worker_done:
     mov [rip + probe_result], eax
     add rsp, 40
     ret
 ENDFN probe_worker
+.ifdef PROBE_DEFAULT_DEVICE
+LOCALFN probe_default_active
+    sub rsp, 40
+    lea rcx, [rip + output_notification_client]
+    xor edx, edx
+    xor r8d, r8d
+    xor r9d, r9d
+    mov rax, [rcx]
+    call qword ptr [rax + 48]
+    call probe_join
+    test eax, eax
+    jz .Lprobe_active_bad
+    cmp dword ptr [rip + engine_command], 5
+    jne .Lprobe_active_bad
+    cmp dword ptr [rip + pause_requested], 0
+    jne .Lprobe_active_bad
+    cmp dword ptr [rip + engine_heard_index], 0
+    jne .Lprobe_active_bad
+    mov rax, [rip + engine_position]
+    imul rax, 1000
+    xor edx, edx
+    mov ecx, [rip + output_rate]
+    div rcx
+    cmp rax, [rip + engine_heard_ms]
+    jne .Lprobe_active_bad
+    mov [rip + probe_restart_ms], rax
+    mov dword ptr [rip + probe_default_restart], 1
+    mov dword ptr [rip + probe_start_paused], 0
+    imul rax, rcx
+    xor edx, edx
+    mov ecx, 1000
+    div rcx
+    mov edx, [rip + output_rate]
+    add rax, rdx
+    mov [rip + probe_expected], rax
+    call probe_launch
+    call probe_wait_position
+    test eax, eax
+    jz .Lprobe_active_bad
+    call engine_pause
+    mov rcx, [rip + probe_thread]
+    mov edx, 500
+    call WaitForSingleObject
+    cmp eax, 0x102
+    jne .Lprobe_active_bad
+    # A completed user seek command wins over the next notification. Its
+    # paired file/time snapshot must survive without being overwritten.
+    mov dword ptr [rip + engine_heard_index], 0
+    mov qword ptr [rip + engine_heard_ms], 271
+    mov dword ptr [rip + engine_command], 3
+    lea rcx, [rip + output_notification_client]
+    xor edx, edx
+    xor r8d, r8d
+    xor r9d, r9d
+    mov rax, [rcx]
+    call qword ptr [rax + 48]
+    call probe_join
+    test eax, eax
+    jz .Lprobe_active_bad
+    cmp dword ptr [rip + engine_command], 3
+    jne .Lprobe_active_bad
+    cmp dword ptr [rip + engine_heard_index], 0
+    jne .Lprobe_active_bad
+    cmp qword ptr [rip + engine_heard_ms], 271
+    jne .Lprobe_active_bad
+    mov qword ptr [rip + probe_restart_ms], 271
+    mov dword ptr [rip + probe_default_restart], 1
+    mov dword ptr [rip + probe_start_paused], 1
+    mov eax, [rip + output_rate]
+    imul rax, 271
+    xor edx, edx
+    mov ecx, 1000
+    div rcx
+    mov [rip + probe_expected], rax
+    call probe_launch
+    call probe_wait_position
+    jmp .Lprobe_active_return
+.Lprobe_active_bad:
+    xor eax, eax
+.Lprobe_active_return:
+    add rsp, 40
+    ret
+ENDFN probe_default_active
+LOCALFN probe_default_change
+    sub rsp, 40
+    lea rcx, [rip + output_notification_client]
+    xor edx, edx
+    xor r8d, r8d
+    xor r9d, r9d
+    mov rax, [rcx]
+    call qword ptr [rax + 48]           # OnDefaultDeviceChanged, no system change
+    call probe_join
+    test eax, eax
+    jz .Lprobe_default_bad
+    cmp dword ptr [rip + engine_command], 5
+    jne .Lprobe_default_bad
+    cmp dword ptr [rip + pause_requested], 1
+    jne .Lprobe_default_bad
+    cmp dword ptr [rip + engine_heard_index], 0
+    jne .Lprobe_default_bad
+    mov rax, [rip + probe_pause_position]
+    imul rax, 1000
+    xor edx, edx
+    mov ecx, [rip + output_rate]
+    div rcx
+    cmp rax, [rip + engine_heard_ms]
+    jne .Lprobe_default_bad
+    mov [rip + probe_restart_ms], rax
+    mov dword ptr [rip + probe_default_restart], 1
+    mov dword ptr [rip + probe_start_paused], 1
+    imul rax, rcx
+    xor edx, edx
+    mov ecx, 1000
+    div rcx
+    mov [rip + probe_expected], rax
+    mov [rip + probe_pause_position], rax
+    call probe_launch
+    call probe_wait_position
+    test eax, eax
+    jz .Lprobe_default_bad
+    mov rcx, [rip + probe_thread]
+    mov edx, 500
+    call WaitForSingleObject
+    cmp eax, 0x102
+    jne .Lprobe_default_bad
+    mov rax, [rip + probe_pause_position]
+    cmp rax, [rip + engine_position]
+    jne .Lprobe_default_bad
+    cmp dword ptr [rip + pause_requested], 1
+    jne .Lprobe_default_bad
+    mov eax, 1
+    jmp .Lprobe_default_return
+.Lprobe_default_bad:
+    xor eax, eax
+.Lprobe_default_return:
+    add rsp, 40
+    ret
+ENDFN probe_default_change
+.endif
 LOCALFN probe_launch
     sub rsp, 56
     mov dword ptr [rip + engine_stop_requested], 0
