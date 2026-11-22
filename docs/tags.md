@@ -12,7 +12,7 @@ LAMP 0.4.0-dev reads the opened file's tags with a handwritten reader (`src/tags
 | AU | The annotation's `Title=`, `Artist=`, `Album=`, `Track=` and `Genre=` lines (the keys FFmpeg reads) |
 | CAF | The `info` chunk's key/value strings, with Apple's keys (`year`, `track number`, `comments`) |
 | FLAC | The first `VORBIS_COMMENT` block |
-| Ogg Vorbis, Opus, FLAC | The comment packet of the first stream LAMP decodes, gathered across pages |
+| Ogg Vorbis, Opus, Speex, FLAC | The comment packet of the selected stream LAMP decodes, gathered across pages; Speex uses its raw Vorbis-style comment body |
 | MP4/M4A/MOV | `moov/udta/meta/ilst` and `moov/meta/ilst` items (`©nam`, `©ART`, `©alb`, `aART`, `©day`, `trkn`, `disk`, `©gen`, `gnre`, `©cmt`, `©wrt`) and QuickTime `udta` text atoms (`©nam` and so on with a length and language code) |
 | Matroska/WebM | The Segment Info title and SimpleTags of Tags without a track, edition, chapter or attachment target (a TagLanguage other than `und` is skipped) |
 

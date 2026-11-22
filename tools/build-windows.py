@@ -66,6 +66,8 @@ def main():
                         help='engine-probe checks default-device notifications during paused and active playback')
     parser.add_argument('--probe-exclusive', action='store_true',
                         help='engine-probe uses exclusive output with a 48000 Hz session')
+    parser.add_argument('--probe-silent', action='store_true',
+                        help='mute engine-probe output while exercising the real audio client')
     parser.add_argument('--probe-ui-output', action='store_true',
                         help='assemble ui-output-probe.obj for native hidden output-menu tests')
     parser.add_argument('--preview-tags', action='store_true', help='ui-preview.exe shows a tagged title')
@@ -97,6 +99,8 @@ def main():
             defines.append('-defsym=PROBE_DEFAULT_DEVICE=1')
         if path.stem == 'engine-probe' and args.probe_exclusive:
             defines.append('-defsym=PROBE_EXCLUSIVE=1')
+        if path.stem == 'engine-probe' and args.probe_silent:
+            defines.append('-defsym=PROBE_SILENT=1')
         if path.stem == 'ui-preview' and args.preview_codec is not None:
             defines.append(f'-defsym=PREVIEW_CODEC={args.preview_codec}')
         if path.stem == 'ui-preview' and args.preview_tags:

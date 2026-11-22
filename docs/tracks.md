@@ -12,7 +12,7 @@ By default LAMP plays one audio track per file, chosen by the container's rules:
 | AVI | `auds` stream lists, in `hdrl` order. |
 | ASF | Audio Stream Properties objects in header order, including unsupported and encrypted streams; stream IDs 1–127. |
 
-Every other format holds one audio track: `--track 1` plays it, and any other N rejects the file. A track that does not exist, or one LAMP does not decode (WMA in Matroska or Speex in Ogg), rejects with `decode_error` 101. Within a queue, such a file is skipped like any file that cannot play. The Windows player chooses tracks through its Audio track context submenu; its per-entry policy is described below.
+Every other format holds one audio track: `--track 1` plays it, and any other N rejects the file. A track that does not exist, or one LAMP does not decode (for example, WMA in Matroska or CELT in Ogg), rejects with `decode_error` 101. Within a queue, such a file is skipped like any file that cannot play. The Windows player chooses tracks through its Audio track context submenu; its per-entry policy is described below.
 
 ## Windows player
 
@@ -38,7 +38,7 @@ Labels currently identify ordinal numbers; language, title and codec labels and 
 
   For each track, LAMP's decode with `--track N` equals its decode of FFmpeg's copy of that track alone (`-map 0:a:N-1 -c copy`) in the same container, and FFmpeg's decodes of the two agree. Without `--track`, the choice is unchanged: track 2 (the default) in the Matroska file, track 1 elsewhere.
 - A chain of two Ogg links, each with Opus and Vorbis, plays each link's Vorbis stream with `--track 2`.
-- In an Ogg file of Speex and Opus, Speex counts as track 1 and rejects when chosen. The Opus stream, whose header is on the file's second page, plays by default and as track 2.
+- In an Ogg file of Speex and Opus, Speex now plays automatically as track 1 and Opus as track 2. The Speex file/player reports also reverse only the BOS pages, checking automatic selection, both explicit ordinals and the chosen stream's comment tags. Timestamp-preserving copies supply the selected-stream PCM comparisons.
 - `--track 3` in a queue of the Matroska and MP4 files plays track 3 of each.
 - Rejections (`decode_error` 101, through `tests/chain-oracle.c`): a track past the last in each of the six files, WMA in Matroska, and `--track 2` on WAV, MP3 and FLV files, which play with `--track 1`.
 

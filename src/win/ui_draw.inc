@@ -693,7 +693,7 @@ FN ui_draw
     mov eax, [rip + ui_shown_codec]
     test eax, eax
     jz .Lui_draw_hints
-    cmp eax, 21
+    cmp eax, 22
     ja .Lui_draw_hints
     lea rcx, [rip + ui_codec_names]
     mov rcx, [rcx + rax*8]

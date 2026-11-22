@@ -2,7 +2,7 @@
 # MIT, see LICENSE.
 # A physical stream is a sequence of links. Each link starts with the BOS
 # pages of its logical streams; a BOS page after any other page starts the next
-# link. Each link plays its first Vorbis, Opus or FLAC stream, or the audio
+# link. Each link plays its first Vorbis, Opus, FLAC or Speex stream, or the audio
 # stream that track_choice numbers (Vorbis, Opus, FLAC, Speex, CELT and OGM
 # audio count, in BOS order); other streams (video, metadata, other audio
 # tracks) are skipped. A link without the stream rejects the file.
@@ -20,7 +20,7 @@
 .equ CH_FRAMES, 24                # output frames
 .equ CH_SOURCE, 32                # frames at the link's own rate
 .equ CH_SERIAL, 40
-.equ CH_CODEC, 44                 # codec_kind: 4 Vorbis, 5 Opus, 7 FLAC
+.equ CH_CODEC, 44                 # codec_kind: 4 Vorbis, 5 Opus, 7 FLAC, 22 Speex
 .equ CH_RATE, 48
 .equ CH_CHANNELS, 52
 .equ CH_BITS, 56
@@ -74,6 +74,7 @@ LOCALFN chain_codec_close
     call vorbis_close
     call opus_close
     call flac_ogg_close
+    call speex_close
     mov dword ptr [rip + chain_current], -1
 .Lch_codec_close_done:
     add rsp, 40
@@ -95,6 +96,8 @@ LOCALFN chain_codec_open
     je .Lch_open_vorbis
     cmp eax, 5
     je .Lch_open_opus
+    cmp eax, 22
+    je .Lch_open_speex
     call flac_ogg_open
     jmp .Lch_codec_open_return
 .Lch_open_vorbis:
@@ -102,6 +105,9 @@ LOCALFN chain_codec_open
     jmp .Lch_codec_open_return
 .Lch_open_opus:
     call opus_open
+    jmp .Lch_codec_open_return
+.Lch_open_speex:
+    call speex_open
 .Lch_codec_open_return:
     add rsp, 32
     pop rbx
@@ -119,6 +125,8 @@ LOCALFN chain_codec_read
     je .Lch_read_vorbis
     cmp eax, 5
     je .Lch_read_opus
+    cmp eax, 22
+    je .Lch_read_speex
     call flac_ogg_read
     jmp .Lch_read_return
 .Lch_read_vorbis:
@@ -126,6 +134,9 @@ LOCALFN chain_codec_read
     jmp .Lch_read_return
 .Lch_read_opus:
     call opus_read
+    jmp .Lch_read_return
+.Lch_read_speex:
+    call speex_read
 .Lch_read_return:
     add rsp, 40
     ret
@@ -142,6 +153,8 @@ LOCALFN chain_codec_seek
     je .Lch_seek_vorbis
     cmp eax, 5
     je .Lch_seek_opus
+    cmp eax, 22
+    je .Lch_seek_speex
     call flac_ogg_seek
     jmp .Lch_codec_seek_return
 .Lch_seek_vorbis:
@@ -149,6 +162,9 @@ LOCALFN chain_codec_seek
     jmp .Lch_codec_seek_return
 .Lch_seek_opus:
     call opus_seek
+    jmp .Lch_codec_seek_return
+.Lch_seek_speex:
+    call speex_seek
 .Lch_codec_seek_return:
     add rsp, 40
     ret
@@ -200,7 +216,7 @@ LOCALFN chain_serial_find
     ret
 ENDFN chain_serial_find
 
-# RCX=BOS page -> EAX=codec_kind of its first packet (4, 5, 7) or zero.
+# RCX=BOS page -> EAX=codec_kind (4,5,7,22), or zero.
 # Every supported mapping places its whole identification packet first on
 # the BOS page.
 LOCALFN chain_probe
@@ -234,10 +250,16 @@ LOCALFN chain_probe
     ret
 .Lch_probe_flac:
     cmp dword ptr [r9], 0x414c467f   # 7f 'FLA'
-    jne .Lch_probe_none
+    jne .Lch_probe_speex
     cmp byte ptr [r9 + 4], 0x43      # 'C'
     jne .Lch_probe_none
     mov eax, 7
+    ret
+.Lch_probe_speex:
+    mov rax, 0x2020207865657053
+    cmp [r9], rax
+    jne .Lch_probe_none
+    mov eax, 22
     ret
 .Lch_probe_none:
     xor eax, eax
@@ -245,7 +267,7 @@ LOCALFN chain_probe
 ENDFN chain_probe
 
 # RCX=BOS page -> EAX=1 when its first packet begins an audio stream LAMP
-# does not decode: Speex, CELT or OGM audio (counted by track_choice).
+# does not decode: CELT or OGM audio (counted by track_choice).
 LOCALFN chain_other_audio
     xor eax, eax
     cmp byte ptr [rcx + 26], 0

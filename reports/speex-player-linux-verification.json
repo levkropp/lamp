@@ -1,0 +1,151 @@
+{
+  "suite": "speex-player",
+  "result": "passed",
+  "platform": "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "ffmpeg": "ffmpeg version 8.0.1-essentials_build-www.gyan.dev Copyright (c) 2000-2025 the FFmpeg developers",
+  "checks": [
+    {
+      "test": "speex-8000-1-0",
+      "frames": 2960,
+      "seeks": 10,
+      "pcm": "exact official float reference",
+      "sha256": "aab4b698c75909d901a5fffecea5269e2cd721d9a6ebe158c1957ff7dabce729"
+    },
+    {
+      "test": "speex-8000-1-1",
+      "frames": 9840,
+      "seeks": 10,
+      "pcm": "exact official float reference",
+      "sha256": "196ade11d06c3a3df3a76abce00b25b4a45cb6bc5183fa91494f93463d910d71"
+    },
+    {
+      "test": "speex-8000-2-0",
+      "frames": 2960,
+      "seeks": 10,
+      "pcm": "exact official float reference",
+      "sha256": "9d5ddd8800b8740648bb5ae816b8942c9d45d7ad88b2df70278e658daecf3bcb"
+    },
+    {
+      "test": "speex-8000-2-1",
+      "frames": 9840,
+      "seeks": 10,
+      "pcm": "exact official float reference",
+      "sha256": "1054bcc1b971c0a1f35d68237f1b5327ba7ce38009345cad048e5dbee2623eed"
+    },
+    {
+      "test": "speex-16000-1-0",
+      "frames": 5857,
+      "seeks": 10,
+      "pcm": "exact official float reference",
+      "sha256": "47020fd89c49a31a5e228d42d897c602671bf282d156e7ba7574c890462efb16"
+    },
+    {
+      "test": "speex-16000-1-1",
+      "frames": 19617,
+      "seeks": 10,
+      "pcm": "exact official float reference",
+      "sha256": "a30f0ccbbd12ded30fc7f0ee8bc255178b9db8b8fe868b060e41ac7174f0c2bc"
+    },
+    {
+      "test": "speex-16000-2-0",
+      "frames": 5857,
+      "seeks": 10,
+      "pcm": "exact official float reference",
+      "sha256": "f6730ebdf95cda17f71ac063a665547a9760059e57564956ed57531ab8391710"
+    },
+    {
+      "test": "speex-16000-2-1",
+      "frames": 19617,
+      "seeks": 10,
+      "pcm": "exact official float reference",
+      "sha256": "0a47b73365b3ca125823021ab7181a103d0557053375cecc4f34c5b740f79142"
+    },
+    {
+      "test": "speex-32000-1-0",
+      "frames": 11651,
+      "seeks": 10,
+      "pcm": "exact official float reference",
+      "sha256": "77bc94a7efb952befcabe05de1a96370777f8004d6e23ba734a428ce00864211"
+    },
+    {
+      "test": "speex-32000-1-1",
+      "frames": 39171,
+      "seeks": 10,
+      "pcm": "exact official float reference",
+      "sha256": "262c68973908c6f2edbb8a8cf9868f95a8ab0828034f3f7803c0cf753349f879"
+    },
+    {
+      "test": "speex-32000-2-0",
+      "frames": 11651,
+      "seeks": 10,
+      "pcm": "exact official float reference",
+      "sha256": "71fb8283672b3187e2fb982b42fbdad1f84d96f2984fa5e63bbb072b1751d366"
+    },
+    {
+      "test": "speex-32000-2-1",
+      "frames": 39171,
+      "seeks": 10,
+      "pcm": "exact official float reference",
+      "sha256": "4e2bde3b2bd858ef80f9803c5a1d10a18fc1deb36507cfe1a6e59ef93313f244"
+    },
+    {
+      "test": "same-rate chained Speex",
+      "details": {
+        "result": "passed",
+        "links": 2,
+        "frames": 11714,
+        "rate": 16000,
+        "seeks": 15,
+        "opus_seeks_left_to_dump": 0,
+        "maximum_discarded": 5857
+      }
+    },
+    {
+      "test": "mixed-rate chained Speex and exact seeks",
+      "details": {
+        "result": "passed",
+        "links": 2,
+        "frames": 12753,
+        "rate": 8000,
+        "seeks": 15,
+        "opus_seeks_left_to_dump": 0,
+        "maximum_discarded": 9793
+      }
+    },
+    {
+      "test": "second-BOS Speex track selection and tags",
+      "frames": 19617
+    },
+    {
+      "test": "automatic first Speex, both audio ordinals and selected metadata",
+      "frames": 19617
+    },
+    {
+      "test": "cancel-open",
+      "details": {
+        "result": "cancelled"
+      }
+    },
+    {
+      "test": "cancel-read",
+      "details": {
+        "result": "cancelled",
+        "frames_before_cancel": 12288
+      }
+    }
+  ],
+  "scope": "Actual CLI decode, selected Ogg stream, tags, same/mixed-rate chains, cold seek/lifecycle/cancellation via full shipping decoder. Native output-device playback and Mac execution are separate checks.",
+  "binaries": {
+    "lamp-cli": "8cbdeece07295beef9e7c69a69fd2471105c169e7da77babb1eca98a9121d7c8",
+    "speex-chain-oracle": "d8c93567936f7ce4209a321a9da907b627181e90d9a6a3bbabc34b479a3d79e8",
+    "speex-file-reference": "93440a8b050b45b28fedca06c816429ad4c2b3f4d4483782cd49c49437fec1d7"
+  },
+  "sources": {
+    "src/speex.s": "c577ce70d4e07809fac8fc3c70713775bcc5665b3e9cb04e21b0d9da0bee909c",
+    "src/ogg_chain.s": "fc1565bb174d986a5714f2ecc471fa028773708441f583061d0965d83bab4791",
+    "src/tags.s": "4eab7cac52b13b0029dc9e97a309010e18a0350355ceb3c993a6dbedbf9a84f1",
+    "tests/speex-file-reference.c": "a90c6d585fc33718d3f143058a4241741f97959f6ca02cfe265cc8e91918be7d",
+    "tests/chain-oracle.c": "770757565631753a57a6a8352cbac5ffecd33bb380eec247f23874277f7a00f7",
+    "tests/verify-speex-player.py": "642d69a3aee9203b673c65175dceead61572282f24b590899dbbff9f528e0f26"
+  }
+}

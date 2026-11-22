@@ -15,6 +15,10 @@ probe_default_restart: .long 0
 probe_restart_ms: .quad 0
 probe_pass: .ascii "Passed: playback, pause, resume, stop, reopen, seek, paused seek and cancelled open."
 .byte 13, 10
+.ifdef PROBE_SILENT
+    .ascii "Muted output: lifecycle exercised with volume zero."
+    .byte 13, 10
+.endif
 .ifdef PROBE_DEFAULT_DEVICE
     .ascii "Default-device callback: paused and active restart passed; pending command preserved."
     .byte 13, 10
@@ -27,6 +31,9 @@ probe_pass: .ascii "Passed: playback, pause, resume, stop, reopen, seek, paused 
 .text
 FN probe_start
     sub rsp, 72
+    .ifdef PROBE_SILENT
+    mov dword ptr [rip+engine_volume], 0
+    .endif
     .ifdef PROBE_EXCLUSIVE
     mov dword ptr [rip + engine_exclusive], 1
     mov dword ptr [rip + queue_target], 48000

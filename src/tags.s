@@ -1774,6 +1774,12 @@ LOCALFN ogg_tags
     add rsi, rax
     test edx, edx
     jz .Logg_tags_bos
+    cmp dword ptr [rip+ogg_select_active], 0
+    je .Logg_tags_probe
+    mov eax, [r8+14]
+    cmp eax, [rip+ogg_select]
+    jne .Logg_tags_bos
+.Logg_tags_probe:
     movzx eax, byte ptr [r8 + 27]         # first packet's first segment
     cmp eax, 8
     jb .Logg_tags_bos
@@ -1787,6 +1793,10 @@ LOCALFN ogg_tags
     mov r9, 0x646165487375704f            # "OpusHead"
     cmp rax, r9
     mov r12d, 2
+    je .Logg_tags_found
+    mov r9, 0x2020207865657053           # "Speex   "
+    cmp rax, r9
+    mov r12d, 4
     je .Logg_tags_found
     mov r9d, 0x43414c46                   # "\x7fFLAC"
     cmp byte ptr [rcx], 0x7f
@@ -1871,6 +1881,8 @@ LOCALFN ogg_tags
     add rdx, [rsp + 32]
     mov rax, rdx
     sub rax, rcx
+    cmp r12d, 4
+    je .Logg_tags_comments              # Speex comments have no signature prefix
     cmp r12d, 1
     jne .Logg_tags_opus
     cmp rax, 8

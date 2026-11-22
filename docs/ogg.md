@@ -1,10 +1,10 @@
 # Ogg streams, FLAC in Ogg and resampling
 
-LAMP 0.4.0-dev reads an Ogg file as a physical stream: a sequence of **links**, each with one or more multiplexed logical streams. This page describes how links and streams are chosen, FLAC-in-Ogg, and the resampler used when links change rate. Vorbis and Opus decoding are described in [Vorbis](vorbis.md) and [Opus](opus.md).
+LAMP 0.4.0-dev reads an Ogg file as a physical stream: a sequence of **links**, each with one or more multiplexed logical streams. This page describes how links and streams are chosen, FLAC-in-Ogg, and the resampler used when links change rate. Codec details are in [Vorbis](vorbis.md), [Opus](opus.md) and [Speex](speex.md).
 
 ## Links and streams
 
-A link begins with the BOS pages of its logical streams. A BOS page after any other page starts the next link; this is how chained files (for example, concatenated recordings or stream dumps) are formed. Each link plays its **first Vorbis, Opus or FLAC stream**, in BOS order. Other streams in the link, such as Theora video, Speex or a second audio track, are skipped page by page. A link without a supported stream rejects the whole file, rather than silently dropping its audio. `--track N` plays each link's Nth audio stream instead, counting Speex, CELT and OGM audio too ([track selection](tracks.md)).
+A link begins with the BOS pages of its logical streams. A BOS page after any other page starts the next link; this is how chained files (for example, concatenated recordings or stream dumps) are formed. Each link plays its **first Vorbis, Opus, Speex or FLAC stream**, in BOS order. Other streams in the link, such as Theora video, CELT or a second audio track, are skipped page by page. A link without a supported stream rejects the whole file, rather than silently dropping its audio. `--track N` plays each link's Nth audio stream instead, counting Speex, CELT and OGM audio too ([track selection](tracks.md)).
 
 `chain_open` (`src/ogg_chain.s`) walks page headers once, recording each link's byte range and selected stream. It then opens every link with its codec, last to first, so link 0 remains open. Each codec open validates the whole link exactly as a single-stream file is validated: every page CRC of the selected stream, page sequence and continuation, granule order, header placement and every packet's duration. Pages of other streams are bounds-checked and skipped; a page whose stream did not begin in the link, a duplicate BOS, more than 64 streams in a link, junk between pages and a page of the selected stream after its EOS reject the file. Opening therefore reads the whole file, as before. The link table reserves 4 MiB of address space and commits 64 KiB per 1,024 links; at most 65,536 links are accepted.
 
@@ -16,7 +16,9 @@ Output uses the first link's rate (48 kHz for Opus). `output_rate` and `output_f
 
 ## Seeking
 
-`chain_seek` finds the link containing the target, opens it and seeks its codec. Vorbis and FLAC links seek exactly, so the PCM after a seek equals continuous playback. Opus links use their usual 80 ms pre-roll, so PCM after a seek into an Opus link equals a seek in that link alone. In a resampled link the codec seeks a filter half-width before the target's input span and the resampler restarts at the first output whose whole span was decoded; with an exact codec seek its output equals continuous playback.
+`chain_seek` finds the link containing the target, opens it and seeks its codec. Vorbis, FLAC and Speex links seek exactly, so the PCM after a seek equals continuous playback. Opus links use their usual 80 ms pre-roll, so PCM after a seek into an Opus link equals a seek in that link alone. In a resampled link the codec seeks a filter half-width before the target's input span and the resampler restarts at the first output whose whole span was decoded; with an exact codec seek its output equals continuous playback.
+
+Speex restores complete decoder histories from a lazily populated packet cache; a fresh link open starts without that cache, so exact cold seeks may decode from the beginning. [Speex timing, cache limits and file/player checks](speex.md#ogg-file-bridge-timing-and-exact-seeks) cover all three bands and both channel counts.
 
 ## FLAC in Ogg
 

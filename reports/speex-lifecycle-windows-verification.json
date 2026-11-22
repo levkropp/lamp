@@ -1,0 +1,51 @@
+{
+  "result": "passed",
+  "platform": "Windows-11-10.0.26300-SP0",
+  "scope": "Muted native WASAPI engine lifecycle: three Speex bands, pause/resume, stop/reopen, active/paused seek, cancelled open, and any default-output/exclusive scenarios identified by probe output. Physical device switching and captured hardware PCM are not established.",
+  "cases": [
+    {
+      "rate": 8000,
+      "channels": 1,
+      "fixture_sha256": "ce0390850eebd80b0eff77ebf5868a16c6704856cd2bbd35246a1b335addcd3c",
+      "result": "passed",
+      "details": [
+        "Passed: playback, pause, resume, stop, reopen, seek, paused seek and cancelled open.",
+        "Muted output: lifecycle exercised with volume zero.",
+        "Default-device callback: paused and active restart passed; pending command preserved.",
+        "Exclusive output: 48000 Hz session lifecycle passed."
+      ]
+    },
+    {
+      "rate": 16000,
+      "channels": 2,
+      "fixture_sha256": "2c123b2a28559bc37cb6e43a028c90693c1039acb462c955a18001364ca306f1",
+      "result": "passed",
+      "details": [
+        "Passed: playback, pause, resume, stop, reopen, seek, paused seek and cancelled open.",
+        "Muted output: lifecycle exercised with volume zero.",
+        "Default-device callback: paused and active restart passed; pending command preserved.",
+        "Exclusive output: 48000 Hz session lifecycle passed."
+      ]
+    },
+    {
+      "rate": 32000,
+      "channels": 2,
+      "fixture_sha256": "8074fbb74d6440eb2792289b1115eae787d7d92f591f7c49dd932dd4c1fa7f94",
+      "result": "passed",
+      "details": [
+        "Passed: playback, pause, resume, stop, reopen, seek, paused seek and cancelled open.",
+        "Muted output: lifecycle exercised with volume zero.",
+        "Default-device callback: paused and active restart passed; pending command preserved.",
+        "Exclusive output: 48000 Hz session lifecycle passed."
+      ]
+    }
+  ],
+  "probe_sha256": "0e8d1056498457c5534209a9683cfca135dd15d67be984a08a061cfb800f20c6",
+  "sources": {
+    "src/speex.s": "c577ce70d4e07809fac8fc3c70713775bcc5665b3e9cb04e21b0d9da0bee909c",
+    "src/ogg_chain.s": "fc1565bb174d986a5714f2ecc471fa028773708441f583061d0965d83bab4791",
+    "tests/engine-probe.s": "e824e3f45c2c44bd71f52e6d9fead7583eb9fdbcd695a7364bc84809699d69bd",
+    "tools/build-windows.py": "1eb77cc3e2f60dcf4579bd890ca13b55d26cf168baeccb0a07656c55e63b8a9a",
+    "tests/verify-speex-lifecycle.py": "cf0365d95e281425649956b1eafa74566b168dd721da4d1532bcd24cbeea0d96"
+  }
+}

@@ -8,7 +8,7 @@ resampler (checked by verify-resample.py) when the link's rate differs from
 the first link's; the chained decode must match it exactly, continuously and
 after seeks to every link boundary and inside every link. Seeks inside Opus
 links use pre-roll, so they must equal a seek in the standalone link.
-Multiplexed links must play their first Vorbis/Opus/FLAC stream, identical to
+Multiplexed links must play their first Vorbis/Opus/FLAC/Speex stream, identical to
 that stream alone. FLAC-in-Ogg must equal FFmpeg's lossless decode, or LAMP's
 native decode of the same frames for multichannel downmixes. Malformed
 chains and mappings must be rejected; cancellation must stop cleanly.
@@ -235,22 +235,29 @@ def main():
     # Multiplexed links: the first supported stream plays.
     def mux(name, *inputs):
         path = work / name
-        args = []
+        args = ['-copyts']
         for item in inputs:
             args += ['-i', item]
         for k in range(len(inputs)):
             args += ['-map', str(k)]
-        ffmpeg(*args, '-c', 'copy', path)
+        ffmpeg(*args, '-c', 'copy', '-avoid_negative_ts', 'disabled', path)
         return path
     speex = encode('sp.spx.ogg', noise(10, 16000, 0.7), '-c:a', 'libspeex', rate=16000, channels=1)
     opus_vorbis = mux('mux-opus-vorbis.ogg', opus_a, vorbis_b)
     speex_vorbis = mux('mux-speex-vorbis.ogg', speex, vorbis_a)
+    # FFmpeg can change Speex final granules while remuxing. Isolate the
+    # selected logical stream without changing its bytes or timestamps.
+    mux_pages = pages(speex_vorbis.read_bytes())
+    speex_serial = next(p[14:18] for p in mux_pages
+                        if p[5] & 2 and p[27 + p[26]:][:8] == b'Speex   ')
+    speex_selected = work / 'mux-speex-alone.spx'
+    speex_selected.write_bytes(b''.join(bytes(p) for p in mux_pages if p[14:18] == speex_serial))
     vorbis_flac = mux('mux-vorbis-flac.ogg', vorbis_b, flac_a)
     video = work / 'video.ogv'
     ffmpeg('-f', 'lavfi', '-i', 'testsrc=size=96x64:rate=12:duration=1.2', '-i', vorbis_a, '-map', '0', '-map', '1',
            '-c:v', 'libtheora', '-c:a', 'copy', video)
     verify_chain('mux-chain.ogg', [opus_vorbis, speex_vorbis, vorbis_flac, video],
-                 multiplexed_references=[opus_a, vorbis_a, vorbis_b, vorbis_a])
+                 multiplexed_references=[opus_a, speex_selected, vorbis_b, vorbis_a])
 
     # FLAC-in-Ogg against FFmpeg, and against the same frames in native FLAC.
     flac_cases = [('flac-16-44100-2.oga', noise(11, 44100, 0.8), ['-c:a', 'flac'], 44100, 2, None),
@@ -300,8 +307,15 @@ def main():
     corrupt = bytearray(two)
     corrupt[len(vorbis_a.read_bytes()) + 200] ^= 0x40
     reject('chain-second-link-crc.ogg', bytes(corrupt))
-    reject('chain-unsupported-link.ogg', vorbis_a.read_bytes() + speex.read_bytes())
-    reject('chain-unsupported-only.ogg', speex.read_bytes())
+    # Speex now plays. A CELT identification packet still counts as audio
+    # but is unsupported; preserve valid page framing and CRCs.
+    unsupported_pages = pages(speex.read_bytes())
+    bos = unsupported_pages[0]
+    body = 27 + bos[26]
+    bos[body:body + 8] = b'CELT    '
+    unsupported = b''.join(bytes(seal(p)) for p in unsupported_pages)
+    reject('chain-unsupported-link.ogg', vorbis_a.read_bytes() + unsupported)
+    reject('chain-unsupported-only.ogg', unsupported)
     first = pages(vorbis_b.read_bytes())
     reject('chain-missing-bos.ogg', vorbis_a.read_bytes() + b''.join(bytes(p) for p in first[1:]))
     reject('chain-after-eos.ogg', vorbis_a.read_bytes() + bytes(pages(vorbis_a.read_bytes())[-1]))

@@ -1,23 +1,18 @@
-# Speex decoder development
+# Ogg/Speex playback
 
-Speex playback is **not implemented yet**. The source now contains assembly
-decoder components and mono/stereo frame paths for all three bands, checked against the BSD
-Speex 1.2.1 reference:
-bounded bit access, identification headers, canonical packet inspection,
-the three spectral codebook reconstruction paths, LSP interpolation/LPC
-reconstruction, bandwidth expansion, IIR synthesis, high-pass filtering,
-pitch/gain reconstruction, split innovation and seeded noise, plus connected
-mono/stereo narrowband/wideband/ultra-wideband frame decoding, comb enhancement,
-high-band folding/innovation and QMF synthesis, DTX, packet-loss concealment
-and recovery.
-The CLI and window still
-reject Speex files; no container mapping or audio format claim is added.
+Source builds play Ogg/Speex (`.spx` or `.ogg`): narrowband, wideband and
+ultra-wideband, all submodes, mono and in-band stereo, grouped frames,
+CBR/VBR/VAD/DTX, comment tags, granule/delay trimming and exact seeks.
+The assembly decoder matches the BSD Speex 1.2.1 float reference. Speex
+participates in Ogg track selection, chained links, queue playback and
+output resampling. Windows and Linux decoding/seeking are verified;
+Windows also has muted native WASAPI lifecycle checks. Apple Silicon
+translation/assembly passes, with native Mac execution still unverified.
+The published v0.3.0 download predates this support.
 
-The intended decoder covers narrowband, wideband and ultra-wideband, all
-their submodes, mono and in-band stereo, packet grouping, VBR/VAD/DTX and
-stateful recovery. It still needs container integration,
-granule/delay trimming, exact seeking and playback lifecycle verification.
-The eventual format gate is PCM and playback, not packet inspection alone.
+The following sections retain the individual component contracts and
+their separate verification scopes. File/player verification follows at
+the end. Speex mappings in other containers are not implemented yet.
 
 ## Source and provenance
 
@@ -64,8 +59,9 @@ generators support `--check` and write identical LF output on every host.
 
 ## Assembly contracts
 
-These functions use the shared Microsoft x64 convention and caller-owned
-state. No heap, system calls or global mutable decoder state are used.
+The `spx_*` component functions use the shared Microsoft x64 convention and
+caller-owned state. They use no heap, system calls or global mutable decoder
+state. The file bridge described below owns its stream state and optional cache.
 
 - `spx_bits_init(state, data, bytes)` initializes a 24-byte reader, at most
   1 MiB. An empty reader may have a null data pointer. Other null inputs,
@@ -403,7 +399,7 @@ Numeric history must remain finite, stored old LSP magnitudes may not exceed
 16, and structural fields are checked. The loss counter is bounded at
 1,000,000,000 before a call, keeping the reference's random-pitch float-to-int
 conversion within signed range. Initialization restores all history and seeds.
-This is a mono frame API; the player still rejects Speex files.
+This is a mono frame API; the file bridge uses the complete three-band API below.
 
 ### Connected frame verification
 
@@ -442,7 +438,7 @@ Another 3,597 rejected/no-frame cases verify the failure and capacity rules.
 ARM64 macOS translation and assembly pass; native execution is unverified.
 The three-band API below now connects the higher layers and stereo synthesis.
 Container mapping, granule/delay trimming, seeking and actual player lifecycle
-checks remain necessary before advertising Speex file playback.
+checks are recorded separately below.
 
 ## Wideband and ultra-wideband frame synthesis
 
@@ -542,7 +538,7 @@ The new frame and QMF modules translate and assemble for Apple Silicon;
 native Mac execution remains unverified. These tests establish mono frame
 decoding. The separate stereo checks below establish stereo reconstruction;
 file/container support, granule/delay trimming, seeking and player lifecycle
-behavior remain pending.
+behavior are established by the separate file/player checks below.
 
 ## Intensity stereo reconstruction
 
@@ -610,5 +606,90 @@ pass 54,716,002 checks and 19,416,100 bit-exact float comparisons:
 
 The previous 104,141-frame mono three-band suite also passes against the
 updated shared decoder. Apple Silicon translation/assembly passes; native
-Mac execution is unverified. Actual Speex file playback, container mapping,
-delay/granule trimming, seeking and player lifecycle checks remain open.
+Mac execution is unverified. Actual file playback, container mapping,
+delay/granule trimming, seeking and player lifecycle checks follow.
+
+## Ogg file bridge, timing and exact seeks
+
+`src/speex.s` implements `speex_open/read/seek/close` for the common decoder
+and Ogg-chain adapters. Open validates headers, bounded comments, page CRCs,
+packet structure and duration without decoding the entire file to PCM.
+Identification headers accept the limits above; audio packets are at most
+1 MiB, comments have at most 65,536 entries, and up to 64 extra headers are
+skipped. Packets contain the declared 1–64 frames, except the final EOS
+packet may have fewer. Control-only audio packets are currently rejected.
+Mono is duplicated; intensity stereo is interleaved. Raw reference float
+samples are multiplied by 1/32768, without an intermediate int16 clipping
+step. The independent comparator uses the official float decoder, rather
+than FFmpeg's int16 libspeex adapter.
+
+The first completed nonfinal audio page establishes encoder priming or a
+positive granule origin from its decoded sample count. Later nonfinal page
+granules must agree. The decoder lookahead is 40/80/160 samples for
+NB/WB/UWB. Presentation skips both encoder priming and decoder lookahead;
+the final granule trims the tail, bounded by PCM actually present in the
+packets. Missing encoder flush samples are never synthesized. If all audio
+is on one final page and priming cannot be inferred, the bridge uses the
+canonical encoder delays of 40/143/349 samples. Nonstandard priming in such
+an ambiguous final-only file cannot be recovered from the header alone.
+This follows the pinned reference file decoder's delay compensation and
+the [Ogg mapping's granule model](https://www.xiph.org/ogg/doc/ogg-multiplex.html).
+Remux comparisons preserve timestamps (`-copyts -avoid_negative_ts disabled`);
+shifting a page's granule can change its presentation interval.
+
+The bridge uses a static 65,536-byte decoder arena and 5,120-byte frame
+buffer, plus the existing Ogg packet buffer. An optional 1,050,624-byte
+index holds 64 packet checkpoints, each with the complete 16,384-byte live
+decoder state, raw sample position and packet ordinal. It is populated
+lazily during decoding, initially every 16 packets, and halves its density
+when full. Warm seeks restore the nearest complete history; cold seeks
+decode and discard from the beginning. Either path is exact and checks
+cancellation. Index allocation failure falls back to exact sequential
+seeking. A chain reopen also begins with a fresh cache, so cold seeks in
+long files may take time. No whole-file PCM cache is allocated.
+
+## File and player verification
+
+After building the corresponding objects and CLI:
+
+```sh
+python3 tests/verify-speex-files.py --bin build/speex-check
+python3 tests/verify-speex-player.py --bin build/speex-check
+```
+
+Use `python` and `--bin bin/speex-check` on Windows. The player suite needs
+FFmpeg with libspeex for fixture generation; `--fixtures PATH` reuses its
+recorded corpus and ffprobe packet timestamps on a host without FFmpeg.
+
+The [Linux bridge report](../reports/speex-file-linux-verification.json)
+and [Windows bridge report](../reports/speex-file-windows-verification.json)
+each pass 63,802,414 checks and 5,903,082 exact float comparisons over
+86 files, 2,752 warm seeks and 86 cold seeks. Cases cover all qualities,
+three bands, mono/stereo, CBR/VBR/VAD+DTX, 1/2/5/64 grouped frames,
+continued comments/audio, extra headers, positive origins, custom rates,
+priming spanning frames, final-only pages, one-sample output and short final
+groups. Cache compaction and failed-index-allocation fallbacks pass.
+Fourteen malformed/cancellation cases, 618 protected truncated file prefixes
+and 1,024 CRC-repaired mutations check bounded behavior and allocation
+cleanup. Accepted mutations are not a claim of correct damaged-file PCM.
+
+The [Linux player report](../reports/speex-player-linux-verification.json)
+and [Windows player report](../reports/speex-player-windows-verification.json)
+each compare 12 FFmpeg/libspeex files against an independently extracted
+packet stream decoded by the unchanged official float decoder, byte for
+byte, with 120 cold seeks. Same-rate and mixed-rate chains add 30 exact
+seeks. Both BOS orders, automatic and explicit track selection, selected
+comment tags, cancellation and reopen pass through the shipping decoder.
+The mixed-rate comparison also uses the separately verified assembly
+resampler; it is not an independent resampler conformance test.
+
+The [native Windows lifecycle report](../reports/speex-lifecycle-windows-verification.json)
+covers 8 kHz mono, 16 kHz stereo and 32 kHz stereo. Each passes play, pause,
+resume, stop, reopen, active/paused seek, cancelled open, simulated default
+output callback recovery while active/paused, and exclusive 48 kHz output.
+The probe sets its own volume to zero before playback and verifies its
+muted-build marker before launch. This does not establish audible latency,
+captured hardware PCM or physical device hotplug behavior. Linux output
+device playback was unavailable in this environment; native Mac execution
+remains unverified. The tests use reference C only in separate test tools;
+the player retains its assembly-only codec runtime.

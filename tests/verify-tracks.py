@@ -10,8 +10,8 @@ usage: python3 tests/verify-tracks.py
   FFmpeg's decodes of the two agree too. Without --track the automatic
   choice is unchanged (Matroska's default track, else the first supported).
 - A chained Ogg file chooses the track in every link. In an Ogg file of
-  Speex and Opus, Speex counts as track 1 (and rejects when chosen) and the
-  Opus stream, whose header is not on the file's first page, plays.
+  Speex and Opus, Speex plays automatically as track 1; either explicit
+  selection matches its own copied stream, including the second BOS page.
 - --track applies to every file of a queue.
 - A track that does not exist, or one LAMP does not decode (WMA in
   Matroska), rejects with decode_error 101
@@ -242,7 +242,7 @@ def main():
     catalog(chained, 0, 2, 1)
     catalog(chained, 2, 2, 2)
 
-    # Speex counts as a track: Opus second in its link plays automatically.
+    # Speex is playable as the first track; Opus remains available as track 2.
     speex = work / 'speex-opus.ogg'
     retained = os.environ.get('LAMP_TRACK_FIXTURES')
     if retained:
@@ -252,14 +252,17 @@ def main():
     single = work / 'speex-opus-a2.ogg'
     ffmpeg('-i', speex, '-map', '0:a:1', '-c', 'copy', single)
     reference = decode(single)[2]
-    if decode(speex)[2] != reference or decode(speex, 2)[2] != reference:
+    if decode(speex, 2)[2] != reference:
         raise Failure('speex-opus.ogg: the Opus track does not play as its own file')
-    rejected(chain, speex, 1)
-    catalog(speex, 0, 2, 2)
+    first = work / 'speex-opus-a1.spx'
+    ffmpeg('-copyts', '-i', speex, '-map', '0:a:0', '-c', 'copy', '-avoid_negative_ts', 'disabled', first)
+    if decode(speex)[2] != decode(first)[2] or decode(speex, 1)[2] != decode(first)[2]:
+        raise Failure('speex-opus.ogg: the Speex track does not play as its own file')
+    catalog(speex, 0, 2, 1)
     catalog(speex, 2, 2, 2)
-    catalog(speex, 1, 0, 0)
-    checks.append({'test': 'speex-opus.ogg', 'result': 'exact', 'automatic': 2,
-                   'note': 'Speex (track 1) is counted and rejects; Opus begins on the second BOS page'})
+    catalog(speex, 1, 2, 1)
+    checks.append({'test': 'speex-opus.ogg', 'result': 'exact', 'automatic': 1,
+                   'note': 'Speex and second-BOS Opus both match their copied streams'})
 
     # A queue: --track applies to every file.
     queue = work / 'queue.f32'
@@ -329,7 +332,7 @@ def main():
     # still names the first link's actually selected stream.
     unequal = work / 'unequal.ogg'
     unequal.write_bytes(speex.read_bytes() + (work / 'speex-opus-a2.ogg').read_bytes())
-    catalog(unequal, 0, 1, 2)
+    catalog(unequal, 0, 1, 1)
     catalog(unequal, 2, 0, 0)
     # Ordinal 65 used to reject because mps_audio_seen retained only 64 IDs.
     # All 104 currently recognized IDs must fit, including unsupported ones.
