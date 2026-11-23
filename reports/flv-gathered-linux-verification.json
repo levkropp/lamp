@@ -1,0 +1,3313 @@
+{
+  "result": "passed",
+  "platform": "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "scope": "PCM/G.711/MPEG FLV timestamps and arbitrary byte fragmentation; independent sample placement with source codec PCM established separately. Continuation tags advance the next newly owned frame clock; empty PCM, native MPEG metadata/trims, sparse maximum timestamps and cancellation. Mutated reads capped at128 with midpoint seek64. No video/A-V sync or native Mac/Linux device coverage.",
+  "checks": [
+    {
+      "file": "pcm-11025-8-1-continuous.flv",
+      "reference": "pcm-11025-8-1-continuous.flv.f32",
+      "rate": 11025,
+      "channels": 1,
+      "frames": 1701,
+      "pattern": "continuous",
+      "units": 1701,
+      "tags": 1,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1701,
+        "seeks": 16,
+        "checks": 1107617,
+        "exact_float_words": 8618
+      }
+    },
+    {
+      "file": "pcm-11025-8-1-fragmented.flv",
+      "reference": "pcm-11025-8-1-fragmented.flv.f32",
+      "rate": 11025,
+      "channels": 1,
+      "frames": 1701,
+      "pattern": "fragmented",
+      "units": 1701,
+      "tags": 18,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1701,
+        "seeks": 16,
+        "checks": 1130264,
+        "exact_float_words": 8618
+      }
+    },
+    {
+      "file": "pcm-11025-8-1-leading.flv",
+      "reference": "pcm-11025-8-1-leading.flv.f32",
+      "rate": 11025,
+      "channels": 1,
+      "frames": 1977,
+      "pattern": "leading",
+      "units": 1701,
+      "tags": 18,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1977,
+        "seeks": 16,
+        "checks": 717114,
+        "exact_float_words": 9170
+      }
+    },
+    {
+      "file": "pcm-11025-8-1-internal.flv",
+      "reference": "pcm-11025-8-1-internal.flv.f32",
+      "rate": 11025,
+      "channels": 1,
+      "frames": 2137,
+      "pattern": "internal",
+      "units": 1701,
+      "tags": 18,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 2137,
+        "seeks": 16,
+        "checks": 748606,
+        "exact_float_words": 9490
+      }
+    },
+    {
+      "file": "pcm-11025-8-1-overlap.flv",
+      "reference": "pcm-11025-8-1-overlap.flv.f32",
+      "rate": 11025,
+      "channels": 1,
+      "frames": 1475,
+      "pattern": "overlap",
+      "units": 1701,
+      "tags": 18,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1475,
+        "seeks": 16,
+        "checks": 721130,
+        "exact_float_words": 8166
+      }
+    },
+    {
+      "file": "pcm-11025-8-1-negative.flv",
+      "reference": "pcm-11025-8-1-negative.flv.f32",
+      "rate": 11025,
+      "channels": 1,
+      "frames": 1480,
+      "pattern": "negative",
+      "units": 1701,
+      "tags": 18,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1480,
+        "seeks": 16,
+        "checks": 721090,
+        "exact_float_words": 8176
+      }
+    },
+    {
+      "file": "pcm-11025-8-1-foreign.flv",
+      "reference": "pcm-11025-8-1-foreign.flv.f32",
+      "rate": 11025,
+      "channels": 1,
+      "frames": 1701,
+      "pattern": "foreign",
+      "units": 1701,
+      "tags": 18,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1701,
+        "seeks": 16,
+        "checks": 1130264,
+        "exact_float_words": 8618
+      }
+    },
+    {
+      "file": "pcm-11025-8-1-reorder.flv",
+      "reference": "pcm-11025-8-1-reorder.flv.f32",
+      "rate": 11025,
+      "channels": 1,
+      "frames": 248,
+      "pattern": "reorder",
+      "units": 1701,
+      "tags": 18,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 248,
+        "seeks": 16,
+        "checks": 646542,
+        "exact_float_words": 2234
+      }
+    },
+    {
+      "file": "pcm-11025-8-2-continuous.flv",
+      "reference": "pcm-11025-8-2-continuous.flv.f32",
+      "rate": 11025,
+      "channels": 2,
+      "frames": 1701,
+      "pattern": "continuous",
+      "units": 1701,
+      "tags": 1,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1701,
+        "seeks": 16,
+        "checks": 1107617,
+        "exact_float_words": 8618
+      }
+    },
+    {
+      "file": "pcm-11025-8-2-fragmented.flv",
+      "reference": "pcm-11025-8-2-fragmented.flv.f32",
+      "rate": 11025,
+      "channels": 2,
+      "frames": 1701,
+      "pattern": "fragmented",
+      "units": 1701,
+      "tags": 28,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1701,
+        "seeks": 16,
+        "checks": 1095150,
+        "exact_float_words": 8618
+      }
+    },
+    {
+      "file": "pcm-11025-8-2-leading.flv",
+      "reference": "pcm-11025-8-2-leading.flv.f32",
+      "rate": 11025,
+      "channels": 2,
+      "frames": 1977,
+      "pattern": "leading",
+      "units": 1701,
+      "tags": 28,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1977,
+        "seeks": 16,
+        "checks": 717114,
+        "exact_float_words": 9170
+      }
+    },
+    {
+      "file": "pcm-11025-8-2-internal.flv",
+      "reference": "pcm-11025-8-2-internal.flv.f32",
+      "rate": 11025,
+      "channels": 2,
+      "frames": 2137,
+      "pattern": "internal",
+      "units": 1701,
+      "tags": 28,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 2137,
+        "seeks": 16,
+        "checks": 748606,
+        "exact_float_words": 9490
+      }
+    },
+    {
+      "file": "pcm-11025-8-2-overlap.flv",
+      "reference": "pcm-11025-8-2-overlap.flv.f32",
+      "rate": 11025,
+      "channels": 2,
+      "frames": 1476,
+      "pattern": "overlap",
+      "units": 1701,
+      "tags": 28,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1476,
+        "seeks": 16,
+        "checks": 721122,
+        "exact_float_words": 8168
+      }
+    },
+    {
+      "file": "pcm-11025-8-2-negative.flv",
+      "reference": "pcm-11025-8-2-negative.flv.f32",
+      "rate": 11025,
+      "channels": 2,
+      "frames": 1480,
+      "pattern": "negative",
+      "units": 1701,
+      "tags": 28,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1480,
+        "seeks": 16,
+        "checks": 721090,
+        "exact_float_words": 8176
+      }
+    },
+    {
+      "file": "pcm-11025-8-2-foreign.flv",
+      "reference": "pcm-11025-8-2-foreign.flv.f32",
+      "rate": 11025,
+      "channels": 2,
+      "frames": 1701,
+      "pattern": "foreign",
+      "units": 1701,
+      "tags": 28,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1701,
+        "seeks": 16,
+        "checks": 1095150,
+        "exact_float_words": 8618
+      }
+    },
+    {
+      "file": "pcm-11025-8-2-reorder.flv",
+      "reference": "pcm-11025-8-2-reorder.flv.f32",
+      "rate": 11025,
+      "channels": 2,
+      "frames": 160,
+      "pattern": "reorder",
+      "units": 1701,
+      "tags": 28,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 160,
+        "seeks": 16,
+        "checks": 649614,
+        "exact_float_words": 1466
+      }
+    },
+    {
+      "file": "pcm-11025-16-1-continuous.flv",
+      "reference": "pcm-11025-16-1-continuous.flv.f32",
+      "rate": 11025,
+      "channels": 1,
+      "frames": 1701,
+      "pattern": "continuous",
+      "units": 1701,
+      "tags": 1,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1701,
+        "seeks": 16,
+        "checks": 1107617,
+        "exact_float_words": 8618
+      }
+    },
+    {
+      "file": "pcm-11025-16-1-fragmented.flv",
+      "reference": "pcm-11025-16-1-fragmented.flv.f32",
+      "rate": 11025,
+      "channels": 1,
+      "frames": 1701,
+      "pattern": "fragmented",
+      "units": 1701,
+      "tags": 18,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1701,
+        "seeks": 16,
+        "checks": 1195649,
+        "exact_float_words": 8618
+      }
+    },
+    {
+      "file": "pcm-11025-16-1-leading.flv",
+      "reference": "pcm-11025-16-1-leading.flv.f32",
+      "rate": 11025,
+      "channels": 1,
+      "frames": 1977,
+      "pattern": "leading",
+      "units": 1701,
+      "tags": 18,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1977,
+        "seeks": 16,
+        "checks": 717114,
+        "exact_float_words": 9170
+      }
+    },
+    {
+      "file": "pcm-11025-16-1-internal.flv",
+      "reference": "pcm-11025-16-1-internal.flv.f32",
+      "rate": 11025,
+      "channels": 1,
+      "frames": 2145,
+      "pattern": "internal",
+      "units": 1701,
+      "tags": 18,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 2145,
+        "seeks": 16,
+        "checks": 748542,
+        "exact_float_words": 9506
+      }
+    },
+    {
+      "file": "pcm-11025-16-1-overlap.flv",
+      "reference": "pcm-11025-16-1-overlap.flv.f32",
+      "rate": 11025,
+      "channels": 1,
+      "frames": 1483,
+      "pattern": "overlap",
+      "units": 1701,
+      "tags": 18,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1483,
+        "seeks": 16,
+        "checks": 721066,
+        "exact_float_words": 8182
+      }
+    },
+    {
+      "file": "pcm-11025-16-1-negative.flv",
+      "reference": "pcm-11025-16-1-negative.flv.f32",
+      "rate": 11025,
+      "channels": 1,
+      "frames": 1480,
+      "pattern": "negative",
+      "units": 1701,
+      "tags": 18,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1480,
+        "seeks": 16,
+        "checks": 721090,
+        "exact_float_words": 8176
+      }
+    },
+    {
+      "file": "pcm-11025-16-1-foreign.flv",
+      "reference": "pcm-11025-16-1-foreign.flv.f32",
+      "rate": 11025,
+      "channels": 1,
+      "frames": 1701,
+      "pattern": "foreign",
+      "units": 1701,
+      "tags": 18,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1701,
+        "seeks": 16,
+        "checks": 1195649,
+        "exact_float_words": 8618
+      }
+    },
+    {
+      "file": "pcm-11025-16-1-reorder.flv",
+      "reference": "pcm-11025-16-1-reorder.flv.f32",
+      "rate": 11025,
+      "channels": 1,
+      "frames": 681,
+      "pattern": "reorder",
+      "units": 1701,
+      "tags": 18,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 681,
+        "seeks": 16,
+        "checks": 667322,
+        "exact_float_words": 5232
+      }
+    },
+    {
+      "file": "pcm-11025-16-2-continuous.flv",
+      "reference": "pcm-11025-16-2-continuous.flv.f32",
+      "rate": 11025,
+      "channels": 2,
+      "frames": 1701,
+      "pattern": "continuous",
+      "units": 1701,
+      "tags": 1,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1701,
+        "seeks": 16,
+        "checks": 1107617,
+        "exact_float_words": 8618
+      }
+    },
+    {
+      "file": "pcm-11025-16-2-fragmented.flv",
+      "reference": "pcm-11025-16-2-fragmented.flv.f32",
+      "rate": 11025,
+      "channels": 2,
+      "frames": 1701,
+      "pattern": "fragmented",
+      "units": 1701,
+      "tags": 34,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1701,
+        "seeks": 16,
+        "checks": 1195001,
+        "exact_float_words": 8618
+      }
+    },
+    {
+      "file": "pcm-11025-16-2-leading.flv",
+      "reference": "pcm-11025-16-2-leading.flv.f32",
+      "rate": 11025,
+      "channels": 2,
+      "frames": 1977,
+      "pattern": "leading",
+      "units": 1701,
+      "tags": 34,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1977,
+        "seeks": 16,
+        "checks": 717114,
+        "exact_float_words": 9170
+      }
+    },
+    {
+      "file": "pcm-11025-16-2-internal.flv",
+      "reference": "pcm-11025-16-2-internal.flv.f32",
+      "rate": 11025,
+      "channels": 2,
+      "frames": 2140,
+      "pattern": "internal",
+      "units": 1701,
+      "tags": 34,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 2140,
+        "seeks": 16,
+        "checks": 748582,
+        "exact_float_words": 9496
+      }
+    },
+    {
+      "file": "pcm-11025-16-2-overlap.flv",
+      "reference": "pcm-11025-16-2-overlap.flv.f32",
+      "rate": 11025,
+      "channels": 2,
+      "frames": 1478,
+      "pattern": "overlap",
+      "units": 1701,
+      "tags": 34,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1478,
+        "seeks": 16,
+        "checks": 721106,
+        "exact_float_words": 8172
+      }
+    },
+    {
+      "file": "pcm-11025-16-2-negative.flv",
+      "reference": "pcm-11025-16-2-negative.flv.f32",
+      "rate": 11025,
+      "channels": 2,
+      "frames": 1480,
+      "pattern": "negative",
+      "units": 1701,
+      "tags": 34,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1480,
+        "seeks": 16,
+        "checks": 721090,
+        "exact_float_words": 8176
+      }
+    },
+    {
+      "file": "pcm-11025-16-2-foreign.flv",
+      "reference": "pcm-11025-16-2-foreign.flv.f32",
+      "rate": 11025,
+      "channels": 2,
+      "frames": 1701,
+      "pattern": "foreign",
+      "units": 1701,
+      "tags": 34,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1701,
+        "seeks": 16,
+        "checks": 1195001,
+        "exact_float_words": 8618
+      }
+    },
+    {
+      "file": "pcm-11025-16-2-reorder.flv",
+      "reference": "pcm-11025-16-2-reorder.flv.f32",
+      "rate": 11025,
+      "channels": 2,
+      "frames": 808,
+      "pattern": "reorder",
+      "units": 1701,
+      "tags": 34,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 808,
+        "seeks": 16,
+        "checks": 663154,
+        "exact_float_words": 6274
+      }
+    },
+    {
+      "file": "pcm-22050-8-1-continuous.flv",
+      "reference": "pcm-22050-8-1-continuous.flv.f32",
+      "rate": 22050,
+      "channels": 1,
+      "frames": 1701,
+      "pattern": "continuous",
+      "units": 1701,
+      "tags": 1,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1701,
+        "seeks": 16,
+        "checks": 1107617,
+        "exact_float_words": 8618
+      }
+    },
+    {
+      "file": "pcm-22050-8-1-fragmented.flv",
+      "reference": "pcm-22050-8-1-fragmented.flv.f32",
+      "rate": 22050,
+      "channels": 1,
+      "frames": 1701,
+      "pattern": "fragmented",
+      "units": 1701,
+      "tags": 18,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1701,
+        "seeks": 16,
+        "checks": 1130264,
+        "exact_float_words": 8618
+      }
+    },
+    {
+      "file": "pcm-22050-8-1-leading.flv",
+      "reference": "pcm-22050-8-1-leading.flv.f32",
+      "rate": 22050,
+      "channels": 1,
+      "frames": 2252,
+      "pattern": "leading",
+      "units": 1701,
+      "tags": 18,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 2252,
+        "seeks": 16,
+        "checks": 747686,
+        "exact_float_words": 9720
+      }
+    },
+    {
+      "file": "pcm-22050-8-1-internal.flv",
+      "reference": "pcm-22050-8-1-internal.flv.f32",
+      "rate": 22050,
+      "channels": 1,
+      "frames": 2578,
+      "pattern": "internal",
+      "units": 1701,
+      "tags": 18,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 2578,
+        "seeks": 16,
+        "checks": 745078,
+        "exact_float_words": 10372
+      }
+    },
+    {
+      "file": "pcm-22050-8-1-overlap.flv",
+      "reference": "pcm-22050-8-1-overlap.flv.f32",
+      "rate": 22050,
+      "channels": 1,
+      "frames": 1255,
+      "pattern": "overlap",
+      "units": 1701,
+      "tags": 18,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1255,
+        "seeks": 16,
+        "checks": 690118,
+        "exact_float_words": 7726
+      }
+    },
+    {
+      "file": "pcm-22050-8-1-negative.flv",
+      "reference": "pcm-22050-8-1-negative.flv.f32",
+      "rate": 22050,
+      "channels": 1,
+      "frames": 1260,
+      "pattern": "negative",
+      "units": 1701,
+      "tags": 18,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1260,
+        "seeks": 16,
+        "checks": 690078,
+        "exact_float_words": 7736
+      }
+    },
+    {
+      "file": "pcm-22050-8-1-foreign.flv",
+      "reference": "pcm-22050-8-1-foreign.flv.f32",
+      "rate": 22050,
+      "channels": 1,
+      "frames": 1701,
+      "pattern": "foreign",
+      "units": 1701,
+      "tags": 18,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1701,
+        "seeks": 16,
+        "checks": 1130264,
+        "exact_float_words": 8618
+      }
+    },
+    {
+      "file": "pcm-22050-8-1-reorder.flv",
+      "reference": "pcm-22050-8-1-reorder.flv.f32",
+      "rate": 22050,
+      "channels": 1,
+      "frames": 248,
+      "pattern": "reorder",
+      "units": 1701,
+      "tags": 18,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 248,
+        "seeks": 16,
+        "checks": 646542,
+        "exact_float_words": 2234
+      }
+    },
+    {
+      "file": "pcm-22050-8-2-continuous.flv",
+      "reference": "pcm-22050-8-2-continuous.flv.f32",
+      "rate": 22050,
+      "channels": 2,
+      "frames": 1701,
+      "pattern": "continuous",
+      "units": 1701,
+      "tags": 1,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1701,
+        "seeks": 16,
+        "checks": 1107617,
+        "exact_float_words": 8618
+      }
+    },
+    {
+      "file": "pcm-22050-8-2-fragmented.flv",
+      "reference": "pcm-22050-8-2-fragmented.flv.f32",
+      "rate": 22050,
+      "channels": 2,
+      "frames": 1701,
+      "pattern": "fragmented",
+      "units": 1701,
+      "tags": 28,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1701,
+        "seeks": 16,
+        "checks": 1095150,
+        "exact_float_words": 8618
+      }
+    },
+    {
+      "file": "pcm-22050-8-2-leading.flv",
+      "reference": "pcm-22050-8-2-leading.flv.f32",
+      "rate": 22050,
+      "channels": 2,
+      "frames": 2252,
+      "pattern": "leading",
+      "units": 1701,
+      "tags": 28,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 2252,
+        "seeks": 16,
+        "checks": 747686,
+        "exact_float_words": 9720
+      }
+    },
+    {
+      "file": "pcm-22050-8-2-internal.flv",
+      "reference": "pcm-22050-8-2-internal.flv.f32",
+      "rate": 22050,
+      "channels": 2,
+      "frames": 2578,
+      "pattern": "internal",
+      "units": 1701,
+      "tags": 28,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 2578,
+        "seeks": 16,
+        "checks": 745078,
+        "exact_float_words": 10372
+      }
+    },
+    {
+      "file": "pcm-22050-8-2-overlap.flv",
+      "reference": "pcm-22050-8-2-overlap.flv.f32",
+      "rate": 22050,
+      "channels": 2,
+      "frames": 1255,
+      "pattern": "overlap",
+      "units": 1701,
+      "tags": 28,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1255,
+        "seeks": 16,
+        "checks": 690118,
+        "exact_float_words": 7726
+      }
+    },
+    {
+      "file": "pcm-22050-8-2-negative.flv",
+      "reference": "pcm-22050-8-2-negative.flv.f32",
+      "rate": 22050,
+      "channels": 2,
+      "frames": 1260,
+      "pattern": "negative",
+      "units": 1701,
+      "tags": 28,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1260,
+        "seeks": 16,
+        "checks": 690078,
+        "exact_float_words": 7736
+      }
+    },
+    {
+      "file": "pcm-22050-8-2-foreign.flv",
+      "reference": "pcm-22050-8-2-foreign.flv.f32",
+      "rate": 22050,
+      "channels": 2,
+      "frames": 1701,
+      "pattern": "foreign",
+      "units": 1701,
+      "tags": 28,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1701,
+        "seeks": 16,
+        "checks": 1095150,
+        "exact_float_words": 8618
+      }
+    },
+    {
+      "file": "pcm-22050-8-2-reorder.flv",
+      "reference": "pcm-22050-8-2-reorder.flv.f32",
+      "rate": 22050,
+      "channels": 2,
+      "frames": 160,
+      "pattern": "reorder",
+      "units": 1701,
+      "tags": 28,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 160,
+        "seeks": 16,
+        "checks": 649614,
+        "exact_float_words": 1466
+      }
+    },
+    {
+      "file": "pcm-22050-16-1-continuous.flv",
+      "reference": "pcm-22050-16-1-continuous.flv.f32",
+      "rate": 22050,
+      "channels": 1,
+      "frames": 1701,
+      "pattern": "continuous",
+      "units": 1701,
+      "tags": 1,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1701,
+        "seeks": 16,
+        "checks": 1107617,
+        "exact_float_words": 8618
+      }
+    },
+    {
+      "file": "pcm-22050-16-1-fragmented.flv",
+      "reference": "pcm-22050-16-1-fragmented.flv.f32",
+      "rate": 22050,
+      "channels": 1,
+      "frames": 1701,
+      "pattern": "fragmented",
+      "units": 1701,
+      "tags": 18,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1701,
+        "seeks": 16,
+        "checks": 1195649,
+        "exact_float_words": 8618
+      }
+    },
+    {
+      "file": "pcm-22050-16-1-leading.flv",
+      "reference": "pcm-22050-16-1-leading.flv.f32",
+      "rate": 22050,
+      "channels": 1,
+      "frames": 2252,
+      "pattern": "leading",
+      "units": 1701,
+      "tags": 18,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 2252,
+        "seeks": 16,
+        "checks": 747686,
+        "exact_float_words": 9720
+      }
+    },
+    {
+      "file": "pcm-22050-16-1-internal.flv",
+      "reference": "pcm-22050-16-1-internal.flv.f32",
+      "rate": 22050,
+      "channels": 1,
+      "frames": 2586,
+      "pattern": "internal",
+      "units": 1701,
+      "tags": 18,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 2586,
+        "seeks": 16,
+        "checks": 745014,
+        "exact_float_words": 10388
+      }
+    },
+    {
+      "file": "pcm-22050-16-1-overlap.flv",
+      "reference": "pcm-22050-16-1-overlap.flv.f32",
+      "rate": 22050,
+      "channels": 1,
+      "frames": 1263,
+      "pattern": "overlap",
+      "units": 1701,
+      "tags": 18,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1263,
+        "seeks": 16,
+        "checks": 690054,
+        "exact_float_words": 7742
+      }
+    },
+    {
+      "file": "pcm-22050-16-1-negative.flv",
+      "reference": "pcm-22050-16-1-negative.flv.f32",
+      "rate": 22050,
+      "channels": 1,
+      "frames": 1260,
+      "pattern": "negative",
+      "units": 1701,
+      "tags": 18,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1260,
+        "seeks": 16,
+        "checks": 690078,
+        "exact_float_words": 7736
+      }
+    },
+    {
+      "file": "pcm-22050-16-1-foreign.flv",
+      "reference": "pcm-22050-16-1-foreign.flv.f32",
+      "rate": 22050,
+      "channels": 1,
+      "frames": 1701,
+      "pattern": "foreign",
+      "units": 1701,
+      "tags": 18,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1701,
+        "seeks": 16,
+        "checks": 1195649,
+        "exact_float_words": 8618
+      }
+    },
+    {
+      "file": "pcm-22050-16-1-reorder.flv",
+      "reference": "pcm-22050-16-1-reorder.flv.f32",
+      "rate": 22050,
+      "channels": 1,
+      "frames": 681,
+      "pattern": "reorder",
+      "units": 1701,
+      "tags": 18,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 681,
+        "seeks": 16,
+        "checks": 667322,
+        "exact_float_words": 5232
+      }
+    },
+    {
+      "file": "pcm-22050-16-2-continuous.flv",
+      "reference": "pcm-22050-16-2-continuous.flv.f32",
+      "rate": 22050,
+      "channels": 2,
+      "frames": 1701,
+      "pattern": "continuous",
+      "units": 1701,
+      "tags": 1,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1701,
+        "seeks": 16,
+        "checks": 1107617,
+        "exact_float_words": 8618
+      }
+    },
+    {
+      "file": "pcm-22050-16-2-fragmented.flv",
+      "reference": "pcm-22050-16-2-fragmented.flv.f32",
+      "rate": 22050,
+      "channels": 2,
+      "frames": 1701,
+      "pattern": "fragmented",
+      "units": 1701,
+      "tags": 34,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1701,
+        "seeks": 16,
+        "checks": 1195001,
+        "exact_float_words": 8618
+      }
+    },
+    {
+      "file": "pcm-22050-16-2-leading.flv",
+      "reference": "pcm-22050-16-2-leading.flv.f32",
+      "rate": 22050,
+      "channels": 2,
+      "frames": 2252,
+      "pattern": "leading",
+      "units": 1701,
+      "tags": 34,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 2252,
+        "seeks": 16,
+        "checks": 747686,
+        "exact_float_words": 9720
+      }
+    },
+    {
+      "file": "pcm-22050-16-2-internal.flv",
+      "reference": "pcm-22050-16-2-internal.flv.f32",
+      "rate": 22050,
+      "channels": 2,
+      "frames": 2592,
+      "pattern": "internal",
+      "units": 1701,
+      "tags": 34,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 2592,
+        "seeks": 16,
+        "checks": 744966,
+        "exact_float_words": 10400
+      }
+    },
+    {
+      "file": "pcm-22050-16-2-overlap.flv",
+      "reference": "pcm-22050-16-2-overlap.flv.f32",
+      "rate": 22050,
+      "channels": 2,
+      "frames": 1269,
+      "pattern": "overlap",
+      "units": 1701,
+      "tags": 34,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1269,
+        "seeks": 16,
+        "checks": 690006,
+        "exact_float_words": 7754
+      }
+    },
+    {
+      "file": "pcm-22050-16-2-negative.flv",
+      "reference": "pcm-22050-16-2-negative.flv.f32",
+      "rate": 22050,
+      "channels": 2,
+      "frames": 1260,
+      "pattern": "negative",
+      "units": 1701,
+      "tags": 34,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1260,
+        "seeks": 16,
+        "checks": 690078,
+        "exact_float_words": 7736
+      }
+    },
+    {
+      "file": "pcm-22050-16-2-foreign.flv",
+      "reference": "pcm-22050-16-2-foreign.flv.f32",
+      "rate": 22050,
+      "channels": 2,
+      "frames": 1701,
+      "pattern": "foreign",
+      "units": 1701,
+      "tags": 34,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1701,
+        "seeks": 16,
+        "checks": 1195001,
+        "exact_float_words": 8618
+      }
+    },
+    {
+      "file": "pcm-22050-16-2-reorder.flv",
+      "reference": "pcm-22050-16-2-reorder.flv.f32",
+      "rate": 22050,
+      "channels": 2,
+      "frames": 808,
+      "pattern": "reorder",
+      "units": 1701,
+      "tags": 34,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 808,
+        "seeks": 16,
+        "checks": 663154,
+        "exact_float_words": 6274
+      }
+    },
+    {
+      "file": "pcm-44100-8-1-continuous.flv",
+      "reference": "pcm-44100-8-1-continuous.flv.f32",
+      "rate": 44100,
+      "channels": 1,
+      "frames": 1701,
+      "pattern": "continuous",
+      "units": 1701,
+      "tags": 1,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1701,
+        "seeks": 16,
+        "checks": 1107617,
+        "exact_float_words": 8618
+      }
+    },
+    {
+      "file": "pcm-44100-8-1-fragmented.flv",
+      "reference": "pcm-44100-8-1-fragmented.flv.f32",
+      "rate": 44100,
+      "channels": 1,
+      "frames": 1701,
+      "pattern": "fragmented",
+      "units": 1701,
+      "tags": 18,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1701,
+        "seeks": 16,
+        "checks": 1130264,
+        "exact_float_words": 8618
+      }
+    },
+    {
+      "file": "pcm-44100-8-1-leading.flv",
+      "reference": "pcm-44100-8-1-leading.flv.f32",
+      "rate": 44100,
+      "channels": 1,
+      "frames": 2804,
+      "pattern": "leading",
+      "units": 1701,
+      "tags": 18,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 2804,
+        "seeks": 16,
+        "checks": 743270,
+        "exact_float_words": 10824
+      }
+    },
+    {
+      "file": "pcm-44100-8-1-internal.flv",
+      "reference": "pcm-44100-8-1-internal.flv.f32",
+      "rate": 44100,
+      "channels": 1,
+      "frames": 3482,
+      "pattern": "internal",
+      "units": 1701,
+      "tags": 18,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 3482,
+        "seeks": 16,
+        "checks": 770618,
+        "exact_float_words": 12180
+      }
+    },
+    {
+      "file": "pcm-44100-8-1-overlap.flv",
+      "reference": "pcm-44100-8-1-overlap.flv.f32",
+      "rate": 44100,
+      "channels": 1,
+      "frames": 836,
+      "pattern": "overlap",
+      "units": 1701,
+      "tags": 18,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 836,
+        "seeks": 16,
+        "checks": 695190,
+        "exact_float_words": 6458
+      }
+    },
+    {
+      "file": "pcm-44100-8-1-negative.flv",
+      "reference": "pcm-44100-8-1-negative.flv.f32",
+      "rate": 44100,
+      "channels": 1,
+      "frames": 819,
+      "pattern": "negative",
+      "units": 1701,
+      "tags": 18,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 819,
+        "seeks": 16,
+        "checks": 662842,
+        "exact_float_words": 6352
+      }
+    },
+    {
+      "file": "pcm-44100-8-1-foreign.flv",
+      "reference": "pcm-44100-8-1-foreign.flv.f32",
+      "rate": 44100,
+      "channels": 1,
+      "frames": 1701,
+      "pattern": "foreign",
+      "units": 1701,
+      "tags": 18,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1701,
+        "seeks": 16,
+        "checks": 1130264,
+        "exact_float_words": 8618
+      }
+    },
+    {
+      "file": "pcm-44100-8-1-reorder.flv",
+      "reference": "pcm-44100-8-1-reorder.flv.f32",
+      "rate": 44100,
+      "channels": 1,
+      "frames": 248,
+      "pattern": "reorder",
+      "units": 1701,
+      "tags": 18,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 248,
+        "seeks": 16,
+        "checks": 646542,
+        "exact_float_words": 2234
+      }
+    },
+    {
+      "file": "pcm-44100-8-2-continuous.flv",
+      "reference": "pcm-44100-8-2-continuous.flv.f32",
+      "rate": 44100,
+      "channels": 2,
+      "frames": 1701,
+      "pattern": "continuous",
+      "units": 1701,
+      "tags": 1,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1701,
+        "seeks": 16,
+        "checks": 1107617,
+        "exact_float_words": 8618
+      }
+    },
+    {
+      "file": "pcm-44100-8-2-fragmented.flv",
+      "reference": "pcm-44100-8-2-fragmented.flv.f32",
+      "rate": 44100,
+      "channels": 2,
+      "frames": 1701,
+      "pattern": "fragmented",
+      "units": 1701,
+      "tags": 28,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1701,
+        "seeks": 16,
+        "checks": 1095150,
+        "exact_float_words": 8618
+      }
+    },
+    {
+      "file": "pcm-44100-8-2-leading.flv",
+      "reference": "pcm-44100-8-2-leading.flv.f32",
+      "rate": 44100,
+      "channels": 2,
+      "frames": 2804,
+      "pattern": "leading",
+      "units": 1701,
+      "tags": 28,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 2804,
+        "seeks": 16,
+        "checks": 743270,
+        "exact_float_words": 10824
+      }
+    },
+    {
+      "file": "pcm-44100-8-2-internal.flv",
+      "reference": "pcm-44100-8-2-internal.flv.f32",
+      "rate": 44100,
+      "channels": 2,
+      "frames": 3482,
+      "pattern": "internal",
+      "units": 1701,
+      "tags": 28,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 3482,
+        "seeks": 16,
+        "checks": 770618,
+        "exact_float_words": 12180
+      }
+    },
+    {
+      "file": "pcm-44100-8-2-overlap.flv",
+      "reference": "pcm-44100-8-2-overlap.flv.f32",
+      "rate": 44100,
+      "channels": 2,
+      "frames": 836,
+      "pattern": "overlap",
+      "units": 1701,
+      "tags": 28,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 836,
+        "seeks": 16,
+        "checks": 695190,
+        "exact_float_words": 6458
+      }
+    },
+    {
+      "file": "pcm-44100-8-2-negative.flv",
+      "reference": "pcm-44100-8-2-negative.flv.f32",
+      "rate": 44100,
+      "channels": 2,
+      "frames": 819,
+      "pattern": "negative",
+      "units": 1701,
+      "tags": 28,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 819,
+        "seeks": 16,
+        "checks": 662842,
+        "exact_float_words": 6352
+      }
+    },
+    {
+      "file": "pcm-44100-8-2-foreign.flv",
+      "reference": "pcm-44100-8-2-foreign.flv.f32",
+      "rate": 44100,
+      "channels": 2,
+      "frames": 1701,
+      "pattern": "foreign",
+      "units": 1701,
+      "tags": 28,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1701,
+        "seeks": 16,
+        "checks": 1095150,
+        "exact_float_words": 8618
+      }
+    },
+    {
+      "file": "pcm-44100-8-2-reorder.flv",
+      "reference": "pcm-44100-8-2-reorder.flv.f32",
+      "rate": 44100,
+      "channels": 2,
+      "frames": 160,
+      "pattern": "reorder",
+      "units": 1701,
+      "tags": 28,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 160,
+        "seeks": 16,
+        "checks": 649614,
+        "exact_float_words": 1466
+      }
+    },
+    {
+      "file": "pcm-44100-16-1-continuous.flv",
+      "reference": "pcm-44100-16-1-continuous.flv.f32",
+      "rate": 44100,
+      "channels": 1,
+      "frames": 1701,
+      "pattern": "continuous",
+      "units": 1701,
+      "tags": 1,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1701,
+        "seeks": 16,
+        "checks": 1107617,
+        "exact_float_words": 8618
+      }
+    },
+    {
+      "file": "pcm-44100-16-1-fragmented.flv",
+      "reference": "pcm-44100-16-1-fragmented.flv.f32",
+      "rate": 44100,
+      "channels": 1,
+      "frames": 1701,
+      "pattern": "fragmented",
+      "units": 1701,
+      "tags": 18,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1701,
+        "seeks": 16,
+        "checks": 1195649,
+        "exact_float_words": 8618
+      }
+    },
+    {
+      "file": "pcm-44100-16-1-leading.flv",
+      "reference": "pcm-44100-16-1-leading.flv.f32",
+      "rate": 44100,
+      "channels": 1,
+      "frames": 2804,
+      "pattern": "leading",
+      "units": 1701,
+      "tags": 18,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 2804,
+        "seeks": 16,
+        "checks": 743270,
+        "exact_float_words": 10824
+      }
+    },
+    {
+      "file": "pcm-44100-16-1-internal.flv",
+      "reference": "pcm-44100-16-1-internal.flv.f32",
+      "rate": 44100,
+      "channels": 1,
+      "frames": 3446,
+      "pattern": "internal",
+      "units": 1701,
+      "tags": 18,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 3446,
+        "seeks": 16,
+        "checks": 770906,
+        "exact_float_words": 12108
+      }
+    },
+    {
+      "file": "pcm-44100-16-1-overlap.flv",
+      "reference": "pcm-44100-16-1-overlap.flv.f32",
+      "rate": 44100,
+      "channels": 1,
+      "frames": 799,
+      "pattern": "overlap",
+      "units": 1701,
+      "tags": 18,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 799,
+        "seeks": 16,
+        "checks": 663402,
+        "exact_float_words": 6212
+      }
+    },
+    {
+      "file": "pcm-44100-16-1-negative.flv",
+      "reference": "pcm-44100-16-1-negative.flv.f32",
+      "rate": 44100,
+      "channels": 1,
+      "frames": 819,
+      "pattern": "negative",
+      "units": 1701,
+      "tags": 18,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 819,
+        "seeks": 16,
+        "checks": 662842,
+        "exact_float_words": 6352
+      }
+    },
+    {
+      "file": "pcm-44100-16-1-foreign.flv",
+      "reference": "pcm-44100-16-1-foreign.flv.f32",
+      "rate": 44100,
+      "channels": 1,
+      "frames": 1701,
+      "pattern": "foreign",
+      "units": 1701,
+      "tags": 18,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1701,
+        "seeks": 16,
+        "checks": 1195649,
+        "exact_float_words": 8618
+      }
+    },
+    {
+      "file": "pcm-44100-16-1-reorder.flv",
+      "reference": "pcm-44100-16-1-reorder.flv.f32",
+      "rate": 44100,
+      "channels": 1,
+      "frames": 681,
+      "pattern": "reorder",
+      "units": 1701,
+      "tags": 18,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 681,
+        "seeks": 16,
+        "checks": 667322,
+        "exact_float_words": 5232
+      }
+    },
+    {
+      "file": "pcm-44100-16-2-continuous.flv",
+      "reference": "pcm-44100-16-2-continuous.flv.f32",
+      "rate": 44100,
+      "channels": 2,
+      "frames": 1701,
+      "pattern": "continuous",
+      "units": 1701,
+      "tags": 1,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1701,
+        "seeks": 16,
+        "checks": 1107617,
+        "exact_float_words": 8618
+      }
+    },
+    {
+      "file": "pcm-44100-16-2-fragmented.flv",
+      "reference": "pcm-44100-16-2-fragmented.flv.f32",
+      "rate": 44100,
+      "channels": 2,
+      "frames": 1701,
+      "pattern": "fragmented",
+      "units": 1701,
+      "tags": 34,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1701,
+        "seeks": 16,
+        "checks": 1195001,
+        "exact_float_words": 8618
+      }
+    },
+    {
+      "file": "pcm-44100-16-2-leading.flv",
+      "reference": "pcm-44100-16-2-leading.flv.f32",
+      "rate": 44100,
+      "channels": 2,
+      "frames": 2804,
+      "pattern": "leading",
+      "units": 1701,
+      "tags": 34,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 2804,
+        "seeks": 16,
+        "checks": 743270,
+        "exact_float_words": 10824
+      }
+    },
+    {
+      "file": "pcm-44100-16-2-internal.flv",
+      "reference": "pcm-44100-16-2-internal.flv.f32",
+      "rate": 44100,
+      "channels": 2,
+      "frames": 3452,
+      "pattern": "internal",
+      "units": 1701,
+      "tags": 34,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 3452,
+        "seeks": 16,
+        "checks": 770858,
+        "exact_float_words": 12120
+      }
+    },
+    {
+      "file": "pcm-44100-16-2-overlap.flv",
+      "reference": "pcm-44100-16-2-overlap.flv.f32",
+      "rate": 44100,
+      "channels": 2,
+      "frames": 808,
+      "pattern": "overlap",
+      "units": 1701,
+      "tags": 34,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 808,
+        "seeks": 16,
+        "checks": 663154,
+        "exact_float_words": 6274
+      }
+    },
+    {
+      "file": "pcm-44100-16-2-negative.flv",
+      "reference": "pcm-44100-16-2-negative.flv.f32",
+      "rate": 44100,
+      "channels": 2,
+      "frames": 819,
+      "pattern": "negative",
+      "units": 1701,
+      "tags": 34,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 819,
+        "seeks": 16,
+        "checks": 662842,
+        "exact_float_words": 6352
+      }
+    },
+    {
+      "file": "pcm-44100-16-2-foreign.flv",
+      "reference": "pcm-44100-16-2-foreign.flv.f32",
+      "rate": 44100,
+      "channels": 2,
+      "frames": 1701,
+      "pattern": "foreign",
+      "units": 1701,
+      "tags": 34,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1701,
+        "seeks": 16,
+        "checks": 1195001,
+        "exact_float_words": 8618
+      }
+    },
+    {
+      "file": "pcm-44100-16-2-reorder.flv",
+      "reference": "pcm-44100-16-2-reorder.flv.f32",
+      "rate": 44100,
+      "channels": 2,
+      "frames": 808,
+      "pattern": "reorder",
+      "units": 1701,
+      "tags": 34,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 808,
+        "seeks": 16,
+        "checks": 663154,
+        "exact_float_words": 6274
+      }
+    },
+    {
+      "file": "g711-7-1-continuous.flv",
+      "reference": "g711-7-1-continuous.flv.f32",
+      "rate": 8000,
+      "channels": 1,
+      "frames": 1701,
+      "pattern": "continuous",
+      "units": 1701,
+      "tags": 1,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1701,
+        "seeks": 16,
+        "checks": 1107617,
+        "exact_float_words": 8618
+      }
+    },
+    {
+      "file": "g711-7-1-fragmented.flv",
+      "reference": "g711-7-1-fragmented.flv.f32",
+      "rate": 8000,
+      "channels": 1,
+      "frames": 1701,
+      "pattern": "fragmented",
+      "units": 1701,
+      "tags": 7,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1701,
+        "seeks": 16,
+        "checks": 1125464,
+        "exact_float_words": 8618
+      }
+    },
+    {
+      "file": "g711-7-1-leading.flv",
+      "reference": "g711-7-1-leading.flv.f32",
+      "rate": 8000,
+      "channels": 1,
+      "frames": 1901,
+      "pattern": "leading",
+      "units": 1701,
+      "tags": 7,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1901,
+        "seeks": 16,
+        "checks": 717722,
+        "exact_float_words": 9018
+      }
+    },
+    {
+      "file": "g711-7-1-internal.flv",
+      "reference": "g711-7-1-internal.flv.f32",
+      "rate": 8000,
+      "channels": 1,
+      "frames": 2025,
+      "pattern": "internal",
+      "units": 1701,
+      "tags": 7,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 2025,
+        "seeks": 16,
+        "checks": 716730,
+        "exact_float_words": 9266
+      }
+    },
+    {
+      "file": "g711-7-1-overlap.flv",
+      "reference": "g711-7-1-overlap.flv.f32",
+      "rate": 8000,
+      "channels": 1,
+      "frames": 1545,
+      "pattern": "overlap",
+      "units": 1701,
+      "tags": 7,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1545,
+        "seeks": 16,
+        "checks": 720570,
+        "exact_float_words": 8306
+      }
+    },
+    {
+      "file": "g711-7-1-negative.flv",
+      "reference": "g711-7-1-negative.flv.f32",
+      "rate": 8000,
+      "channels": 1,
+      "frames": 1541,
+      "pattern": "negative",
+      "units": 1701,
+      "tags": 7,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1541,
+        "seeks": 16,
+        "checks": 720602,
+        "exact_float_words": 8298
+      }
+    },
+    {
+      "file": "g711-7-1-foreign.flv",
+      "reference": "g711-7-1-foreign.flv.f32",
+      "rate": 8000,
+      "channels": 1,
+      "frames": 1701,
+      "pattern": "foreign",
+      "units": 1701,
+      "tags": 7,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1701,
+        "seeks": 16,
+        "checks": 1125464,
+        "exact_float_words": 8618
+      }
+    },
+    {
+      "file": "g711-7-1-reorder.flv",
+      "reference": "g711-7-1-reorder.flv.f32",
+      "rate": 8000,
+      "channels": 1,
+      "frames": 668,
+      "pattern": "reorder",
+      "units": 1701,
+      "tags": 7,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 668,
+        "seeks": 16,
+        "checks": 667754,
+        "exact_float_words": 5124
+      }
+    },
+    {
+      "file": "g711-7-2-continuous.flv",
+      "reference": "g711-7-2-continuous.flv.f32",
+      "rate": 8000,
+      "channels": 2,
+      "frames": 1701,
+      "pattern": "continuous",
+      "units": 1701,
+      "tags": 1,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1701,
+        "seeks": 16,
+        "checks": 1107617,
+        "exact_float_words": 8618
+      }
+    },
+    {
+      "file": "g711-7-2-fragmented.flv",
+      "reference": "g711-7-2-fragmented.flv.f32",
+      "rate": 8000,
+      "channels": 2,
+      "frames": 1701,
+      "pattern": "fragmented",
+      "units": 1701,
+      "tags": 10,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1701,
+        "seeks": 16,
+        "checks": 1160200,
+        "exact_float_words": 8618
+      }
+    },
+    {
+      "file": "g711-7-2-leading.flv",
+      "reference": "g711-7-2-leading.flv.f32",
+      "rate": 8000,
+      "channels": 2,
+      "frames": 1901,
+      "pattern": "leading",
+      "units": 1701,
+      "tags": 10,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1901,
+        "seeks": 16,
+        "checks": 717722,
+        "exact_float_words": 9018
+      }
+    },
+    {
+      "file": "g711-7-2-internal.flv",
+      "reference": "g711-7-2-internal.flv.f32",
+      "rate": 8000,
+      "channels": 2,
+      "frames": 2023,
+      "pattern": "internal",
+      "units": 1701,
+      "tags": 10,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 2023,
+        "seeks": 16,
+        "checks": 716746,
+        "exact_float_words": 9262
+      }
+    },
+    {
+      "file": "g711-7-2-overlap.flv",
+      "reference": "g711-7-2-overlap.flv.f32",
+      "rate": 8000,
+      "channels": 2,
+      "frames": 1543,
+      "pattern": "overlap",
+      "units": 1701,
+      "tags": 10,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1543,
+        "seeks": 16,
+        "checks": 720586,
+        "exact_float_words": 8302
+      }
+    },
+    {
+      "file": "g711-7-2-negative.flv",
+      "reference": "g711-7-2-negative.flv.f32",
+      "rate": 8000,
+      "channels": 2,
+      "frames": 1541,
+      "pattern": "negative",
+      "units": 1701,
+      "tags": 10,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1541,
+        "seeks": 16,
+        "checks": 720602,
+        "exact_float_words": 8298
+      }
+    },
+    {
+      "file": "g711-7-2-foreign.flv",
+      "reference": "g711-7-2-foreign.flv.f32",
+      "rate": 8000,
+      "channels": 2,
+      "frames": 1701,
+      "pattern": "foreign",
+      "units": 1701,
+      "tags": 10,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1701,
+        "seeks": 16,
+        "checks": 1160200,
+        "exact_float_words": 8618
+      }
+    },
+    {
+      "file": "g711-7-2-reorder.flv",
+      "reference": "g711-7-2-reorder.flv.f32",
+      "rate": 8000,
+      "channels": 2,
+      "frames": 350,
+      "pattern": "reorder",
+      "units": 1701,
+      "tags": 10,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 350,
+        "seeks": 16,
+        "checks": 643286,
+        "exact_float_words": 3048
+      }
+    },
+    {
+      "file": "g711-8-1-continuous.flv",
+      "reference": "g711-8-1-continuous.flv.f32",
+      "rate": 8000,
+      "channels": 1,
+      "frames": 1701,
+      "pattern": "continuous",
+      "units": 1701,
+      "tags": 1,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1701,
+        "seeks": 16,
+        "checks": 1107617,
+        "exact_float_words": 8618
+      }
+    },
+    {
+      "file": "g711-8-1-fragmented.flv",
+      "reference": "g711-8-1-fragmented.flv.f32",
+      "rate": 8000,
+      "channels": 1,
+      "frames": 1701,
+      "pattern": "fragmented",
+      "units": 1701,
+      "tags": 7,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1701,
+        "seeks": 16,
+        "checks": 1125464,
+        "exact_float_words": 8618
+      }
+    },
+    {
+      "file": "g711-8-1-leading.flv",
+      "reference": "g711-8-1-leading.flv.f32",
+      "rate": 8000,
+      "channels": 1,
+      "frames": 1901,
+      "pattern": "leading",
+      "units": 1701,
+      "tags": 7,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1901,
+        "seeks": 16,
+        "checks": 717722,
+        "exact_float_words": 9018
+      }
+    },
+    {
+      "file": "g711-8-1-internal.flv",
+      "reference": "g711-8-1-internal.flv.f32",
+      "rate": 8000,
+      "channels": 1,
+      "frames": 2025,
+      "pattern": "internal",
+      "units": 1701,
+      "tags": 7,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 2025,
+        "seeks": 16,
+        "checks": 716730,
+        "exact_float_words": 9266
+      }
+    },
+    {
+      "file": "g711-8-1-overlap.flv",
+      "reference": "g711-8-1-overlap.flv.f32",
+      "rate": 8000,
+      "channels": 1,
+      "frames": 1545,
+      "pattern": "overlap",
+      "units": 1701,
+      "tags": 7,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1545,
+        "seeks": 16,
+        "checks": 720570,
+        "exact_float_words": 8306
+      }
+    },
+    {
+      "file": "g711-8-1-negative.flv",
+      "reference": "g711-8-1-negative.flv.f32",
+      "rate": 8000,
+      "channels": 1,
+      "frames": 1541,
+      "pattern": "negative",
+      "units": 1701,
+      "tags": 7,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1541,
+        "seeks": 16,
+        "checks": 720602,
+        "exact_float_words": 8298
+      }
+    },
+    {
+      "file": "g711-8-1-foreign.flv",
+      "reference": "g711-8-1-foreign.flv.f32",
+      "rate": 8000,
+      "channels": 1,
+      "frames": 1701,
+      "pattern": "foreign",
+      "units": 1701,
+      "tags": 7,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1701,
+        "seeks": 16,
+        "checks": 1125464,
+        "exact_float_words": 8618
+      }
+    },
+    {
+      "file": "g711-8-1-reorder.flv",
+      "reference": "g711-8-1-reorder.flv.f32",
+      "rate": 8000,
+      "channels": 1,
+      "frames": 668,
+      "pattern": "reorder",
+      "units": 1701,
+      "tags": 7,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 668,
+        "seeks": 16,
+        "checks": 667754,
+        "exact_float_words": 5124
+      }
+    },
+    {
+      "file": "g711-8-2-continuous.flv",
+      "reference": "g711-8-2-continuous.flv.f32",
+      "rate": 8000,
+      "channels": 2,
+      "frames": 1701,
+      "pattern": "continuous",
+      "units": 1701,
+      "tags": 1,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1701,
+        "seeks": 16,
+        "checks": 1107617,
+        "exact_float_words": 8618
+      }
+    },
+    {
+      "file": "g711-8-2-fragmented.flv",
+      "reference": "g711-8-2-fragmented.flv.f32",
+      "rate": 8000,
+      "channels": 2,
+      "frames": 1701,
+      "pattern": "fragmented",
+      "units": 1701,
+      "tags": 10,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1701,
+        "seeks": 16,
+        "checks": 1160200,
+        "exact_float_words": 8618
+      }
+    },
+    {
+      "file": "g711-8-2-leading.flv",
+      "reference": "g711-8-2-leading.flv.f32",
+      "rate": 8000,
+      "channels": 2,
+      "frames": 1901,
+      "pattern": "leading",
+      "units": 1701,
+      "tags": 10,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1901,
+        "seeks": 16,
+        "checks": 717722,
+        "exact_float_words": 9018
+      }
+    },
+    {
+      "file": "g711-8-2-internal.flv",
+      "reference": "g711-8-2-internal.flv.f32",
+      "rate": 8000,
+      "channels": 2,
+      "frames": 2023,
+      "pattern": "internal",
+      "units": 1701,
+      "tags": 10,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 2023,
+        "seeks": 16,
+        "checks": 716746,
+        "exact_float_words": 9262
+      }
+    },
+    {
+      "file": "g711-8-2-overlap.flv",
+      "reference": "g711-8-2-overlap.flv.f32",
+      "rate": 8000,
+      "channels": 2,
+      "frames": 1543,
+      "pattern": "overlap",
+      "units": 1701,
+      "tags": 10,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1543,
+        "seeks": 16,
+        "checks": 720586,
+        "exact_float_words": 8302
+      }
+    },
+    {
+      "file": "g711-8-2-negative.flv",
+      "reference": "g711-8-2-negative.flv.f32",
+      "rate": 8000,
+      "channels": 2,
+      "frames": 1541,
+      "pattern": "negative",
+      "units": 1701,
+      "tags": 10,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1541,
+        "seeks": 16,
+        "checks": 720602,
+        "exact_float_words": 8298
+      }
+    },
+    {
+      "file": "g711-8-2-foreign.flv",
+      "reference": "g711-8-2-foreign.flv.f32",
+      "rate": 8000,
+      "channels": 2,
+      "frames": 1701,
+      "pattern": "foreign",
+      "units": 1701,
+      "tags": 10,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1701,
+        "seeks": 16,
+        "checks": 1160200,
+        "exact_float_words": 8618
+      }
+    },
+    {
+      "file": "g711-8-2-reorder.flv",
+      "reference": "g711-8-2-reorder.flv.f32",
+      "rate": 8000,
+      "channels": 2,
+      "frames": 350,
+      "pattern": "reorder",
+      "units": 1701,
+      "tags": 10,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 350,
+        "seeks": 16,
+        "checks": 643286,
+        "exact_float_words": 3048
+      }
+    },
+    {
+      "file": "mpeg-8000-1-cbr-continuous.flv",
+      "reference": "mpeg-8000-1-cbr-continuous.flv.f32",
+      "rate": 8000,
+      "channels": 1,
+      "frames": 6912,
+      "pattern": "continuous",
+      "units": 12,
+      "tags": 12,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 6912,
+        "seeks": 16,
+        "checks": 1132265,
+        "exact_float_words": 20846
+      }
+    },
+    {
+      "file": "mpeg-8000-1-cbr-fragmented.flv",
+      "reference": "mpeg-8000-1-cbr-fragmented.flv.f32",
+      "rate": 8000,
+      "channels": 1,
+      "frames": 6912,
+      "pattern": "fragmented",
+      "units": 12,
+      "tags": 17,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 6912,
+        "seeks": 16,
+        "checks": 1132265,
+        "exact_float_words": 20846
+      }
+    },
+    {
+      "file": "mpeg-8000-1-cbr-leading.flv",
+      "reference": "mpeg-8000-1-cbr-leading.flv.f32",
+      "rate": 8000,
+      "channels": 1,
+      "frames": 7112,
+      "pattern": "leading",
+      "units": 12,
+      "tags": 17,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 7112,
+        "seeks": 16,
+        "checks": 832670,
+        "exact_float_words": 21246
+      }
+    },
+    {
+      "file": "mpeg-8000-1-cbr-internal.flv",
+      "reference": "mpeg-8000-1-cbr-internal.flv.f32",
+      "rate": 8000,
+      "channels": 1,
+      "frames": 7232,
+      "pattern": "internal",
+      "units": 12,
+      "tags": 17,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 7232,
+        "seeks": 16,
+        "checks": 831710,
+        "exact_float_words": 21486
+      }
+    },
+    {
+      "file": "mpeg-8000-1-cbr-overlap.flv",
+      "reference": "mpeg-8000-1-cbr-overlap.flv.f32",
+      "rate": 8000,
+      "channels": 1,
+      "frames": 6752,
+      "pattern": "overlap",
+      "units": 12,
+      "tags": 17,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 6752,
+        "seeks": 16,
+        "checks": 835550,
+        "exact_float_words": 20526
+      }
+    },
+    {
+      "file": "mpeg-8000-1-cbr-negative.flv",
+      "reference": "mpeg-8000-1-cbr-negative.flv.f32",
+      "rate": 8000,
+      "channels": 1,
+      "frames": 6752,
+      "pattern": "negative",
+      "units": 12,
+      "tags": 17,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 6752,
+        "seeks": 16,
+        "checks": 835550,
+        "exact_float_words": 20526
+      }
+    },
+    {
+      "file": "mpeg-8000-1-cbr-foreign.flv",
+      "reference": "mpeg-8000-1-cbr-foreign.flv.f32",
+      "rate": 8000,
+      "channels": 1,
+      "frames": 6912,
+      "pattern": "foreign",
+      "units": 12,
+      "tags": 17,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 6912,
+        "seeks": 16,
+        "checks": 1132265,
+        "exact_float_words": 20846
+      }
+    },
+    {
+      "file": "mpeg-8000-1-cbr-reorder.flv",
+      "reference": "mpeg-8000-1-cbr-reorder.flv.f32",
+      "rate": 8000,
+      "channels": 1,
+      "frames": 5184,
+      "pattern": "reorder",
+      "units": 12,
+      "tags": 17,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 5184,
+        "seeks": 16,
+        "checks": 815322,
+        "exact_float_words": 17390
+      }
+    },
+    {
+      "file": "mpeg-22050-2-cbr-continuous.flv",
+      "reference": "mpeg-22050-2-cbr-continuous.flv.f32",
+      "rate": 22050,
+      "channels": 2,
+      "frames": 15552,
+      "pattern": "continuous",
+      "units": 27,
+      "tags": 27,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 15552,
+        "seeks": 16,
+        "checks": 1248767,
+        "exact_float_words": 38126
+      }
+    },
+    {
+      "file": "mpeg-22050-2-cbr-fragmented.flv",
+      "reference": "mpeg-22050-2-cbr-fragmented.flv.f32",
+      "rate": 22050,
+      "channels": 2,
+      "frames": 15552,
+      "pattern": "fragmented",
+      "units": 27,
+      "tags": 52,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 15552,
+        "seeks": 16,
+        "checks": 1248767,
+        "exact_float_words": 38126
+      }
+    },
+    {
+      "file": "mpeg-22050-2-cbr-leading.flv",
+      "reference": "mpeg-22050-2-cbr-leading.flv.f32",
+      "rate": 22050,
+      "channels": 2,
+      "frames": 16103,
+      "pattern": "leading",
+      "units": 27,
+      "tags": 52,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 16103,
+        "seeks": 16,
+        "checks": 924602,
+        "exact_float_words": 39228
+      }
+    },
+    {
+      "file": "mpeg-22050-2-cbr-internal.flv",
+      "reference": "mpeg-22050-2-cbr-internal.flv.f32",
+      "rate": 22050,
+      "channels": 2,
+      "frames": 16424,
+      "pattern": "internal",
+      "units": 27,
+      "tags": 52,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 16424,
+        "seeks": 16,
+        "checks": 922034,
+        "exact_float_words": 39870
+      }
+    },
+    {
+      "file": "mpeg-22050-2-cbr-overlap.flv",
+      "reference": "mpeg-22050-2-cbr-overlap.flv.f32",
+      "rate": 22050,
+      "channels": 2,
+      "frames": 15101,
+      "pattern": "overlap",
+      "units": 27,
+      "tags": 52,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 15101,
+        "seeks": 16,
+        "checks": 932618,
+        "exact_float_words": 37224
+      }
+    },
+    {
+      "file": "mpeg-22050-2-cbr-negative.flv",
+      "reference": "mpeg-22050-2-cbr-negative.flv.f32",
+      "rate": 22050,
+      "channels": 2,
+      "frames": 15111,
+      "pattern": "negative",
+      "units": 27,
+      "tags": 52,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 15111,
+        "seeks": 16,
+        "checks": 932538,
+        "exact_float_words": 37244
+      }
+    },
+    {
+      "file": "mpeg-22050-2-cbr-foreign.flv",
+      "reference": "mpeg-22050-2-cbr-foreign.flv.f32",
+      "rate": 22050,
+      "channels": 2,
+      "frames": 15552,
+      "pattern": "foreign",
+      "units": 27,
+      "tags": 52,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 15552,
+        "seeks": 16,
+        "checks": 1248767,
+        "exact_float_words": 38126
+      }
+    },
+    {
+      "file": "mpeg-22050-2-cbr-reorder.flv",
+      "reference": "mpeg-22050-2-cbr-reorder.flv.f32",
+      "rate": 22050,
+      "channels": 2,
+      "frames": 8927,
+      "pattern": "reorder",
+      "units": 27,
+      "tags": 52,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 8927,
+        "seeks": 16,
+        "checks": 850922,
+        "exact_float_words": 24876
+      }
+    },
+    {
+      "file": "mpeg-44100-1-cbr-continuous.flv",
+      "reference": "mpeg-44100-1-cbr-continuous.flv.f32",
+      "rate": 44100,
+      "channels": 1,
+      "frames": 29952,
+      "pattern": "continuous",
+      "units": 26,
+      "tags": 26,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 29952,
+        "seeks": 16,
+        "checks": 1372961,
+        "exact_float_words": 66926
+      }
+    },
+    {
+      "file": "mpeg-44100-1-cbr-fragmented.flv",
+      "reference": "mpeg-44100-1-cbr-fragmented.flv.f32",
+      "rate": 44100,
+      "channels": 1,
+      "frames": 29952,
+      "pattern": "fragmented",
+      "units": 26,
+      "tags": 52,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 29952,
+        "seeks": 16,
+        "checks": 1372961,
+        "exact_float_words": 66926
+      }
+    },
+    {
+      "file": "mpeg-44100-1-cbr-leading.flv",
+      "reference": "mpeg-44100-1-cbr-leading.flv.f32",
+      "rate": 44100,
+      "channels": 1,
+      "frames": 31055,
+      "pattern": "leading",
+      "units": 26,
+      "tags": 52,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 31055,
+        "seeks": 16,
+        "checks": 1001618,
+        "exact_float_words": 69132
+      }
+    },
+    {
+      "file": "mpeg-44100-1-cbr-internal.flv",
+      "reference": "mpeg-44100-1-cbr-internal.flv.f32",
+      "rate": 44100,
+      "channels": 1,
+      "frames": 31695,
+      "pattern": "internal",
+      "units": 26,
+      "tags": 52,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 31695,
+        "seeks": 16,
+        "checks": 1029270,
+        "exact_float_words": 70412
+      }
+    },
+    {
+      "file": "mpeg-44100-1-cbr-overlap.flv",
+      "reference": "mpeg-44100-1-cbr-overlap.flv.f32",
+      "rate": 44100,
+      "channels": 1,
+      "frames": 29049,
+      "pattern": "overlap",
+      "units": 26,
+      "tags": 52,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 29049,
+        "seeks": 16,
+        "checks": 1017666,
+        "exact_float_words": 65120
+      }
+    },
+    {
+      "file": "mpeg-44100-1-cbr-negative.flv",
+      "reference": "mpeg-44100-1-cbr-negative.flv.f32",
+      "rate": 44100,
+      "channels": 1,
+      "frames": 29070,
+      "pattern": "negative",
+      "units": 26,
+      "tags": 52,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 29070,
+        "seeks": 16,
+        "checks": 1017498,
+        "exact_float_words": 65162
+      }
+    },
+    {
+      "file": "mpeg-44100-1-cbr-foreign.flv",
+      "reference": "mpeg-44100-1-cbr-foreign.flv.f32",
+      "rate": 44100,
+      "channels": 1,
+      "frames": 29952,
+      "pattern": "foreign",
+      "units": 26,
+      "tags": 52,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 29952,
+        "seeks": 16,
+        "checks": 1372961,
+        "exact_float_words": 66926
+      }
+    },
+    {
+      "file": "mpeg-44100-1-cbr-reorder.flv",
+      "reference": "mpeg-44100-1-cbr-reorder.flv.f32",
+      "rate": 44100,
+      "channels": 1,
+      "frames": 16701,
+      "pattern": "reorder",
+      "units": 26,
+      "tags": 52,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 16701,
+        "seeks": 16,
+        "checks": 952590,
+        "exact_float_words": 40424
+      }
+    },
+    {
+      "file": "mpeg-44100-2-cbr-continuous.flv",
+      "reference": "mpeg-44100-2-cbr-continuous.flv.f32",
+      "rate": 44100,
+      "channels": 2,
+      "frames": 29952,
+      "pattern": "continuous",
+      "units": 26,
+      "tags": 26,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 29952,
+        "seeks": 16,
+        "checks": 1372961,
+        "exact_float_words": 66926
+      }
+    },
+    {
+      "file": "mpeg-44100-2-cbr-fragmented.flv",
+      "reference": "mpeg-44100-2-cbr-fragmented.flv.f32",
+      "rate": 44100,
+      "channels": 2,
+      "frames": 29952,
+      "pattern": "fragmented",
+      "units": 26,
+      "tags": 52,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 29952,
+        "seeks": 16,
+        "checks": 1372961,
+        "exact_float_words": 66926
+      }
+    },
+    {
+      "file": "mpeg-44100-2-cbr-leading.flv",
+      "reference": "mpeg-44100-2-cbr-leading.flv.f32",
+      "rate": 44100,
+      "channels": 2,
+      "frames": 31055,
+      "pattern": "leading",
+      "units": 26,
+      "tags": 52,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 31055,
+        "seeks": 16,
+        "checks": 1001618,
+        "exact_float_words": 69132
+      }
+    },
+    {
+      "file": "mpeg-44100-2-cbr-internal.flv",
+      "reference": "mpeg-44100-2-cbr-internal.flv.f32",
+      "rate": 44100,
+      "channels": 2,
+      "frames": 31695,
+      "pattern": "internal",
+      "units": 26,
+      "tags": 52,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 31695,
+        "seeks": 16,
+        "checks": 1029270,
+        "exact_float_words": 70412
+      }
+    },
+    {
+      "file": "mpeg-44100-2-cbr-overlap.flv",
+      "reference": "mpeg-44100-2-cbr-overlap.flv.f32",
+      "rate": 44100,
+      "channels": 2,
+      "frames": 29049,
+      "pattern": "overlap",
+      "units": 26,
+      "tags": 52,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 29049,
+        "seeks": 16,
+        "checks": 1017666,
+        "exact_float_words": 65120
+      }
+    },
+    {
+      "file": "mpeg-44100-2-cbr-negative.flv",
+      "reference": "mpeg-44100-2-cbr-negative.flv.f32",
+      "rate": 44100,
+      "channels": 2,
+      "frames": 29070,
+      "pattern": "negative",
+      "units": 26,
+      "tags": 52,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 29070,
+        "seeks": 16,
+        "checks": 1017498,
+        "exact_float_words": 65162
+      }
+    },
+    {
+      "file": "mpeg-44100-2-cbr-foreign.flv",
+      "reference": "mpeg-44100-2-cbr-foreign.flv.f32",
+      "rate": 44100,
+      "channels": 2,
+      "frames": 29952,
+      "pattern": "foreign",
+      "units": 26,
+      "tags": 52,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 29952,
+        "seeks": 16,
+        "checks": 1372961,
+        "exact_float_words": 66926
+      }
+    },
+    {
+      "file": "mpeg-44100-2-cbr-reorder.flv",
+      "reference": "mpeg-44100-2-cbr-reorder.flv.f32",
+      "rate": 44100,
+      "channels": 2,
+      "frames": 16701,
+      "pattern": "reorder",
+      "units": 26,
+      "tags": 52,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 16701,
+        "seeks": 16,
+        "checks": 952590,
+        "exact_float_words": 40424
+      }
+    },
+    {
+      "file": "mpeg-48000-2-vbr-continuous.flv",
+      "reference": "mpeg-48000-2-vbr-continuous.flv.f32",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 33408,
+      "pattern": "continuous",
+      "units": 29,
+      "tags": 29,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 33408,
+        "seeks": 16,
+        "checks": 1323311,
+        "exact_float_words": 73838
+      }
+    },
+    {
+      "file": "mpeg-48000-2-vbr-fragmented.flv",
+      "reference": "mpeg-48000-2-vbr-fragmented.flv.f32",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 33408,
+      "pattern": "fragmented",
+      "units": 29,
+      "tags": 41,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 33408,
+        "seeks": 16,
+        "checks": 1323311,
+        "exact_float_words": 73838
+      }
+    },
+    {
+      "file": "mpeg-48000-2-vbr-leading.flv",
+      "reference": "mpeg-48000-2-vbr-leading.flv.f32",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 34608,
+      "pattern": "leading",
+      "units": 29,
+      "tags": 41,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 34608,
+        "seeks": 16,
+        "checks": 1005966,
+        "exact_float_words": 76238
+      }
+    },
+    {
+      "file": "mpeg-48000-2-vbr-internal.flv",
+      "reference": "mpeg-48000-2-vbr-internal.flv.f32",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 35328,
+      "pattern": "internal",
+      "units": 29,
+      "tags": 41,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 35328,
+        "seeks": 16,
+        "checks": 1032978,
+        "exact_float_words": 77678
+      }
+    },
+    {
+      "file": "mpeg-48000-2-vbr-overlap.flv",
+      "reference": "mpeg-48000-2-vbr-overlap.flv.f32",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 32448,
+      "pattern": "overlap",
+      "units": 29,
+      "tags": 41,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 32448,
+        "seeks": 16,
+        "checks": 1023246,
+        "exact_float_words": 71918
+      }
+    },
+    {
+      "file": "mpeg-48000-2-vbr-negative.flv",
+      "reference": "mpeg-48000-2-vbr-negative.flv.f32",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 32448,
+      "pattern": "negative",
+      "units": 29,
+      "tags": 41,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 32448,
+        "seeks": 16,
+        "checks": 1023246,
+        "exact_float_words": 71918
+      }
+    },
+    {
+      "file": "mpeg-48000-2-vbr-foreign.flv",
+      "reference": "mpeg-48000-2-vbr-foreign.flv.f32",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 33408,
+      "pattern": "foreign",
+      "units": 29,
+      "tags": 41,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 33408,
+        "seeks": 16,
+        "checks": 1323311,
+        "exact_float_words": 73838
+      }
+    },
+    {
+      "file": "mpeg-48000-2-vbr-reorder.flv",
+      "reference": "mpeg-48000-2-vbr-reorder.flv.f32",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 19008,
+      "pattern": "reorder",
+      "units": 29,
+      "tags": 41,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 19008,
+        "seeks": 16,
+        "checks": 966906,
+        "exact_float_words": 45038
+      }
+    },
+    {
+      "file": "platform-pcm-11025-8-1-fragmented.flv",
+      "reference": "platform-pcm-11025-8-1-fragmented.flv.f32",
+      "rate": 11025,
+      "channels": 1,
+      "frames": 1701,
+      "pattern": "format0 little-endian",
+      "units": 1701,
+      "tags": 18,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1701,
+        "seeks": 16,
+        "checks": 1130264,
+        "exact_float_words": 8618
+      }
+    },
+    {
+      "file": "platform-pcm-44100-16-2-internal.flv",
+      "reference": "platform-pcm-44100-16-2-internal.flv.f32",
+      "rate": 44100,
+      "channels": 2,
+      "frames": 3452,
+      "pattern": "format0 little-endian",
+      "units": 1701,
+      "tags": 34,
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 3452,
+        "seeks": 16,
+        "checks": 770858,
+        "exact_float_words": 12120
+      }
+    },
+    {
+      "file": "large-pcm-tag.flv",
+      "reference": "large-pcm-tag.flv.f32",
+      "rate": 44100,
+      "channels": 2,
+      "frames": 263284,
+      "pattern": "multi-view tag",
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 263284,
+        "seeks": 16,
+        "checks": 2978110,
+        "exact_float_words": 533590
+      }
+    },
+    {
+      "file": "empty-pcm.flv",
+      "reference": "empty-pcm.flv.f32",
+      "rate": 44100,
+      "channels": 2,
+      "frames": 0,
+      "pattern": "empty presentation",
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 0,
+        "seeks": 16,
+        "checks": 557162,
+        "exact_float_words": 0
+      }
+    },
+    {
+      "file": "partial-pcm.flv",
+      "reference": "partial-pcm.flv.f32",
+      "rate": 44100,
+      "channels": 2,
+      "frames": 0,
+      "pattern": "empty presentation",
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 0,
+        "seeks": 16,
+        "checks": 557162,
+        "exact_float_words": 0
+      }
+    },
+    {
+      "file": "empty-g711.flv",
+      "reference": "empty-g711.flv.f32",
+      "rate": 8000,
+      "channels": 2,
+      "frames": 0,
+      "pattern": "empty presentation",
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 0,
+        "seeks": 16,
+        "checks": 557162,
+        "exact_float_words": 0
+      }
+    },
+    {
+      "file": "mpeg-metadata.flv",
+      "reference": "mpeg-metadata.flv.f32",
+      "rate": 44100,
+      "channels": 1,
+      "frames": 28665,
+      "pattern": "native metadata/trims",
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 28665,
+        "seeks": 16,
+        "checks": 1259422,
+        "exact_float_words": 64352
+      }
+    },
+    {
+      "file": "mpeg-metadata-id3v1.flv",
+      "reference": "mpeg-metadata-id3v1.flv.f32",
+      "rate": 44100,
+      "channels": 1,
+      "frames": 28665,
+      "pattern": "metadata-only tail clock ignored",
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 28665,
+        "seeks": 16,
+        "checks": 1259422,
+        "exact_float_words": 64352
+      }
+    },
+    {
+      "file": "mpeg-metadata-ape.flv",
+      "reference": "mpeg-metadata-ape.flv.f32",
+      "rate": 44100,
+      "channels": 1,
+      "frames": 28665,
+      "pattern": "metadata-only tail clock ignored",
+      "result": "exact media PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 28665,
+        "seeks": 16,
+        "checks": 1259422,
+        "exact_float_words": 64352
+      }
+    }
+  ],
+  "guarded": [
+    {
+      "file": "pcm-44100-16-2-internal.flv",
+      "result": "passed",
+      "checks": 39881300,
+      "exact_float_words": 6904,
+      "guarded_cases": 767,
+      "protected_prefixes": 254,
+      "mutations": 512
+    },
+    {
+      "file": "g711-7-2-overlap.flv",
+      "result": "passed",
+      "checks": 36796987,
+      "exact_float_words": 3086,
+      "guarded_cases": 769,
+      "protected_prefixes": 256,
+      "mutations": 512
+    },
+    {
+      "file": "mpeg-44100-2-cbr-fragmented.flv",
+      "result": "passed",
+      "checks": 163954179,
+      "exact_float_words": 59904,
+      "guarded_cases": 763,
+      "protected_prefixes": 250,
+      "mutations": 512
+    }
+  ],
+  "sparse": [
+    {
+      "file": "pcm-44100-16-2-maximum-clock.flv",
+      "reference": "pcm-44100-16-2-maximum-clock.flv.f32",
+      "gap_frames": 94704028833,
+      "result": "passed",
+      "checks": 24
+    },
+    {
+      "file": "pcm-44100-16-2-maximum-continuation.flv",
+      "reference": "pcm-44100-16-2-maximum-continuation.flv.f32",
+      "gap_frames": 94704028833,
+      "prefix_frames": 1,
+      "result": "passed",
+      "checks": 25
+    },
+    {
+      "file": "g711-7-2-maximum-clock.flv",
+      "reference": "g711-7-2-maximum-clock.flv.f32",
+      "gap_frames": 17179869176,
+      "result": "passed",
+      "checks": 24
+    },
+    {
+      "file": "g711-7-2-maximum-continuation.flv",
+      "reference": "g711-7-2-maximum-continuation.flv.f32",
+      "gap_frames": 17179869176,
+      "prefix_frames": 1,
+      "result": "passed",
+      "checks": 25
+    },
+    {
+      "file": "mpeg-8000-1-cbr-maximum-clock.flv",
+      "reference": "mpeg-8000-1-cbr-maximum-clock.flv.f32",
+      "gap_frames": 17179869176,
+      "result": "passed",
+      "checks": 24
+    },
+    {
+      "file": "mpeg-8000-1-cbr-maximum-continuation.flv",
+      "reference": "mpeg-8000-1-cbr-maximum-continuation.flv.f32",
+      "gap_frames": 17179869176,
+      "prefix_frames": 576,
+      "result": "passed",
+      "checks": 25
+    }
+  ],
+  "cancellation": [
+    {
+      "file": "pcm-lifecycle.flv",
+      "mode": "cancel-open",
+      "result": "cancelled"
+    },
+    {
+      "file": "pcm-lifecycle.flv",
+      "mode": "cancel-read",
+      "result": "cancelled",
+      "frames_before_cancel": 278528
+    },
+    {
+      "file": "g711-lifecycle.flv",
+      "mode": "cancel-open",
+      "result": "cancelled"
+    },
+    {
+      "file": "g711-lifecycle.flv",
+      "mode": "cancel-read",
+      "result": "cancelled",
+      "frames_before_cancel": 53248
+    },
+    {
+      "file": "mpeg-lifecycle.flv",
+      "mode": "cancel-open",
+      "result": "cancelled"
+    },
+    {
+      "file": "mpeg-lifecycle.flv",
+      "mode": "cancel-read",
+      "result": "cancelled",
+      "frames_before_cancel": 282624
+    }
+  ],
+  "native_lifecycle": [],
+  "sources": {
+    "src/flv.s": "b0be68cfda5107b537cdceffa4617d6d79e8c7f4d6dce026ab461266b49aff1b",
+    "src/track.s": "d882c87afacc6e35595293b508009b51065180a74fbde95c733a82ae22bcb0d9",
+    "src/track_time.s": "958c15a5948f77753eeb635a1ebbf7fc89ee185a746ac2d0321fbf4dc42d05f2",
+    "src/mp3.s": "69a73284b0b5949b82f5b04123458e76f37d73ccb981f8042df3714ef9806916",
+    "src/decoder.s": "eb8a1d8e3902d75f76a2c729d08366387cd367c47511288675758dc18d0ca6f3",
+    "tests/verify-flv-gathered.py": "873098b0786f5f872cb60ce2c6f9659e81e1363150517969e6f9f7f372ce841e",
+    "tests/verify-flv.py": "57ace422159f812d5394c58232abb0a7cb15ce22bb6280862399dccb88855f5a",
+    "tests/matroska-timing-oracle.c": "6a6720abcc0a5039f019d4afa3cd7b9442539912f9302d1ba9580b0fd0cea24c",
+    "tests/speex-flv-oracle.c": "e9a356410dfcc8492679fcaa1d6f752fe71e0d289acb6e0620811f60fe11624c",
+    "tests/flv-clock-sparse-oracle.c": "ce51366fa6be45fcabe847701a6ac0efca1952e77a25cdc3704c32241434894a",
+    "tests/track-source-oracle.c": "f7fd763aa449eb0ca09a7c438b2d62a2e5977e65ad140a731d6699a4445f7e33",
+    "tests/chain-oracle.c": "770757565631753a57a6a8352cbac5ffecd33bb380eec247f23874277f7a00f7"
+  },
+  "binaries": {
+    "lamp-cli": "7b37a3326d86e86e95b55bd736f217dd1ba5b61f4d7fbd652f793bbcfd7d7802",
+    "flv-gathered-source": "218ea4c61130615c9b4eb85b5200ce5ba9360fedd50b47b2002eeb24d6e38283",
+    "flv-gathered-oracle": "71644c127d175ec94e396086af0105675e3fd2cad5be3189eea1a9468838a720",
+    "flv-gathered-guard": "e88b6f2be9477264d9079eca5ec6a9843340ebd8995ab50f354e6d09b7edbbe5",
+    "flv-gathered-chain": "887f89f744c0bea61216f0344d61e4a48af8c970ddc7bed0fa562798ad6deb5d",
+    "flv-gathered-sparse": "bcc8ec520f146e5677313ee8be38a3c1b10eb1f7dc308b5bd4e08ebf816a2651"
+  }
+}

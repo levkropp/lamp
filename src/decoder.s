@@ -548,20 +548,14 @@ LOCALFN decoder_open_format
     mov rax, rcx
     jmp .Lopen_w64
 .Lopen_flv:
-    # As AVI: gathered PCM, G.711 and MP3 open as a Wave64 image.
+    # All FLV audio paths now own packet views and their media timeline.
     mov rcx, rax
     mov rdx, [rip + input_end]
     call flv_open
-    cmp eax, 1
-    jb .Lopen_bad
-    ja .Lopen_flv_image
+    test eax, eax
+    jz .Lopen_bad
     leave
     ret
-.Lopen_flv_image:
-    mov dword ptr [rip + wav_codec_kind], 15
-    mov [rip + input_end], rdx
-    mov rax, rcx
-    jmp .Lopen_w64
 .Lopen_asf:
     mov rcx, rax
     mov rdx, [rip + input_end]

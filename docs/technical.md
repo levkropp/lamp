@@ -321,3 +321,5 @@ Next work includes reopen/seek latency measurements and caching, native multicha
 - [Windows MMCSS](https://learn.microsoft.com/en-us/windows/win32/procthread/multimedia-class-scheduler-service)
 
 Original project code is MIT licensed. Adapted algorithms/data retain required MIT-0, MIT, CC0 and BSD notices. The project's MIT license does not replace them. ASF metadata uses original bounded assembly readers: tags and WM/Picture in `src/tags_asf.inc`, with global fallback and selected-stream precedence, and marker chapters in `src/chapters_asf.inc`; see [ASF reading rules](asf.md#tags-and-pictures). WMA remains unsupported pending compatible parameter-table provenance; LGPL/GPL WMA sources reviewed during research were not added to the runtime.
+
+Packet MPEG audio in FLV, Matroska and MP4 uses the shared packet index rather than the native sparse MP3 index described above. Its seek history now counts usable main-data bytes, and unknown prefixes never become saved reservoir history. See [MPEG packet seek corrections and reproducible controls](flv-gathered.md#mpeg-seek-history-corrections).

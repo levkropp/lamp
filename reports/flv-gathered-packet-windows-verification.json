@@ -1,0 +1,3217 @@
+{
+  "result": "passed",
+  "platform": "Windows-11-10.0.26300-SP0",
+  "scope": "AAC-LC, HE-AAC v1/v2 (implicit/explicit/sync), Flash ADPCM and Speex signed 32-bit millisecond tag clocks. Independent per-sample media placement and AAC packet-suffix seek references; codec DSP has separate suites. Guarded mutations stop at 128 reads and seek at64. PCM/G.711/MPEG gathered paths, video synchronization, native Mac and Linux device playback remain unestablished.",
+  "checks": [
+    {
+      "file": "aac-8000-1-continuous.flv",
+      "reference": "aac-8000-1-continuous.flv.f32",
+      "rate": 8000,
+      "channels": 1,
+      "frames": 7168,
+      "pattern": "continuous",
+      "seek_reference": "aac-8000-1-continuous.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 7168,
+        "seeks": 16,
+        "checks": 1232989,
+        "exact_float_words": 21358
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-8000-1-leading.flv",
+      "reference": "aac-8000-1-leading.flv.f32",
+      "rate": 8000,
+      "channels": 1,
+      "frames": 7368,
+      "pattern": "leading",
+      "seek_reference": "aac-8000-1-leading.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 7368,
+        "seeks": 16,
+        "checks": 830655,
+        "exact_float_words": 21758
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-8000-1-internal.flv",
+      "reference": "aac-8000-1-internal.flv.f32",
+      "rate": 8000,
+      "channels": 1,
+      "frames": 7488,
+      "pattern": "internal",
+      "seek_reference": "aac-8000-1-internal.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 7488,
+        "seeks": 16,
+        "checks": 829695,
+        "exact_float_words": 21998
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-8000-1-overlap.flv",
+      "reference": "aac-8000-1-overlap.flv.f32",
+      "rate": 8000,
+      "channels": 1,
+      "frames": 7008,
+      "pattern": "overlap",
+      "seek_reference": "aac-8000-1-overlap.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 7008,
+        "seeks": 16,
+        "checks": 833535,
+        "exact_float_words": 21038
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-8000-1-negative.flv",
+      "reference": "aac-8000-1-negative.flv.f32",
+      "rate": 8000,
+      "channels": 1,
+      "frames": 7008,
+      "pattern": "negative",
+      "seek_reference": "aac-8000-1-negative.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 7008,
+        "seeks": 16,
+        "checks": 833535,
+        "exact_float_words": 21038
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-8000-1-reorder.flv",
+      "reference": "aac-8000-1-reorder.flv.f32",
+      "rate": 8000,
+      "channels": 1,
+      "frames": 4768,
+      "pattern": "reorder",
+      "seek_reference": "aac-8000-1-reorder.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 4768,
+        "seeks": 16,
+        "checks": 785911,
+        "exact_float_words": 16558
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-8000-1-foreign.flv",
+      "reference": "aac-8000-1-foreign.flv.f32",
+      "rate": 8000,
+      "channels": 1,
+      "frames": 7168,
+      "pattern": "foreign",
+      "seek_reference": "aac-8000-1-foreign.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 7168,
+        "seeks": 16,
+        "checks": 1232989,
+        "exact_float_words": 21358
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-8000-1-negative-limit.flv",
+      "reference": "aac-8000-1-negative-limit.flv.f32",
+      "rate": 8000,
+      "channels": 1,
+      "frames": 0,
+      "pattern": "negative-limit",
+      "seek_reference": "aac-8000-1-negative-limit.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 0,
+        "seeks": 16,
+        "checks": 557195,
+        "exact_float_words": 0
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-16000-2-continuous.flv",
+      "reference": "aac-16000-2-continuous.flv.f32",
+      "rate": 16000,
+      "channels": 2,
+      "frames": 12288,
+      "pattern": "continuous",
+      "seek_reference": "aac-16000-2-continuous.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 12288,
+        "seeks": 16,
+        "checks": 1264400,
+        "exact_float_words": 31598
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-16000-2-leading.flv",
+      "reference": "aac-16000-2-leading.flv.f32",
+      "rate": 16000,
+      "channels": 2,
+      "frames": 12688,
+      "pattern": "leading",
+      "seek_reference": "aac-16000-2-leading.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 12688,
+        "seeks": 16,
+        "checks": 919183,
+        "exact_float_words": 32398
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-16000-2-internal.flv",
+      "reference": "aac-16000-2-internal.flv.f32",
+      "rate": 16000,
+      "channels": 2,
+      "frames": 12928,
+      "pattern": "internal",
+      "seek_reference": "aac-16000-2-internal.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 12928,
+        "seeks": 16,
+        "checks": 917263,
+        "exact_float_words": 32878
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-16000-2-overlap.flv",
+      "reference": "aac-16000-2-overlap.flv.f32",
+      "rate": 16000,
+      "channels": 2,
+      "frames": 11968,
+      "pattern": "overlap",
+      "seek_reference": "aac-16000-2-overlap.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 11968,
+        "seeks": 16,
+        "checks": 892171,
+        "exact_float_words": 30958
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-16000-2-negative.flv",
+      "reference": "aac-16000-2-negative.flv.f32",
+      "rate": 16000,
+      "channels": 2,
+      "frames": 11968,
+      "pattern": "negative",
+      "seek_reference": "aac-16000-2-negative.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 11968,
+        "seeks": 16,
+        "checks": 892171,
+        "exact_float_words": 30958
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-16000-2-reorder.flv",
+      "reference": "aac-16000-2-reorder.flv.f32",
+      "rate": 16000,
+      "channels": 2,
+      "frames": 7488,
+      "pattern": "reorder",
+      "seek_reference": "aac-16000-2-reorder.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 7488,
+        "seeks": 16,
+        "checks": 829695,
+        "exact_float_words": 21998
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-16000-2-foreign.flv",
+      "reference": "aac-16000-2-foreign.flv.f32",
+      "rate": 16000,
+      "channels": 2,
+      "frames": 12288,
+      "pattern": "foreign",
+      "seek_reference": "aac-16000-2-foreign.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 12288,
+        "seeks": 16,
+        "checks": 1264400,
+        "exact_float_words": 31598
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-16000-2-negative-limit.flv",
+      "reference": "aac-16000-2-negative-limit.flv.f32",
+      "rate": 16000,
+      "channels": 2,
+      "frames": 0,
+      "pattern": "negative-limit",
+      "seek_reference": "aac-16000-2-negative-limit.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 0,
+        "seeks": 16,
+        "checks": 557195,
+        "exact_float_words": 0
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-32000-1-continuous.flv",
+      "reference": "aac-32000-1-continuous.flv.f32",
+      "rate": 32000,
+      "channels": 1,
+      "frames": 22528,
+      "pattern": "continuous",
+      "seek_reference": "aac-32000-1-continuous.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 22528,
+        "seeks": 16,
+        "checks": 1376381,
+        "exact_float_words": 52078
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-32000-1-leading.flv",
+      "reference": "aac-32000-1-leading.flv.f32",
+      "rate": 32000,
+      "channels": 1,
+      "frames": 23328,
+      "pattern": "leading",
+      "seek_reference": "aac-32000-1-leading.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 23328,
+        "seeks": 16,
+        "checks": 965151,
+        "exact_float_words": 53678
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-32000-1-internal.flv",
+      "reference": "aac-32000-1-internal.flv.f32",
+      "rate": 32000,
+      "channels": 1,
+      "frames": 23808,
+      "pattern": "internal",
+      "seek_reference": "aac-32000-1-internal.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 23808,
+        "seeks": 16,
+        "checks": 994083,
+        "exact_float_words": 54638
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-32000-1-overlap.flv",
+      "reference": "aac-32000-1-overlap.flv.f32",
+      "rate": 32000,
+      "channels": 1,
+      "frames": 21888,
+      "pattern": "overlap",
+      "seek_reference": "aac-32000-1-overlap.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 21888,
+        "seeks": 16,
+        "checks": 976671,
+        "exact_float_words": 50798
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-32000-1-negative.flv",
+      "reference": "aac-32000-1-negative.flv.f32",
+      "rate": 32000,
+      "channels": 1,
+      "frames": 21888,
+      "pattern": "negative",
+      "seek_reference": "aac-32000-1-negative.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 21888,
+        "seeks": 16,
+        "checks": 976671,
+        "exact_float_words": 50798
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-32000-1-reorder.flv",
+      "reference": "aac-32000-1-reorder.flv.f32",
+      "rate": 32000,
+      "channels": 1,
+      "frames": 12928,
+      "pattern": "reorder",
+      "seek_reference": "aac-32000-1-reorder.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 12928,
+        "seeks": 16,
+        "checks": 917263,
+        "exact_float_words": 32878
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-32000-1-foreign.flv",
+      "reference": "aac-32000-1-foreign.flv.f32",
+      "rate": 32000,
+      "channels": 1,
+      "frames": 22528,
+      "pattern": "foreign",
+      "seek_reference": "aac-32000-1-foreign.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 22528,
+        "seeks": 16,
+        "checks": 1376381,
+        "exact_float_words": 52078
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-32000-1-negative-limit.flv",
+      "reference": "aac-32000-1-negative-limit.flv.f32",
+      "rate": 32000,
+      "channels": 1,
+      "frames": 0,
+      "pattern": "negative-limit",
+      "seek_reference": "aac-32000-1-negative-limit.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 0,
+        "seeks": 16,
+        "checks": 557195,
+        "exact_float_words": 0
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-44100-2-continuous.flv",
+      "reference": "aac-44100-2-continuous.flv.f32",
+      "rate": 44100,
+      "channels": 2,
+      "frames": 29696,
+      "pattern": "continuous",
+      "seek_reference": "aac-44100-2-continuous.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 29696,
+        "seeks": 16,
+        "checks": 1410529,
+        "exact_float_words": 66414
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-44100-2-leading.flv",
+      "reference": "aac-44100-2-leading.flv.f32",
+      "rate": 44100,
+      "channels": 2,
+      "frames": 30799,
+      "pattern": "leading",
+      "seek_reference": "aac-44100-2-leading.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 30799,
+        "seeks": 16,
+        "checks": 1003699,
+        "exact_float_words": 68620
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-44100-2-internal.flv",
+      "reference": "aac-44100-2-internal.flv.f32",
+      "rate": 44100,
+      "channels": 2,
+      "frames": 31457,
+      "pattern": "internal",
+      "seek_reference": "aac-44100-2-internal.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 31457,
+        "seeks": 16,
+        "checks": 998435,
+        "exact_float_words": 69936
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-44100-2-overlap.flv",
+      "reference": "aac-44100-2-overlap.flv.f32",
+      "rate": 44100,
+      "channels": 2,
+      "frames": 28811,
+      "pattern": "overlap",
+      "seek_reference": "aac-44100-2-overlap.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 28811,
+        "seeks": 16,
+        "checks": 1019603,
+        "exact_float_words": 64644
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-44100-2-negative.flv",
+      "reference": "aac-44100-2-negative.flv.f32",
+      "rate": 44100,
+      "channels": 2,
+      "frames": 28814,
+      "pattern": "negative",
+      "seek_reference": "aac-44100-2-negative.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 28814,
+        "seeks": 16,
+        "checks": 1019579,
+        "exact_float_words": 64650
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-44100-2-reorder.flv",
+      "reference": "aac-44100-2-reorder.flv.f32",
+      "rate": 44100,
+      "channels": 2,
+      "frames": 16463,
+      "pattern": "reorder",
+      "seek_reference": "aac-44100-2-reorder.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 16463,
+        "seeks": 16,
+        "checks": 954527,
+        "exact_float_words": 39948
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-44100-2-foreign.flv",
+      "reference": "aac-44100-2-foreign.flv.f32",
+      "rate": 44100,
+      "channels": 2,
+      "frames": 29696,
+      "pattern": "foreign",
+      "seek_reference": "aac-44100-2-foreign.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 29696,
+        "seeks": 16,
+        "checks": 1410529,
+        "exact_float_words": 66414
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-44100-2-negative-limit.flv",
+      "reference": "aac-44100-2-negative-limit.flv.f32",
+      "rate": 44100,
+      "channels": 2,
+      "frames": 0,
+      "pattern": "negative-limit",
+      "seek_reference": "aac-44100-2-negative-limit.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 0,
+        "seeks": 16,
+        "checks": 557195,
+        "exact_float_words": 0
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-48000-1-continuous.flv",
+      "reference": "aac-48000-1-continuous.flv.f32",
+      "rate": 48000,
+      "channels": 1,
+      "frames": 32768,
+      "pattern": "continuous",
+      "seek_reference": "aac-48000-1-continuous.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 32768,
+        "seeks": 16,
+        "checks": 1422821,
+        "exact_float_words": 72558
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-48000-1-leading.flv",
+      "reference": "aac-48000-1-leading.flv.f32",
+      "rate": 48000,
+      "channels": 1,
+      "frames": 33968,
+      "pattern": "leading",
+      "seek_reference": "aac-48000-1-leading.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 33968,
+        "seeks": 16,
+        "checks": 1011119,
+        "exact_float_words": 74958
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-48000-1-internal.flv",
+      "reference": "aac-48000-1-internal.flv.f32",
+      "rate": 48000,
+      "channels": 1,
+      "frames": 34672,
+      "pattern": "internal",
+      "seek_reference": "aac-48000-1-internal.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 34672,
+        "seeks": 16,
+        "checks": 1005487,
+        "exact_float_words": 76366
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-48000-1-overlap.flv",
+      "reference": "aac-48000-1-overlap.flv.f32",
+      "rate": 48000,
+      "channels": 1,
+      "frames": 31792,
+      "pattern": "overlap",
+      "seek_reference": "aac-48000-1-overlap.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 31792,
+        "seeks": 16,
+        "checks": 1028527,
+        "exact_float_words": 70606
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-48000-1-negative.flv",
+      "reference": "aac-48000-1-negative.flv.f32",
+      "rate": 48000,
+      "channels": 1,
+      "frames": 31808,
+      "pattern": "negative",
+      "seek_reference": "aac-48000-1-negative.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 31808,
+        "seeks": 16,
+        "checks": 1028399,
+        "exact_float_words": 70638
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-48000-1-reorder.flv",
+      "reference": "aac-48000-1-reorder.flv.f32",
+      "rate": 48000,
+      "channels": 1,
+      "frames": 18352,
+      "pattern": "reorder",
+      "seek_reference": "aac-48000-1-reorder.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 18352,
+        "seeks": 16,
+        "checks": 939415,
+        "exact_float_words": 43726
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-48000-1-foreign.flv",
+      "reference": "aac-48000-1-foreign.flv.f32",
+      "rate": 48000,
+      "channels": 1,
+      "frames": 32768,
+      "pattern": "foreign",
+      "seek_reference": "aac-48000-1-foreign.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 32768,
+        "seeks": 16,
+        "checks": 1422821,
+        "exact_float_words": 72558
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-48000-1-negative-limit.flv",
+      "reference": "aac-48000-1-negative-limit.flv.f32",
+      "rate": 48000,
+      "channels": 1,
+      "frames": 0,
+      "pattern": "negative-limit",
+      "seek_reference": "aac-48000-1-negative-limit.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 0,
+        "seeks": 16,
+        "checks": 557195,
+        "exact_float_words": 0
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-96000-2-continuous.flv",
+      "reference": "aac-96000-2-continuous.flv.f32",
+      "rate": 96000,
+      "channels": 2,
+      "frames": 63488,
+      "pattern": "continuous",
+      "seek_reference": "aac-96000-2-continuous.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 63488,
+        "seeks": 16,
+        "checks": 1668641,
+        "exact_float_words": 133998
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-96000-2-leading.flv",
+      "reference": "aac-96000-2-leading.flv.f32",
+      "rate": 96000,
+      "channels": 2,
+      "frames": 65888,
+      "pattern": "leading",
+      "seek_reference": "aac-96000-2-leading.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 65888,
+        "seeks": 16,
+        "checks": 1312883,
+        "exact_float_words": 138798
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-96000-2-internal.flv",
+      "reference": "aac-96000-2-internal.flv.f32",
+      "rate": 96000,
+      "channels": 2,
+      "frames": 67360,
+      "pattern": "internal",
+      "seek_reference": "aac-96000-2-internal.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 67360,
+        "seeks": 16,
+        "checks": 1366651,
+        "exact_float_words": 141742
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-96000-2-overlap.flv",
+      "reference": "aac-96000-2-overlap.flv.f32",
+      "rate": 96000,
+      "channels": 2,
+      "frames": 61600,
+      "pattern": "overlap",
+      "seek_reference": "aac-96000-2-overlap.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 61600,
+        "seeks": 16,
+        "checks": 1216099,
+        "exact_float_words": 130222
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-96000-2-negative.flv",
+      "reference": "aac-96000-2-negative.flv.f32",
+      "rate": 96000,
+      "channels": 2,
+      "frames": 61568,
+      "pattern": "negative",
+      "seek_reference": "aac-96000-2-negative.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 61568,
+        "seeks": 16,
+        "checks": 1216355,
+        "exact_float_words": 130158
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-96000-2-reorder.flv",
+      "reference": "aac-96000-2-reorder.flv.f32",
+      "rate": 96000,
+      "channels": 2,
+      "frames": 34720,
+      "pattern": "reorder",
+      "seek_reference": "aac-96000-2-reorder.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 34720,
+        "seeks": 16,
+        "checks": 1037875,
+        "exact_float_words": 76462
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-96000-2-foreign.flv",
+      "reference": "aac-96000-2-foreign.flv.f32",
+      "rate": 96000,
+      "channels": 2,
+      "frames": 63488,
+      "pattern": "foreign",
+      "seek_reference": "aac-96000-2-foreign.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 63488,
+        "seeks": 16,
+        "checks": 1668641,
+        "exact_float_words": 133998
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-96000-2-negative-limit.flv",
+      "reference": "aac-96000-2-negative-limit.flv.f32",
+      "rate": 96000,
+      "channels": 2,
+      "frames": 0,
+      "pattern": "negative-limit",
+      "seek_reference": "aac-96000-2-negative-limit.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 0,
+        "seeks": 16,
+        "checks": 557195,
+        "exact_float_words": 0
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-sbr-implicit-continuous.flv",
+      "reference": "aac-sbr-implicit-continuous.flv.f32",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 36864,
+      "pattern": "continuous",
+      "seek_reference": "aac-sbr-implicit-continuous.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 36864,
+        "seeks": 16,
+        "checks": 1354552,
+        "exact_float_words": 80750
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-sbr-implicit-leading.flv",
+      "reference": "aac-sbr-implicit-leading.flv.f32",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 38064,
+      "pattern": "leading",
+      "seek_reference": "aac-sbr-implicit-leading.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 38064,
+        "seeks": 16,
+        "checks": 1043895,
+        "exact_float_words": 83150
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-sbr-implicit-internal.flv",
+      "reference": "aac-sbr-implicit-internal.flv.f32",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 38784,
+      "pattern": "internal",
+      "seek_reference": "aac-sbr-implicit-internal.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 38784,
+        "seeks": 16,
+        "checks": 1038135,
+        "exact_float_words": 84590
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-sbr-implicit-overlap.flv",
+      "reference": "aac-sbr-implicit-overlap.flv.f32",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 35904,
+      "pattern": "overlap",
+      "seek_reference": "aac-sbr-implicit-overlap.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 35904,
+        "seeks": 16,
+        "checks": 1028403,
+        "exact_float_words": 78830
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-sbr-implicit-negative.flv",
+      "reference": "aac-sbr-implicit-negative.flv.f32",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 35904,
+      "pattern": "negative",
+      "seek_reference": "aac-sbr-implicit-negative.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 35904,
+        "seeks": 16,
+        "checks": 1028403,
+        "exact_float_words": 78830
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-sbr-implicit-reorder.flv",
+      "reference": "aac-sbr-implicit-reorder.flv.f32",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 22464,
+      "pattern": "reorder",
+      "seek_reference": "aac-sbr-implicit-reorder.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 22464,
+        "seeks": 16,
+        "checks": 972063,
+        "exact_float_words": 51950
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-sbr-implicit-foreign.flv",
+      "reference": "aac-sbr-implicit-foreign.flv.f32",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 36864,
+      "pattern": "foreign",
+      "seek_reference": "aac-sbr-implicit-foreign.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 36864,
+        "seeks": 16,
+        "checks": 1354552,
+        "exact_float_words": 80750
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-sbr-implicit-negative-limit.flv",
+      "reference": "aac-sbr-implicit-negative-limit.flv.f32",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 0,
+      "pattern": "negative-limit",
+      "seek_reference": "aac-sbr-implicit-negative-limit.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 0,
+        "seeks": 16,
+        "checks": 557195,
+        "exact_float_words": 0
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-sbr-explicit-continuous.flv",
+      "reference": "aac-sbr-explicit-continuous.flv.f32",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 36864,
+      "pattern": "continuous",
+      "seek_reference": "aac-sbr-explicit-continuous.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 36864,
+        "seeks": 16,
+        "checks": 1354552,
+        "exact_float_words": 80750
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-sbr-explicit-leading.flv",
+      "reference": "aac-sbr-explicit-leading.flv.f32",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 38064,
+      "pattern": "leading",
+      "seek_reference": "aac-sbr-explicit-leading.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 38064,
+        "seeks": 16,
+        "checks": 1043895,
+        "exact_float_words": 83150
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-sbr-explicit-internal.flv",
+      "reference": "aac-sbr-explicit-internal.flv.f32",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 38784,
+      "pattern": "internal",
+      "seek_reference": "aac-sbr-explicit-internal.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 38784,
+        "seeks": 16,
+        "checks": 1038135,
+        "exact_float_words": 84590
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-sbr-explicit-overlap.flv",
+      "reference": "aac-sbr-explicit-overlap.flv.f32",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 35904,
+      "pattern": "overlap",
+      "seek_reference": "aac-sbr-explicit-overlap.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 35904,
+        "seeks": 16,
+        "checks": 1028403,
+        "exact_float_words": 78830
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-sbr-explicit-negative.flv",
+      "reference": "aac-sbr-explicit-negative.flv.f32",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 35904,
+      "pattern": "negative",
+      "seek_reference": "aac-sbr-explicit-negative.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 35904,
+        "seeks": 16,
+        "checks": 1028403,
+        "exact_float_words": 78830
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-sbr-explicit-reorder.flv",
+      "reference": "aac-sbr-explicit-reorder.flv.f32",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 22464,
+      "pattern": "reorder",
+      "seek_reference": "aac-sbr-explicit-reorder.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 22464,
+        "seeks": 16,
+        "checks": 972063,
+        "exact_float_words": 51950
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-sbr-explicit-foreign.flv",
+      "reference": "aac-sbr-explicit-foreign.flv.f32",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 36864,
+      "pattern": "foreign",
+      "seek_reference": "aac-sbr-explicit-foreign.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 36864,
+        "seeks": 16,
+        "checks": 1354552,
+        "exact_float_words": 80750
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-sbr-explicit-negative-limit.flv",
+      "reference": "aac-sbr-explicit-negative-limit.flv.f32",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 0,
+      "pattern": "negative-limit",
+      "seek_reference": "aac-sbr-explicit-negative-limit.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 0,
+        "seeks": 16,
+        "checks": 557195,
+        "exact_float_words": 0
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-sbr-sync-continuous.flv",
+      "reference": "aac-sbr-sync-continuous.flv.f32",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 36864,
+      "pattern": "continuous",
+      "seek_reference": "aac-sbr-sync-continuous.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 36864,
+        "seeks": 16,
+        "checks": 1354552,
+        "exact_float_words": 80750
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-sbr-sync-leading.flv",
+      "reference": "aac-sbr-sync-leading.flv.f32",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 38064,
+      "pattern": "leading",
+      "seek_reference": "aac-sbr-sync-leading.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 38064,
+        "seeks": 16,
+        "checks": 1043895,
+        "exact_float_words": 83150
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-sbr-sync-internal.flv",
+      "reference": "aac-sbr-sync-internal.flv.f32",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 38784,
+      "pattern": "internal",
+      "seek_reference": "aac-sbr-sync-internal.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 38784,
+        "seeks": 16,
+        "checks": 1038135,
+        "exact_float_words": 84590
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-sbr-sync-overlap.flv",
+      "reference": "aac-sbr-sync-overlap.flv.f32",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 35904,
+      "pattern": "overlap",
+      "seek_reference": "aac-sbr-sync-overlap.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 35904,
+        "seeks": 16,
+        "checks": 1028403,
+        "exact_float_words": 78830
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-sbr-sync-negative.flv",
+      "reference": "aac-sbr-sync-negative.flv.f32",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 35904,
+      "pattern": "negative",
+      "seek_reference": "aac-sbr-sync-negative.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 35904,
+        "seeks": 16,
+        "checks": 1028403,
+        "exact_float_words": 78830
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-sbr-sync-reorder.flv",
+      "reference": "aac-sbr-sync-reorder.flv.f32",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 22464,
+      "pattern": "reorder",
+      "seek_reference": "aac-sbr-sync-reorder.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 22464,
+        "seeks": 16,
+        "checks": 972063,
+        "exact_float_words": 51950
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-sbr-sync-foreign.flv",
+      "reference": "aac-sbr-sync-foreign.flv.f32",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 36864,
+      "pattern": "foreign",
+      "seek_reference": "aac-sbr-sync-foreign.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 36864,
+        "seeks": 16,
+        "checks": 1354552,
+        "exact_float_words": 80750
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-sbr-sync-negative-limit.flv",
+      "reference": "aac-sbr-sync-negative-limit.flv.f32",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 0,
+      "pattern": "negative-limit",
+      "seek_reference": "aac-sbr-sync-negative-limit.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 0,
+        "seeks": 16,
+        "checks": 557195,
+        "exact_float_words": 0
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-ps-implicit-continuous.flv",
+      "reference": "aac-ps-implicit-continuous.flv.f32",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 36864,
+      "pattern": "continuous",
+      "seek_reference": "aac-ps-implicit-continuous.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 36864,
+        "seeks": 16,
+        "checks": 1354552,
+        "exact_float_words": 80750
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-ps-implicit-leading.flv",
+      "reference": "aac-ps-implicit-leading.flv.f32",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 38064,
+      "pattern": "leading",
+      "seek_reference": "aac-ps-implicit-leading.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 38064,
+        "seeks": 16,
+        "checks": 1043895,
+        "exact_float_words": 83150
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-ps-implicit-internal.flv",
+      "reference": "aac-ps-implicit-internal.flv.f32",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 38784,
+      "pattern": "internal",
+      "seek_reference": "aac-ps-implicit-internal.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 38784,
+        "seeks": 16,
+        "checks": 1038135,
+        "exact_float_words": 84590
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-ps-implicit-overlap.flv",
+      "reference": "aac-ps-implicit-overlap.flv.f32",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 35904,
+      "pattern": "overlap",
+      "seek_reference": "aac-ps-implicit-overlap.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 35904,
+        "seeks": 16,
+        "checks": 1028403,
+        "exact_float_words": 78830
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-ps-implicit-negative.flv",
+      "reference": "aac-ps-implicit-negative.flv.f32",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 35904,
+      "pattern": "negative",
+      "seek_reference": "aac-ps-implicit-negative.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 35904,
+        "seeks": 16,
+        "checks": 1028403,
+        "exact_float_words": 78830
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-ps-implicit-reorder.flv",
+      "reference": "aac-ps-implicit-reorder.flv.f32",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 22464,
+      "pattern": "reorder",
+      "seek_reference": "aac-ps-implicit-reorder.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 22464,
+        "seeks": 16,
+        "checks": 972063,
+        "exact_float_words": 51950
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-ps-implicit-foreign.flv",
+      "reference": "aac-ps-implicit-foreign.flv.f32",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 36864,
+      "pattern": "foreign",
+      "seek_reference": "aac-ps-implicit-foreign.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 36864,
+        "seeks": 16,
+        "checks": 1354552,
+        "exact_float_words": 80750
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-ps-implicit-negative-limit.flv",
+      "reference": "aac-ps-implicit-negative-limit.flv.f32",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 0,
+      "pattern": "negative-limit",
+      "seek_reference": "aac-ps-implicit-negative-limit.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 0,
+        "seeks": 16,
+        "checks": 557195,
+        "exact_float_words": 0
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-ps-explicit-continuous.flv",
+      "reference": "aac-ps-explicit-continuous.flv.f32",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 36864,
+      "pattern": "continuous",
+      "seek_reference": "aac-ps-explicit-continuous.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 36864,
+        "seeks": 16,
+        "checks": 1354552,
+        "exact_float_words": 80750
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-ps-explicit-leading.flv",
+      "reference": "aac-ps-explicit-leading.flv.f32",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 38064,
+      "pattern": "leading",
+      "seek_reference": "aac-ps-explicit-leading.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 38064,
+        "seeks": 16,
+        "checks": 1043895,
+        "exact_float_words": 83150
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-ps-explicit-internal.flv",
+      "reference": "aac-ps-explicit-internal.flv.f32",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 38784,
+      "pattern": "internal",
+      "seek_reference": "aac-ps-explicit-internal.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 38784,
+        "seeks": 16,
+        "checks": 1038135,
+        "exact_float_words": 84590
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-ps-explicit-overlap.flv",
+      "reference": "aac-ps-explicit-overlap.flv.f32",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 35904,
+      "pattern": "overlap",
+      "seek_reference": "aac-ps-explicit-overlap.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 35904,
+        "seeks": 16,
+        "checks": 1028403,
+        "exact_float_words": 78830
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-ps-explicit-negative.flv",
+      "reference": "aac-ps-explicit-negative.flv.f32",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 35904,
+      "pattern": "negative",
+      "seek_reference": "aac-ps-explicit-negative.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 35904,
+        "seeks": 16,
+        "checks": 1028403,
+        "exact_float_words": 78830
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-ps-explicit-reorder.flv",
+      "reference": "aac-ps-explicit-reorder.flv.f32",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 22464,
+      "pattern": "reorder",
+      "seek_reference": "aac-ps-explicit-reorder.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 22464,
+        "seeks": 16,
+        "checks": 972063,
+        "exact_float_words": 51950
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-ps-explicit-foreign.flv",
+      "reference": "aac-ps-explicit-foreign.flv.f32",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 36864,
+      "pattern": "foreign",
+      "seek_reference": "aac-ps-explicit-foreign.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 36864,
+        "seeks": 16,
+        "checks": 1354552,
+        "exact_float_words": 80750
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-ps-explicit-negative-limit.flv",
+      "reference": "aac-ps-explicit-negative-limit.flv.f32",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 0,
+      "pattern": "negative-limit",
+      "seek_reference": "aac-ps-explicit-negative-limit.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 0,
+        "seeks": 16,
+        "checks": 557195,
+        "exact_float_words": 0
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-ps-sync-continuous.flv",
+      "reference": "aac-ps-sync-continuous.flv.f32",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 36864,
+      "pattern": "continuous",
+      "seek_reference": "aac-ps-sync-continuous.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 36864,
+        "seeks": 16,
+        "checks": 1354552,
+        "exact_float_words": 80750
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-ps-sync-leading.flv",
+      "reference": "aac-ps-sync-leading.flv.f32",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 38064,
+      "pattern": "leading",
+      "seek_reference": "aac-ps-sync-leading.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 38064,
+        "seeks": 16,
+        "checks": 1043895,
+        "exact_float_words": 83150
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-ps-sync-internal.flv",
+      "reference": "aac-ps-sync-internal.flv.f32",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 38784,
+      "pattern": "internal",
+      "seek_reference": "aac-ps-sync-internal.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 38784,
+        "seeks": 16,
+        "checks": 1038135,
+        "exact_float_words": 84590
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-ps-sync-overlap.flv",
+      "reference": "aac-ps-sync-overlap.flv.f32",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 35904,
+      "pattern": "overlap",
+      "seek_reference": "aac-ps-sync-overlap.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 35904,
+        "seeks": 16,
+        "checks": 1028403,
+        "exact_float_words": 78830
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-ps-sync-negative.flv",
+      "reference": "aac-ps-sync-negative.flv.f32",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 35904,
+      "pattern": "negative",
+      "seek_reference": "aac-ps-sync-negative.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 35904,
+        "seeks": 16,
+        "checks": 1028403,
+        "exact_float_words": 78830
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-ps-sync-reorder.flv",
+      "reference": "aac-ps-sync-reorder.flv.f32",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 22464,
+      "pattern": "reorder",
+      "seek_reference": "aac-ps-sync-reorder.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 22464,
+        "seeks": 16,
+        "checks": 972063,
+        "exact_float_words": 51950
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-ps-sync-foreign.flv",
+      "reference": "aac-ps-sync-foreign.flv.f32",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 36864,
+      "pattern": "foreign",
+      "seek_reference": "aac-ps-sync-foreign.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 36864,
+        "seeks": 16,
+        "checks": 1354552,
+        "exact_float_words": 80750
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "aac-ps-sync-negative-limit.flv",
+      "reference": "aac-ps-sync-negative-limit.flv.f32",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 0,
+      "pattern": "negative-limit",
+      "seek_reference": "aac-ps-sync-negative-limit.flv.seek-reference",
+      "oracle": {
+        "result": "passed",
+        "frames": 0,
+        "seeks": 16,
+        "checks": 557195,
+        "exact_float_words": 0
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "speex-group1-continuous.flv",
+      "reference": "speex-group1-continuous.flv.f32",
+      "rate": 16000,
+      "channels": 1,
+      "frames": 13440,
+      "pattern": "continuous",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 13440,
+        "seeks": 16,
+        "checks": 1267971,
+        "exact_float_words": 33902
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "speex-group1-leading.flv",
+      "reference": "speex-group1-leading.flv.f32",
+      "rate": 16000,
+      "channels": 1,
+      "frames": 13840,
+      "pattern": "leading",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 13840,
+        "seeks": 16,
+        "checks": 909934,
+        "exact_float_words": 34702
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "speex-group1-internal.flv",
+      "reference": "speex-group1-internal.flv.f32",
+      "rate": 16000,
+      "channels": 1,
+      "frames": 14080,
+      "pattern": "internal",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 14080,
+        "seeks": 16,
+        "checks": 908014,
+        "exact_float_words": 35182
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "speex-group1-overlap.flv",
+      "reference": "speex-group1-overlap.flv.f32",
+      "rate": 16000,
+      "channels": 1,
+      "frames": 13120,
+      "pattern": "overlap",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 13120,
+        "seeks": 16,
+        "checks": 915694,
+        "exact_float_words": 33262
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "speex-group1-negative.flv",
+      "reference": "speex-group1-negative.flv.f32",
+      "rate": 16000,
+      "channels": 1,
+      "frames": 13120,
+      "pattern": "negative",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 13120,
+        "seeks": 16,
+        "checks": 915694,
+        "exact_float_words": 33262
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "speex-group1-reorder.flv",
+      "reference": "speex-group1-reorder.flv.f32",
+      "rate": 16000,
+      "channels": 1,
+      "frames": 8640,
+      "pattern": "reorder",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 8640,
+        "seeks": 16,
+        "checks": 853218,
+        "exact_float_words": 24302
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "speex-group1-foreign.flv",
+      "reference": "speex-group1-foreign.flv.f32",
+      "rate": 16000,
+      "channels": 1,
+      "frames": 13440,
+      "pattern": "foreign",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 13440,
+        "seeks": 16,
+        "checks": 1267971,
+        "exact_float_words": 33902
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "speex-group1-negative-limit.flv",
+      "reference": "speex-group1-negative-limit.flv.f32",
+      "rate": 16000,
+      "channels": 1,
+      "frames": 0,
+      "pattern": "negative-limit",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 0,
+        "seeks": 16,
+        "checks": 557162,
+        "exact_float_words": 0
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "speex-group5-continuous.flv",
+      "reference": "speex-group5-continuous.flv.f32",
+      "rate": 16000,
+      "channels": 1,
+      "frames": 13440,
+      "pattern": "continuous",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 13440,
+        "seeks": 16,
+        "checks": 1267971,
+        "exact_float_words": 33902
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "speex-group5-leading.flv",
+      "reference": "speex-group5-leading.flv.f32",
+      "rate": 16000,
+      "channels": 1,
+      "frames": 13840,
+      "pattern": "leading",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 13840,
+        "seeks": 16,
+        "checks": 909934,
+        "exact_float_words": 34702
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "speex-group5-internal.flv",
+      "reference": "speex-group5-internal.flv.f32",
+      "rate": 16000,
+      "channels": 1,
+      "frames": 14080,
+      "pattern": "internal",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 14080,
+        "seeks": 16,
+        "checks": 908014,
+        "exact_float_words": 35182
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "speex-group5-overlap.flv",
+      "reference": "speex-group5-overlap.flv.f32",
+      "rate": 16000,
+      "channels": 1,
+      "frames": 13120,
+      "pattern": "overlap",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 13120,
+        "seeks": 16,
+        "checks": 915694,
+        "exact_float_words": 33262
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "speex-group5-negative.flv",
+      "reference": "speex-group5-negative.flv.f32",
+      "rate": 16000,
+      "channels": 1,
+      "frames": 13120,
+      "pattern": "negative",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 13120,
+        "seeks": 16,
+        "checks": 915694,
+        "exact_float_words": 33262
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "speex-group5-reorder.flv",
+      "reference": "speex-group5-reorder.flv.f32",
+      "rate": 16000,
+      "channels": 1,
+      "frames": 8640,
+      "pattern": "reorder",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 8640,
+        "seeks": 16,
+        "checks": 853218,
+        "exact_float_words": 24302
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "speex-group5-foreign.flv",
+      "reference": "speex-group5-foreign.flv.f32",
+      "rate": 16000,
+      "channels": 1,
+      "frames": 13440,
+      "pattern": "foreign",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 13440,
+        "seeks": 16,
+        "checks": 1267971,
+        "exact_float_words": 33902
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "speex-group5-negative-limit.flv",
+      "reference": "speex-group5-negative-limit.flv.f32",
+      "rate": 16000,
+      "channels": 1,
+      "frames": 0,
+      "pattern": "negative-limit",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 0,
+        "seeks": 16,
+        "checks": 557162,
+        "exact_float_words": 0
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "speex-group8-continuous.flv",
+      "reference": "speex-group8-continuous.flv.f32",
+      "rate": 16000,
+      "channels": 1,
+      "frames": 13440,
+      "pattern": "continuous",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 13440,
+        "seeks": 16,
+        "checks": 1267971,
+        "exact_float_words": 33902
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "speex-group8-leading.flv",
+      "reference": "speex-group8-leading.flv.f32",
+      "rate": 16000,
+      "channels": 1,
+      "frames": 13840,
+      "pattern": "leading",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 13840,
+        "seeks": 16,
+        "checks": 909934,
+        "exact_float_words": 34702
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "speex-group8-internal.flv",
+      "reference": "speex-group8-internal.flv.f32",
+      "rate": 16000,
+      "channels": 1,
+      "frames": 14080,
+      "pattern": "internal",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 14080,
+        "seeks": 16,
+        "checks": 908014,
+        "exact_float_words": 35182
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "speex-group8-overlap.flv",
+      "reference": "speex-group8-overlap.flv.f32",
+      "rate": 16000,
+      "channels": 1,
+      "frames": 13120,
+      "pattern": "overlap",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 13120,
+        "seeks": 16,
+        "checks": 915694,
+        "exact_float_words": 33262
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "speex-group8-negative.flv",
+      "reference": "speex-group8-negative.flv.f32",
+      "rate": 16000,
+      "channels": 1,
+      "frames": 13120,
+      "pattern": "negative",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 13120,
+        "seeks": 16,
+        "checks": 915694,
+        "exact_float_words": 33262
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "speex-group8-reorder.flv",
+      "reference": "speex-group8-reorder.flv.f32",
+      "rate": 16000,
+      "channels": 1,
+      "frames": 8640,
+      "pattern": "reorder",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 8640,
+        "seeks": 16,
+        "checks": 853218,
+        "exact_float_words": 24302
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "speex-group8-foreign.flv",
+      "reference": "speex-group8-foreign.flv.f32",
+      "rate": 16000,
+      "channels": 1,
+      "frames": 13440,
+      "pattern": "foreign",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 13440,
+        "seeks": 16,
+        "checks": 1267971,
+        "exact_float_words": 33902
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "speex-group8-negative-limit.flv",
+      "reference": "speex-group8-negative-limit.flv.f32",
+      "rate": 16000,
+      "channels": 1,
+      "frames": 0,
+      "pattern": "negative-limit",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 0,
+        "seeks": 16,
+        "checks": 557162,
+        "exact_float_words": 0
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-2-1-continuous.flv",
+      "reference": "adpcm-2-1-continuous.flv.f32",
+      "rate": 11025,
+      "channels": 1,
+      "frames": 17439,
+      "pattern": "continuous",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 17439,
+        "seeks": 16,
+        "checks": 1348180,
+        "exact_float_words": 41900
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-2-1-leading.flv",
+      "reference": "adpcm-2-1-leading.flv.f32",
+      "rate": 11025,
+      "channels": 1,
+      "frames": 17715,
+      "pattern": "leading",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 17715,
+        "seeks": 16,
+        "checks": 944478,
+        "exact_float_words": 42452
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-2-1-internal.flv",
+      "reference": "adpcm-2-1-internal.flv.f32",
+      "rate": 11025,
+      "channels": 1,
+      "frames": 17881,
+      "pattern": "internal",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 17881,
+        "seeks": 16,
+        "checks": 943150,
+        "exact_float_words": 42784
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-2-1-overlap.flv",
+      "reference": "adpcm-2-1-overlap.flv.f32",
+      "rate": 11025,
+      "channels": 1,
+      "frames": 17219,
+      "pattern": "overlap",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 17219,
+        "seeks": 16,
+        "checks": 948446,
+        "exact_float_words": 41460
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-2-1-negative.flv",
+      "reference": "adpcm-2-1-negative.flv.f32",
+      "rate": 11025,
+      "channels": 1,
+      "frames": 17218,
+      "pattern": "negative",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 17218,
+        "seeks": 16,
+        "checks": 948454,
+        "exact_float_words": 41458
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-2-1-reorder.flv",
+      "reference": "adpcm-2-1-reorder.flv.f32",
+      "rate": 11025,
+      "channels": 1,
+      "frames": 14132,
+      "pattern": "reorder",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 14132,
+        "seeks": 16,
+        "checks": 907598,
+        "exact_float_words": 35286
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-2-1-foreign.flv",
+      "reference": "adpcm-2-1-foreign.flv.f32",
+      "rate": 11025,
+      "channels": 1,
+      "frames": 17439,
+      "pattern": "foreign",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 17439,
+        "seeks": 16,
+        "checks": 1348180,
+        "exact_float_words": 41900
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-2-1-negative-limit.flv",
+      "reference": "adpcm-2-1-negative-limit.flv.f32",
+      "rate": 11025,
+      "channels": 1,
+      "frames": 0,
+      "pattern": "negative-limit",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 0,
+        "seeks": 16,
+        "checks": 557162,
+        "exact_float_words": 0
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-2-2-continuous.flv",
+      "reference": "adpcm-2-2-continuous.flv.f32",
+      "rate": 22050,
+      "channels": 2,
+      "frames": 17437,
+      "pattern": "continuous",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 17437,
+        "seeks": 16,
+        "checks": 1348180,
+        "exact_float_words": 41896
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-2-2-leading.flv",
+      "reference": "adpcm-2-2-leading.flv.f32",
+      "rate": 22050,
+      "channels": 2,
+      "frames": 17988,
+      "pattern": "leading",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 17988,
+        "seeks": 16,
+        "checks": 942294,
+        "exact_float_words": 42998
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-2-2-internal.flv",
+      "reference": "adpcm-2-2-internal.flv.f32",
+      "rate": 22050,
+      "channels": 2,
+      "frames": 18322,
+      "pattern": "internal",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 18322,
+        "seeks": 16,
+        "checks": 939622,
+        "exact_float_words": 43666
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-2-2-overlap.flv",
+      "reference": "adpcm-2-2-overlap.flv.f32",
+      "rate": 22050,
+      "channels": 2,
+      "frames": 16999,
+      "pattern": "overlap",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 16999,
+        "seeks": 16,
+        "checks": 950206,
+        "exact_float_words": 41020
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-2-2-negative.flv",
+      "reference": "adpcm-2-2-negative.flv.f32",
+      "rate": 22050,
+      "channels": 2,
+      "frames": 16996,
+      "pattern": "negative",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 16996,
+        "seeks": 16,
+        "checks": 950230,
+        "exact_float_words": 41014
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-2-2-reorder.flv",
+      "reference": "adpcm-2-2-reorder.flv.f32",
+      "rate": 22050,
+      "channels": 2,
+      "frames": 10825,
+      "pattern": "reorder",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 10825,
+        "seeks": 16,
+        "checks": 901282,
+        "exact_float_words": 28672
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-2-2-foreign.flv",
+      "reference": "adpcm-2-2-foreign.flv.f32",
+      "rate": 22050,
+      "channels": 2,
+      "frames": 17437,
+      "pattern": "foreign",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 17437,
+        "seeks": 16,
+        "checks": 1348180,
+        "exact_float_words": 41896
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-2-2-negative-limit.flv",
+      "reference": "adpcm-2-2-negative-limit.flv.f32",
+      "rate": 22050,
+      "channels": 2,
+      "frames": 0,
+      "pattern": "negative-limit",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 0,
+        "seeks": 16,
+        "checks": 557162,
+        "exact_float_words": 0
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-3-1-continuous.flv",
+      "reference": "adpcm-3-1-continuous.flv.f32",
+      "rate": 22050,
+      "channels": 1,
+      "frames": 17441,
+      "pattern": "continuous",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 17441,
+        "seeks": 16,
+        "checks": 1348164,
+        "exact_float_words": 41904
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-3-1-leading.flv",
+      "reference": "adpcm-3-1-leading.flv.f32",
+      "rate": 22050,
+      "channels": 1,
+      "frames": 17992,
+      "pattern": "leading",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 17992,
+        "seeks": 16,
+        "checks": 942262,
+        "exact_float_words": 43006
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-3-1-internal.flv",
+      "reference": "adpcm-3-1-internal.flv.f32",
+      "rate": 22050,
+      "channels": 1,
+      "frames": 18323,
+      "pattern": "internal",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 18323,
+        "seeks": 16,
+        "checks": 939614,
+        "exact_float_words": 43668
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-3-1-overlap.flv",
+      "reference": "adpcm-3-1-overlap.flv.f32",
+      "rate": 22050,
+      "channels": 1,
+      "frames": 17000,
+      "pattern": "overlap",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 17000,
+        "seeks": 16,
+        "checks": 950198,
+        "exact_float_words": 41022
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-3-1-negative.flv",
+      "reference": "adpcm-3-1-negative.flv.f32",
+      "rate": 22050,
+      "channels": 1,
+      "frames": 17000,
+      "pattern": "negative",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 17000,
+        "seeks": 16,
+        "checks": 950198,
+        "exact_float_words": 41022
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-3-1-reorder.flv",
+      "reference": "adpcm-3-1-reorder.flv.f32",
+      "rate": 22050,
+      "channels": 1,
+      "frames": 10826,
+      "pattern": "reorder",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 10826,
+        "seeks": 16,
+        "checks": 901274,
+        "exact_float_words": 28674
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-3-1-foreign.flv",
+      "reference": "adpcm-3-1-foreign.flv.f32",
+      "rate": 22050,
+      "channels": 1,
+      "frames": 17441,
+      "pattern": "foreign",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 17441,
+        "seeks": 16,
+        "checks": 1348164,
+        "exact_float_words": 41904
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-3-1-negative-limit.flv",
+      "reference": "adpcm-3-1-negative-limit.flv.f32",
+      "rate": 22050,
+      "channels": 1,
+      "frames": 0,
+      "pattern": "negative-limit",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 0,
+        "seeks": 16,
+        "checks": 557162,
+        "exact_float_words": 0
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-3-2-continuous.flv",
+      "reference": "adpcm-3-2-continuous.flv.f32",
+      "rate": 44100,
+      "channels": 2,
+      "frames": 17438,
+      "pattern": "continuous",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 17438,
+        "seeks": 16,
+        "checks": 1348180,
+        "exact_float_words": 41898
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-3-2-leading.flv",
+      "reference": "adpcm-3-2-leading.flv.f32",
+      "rate": 44100,
+      "channels": 2,
+      "frames": 18541,
+      "pattern": "leading",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 18541,
+        "seeks": 16,
+        "checks": 937870,
+        "exact_float_words": 44104
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-3-2-internal.flv",
+      "reference": "adpcm-3-2-internal.flv.f32",
+      "rate": 44100,
+      "channels": 2,
+      "frames": 19182,
+      "pattern": "internal",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 19182,
+        "seeks": 16,
+        "checks": 965514,
+        "exact_float_words": 45386
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-3-2-overlap.flv",
+      "reference": "adpcm-3-2-overlap.flv.f32",
+      "rate": 44100,
+      "channels": 2,
+      "frames": 16536,
+      "pattern": "overlap",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 16536,
+        "seeks": 16,
+        "checks": 953910,
+        "exact_float_words": 40094
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-3-2-negative.flv",
+      "reference": "adpcm-3-2-negative.flv.f32",
+      "rate": 44100,
+      "channels": 2,
+      "frames": 16556,
+      "pattern": "negative",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 16556,
+        "seeks": 16,
+        "checks": 953750,
+        "exact_float_words": 40134
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-3-2-reorder.flv",
+      "reference": "adpcm-3-2-reorder.flv.f32",
+      "rate": 44100,
+      "channels": 2,
+      "frames": 8664,
+      "pattern": "reorder",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 8664,
+        "seeks": 16,
+        "checks": 853026,
+        "exact_float_words": 24350
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-3-2-foreign.flv",
+      "reference": "adpcm-3-2-foreign.flv.f32",
+      "rate": 44100,
+      "channels": 2,
+      "frames": 17438,
+      "pattern": "foreign",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 17438,
+        "seeks": 16,
+        "checks": 1348180,
+        "exact_float_words": 41898
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-3-2-negative-limit.flv",
+      "reference": "adpcm-3-2-negative-limit.flv.f32",
+      "rate": 44100,
+      "channels": 2,
+      "frames": 0,
+      "pattern": "negative-limit",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 0,
+        "seeks": 16,
+        "checks": 557162,
+        "exact_float_words": 0
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-4-1-continuous.flv",
+      "reference": "adpcm-4-1-continuous.flv.f32",
+      "rate": 44100,
+      "channels": 1,
+      "frames": 17438,
+      "pattern": "continuous",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 17438,
+        "seeks": 16,
+        "checks": 1348172,
+        "exact_float_words": 41898
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-4-1-leading.flv",
+      "reference": "adpcm-4-1-leading.flv.f32",
+      "rate": 44100,
+      "channels": 1,
+      "frames": 18541,
+      "pattern": "leading",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 18541,
+        "seeks": 16,
+        "checks": 937870,
+        "exact_float_words": 44104
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-4-1-internal.flv",
+      "reference": "adpcm-4-1-internal.flv.f32",
+      "rate": 44100,
+      "channels": 1,
+      "frames": 19182,
+      "pattern": "internal",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 19182,
+        "seeks": 16,
+        "checks": 965514,
+        "exact_float_words": 45386
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-4-1-overlap.flv",
+      "reference": "adpcm-4-1-overlap.flv.f32",
+      "rate": 44100,
+      "channels": 1,
+      "frames": 16536,
+      "pattern": "overlap",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 16536,
+        "seeks": 16,
+        "checks": 953910,
+        "exact_float_words": 40094
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-4-1-negative.flv",
+      "reference": "adpcm-4-1-negative.flv.f32",
+      "rate": 44100,
+      "channels": 1,
+      "frames": 16556,
+      "pattern": "negative",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 16556,
+        "seeks": 16,
+        "checks": 953750,
+        "exact_float_words": 40134
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-4-1-reorder.flv",
+      "reference": "adpcm-4-1-reorder.flv.f32",
+      "rate": 44100,
+      "channels": 1,
+      "frames": 8664,
+      "pattern": "reorder",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 8664,
+        "seeks": 16,
+        "checks": 853026,
+        "exact_float_words": 24350
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-4-1-foreign.flv",
+      "reference": "adpcm-4-1-foreign.flv.f32",
+      "rate": 44100,
+      "channels": 1,
+      "frames": 17438,
+      "pattern": "foreign",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 17438,
+        "seeks": 16,
+        "checks": 1348172,
+        "exact_float_words": 41898
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-4-1-negative-limit.flv",
+      "reference": "adpcm-4-1-negative-limit.flv.f32",
+      "rate": 44100,
+      "channels": 1,
+      "frames": 0,
+      "pattern": "negative-limit",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 0,
+        "seeks": 16,
+        "checks": 557162,
+        "exact_float_words": 0
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-4-2-continuous.flv",
+      "reference": "adpcm-4-2-continuous.flv.f32",
+      "rate": 11025,
+      "channels": 2,
+      "frames": 17437,
+      "pattern": "continuous",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 17437,
+        "seeks": 16,
+        "checks": 1348180,
+        "exact_float_words": 41896
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-4-2-leading.flv",
+      "reference": "adpcm-4-2-leading.flv.f32",
+      "rate": 11025,
+      "channels": 2,
+      "frames": 17713,
+      "pattern": "leading",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 17713,
+        "seeks": 16,
+        "checks": 944494,
+        "exact_float_words": 42448
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-4-2-internal.flv",
+      "reference": "adpcm-4-2-internal.flv.f32",
+      "rate": 11025,
+      "channels": 2,
+      "frames": 17881,
+      "pattern": "internal",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 17881,
+        "seeks": 16,
+        "checks": 943150,
+        "exact_float_words": 42784
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-4-2-overlap.flv",
+      "reference": "adpcm-4-2-overlap.flv.f32",
+      "rate": 11025,
+      "channels": 2,
+      "frames": 17219,
+      "pattern": "overlap",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 17219,
+        "seeks": 16,
+        "checks": 948446,
+        "exact_float_words": 41460
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-4-2-negative.flv",
+      "reference": "adpcm-4-2-negative.flv.f32",
+      "rate": 11025,
+      "channels": 2,
+      "frames": 17216,
+      "pattern": "negative",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 17216,
+        "seeks": 16,
+        "checks": 948470,
+        "exact_float_words": 41454
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-4-2-reorder.flv",
+      "reference": "adpcm-4-2-reorder.flv.f32",
+      "rate": 11025,
+      "channels": 2,
+      "frames": 14132,
+      "pattern": "reorder",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 14132,
+        "seeks": 16,
+        "checks": 907598,
+        "exact_float_words": 35286
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-4-2-foreign.flv",
+      "reference": "adpcm-4-2-foreign.flv.f32",
+      "rate": 11025,
+      "channels": 2,
+      "frames": 17437,
+      "pattern": "foreign",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 17437,
+        "seeks": 16,
+        "checks": 1348180,
+        "exact_float_words": 41896
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-4-2-negative-limit.flv",
+      "reference": "adpcm-4-2-negative-limit.flv.f32",
+      "rate": 11025,
+      "channels": 2,
+      "frames": 0,
+      "pattern": "negative-limit",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 0,
+        "seeks": 16,
+        "checks": 557162,
+        "exact_float_words": 0
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-5-1-continuous.flv",
+      "reference": "adpcm-5-1-continuous.flv.f32",
+      "rate": 11025,
+      "channels": 1,
+      "frames": 17437,
+      "pattern": "continuous",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 17437,
+        "seeks": 16,
+        "checks": 1348180,
+        "exact_float_words": 41896
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-5-1-leading.flv",
+      "reference": "adpcm-5-1-leading.flv.f32",
+      "rate": 11025,
+      "channels": 1,
+      "frames": 17713,
+      "pattern": "leading",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 17713,
+        "seeks": 16,
+        "checks": 944494,
+        "exact_float_words": 42448
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-5-1-internal.flv",
+      "reference": "adpcm-5-1-internal.flv.f32",
+      "rate": 11025,
+      "channels": 1,
+      "frames": 17881,
+      "pattern": "internal",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 17881,
+        "seeks": 16,
+        "checks": 943150,
+        "exact_float_words": 42784
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-5-1-overlap.flv",
+      "reference": "adpcm-5-1-overlap.flv.f32",
+      "rate": 11025,
+      "channels": 1,
+      "frames": 17219,
+      "pattern": "overlap",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 17219,
+        "seeks": 16,
+        "checks": 948446,
+        "exact_float_words": 41460
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-5-1-negative.flv",
+      "reference": "adpcm-5-1-negative.flv.f32",
+      "rate": 11025,
+      "channels": 1,
+      "frames": 17216,
+      "pattern": "negative",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 17216,
+        "seeks": 16,
+        "checks": 948470,
+        "exact_float_words": 41454
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-5-1-reorder.flv",
+      "reference": "adpcm-5-1-reorder.flv.f32",
+      "rate": 11025,
+      "channels": 1,
+      "frames": 14132,
+      "pattern": "reorder",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 14132,
+        "seeks": 16,
+        "checks": 907598,
+        "exact_float_words": 35286
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-5-1-foreign.flv",
+      "reference": "adpcm-5-1-foreign.flv.f32",
+      "rate": 11025,
+      "channels": 1,
+      "frames": 17437,
+      "pattern": "foreign",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 17437,
+        "seeks": 16,
+        "checks": 1348180,
+        "exact_float_words": 41896
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-5-1-negative-limit.flv",
+      "reference": "adpcm-5-1-negative-limit.flv.f32",
+      "rate": 11025,
+      "channels": 1,
+      "frames": 0,
+      "pattern": "negative-limit",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 0,
+        "seeks": 16,
+        "checks": 557162,
+        "exact_float_words": 0
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-5-2-continuous.flv",
+      "reference": "adpcm-5-2-continuous.flv.f32",
+      "rate": 22050,
+      "channels": 2,
+      "frames": 17437,
+      "pattern": "continuous",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 17437,
+        "seeks": 16,
+        "checks": 1348180,
+        "exact_float_words": 41896
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-5-2-leading.flv",
+      "reference": "adpcm-5-2-leading.flv.f32",
+      "rate": 22050,
+      "channels": 2,
+      "frames": 17988,
+      "pattern": "leading",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 17988,
+        "seeks": 16,
+        "checks": 942294,
+        "exact_float_words": 42998
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-5-2-internal.flv",
+      "reference": "adpcm-5-2-internal.flv.f32",
+      "rate": 22050,
+      "channels": 2,
+      "frames": 18322,
+      "pattern": "internal",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 18322,
+        "seeks": 16,
+        "checks": 939622,
+        "exact_float_words": 43666
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-5-2-overlap.flv",
+      "reference": "adpcm-5-2-overlap.flv.f32",
+      "rate": 22050,
+      "channels": 2,
+      "frames": 16999,
+      "pattern": "overlap",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 16999,
+        "seeks": 16,
+        "checks": 950206,
+        "exact_float_words": 41020
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-5-2-negative.flv",
+      "reference": "adpcm-5-2-negative.flv.f32",
+      "rate": 22050,
+      "channels": 2,
+      "frames": 16996,
+      "pattern": "negative",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 16996,
+        "seeks": 16,
+        "checks": 950230,
+        "exact_float_words": 41014
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-5-2-reorder.flv",
+      "reference": "adpcm-5-2-reorder.flv.f32",
+      "rate": 22050,
+      "channels": 2,
+      "frames": 10825,
+      "pattern": "reorder",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 10825,
+        "seeks": 16,
+        "checks": 901282,
+        "exact_float_words": 28672
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-5-2-foreign.flv",
+      "reference": "adpcm-5-2-foreign.flv.f32",
+      "rate": 22050,
+      "channels": 2,
+      "frames": 17437,
+      "pattern": "foreign",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 17437,
+        "seeks": 16,
+        "checks": 1348180,
+        "exact_float_words": 41896
+      },
+      "result": "exact independent media placement"
+    },
+    {
+      "file": "adpcm-5-2-negative-limit.flv",
+      "reference": "adpcm-5-2-negative-limit.flv.f32",
+      "rate": 22050,
+      "channels": 2,
+      "frames": 0,
+      "pattern": "negative-limit",
+      "seek_reference": null,
+      "oracle": {
+        "result": "passed",
+        "frames": 0,
+        "seeks": 16,
+        "checks": 557162,
+        "exact_float_words": 0
+      },
+      "result": "exact independent media placement"
+    }
+  ],
+  "guarded": [
+    {
+      "file": "aac-44100-2-internal.flv",
+      "result": "passed",
+      "checks": 245034173,
+      "exact_float_words": 62914,
+      "guarded_cases": 767,
+      "protected_prefixes": 254,
+      "mutations": 512
+    },
+    {
+      "file": "speex-group5-leading.flv",
+      "result": "passed",
+      "checks": 105855934,
+      "exact_float_words": 27680,
+      "guarded_cases": 751,
+      "protected_prefixes": 238,
+      "mutations": 512
+    },
+    {
+      "file": "adpcm-5-2-overlap.flv",
+      "result": "passed",
+      "checks": 122375457,
+      "exact_float_words": 33998,
+      "guarded_cases": 769,
+      "protected_prefixes": 256,
+      "mutations": 512
+    }
+  ],
+  "sparse": [
+    {
+      "file": "extended-16777217.flv",
+      "reference": "extended-16777217.flv.f32",
+      "gap_frames": 268435472,
+      "result": "passed",
+      "checks": 24
+    },
+    {
+      "file": "extended-2147483647.flv",
+      "reference": "extended-2147483647.flv.f32",
+      "gap_frames": 34359738352,
+      "result": "passed",
+      "checks": 24
+    }
+  ],
+  "cancellation": [
+    {
+      "mode": "cancel-open",
+      "result": "cancelled"
+    },
+    {
+      "mode": "cancel-read",
+      "result": "cancelled",
+      "frames_before_cancel": 102400
+    }
+  ],
+  "native_lifecycle": [],
+  "sources": {
+    "src/flv.s": "b0be68cfda5107b537cdceffa4617d6d79e8c7f4d6dce026ab461266b49aff1b",
+    "src/track.s": "d882c87afacc6e35595293b508009b51065180a74fbde95c733a82ae22bcb0d9",
+    "src/track_time.s": "958c15a5948f77753eeb635a1ebbf7fc89ee185a746ac2d0321fbf4dc42d05f2",
+    "src/decoder.s": "eb8a1d8e3902d75f76a2c729d08366387cd367c47511288675758dc18d0ca6f3",
+    "tests/verify-flv-clock.py": "435d72748fc9d9ebc5e41a190328c066447e3b62abd78360be4c938c997360fc",
+    "tests/verify-flv.py": "57ace422159f812d5394c58232abb0a7cb15ce22bb6280862399dccb88855f5a",
+    "tests/verify-heaac.py": "c96f753ed26f082397b676b4a1946f7af6c39cf9a5f53b7bdaf77b45b48f8dcd",
+    "tests/sbr_vectors.py": "3d1799bec74e5b6d381726f3dc22e395c62d24215d79c5fd72fb525dbeeaee62",
+    "tests/sbr_model.py": "b3e4066ed28ed936d42f9af5ba0cfe8c0ab1901f311437ed4e24712ac68c3bc2",
+    "tests/ps_model.py": "27f7711782875257150813c291cc29a4681c79556bfcb70281a16d9db9902e4b",
+    "tests/flv-clock-sparse-oracle.c": "ce51366fa6be45fcabe847701a6ac0efca1952e77a25cdc3704c32241434894a",
+    "tests/speex-flv-oracle.c": "e9a356410dfcc8492679fcaa1d6f752fe71e0d289acb6e0620811f60fe11624c",
+    "tests/matroska-timing-oracle.c": "6a6720abcc0a5039f019d4afa3cd7b9442539912f9302d1ba9580b0fd0cea24c",
+    "tests/track-source-oracle.c": "f7fd763aa449eb0ca09a7c438b2d62a2e5977e65ad140a731d6699a4445f7e33",
+    "tests/chain-oracle.c": "770757565631753a57a6a8352cbac5ffecd33bb380eec247f23874277f7a00f7"
+  },
+  "binaries": {
+    "lamp-cli.exe": "13d533e54b0c13eb90f8ab246fed926689d82e2f00ed912911360298c8056a7c",
+    "flv-clock-source.exe": "070605e5ebecec61f1f45702ffca618d5f5de503c476fdae30ea1220941849a1",
+    "flv-clock-oracle.exe": "bbe34c7a5b47a0e8faccffa71c19057973e600197c22537d557850d509ca2cb0",
+    "flv-clock-chain.exe": "5e09413b38ed034abeed08d566706a64c6de563dd6a2707c9e5c3e8f5b64f58a",
+    "flv-clock-guard.exe": "dd468b75c1d04db07f7eaa2a7a7b260ca5625419472615fd9609bb431b48bd9c",
+    "flv-clock-sparse.exe": "d95929085df8ccc23927d57a8a468a0b75911e21381e54c70097c3a0ac6f9b75"
+  }
+}

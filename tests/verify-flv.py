@@ -55,13 +55,19 @@ def flv_tag(kind, data, timestamp=0):
 
 
 def flv_file(tags, extra=0):
-    """Write coherent continuous audio clocks for these LC/ADPCM fixtures."""
-    selected=None;rate=44100;frames=0;out=[]
+    """Write continuous clocks; a fragment's time belongs to its first frame."""
+    from bisect import bisect_right
+    selected=next((d[0]>>4 for k,d in tags if k==8 and d),None)
+    first=next((d[0] for k,d in tags if k==8 and d),0)
+    mpeg=[];byte_at=0
+    if selected in [2,14]:
+        blob=b''.join(d[1:] for k,d in tags if k==8 and d and d[0]>>4==selected)
+        for offset,samples,rate,size in mpeg_frames(blob):mpeg.append((offset,samples,rate))
+    rate=44100;frames=0;out=[]
     for kind,data in tags:
         timestamp=(frames*1000+rate//2)//rate
         if kind==8 and data:
             codec=data[0]>>4
-            if selected is None:selected=codec
             if codec==selected==10 and len(data)>2:
                 if data[1]==0:
                     index=(data[2]&7)<<1 | data[3]>>7
@@ -73,8 +79,32 @@ def flv_file(tags, extra=0):
                 channels=(data[0]&1)+1;bits=(data[1]>>6)+2;header=22*channels;group=bits*channels
                 blocks,remaining=divmod((len(data)-1)*8-2,header+4095*group)
                 frames+=blocks*4096+(1+(remaining-header)//group if remaining>=header else 0)
+            elif codec==selected and selected in [0,3,7,8] and data[0]==first:
+                rate=8000 if selected in [7,8] else [5512,11025,22050,44100][first>>2&3]
+                align=((first&1)+1)*(1 if selected in [7,8] or not first&2 else 2)
+                timestamp=((byte_at//align)*1000+rate//2)//rate;byte_at+=len(data)-1
+            elif codec==selected and selected in [2,14] and mpeg:
+                frame=mpeg[max(0,bisect_right([x[0] for x in mpeg],byte_at)-1)]
+                timestamp=(frame[1]*1000+frame[2]//2)//frame[2];byte_at+=len(data)-1
         out.append(flv_tag(kind,data,timestamp))
     return b'FLV\x01\x04'+(9+extra).to_bytes(4,'big')+bytes(extra)+bytes(4)+b''.join(out)
+
+
+def mpeg_frames(blob):
+    """Independent header lengths/sample starts for generated Layer I-III audio."""
+    at=0;sample=0
+    tables={1:[0,32,64,96,128,160,192,224,256,288,320,352,384,416,448],
+            2:[0,32,48,56,64,80,96,112,128,160,192,224,256,320,384],
+            3:[0,32,40,48,56,64,80,96,112,128,160,192,224,256,320]}
+    while at+4<=len(blob):
+        h=int.from_bytes(blob[at:at+4],'big');version=h>>19&3;layer=4-(h>>17&3);index=h>>12&15;rate_index=h>>10&3
+        if h>>21!=0x7ff or version==1 or layer not in [1,2,3] or index in [0,15] or rate_index==3:raise Failure('MPEG fixture header')
+        rate=[44100,48000,32000][rate_index]//(1 if version==3 else 2 if version==2 else 4)
+        bitrate=(tables[layer][index] if version==3 else [0,32,48,56,64,80,96,112,128,144,160,176,192,224,256][index] if layer==1 else [0,8,16,24,32,40,48,56,64,80,96,112,128,144,160][index])*1000
+        samples=384 if layer==1 else 576 if layer==3 and version!=3 else 1152;padding=h>>9&1
+        size=((12*bitrate//rate+padding)*4 if layer==1 else (72 if samples==576 else 144)*bitrate//rate+padding)
+        if at+size>len(blob):raise Failure('MPEG fixture tail')
+        yield at,sample,rate,size;sample+=samples;at+=size
 
 
 def flv_tags(data):

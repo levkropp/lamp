@@ -1,0 +1,42 @@
+{
+  "result": "passed",
+  "scope": "Test-only counterfactual objects: unknown prefix retention reproduces a VBR seek failure with the prior history cutoff; correcting only prefix provenance passes. Omitting only the native-open tolerance reset reproduces acceptance of missing reservoir after packet seek/close. No control object is linked into shipping binaries.",
+  "results": {
+    "unknown_prefix": {
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "timing check failed line29 error14",
+      "sha256": "f6d9427faedf58a9d2f6f4abfc1871d1f10c8712a1019cd926ad08aacd71bb52"
+    },
+    "known_prefix": {
+      "exit_code": 0,
+      "stdout": "{\"result\":\"passed\",\"frames\":33408,\"seeks\":16,\"checks\":1339691,\"exact_float_words\":73838}",
+      "stderr": "",
+      "sha256": "e23348e7a64932e73020339be2d00bfe3d75b5d34a3b4f3d08145f2991401ac6"
+    },
+    "native_legacy": {
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "missing reservoir accepted after packet seek/close",
+      "sha256": "2ca9454148590231068d203c4be08c61c8fae0bb09b82054306953816edf2615"
+    },
+    "native_current": {
+      "exit_code": 0,
+      "stdout": "{\"result\":\"passed\",\"cold_rejection\":true,\"reopened_rejection\":true}",
+      "stderr": "",
+      "sha256": "5390560fc9ed2233c9461cee1968397b8dbe422d49f9dd2e910f724d1ffcbff7"
+    }
+  },
+  "sources": {
+    "src/mp3.s": "69a73284b0b5949b82f5b04123458e76f37d73ccb981f8042df3714ef9806916",
+    "src/track.s": "d882c87afacc6e35595293b508009b51065180a74fbde95c733a82ae22bcb0d9",
+    "tests/mpeg-reopen-oracle.c": "f67b9c092d64503108f3504d3ffbd14b68ba2f0417d321d57a575ff2ad48fc99",
+    "tests/matroska-timing-oracle.c": "6a6720abcc0a5039f019d4afa3cd7b9442539912f9302d1ba9580b0fd0cea24c",
+    "tests/verify-mpeg-restart.py": "87aab70b99bafd745e149bae0d8db8df68530b03d7825cbea11ac41bd4589d05"
+  },
+  "fixtures": {
+    "mpeg-48000-2-vbr-continuous.flv": "1fbb7da52167e3aaa2052365d6e88f8295415f389d2505ba0c4d45657b45026b",
+    "mpeg-48000-2-vbr-continuous.flv.f32": "e219e2680e5b93633369fa305edf49f703048b1baa9f1170fdaa3be04ae41026",
+    "missing-reservoir.mp3": "7d7e9c7b7352d1694dd15aa0e46e251de30d9655324feb4e881560c708999054"
+  }
+}

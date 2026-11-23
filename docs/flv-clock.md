@@ -4,9 +4,9 @@ AAC (including HE-AAC v1/v2), Flash ADPCM and Speex now use the FLV tag's
 media clock for audio placement. Leading/internal gaps produce silence,
 negative prefixes are clipped and earlier samples win when tags overlap.
 Duration and seek targets include gaps. Codec history still decodes through
-clipped samples. PCM, G.711 and MPEG audio currently use the older gathered
-path and do not yet schedule tag timestamps. Actual video/A/V synchronization
-also remains unfinished.
+clipped samples. PCM, G.711 and MPEG audio now also have a
+[timed packet-view path](flv-gathered.md), preserving arbitrary byte fragments.
+Actual video/A/V synchronization remains unfinished.
 
 ## Timestamp rules
 

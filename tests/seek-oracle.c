@@ -9,7 +9,7 @@ LAMP_ABI int decoder_open(const lamp_char *);
 LAMP_ABI void decoder_close(void);
 LAMP_ABI uint64_t decoder_seek(uint64_t);
 LAMP_ABI unsigned decoder_read(float *,unsigned);
-extern unsigned decode_error,codec_kind,track_choice;
+extern unsigned decode_error,codec_kind,track_choice,track_active;
 extern unsigned decoder_seek_probes;
 extern unsigned *ogg_cancel_ptr;
 extern unsigned mp3_index_count;
@@ -56,14 +56,14 @@ int lamp_main(int argc,lamp_char **argv){
  for(unsigned i=0;i<sizeof(requests)/sizeof(*requests);i++){
   uint64_t target=requests[i]>frames?frames:requests[i];
   if(!decoder_open(argv[1])||(total_frames&&total_frames!=frames))return 1;
-  if(codec_kind==3&&(!mp3_index_count||mp3_index_count>2048))return 1;
+  if(codec_kind==3&&!track_active&&(!mp3_index_count||mp3_index_count>2048))return 1;
   if(codec_kind==4&&(!vorbis_index_count||vorbis_index_count>2048))return 1;
   uint64_t base=decoder_seek(requests[i]);
   if(base>target||decode_error){fprintf(stderr,"Seek base error %u\n",i);return 1;}if(base)advanced++;
   if(target-base>most_discarded)most_discarded=target-base;
   if(target-base>bound||decoder_seek_probes>66){fprintf(stderr,"Seek work bound exceeded %u: %llu frames, %u probes\n",i,target-base,decoder_seek_probes);return 1;}
   if(decoder_seek_probes>most_probes)most_probes=decoder_seek_probes;
-  if(codec_kind==3){if(mp3_seek_headers>=mp3_index_stride)return 1;if(mp3_seek_headers>most_headers)most_headers=mp3_seek_headers;if(mp3_index_count>most_points)most_points=mp3_index_count;}
+  if(codec_kind==3&&!track_active){if(mp3_seek_headers>=mp3_index_stride)return 1;if(mp3_seek_headers>most_headers)most_headers=mp3_seek_headers;if(mp3_index_count>most_points)most_points=mp3_index_count;}
   if(codec_kind==4){if(target-base>vorbis_index_stride*6144||vorbis_seek_preroll>1)return 1;if(vorbis_index_count>most_points)most_points=vorbis_index_count;if(vorbis_index_stride>most_stride)most_stride=vorbis_index_stride;if(vorbis_seek_preroll>most_preroll)most_preroll=vorbis_seek_preroll;}
   while(base<target){unsigned count=target-base>2048?2048:(unsigned)(target-base),n=decoder_read(pcm.values,count);if(n!=count||decode_error)return 1;base+=n;discarded+=n;}
   memset(pcm.values,0xa5,sizeof(pcm.values));pcm.before=0x13579bdf98765432ULL;pcm.after=0x2468ace012345678ULL;

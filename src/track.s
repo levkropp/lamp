@@ -248,6 +248,22 @@ FN track_time_mark_signed
     ret
 ENDFN track_time_mark_signed
 
+# RCX=packet, RDX=signed absolute nanoseconds. A gathered tag can begin
+# inside a sample/frame; this carries its precise next-frame adjustment.
+FN track_time_mark_ns
+    cmp rcx, [rip + track_count]
+    jae .Ltk_mark_ns_bad
+    imul rax, rcx, TK_ENTRY
+    add rax, [rip + track_packets]
+    mov [rax + TK_START], rdx
+    mov dword ptr [rax + TK_SAMPLES], 0xa0000000
+    mov eax, 1
+    ret
+.Ltk_mark_ns_bad:
+    xor eax, eax
+    ret
+ENDFN track_time_mark_ns
+
 # RCX=data, EDX=bytes, R8D=limit -> EAX=1. Extends the previous packet when
 # the data follows it directly and the total stays within the limit (PCM).
 FN track_append
@@ -486,7 +502,10 @@ FN track_finish
     push r12
     sub rsp, 40
     cmp qword ptr [rip + track_count], 0
-    je .Ltk_finish_bad
+    jne .Ltk_finish_allocate
+    cmp dword ptr [rip + track_codec], TK_PCM
+    jne .Ltk_finish_bad
+.Ltk_finish_allocate:
     mov ecx, TK_BUFFER*8
     call mem_alloc
     mov [rip + track_buffer], rax
@@ -654,6 +673,8 @@ FN track_finish
     mov eax, [rsi + TK_SAMPLES]
     test eax, 0x80000000
     jz .Ltk_scan_clock_ready
+    test eax, 0x20000000
+    jnz .Ltk_scan_ns_clock
     test eax, 0x40000000
     jnz .Ltk_scan_signed_clock
     movsx r8d, ax
@@ -665,6 +686,12 @@ FN track_finish
 .Ltk_scan_anchor:
     mov rcx, rdi
     call track_time_anchor
+    jmp .Ltk_scan_clock_checked
+.Ltk_scan_ns_clock:
+    mov rcx, rdi
+    mov rdx, [rsi + TK_START]
+    call track_time_anchor_ns
+.Ltk_scan_clock_checked:
     test eax, eax
     jz .Ltk_finish_bad
 .Ltk_scan_clock_ready:
@@ -747,11 +774,17 @@ LOCALFN track_restart
     mov dword ptr [rip + track_used], 0
     mov dword ptr [rip + track_available], 0
     mov dword ptr [rip + track_primer], 0
+    cmp qword ptr [rip + track_count], 0
+    je .Ltk_restart_empty
     imul rax, rbx, TK_ENTRY
     add rax, [rip + track_packets]
     mov rcx, [rax + TK_START]
     mov [rip + track_raw], rcx
     call track_reset_codec
+    jmp .Ltk_restart_done
+.Ltk_restart_empty:
+    mov qword ptr [rip + track_raw], 0
+.Ltk_restart_done:
     add rsp, 32
     pop rbx
     ret
@@ -904,6 +937,11 @@ FN track_seek
     mov eax, 0
     jne .Ltk_seek_return
 .Ltk_seek_not_cancelled:
+    cmp qword ptr [rip + track_count], 0
+    jne .Ltk_seek_has_packets
+    xor eax, eax
+    jmp .Ltk_seek_return
+.Ltk_seek_has_packets:
     test rcx, rcx
     jz .Ltk_seek_from_zero              # reset even after earlier reads/seeks
     mov rax, [rip + total_frames]
@@ -996,6 +1034,14 @@ FN track_seek
     jne .Ltk_seek_restart                # Layers I/II have no reservoir
     xor esi, esi
 .Ltk_seek_mpa_back:
+    mov rax, [rip + ogg_cancel_ptr]
+    test rax, rax
+    jz .Ltk_seek_mpa_not_cancelled
+    cmp dword ptr [rax], 0
+    je .Ltk_seek_mpa_not_cancelled
+    xor eax, eax
+    jmp .Ltk_seek_return
+.Ltk_seek_mpa_not_cancelled:
     test rbx, rbx
     jz .Ltk_seek_restart
     cmp esi, TK_MPA_RESERVOIR
@@ -1003,7 +1049,10 @@ FN track_seek
     dec rbx
     imul rax, rbx, TK_ENTRY
     add rax, [rip + track_packets]
-    add esi, [rax + TK_BYTES]
+    mov edx, [rax + TK_BYTES]
+    mov rcx, [rax + TK_POINTER]
+    call mpa_reservoir_bytes
+    add esi, eax
     jmp .Ltk_seek_mpa_back
 .Ltk_seek_primer:
     # Primer packets rebuild the overlap; their output is skipped. HE-AAC

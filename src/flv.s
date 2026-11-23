@@ -5,7 +5,7 @@
 # tags of the first audio tag's sound format are read in file order; video,
 # script data and audio of another format are skipped, as are encrypted
 # tags. PCM (8-bit unsigned, 16-bit little-endian), G.711 and MP3 tag data
-# is gathered behind a Wave64 header for the WAV reader, as AVI's is; AAC
+# is gathered without changing byte order, then split into packet views; AAC
 # raw frames (after the AudioSpecificConfig of the first sequence header)
 # and Flash ADPCM/Speex tags are track packets.
 .include "lamp.inc"
@@ -14,6 +14,8 @@
 .equ FLV_MALFORMED, 100
 .equ FLV_UNSUPPORTED, 101
 .equ TK_AAC, 7
+.equ TK_PCM, 1
+.equ TK_MPA, 3
 .equ TK_ADPCM, 10
 .equ TK_SPEEX, 11
 .equ ADPCM_SWF, 0x5346
@@ -42,8 +44,12 @@ flv_config: .quad 0                 # AAC AudioSpecificConfig
 flv_config_bytes: .long 0
 flv_largest: .long 0                # largest Flash ADPCM packet
 flv_timestamp: .long 0              # complete signed millisecond tag clock
+flv_stamp_ns: .quad 0               # next owned frame, including a continuation
+flv_last_samples: .long 0
+flv_trim_start: .long 0
+flv_trim_end: .long 0
 .p2align 2
-flv_fmt: .zero 16                   # WAVE format: the image's or the ADPCM track's
+flv_fmt: .zero 16                   # gathered PCM/G.711 or Flash ADPCM configuration
 
 .text
 # -> EAX=1 when the open was cancelled.
@@ -131,11 +137,9 @@ LOCALFN flv_start
     mov word ptr [r8 + 14], 0
 .Lflv_start_image:
     mov dword ptr [rip + flv_mode], FLV_IMAGE
-    lea rcx, [rip + flv_fmt]
-    mov edx, 16
-    mov r8, [rip + flv_end]
-    sub r8, [rip + flv_file]
-    call wav_image_begin
+    mov rcx, [rip + flv_end]
+    sub rcx, [rip + flv_file]
+    call mts_begin
     jmp .Lflv_start_return
 .Lflv_start_aac:
     mov dword ptr [rip + flv_mode], FLV_AAC
@@ -296,9 +300,272 @@ LOCALFN flv_audio
     ret
 ENDFN flv_audio
 
-# RCX=mapped start ("FLV", version 1), RDX=end -> EAX=1 with the stream open
-# (AAC, Flash ADPCM, Speex), EAX=2 with a Wave64 image for the WAV reader,
-# or 0 with decode_error set.
+# Revisit accepted byte fragments after gathering. A sample/MPEG frame
+# belongs to the tag containing its first byte. It may finish in a later
+# tag; no bytes are lost, duplicated, or interpreted as separate frames.
+# Continuation-only tags own no new frame. A continuation with a new frame
+# advances that frame's tag clock by the preceding frame's full duration.
+LOCALFN flv_gathered_finish
+    push rbx
+    push rsi
+    push rdi
+    push r12
+    push r13
+    push r14
+    push r15
+    sub rsp, 80
+    mov dword ptr [rip + flv_last_samples], 0
+    cmp word ptr [rip + flv_fmt], 0x55
+    jne .Lflv_views_pcm
+    mov rcx, [rip + mts_buffer]
+    mov rdx, rcx
+    add rdx, [rip + mts_bytes]
+    call mp3_open                       # existing metadata/trim/structure rules
+    test eax, eax
+    jz .Lflv_views_bad
+    call mp3_stream_layout
+    mov r14, rax
+    mov r15, rdx
+    mov [rip + flv_trim_start], r8d
+    mov [rip + flv_trim_end], r9d
+    call mp3_close                      # packet views replace the native index
+    mov ecx, TK_MPA
+    call track_begin
+    test eax, eax
+    jz .Lflv_views_bad
+    mov eax, [rip + flv_trim_start]
+    mov [rip + track_start_trim], rax
+    mov eax, [rip + flv_trim_end]
+    mov [rip + track_end_trim], rax
+    jmp .Lflv_views_ready
+.Lflv_views_pcm:
+    mov ecx, TK_PCM
+    call track_begin
+    test eax, eax
+    jz .Lflv_views_bad
+    mov eax, [rip + flv_fmt + 4]
+    mov [rip + sample_rate], eax
+    movzx eax, word ptr [rip + flv_fmt + 2]
+    mov [rip + track_pcm_channels], eax
+    movzx eax, word ptr [rip + flv_fmt + 14]
+    mov [rip + track_pcm_bits], eax
+    xor eax, eax
+    cmp word ptr [rip + flv_fmt], 6
+    jne .Lflv_views_ulaw
+    mov eax, 8
+.Lflv_views_ulaw:
+    cmp word ptr [rip + flv_fmt], 7
+    jne .Lflv_views_pcm_flags
+    mov eax, 16
+.Lflv_views_pcm_flags:
+    mov [rip + track_pcm_flags], eax
+    mov rax, [rip + mts_bytes]
+    xor edx, edx
+    movzx ecx, word ptr [rip + flv_fmt + 12]
+    div rcx
+    mov r15, [rip + mts_bytes]
+    sub r15, rdx                       # discard only an incomplete final sample
+    xor r14d, r14d                     # next unowned PCM byte
+.Lflv_views_ready:
+    mov dword ptr [rip + track_time_enabled], 1
+    mov qword ptr [rip + track_time_scale_ns], 1000000
+    mov rsi, [rip + flv_file]
+    mov rdi, [rip + flv_end]
+    mov eax, [rsi + 5]
+    bswap eax
+    lea r12, [rsi + rax + 4]
+    xor r13d, r13d                     # accepted gathered bytes through this tag
+.Lflv_views_tag:
+    call flv_cancelled
+    test eax, eax
+    jnz .Lflv_views_bad
+    mov rax, rdi
+    sub rax, r12
+    cmp rax, 11
+    jl .Lflv_views_done
+    sub rax, 11
+    mov ebx, [r12]
+    bswap ebx
+    and ebx, 0xffffff
+    mov dword ptr [rsp+32], 0
+    cmp rbx, rax
+    jbe .Lflv_views_sized
+    mov rbx, rax
+    mov dword ptr [rsp+32], 1
+.Lflv_views_sized:
+    movzx eax, byte ptr [r12]
+    and eax, 0x3f
+    cmp eax, 8
+    jne .Lflv_views_next
+    test rbx, rbx
+    jz .Lflv_views_next
+    movzx eax, byte ptr [r12+11]
+    xor eax, [rip + flv_flags]
+    test eax, 0xf0
+    jnz .Lflv_views_next
+    cmp word ptr [rip + flv_fmt], 0x55
+    je .Lflv_views_accept
+    test eax, eax
+    jnz .Lflv_views_next
+.Lflv_views_accept:
+    mov [rsp+56], r13                  # original tag byte start
+    lea rax, [r13 + rbx - 1]
+    cmp rax, [rip + mts_bytes]
+    ja .Lflv_views_bad
+    mov r13, rax
+    mov rax, [rip + track_count]
+    mov [rsp+40], rax                  # first packet this tag will own
+    mov eax, [r12+4]
+    bswap eax
+    ror eax, 8
+    movsxd rax, eax
+    imul rax, rax, 1000000
+    mov [rip + flv_stamp_ns], rax
+    cmp word ptr [rip + flv_fmt], 0x55
+    je .Lflv_views_mpa
+    movzx ecx, word ptr [rip + flv_fmt + 12]
+    mov rax, [rsp+56]
+    xor edx, edx
+    div rcx
+    test edx, edx
+    jz .Lflv_views_pcm_end
+    mov ecx, 1
+    call flv_stamp_advance
+.Lflv_views_pcm_end:
+    movzx ecx, word ptr [rip + flv_fmt + 12]
+    lea rax, [r13 + rcx - 1]
+    xor edx, edx
+    div rcx
+    imul rax, rcx
+    cmp rax, r15
+    cmova rax, r15
+    mov [rsp+48], rax
+.Lflv_views_pcm_packet:
+    cmp r14, [rsp+48]
+    jae .Lflv_views_mark
+    call flv_cancelled
+    test eax, eax
+    jnz .Lflv_views_bad
+    mov rdx, [rsp+48]
+    sub rdx, r14
+    movzx eax, word ptr [rip + flv_fmt + 12]
+    shl eax, 18                       # existing packet PCM capacity
+    cmp rdx, rax
+    cmova rdx, rax
+    mov [rsp+64], rdx
+    mov rcx, [rip + mts_buffer]
+    add rcx, r14
+    call track_add
+    test eax, eax
+    jz .Lflv_views_bad
+    add r14, [rsp+64]
+    jmp .Lflv_views_pcm_packet
+.Lflv_views_mpa:
+    mov rax, [rip + mts_buffer]
+    add rax, [rsp+56]
+    cmp r14, rax
+    jbe .Lflv_views_mpa_end
+    mov ecx, [rip + flv_last_samples]
+    test ecx, ecx
+    jz .Lflv_views_mpa_end
+    call flv_stamp_advance
+.Lflv_views_mpa_end:
+    mov rax, [rip + mts_buffer]
+    add rax, r13
+    mov [rsp+48], rax
+.Lflv_views_mpa_packet:
+    cmp r14, [rsp+48]
+    jae .Lflv_views_mark
+    cmp r14, r15
+    jae .Lflv_views_mark
+    call flv_cancelled
+    test eax, eax
+    jnz .Lflv_views_bad
+    mov rax, r15
+    sub rax, r14
+    cmp rax, 128
+    jne .Lflv_views_mpa_frame
+    cmp word ptr [r14], 0x4154
+    jne .Lflv_views_mpa_frame
+    cmp byte ptr [r14+2], 'G'
+    jne .Lflv_views_mpa_frame
+    mov r14, r15                       # native ID3v1 trailer, not audio
+    jmp .Lflv_views_mark
+.Lflv_views_mpa_frame:
+    mov rcx, r14
+    mov rdx, r15
+    call mpa_frame_bytes
+    test eax, eax
+    jz .Lflv_views_bad
+    mov [rsp+64], rax
+    mov eax, [rip + mp_samples]
+    mov [rip + flv_last_samples], eax
+    mov rcx, r14
+    mov edx, [rsp+64]
+    call track_add
+    test eax, eax
+    jz .Lflv_views_bad
+    add r14, [rsp+64]
+    jmp .Lflv_views_mpa_packet
+.Lflv_views_mark:
+    mov rcx, [rsp+40]
+    cmp rcx, [rip + track_count]
+    jae .Lflv_views_next
+    mov rdx, [rip + flv_stamp_ns]
+    call track_time_mark_ns
+    test eax, eax
+    jz .Lflv_views_bad
+.Lflv_views_next:
+    cmp dword ptr [rsp+32], 0
+    jne .Lflv_views_done
+    lea r12, [r12 + rbx + 15]
+    jmp .Lflv_views_tag
+.Lflv_views_done:
+    cmp r13, [rip + mts_bytes]
+    jne .Lflv_views_bad
+    call track_finish
+    test eax, eax
+    jz .Lflv_views_bad
+    mov dword ptr [rip + codec_kind], 15
+    cmp word ptr [rip + flv_fmt], 0x55
+    jne .Lflv_views_ok
+    mov dword ptr [rip + codec_kind], 3
+.Lflv_views_ok:
+    mov eax, 1
+    jmp .Lflv_views_return
+.Lflv_views_bad:
+    call mp3_close
+    xor eax, eax
+.Lflv_views_return:
+    add rsp, 80
+    pop r15
+    pop r14
+    pop r13
+    pop r12
+    pop rdi
+    pop rsi
+    pop rbx
+    ret
+ENDFN flv_gathered_finish
+
+# ECX=samples before the tag's next newly owned frame. Nanosecond precision
+# avoids overflowing a signed millisecond field at its positive boundary.
+LOCALFN flv_stamp_advance
+    mov eax, ecx
+    mov ecx, 1000000000
+    mul rcx
+    mov ecx, [rip + sample_rate]
+    mov r8d, ecx
+    shr r8d, 1
+    add rax, r8
+    adc rdx, 0
+    div rcx
+    add [rip + flv_stamp_ns], rax
+    ret
+ENDFN flv_stamp_advance
+
+# RCX=mapped start ("FLV", version 1), RDX=end -> EAX=1 with the packet
+# stream open, or 0 with decode_error set.
 FN flv_open
     push rbx
     push rsi
@@ -378,13 +645,9 @@ FN flv_open
     je .Lflv_open_adpcm
     cmp eax, FLV_SPEEX
     je .Lflv_open_speex
-    xor ecx, ecx
-    cmp word ptr [rip + flv_fmt], 0x55
-    je .Lflv_open_image
-    movzx ecx, word ptr [rip + flv_fmt + 12]  # whole PCM frames
-.Lflv_open_image:
-    call wav_image_end
-    mov eax, 2
+    call flv_gathered_finish
+    test eax, eax
+    jz .Lflv_open_bad
     jmp .Lflv_open_return
 .Lflv_open_aac:
     cmp qword ptr [rip + flv_config], 0

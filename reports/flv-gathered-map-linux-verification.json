@@ -1,0 +1,17 @@
+{
+  "result": "passed",
+  "cases": 524,
+  "checks": 22259152,
+  "seek_positions": 27066,
+  "float_words": 12491720,
+  "peak_committed_bytes": 327680,
+  "platform": "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "scope": "Per-sample source/media mapping, gaps, overlap/negative clipping, cut intersections, repeated seeks, exact gap seeks, sparse giant gaps, signed/scaled clocks, cancellation and allocator failures. This component does not establish Matroska demux or device playback.",
+  "sources": {
+    "src/track_time.s": "958c15a5948f77753eeb635a1ebbf7fc89ee185a746ac2d0321fbf4dc42d05f2",
+    "tests/track-time-oracle.c": "0c0e911f6b7b569ea903da2b441256efc21f0d7ae37b56cd901a50bdc87fe0f6",
+    "tests/track-time-probe.s": "b47f4916bd63949896db02f8a1825b176ee68e1638d97ec989fd2733359e67aa",
+    "tests/verify-track-time.py": "05f46839c88bc2d8eccfb4b6d49941bd183b8cd46725ab52b52bc83d28ff94f1"
+  },
+  "oracle_sha256": "58bfe6421183058750fc2480ae6d6e29a9e8681c014c6898afbb90cb92786ff3"
+}

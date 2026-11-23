@@ -234,65 +234,11 @@ FN track_time_anchor
     add rax, rdi
     jo .Ltt_anchor_bad
 .Ltt_anchor_ns_ready:
-    mov [rsp+40], rax                    # actual PTS, before codec delay
-    # Expected continuous coded time at this sample (nearest nanosecond).
-    mov rax, rbx
-    mov ecx, 1000000000
-    mul rcx
-    mov ecx, [rip+sample_rate]
-    test ecx, ecx
-    jz .Ltt_anchor_bad
-    mov r8d, ecx
-    shr r8d, 1
-    add rax, r8
-    adc rdx, 0
-    cmp rdx, rcx
-    jae .Ltt_anchor_bad
-    div rcx
-    test rax, rax
-    js .Ltt_anchor_bad
-    mov rdi, [rsp+40]
-    sub rdi, rax                        # signed nanosecond offset
-    jo .Ltt_anchor_bad
-    mov rax, rdi
-    sub rax, [rip+tt_last_ns]
-    jo .Ltt_anchor_changed
-    test rax, rax
-    jns .Ltt_anchor_difference
-    neg rax
-.Ltt_anchor_difference:
-    cmp rax, [rsp+48]
-    jbe .Ltt_anchor_ok
-.Ltt_anchor_changed:
-    # Absolute PTS -> nearest signed sample, then offset from coded start.
-    mov rax, [rsp+40]
-    mov rsi, rax
-    test rax, rax
-    jns .Ltt_anchor_sample_multiply
-    neg rax
-.Ltt_anchor_sample_multiply:
-    mov ecx, [rip+sample_rate]
-    mul rcx
-    add rax, 500000000
-    adc rdx, 0
-    mov ecx, 1000000000
-    cmp rdx, rcx
-    jae .Ltt_anchor_bad
-    div rcx
-    test rax, rax
-    js .Ltt_anchor_bad
-    test rsi, rsi
-    jns .Ltt_anchor_sample_ready
-    neg rax
-.Ltt_anchor_sample_ready:
-    sub rax, rbx
-    jo .Ltt_anchor_bad
     mov rcx, rbx
     mov rdx, rax
-    call track_time_event
-    test eax, eax
-    jz .Ltt_anchor_bad
-    mov [rip+tt_last_ns], rdi
+    mov r8, [rsp+48]
+    call tt_anchor_samples
+    jmp .Ltt_anchor_return
 .Ltt_anchor_ok:
     mov eax, 1
     jmp .Ltt_anchor_return
@@ -305,6 +251,102 @@ FN track_time_anchor
     pop rbx
     ret
 ENDFN track_time_anchor
+
+# RCX=raw boundary, RDX=signed absolute nanoseconds. Absolute timestamps
+# use the selected positive integer tick as their quantization tolerance.
+FN track_time_anchor_ns
+    mov rax, 0x8000000000000000
+    cmp rdx, rax
+    je .Ltt_absolute_bad
+    mov r8, [rip+track_time_scale_ns]
+    test r8, r8
+    jle .Ltt_absolute_bad
+    jmp tt_anchor_samples
+.Ltt_absolute_bad:
+    xor eax, eax
+    ret
+ENDFN track_time_anchor_ns
+
+# RCX=raw boundary, RDX=signed nanoseconds, R8=quantization tolerance.
+LOCALFN tt_anchor_samples
+    push rbx
+    push rsi
+    push rdi
+    sub rsp, 64
+    mov rbx, rcx
+    mov rax, rdx
+    mov [rsp+48], r8
+    mov [rsp+40], rax                    # actual PTS, before codec delay
+    # Expected continuous coded time at this sample (nearest nanosecond).
+    mov rax, rbx
+    mov ecx, 1000000000
+    mul rcx
+    mov ecx, [rip+sample_rate]
+    test ecx, ecx
+    jz .Ltt_sample_bad
+    mov r8d, ecx
+    shr r8d, 1
+    add rax, r8
+    adc rdx, 0
+    cmp rdx, rcx
+    jae .Ltt_sample_bad
+    div rcx
+    test rax, rax
+    js .Ltt_sample_bad
+    mov rdi, [rsp+40]
+    sub rdi, rax                        # signed nanosecond offset
+    jo .Ltt_sample_bad
+    mov rax, rdi
+    sub rax, [rip+tt_last_ns]
+    jo .Ltt_sample_changed
+    test rax, rax
+    jns .Ltt_sample_difference
+    neg rax
+.Ltt_sample_difference:
+    cmp rax, [rsp+48]
+    jbe .Ltt_sample_ok
+.Ltt_sample_changed:
+    # Absolute PTS -> nearest signed sample, then offset from coded start.
+    mov rax, [rsp+40]
+    mov rsi, rax
+    test rax, rax
+    jns .Ltt_sample_sample_multiply
+    neg rax
+.Ltt_sample_sample_multiply:
+    mov ecx, [rip+sample_rate]
+    mul rcx
+    add rax, 500000000
+    adc rdx, 0
+    mov ecx, 1000000000
+    cmp rdx, rcx
+    jae .Ltt_sample_bad
+    div rcx
+    test rax, rax
+    js .Ltt_sample_bad
+    test rsi, rsi
+    jns .Ltt_sample_sample_ready
+    neg rax
+.Ltt_sample_sample_ready:
+    sub rax, rbx
+    jo .Ltt_sample_bad
+    mov rcx, rbx
+    mov rdx, rax
+    call track_time_event
+    test eax, eax
+    jz .Ltt_sample_bad
+    mov [rip+tt_last_ns], rdi
+.Ltt_sample_ok:
+    mov eax, 1
+    jmp .Ltt_sample_return
+.Ltt_sample_bad:
+    xor eax, eax
+.Ltt_sample_return:
+    add rsp, 64
+    pop rdi
+    pop rsi
+    pop rbx
+    ret
+ENDFN tt_anchor_samples
 
 # RCX=source start, RDX=source end, R8=media start, R9=media end ->1/0.
 # Adjacent source/media intervals merge. Source and destination lengths agree.

@@ -33,6 +33,7 @@ mp_header: .long 0
 mp_layer: .long 3                   # 1, 2 or 3
 mp_track_tolerant: .long 0          # track mode: missing reservoir reads as zeros
 mp_main_incomplete: .long 0         # this frame's main data lacked reservoir bytes
+mp_main_missing: .long 0           # unknown prefix must never become saved history
 mp_initial_layer: .long 3
 mp_kbps: .long 0
 mp_version: .long 0
@@ -158,6 +159,7 @@ FN mp3_open
     mov rsi, rcx
     mov r12, rdx
     call mp3_close
+    mov dword ptr [rip + mp_track_tolerant], 0
     mov rcx, rsi
     mov rdx, r12
     mov [rip + mp_cursor], rcx
@@ -357,6 +359,30 @@ FN mp3_open
     pop rbp
     ret
 ENDFN mp3_open
+
+# Read-only layout after native open: metadata-stripped coded range and
+# encoder trims, retained when a container changes to packet views.
+FN mp3_stream_layout
+    mov rax, [rip + mp_stream_begin]
+    mov rdx, [rip + mp_end]
+    mov r8d, [rip + mp_initial_trim]
+    mov r9d, [rip + mp_trim_end]
+    ret
+ENDFN mp3_stream_layout
+
+# RCX=frame, RDX=bounded stream end ->EAX=complete frame bytes or zero.
+# Shares the original validated header/CRC parser; no resynchronization.
+FN mpa_frame_bytes
+    sub rsp, 40
+    mov [rip + mp_end], rdx
+    call mp_parse_header
+    test eax, eax
+    jz .Lmpa_frame_bytes_done
+    mov eax, [rip + mp_frame_bytes]
+.Lmpa_frame_bytes_done:
+    add rsp, 40
+    ret
+ENDFN mpa_frame_bytes
 
 FN mp3_close
     sub rsp, 40
@@ -1134,6 +1160,7 @@ LOCALFN mp_sideinfo
     lea rdi, [rip + mp_main]
     mov ecx, eax
     sub ecx, [rip + mp_reserv_size]
+    mov [rip + mp_main_missing], ecx
     xor eax, eax
     rep stosb
     lea rsi, [rip + mp_reserv]
@@ -1141,6 +1168,7 @@ LOCALFN mp_sideinfo
     rep movsb
     jmp .Lside_frame_data
 .Lside_reservoir_ready:
+    mov dword ptr [rip + mp_main_missing], 0
     mov dword ptr [rip + mp_track_tolerant], 0
     mov dword ptr [rip + mp_main_incomplete], 0
     mov ecx, eax
@@ -2121,6 +2149,8 @@ LOCALFN mp_save_reservoir
     mov eax, [rip + mp_bit_pos]
     add eax, 7
     shr eax, 3
+    cmp eax, [rip + mp_main_missing]
+    cmovb eax, [rip + mp_main_missing]  # only real unused bytes are restart history
     mov ecx, [rip + mp_main_bytes]
     sub ecx, eax
     js .Lmp_save_bad
@@ -2215,6 +2245,34 @@ FN mpa_track_samples
     add rsp, 40
     ret
 ENDFN mpa_track_samples
+
+# RCX=validated Layer III frame, EDX=bytes ->EAX=main-data bytes. Header,
+# optional CRC and side information cannot refill a seek's bit reservoir.
+FN mpa_reservoir_bytes
+    mov eax, edx
+    sub eax, 4
+    test byte ptr [rcx+1], 1
+    jnz .Lmpa_history_side
+    sub eax, 2
+.Lmpa_history_side:
+    mov edx, 17
+    cmp dword ptr [rip + mp_initial_version], 3
+    jne .Lmpa_history_low
+    cmp dword ptr [rip + mp_initial_channels], 1
+    je .Lmpa_history_subtract
+    mov edx, 32
+    jmp .Lmpa_history_subtract
+.Lmpa_history_low:
+    cmp dword ptr [rip + mp_initial_channels], 1
+    jne .Lmpa_history_subtract
+    mov edx, 9
+.Lmpa_history_subtract:
+    sub eax, edx
+    jnc .Lmpa_history_done
+    xor eax, eax
+.Lmpa_history_done:
+    ret
+ENDFN mpa_reservoir_bytes
 
 # Clears synthesis history and the reservoir before decoding from a seek
 # point; pre-roll frames may then lack reservoir data.

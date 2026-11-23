@@ -9,6 +9,7 @@ extern double track_time_track_scale;
 LAMP_ABI void track_time_close(void);
 LAMP_ABI int track_time_event(uint64_t,int64_t);
 LAMP_ABI int track_time_anchor(uint64_t,uint64_t,int);
+LAMP_ABI int track_time_anchor_ns(uint64_t,int64_t);
 LAMP_ABI int track_time_finish(uint64_t);
 LAMP_ABI uint64_t track_time_seek(uint64_t);
 LAMP_ABI unsigned track_time_read(float*,unsigned);
@@ -37,6 +38,8 @@ static void read_exact(unsigned cap,unsigned want,const unsigned*data){memset(ou
 static int removed(unsigned i){for(unsigned j=0;j<cut_count;j++)if(cuts[j].a<=i&&i<cuts[j].b)return 1;return 0;}
 static void clear(void){track_time_close();CHECK(!allocations&&!track_time_active&&!track_time_event_count&&!track_time_span_count);track_time_enabled=1;decode_error=0;source_at=source_count=cut_count=tail_calls=0;committed=0;track_start_trim=track_end_trim=0;}
 int main(void){
+ for(unsigned negative=0;negative<2;negative++){clear();sample_rate=8000;track_time_scale_ns=1;CHECK(track_time_anchor_ns(0,negative?-125000:125000));source_count=4;for(unsigned i=0;i<4;i++)source[i]=i+1;total_frames=4;CHECK(track_time_finish(4)&&total_frames==(negative?3u:5u));unsigned plus[5]={0,1,2,3,4},minus[3]={2,3,4};read_exact(5,negative?3:5,negative?minus:plus);cases++;}
+ clear();CHECK(!track_time_anchor_ns(0,INT64_MIN));track_time_scale_ns=0;CHECK(!track_time_anchor_ns(0,0));clear();sample_rate=0;CHECK(!track_time_anchor_ns(0,2000000));sample_rate=8000;clear();CHECK(track_time_anchor_ns(8,2000000)&&!track_time_event_count);cases++;
  for(unsigned trial=0;trial<512;trial++){
   clear();unsigned raw=100+next()%1200;int64_t offset[8192];for(unsigned i=0;i<raw;i++)offset[i]=0;
   track_start_trim=next()%31;track_end_trim=next()%31;unsigned end=raw-(unsigned)track_end_trim;

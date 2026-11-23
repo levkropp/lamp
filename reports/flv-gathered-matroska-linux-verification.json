@@ -1,0 +1,2482 @@
+{
+  "result": "passed",
+  "platform": "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "scope": "Independent per-sample media placement of PCM and 11 compressed codec mappings; six PCM rates, fine/signed/scaled clocks, gaps/overlap/negative clipping, late metadata, lacing/padding/delay, selected ordinals and ignored foreign clocks. Opus/AAC/AC3/EAC3 seeks use independently decoded packet suffixes; codec DSP is established separately. Guarded mutations are capped at 128 reads and seek at 64. This does not establish video/A/V synchronization or native Mac playback.",
+  "checks": [
+    {
+      "file": "pcm-8000-continuous.mka",
+      "reference": "pcm-8000-continuous.mka.f32",
+      "rate": 8000,
+      "frames": 1231,
+      "description": "continuous",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1231,
+        "seeks": 16,
+        "checks": 1163293,
+        "exact_float_words": 7678
+      }
+    },
+    {
+      "file": "pcm-8000-leading-gap.mka",
+      "reference": "pcm-8000-leading-gap.mka.f32",
+      "rate": 8000,
+      "frames": 1631,
+      "description": "leading-gap",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1631,
+        "seeks": 16,
+        "checks": 719882,
+        "exact_float_words": 8478
+      }
+    },
+    {
+      "file": "pcm-8000-interior-gap.mka",
+      "reference": "pcm-8000-interior-gap.mka.f32",
+      "rate": 8000,
+      "frames": 1551,
+      "description": "interior-gap",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1551,
+        "seeks": 16,
+        "checks": 720522,
+        "exact_float_words": 8318
+      }
+    },
+    {
+      "file": "pcm-8000-overlap.mka",
+      "reference": "pcm-8000-overlap.mka.f32",
+      "rate": 8000,
+      "frames": 1071,
+      "description": "overlap",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1071,
+        "seeks": 16,
+        "checks": 691982,
+        "exact_float_words": 7260
+      }
+    },
+    {
+      "file": "pcm-8000-negative.mka",
+      "reference": "pcm-8000-negative.mka.f32",
+      "rate": 8000,
+      "frames": 1191,
+      "description": "negative",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1191,
+        "seeks": 16,
+        "checks": 690630,
+        "exact_float_words": 7598
+      }
+    },
+    {
+      "file": "pcm-8000-late-info.mka",
+      "reference": "pcm-8000-late-info.mka.f32",
+      "rate": 8000,
+      "frames": 1551,
+      "description": "late-info",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1551,
+        "seeks": 16,
+        "checks": 720522,
+        "exact_float_words": 8318
+      }
+    },
+    {
+      "file": "pcm-8000-late-clock.mka",
+      "reference": "pcm-8000-late-clock.mka.f32",
+      "rate": 8000,
+      "frames": 1551,
+      "description": "late-clock",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1551,
+        "seeks": 16,
+        "checks": 720522,
+        "exact_float_words": 8318
+      }
+    },
+    {
+      "file": "pcm-8000-unknown-clusters.mka",
+      "reference": "pcm-8000-unknown-clusters.mka.f32",
+      "rate": 8000,
+      "frames": 1551,
+      "description": "unknown-clusters",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1551,
+        "seeks": 16,
+        "checks": 720522,
+        "exact_float_words": 8318
+      }
+    },
+    {
+      "file": "pcm-8000-track-scale.mka",
+      "reference": "pcm-8000-track-scale.mka.f32",
+      "rate": 8000,
+      "frames": 1551,
+      "description": "track-scale",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1551,
+        "seeks": 16,
+        "checks": 720522,
+        "exact_float_words": 8318
+      }
+    },
+    {
+      "file": "pcm-8000-track-scale-two.mka",
+      "reference": "pcm-8000-track-scale-two.mka.f32",
+      "rate": 8000,
+      "frames": 1551,
+      "description": "track-scale-two",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1551,
+        "seeks": 16,
+        "checks": 720522,
+        "exact_float_words": 8318
+      }
+    },
+    {
+      "file": "pcm-8000-track-scale-f32.mka",
+      "reference": "pcm-8000-track-scale-f32.mka.f32",
+      "rate": 8000,
+      "frames": 1551,
+      "description": "track-scale-f32",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1551,
+        "seeks": 16,
+        "checks": 720522,
+        "exact_float_words": 8318
+      }
+    },
+    {
+      "file": "pcm-11025-continuous.mka",
+      "reference": "pcm-11025-continuous.mka.f32",
+      "rate": 11025,
+      "frames": 1231,
+      "description": "continuous",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1231,
+        "seeks": 16,
+        "checks": 1163293,
+        "exact_float_words": 7678
+      }
+    },
+    {
+      "file": "pcm-11025-leading-gap.mka",
+      "reference": "pcm-11025-leading-gap.mka.f32",
+      "rate": 11025,
+      "frames": 1782,
+      "description": "leading-gap",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1782,
+        "seeks": 16,
+        "checks": 718674,
+        "exact_float_words": 8780
+      }
+    },
+    {
+      "file": "pcm-11025-interior-gap.mka",
+      "reference": "pcm-11025-interior-gap.mka.f32",
+      "rate": 11025,
+      "frames": 1672,
+      "description": "interior-gap",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1672,
+        "seeks": 16,
+        "checks": 719554,
+        "exact_float_words": 8560
+      }
+    },
+    {
+      "file": "pcm-11025-overlap.mka",
+      "reference": "pcm-11025-overlap.mka.f32",
+      "rate": 11025,
+      "frames": 1011,
+      "description": "overlap",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1011,
+        "seeks": 16,
+        "checks": 692702,
+        "exact_float_words": 7080
+      }
+    },
+    {
+      "file": "pcm-11025-negative.mka",
+      "reference": "pcm-11025-negative.mka.f32",
+      "rate": 11025,
+      "frames": 1176,
+      "description": "negative",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1176,
+        "seeks": 16,
+        "checks": 690750,
+        "exact_float_words": 7568
+      }
+    },
+    {
+      "file": "pcm-11025-late-info.mka",
+      "reference": "pcm-11025-late-info.mka.f32",
+      "rate": 11025,
+      "frames": 1672,
+      "description": "late-info",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1672,
+        "seeks": 16,
+        "checks": 719554,
+        "exact_float_words": 8560
+      }
+    },
+    {
+      "file": "pcm-11025-late-clock.mka",
+      "reference": "pcm-11025-late-clock.mka.f32",
+      "rate": 11025,
+      "frames": 1672,
+      "description": "late-clock",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1672,
+        "seeks": 16,
+        "checks": 719554,
+        "exact_float_words": 8560
+      }
+    },
+    {
+      "file": "pcm-11025-unknown-clusters.mka",
+      "reference": "pcm-11025-unknown-clusters.mka.f32",
+      "rate": 11025,
+      "frames": 1672,
+      "description": "unknown-clusters",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1672,
+        "seeks": 16,
+        "checks": 719554,
+        "exact_float_words": 8560
+      }
+    },
+    {
+      "file": "pcm-11025-track-scale.mka",
+      "reference": "pcm-11025-track-scale.mka.f32",
+      "rate": 11025,
+      "frames": 1672,
+      "description": "track-scale",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1672,
+        "seeks": 16,
+        "checks": 719554,
+        "exact_float_words": 8560
+      }
+    },
+    {
+      "file": "pcm-11025-track-scale-two.mka",
+      "reference": "pcm-11025-track-scale-two.mka.f32",
+      "rate": 11025,
+      "frames": 1672,
+      "description": "track-scale-two",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1672,
+        "seeks": 16,
+        "checks": 719554,
+        "exact_float_words": 8560
+      }
+    },
+    {
+      "file": "pcm-11025-track-scale-f32.mka",
+      "reference": "pcm-11025-track-scale-f32.mka.f32",
+      "rate": 11025,
+      "frames": 1672,
+      "description": "track-scale-f32",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1672,
+        "seeks": 16,
+        "checks": 719554,
+        "exact_float_words": 8560
+      }
+    },
+    {
+      "file": "pcm-44100-continuous.mka",
+      "reference": "pcm-44100-continuous.mka.f32",
+      "rate": 44100,
+      "frames": 1231,
+      "description": "continuous",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1231,
+        "seeks": 16,
+        "checks": 1163293,
+        "exact_float_words": 7678
+      }
+    },
+    {
+      "file": "pcm-44100-leading-gap.mka",
+      "reference": "pcm-44100-leading-gap.mka.f32",
+      "rate": 44100,
+      "frames": 3436,
+      "description": "leading-gap",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 3436,
+        "seeks": 16,
+        "checks": 770986,
+        "exact_float_words": 12088
+      }
+    },
+    {
+      "file": "pcm-44100-interior-gap.mka",
+      "reference": "pcm-44100-interior-gap.mka.f32",
+      "rate": 44100,
+      "frames": 2995,
+      "description": "interior-gap",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 2995,
+        "seeks": 16,
+        "checks": 774514,
+        "exact_float_words": 11206
+      }
+    },
+    {
+      "file": "pcm-44100-overlap.mka",
+      "reference": "pcm-44100-overlap.mka.f32",
+      "rate": 44100,
+      "frames": 349,
+      "description": "overlap",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 349,
+        "seeks": 16,
+        "checks": 643310,
+        "exact_float_words": 3042
+      }
+    },
+    {
+      "file": "pcm-44100-negative.mka",
+      "reference": "pcm-44100-negative.mka.f32",
+      "rate": 44100,
+      "frames": 1011,
+      "description": "negative",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1011,
+        "seeks": 16,
+        "checks": 692702,
+        "exact_float_words": 7080
+      }
+    },
+    {
+      "file": "pcm-44100-late-info.mka",
+      "reference": "pcm-44100-late-info.mka.f32",
+      "rate": 44100,
+      "frames": 2995,
+      "description": "late-info",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 2995,
+        "seeks": 16,
+        "checks": 774514,
+        "exact_float_words": 11206
+      }
+    },
+    {
+      "file": "pcm-44100-late-clock.mka",
+      "reference": "pcm-44100-late-clock.mka.f32",
+      "rate": 44100,
+      "frames": 2995,
+      "description": "late-clock",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 2995,
+        "seeks": 16,
+        "checks": 774514,
+        "exact_float_words": 11206
+      }
+    },
+    {
+      "file": "pcm-44100-unknown-clusters.mka",
+      "reference": "pcm-44100-unknown-clusters.mka.f32",
+      "rate": 44100,
+      "frames": 2995,
+      "description": "unknown-clusters",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 2995,
+        "seeks": 16,
+        "checks": 774514,
+        "exact_float_words": 11206
+      }
+    },
+    {
+      "file": "pcm-44100-track-scale.mka",
+      "reference": "pcm-44100-track-scale.mka.f32",
+      "rate": 44100,
+      "frames": 2995,
+      "description": "track-scale",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 2995,
+        "seeks": 16,
+        "checks": 774514,
+        "exact_float_words": 11206
+      }
+    },
+    {
+      "file": "pcm-44100-track-scale-two.mka",
+      "reference": "pcm-44100-track-scale-two.mka.f32",
+      "rate": 44100,
+      "frames": 2995,
+      "description": "track-scale-two",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 2995,
+        "seeks": 16,
+        "checks": 774514,
+        "exact_float_words": 11206
+      }
+    },
+    {
+      "file": "pcm-44100-track-scale-f32.mka",
+      "reference": "pcm-44100-track-scale-f32.mka.f32",
+      "rate": 44100,
+      "frames": 2995,
+      "description": "track-scale-f32",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 2995,
+        "seeks": 16,
+        "checks": 774514,
+        "exact_float_words": 11206
+      }
+    },
+    {
+      "file": "pcm-48000-continuous.mka",
+      "reference": "pcm-48000-continuous.mka.f32",
+      "rate": 48000,
+      "frames": 1231,
+      "description": "continuous",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1231,
+        "seeks": 16,
+        "checks": 1163293,
+        "exact_float_words": 7678
+      }
+    },
+    {
+      "file": "pcm-48000-leading-gap.mka",
+      "reference": "pcm-48000-leading-gap.mka.f32",
+      "rate": 48000,
+      "frames": 3631,
+      "description": "leading-gap",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 3631,
+        "seeks": 16,
+        "checks": 769426,
+        "exact_float_words": 12478
+      }
+    },
+    {
+      "file": "pcm-48000-interior-gap.mka",
+      "reference": "pcm-48000-interior-gap.mka.f32",
+      "rate": 48000,
+      "frames": 3151,
+      "description": "interior-gap",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 3151,
+        "seeks": 16,
+        "checks": 773266,
+        "exact_float_words": 11518
+      }
+    },
+    {
+      "file": "pcm-48000-overlap.mka",
+      "reference": "pcm-48000-overlap.mka.f32",
+      "rate": 48000,
+      "frames": 271,
+      "description": "overlap",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 271,
+        "seeks": 16,
+        "checks": 645774,
+        "exact_float_words": 2426
+      }
+    },
+    {
+      "file": "pcm-48000-negative.mka",
+      "reference": "pcm-48000-negative.mka.f32",
+      "rate": 48000,
+      "frames": 991,
+      "description": "negative",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 991,
+        "seeks": 16,
+        "checks": 692942,
+        "exact_float_words": 7020
+      }
+    },
+    {
+      "file": "pcm-48000-late-info.mka",
+      "reference": "pcm-48000-late-info.mka.f32",
+      "rate": 48000,
+      "frames": 3151,
+      "description": "late-info",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 3151,
+        "seeks": 16,
+        "checks": 773266,
+        "exact_float_words": 11518
+      }
+    },
+    {
+      "file": "pcm-48000-late-clock.mka",
+      "reference": "pcm-48000-late-clock.mka.f32",
+      "rate": 48000,
+      "frames": 3151,
+      "description": "late-clock",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 3151,
+        "seeks": 16,
+        "checks": 773266,
+        "exact_float_words": 11518
+      }
+    },
+    {
+      "file": "pcm-48000-unknown-clusters.mka",
+      "reference": "pcm-48000-unknown-clusters.mka.f32",
+      "rate": 48000,
+      "frames": 3151,
+      "description": "unknown-clusters",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 3151,
+        "seeks": 16,
+        "checks": 773266,
+        "exact_float_words": 11518
+      }
+    },
+    {
+      "file": "pcm-48000-track-scale.mka",
+      "reference": "pcm-48000-track-scale.mka.f32",
+      "rate": 48000,
+      "frames": 3151,
+      "description": "track-scale",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 3151,
+        "seeks": 16,
+        "checks": 773266,
+        "exact_float_words": 11518
+      }
+    },
+    {
+      "file": "pcm-48000-track-scale-two.mka",
+      "reference": "pcm-48000-track-scale-two.mka.f32",
+      "rate": 48000,
+      "frames": 3151,
+      "description": "track-scale-two",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 3151,
+        "seeks": 16,
+        "checks": 773266,
+        "exact_float_words": 11518
+      }
+    },
+    {
+      "file": "pcm-48000-track-scale-f32.mka",
+      "reference": "pcm-48000-track-scale-f32.mka.f32",
+      "rate": 48000,
+      "frames": 3151,
+      "description": "track-scale-f32",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 3151,
+        "seeks": 16,
+        "checks": 773266,
+        "exact_float_words": 11518
+      }
+    },
+    {
+      "file": "pcm-96000-continuous.mka",
+      "reference": "pcm-96000-continuous.mka.f32",
+      "rate": 96000,
+      "frames": 1231,
+      "description": "continuous",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1231,
+        "seeks": 16,
+        "checks": 1163293,
+        "exact_float_words": 7678
+      }
+    },
+    {
+      "file": "pcm-96000-leading-gap.mka",
+      "reference": "pcm-96000-leading-gap.mka.f32",
+      "rate": 96000,
+      "frames": 6031,
+      "description": "leading-gap",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 6031,
+        "seeks": 16,
+        "checks": 808546,
+        "exact_float_words": 19084
+      }
+    },
+    {
+      "file": "pcm-96000-interior-gap.mka",
+      "reference": "pcm-96000-interior-gap.mka.f32",
+      "rate": 96000,
+      "frames": 5071,
+      "description": "interior-gap",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 5071,
+        "seeks": 16,
+        "checks": 816226,
+        "exact_float_words": 17164
+      }
+    },
+    {
+      "file": "pcm-96000-overlap.mka",
+      "reference": "pcm-96000-overlap.mka.f32",
+      "rate": 96000,
+      "frames": 175,
+      "description": "overlap",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 175,
+        "seeks": 16,
+        "checks": 648990,
+        "exact_float_words": 1622
+      }
+    },
+    {
+      "file": "pcm-96000-negative.mka",
+      "reference": "pcm-96000-negative.mka.f32",
+      "rate": 96000,
+      "frames": 751,
+      "description": "negative",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 751,
+        "seeks": 16,
+        "checks": 664986,
+        "exact_float_words": 5816
+      }
+    },
+    {
+      "file": "pcm-96000-late-info.mka",
+      "reference": "pcm-96000-late-info.mka.f32",
+      "rate": 96000,
+      "frames": 5071,
+      "description": "late-info",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 5071,
+        "seeks": 16,
+        "checks": 816226,
+        "exact_float_words": 17164
+      }
+    },
+    {
+      "file": "pcm-96000-late-clock.mka",
+      "reference": "pcm-96000-late-clock.mka.f32",
+      "rate": 96000,
+      "frames": 5071,
+      "description": "late-clock",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 5071,
+        "seeks": 16,
+        "checks": 816226,
+        "exact_float_words": 17164
+      }
+    },
+    {
+      "file": "pcm-96000-unknown-clusters.mka",
+      "reference": "pcm-96000-unknown-clusters.mka.f32",
+      "rate": 96000,
+      "frames": 5071,
+      "description": "unknown-clusters",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 5071,
+        "seeks": 16,
+        "checks": 816226,
+        "exact_float_words": 17164
+      }
+    },
+    {
+      "file": "pcm-96000-track-scale.mka",
+      "reference": "pcm-96000-track-scale.mka.f32",
+      "rate": 96000,
+      "frames": 5071,
+      "description": "track-scale",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 5071,
+        "seeks": 16,
+        "checks": 816226,
+        "exact_float_words": 17164
+      }
+    },
+    {
+      "file": "pcm-96000-track-scale-two.mka",
+      "reference": "pcm-96000-track-scale-two.mka.f32",
+      "rate": 96000,
+      "frames": 5071,
+      "description": "track-scale-two",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 5071,
+        "seeks": 16,
+        "checks": 816226,
+        "exact_float_words": 17164
+      }
+    },
+    {
+      "file": "pcm-96000-track-scale-f32.mka",
+      "reference": "pcm-96000-track-scale-f32.mka.f32",
+      "rate": 96000,
+      "frames": 5071,
+      "description": "track-scale-f32",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 5071,
+        "seeks": 16,
+        "checks": 816226,
+        "exact_float_words": 17164
+      }
+    },
+    {
+      "file": "pcm-192000-continuous.mka",
+      "reference": "pcm-192000-continuous.mka.f32",
+      "rate": 192000,
+      "frames": 1231,
+      "description": "continuous",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1231,
+        "seeks": 16,
+        "checks": 1163293,
+        "exact_float_words": 7678
+      }
+    },
+    {
+      "file": "pcm-192000-leading-gap.mka",
+      "reference": "pcm-192000-leading-gap.mka.f32",
+      "rate": 192000,
+      "frames": 10831,
+      "description": "leading-gap",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 10831,
+        "seeks": 16,
+        "checks": 901234,
+        "exact_float_words": 28684
+      }
+    },
+    {
+      "file": "pcm-192000-interior-gap.mka",
+      "reference": "pcm-192000-interior-gap.mka.f32",
+      "rate": 192000,
+      "frames": 8911,
+      "description": "interior-gap",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 8911,
+        "seeks": 16,
+        "checks": 851050,
+        "exact_float_words": 24844
+      }
+    },
+    {
+      "file": "pcm-192000-overlap.mka",
+      "reference": "pcm-192000-overlap.mka.f32",
+      "rate": 192000,
+      "frames": 175,
+      "description": "overlap",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 175,
+        "seeks": 16,
+        "checks": 648990,
+        "exact_float_words": 1622
+      }
+    },
+    {
+      "file": "pcm-192000-negative.mka",
+      "reference": "pcm-192000-negative.mka.f32",
+      "rate": 192000,
+      "frames": 271,
+      "description": "negative",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 271,
+        "seeks": 16,
+        "checks": 645774,
+        "exact_float_words": 2426
+      }
+    },
+    {
+      "file": "pcm-192000-late-info.mka",
+      "reference": "pcm-192000-late-info.mka.f32",
+      "rate": 192000,
+      "frames": 8911,
+      "description": "late-info",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 8911,
+        "seeks": 16,
+        "checks": 851050,
+        "exact_float_words": 24844
+      }
+    },
+    {
+      "file": "pcm-192000-late-clock.mka",
+      "reference": "pcm-192000-late-clock.mka.f32",
+      "rate": 192000,
+      "frames": 8911,
+      "description": "late-clock",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 8911,
+        "seeks": 16,
+        "checks": 851050,
+        "exact_float_words": 24844
+      }
+    },
+    {
+      "file": "pcm-192000-unknown-clusters.mka",
+      "reference": "pcm-192000-unknown-clusters.mka.f32",
+      "rate": 192000,
+      "frames": 8911,
+      "description": "unknown-clusters",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 8911,
+        "seeks": 16,
+        "checks": 851050,
+        "exact_float_words": 24844
+      }
+    },
+    {
+      "file": "pcm-192000-track-scale.mka",
+      "reference": "pcm-192000-track-scale.mka.f32",
+      "rate": 192000,
+      "frames": 8911,
+      "description": "track-scale",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 8911,
+        "seeks": 16,
+        "checks": 851050,
+        "exact_float_words": 24844
+      }
+    },
+    {
+      "file": "pcm-192000-track-scale-two.mka",
+      "reference": "pcm-192000-track-scale-two.mka.f32",
+      "rate": 192000,
+      "frames": 8911,
+      "description": "track-scale-two",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 8911,
+        "seeks": 16,
+        "checks": 851050,
+        "exact_float_words": 24844
+      }
+    },
+    {
+      "file": "pcm-192000-track-scale-f32.mka",
+      "reference": "pcm-192000-track-scale-f32.mka.f32",
+      "rate": 192000,
+      "frames": 8911,
+      "description": "track-scale-f32",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 8911,
+        "seeks": 16,
+        "checks": 851050,
+        "exact_float_words": 24844
+      }
+    },
+    {
+      "file": "flac-continuous.mka",
+      "reference": "flac-continuous.mka.f32",
+      "rate": 48000,
+      "frames": 57600,
+      "description": "continuous",
+      "codec": "flac",
+      "seek_reference": null,
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 57600,
+        "seeks": 16,
+        "checks": 1378097,
+        "exact_float_words": 122222
+      }
+    },
+    {
+      "file": "flac-leading-gap.mka",
+      "reference": "flac-leading-gap.mka.f32",
+      "rate": 48000,
+      "frames": 60000,
+      "description": "leading-gap",
+      "codec": "flac",
+      "seek_reference": null,
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 60000,
+        "seeks": 16,
+        "checks": 1130550,
+        "exact_float_words": 127022
+      }
+    },
+    {
+      "file": "flac-interior-gap.mka",
+      "reference": "flac-interior-gap.mka.f32",
+      "rate": 48000,
+      "frames": 59520,
+      "description": "interior-gap",
+      "codec": "flac",
+      "seek_reference": null,
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 59520,
+        "seeks": 16,
+        "checks": 1036074,
+        "exact_float_words": 126062
+      }
+    },
+    {
+      "file": "flac-overlap.mka",
+      "reference": "flac-overlap.mka.f32",
+      "rate": 48000,
+      "frames": 56640,
+      "description": "overlap",
+      "codec": "flac",
+      "seek_reference": null,
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 56640,
+        "seeks": 16,
+        "checks": 1059114,
+        "exact_float_words": 120302
+      }
+    },
+    {
+      "file": "flac-negative.mka",
+      "reference": "flac-negative.mka.f32",
+      "rate": 48000,
+      "frames": 56640,
+      "description": "negative",
+      "codec": "flac",
+      "seek_reference": null,
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 56640,
+        "seeks": 16,
+        "checks": 1059114,
+        "exact_float_words": 120302
+      }
+    },
+    {
+      "file": "flac-laced-padding.mka",
+      "reference": "flac-laced-padding.mka.f32",
+      "rate": 48000,
+      "frames": 57288,
+      "description": "laced-padding",
+      "codec": "flac",
+      "seek_reference": null,
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 57288,
+        "seeks": 16,
+        "checks": 1053930,
+        "exact_float_words": 121598
+      }
+    },
+    {
+      "file": "flac-preroll-gap.mka",
+      "reference": "flac-preroll-gap.mka.f32",
+      "rate": 48000,
+      "frames": 59520,
+      "description": "preroll-gap",
+      "codec": "flac",
+      "seek_reference": null,
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 59520,
+        "seeks": 16,
+        "checks": 1036074,
+        "exact_float_words": 126062
+      }
+    },
+    {
+      "file": "opus-continuous.mka",
+      "reference": "opus-continuous.mka.f32",
+      "rate": 48000,
+      "frames": 58248,
+      "description": "continuous",
+      "codec": "opus",
+      "seek_reference": "opus-continuous.mka.seek-reference",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 58248,
+        "seeks": 16,
+        "checks": 1359029,
+        "exact_float_words": 123518
+      }
+    },
+    {
+      "file": "opus-leading-gap.mka",
+      "reference": "opus-leading-gap.mka.f32",
+      "rate": 48000,
+      "frames": 60648,
+      "description": "leading-gap",
+      "codec": "opus",
+      "seek_reference": "opus-leading-gap.mka.seek-reference",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 60648,
+        "seeks": 16,
+        "checks": 1190943,
+        "exact_float_words": 128318
+      }
+    },
+    {
+      "file": "opus-interior-gap.mka",
+      "reference": "opus-interior-gap.mka.f32",
+      "rate": 48000,
+      "frames": 60168,
+      "description": "interior-gap",
+      "codec": "opus",
+      "seek_reference": "opus-interior-gap.mka.seek-reference",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 60168,
+        "seeks": 16,
+        "checks": 1162011,
+        "exact_float_words": 127358
+      }
+    },
+    {
+      "file": "opus-overlap.mka",
+      "reference": "opus-overlap.mka.f32",
+      "rate": 48000,
+      "frames": 57288,
+      "description": "overlap",
+      "codec": "opus",
+      "seek_reference": "opus-overlap.mka.seek-reference",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 57288,
+        "seeks": 16,
+        "checks": 1053963,
+        "exact_float_words": 121598
+      }
+    },
+    {
+      "file": "opus-negative.mka",
+      "reference": "opus-negative.mka.f32",
+      "rate": 48000,
+      "frames": 57288,
+      "description": "negative",
+      "codec": "opus",
+      "seek_reference": "opus-negative.mka.seek-reference",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 57288,
+        "seeks": 16,
+        "checks": 1053963,
+        "exact_float_words": 121598
+      }
+    },
+    {
+      "file": "opus-laced-padding.mka",
+      "reference": "opus-laced-padding.mka.f32",
+      "rate": 48000,
+      "frames": 58248,
+      "description": "laced-padding",
+      "codec": "opus",
+      "seek_reference": "opus-laced-padding.mka.seek-reference",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 58248,
+        "seeks": 16,
+        "checks": 1046283,
+        "exact_float_words": 123518
+      }
+    },
+    {
+      "file": "opus-preroll-gap.mka",
+      "reference": "opus-preroll-gap.mka.f32",
+      "rate": 48000,
+      "frames": 60168,
+      "description": "preroll-gap",
+      "codec": "opus",
+      "seek_reference": "opus-preroll-gap.mka.seek-reference",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 60168,
+        "seeks": 16,
+        "checks": 1162011,
+        "exact_float_words": 127358
+      }
+    },
+    {
+      "file": "mp2-continuous.mka",
+      "reference": "mp2-continuous.mka.f32",
+      "rate": 48000,
+      "frames": 57600,
+      "description": "continuous",
+      "codec": "mp2",
+      "seek_reference": null,
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 57600,
+        "seeks": 16,
+        "checks": 1332017,
+        "exact_float_words": 122222
+      }
+    },
+    {
+      "file": "mp2-leading-gap.mka",
+      "reference": "mp2-leading-gap.mka.f32",
+      "rate": 48000,
+      "frames": 60000,
+      "description": "leading-gap",
+      "codec": "mp2",
+      "seek_reference": null,
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 60000,
+        "seeks": 16,
+        "checks": 1130550,
+        "exact_float_words": 127022
+      }
+    },
+    {
+      "file": "mp2-interior-gap.mka",
+      "reference": "mp2-interior-gap.mka.f32",
+      "rate": 48000,
+      "frames": 59520,
+      "description": "interior-gap",
+      "codec": "mp2",
+      "seek_reference": null,
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 59520,
+        "seeks": 16,
+        "checks": 1036074,
+        "exact_float_words": 126062
+      }
+    },
+    {
+      "file": "mp2-overlap.mka",
+      "reference": "mp2-overlap.mka.f32",
+      "rate": 48000,
+      "frames": 56640,
+      "description": "overlap",
+      "codec": "mp2",
+      "seek_reference": null,
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 56640,
+        "seeks": 16,
+        "checks": 1059114,
+        "exact_float_words": 120302
+      }
+    },
+    {
+      "file": "mp2-negative.mka",
+      "reference": "mp2-negative.mka.f32",
+      "rate": 48000,
+      "frames": 56640,
+      "description": "negative",
+      "codec": "mp2",
+      "seek_reference": null,
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 56640,
+        "seeks": 16,
+        "checks": 1059114,
+        "exact_float_words": 120302
+      }
+    },
+    {
+      "file": "mp2-laced-padding.mka",
+      "reference": "mp2-laced-padding.mka.f32",
+      "rate": 48000,
+      "frames": 57288,
+      "description": "laced-padding",
+      "codec": "mp2",
+      "seek_reference": null,
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 57288,
+        "seeks": 16,
+        "checks": 1053930,
+        "exact_float_words": 121598
+      }
+    },
+    {
+      "file": "mp2-preroll-gap.mka",
+      "reference": "mp2-preroll-gap.mka.f32",
+      "rate": 48000,
+      "frames": 59520,
+      "description": "preroll-gap",
+      "codec": "mp2",
+      "seek_reference": null,
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 59520,
+        "seeks": 16,
+        "checks": 1036074,
+        "exact_float_words": 126062
+      }
+    },
+    {
+      "file": "mp3-continuous.mka",
+      "reference": "mp3-continuous.mka.f32",
+      "rate": 48000,
+      "frames": 58752,
+      "description": "continuous",
+      "codec": "mp3",
+      "seek_reference": null,
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 58752,
+        "seeks": 16,
+        "checks": 1367357,
+        "exact_float_words": 124526
+      }
+    },
+    {
+      "file": "mp3-leading-gap.mka",
+      "reference": "mp3-leading-gap.mka.f32",
+      "rate": 48000,
+      "frames": 61152,
+      "description": "leading-gap",
+      "codec": "mp3",
+      "seek_reference": null,
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 61152,
+        "seeks": 16,
+        "checks": 1219650,
+        "exact_float_words": 129326
+      }
+    },
+    {
+      "file": "mp3-interior-gap.mka",
+      "reference": "mp3-interior-gap.mka.f32",
+      "rate": 48000,
+      "frames": 60672,
+      "description": "interior-gap",
+      "codec": "mp3",
+      "seek_reference": null,
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 60672,
+        "seeks": 16,
+        "checks": 1190718,
+        "exact_float_words": 128366
+      }
+    },
+    {
+      "file": "mp3-overlap.mka",
+      "reference": "mp3-overlap.mka.f32",
+      "rate": 48000,
+      "frames": 57792,
+      "description": "overlap",
+      "codec": "mp3",
+      "seek_reference": null,
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 57792,
+        "seeks": 16,
+        "checks": 1049898,
+        "exact_float_words": 122606
+      }
+    },
+    {
+      "file": "mp3-negative.mka",
+      "reference": "mp3-negative.mka.f32",
+      "rate": 48000,
+      "frames": 57792,
+      "description": "negative",
+      "codec": "mp3",
+      "seek_reference": null,
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 57792,
+        "seeks": 16,
+        "checks": 1049898,
+        "exact_float_words": 122606
+      }
+    },
+    {
+      "file": "mp3-laced-padding.mka",
+      "reference": "mp3-laced-padding.mka.f32",
+      "rate": 48000,
+      "frames": 58440,
+      "description": "laced-padding",
+      "codec": "mp3",
+      "seek_reference": null,
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 58440,
+        "seeks": 16,
+        "checks": 1044714,
+        "exact_float_words": 123902
+      }
+    },
+    {
+      "file": "mp3-preroll-gap.mka",
+      "reference": "mp3-preroll-gap.mka.f32",
+      "rate": 48000,
+      "frames": 60672,
+      "description": "preroll-gap",
+      "codec": "mp3",
+      "seek_reference": null,
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 60672,
+        "seeks": 16,
+        "checks": 1190718,
+        "exact_float_words": 128366
+      }
+    },
+    {
+      "file": "aac-continuous.mka",
+      "reference": "aac-continuous.mka.f32",
+      "rate": 48000,
+      "frames": 59392,
+      "description": "continuous",
+      "codec": "aac",
+      "seek_reference": "aac-continuous.mka.seek-reference",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 59392,
+        "seeks": 16,
+        "checks": 1441961,
+        "exact_float_words": 125806
+      }
+    },
+    {
+      "file": "aac-leading-gap.mka",
+      "reference": "aac-leading-gap.mka.f32",
+      "rate": 48000,
+      "frames": 61792,
+      "description": "leading-gap",
+      "codec": "aac",
+      "seek_reference": "aac-leading-gap.mka.seek-reference",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 61792,
+        "seeks": 16,
+        "checks": 1247335,
+        "exact_float_words": 130606
+      }
+    },
+    {
+      "file": "aac-interior-gap.mka",
+      "reference": "aac-interior-gap.mka.f32",
+      "rate": 48000,
+      "frames": 61312,
+      "description": "interior-gap",
+      "codec": "aac",
+      "seek_reference": "aac-interior-gap.mka.seek-reference",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 61312,
+        "seeks": 16,
+        "checks": 1218403,
+        "exact_float_words": 129646
+      }
+    },
+    {
+      "file": "aac-overlap.mka",
+      "reference": "aac-overlap.mka.f32",
+      "rate": 48000,
+      "frames": 58432,
+      "description": "overlap",
+      "codec": "aac",
+      "seek_reference": "aac-overlap.mka.seek-reference",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 58432,
+        "seeks": 16,
+        "checks": 1044811,
+        "exact_float_words": 123886
+      }
+    },
+    {
+      "file": "aac-negative.mka",
+      "reference": "aac-negative.mka.f32",
+      "rate": 48000,
+      "frames": 58432,
+      "description": "negative",
+      "codec": "aac",
+      "seek_reference": "aac-negative.mka.seek-reference",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 58432,
+        "seeks": 16,
+        "checks": 1044811,
+        "exact_float_words": 123886
+      }
+    },
+    {
+      "file": "aac-laced-padding.mka",
+      "reference": "aac-laced-padding.mka.f32",
+      "rate": 48000,
+      "frames": 58568,
+      "description": "laced-padding",
+      "codec": "aac",
+      "seek_reference": "aac-laced-padding.mka.seek-reference",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 58568,
+        "seeks": 16,
+        "checks": 1043723,
+        "exact_float_words": 124158
+      }
+    },
+    {
+      "file": "aac-preroll-gap.mka",
+      "reference": "aac-preroll-gap.mka.f32",
+      "rate": 48000,
+      "frames": 61312,
+      "description": "preroll-gap",
+      "codec": "aac",
+      "seek_reference": "aac-preroll-gap.mka.seek-reference",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 61312,
+        "seeks": 16,
+        "checks": 1218403,
+        "exact_float_words": 129646
+      }
+    },
+    {
+      "file": "alac-continuous.mka",
+      "reference": "alac-continuous.mka.f32",
+      "rate": 48000,
+      "frames": 57600,
+      "description": "continuous",
+      "codec": "alac",
+      "seek_reference": null,
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 57600,
+        "seeks": 16,
+        "checks": 1435440,
+        "exact_float_words": 122222
+      }
+    },
+    {
+      "file": "alac-leading-gap.mka",
+      "reference": "alac-leading-gap.mka.f32",
+      "rate": 48000,
+      "frames": 60000,
+      "description": "leading-gap",
+      "codec": "alac",
+      "seek_reference": null,
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 60000,
+        "seeks": 16,
+        "checks": 1130550,
+        "exact_float_words": 127022
+      }
+    },
+    {
+      "file": "alac-interior-gap.mka",
+      "reference": "alac-interior-gap.mka.f32",
+      "rate": 48000,
+      "frames": 59520,
+      "description": "interior-gap",
+      "codec": "alac",
+      "seek_reference": null,
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 59520,
+        "seeks": 16,
+        "checks": 1036074,
+        "exact_float_words": 126062
+      }
+    },
+    {
+      "file": "alac-overlap.mka",
+      "reference": "alac-overlap.mka.f32",
+      "rate": 48000,
+      "frames": 56640,
+      "description": "overlap",
+      "codec": "alac",
+      "seek_reference": null,
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 56640,
+        "seeks": 16,
+        "checks": 1059114,
+        "exact_float_words": 120302
+      }
+    },
+    {
+      "file": "alac-negative.mka",
+      "reference": "alac-negative.mka.f32",
+      "rate": 48000,
+      "frames": 56640,
+      "description": "negative",
+      "codec": "alac",
+      "seek_reference": null,
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 56640,
+        "seeks": 16,
+        "checks": 1059114,
+        "exact_float_words": 120302
+      }
+    },
+    {
+      "file": "alac-laced-padding.mka",
+      "reference": "alac-laced-padding.mka.f32",
+      "rate": 48000,
+      "frames": 57288,
+      "description": "laced-padding",
+      "codec": "alac",
+      "seek_reference": null,
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 57288,
+        "seeks": 16,
+        "checks": 1053930,
+        "exact_float_words": 121598
+      }
+    },
+    {
+      "file": "alac-preroll-gap.mka",
+      "reference": "alac-preroll-gap.mka.f32",
+      "rate": 48000,
+      "frames": 59520,
+      "description": "preroll-gap",
+      "codec": "alac",
+      "seek_reference": null,
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 59520,
+        "seeks": 16,
+        "checks": 1036074,
+        "exact_float_words": 126062
+      }
+    },
+    {
+      "file": "speex-continuous.mka",
+      "reference": "speex-continuous.mka.f32",
+      "rate": 16000,
+      "frames": 19200,
+      "description": "continuous",
+      "codec": "speex",
+      "seek_reference": null,
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 19200,
+        "seeks": 16,
+        "checks": 1261332,
+        "exact_float_words": 45422
+      }
+    },
+    {
+      "file": "speex-leading-gap.mka",
+      "reference": "speex-leading-gap.mka.f32",
+      "rate": 16000,
+      "frames": 20000,
+      "description": "leading-gap",
+      "codec": "speex",
+      "seek_reference": null,
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 20000,
+        "seeks": 16,
+        "checks": 958970,
+        "exact_float_words": 47022
+      }
+    },
+    {
+      "file": "speex-interior-gap.mka",
+      "reference": "speex-interior-gap.mka.f32",
+      "rate": 16000,
+      "frames": 19840,
+      "description": "interior-gap",
+      "codec": "speex",
+      "seek_reference": null,
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 19840,
+        "seeks": 16,
+        "checks": 960250,
+        "exact_float_words": 46702
+      }
+    },
+    {
+      "file": "speex-overlap.mka",
+      "reference": "speex-overlap.mka.f32",
+      "rate": 16000,
+      "frames": 18880,
+      "description": "overlap",
+      "codec": "speex",
+      "seek_reference": null,
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 18880,
+        "seeks": 16,
+        "checks": 967930,
+        "exact_float_words": 44782
+      }
+    },
+    {
+      "file": "speex-negative.mka",
+      "reference": "speex-negative.mka.f32",
+      "rate": 16000,
+      "frames": 18880,
+      "description": "negative",
+      "codec": "speex",
+      "seek_reference": null,
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 18880,
+        "seeks": 16,
+        "checks": 967930,
+        "exact_float_words": 44782
+      }
+    },
+    {
+      "file": "speex-laced-padding.mka",
+      "reference": "speex-laced-padding.mka.f32",
+      "rate": 16000,
+      "frames": 18616,
+      "description": "laced-padding",
+      "codec": "speex",
+      "seek_reference": null,
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 18616,
+        "seeks": 16,
+        "checks": 937270,
+        "exact_float_words": 44254
+      }
+    },
+    {
+      "file": "speex-preroll-gap.mka",
+      "reference": "speex-preroll-gap.mka.f32",
+      "rate": 16000,
+      "frames": 19840,
+      "description": "preroll-gap",
+      "codec": "speex",
+      "seek_reference": null,
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 19840,
+        "seeks": 16,
+        "checks": 960250,
+        "exact_float_words": 46702
+      }
+    },
+    {
+      "file": "vorbis-continuous.mka",
+      "reference": "vorbis-continuous.mka.f32",
+      "rate": 48000,
+      "frames": 57920,
+      "description": "continuous",
+      "codec": "vorbis",
+      "seek_reference": null,
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 57920,
+        "seeks": 16,
+        "checks": 1481953,
+        "exact_float_words": 122862
+      }
+    },
+    {
+      "file": "vorbis-leading-gap.mka",
+      "reference": "vorbis-leading-gap.mka.f32",
+      "rate": 48000,
+      "frames": 60320,
+      "description": "leading-gap",
+      "codec": "vorbis",
+      "seek_reference": null,
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 60320,
+        "seeks": 16,
+        "checks": 1160762,
+        "exact_float_words": 127662
+      }
+    },
+    {
+      "file": "vorbis-interior-gap.mka",
+      "reference": "vorbis-interior-gap.mka.f32",
+      "rate": 48000,
+      "frames": 59840,
+      "description": "interior-gap",
+      "codec": "vorbis",
+      "seek_reference": null,
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 59840,
+        "seeks": 16,
+        "checks": 1131830,
+        "exact_float_words": 126702
+      }
+    },
+    {
+      "file": "vorbis-overlap.mka",
+      "reference": "vorbis-overlap.mka.f32",
+      "rate": 48000,
+      "frames": 56960,
+      "description": "overlap",
+      "codec": "vorbis",
+      "seek_reference": null,
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 56960,
+        "seeks": 16,
+        "checks": 1056554,
+        "exact_float_words": 120942
+      }
+    },
+    {
+      "file": "vorbis-negative.mka",
+      "reference": "vorbis-negative.mka.f32",
+      "rate": 48000,
+      "frames": 56960,
+      "description": "negative",
+      "codec": "vorbis",
+      "seek_reference": null,
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 56960,
+        "seeks": 16,
+        "checks": 1056554,
+        "exact_float_words": 120942
+      }
+    },
+    {
+      "file": "vorbis-laced-padding.mka",
+      "reference": "vorbis-laced-padding.mka.f32",
+      "rate": 48000,
+      "frames": 57096,
+      "description": "laced-padding",
+      "codec": "vorbis",
+      "seek_reference": null,
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 57096,
+        "seeks": 16,
+        "checks": 1055466,
+        "exact_float_words": 121214
+      }
+    },
+    {
+      "file": "vorbis-preroll-gap.mka",
+      "reference": "vorbis-preroll-gap.mka.f32",
+      "rate": 48000,
+      "frames": 59840,
+      "description": "preroll-gap",
+      "codec": "vorbis",
+      "seek_reference": null,
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 59840,
+        "seeks": 16,
+        "checks": 1131830,
+        "exact_float_words": 126702
+      }
+    },
+    {
+      "file": "ac3-continuous.mka",
+      "reference": "ac3-continuous.mka.f32",
+      "rate": 48000,
+      "frames": 58368,
+      "description": "continuous",
+      "codec": "ac3",
+      "seek_reference": "ac3-continuous.mka.seek-reference",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 58368,
+        "seeks": 16,
+        "checks": 1452882,
+        "exact_float_words": 123758
+      }
+    },
+    {
+      "file": "ac3-leading-gap.mka",
+      "reference": "ac3-leading-gap.mka.f32",
+      "rate": 48000,
+      "frames": 60768,
+      "description": "leading-gap",
+      "codec": "ac3",
+      "seek_reference": "ac3-leading-gap.mka.seek-reference",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 60768,
+        "seeks": 16,
+        "checks": 1189983,
+        "exact_float_words": 128558
+      }
+    },
+    {
+      "file": "ac3-interior-gap.mka",
+      "reference": "ac3-interior-gap.mka.f32",
+      "rate": 48000,
+      "frames": 60288,
+      "description": "interior-gap",
+      "codec": "ac3",
+      "seek_reference": "ac3-interior-gap.mka.seek-reference",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 60288,
+        "seeks": 16,
+        "checks": 1161051,
+        "exact_float_words": 127598
+      }
+    },
+    {
+      "file": "ac3-overlap.mka",
+      "reference": "ac3-overlap.mka.f32",
+      "rate": 48000,
+      "frames": 57408,
+      "description": "overlap",
+      "codec": "ac3",
+      "seek_reference": "ac3-overlap.mka.seek-reference",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 57408,
+        "seeks": 16,
+        "checks": 1053003,
+        "exact_float_words": 121838
+      }
+    },
+    {
+      "file": "ac3-negative.mka",
+      "reference": "ac3-negative.mka.f32",
+      "rate": 48000,
+      "frames": 57408,
+      "description": "negative",
+      "codec": "ac3",
+      "seek_reference": "ac3-negative.mka.seek-reference",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 57408,
+        "seeks": 16,
+        "checks": 1053003,
+        "exact_float_words": 121838
+      }
+    },
+    {
+      "file": "ac3-laced-padding.mka",
+      "reference": "ac3-laced-padding.mka.f32",
+      "rate": 48000,
+      "frames": 58056,
+      "description": "laced-padding",
+      "codec": "ac3",
+      "seek_reference": "ac3-laced-padding.mka.seek-reference",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 58056,
+        "seeks": 16,
+        "checks": 1047819,
+        "exact_float_words": 123134
+      }
+    },
+    {
+      "file": "ac3-preroll-gap.mka",
+      "reference": "ac3-preroll-gap.mka.f32",
+      "rate": 48000,
+      "frames": 60288,
+      "description": "preroll-gap",
+      "codec": "ac3",
+      "seek_reference": "ac3-preroll-gap.mka.seek-reference",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 60288,
+        "seeks": 16,
+        "checks": 1161051,
+        "exact_float_words": 127598
+      }
+    },
+    {
+      "file": "eac3-continuous.mka",
+      "reference": "eac3-continuous.mka.f32",
+      "rate": 48000,
+      "frames": 58368,
+      "description": "continuous",
+      "codec": "eac3",
+      "seek_reference": "eac3-continuous.mka.seek-reference",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 58368,
+        "seeks": 16,
+        "checks": 1452882,
+        "exact_float_words": 123758
+      }
+    },
+    {
+      "file": "eac3-leading-gap.mka",
+      "reference": "eac3-leading-gap.mka.f32",
+      "rate": 48000,
+      "frames": 60768,
+      "description": "leading-gap",
+      "codec": "eac3",
+      "seek_reference": "eac3-leading-gap.mka.seek-reference",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 60768,
+        "seeks": 16,
+        "checks": 1189983,
+        "exact_float_words": 128558
+      }
+    },
+    {
+      "file": "eac3-interior-gap.mka",
+      "reference": "eac3-interior-gap.mka.f32",
+      "rate": 48000,
+      "frames": 60288,
+      "description": "interior-gap",
+      "codec": "eac3",
+      "seek_reference": "eac3-interior-gap.mka.seek-reference",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 60288,
+        "seeks": 16,
+        "checks": 1161051,
+        "exact_float_words": 127598
+      }
+    },
+    {
+      "file": "eac3-overlap.mka",
+      "reference": "eac3-overlap.mka.f32",
+      "rate": 48000,
+      "frames": 57408,
+      "description": "overlap",
+      "codec": "eac3",
+      "seek_reference": "eac3-overlap.mka.seek-reference",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 57408,
+        "seeks": 16,
+        "checks": 1053003,
+        "exact_float_words": 121838
+      }
+    },
+    {
+      "file": "eac3-negative.mka",
+      "reference": "eac3-negative.mka.f32",
+      "rate": 48000,
+      "frames": 57408,
+      "description": "negative",
+      "codec": "eac3",
+      "seek_reference": "eac3-negative.mka.seek-reference",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 57408,
+        "seeks": 16,
+        "checks": 1053003,
+        "exact_float_words": 121838
+      }
+    },
+    {
+      "file": "eac3-laced-padding.mka",
+      "reference": "eac3-laced-padding.mka.f32",
+      "rate": 48000,
+      "frames": 58056,
+      "description": "laced-padding",
+      "codec": "eac3",
+      "seek_reference": "eac3-laced-padding.mka.seek-reference",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 58056,
+        "seeks": 16,
+        "checks": 1047819,
+        "exact_float_words": 123134
+      }
+    },
+    {
+      "file": "eac3-preroll-gap.mka",
+      "reference": "eac3-preroll-gap.mka.f32",
+      "rate": 48000,
+      "frames": 60288,
+      "description": "preroll-gap",
+      "codec": "eac3",
+      "seek_reference": "eac3-preroll-gap.mka.seek-reference",
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 60288,
+        "seeks": 16,
+        "checks": 1161051,
+        "exact_float_words": 127598
+      }
+    },
+    {
+      "file": "wavpack-continuous.mka",
+      "reference": "wavpack-continuous.mka.f32",
+      "rate": 48000,
+      "frames": 57600,
+      "description": "continuous",
+      "codec": "wavpack",
+      "seek_reference": null,
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 57600,
+        "seeks": 16,
+        "checks": 1393982,
+        "exact_float_words": 122222
+      }
+    },
+    {
+      "file": "wavpack-leading-gap.mka",
+      "reference": "wavpack-leading-gap.mka.f32",
+      "rate": 48000,
+      "frames": 60000,
+      "description": "leading-gap",
+      "codec": "wavpack",
+      "seek_reference": null,
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 60000,
+        "seeks": 16,
+        "checks": 1130550,
+        "exact_float_words": 127022
+      }
+    },
+    {
+      "file": "wavpack-interior-gap.mka",
+      "reference": "wavpack-interior-gap.mka.f32",
+      "rate": 48000,
+      "frames": 59520,
+      "description": "interior-gap",
+      "codec": "wavpack",
+      "seek_reference": null,
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 59520,
+        "seeks": 16,
+        "checks": 1036074,
+        "exact_float_words": 126062
+      }
+    },
+    {
+      "file": "wavpack-overlap.mka",
+      "reference": "wavpack-overlap.mka.f32",
+      "rate": 48000,
+      "frames": 56640,
+      "description": "overlap",
+      "codec": "wavpack",
+      "seek_reference": null,
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 56640,
+        "seeks": 16,
+        "checks": 1059114,
+        "exact_float_words": 120302
+      }
+    },
+    {
+      "file": "wavpack-negative.mka",
+      "reference": "wavpack-negative.mka.f32",
+      "rate": 48000,
+      "frames": 56640,
+      "description": "negative",
+      "codec": "wavpack",
+      "seek_reference": null,
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 56640,
+        "seeks": 16,
+        "checks": 1059114,
+        "exact_float_words": 120302
+      }
+    },
+    {
+      "file": "wavpack-laced-padding.mka",
+      "reference": "wavpack-laced-padding.mka.f32",
+      "rate": 48000,
+      "frames": 57288,
+      "description": "laced-padding",
+      "codec": "wavpack",
+      "seek_reference": null,
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 57288,
+        "seeks": 16,
+        "checks": 1396062,
+        "exact_float_words": 121598
+      }
+    },
+    {
+      "file": "wavpack-preroll-gap.mka",
+      "reference": "wavpack-preroll-gap.mka.f32",
+      "rate": 48000,
+      "frames": 59520,
+      "description": "preroll-gap",
+      "codec": "wavpack",
+      "seek_reference": null,
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 59520,
+        "seeks": 16,
+        "checks": 1036074,
+        "exact_float_words": 126062
+      }
+    },
+    {
+      "file": "unselected-clock-0.mka",
+      "reference": "unselected-clock-0.mka.f32",
+      "rate": 8000,
+      "frames": 1231,
+      "description": "unselected clock ignored",
+      "track_choice": 0,
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1231,
+        "seeks": 16,
+        "checks": 1163293,
+        "exact_float_words": 7678
+      }
+    },
+    {
+      "file": "unselected-clock-2.mka",
+      "reference": "unselected-clock-2.mka.f32",
+      "rate": 8000,
+      "frames": 1231,
+      "description": "unselected clock ignored",
+      "track_choice": 2,
+      "result": "exact timestamped PCM and seeks",
+      "oracle": {
+        "result": "passed",
+        "frames": 1231,
+        "seeks": 16,
+        "checks": 1163293,
+        "exact_float_words": 7678
+      }
+    }
+  ],
+  "rejections": [
+    {
+      "file": "bad-zero-scale.mka",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 70
+    },
+    {
+      "file": "bad-duplicate-scale.mka",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 70
+    },
+    {
+      "file": "bad-long-scale.mka",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 70
+    },
+    {
+      "file": "bad-missing-clock.mka",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 70
+    },
+    {
+      "file": "bad-duplicate-clock.mka",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 70
+    },
+    {
+      "file": "bad-long-clock.mka",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 70
+    },
+    {
+      "file": "bad-range-clock.mka",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 60
+    },
+    {
+      "file": "bad-track-scale-zero.mka",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 70
+    },
+    {
+      "file": "bad-track-scale-negative.mka",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 70
+    },
+    {
+      "file": "bad-track-scale-nan.mka",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 70
+    },
+    {
+      "file": "bad-track-scale-infinite.mka",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 70
+    },
+    {
+      "file": "bad-track-scale-short.mka",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 70
+    },
+    {
+      "file": "bad-track-scale-duplicate.mka",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 70
+    },
+    {
+      "file": "bad-huge-scale.mka",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 70
+    }
+  ],
+  "sources": {
+    "src/track_time.s": "958c15a5948f77753eeb635a1ebbf7fc89ee185a746ac2d0321fbf4dc42d05f2",
+    "src/mkv.s": "3e9e203b33186b8cd643b0ff3e802457442c9ac3f53e266b3e6648e47379a3bb",
+    "src/track.s": "d882c87afacc6e35595293b508009b51065180a74fbde95c733a82ae22bcb0d9",
+    "src/track_cuts.s": "fa3f9442743150a974b4f9e47ed67d2ba586905af127dc60552cb7781a5976f9",
+    "src/decoder.s": "eb8a1d8e3902d75f76a2c729d08366387cd367c47511288675758dc18d0ca6f3",
+    "tests/verify-matroska-clock.py": "6cab266b9b474975cf72ee3496b1647d03e059be71311a4b153f9cedb68c39e1",
+    "tests/matroska-timing-oracle.c": "6a6720abcc0a5039f019d4afa3cd7b9442539912f9302d1ba9580b0fd0cea24c",
+    "src/vorbis.s": "265157f893c9749d531bacbded12fa8f05121ad36b1b1887296a5c10b7c52958",
+    "src/vorbis_decode.inc": "5e55cb077ed617c9f41c2b745c758ef9b91d8206beea8e739cf7d8b05a4d52b3",
+    "tests/track-source-oracle.c": "f7fd763aa449eb0ca09a7c438b2d62a2e5977e65ad140a731d6699a4445f7e33",
+    "tests/speex-matroska-oracle.c": "3d537d36380fece7dd37b90757066b42db5578bbc3721a22b0974586ab6d8337",
+    "tests/matroska-clock-sparse-oracle.c": "dc843aeef8f5955642e2271154b2d332acee5f7f698b9a1ba4ea3e3fc39fbfb5",
+    "tests/verify-matroska.py": "fb0f931818c7312a32bc1d9428c21a4182990e841d68739c60bbcf44c73a4bb7"
+  },
+  "binaries": {
+    "lamp-cli": "7b37a3326d86e86e95b55bd736f217dd1ba5b61f4d7fbd652f793bbcfd7d7802",
+    "matroska-clock-oracle": "71644c127d175ec94e396086af0105675e3fd2cad5be3189eea1a9468838a720",
+    "matroska-clock-chain": "887f89f744c0bea61216f0344d61e4a48af8c970ddc7bed0fa562798ad6deb5d",
+    "matroska-clock-source": "218ea4c61130615c9b4eb85b5200ce5ba9360fedd50b47b2002eeb24d6e38283",
+    "matroska-clock-guard": "7fef610cd989e261f018e76132e1b7ee979d14a7fbcaf0636bff997942c44ac8",
+    "matroska-clock-sparse": "dc06568a9f12939f447f503415519cebad2056f41acc23c5888086bd4458ee44"
+  },
+  "guarded": [
+    {
+      "file": "pcm-8000-leading-gap.mka",
+      "result": "passed",
+      "checks": 23707963,
+      "exact_float_words": 3262,
+      "guarded_cases": 1733,
+      "protected_prefixes": 1220,
+      "mutations": 512
+    },
+    {
+      "file": "opus-laced-padding.mka",
+      "result": "passed",
+      "checks": 300951208,
+      "exact_float_words": 116496,
+      "guarded_cases": 1779,
+      "protected_prefixes": 1266,
+      "mutations": 512
+    },
+    {
+      "file": "vorbis-overlap.mka",
+      "result": "passed",
+      "checks": 153796236,
+      "exact_float_words": 113920,
+      "guarded_cases": 1765,
+      "protected_prefixes": 1252,
+      "mutations": 512
+    }
+  ],
+  "sparse_gap": {
+    "result": "passed",
+    "gap_frames": 1000000000000,
+    "checks": 51
+  },
+  "native_lifecycle": []
+}
