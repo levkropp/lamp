@@ -275,6 +275,8 @@ ENDFN hp_more
 # Find one bounded byte-stream NAL. Leading/trailing_zero_8bits are excluded.
 # Returns1 NAL,0 EOF,-1 malformed/limit/cancel. Poll cancellation every4096B.
 LOCALFN hp_nal
+    cmp dword ptr [rcx+HP_PACKET_MODE], 0
+    jne hp_packet_nal
     mov r8, [rcx+HP_CURSOR]
     mov r10, [rcx+HP_END]
     cmp r8, r10
@@ -377,3 +379,4 @@ ENDFN hp_nal
 .include "h264_headers.inc"
 .include "h264_dpb.inc"
 .include "h264_frames.inc"
+.include "h264_packets.inc"

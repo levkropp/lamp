@@ -121,6 +121,14 @@
 .equ HP_FRAME_NOOUTPUT, 14852
 .equ HP_TEMP_NOOUTPUT, 14856
 .equ HP_OUTPUT_POC, 14860
+.equ HP_PACKET_MODE, 14864
+.equ HP_PACKET_LENGTH, 14868
+.equ HP_PACKET_READS, 14872
+.equ HP_PACKET_SEEN, 14876
+.equ HP_PACKET_DTS, 14880
+.equ HP_PACKET_PTS, 14888
+.equ HP_PACKET_DURATION, 14896
+.equ HP_PACKET_EPOCH, 14904
 
 # Checked syntax readers used by the original SPS/PPS/slice implementation.
 .macro HP_BITS n, field, maximum, bad

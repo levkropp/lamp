@@ -272,6 +272,8 @@ The [Main/High I/P extension](docs/h264-profiles.md) now adds CABAC/CAVLC, expli
 
 The [B-picture extension](docs/h264-b.md) now adds Main/High bidirectional prediction and display-order output with retained GPU surfaces. All 1,074 encoded images match 154,151,640 independent reference bytes, including B-pyramids, explicit/implicit weights, open GOPs, 16 references and 720p. Windows/Linux each pass 30 syntax cases and 51,721,632 guarded checks with identical packets; output ownership passes 544 random permutations and isolated failure controls. Main/High B-frame rendering, pause/step through EOF, replay and resize pass. Container clocks, the audio-master connection, seeking, higher bit depths, other codecs and the full milestone gates remain open.
 
+The [timestamped H.264 packet frontend](docs/h264-packets.md) now accepts AVC configuration and complete access units directly, preserving DTS/PTS/duration and reference history without converting the whole file to Annex B. Test-only extraction from six MP4 inputs supplies 13 packetizations; all 795 hardware images match 60,577,200 reference bytes. Windows/Linux packet output and mutation fingerprints agree, with 38 boundary cases and 6,238 guarded opens per host. Native container video demux, timestamp-driven presentation, the real audio-master connection, seeking and the other milestone gates remain open.
+
 **Gate:** reference video vectors/images and synchronized mixed-media fixtures; measured dropped frames, latency, CPU/GPU use and fallback behavior. Hardware paths must have explicit supported-profile limits. Implementing mature software video codecs is a substantial project, not a quick extension of the audio decoder.
 
 ## 5 — Subtitles and network media

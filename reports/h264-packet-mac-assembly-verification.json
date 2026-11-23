@@ -1,0 +1,35 @@
+{
+  "result": "passed",
+  "scope": "Shared H264 frontend translation/assembly only; no native Mac execution, GPU, file playback or video support established.",
+  "target": "arm64-apple-macosx12.0.0",
+  "cpu": "apple-m1",
+  "sources": {
+    "src/h264.s": "7ad8361ff8afdaff6b276574a1c5c9a690b8ac338de5cba9ee1624a29b07a786",
+    "src/h264.inc": "a0729de31cc476db3412bd7fc4058ed069a8b2658954a362f5d2850d1e232545",
+    "src/h264_headers.inc": "71d4ffa6c8296db2182e3c79a688b87e3336fb6884e07fbddee8a2b9d5e7e0d3",
+    "src/h264_frames.inc": "cef55a4d7d6e46aca56f615401fa03d67d92c0dfe6185d78eb985e22796a118e",
+    "src/h264_dpb.inc": "f421c12ad188d85e1100191d3eadec7f9b709b8d77e061cbb247c8a431ff338a",
+    "src/h264_scaling.inc": "5b0543e2cf11063097233bafccdcc19829efb3e6a07c203de65be86ef9009e59",
+    "src/h264_limits.inc": "c22f78f75435e6a761b3a6d1a8dac1ff40a7d54b5d8a71e45d3a97ceceaa3f92",
+    "src/h264_packets.inc": "e5ee417856d6412d1aca847433a1e1b9e212cbd9339aac96160d67717b18ee7d",
+    "src/lamp.inc": "d79c75543ab0d78863010b32e46faf23fda5b9cb54ec624e9dce0acfcabf03e6",
+    "tools/arm64.py": "f8abd01ad67063451181e0adc66e72b2a445ebe9a7b159f7b88ac52b79bdadc2",
+    "tools/arm64_lamp.py": "37e4a515283ef441f9d1ee647377716efbe0d6a3aae27ef7c62faf53118f35d0"
+  },
+  "translated_sha256": "fcd7fefd9f6a948447f0f5fa19e4ff51c0a3e9f81640aa41a8429ead3bfa1445",
+  "object_sha256": "78029cdf3217b914aff695dae0f53fd7d89b0aa723702d6aa909a52d213ead71",
+  "object_bytes": 21304,
+  "git_source_sha256": {
+    "src/h264.s": "7ad8361ff8afdaff6b276574a1c5c9a690b8ac338de5cba9ee1624a29b07a786",
+    "src/h264.inc": "a0729de31cc476db3412bd7fc4058ed069a8b2658954a362f5d2850d1e232545",
+    "src/h264_headers.inc": "71d4ffa6c8296db2182e3c79a688b87e3336fb6884e07fbddee8a2b9d5e7e0d3",
+    "src/h264_frames.inc": "cef55a4d7d6e46aca56f615401fa03d67d92c0dfe6185d78eb985e22796a118e",
+    "src/h264_dpb.inc": "f421c12ad188d85e1100191d3eadec7f9b709b8d77e061cbb247c8a431ff338a",
+    "src/h264_scaling.inc": "5b0543e2cf11063097233bafccdcc19829efb3e6a07c203de65be86ef9009e59",
+    "src/h264_limits.inc": "c22f78f75435e6a761b3a6d1a8dac1ff40a7d54b5d8a71e45d3a97ceceaa3f92",
+    "src/h264_packets.inc": "e5ee417856d6412d1aca847433a1e1b9e212cbd9339aac96160d67717b18ee7d",
+    "src/lamp.inc": "d79c75543ab0d78863010b32e46faf23fda5b9cb54ec624e9dce0acfcabf03e6",
+    "tools/arm64.py": "f8abd01ad67063451181e0adc66e72b2a445ebe9a7b159f7b88ac52b79bdadc2",
+    "tools/arm64_lamp.py": "37e4a515283ef441f9d1ee647377716efbe0d6a3aae27ef7c62faf53118f35d0"
+  }
+}
