@@ -31,6 +31,8 @@ FN h264_next
     and ebp, 31
     cmp ebp, 5
     je .Lhp_next_slice
+    cmp ebp, 1
+    je .Lhp_next_slice
     cmp dword ptr [rbx+HP_SLICES], 0
     jne .Lhp_next_rewind
     cmp ebp, 7
@@ -112,9 +114,12 @@ FN h264_next
     jne .Lhp_next_unsupported
     movzx eax, byte ptr [rsi]
     shr eax, 5
+    and eax, 3
     test eax, eax
-    jz .Lhp_next_bad
+    setnz al
+    movzx eax, al
     mov [rbx+HP_TEMP_REF], eax
+    mov [rbx+HP_TEMP_NAL], ebp
     mov rcx, rbx
     call hp_slice
     test eax, eax
@@ -138,6 +143,30 @@ FN h264_next
     mov eax, [rbx+HP_TEMP_REF]
     cmp eax, [rbx+HP_FRAME_REF]
     jne .Lhp_next_bad
+    mov eax, [rbx+HP_TEMP_NUM]
+    cmp eax, [rbx+HP_FRAME_NUM]
+    jne .Lhp_next_bad
+    mov eax, [rbx+HP_TEMP_NAL]
+    cmp eax, [rbx+HP_FRAME_NAL]
+    jne .Lhp_next_bad
+    mov eax, [rbx+HP_TEMP_ADAPT]
+    cmp eax, [rbx+HP_FRAME_ADAPT]
+    jne .Lhp_next_bad
+    mov eax, [rbx+HP_TEMP_LONG]
+    cmp eax, [rbx+HP_FRAME_LONG]
+    jne .Lhp_next_bad
+    mov eax, [rbx+HP_TEMP_MMCO_COUNT]
+    cmp eax, [rbx+HP_FRAME_MMCO_COUNT]
+    jne .Lhp_next_bad
+    lea ecx, [rax+rax*2]
+    shl ecx, 2
+    lea rsi, [rbx+HP_TEMP_MMCO]
+    lea rdi, [rbx+HP_FRAME_MMCO]
+    repe cmpsb
+    jne .Lhp_next_bad
+    cmp dword ptr [rbx+HP_TEMP_TYPE], 0
+    jne .Lhp_next_append
+    mov dword ptr [rbx+HP_FRAME_TYPE], 0
     jmp .Lhp_next_append
 .Lhp_next_first:
     cmp dword ptr [rbx+HP_TEMP_MB], 0
@@ -150,6 +179,23 @@ FN h264_next
     mov [rbx+HP_FRAME_POC], eax
     mov eax, [rbx+HP_TEMP_REF]
     mov [rbx+HP_FRAME_REF], eax
+    mov eax, [rbx+HP_TEMP_NUM]
+    mov [rbx+HP_FRAME_NUM], eax
+    mov eax, [rbx+HP_TEMP_TYPE]
+    mov [rbx+HP_FRAME_TYPE], eax
+    mov eax, [rbx+HP_TEMP_NAL]
+    mov [rbx+HP_FRAME_NAL], eax
+    mov eax, [rbx+HP_TEMP_ADAPT]
+    mov [rbx+HP_FRAME_ADAPT], eax
+    mov eax, [rbx+HP_TEMP_LONG]
+    mov [rbx+HP_FRAME_LONG], eax
+    mov eax, [rbx+HP_TEMP_MMCO_COUNT]
+    mov [rbx+HP_FRAME_MMCO_COUNT], eax
+    lea ecx, [rax+rax*2]
+    shl ecx, 2
+    lea rsi, [rbx+HP_TEMP_MMCO]
+    lea rdi, [rbx+HP_FRAME_MMCO]
+    rep movsb
 .Lhp_next_append:
     mov eax, [rbx+HP_TEMP_MB]
     mov [rbx+HP_LAST_MB], eax
@@ -308,7 +354,15 @@ LOCALFN hp_finish
     mov [rbx+HP_PICTURE+5], al
     mov eax, [rbx+HP_CONSTRAINED]
     shl eax, 7
-    or eax, 0x9850
+    or eax, 0x1810
+    cmp dword ptr [rbx+HP_FRAME_TYPE], 2
+    jne .Lhp_finish_ref_flag
+    or eax, 0x8000
+.Lhp_finish_ref_flag:
+    cmp dword ptr [rbx+HP_FRAME_REF], 0
+    je .Lhp_finish_level_flag
+    or eax, 0x40
+.Lhp_finish_level_flag:
     cmp dword ptr [rbx+HP_LEVEL], 31
     jb .Lhp_finish_flags
     or eax, 0x4000
@@ -354,6 +408,10 @@ LOCALFN hp_finish
     mov [rbx+HP_PICTURE+220], al
     mov eax, [rbx+HP_DEBLOCK]
     mov [rbx+HP_PICTURE+225], al
+    mov rcx, rbx
+    call hp_dpb
+    test eax, eax
+    jz .Lhp_finish_dpb_bad
     lea rax, [rbx+HP_PICTURE]
     mov [rbx+HP_DESC], rax
     lea rax, [rbx+HP_MATRIX]
@@ -369,6 +427,9 @@ LOCALFN hp_finish
     mov [rbx+HP_DESC+40], eax
     mov dword ptr [rbx+HP_DESC+44], 0
     mov eax, 1
+    jmp .Lhp_finish_return
+.Lhp_finish_dpb_bad:
+    mov eax, -1
     jmp .Lhp_finish_return
 .Lhp_finish_bad:
     mov dword ptr [rbx+HP_ERROR], 3

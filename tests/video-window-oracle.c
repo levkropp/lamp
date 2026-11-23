@@ -6,12 +6,13 @@
 #include <stdlib.h>
 #include <string.h>
 typedef struct { BYTE before[64],ctx[1024],after[64]; } GPU;
-typedef struct { BYTE before[64],ctx[12416],after[64]; } Parser;
+typedef struct { BYTE before[64],ctx[16384],after[64]; } Parser;
 typedef struct { HWND hwnd; uint64_t played; DWORD paused,eof,error,width,height,steps; int64_t media; uint64_t late,reserved; } Report;
 typedef struct { const void *data; uint64_t bytes; volatile DWORD *cancel; uint64_t frames; DWORD show,reserved; volatile Report *report; HANDLE event; } Info;
 extern int h264_open(void*,const void*,uint64_t,const volatile DWORD*);
 extern int h264_next(void*); extern void h264_close(void*);
 extern HRESULT win_video_open(void*,UINT,UINT); extern void win_video_close(void*);
+extern HRESULT win_video_open_refs(void*,UINT,UINT,UINT);
 extern HRESULT win_video_play(void*,void*,const Info*);
 static volatile Report report;
 static volatile DWORD cancel;
@@ -27,7 +28,7 @@ static DWORD WINAPI worker(void *unused) {
     CHECK(h264_open(parser.ctx,data,bytes,&cancel));
     while((next=h264_next(parser.ctx))==1){} CHECK(next==0);
     memcpy(&frames,parser.ctx+48,8);CHECK(frames>=60);
-    result=win_video_open(gpu.ctx,u32(parser.ctx+136),u32(parser.ctx+140));CHECK(SUCCEEDED(result));
+    result=win_video_open_refs(gpu.ctx,u32(parser.ctx+136),u32(parser.ctx+140),u32(parser.ctx+180));CHECK(SUCCEEDED(result));
     memset(&info,0,sizeof(info));info.data=data;info.bytes=bytes;info.cancel=&cancel;
     info.frames=frames;info.report=&report;info.event=event;
     result=win_video_play(gpu.ctx,parser.ctx,&info);

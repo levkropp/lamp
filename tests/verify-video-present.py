@@ -83,6 +83,8 @@ def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('--bin', required=True, type=Path)
     p.add_argument('--ffmpeg', default='ffmpeg')
+    p.add_argument('--report', type=Path, default=ROOT/'reports/video-present-windows-verification.json')
+    p.add_argument('--references', action='store_true', help='Also render changing P-picture surfaces and play a reference-dependent sequence.')
     args = p.parse_args()
     assert WINDOWS, 'The presenter requires native Windows and a supported D3D11 hardware adapter.'
     out = args.bin.resolve(); work = out/'video-present'; work.mkdir(exist_ok=True)
@@ -107,6 +109,8 @@ def main():
                 ('black-full', True, 'bt709', 0, 128, 128, False),
                 ('white-full', True, 'bt709', 255, 128, 128, False),
                 ('crop-sar', False, 'bt709', 100, 90, 220, True)]
+    if args.references:
+        configs.append(('p-flat', False, 'bt709', 100, 90, 220, False))
     for name, full, matrix, yy, u, v, crop in configs:
         raw, source, ref, picture = [work/(name+ext) for ext in ('.yuv', '.h264', '.nv12', '.bgra')]
         planes = [bytearray([yy])*4096, bytearray([u])*1024, bytearray([v])*1024]
@@ -116,10 +120,14 @@ def main():
                     for x in range(width):
                         if x < border or y < border or x >= width-border or y >= width-border:
                             plane[y*width+x] = value
-        raw.write_bytes(b''.join(planes))
+        count = 24 if name == 'p-flat' else 1
+        if count == 1:
+            raw.write_bytes(b''.join(planes))
+        else:
+            raw.write_bytes(b''.join(bytes([32+i*7])*4096+bytes([70+i*3])*1024+bytes([210-i*3])*1024 for i in range(count)))
         command([ffmpeg, '-hide_banner', '-loglevel', 'error', '-y', '-f', 'rawvideo', '-pixel_format', 'yuv420p',
-                 '-video_size', '64x64', '-i', raw, '-frames:v', '1', '-c:v', 'libx264', '-profile:v', 'baseline',
-                 '-qp', '1', '-x264-params', 'keyint=1:threads=1', *(['-vf', 'setsar=4/3'] if crop else []),
+                 '-video_size', '64x64', '-i', raw, '-frames:v', str(count), '-c:v', 'libx264', '-profile:v', 'baseline',
+                 '-qp', '1', '-x264-params', 'keyint=30:min-keyint=30:scenecut=0:ref=3:threads=1' if count > 1 else 'keyint=1:threads=1', *(['-vf', 'setsar=4/3'] if crop else []),
                  '-colorspace', matrix, '-color_primaries', 'bt709', '-color_trc', 'bt709', '-color_range', 'pc' if full else 'tv', '-f', 'h264', source])
         if crop:
             source.write_bytes(annex(*[cropped_sps(n, (4, 4, 4, 4), bits) if n[0]&31 == 7 else n for n in units(source.read_bytes())]))
@@ -130,13 +138,13 @@ def main():
         images.append(dict(name=name, **result, sha256={f.name: sha(f) for f in (raw, source, ref, picture)}))
     timed = work/'timed.h264'
     command([ffmpeg, '-hide_banner', '-loglevel', 'error', '-y', '-f', 'lavfi', '-i', 'testsrc2=size=96x64:rate=30',
-             '-frames:v', '90', '-c:v', 'libx264', '-profile:v', 'baseline', '-qp', '20', '-x264-params', 'keyint=1:threads=1', '-f', 'h264', timed])
+             '-frames:v', '90', '-c:v', 'libx264', '-profile:v', 'baseline', '-qp', '20', '-x264-params', 'keyint=60:min-keyint=60:scenecut=0:ref=3:threads=1' if args.references else 'keyint=1:threads=1', '-f', 'h264', timed])
     window = json.loads(command([binaries['video-window-oracle'], timed]))
     # Malformed/unsupported CLI inputs reject before opening a window.
     cli = out/'lamp-cli.exe'
     cli_window = public_window(cli, timed)
     unsupported = []
-    for name, profile in [('inter-frame', 'baseline'), ('high-profile', 'high')]:
+    for name, profile in [('inter-frame', 'main'), ('high-profile', 'high')]:
         path = work/(name+'.h264')
         command([ffmpeg, '-hide_banner', '-loglevel', 'error', '-y', '-f', 'lavfi', '-i', 'testsrc2=size=96x64:rate=30',
                  '-frames:v', '3', '-c:v', 'libx264', '-profile:v', profile, '-x264-params', 'keyint=30:threads=1', '-f', 'h264', path])
@@ -151,12 +159,12 @@ def main():
     files += [ROOT/'tests'/n for n in ['video-present-oracle.c', 'video-present-mock.c', 'video-window-oracle.c', 'verify-video-present.py', 'verify-h264-file.py', 'verify-runtime.js']]
     files += [ROOT/'tools/build-windows.py', ROOT/'reports/video-present-h264-regression.json']
     files += [*objects, obj/'video_window.obj', obj/'video_cli.obj', *binaries.values(), cli, out/'lamp.exe', ffmpeg, timed, *unsupported]
-    report = dict(result='passed', scope='Native hardware NV12-to-BGRA SDR crop/range/matrix/SAR/letterbox/resize and owned hidden-window video-only timing/controls. No real display latency, audio synchronization, seeking, inter-frame reference decoding, HDR, power or GPU-utilization claims.',
+    report = dict(result='passed', scope='Native hardware NV12-to-BGRA SDR crop/range/matrix/SAR/letterbox/resize and owned hidden-window video-only timing/controls. No real display latency, audio synchronization, seeking, HDR, power or GPU-utilization claims.', reference_dependent_playback=args.references,
                   platform=platform.platform(), reference=version, images=images, window=window, mock=mock, cli_window=cli_window, cli_rejections=rejects,
                   sha256={f.relative_to(ROOT).as_posix() if f.is_relative_to(ROOT) else f.as_posix(): sha(f) for f in files})
-    path = ROOT/'reports/video-present-windows-verification.json'
+    path = args.report
     path.write_text(json.dumps(report, indent=2)+'\n', encoding='utf-8')
-    print(json.dumps(dict(result='passed', images=len(images)*2, color_samples=sum(x['color_samples'] for x in images),
+    print(json.dumps(dict(result='passed', images=sum(x['rendered_images'] for x in images), color_samples=sum(x['color_samples'] for x in images),
                           max_rgb_error=max(x['max_rgb_error'] for x in images), window=window, report=str(path))))
 
 

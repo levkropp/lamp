@@ -15,7 +15,7 @@ extern HRESULT win_present_frame(void*);extern HRESULT win_present_resize(void*,
 extern HRESULT win_present_capture(void*,void*,uint64_t);extern void win_present_close(void*);
 static void *device[128],*context[128],*video_device[128],*video_context[128],*dxgi[128],*adapter[128],*factory[128],*swap[128],*enumerator[128],*resource[128];
 static Object borrowed[5],objects[128];static UINT allocated,released,live,calls,fail_at,blits,copies,queries,presents,maps,unmaps,query_busy,present_busy,map_busy,bad_map;
-static BYTE gpu[1024],meta[12416],mapped[80*16];static uint64_t checks;
+static BYTE gpu[1024],meta[16384],mapped[80*16];static uint64_t checks;
 #define CHECK(x) do {++checks;if(!(x)){fprintf(stderr,"present-mock line%d failure%u calls%u live%u\n",__LINE__,fail_at,calls,live);exit(1);}}while(0)
 static HRESULT step(void) { ++calls;return calls==fail_at?E_FAIL:S_OK; }
 static ULONG WINAPI release(Object *o) { CHECK(o->owned && o->live);o->live=0;++released;--live;return 0; }
@@ -94,5 +94,9 @@ int main(void) {
     /* Errors during blit/query/Present and capture allocation/copy-map poison until close. */
     for(n=1;n<=3;++n){initialize(&g);fail_at=0;CHECK(win_present_open(g.ctx,gpu,meta,&t)==S_OK);calls=0;fail_at=n;CHECK(FAILED(win_present_frame(g.ctx)));CHECK(FAILED(win_present_frame(g.ctx)));close_check(&g);}
     for(n=1;n<=2;++n){initialize(&g);fail_at=0;CHECK(win_present_open(g.ctx,gpu,meta,&t)==S_OK);CHECK(win_present_frame(g.ctx)==S_OK);calls=0;fail_at=n;CHECK(FAILED(win_present_capture(g.ctx,output+64,1024)));close_check(&g);}
+    initialize(&g);fail_at=0;CHECK(win_present_open(g.ctx,gpu,meta,&t)==S_OK);CHECK(win_present_frame(g.ctx)==S_OK);
+    {UINT current=1;memcpy(gpu+100,&current,4);}CHECK(win_present_frame(g.ctx)==S_OK);CHECK(blits==2 && copies==2 && released==1);close_check(&g);
+    initialize(&g);fail_at=0;CHECK(win_present_open(g.ctx,gpu,meta,&t)==S_OK);CHECK(win_present_frame(g.ctx)==S_OK);
+    {UINT current=1;memcpy(gpu+100,&current,4);}calls=0;fail_at=1;CHECK(FAILED(win_present_frame(g.ctx)));close_check(&g);
     printf("{\"result\":\"passed\",\"checks\":%llu,\"open_failures\":%u,\"resize_failures\":%u,\"gpu_failures\":5,\"bad_maps\":2,\"busy_retries\":6}\n",(unsigned long long)checks,open_calls,resize_calls);return 0;
 }

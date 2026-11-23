@@ -14,6 +14,26 @@ wv_release_order: .byte WV_VIEW,WV_STAGING,WV_TEXTURE,WV_DECODER,WV_VIDEO_CONTEX
 # multiples of16). Default hardware adapter only; never WARP/software fallback.
 # HRESULT; all partially acquired resources are released on failure.
 FN win_video_open
+    xor r9d, r9d
+    jmp wv_open
+ENDFN win_video_open
+
+# R9D=max_num_ref_frames. Explicit DPB-capable open; one free output in addition.
+FN win_video_open_refs
+    cmp r9d, 16
+    ja .Lwv_refs_invalid
+    test r9d, r9d
+    jnz .Lwv_refs_minimum
+    inc r9d
+.Lwv_refs_minimum:
+    inc r9d
+    jmp wv_open
+.Lwv_refs_invalid:
+    mov eax, WV_INVALID
+    ret
+ENDFN win_video_open_refs
+
+LOCALFN wv_open
     push rbx
     push rbp
     push rsi
@@ -29,6 +49,7 @@ FN win_video_open
     inc eax
     cmp eax, 8
     jb .Lwv_open_owned
+    mov [rbx+WV_REQUIRED], r9d
     cmp esi, 16
     jb .Lwv_open_invalid
     cmp edi, 16
@@ -134,6 +155,8 @@ FN win_video_open
     jz .Lwv_open_next_config
     cmp eax, 32
     ja .Lwv_open_next_config
+    cmp eax, [rbx+WV_REQUIRED]
+    cmovb eax, [rbx+WV_REQUIRED]
     mov [rbx+WV_POOL], eax
     # Pool plus one readback surface must fit 128MiB of nominal NV12 pixels.
     inc eax
@@ -184,6 +207,24 @@ FN win_video_open
     call [rax+7*8]
     test eax, eax
     js .Lwv_open_fail
+    mov rax, [rbx+WV_VIEW]
+    mov [rbx+WV_VIEWS], rax
+    mov ebp, 1
+.Lwv_open_views:
+    cmp ebp, [rbx+WV_POOL]
+    jae .Lwv_open_staging
+    mov [rbx+WV_VIEW_DESC+20], ebp
+    mov rcx, [rbx+WV_VIDEO_DEVICE]
+    mov rdx, [rbx+WV_TEXTURE]
+    lea r8, [rbx+WV_VIEW_DESC]
+    lea r9, [rbx+rbp*8+WV_VIEWS]
+    mov rax, [rcx]
+    call [rax+7*8]
+    test eax, eax
+    js .Lwv_open_fail
+    inc ebp
+    jmp .Lwv_open_views
+.Lwv_open_staging:
     mov dword ptr [rbx+WV_TEX_DESC+12], 1
     mov dword ptr [rbx+WV_TEX_DESC+28], 3 # USAGE_STAGING
     mov dword ptr [rbx+WV_TEX_DESC+32], 0
@@ -221,7 +262,7 @@ FN win_video_open
     pop rbp
     pop rbx
     ret
-ENDFN win_video_open
+ENDFN wv_open
 
 # RCX=context; idempotent, single owner, no call in progress.
 FN win_video_close
@@ -230,6 +271,18 @@ FN win_video_close
     push rdi
     sub rsp, 32
     mov rbx, rcx
+    mov esi, 1
+.Lwv_close_views:
+    mov rcx, [rbx+rsi*8+WV_VIEWS]
+    mov qword ptr [rbx+rsi*8+WV_VIEWS], 0
+    test rcx, rcx
+    jz .Lwv_close_view_next
+    mov rax, [rcx]
+    call [rax+16]
+.Lwv_close_view_next:
+    inc esi
+    cmp esi, 32
+    jb .Lwv_close_views
     xor esi, esi
 .Lwv_close_next:
     lea rax, [rip+wv_release_order]
@@ -258,8 +311,8 @@ ENDFN win_video_close
 # RCX=context, RDX=frame descriptor (48B): picture pointer, matrix pointer,
 # bitstream pointer, padded bytes:u32,reserved:u32,slices pointer,count:u32,
 # reserved:u32. Caller supplies valid storage; all slices are DXVA short10B.
-# First backend profile: single IDR picture, NV12 8-bit420 progressive,
-# no reference surfaces. Actual H.264 parsing belongs to the assembly frontend.
+# Progressive NV12 8-bit420 I/P pictures with bounded retained reference surfaces.
+# Actual H.264 syntax and DPB marking belong to the assembly frontend.
 FN win_video_decode
     push rbx
     push rbp
@@ -318,11 +371,16 @@ FN win_video_decode
     cmp byte ptr [rdi+r8+2], 1
     jne .Lwv_decode_invalid
     movzx r10d, byte ptr [rdi+r8+3]
-    and r10d, 0x9f
+    test r10d, 0x80
+    jnz .Lwv_decode_invalid
+    and r10d, 31
+    cmp r10d, 1
+    je .Lwv_decode_slice_ok
     cmp r10d, 5
     jne .Lwv_decode_invalid
     test byte ptr [rdi+r8+3], 0x60
     jz .Lwv_decode_invalid
+.Lwv_decode_slice_ok:
     mov r8d, r9d
     add rdx, 10
     dec ecx
@@ -339,28 +397,40 @@ FN win_video_decode
     shl eax, 4
     cmp eax, [rbx+WV_HEIGHT]
     jne .Lwv_decode_invalid
-    cmp byte ptr [rsi+4], 0  # CurrPic index0, not bottom field
-    jne .Lwv_decode_invalid
+    movzx eax, byte ptr [rsi+4]
+    cmp eax, [rbx+WV_POOL]
+    jae .Lwv_decode_invalid
+    mov [rbx+WV_SELECT], eax
     cmp byte ptr [rsi+8], 0
     jne .Lwv_decode_invalid
     cmp byte ptr [rsi+9], 0
     jne .Lwv_decode_invalid
     movzx eax, word ptr [rsi+6]
-    and eax, 0xb83f         # progressive,420,intra,consecutive;8x8 transform off
-    cmp eax, 0x9810
+    and eax, 0x383f         # progressive,420,consecutive;8x8 transform off
+    cmp eax, 0x1810
     jne .Lwv_decode_invalid
     cmp byte ptr [rsi+171], 1 # remaining syntax fields must be present
     jne .Lwv_decode_invalid
     xor ecx, ecx
-.Lwv_decode_no_refs:
+.Lwv_decode_refs:
     cmp byte ptr [rsi+rcx+16], 255
-    jne .Lwv_decode_invalid
+    je .Lwv_decode_ref_next
+    movzx eax, byte ptr [rsi+rcx+16]
+    and eax, 127
+    cmp eax, [rbx+WV_POOL]
+    jae .Lwv_decode_invalid
+    cmp eax, [rbx+WV_SELECT]
+    je .Lwv_decode_invalid
+    bt [rbx+WV_DECODED_MASK], eax
+    jnc .Lwv_decode_invalid
+.Lwv_decode_ref_next:
     inc ecx
     cmp ecx, 16
-    jb .Lwv_decode_no_refs
+    jb .Lwv_decode_refs
     mov rcx, [rbx+WV_VIDEO_CONTEXT]
     mov rdx, [rbx+WV_DECODER]
-    mov r8, [rbx+WV_VIEW]
+    mov eax, [rbx+WV_SELECT]
+    mov r8, [rbx+rax*8+WV_VIEWS]
     xor r9d, r9d
     mov qword ptr [rsp+32], 0
     mov rax, [rcx]
@@ -467,6 +537,16 @@ FN win_video_decode
     test eax, eax
     js .Lwv_decode_gpu_error
     mov dword ptr [rbx+WV_HAVE_FRAME], 1
+    mov eax, [rbx+WV_SELECT]
+    mov [rbx+WV_CURRENT], eax
+    mov rdx, [r12+16]
+    movzx edx, byte ptr [rdx+3]
+    and edx, 31
+    cmp edx, 5
+    jne .Lwv_decode_mask
+    mov dword ptr [rbx+WV_DECODED_MASK], 0
+.Lwv_decode_mask:
+    bts [rbx+WV_DECODED_MASK], eax
     xor eax, eax
     jmp .Lwv_decode_return
 .Lwv_decode_copy_error:
@@ -533,7 +613,8 @@ FN win_video_readback
     mov qword ptr [rsp+40], 0
     mov rax, [rbx+WV_TEXTURE]
     mov [rsp+48], rax
-    mov qword ptr [rsp+56], 0
+    mov eax, [rbx+WV_CURRENT]
+    mov [rsp+56], rax
     mov qword ptr [rsp+64], 0
     mov rax, [rcx]
     call [rax+46*8]

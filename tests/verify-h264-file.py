@@ -98,7 +98,7 @@ def main():
             overwrite = run([cli, '--video-decode', source, target])
             assert overwrite.returncode != 0 and sha(target) == digest, name
             checked = run([cli, '--video-check', source])
-            assert checked.returncode == 0 and b'video=h264-idr backend=d3d11' in checked.stdout, name
+            assert checked.returncode == 0 and b'video=h264 backend=d3d11' in checked.stdout, name
             record.update(native_stats=text, image_sha256=digest, no_overwrite=True, native_check=True)
             actual_images += item['frames']; actual_bytes += target.stat().st_size
         checks.append(record)
@@ -136,7 +136,7 @@ def main():
         assert result.returncode == 0 and unicode_target.read_bytes() == (folder/'base-64x64.nv12').read_bytes()
         if args.baseline:
             result = run([args.baseline.resolve(), '--video-check', source])
-            assert b'video=h264-idr' not in result.stdout
+            assert b'video=h264' not in result.stdout
             controls.append(dict(mode='published-before-file-reader', executable_sha256=sha(args.baseline.resolve()),
                                  exit_code=result.returncode, missing_video_result=True))
         if args.controls:
@@ -146,7 +146,7 @@ def main():
                 result = run([controlled, '--video-decode', source, target])
                 assert result.returncode == 1 and expected in result.stdout and not target.exists(), (mode, result.stdout, result.stderr)
                 record.update(exit_code=1, partial_output_removed=True); controls.append(record)
-    sources = ['src/h264.s', 'src/h264.inc', 'src/h264_headers.inc', 'src/h264_frames.inc', 'src/lamp.inc',
+    sources = ['src/h264.s', 'src/h264.inc', 'src/h264_headers.inc', 'src/h264_frames.inc', 'src/h264_dpb.inc', 'src/lamp.inc',
                'tests/h264-file-oracle.c', 'tests/h264_file_fixtures.py', 'tests/verify-h264-file.py', 'tests/verify-windows-video.py']
     if WINDOWS:
         sources += ['src/win/video_cli.s', 'src/win/video.s', 'src/win/video.inc', 'src/win/player.s', 'src/win/kernel32.def', 'tools/build-windows.py', 'tests/verify-runtime.js']

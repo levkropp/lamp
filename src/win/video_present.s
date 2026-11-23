@@ -304,6 +304,8 @@ LOCALFN vp_resources
     test eax, eax
     js .Lvp_resources_return
     mov dword ptr [rbx+VP_INPUT_DESC+4], 1
+    mov eax, [rsi+WV_CURRENT]
+    mov [rbx+VP_INPUT_DESC+12], eax
     mov rcx, [rsi+WV_VIDEO_DEVICE]
     mov rdx, [rsi+WV_TEXTURE]
     mov r8, [rbx+VP_ENUM]
@@ -510,6 +512,32 @@ FN win_present_frame
     jne .Lvp_frame_unexpected
     cmp dword ptr [rbx+VP_DRAW_PENDING], 0
     jne .Lvp_frame_query
+    mov eax, [rsi+WV_CURRENT]
+    cmp eax, [rbx+VP_INPUT_DESC+12]
+    je .Lvp_frame_blit
+    # Decoder rotates among retained reference surfaces; the view selects the
+    # completed current slice. No earlier draw is pending at this boundary.
+    mov [rbx+VP_INPUT_DESC+12], eax
+    mov rcx, [rbx+VP_INPUT]
+    mov qword ptr [rbx+VP_INPUT], 0
+    test rcx, rcx
+    jz .Lvp_frame_input
+    mov rax, [rcx]
+    call [rax+16]
+.Lvp_frame_input:
+    mov rcx, [rsi+WV_VIDEO_DEVICE]
+    mov rdx, [rsi+WV_TEXTURE]
+    mov r8, [rbx+VP_ENUM]
+    lea r9, [rbx+VP_INPUT_DESC]
+    lea rax, [rbx+VP_INPUT]
+    mov [rsp+32], rax
+    mov rax, [rcx]
+    call [rax+8*8]
+    test eax, eax
+    js .Lvp_frame_gpu_error
+    mov rax, [rbx+VP_INPUT]
+    mov [rbx+VP_STREAM+32], rax
+.Lvp_frame_blit:
     mov rcx, [rsi+WV_VIDEO_CONTEXT]
     mov rdx, [rbx+VP_PROCESSOR]
     mov r8, [rbx+VP_OUTPUT]

@@ -208,9 +208,9 @@ def generate(folder, ffmpeg):
     for name, data, accepted, meta in cases:
         file = folder/(name+'.synthetic'); file.write_bytes(data)
         synthetic.append(dict(name=name, accepted=accepted, metadata=meta, sha256=hashlib.sha256(data).hexdigest()))
-    # Genuine unsupported inter-frame and High-profile files; CPU preflight must reject.
+    # Genuine unsupported Main/B and High-profile files; CPU preflight must reject.
     negatives = []
-    for name, profile, params in [('inter-frame', 'baseline', 'keyint=30:bframes=0:cabac=0:8x8dct=0'),
+    for name, profile, params in [('inter-frame', 'main', 'keyint=30:bframes=2:cabac=1:8x8dct=0'),
                                   ('high-profile', 'high', 'keyint=1:cabac=1:8x8dct=1')]:
         file = folder/(name+'.h264')
         subprocess.run([ffmpeg, '-hide_banner', '-loglevel', 'error', '-y', '-f', 'lavfi', '-i',

@@ -1,4 +1,4 @@
-# Original Windows H.264 IDR playback/check/export. No CRT/external decoder.
+# Original Windows H.264 I/P playback/check/export. No CRT/external decoder.
 .include "lamp.inc"
 .include "h264.inc"
 .include "video.inc"
@@ -7,11 +7,11 @@ vc_check: .short '-','-','v','i','d','e','o','-','c','h','e','c','k',0
 vc_decode: .short '-','-','v','i','d','e','o','-','d','e','c','o','d','e',0
 vc_play: .short '-','-','v','i','d','e','o','-','p','l','a','y',0
 vc_usage: .asciz "Usage: --video-play file.h264 | --video-check file.h264 | --video-decode file.h264 output.nv12\r\n"
-vc_input_error: .asciz "Unsupported, malformed or inaccessible H.264 IDR file.\r\n"
+vc_input_error: .asciz "Unsupported, malformed or inaccessible H.264 file.\r\n"
 vc_gpu_error: .asciz "H.264 hardware decode failed or timed out on this adapter.\r\n"
 vc_output_error: .asciz "Cannot create or write video output; existing files are preserved.\r\n"
 vc_cancel_error: .asciz "Video operation cancelled.\r\n"
-vc_stat: .asciz "video=h264-idr backend=d3d11 format=nv12 width="
+vc_stat: .asciz "video=h264 backend=d3d11 format=nv12 width="
 vc_height: .asciz " height="
 vc_coded_w: .asciz " coded_width="
 vc_coded_h: .asciz " coded_height="
@@ -108,7 +108,8 @@ FN win_video_cli
     lea rcx, [rip+vc_gpu]
     mov edx, [rax+HP_WIDTH]
     mov r8d, [rax+HP_HEIGHT]
-    call win_video_open
+    mov r9d, [rax+HP_REFS]
+    call win_video_open_refs
     test eax, eax
     js .Lvc_gpu_error
     cmp esi, 5

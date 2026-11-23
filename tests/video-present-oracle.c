@@ -7,16 +7,17 @@
 #include <string.h>
 #include <math.h>
 typedef struct { BYTE a[64],ctx[1024],b[64]; } Guard;
-typedef struct { BYTE a[64],ctx[12416],b[64]; } Parser;
+typedef struct { BYTE a[64],ctx[16384],b[64]; } Parser;
 typedef struct { HWND hwnd; UINT width,height; } Target;
 extern int h264_open(void*,const void*,uint64_t,const volatile uint32_t*);
 extern int h264_next(void*); extern void h264_close(void*);
 extern HRESULT win_video_open(void*,UINT,UINT);
+extern HRESULT win_video_open_refs(void*,UINT,UINT,UINT);
 extern HRESULT win_video_decode(void*,const void*); extern void win_video_close(void*);
 extern HRESULT win_present_open(void*,void*,const void*,const Target*);
 extern HRESULT win_present_frame(void*); extern HRESULT win_present_capture(void*,void*,uint64_t);
 extern HRESULT win_present_resize(void*,UINT,UINT); extern void win_present_close(void*);
-static uint64_t checks,samples,pending; static UINT max_error;
+static uint64_t checks,samples,pending,images; static UINT max_error;
 #define CHECK(x) do { ++checks; if(!(x)) { fprintf(stderr,"present-oracle line%d\n",__LINE__); exit(1); } } while(0)
 static UINT u32(const void *p) { UINT n; memcpy(&n,p,4); return n; }
 static void guard(const Guard *g) { UINT i; for(i=0;i<64;++i)CHECK(g->a[i]==0xa5 && g->b[i]==0xa5); }
@@ -61,14 +62,20 @@ static void capture(Guard *p,Parser *h,const BYTE *ref,UINT w,UINT height,const 
     }
     for(i=0;i<64;++i)CHECK(pixels[i]==0xa7 && pixels[bytes+64+i]==0xa7);
     f=fopen(output,"wb"); CHECK(f!=0 && fwrite(pixels+64,1,bytes,f)==bytes); fclose(f);free(pixels);guard(p);
+    ++images;
+}
+static void decode(Guard *gpu,Parser *parser) {
+    HRESULT hr;uint64_t deadline=GetTickCount64()+5000;
+    do {hr=win_video_decode(gpu->ctx,parser->ctx+328);if(hr==E_PENDING){++pending;CHECK(GetTickCount64()<deadline);Sleep(1);}}while(hr==E_PENDING);
+    CHECK(SUCCEEDED(hr));
 }
 int main(int argc,char **argv) {
-    Guard gpu,present; Parser parser; BYTE *data,*ref;size_t bytes,ref_bytes; Target target; HRESULT hr;UINT i;
+    Guard gpu,present; Parser parser; BYTE *data,*ref;size_t bytes,ref_bytes,frame_bytes; Target target; HRESULT hr;UINT i,frames=1;int next;
     CHECK(argc==4);data=file(argv[1],&bytes);ref=file(argv[2],&ref_bytes);
     memset(&gpu,0xa5,sizeof(gpu));memset(gpu.ctx,0,sizeof(gpu.ctx));memset(&present,0xa5,sizeof(present));memset(present.ctx,0,sizeof(present.ctx));
     memset(&parser,0xa5,sizeof(parser));memset(parser.ctx,0,sizeof(parser.ctx));CHECK(h264_open(parser.ctx,data,bytes,0));CHECK(h264_next(parser.ctx)==1);
-    CHECK(ref_bytes==(size_t)u32(parser.ctx+144)*u32(parser.ctx+148)*3/2);
-    hr=win_video_open(gpu.ctx,u32(parser.ctx+136),u32(parser.ctx+140));CHECK(SUCCEEDED(hr));CHECK(SUCCEEDED(win_video_decode(gpu.ctx,parser.ctx+328)));
+    frame_bytes=(size_t)u32(parser.ctx+144)*u32(parser.ctx+148)*3/2;CHECK(ref_bytes>=frame_bytes && !(ref_bytes%frame_bytes));
+    hr=win_video_open_refs(gpu.ctx,u32(parser.ctx+136),u32(parser.ctx+140),u32(parser.ctx+180));CHECK(SUCCEEDED(hr));decode(&gpu,&parser);
     target.hwnd=CreateWindowExW(0,L"STATIC",L"LAMP presenter oracle",WS_POPUP,0,0,96,96,0,0,GetModuleHandleW(0),0);CHECK(target.hwnd!=0);
     target.width=target.height=96;
     /* Invalid opens must not retain resources; valid ownership survives reopen. */
@@ -83,8 +90,13 @@ int main(int argc,char **argv) {
     CHECK(SetWindowPos(target.hwnd,0,0,0,161,121,SWP_NOMOVE|SWP_NOZORDER|SWP_NOACTIVATE));
     hr=win_present_resize(present.ctx,161,121);if(FAILED(hr))fprintf(stderr,"resize %08lx\n",hr);CHECK(SUCCEEDED(hr));
     capture(&present,&parser,ref,161,121,argv[3]);
+    while((next=h264_next(parser.ctx))==1) {
+        CHECK((size_t)(frames+1)*frame_bytes<=ref_bytes);decode(&gpu,&parser);
+        capture(&present,&parser,ref+frames*frame_bytes,161,121,argv[3]);++frames;
+    }
+    CHECK(next==0 && (size_t)frames*frame_bytes==ref_bytes);
     win_present_close(present.ctx);win_present_close(present.ctx);guard(&present);for(i=0;i<1024;++i)CHECK(!present.ctx[i]);
     CHECK(DestroyWindow(target.hwnd));win_video_close(gpu.ctx);guard(&gpu);h264_close(parser.ctx);
     for(i=0;i<64;++i)CHECK(parser.a[i]==0xa5 && parser.b[i]==0xa5);free(data);free(ref);
-    printf("{\"result\":\"passed\",\"checks\":%llu,\"color_samples\":%llu,\"max_rgb_error\":%u,\"pending_retries\":%llu}\n",(unsigned long long)checks,(unsigned long long)samples,max_error,(unsigned long long)pending);return 0;
+    printf("{\"result\":\"passed\",\"checks\":%llu,\"color_samples\":%llu,\"max_rgb_error\":%u,\"pending_retries\":%llu,\"frames\":%u,\"rendered_images\":%llu}\n",(unsigned long long)checks,(unsigned long long)samples,max_error,(unsigned long long)pending,frames,(unsigned long long)images);return 0;
 }

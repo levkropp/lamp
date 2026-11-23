@@ -1,12 +1,13 @@
 # Windows hardware video backend
 
 This backend now feeds the experimental [Windows file check/export commands](h264.md).
-The assembly module `src/win/video.s` submits H.264 IDR pictures directly to
+The assembly module `src/win/video.s` submits H.264 I/P pictures directly to
 Direct3D 11 and reads back decoded NV12 images. The normal Windows build links it
 with the assembly Annex B frontend. Source builds can check files and export
-cropped NV12 or use the [GPU video-only window](video-present.md). Ordinary
-inter-frame pictures and the real audio clock/scheduler connection remain to be
-implemented. The earlier backend
+cropped NV12 or use the [GPU video-only window](video-present.md). The
+[reference-picture extension](h264-references.md) adds short/long-term DPB
+surfaces. B/CABAC/Main/High profiles and the real audio clock/scheduler connection
+remain to be implemented. The earlier backend
 report below retains its component-only scope; the file integration has its own
 current reports.
 
@@ -19,16 +20,19 @@ with short slice controls (`ConfigBitstreamRaw = 2`). It uses the returned
 minimum surface count, limited to 1–32, and a texture-array configuration.
 Other adapters, configurations and software fallback are not implemented.
 
-The first submission contract is a progressive, 8-bit 4:2:0 **IDR picture with no
-reference surfaces**, at coded widths/heights from 16 through 4,096 in multiples
-of 16. Dimensions, current surface index, complete picture syntax, reference-list
-emptiness, bitstream bounds and contiguous short-slice locations are checked
+The current submission contract is a progressive, 8-bit 4:2:0 **I/P picture with
+retained reference surfaces**, at coded widths/heights from 16 through 4,096 in
+multiples of 16. Dimensions, current/reference surface indices, bitstream bounds
+and contiguous short-slice locations are checked
 before calling the driver. The caller must provide consistent, already parsed
 picture/matrix/slice data; this API is not a validator for arbitrary H.264 files.
-It rejects non-IDR NAL headers, field pictures and the 8×8 transform mode.
-Only the Baseline/CAVLC fixtures below establish image correctness today.
+It accepts VCL NAL types 1/5 and rejects field pictures and the 8×8 transform mode.
+The assembly frontend enforces the supported Baseline/CAVLC syntax and normative
+reference marking. The [current image reports](h264-references.md#verification)
+extend the historical IDR component evidence below.
 
-A zeroed, single-owner **1,024-byte context** retains eight COM resources.
+A zeroed, single-owner **1,024-byte context** retains seven base COM resources and
+one output view per array slice (up to 39 references total).
 There are no heap allocations in the assembly. The texture pool plus one staging
 surface is limited to **128 MiB of nominal NV12 pixels**; driver allocations,
 alignment and overhead are additional. Compressed frames are limited to 16 MiB
@@ -41,7 +45,8 @@ The exported Microsoft x64 ABI functions are:
 | Function | Arguments | Result |
 | --- | --- | --- |
 | `win_video_open` | context, coded width, coded height | HRESULT; partial resources released on failure |
-| `win_video_decode` | context, pointer to 48-byte submission | HRESULT; one picture targets surface index 0 |
+| `win_video_open_refs` | context, coded width, coded height, max reference count | HRESULT; pool also includes a free destination surface |
+| `win_video_decode` | context, pointer to 48-byte submission | HRESULT; picture selects a destination distinct from retained references |
 | `win_video_readback` | context, destination, capacity in bytes | HRESULT; packed NV12 (Y then interleaved UV) on success |
 | `win_video_close` | context | releases resources, clears context; idempotent |
 
@@ -56,7 +61,8 @@ After a frame has begun, failures attempt `DecoderEndFrame` before returning.
 Driver failures make the context unusable until close/reopen. Input rejection
 does not submit work. A busy `DecoderBeginFrame` returns `E_PENDING` for retry.
 
-Readback issues one copy and flush, then maps with `DO_NOT_WAIT`. A busy GPU
+Readback copies the successful current array slice once and flushes, then maps
+with `DO_NOT_WAIT`. A busy GPU
 returns `E_PENDING` without touching the output; retrying does not enqueue another
 copy. The owner can cancel between attempts and close the context. A new decode
 is refused while that copy is pending. Successful maps validate the pointer and
@@ -90,8 +96,8 @@ each fail: omitted capacity checking, omitted releases, repeated copies, blockin
 maps and missing syntax-field validation. No mock or broken object enters the
 player. Image tests also exercise close/reopen across sizes and padded GPU rows.
 
-This is single-machine component coverage. It establishes no window presentation,
-container demuxing, P/B-reference pictures, full H.264 profile coverage, accurate
+This historical component coverage predates the window and P-picture extension.
+It establishes no container demuxing, B/CABAC/Main/High profile coverage, accurate
 video seeking, screenshots, audio synchronization, multi-adapter behavior,
 software fallback, native Linux/Mac video, power use, playback latency or
 performance advantage. Oracle elapsed times and retry counts are test observations,
@@ -108,8 +114,8 @@ and [D3D11 wrapper](https://chromium.googlesource.com/chromium/src/+/HEAD/media/
 were consulted for interoperability; no C/C++ implementation is linked or copied
 into the runtime. Copyrighted specifications are not redistributed.
 
-The assembly frontend now supplies bounded file-derived decode metadata. Next,
-connect decoded surfaces to presentation and the [scheduler](video-sync.md), and
-add actual media timestamps. Extend the decoded-picture buffer and profile
-coverage for ordinary inter-frame H.264, followed by HEVC, VP9 and AV1. Their
+The assembly frontend now supplies bounded file-derived decode metadata to the
+GPU video window. Next, connect actual container timestamps and the
+[audio-master scheduler](video-sync.md). Extend H.264 profile coverage and
+reordered output, followed by HEVC, VP9 and AV1. Their
 software fallbacks and other milestone requirements remain explicit roadmap work.

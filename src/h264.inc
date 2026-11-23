@@ -1,5 +1,5 @@
-# Original bounded H.264 Annex B IDR frontend ABI; Microsoft x64 convention.
-.equ HP_BYTES, 12416
+# Original bounded H.264 Annex B I/P frontend ABI; Microsoft x64 convention.
+.equ HP_BYTES, 16384
 .equ HP_DATA, 0
 .equ HP_END, 8
 .equ HP_CURSOR, 16
@@ -72,6 +72,37 @@
 .equ HP_SPS_RAW, 4224
 .equ HP_PPS_RAW, 8320
 .equ HP_MAX_FRAME, 16777216
+.equ HP_FRAME_NUM, 12416
+.equ HP_TEMP_NUM, 12420
+.equ HP_FRAME_TYPE, 12424
+.equ HP_TEMP_TYPE, 12428
+.equ HP_FRAME_NAL, 12432
+.equ HP_TEMP_NAL, 12436
+.equ HP_FRAME_ADAPT, 12440
+.equ HP_TEMP_ADAPT, 12444
+.equ HP_FRAME_LONG, 12448
+.equ HP_TEMP_LONG, 12452
+.equ HP_FRAME_MMCO_COUNT, 12456
+.equ HP_TEMP_MMCO_COUNT, 12460
+.equ HP_DPB_COUNT, 12464
+.equ HP_SEEN_IDR, 12468
+.equ HP_PREV_NUM, 12472
+.equ HP_PREV_REF_NUM, 12476
+.equ HP_FRAME_OFFSET, 12480
+.equ HP_PREV_POC_MSB, 12488
+.equ HP_PREV_POC_LSB, 12496
+.equ HP_CURRENT_POC, 12504
+.equ HP_CURRENT_SLOT, 12508
+.equ HP_CURRENT_LONG, 12512
+.equ HP_MAX_LONG, 12516
+.equ HP_MMCO5, 12520
+.equ HP_TEMP_ACTIVE, 12524
+.equ HP_CURRENT_MSB, 12528
+.equ HP_LAST_POC, 12536
+.equ HP_MMCO_HAS123, 12540
+.equ HP_FRAME_MMCO, 12672
+.equ HP_TEMP_MMCO, 13440
+.equ HP_DPB, 14208       # 16 compact records {surface,frame_num,poc,long_index}; -1 short.
 
 # Checked syntax readers used by the original SPS/PPS/slice implementation.
 .macro HP_BITS n, field, maximum, bad

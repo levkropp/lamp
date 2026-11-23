@@ -1,7 +1,7 @@
 # Windows video presentation and playback
 
 Windows source builds provide an experimental video-only window for the
-[supported H.264 Annex B IDR subset](h264.md):
+[supported H.264 Annex B I/P subset](h264.md):
 
 ```
 lamp-cli.exe --video-play file.h264
@@ -10,7 +10,7 @@ lamp-cli.exe --video-play file.h264
 Space pauses or resumes, `.` advances one picture while paused, and Esc or Q
 closes the window. At the end, the last picture stays visible and Space replays
 the file. The audio-library window remains separate. Video containers, audio,
-seeking, ordinary P/B reference pictures and other video codecs are not yet
+seeking, B pictures, broader H.264 profiles and other video codecs are not yet
 connected to this path.
 
 ## Image path
@@ -19,7 +19,7 @@ Original assembly in `src/win/video_present.s` uses the decoder's default
 hardware D3D11 device, an NV12 video-processor input view, an owned BGRA8 output
 texture and a two-buffer flip-discard HWND swapchain. Normal playback keeps
 pixels on the GPU. A GPU event query completes before the caller can reuse the
-decoder's single output slice; retries do not enqueue duplicate blits or copies.
+decoder's selected output slice; retries do not enqueue duplicate blits or copies.
 Present uses `DO_NOT_WAIT`; busy operations return `E_PENDING` to the message
 loop. There is no alternate-adapter or software fallback.
 
@@ -68,7 +68,12 @@ Ctrl+C flag at most every 250 ms while idle. No audio device is opened. Closing
 releases presentation resources before destroying the owned window. The API
 cleans up only its own HWND/class and preserves a host's WM_QUIT message.
 
-## Verification
+The [reference-picture extension](h264-references.md) adds retained decoder
+surfaces and switches input views after the preceding draw completes. Its
+[current presentation report](../reports/h264-reference-present-verification.json)
+checks changing P pictures and reference-dependent pause/step/replay.
+
+## Recorded initial verification
 
 The [native Windows report](../reports/video-present-windows-verification.json)
 records nine encoded inputs at two target sizes: four chromatic range/matrix

@@ -198,7 +198,8 @@ def main():
         controls = [
             ('ignore-small-buffer', '    cmp [rbx+WV_BUFFER_SIZE], eax\n    jb .Lwv_decode_short',
              '    cmp [rbx+WV_BUFFER_SIZE], eax\n    nop'),
-            ('skip-release', '    call [rax+16]', '    nop'),
+            ('skip-release', '    mov qword ptr [rbx+rdi], 0\n    mov rax, [rcx]\n    call [rax+16]',
+             '    mov qword ptr [rbx+rdi], 0\n    mov rax, [rcx]\n    nop'),
             ('repeat-copy', '    cmp dword ptr [rbx+WV_COPY_PENDING], 0\n    jne .Lwv_read_map',
              '    cmp dword ptr [rbx+WV_COPY_PENDING], 0\n    nop'),
             ('blocking-map', '    mov qword ptr [rsp+32], 0x100000', '    mov qword ptr [rsp+32], 0'),
@@ -216,11 +217,11 @@ def main():
                                 '-defsym=WINDOWS=1', '-I', ROOT/'src', '-I', ROOT/'src/win', path, '-o', control_obj], check=True)
             else:
                 def wsl_path(x):
-                    s = str(x.resolve())
+                    s = str(x.absolute())
                     return '/mnt/'+s[0].lower()+s[2:].replace('\\', '/')
                 toolchain = ROOT/'build/toolchain/root/usr/lib'
                 assembler = toolchain/'llvm-18/bin/llvm-mc'
-                assert assembler.is_file(), 'Controls need llvm-mc on PATH or the local WSL toolchain.'
+                assert assembler.parent.is_dir(), 'Controls need llvm-mc on PATH or the local WSL toolchain.'
                 subprocess.run(['wsl', '-d', 'Ubuntu', '--', 'env',
                                 'LD_LIBRARY_PATH='+wsl_path(toolchain/'x86_64-linux-gnu'), wsl_path(assembler),
                                 '-triple=x86_64-pc-windows-msvc', '-filetype=obj', '-defsym=WINDOWS=1',

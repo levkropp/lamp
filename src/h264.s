@@ -1,4 +1,4 @@
-# Original bounded Annex B H.264 IDR frontend. MIT. No software codec library.
+# Original bounded Annex B H.264 I/P frontend. MIT. No software codec library.
 # Syntax: ITU-T H.264 (08/2024); native DXVA metadata layout: Windows SDK.
 .include "lamp.inc"
 .include "h264.inc"
@@ -372,4 +372,5 @@ LOCALFN hp_nal
 ENDFN hp_nal
 
 .include "h264_headers.inc"
+.include "h264_dpb.inc"
 .include "h264_frames.inc"

@@ -1,4 +1,4 @@
-# Original H.264 Baseline IDR header parsing. Included by h264.s only.
+# Original H.264 Baseline I/P header parsing. Included by h264.s only.
 RODATA
 .p2align 2
 hp_sars: .short 0,0, 1,1, 12,11, 10,11, 16,11, 40,33, 24,11, 20,11
@@ -31,7 +31,7 @@ LOCALFN hp_sps
     add dword ptr [rbx+HP_POC_BITS], 4
 .Lhp_sps_refs:
     HP_UE HP_REFS,16,.Lhp_sps_bad
-    HP_BITS 1,-1,1,.Lhp_sps_bad # gaps flag; no inter-frame pictures accepted
+    HP_BITS 1,-1,1,.Lhp_sps_bad # gaps flag parsed; inferred missing pictures reject
     HP_UE HP_WIDTH,255,.Lhp_sps_unsupported
     inc dword ptr [rbx+HP_WIDTH]
     shl dword ptr [rbx+HP_WIDTH], 4
@@ -290,7 +290,10 @@ ENDFN hp_pps
 
 LOCALFN hp_slice
     push rbx
-    sub rsp, 32
+    push rsi
+    push rdi
+    push r12
+    sub rsp, 40
     mov rbx, rcx
     call hp_header
     HP_UE HP_TEMP_MB,65535,.Lhp_slice_bad
@@ -300,11 +303,23 @@ LOCALFN hp_slice
     cmp eax, edx
     jae .Lhp_slice_bad
     HP_UE -1,9,.Lhp_slice_bad
+    cmp eax, 5
+    jb .Lhp_slice_type
+    sub eax, 5
+.Lhp_slice_type:
+    mov [rbx+HP_TEMP_TYPE], eax
+    test eax, eax
+    jz .Lhp_slice_type_ok
     cmp eax, 2
-    je .Lhp_slice_type_ok
-    cmp eax, 7
     jne .Lhp_slice_unsupported
 .Lhp_slice_type_ok:
+    cmp dword ptr [rbx+HP_TEMP_NAL], 5
+    jne .Lhp_slice_pps
+    cmp dword ptr [rbx+HP_TEMP_REF], 0
+    je .Lhp_slice_bad
+    cmp eax, 2
+    jne .Lhp_slice_bad
+.Lhp_slice_pps:
     HP_UE HP_TEMP_PPS,255,.Lhp_slice_bad
     cmp eax, [rbx+HP_PPS_ID]
     jne .Lhp_slice_unsupported
@@ -313,19 +328,121 @@ LOCALFN hp_slice
     call hp_bits
     cmp dword ptr [rbx+HP_ERROR], 0
     jne .Lhp_slice_bad
+    mov [rbx+HP_TEMP_NUM], eax
+    mov dword ptr [rbx+HP_TEMP_IDR], 0
+    cmp dword ptr [rbx+HP_TEMP_NAL], 5
+    jne .Lhp_slice_poc
     test eax, eax
     jnz .Lhp_slice_bad         # IDR frame_num must0
     HP_UE HP_TEMP_IDR,65535,.Lhp_slice_bad
+.Lhp_slice_poc:
     mov dword ptr [rbx+HP_TEMP_POC], 0
     cmp dword ptr [rbx+HP_POC_TYPE], 0
-    jne .Lhp_slice_marking
+    jne .Lhp_slice_prediction
     mov rcx, rbx
     mov edx, [rbx+HP_POC_BITS]
     call hp_bits
     mov [rbx+HP_TEMP_POC], eax
+.Lhp_slice_prediction:
+    cmp dword ptr [rbx+HP_TEMP_TYPE], 0
+    jne .Lhp_slice_marking
+    mov eax, [rbx+HP_L0]
+    mov [rbx+HP_TEMP_ACTIVE], eax
+    HP_BITS 1,-1,1,.Lhp_slice_bad
+    test eax, eax
+    jz .Lhp_slice_active
+    HP_UE HP_TEMP_ACTIVE,15,.Lhp_slice_bad
+.Lhp_slice_active:
+    cmp dword ptr [rbx+HP_TEMP_ACTIVE], 15
+    ja .Lhp_slice_unsupported
+    HP_BITS 1,-1,1,.Lhp_slice_bad # ref_pic_list_modification_flag_l0
+    test eax, eax
+    jz .Lhp_slice_marking
+    xor r12d, r12d
+.Lhp_slice_list_mod:
+    HP_UE -1,3,.Lhp_slice_bad
+    cmp eax, 3
+    je .Lhp_slice_marking
+    inc r12d
+    cmp r12d, 32
+    ja .Lhp_slice_unsupported
+    cmp eax, 2
+    je .Lhp_slice_list_long
+    HP_UE -1,65535,.Lhp_slice_bad
+    mov edx, eax
+    mov ecx, [rbx+HP_FRAME_BITS]
+    mov eax, 1
+    shl eax, cl
+    cmp edx, eax
+    jae .Lhp_slice_bad
+    jmp .Lhp_slice_list_mod
+.Lhp_slice_list_long:
+    HP_UE -1,15,.Lhp_slice_bad
+    jmp .Lhp_slice_list_mod
 .Lhp_slice_marking:
+    mov dword ptr [rbx+HP_TEMP_MMCO_COUNT], 0
+    mov dword ptr [rbx+HP_TEMP_ADAPT], 0
+    mov dword ptr [rbx+HP_TEMP_LONG], 0
+    cmp dword ptr [rbx+HP_TEMP_REF], 0
+    je .Lhp_slice_qp
+    cmp dword ptr [rbx+HP_TEMP_NAL], 5
+    jne .Lhp_slice_adaptive
     HP_BITS 1,-1,1,.Lhp_slice_bad # no_output_of_prior_pics_flag
-    HP_BITS 1,-1,0,.Lhp_slice_unsupported # no long-term references
+    HP_BITS 1,HP_TEMP_LONG,1,.Lhp_slice_bad
+    jmp .Lhp_slice_qp
+.Lhp_slice_adaptive:
+    HP_BITS 1,HP_TEMP_ADAPT,1,.Lhp_slice_bad
+    test eax, eax
+    jz .Lhp_slice_qp
+    xor edi, edi
+    lea rsi, [rbx+HP_TEMP_MMCO]
+.Lhp_slice_mmco:
+    HP_UE -1,6,.Lhp_slice_bad
+    test eax, eax
+    jz .Lhp_slice_mmco_done
+    cmp edi, 64
+    jae .Lhp_slice_unsupported
+    mov r12d, eax
+    mov [rsi], eax
+    mov qword ptr [rsi+4], 0
+    cmp eax, 1
+    je .Lhp_slice_difference
+    cmp eax, 3
+    jne .Lhp_slice_long_pic
+.Lhp_slice_difference:
+    HP_UE -1,65535,.Lhp_slice_bad
+    mov [rsi+4], eax
+    mov edx, eax
+    mov ecx, [rbx+HP_FRAME_BITS]
+    mov eax, 1
+    shl eax, cl
+    cmp edx, eax
+    jae .Lhp_slice_bad
+.Lhp_slice_long_pic:
+    cmp r12d, 2
+    jne .Lhp_slice_max_long
+    HP_UE -1,15,.Lhp_slice_bad
+    mov [rsi+4], eax
+.Lhp_slice_max_long:
+    cmp r12d, 4
+    jne .Lhp_slice_long_index
+    HP_UE -1,16,.Lhp_slice_bad
+    mov [rsi+4], eax
+.Lhp_slice_long_index:
+    cmp r12d, 3
+    je .Lhp_slice_index
+    cmp r12d, 6
+    jne .Lhp_slice_mmco_next
+.Lhp_slice_index:
+    HP_UE -1,15,.Lhp_slice_bad
+    mov [rsi+8], eax
+.Lhp_slice_mmco_next:
+    inc edi
+    add rsi, 12
+    jmp .Lhp_slice_mmco
+.Lhp_slice_mmco_done:
+    mov [rbx+HP_TEMP_MMCO_COUNT], edi
+.Lhp_slice_qp:
     HP_SE -1,-51,51,.Lhp_slice_bad
     add eax, [rbx+HP_QP]
     add eax, 26
@@ -361,7 +478,10 @@ LOCALFN hp_slice
 .Lhp_slice_zero:
     xor eax, eax
 .Lhp_slice_return:
-    add rsp, 32
+    add rsp, 40
+    pop r12
+    pop rdi
+    pop rsi
     pop rbx
     ret
 ENDFN hp_slice

@@ -12,7 +12,7 @@
 #include <unistd.h>
 #define ABI __attribute__((ms_abi))
 #endif
-enum { HC_CTX=12416, HC_ERROR=56, HC_FRAMES=48, HC_DESC=328 };
+enum { HC_CTX=16384, HC_ERROR=56, HC_FRAMES=48, HC_DESC=328 };
 typedef struct { unsigned char a[64],ctx[HC_CTX],b[64]; } Guarded;
 typedef struct { const void *picture,*matrix,*bits; uint32_t bytes,pad; const void *slices; uint32_t count,pad2; } Frame;
 extern int ABI h264_open(void*,const void*,uint64_t,const volatile uint32_t*);
@@ -35,9 +35,10 @@ static void frame_check(Guarded *g) {
     for(i=0;i<f.count;++i) {
         const unsigned char *s=(const unsigned char*)f.slices+i*10,*p=(const unsigned char*)f.bits;
         uint32_t n=u32(s+4); CHECK(u32(s)==end && n>4 && n<=f.bytes-end); CHECK(s[8]==0 && s[9]==0);
-        CHECK(!p[end] && !p[end+1] && p[end+2]==1 && (p[end+3]&31)==5); end+=n;
+        CHECK(!p[end] && !p[end+1] && p[end+2]==1 && ((p[end+3]&31)==5 || (p[end+3]&31)==1)); end+=n;
     }
-    CHECK(end==f.bytes); for(i=16;i<32;++i)CHECK(((unsigned char*)f.picture)[i]==255);
+    CHECK(end==f.bytes); CHECK(((unsigned char*)f.picture)[4]<=16);
+    for(i=16;i<32;++i)CHECK(((unsigned char*)f.picture)[i]==255 || ((((unsigned char*)f.picture)[i]&127)<=16 && (((unsigned char*)f.picture)[i]&127)!=((unsigned char*)f.picture)[4]));
     for(i=0;i<224;++i)CHECK(((unsigned char*)f.matrix)[i]==16);
 }
 static int scan(const unsigned char *data,size_t bytes,FILE *out,int cancel_after_frame) {
