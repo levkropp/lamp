@@ -116,9 +116,9 @@ Reports: [Windows](../reports/video-sync-windows-verification.json),
 The elapsed oracle times measure a component test, not frame latency, playback
 CPU use, wakeups, power, GPU cost or an advantage over another player.
 
-An unintegrated [Windows hardware backend](windows-video.md) now produces checked
-H.264 IDR images from test metadata. Next work is an assembly file/frame producer,
-timestamped demux integration, GPU presentation and a real audible-clock adapter.
+The [Windows file commands](h264.md) now use an assembly Annex B frame producer
+and hardware backend to export checked H.264 IDR images. Next work is timestamped
+demux integration, GPU presentation and a real audible-clock adapter.
 H.264, HEVC, VP9 and AV1 remain the
 priority codecs. Reference images, actual mixed-media sync/seek fixtures, hardware
 profiles/fallback behavior, color/aspect/rotation, deinterlacing, HDR/tone mapping

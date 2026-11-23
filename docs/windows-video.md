@@ -1,12 +1,13 @@
 # Windows hardware video backend
 
-This is an **unintegrated development component**, not video playback support.
+This backend now feeds the experimental [Windows file check/export commands](h264.md).
 The assembly module `src/win/video.s` submits H.264 IDR pictures directly to
-Direct3D 11 and reads back decoded NV12 images. The normal Windows build assembles
-it alongside the player; it is not yet linked into the audio executables.
-The test-only Python fixture reader currently supplies parsed H.264/DXVA metadata.
-An assembly file parser, player controls, GPU presentation and the real audio
-clock/scheduler connection remain to be implemented.
+Direct3D 11 and reads back decoded NV12 images. The normal Windows build links it
+with the assembly Annex B frontend. Source builds can check files and export
+cropped NV12; window presentation, ordinary inter-frame pictures and the real
+audio clock/scheduler connection remain to be implemented. The earlier backend
+report below retains its component-only scope; the file integration has its own
+current reports.
 
 ## Current boundary
 
@@ -100,14 +101,14 @@ not playback benchmarks. Milestone 4 remains open.
 This is original assembly written against Windows SDK 10.0.26100 headers and
 Microsoft's [Direct3D 11 video interfaces](https://learn.microsoft.com/en-us/windows/win32/medfound/supporting-direct3d-11-video-decoding-in-media-foundation)
 and [DXVA H.264 specification](https://www.microsoft.com/en-us/download/details.aspx?id=11323).
-The test-only header reader follows [ITU-T H.264 (08/2024)](https://www.itu.int/rec/T-REC-H.264-202408-S/en).
+The assembly frontend and independent test-only header reader follow [ITU-T H.264 (08/2024)](https://www.itu.int/rec/T-REC-H.264-202408-S/en).
 Chromium's BSD-licensed [DXVA picture mapping](https://chromium.googlesource.com/chromium/src/+/135.0.7049.84/media/gpu/windows/d3d11_h264_accelerator.cc)
 and [D3D11 wrapper](https://chromium.googlesource.com/chromium/src/+/HEAD/media/gpu/windows/d3d11_video_decoder_wrapper.cc)
 were consulted for interoperability; no C/C++ implementation is linked or copied
 into the runtime. Copyrighted specifications are not redistributed.
 
-Next, replace the test metadata producer with bounded assembly H.264 parsing,
+The assembly frontend now supplies bounded file-derived decode metadata. Next,
 connect decoded surfaces to presentation and the [scheduler](video-sync.md), and
-add actual media timestamps. Then extend the decoded-picture buffer and profile
+add actual media timestamps. Extend the decoded-picture buffer and profile
 coverage for ordinary inter-frame H.264, followed by HEVC, VP9 and AV1. Their
 software fallbacks and other milestone requirements remain explicit roadmap work.

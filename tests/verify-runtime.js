@@ -3,7 +3,7 @@
 const fs=require('fs'),path=require('path');
 const root=path.resolve(__dirname,'..');
 const bin=process.argv[2]?path.resolve(process.argv[2]):path.join(root,'bin');
-const audio=['KERNEL32.dll','ole32.dll','SHELL32.dll','AVRT.dll'];
+const audio=['KERNEL32.dll','ole32.dll','SHELL32.dll','AVRT.dll','d3d11.dll'];
 const report=[];
 for(const [name,subsystem,expected]of[
  ['lamp-cli.exe',3,audio],['lamp.exe',2,[...audio,'USER32.dll','GDI32.dll','COMDLG32.dll','COMCTL32.dll','SHLWAPI.dll']]

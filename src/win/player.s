@@ -9,6 +9,7 @@
 .globl read_count, device_chosen, device_id, devices_callback
 .globl engine_exclusive
 .globl exit_code, underruns, endpoint_dry
+.globl equal_wide, print_text, print_number
 
 .equ RING_FRAMES, 262144
 .equ RING_MASK, RING_FRAMES - 1
@@ -39,6 +40,10 @@ usage: .ascii "LAMP 0.4.0-dev - Lev's Assembly Media Player"
       .ascii "       lamp-cli.exe --cover file.mp3 cover-image"
       .byte 13, 10
       .ascii "       lamp-cli.exe --list-devices"
+      .byte 13, 10
+      .ascii "       lamp-cli.exe --video-check file.h264"
+      .byte 13, 10
+      .ascii "       lamp-cli.exe --video-decode file.h264 output.nv12"
       .byte 13, 10
       .ascii "Several files play one after another without a gap, at the first file's rate;"
       .byte 13, 10
@@ -386,6 +391,14 @@ FN start
     mov [rip + argv], rax
     test rax, rax
     jz .Lshow_help
+    mov edx, [rip + argc]
+    mov rcx, rax
+    call win_video_cli                 # -1 means ordinary audio command
+    cmp eax, -1
+    je .Lstart_audio_options
+    mov ecx, eax
+    call ExitProcess
+.Lstart_audio_options:
     mov dword ptr [rip + arg_index], 1
     # Options before the files: one mode, --start TIME, --repeat, "--".
 .Lopt_next:

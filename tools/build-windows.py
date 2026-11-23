@@ -125,7 +125,7 @@ def main():
 
     common = [objects[p] for p in shared] + [objects[ROOT / f'src/win/{name}.s']
                                           for name in ('platform', 'player', 'output_notifications',
-                                                       'output_format', 'output_exclusive')]
+                                                       'output_format', 'output_exclusive', 'video', 'video_cli')]
 
     def executable(name, entry, subsystem, objs, res=None):
         command = [link, '/nologo', '/nodefaultlib', f'/entry:{entry}', f'/subsystem:{subsystem}',

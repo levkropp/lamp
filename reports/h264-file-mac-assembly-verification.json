@@ -1,0 +1,27 @@
+{
+  "result": "passed",
+  "scope": "Shared H264 frontend translation/assembly only; no native Mac execution, GPU, file playback or video support established.",
+  "target": "arm64-apple-macosx12.0.0",
+  "cpu": "apple-m1",
+  "sources": {
+    "src/h264.s": "a1456b95776839582d149fc7132eebb26b9183db34796a46f75ef0f4726c8bca",
+    "src/h264.inc": "4920bbd1d29bd2880dfdc006a1c88893b7828d469b65855ebd187ab5cf8b4d10",
+    "src/h264_headers.inc": "9153013c949d81a44bf0f8678d604df64d0e05ef9763d912ffd31a6865c3de3c",
+    "src/h264_frames.inc": "888bfc114ff26cd91b4d1b04c75aa3b883f33db856062e1e32cdf25bbc441c44",
+    "src/lamp.inc": "d79c75543ab0d78863010b32e46faf23fda5b9cb54ec624e9dce0acfcabf03e6",
+    "tools/arm64.py": "f8abd01ad67063451181e0adc66e72b2a445ebe9a7b159f7b88ac52b79bdadc2",
+    "tools/arm64_lamp.py": "37e4a515283ef441f9d1ee647377716efbe0d6a3aae27ef7c62faf53118f35d0"
+  },
+  "translated_sha256": "4c8cd68c82600c2029d19effe530d88bcfcdc53d308d55913b7609d8da48684a",
+  "object_sha256": "2d047b40f542e94d6c180aa7831daceec96a21af2ffa67807801da9e26645b53",
+  "object_bytes": 11592,
+  "git_source_sha256": {
+    "src/h264.s": "a1456b95776839582d149fc7132eebb26b9183db34796a46f75ef0f4726c8bca",
+    "src/h264.inc": "4920bbd1d29bd2880dfdc006a1c88893b7828d469b65855ebd187ab5cf8b4d10",
+    "src/h264_headers.inc": "9153013c949d81a44bf0f8678d604df64d0e05ef9763d912ffd31a6865c3de3c",
+    "src/h264_frames.inc": "888bfc114ff26cd91b4d1b04c75aa3b883f33db856062e1e32cdf25bbc441c44",
+    "src/lamp.inc": "d79c75543ab0d78863010b32e46faf23fda5b9cb54ec624e9dce0acfcabf03e6",
+    "tools/arm64.py": "f8abd01ad67063451181e0adc66e72b2a445ebe9a7b159f7b88ac52b79bdadc2",
+    "tools/arm64_lamp.py": "37e4a515283ef441f9d1ee647377716efbe0d6a3aae27ef7c62faf53118f35d0"
+  }
+}
