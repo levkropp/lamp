@@ -12,6 +12,7 @@
 .globl track_unit_scale, track_start_units, track_end_units, track_edit
 .globl track_start_trim_ns, track_start_trim_ns_active
 .globl track_seek_preroll_ns
+.globl track_packets, track_raw_total, track_pcm_prepared
 
 .equ TK_PCM, 1
 .equ TK_FLAC, 2
@@ -46,6 +47,7 @@ track_config_bytes: .long 0
 track_pcm_channels: .long 0
 track_pcm_bits: .long 0
 track_pcm_flags: .long 0
+track_pcm_prepared: .long 0           # validated native WAVE PCM state, internal
 track_start_trim: .quad 0            # raw samples before the presented start
 track_start_trim_ns: .quad 0         # container delay, overriding codec default when active
 track_start_trim_ns_active: .long 0
@@ -124,6 +126,7 @@ FN track_close
     jne .Ltk_close_done
     call speex_track_close
 .Ltk_close_done:
+    mov dword ptr [rip + track_pcm_prepared], 0
     mov dword ptr [rip + track_active], 0
     mov dword ptr [rip + track_codec], 0
     mov qword ptr [rip + track_count], 0
@@ -534,10 +537,17 @@ FN track_finish
     je .Ltk_open_adpcm
     cmp eax, TK_SPEEX
     je .Ltk_open_speex
+    cmp dword ptr [rip + track_pcm_prepared], 0
+    jne .Ltk_open_pcm_prepared
     mov ecx, [rip + track_pcm_channels]
     mov edx, [rip + track_pcm_bits]
     mov r8d, [rip + track_pcm_flags]
     call pcm_track_open
+    jmp .Ltk_opened
+.Ltk_open_pcm_prepared:
+    # wav_track_packetize keeps the native reader's validated precision,
+    # speaker mask and mixing state. Ordinary container PCM initializes it.
+    mov eax, 1
     jmp .Ltk_opened
 .Ltk_open_alac:
     call alac_track_open
@@ -809,10 +819,7 @@ FN track_read
     jae .Ltk_read_done
     cmp dword ptr [rip + decode_error], 0
     jne .Ltk_read_done
-    mov eax, [rip + track_used]
-    cmp eax, [rip + track_available]
-    jb .Ltk_read_copy
-    # Decode the next packet.
+    # Cancellation also stops already decoded PCM, before copying it out.
     mov rax, [rip + ogg_cancel_ptr]
     test rax, rax
     jz .Ltk_read_not_cancelled
@@ -821,6 +828,10 @@ FN track_read
     mov dword ptr [rip + decode_error], 61
     jmp .Ltk_read_done
 .Ltk_read_not_cancelled:
+    mov eax, [rip + track_used]
+    cmp eax, [rip + track_available]
+    jb .Ltk_read_copy
+    # Decode the next packet.
     mov rax, [rip + track_next]
     cmp rax, [rip + track_count]
     jae .Ltk_read_done

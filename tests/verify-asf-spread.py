@@ -17,6 +17,7 @@ import struct
 import subprocess
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+import asf_clock_model
 from lamp_test import (ROOT, Failure, build_lamp, build_oracles, exe, ffmpeg,
                        ffmpeg_version, lamp_cli, main_guard, out_dir, run,
                        scratch, stereo_view, write_report)
@@ -48,16 +49,24 @@ def spread(data, span, packet, chunk):
                     for col in range(span) for row in range(rows))
 
 def packets(data, span, packet, chunk, ident=1, *, fragmented=True, variable=False, compressed=False,
-            clock_rate=0, clock_frames=1024):
+            clock_rate=0, clock_frames=1024, fmt=None):
     group = span*packet
     if len(data) % group: raise ValueError('Incomplete media object')
     coded = [spread(data[i:i+group], span, packet, chunk) for i in range(0, len(data), group)]
+    if clock_rate:
+        times = [(k*clock_frames*1000+clock_rate//2)//clock_rate for k in range(len(coded))]
+    elif fmt is not None:
+        rate = struct.unpack_from('<I',fmt,4)[0]
+        times = asf_clock_model.object_times(asf_clock_model.units(fmt,data),list(range(0,len(data),group)),rate)
+    else: times = [0]*len(coded)
     result = []
     if compressed:
         if group > 255: raise ValueError('Compressed object length is one byte')
         for i in range(0, len(coded), 3):
             payload = b''.join(bytes([len(d)]) + d for d in coded[i:i+3])
-            result.append(writer.packet([writer.payload(payload, i&255, stream=ident, replic=1)], physical=1024))
+            delta=times[i+1]-times[i] if i+1<len(times) else 0
+            if i+2<len(times) and times[i+2]!=times[i]+2*delta:raise ValueError('Compressed fixture needs a constant clock delta')
+            result.append(writer.packet([writer.payload(payload, i&255, offset=times[i], stream=ident, replic=1, delta=delta)], physical=1024))
         return result
     for k, data in enumerate(coded):
         off = 0
@@ -66,7 +75,7 @@ def packets(data, span, packet, chunk, ident=1, *, fragmented=True, variable=Fal
             size = cuts.pop(0) if cuts else min(400, len(data)-off)
             piece = data[off:off+size]
             physical = (512 if k%2 else 768) if variable else 512
-            time = (k*clock_frames*1000+clock_rate//2)//clock_rate if clock_rate else 0
+            time = times[k]
             item = writer.payload(piece, (254+k)&255, off, len(data), stream=ident, replic=8 if not off else 0, time=time)
             result.append(writer.packet([item], physical=physical, replic=1 if not off else 0))
             off += len(piece)
@@ -79,7 +88,8 @@ def wave(fmt, data):
 
 def writer_hash():
     return digest(Path(__file__).read_bytes().split(b'def main():')[0] +
-                  Path(writer.__file__).read_bytes().split(b'def main():')[0])
+                  Path(writer.__file__).read_bytes().split(b'def main():')[0] +
+                  Path(asf_clock_model.__file__).read_bytes())
 
 def prepare(work):
     cases, rejects = [], []
@@ -91,6 +101,7 @@ def prepare(work):
         raw = raw or name+'.wav'
         if not (work/raw).exists(): (work/raw).write_bytes(wave(fmt, data))
         framing = {k:options.pop(k) for k in ('fragmented','variable','compressed') if k in options}
+        framing['fmt'] = fmt
         if struct.unpack_from('<H',fmt)[0] == 0xff:
             framing['clock_rate'] = struct.unpack_from('<I',fmt,4)[0]
         physical = 1024 if framing.get('compressed') else 512
@@ -147,7 +158,7 @@ def prepare(work):
     for name,span,packet,chunk,opts in [
         ('legacy-zero-length.asf',2,768,3,dict(declared=False)),
         ('odd-chunks.asf',3,256,1,{}),('wide-span.asf',128,384,3,{}),
-        ('compressed-objects.asf',2,64,4,dict(compressed=True)),
+        ('compressed-objects.asf',2,96,4,dict(compressed=True)),
         ('variable-packets.asf',3,256,4,dict(variable=True)),
         ('span-one.asf',1,768,3,{}),('one-row.asf',2,768,768,{}),
         ('seven-byte-record.asf',2,768,3,dict(silence=b'',comparator=False,
@@ -172,7 +183,7 @@ def prepare(work):
             count=2,selected=2,comparator=False,streams=[stream(fmt,2,768,3,correction=bytes(16)),second])
     otherfmt,otherpcm = writer.source(work/'other.wav',rate=48000,frames=12288,seed=85)
     streams = [stream(fmt,2,768,3),stream(otherfmt,3,256,4,2)]
-    a,b = packets(pcm,2,768,3),packets(otherpcm,3,256,4,2)
+    a,b = packets(pcm,2,768,3,fmt=fmt),packets(otherpcm,3,256,4,2,fmt=otherfmt)
     interleaved = [p for i in range(max(len(a),len(b))) for p in (a[i:i+1]+b[i:i+1])]
     for choice in (0,1,2):
         name = f'multitrack-{choice}.asf'; (work/name).write_bytes(writer.asf(streams,interleaved))
@@ -186,7 +197,7 @@ def prepare(work):
     add('metadata-chapters.asf',fmt,pcm,2,768,3,raw='packet-source.wav',extra=extra)
 
     def reject(name, streams_, payloads=None, error=101, choice=0, physical=512):
-        (work/name).write_bytes(writer.asf(streams_,payloads or packets(pcm,2,768,3),physical))
+        (work/name).write_bytes(writer.asf(streams_,payloads or packets(pcm,2,768,3,fmt=fmt),physical))
         rejects.append(dict(name=name,error=error,choice=choice))
     for name,s,p,c in [('zero-span',0,768,3),('zero-packet',2,0,3),('zero-chunk',2,768,0),
                        ('indivisible',2,767,3),('no-rows',2,2,3)]:
@@ -198,7 +209,7 @@ def prepare(work):
     reject('short-advertised-record.asf',[stream(fmt,2,768,3,ec_length=6)])
     reject('error-length-past-end.asf',[stream(fmt,2,768,3,ec_length=65535)],error=100)
     reject('unavailable-selected.asf',[stream(fmt,2,768,3,correction=bytes(16)),second],
-           packets(pcm,2,768,3,2),choice=1)
+           packets(pcm,2,768,3,2,fmt=fmt),choice=1)
     base_stream = [stream(fmt,2,768,3)]
     for name,items in [
         ('short-object',[writer.payload(pcm[:1535])]),
@@ -207,7 +218,7 @@ def prepare(work):
         ('fragment-gap',[writer.payload(pcm[:128],size=1536),writer.payload(pcm[128:256],offset=129,size=1536)]),
         ('duplicate-fragment',[writer.payload(pcm[:128],size=1536),writer.payload(pcm[:128],offset=0,size=1536)])]:
         reject(name+'.asf',base_stream,[writer.packet([item],physical=2048) for item in items],error=100,physical=2048)
-    bad = packets(pcm,2,768,3)
+    bad = packets(pcm,2,768,3,fmt=fmt)
     bad.append(writer.packet([writer.payload(b'abcd',number=30)]))
     reject('failure-after-transform.asf',base_stream,bad,error=100)
     names = {c['name'] for c in cases} | {c['raw'] for c in cases} | {c['name']+'.ffmpeg.f32' for c in cases if c['ffmpeg']} | {c['name'] for c in rejects}
@@ -224,7 +235,7 @@ def main():
     if manifest['writer_sha256'] != writer_hash(): raise Failure('Fixture writer changed; prepare again')
     for name,sha in manifest['hashes'].items():
         if digest((work/name).read_bytes()) != sha: raise Failure('Fixture changed: '+name)
-    names = {'asf-spread-oracle':'asf-spread-oracle.c','asf-seek-oracle':'asf-seek-oracle.c',
+    names = {'decoder-bounded-oracle':'decoder-bounded-oracle.c','asf-spread-oracle':'asf-spread-oracle.c','asf-seek-oracle':'asf-seek-oracle.c',
              'seek-oracle':'seek-oracle.c','chain-oracle':'chain-oracle.c',
              'track-catalog-oracle':'track-catalog-oracle.c','asf-boundary-oracle':'asf-boundary-oracle.c'}
     wine = '--wine-only' in sys.argv
@@ -290,8 +301,8 @@ def main():
         data = (work/name).read_bytes(); decoded = rejected = seeks = 0
         for i in range(50 if wine else 500):
             mutation.write_bytes(robustness.mutate(data,rng))
-            seek = ['--start',f'{rng.random()*0.4:.6f}'] if i%4==0 else []
-            args = [str(a) for a in [*cli,'--check',*seek,mutation]]
+            seek = [round(rng.random()*400000)] if i%4==0 else []
+            args = [str(a) for a in [*command('decoder-bounded-oracle'),mutation,*seek]]
             if wine:
                 result = robustness.wine_run(args,env=env,timeout=30)
             else:
@@ -299,8 +310,9 @@ def main():
                     preexec_fn=robustness.limit_memory if robustness.resource else None)
             if result.returncode not in (0,2): raise Failure(name+f': mutation {i} exited {result.returncode}: '+str(result.stdout[-1024:]))
             decoded += result.returncode==0; rejected += result.returncode==2; seeks += bool(seek)
-        checks.append(dict(test=name+' full decoder mutations',result='no crash, hang or runaway allocation',
+        checks.append(dict(test=name+' bounded full decoder mutations',result='no crash, hang or runaway allocation',
                            mutations=decoded+rejected,decoded=decoded,rejected=rejected,seeks=seeks,seed=9431,
+                           max_read_calls=256,frames_per_read=2048,midpoint_seek_call=128,
                            address_space_limit_bytes=None if wine or not robustness.resource else robustness.LIMIT))
         print(name+': full decoder mutations passed',flush=True)
     path = work/'legacy-zero-length.asf'
@@ -325,9 +337,9 @@ def main():
             checks.append(dict(test=name+' published negative control',result='rejected before, exact PCM after',
                                baseline_commit='a300968e926e216bba30b48cedeeded9d0f46c04',baseline_cli_sha256=digest(baseline.read_bytes()),
                                baseline_report_sha256=digest(report.read_bytes())))
-    sources = ['src/asf.s','src/asf_spread.inc','src/avi.s','src/track.s','src/mpegts.s','src/decoder.s',
+    sources = ['src/asf.s','src/asf_views.inc','src/track_time.s','src/asf_spread.inc','src/avi.s','src/track.s','src/mpegts.s','src/decoder.s','tests/asf_clock_model.py',
                'tests/verify-asf-spread.py','tests/asf-spread-oracle.c','tests/asf-seek-oracle.c','tests/asf-boundary-oracle.c',
-               'tests/seek-oracle.c','tests/chain-oracle.c','tests/track-catalog-oracle.c','tests/verify-asf.py','tests/verify-robustness.py']
+               'tests/decoder-bounded-oracle.c','tests/seek-oracle.c','tests/chain-oracle.c','tests/track-catalog-oracle.c','tests/verify-asf.py','tests/verify-robustness.py']
     write_report('asf-spread-wine' if wine else 'asf-spread',dict(result='passed',checks=checks,
                  fixture_hashes=manifest['hashes'],fixture_ffmpeg=manifest['fixture_ffmpeg'],runtime_ffmpeg=ffmpeg_version(),
                  runtime_platform=platform.platform(),runtime_sources={n:digest((ROOT/n).read_bytes()) for n in sources},

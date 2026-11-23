@@ -67,6 +67,12 @@ asf_payload_replic: .long 0
 asf_payload_size: .long 0
 asf_payload_time: .long 0
 asf_payload_delta: .long 0
+asf_revisit: .long 0
+asf_audio_offset: .quad 0
+asf_audio_bytes: .quad 0
+asf_data_begin: .quad 0
+asf_data_end: .quad 0
+asf_view_position: .quad 0
 
 .text
 # RCX=data, RDX=GUID -> ZF=1 if equal. Caller bounds the sixteen bytes.
@@ -402,8 +408,38 @@ LOCALFN asf_clock_ns
     ret
 ENDFN asf_clock_ns
 
+# Current logical gather position, unchanged during the clock-only replay.
+LOCALFN asf_position
+    mov rax, [rip + mts_bytes]
+    cmp dword ptr [rip + asf_revisit], 0
+    cmovne rax, [rip + asf_view_position]
+    ret
+ENDFN asf_position
+
+# RCX=bytes, EDX=count -> EAX=1/0. Replay advances inside the original
+# gathered audio without copying or restoring spreading a second time.
+LOCALFN asf_append
+    cmp dword ptr [rip + asf_revisit], 0
+    je mts_append
+    mov eax, edx
+    add rax, [rip + asf_view_position]
+    jc .Lasf_append_bad
+    mov rdx, [rip + asf_audio_offset]
+    add rdx, [rip + asf_audio_bytes]
+    cmp rax, rdx
+    ja .Lasf_append_bad
+    mov [rip + asf_view_position], rax
+    mov eax, 1
+    ret
+.Lasf_append_bad:
+    xor eax, eax
+    ret
+ENDFN asf_append
+
 # -> EAX=1/0. Restores spreading, then publishes a completed AAC packet.
 LOCALFN asf_complete
+    cmp dword ptr [rip + asf_revisit], 0
+    jne asf_view_complete
     push rsi
     push rdi
     sub rsp, 56
@@ -495,7 +531,7 @@ LOCALFN asf_fragment
     ja .Lasf_fragment_bad
     mov [rip + asf_object_size], eax
     mov dword ptr [rip + asf_object_have], 0
-    mov rax, [rip + mts_bytes]
+    call asf_position
     mov [rip + asf_object_start], rax
     mov dword ptr [rip + asf_pending], 1
     jmp .Lasf_fragment_append
@@ -523,7 +559,7 @@ LOCALFN asf_fragment
     ja .Lasf_fragment_bad
     mov rcx, rsi
     mov edx, ebx
-    call mts_append
+    call asf_append
     test eax, eax
     jz .Lasf_fragment_bad
     add [rip + asf_object_have], ebx
@@ -742,11 +778,11 @@ LOCALFN asf_packet
     cmp rdx, rax
     ja .Lasf_packet_bad
     mov [rsp + 56], edx
-    mov rax, [rip + mts_bytes]
+    call asf_position
     mov [rip + asf_object_start], rax
     mov [rip + asf_object_have], edx
     mov rcx, rsi
-    call mts_append
+    call asf_append
     test eax, eax
     jz .Lasf_packet_bad
     call asf_complete
@@ -805,6 +841,7 @@ FN asf_open
     mov qword ptr [rip + asf_preroll], 0
     mov qword ptr [rip + asf_time_offset], 0
     mov qword ptr [rip + asf_object_time], 0
+    mov dword ptr [rip + asf_revisit], 0
     lea rdx, [rip + asf_seen_ids]
     xor eax, eax
     mov ecx, 128
@@ -907,6 +944,10 @@ FN asf_open
 .Lasf_open_started:
     test eax, eax
     jz .Lasf_open_bad
+    mov [rip + asf_data_begin], rsi
+    mov [rip + asf_data_end], rdi
+    mov rax, [rip + mts_bytes]
+    mov [rip + asf_audio_offset], rax
     xor r12d, r12d
 .Lasf_open_packet:
     call asf_cancelled
@@ -930,6 +971,9 @@ FN asf_open
     cmp r12, [rip + asf_packets]
     jne .Lasf_open_bad
 .Lasf_open_finish:
+    mov rax, [rip + mts_bytes]
+    sub rax, [rip + asf_audio_offset]
+    mov [rip + asf_audio_bytes], rax
     cmp dword ptr [rip + asf_mode], 1
     je .Lasf_open_aac
     cmp dword ptr [rip + asf_mode], 2
@@ -943,6 +987,9 @@ FN asf_open
     mov rdx, rcx
     add rdx, [rip + mts_bytes]
     call adts_open
+    test eax, eax
+    jz .Lasf_open_bad
+    call asf_gathered_finish
     jmp .Lasf_open_return
 .Lasf_open_aac:
     mov rax, [rip + asf_fmt]
@@ -988,3 +1035,4 @@ ENDFN asf_open
 
 .include "asf_spread.inc"
 .include "asf_extended.inc"
+.include "asf_views.inc"

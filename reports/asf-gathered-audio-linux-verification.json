@@ -1,0 +1,2079 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "pcm_u8-1.asf",
+      "result": "exact",
+      "note": "FFmpeg ASF muxer, stream-copy WAVE comparison",
+      "stats": "codec=21 rate=44100 channels=1 bits=8 frames=44100 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1100 endpoint_dry=0",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 234543,
+        "maximum_discarded": 44100,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "raw_stream_cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 44100,
+        "leading_frames": 0
+      },
+      "continuous_seek_limit": null,
+      "ffmpeg_snr_db": 999,
+      "ffmpeg_peak_error": 0.0
+    },
+    {
+      "test": "pcm_s16le-1.asf",
+      "result": "exact",
+      "note": "FFmpeg ASF muxer, stream-copy WAVE comparison",
+      "stats": "codec=21 rate=44100 channels=1 bits=16 frames=44100 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=1008 endpoint_dry=0",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 234543,
+        "maximum_discarded": 44100,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "raw_stream_cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 44100,
+        "leading_frames": 0
+      },
+      "continuous_seek_limit": null,
+      "ffmpeg_snr_db": 999,
+      "ffmpeg_peak_error": 0.0
+    },
+    {
+      "test": "pcm_s16le-2.asf",
+      "result": "exact",
+      "note": "FFmpeg ASF muxer, stream-copy WAVE comparison",
+      "stats": "codec=21 rate=44100 channels=2 bits=16 frames=44100 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=1121 endpoint_dry=0",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 234543,
+        "maximum_discarded": 44100,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "raw_stream_cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 44100,
+        "leading_frames": 0
+      },
+      "continuous_seek_limit": null,
+      "ffmpeg_snr_db": 999,
+      "ffmpeg_peak_error": 0.0
+    },
+    {
+      "test": "pcm_s24le-2.asf",
+      "result": "exact",
+      "note": "FFmpeg ASF muxer, stream-copy WAVE comparison",
+      "stats": "codec=21 rate=44100 channels=2 bits=24 frames=44100 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=1163 endpoint_dry=0",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 234543,
+        "maximum_discarded": 44100,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "raw_stream_cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 44100,
+        "leading_frames": 0
+      },
+      "continuous_seek_limit": null,
+      "ffmpeg_snr_db": 999,
+      "ffmpeg_peak_error": 0.0
+    },
+    {
+      "test": "pcm_s32le-2.asf",
+      "result": "exact",
+      "note": "FFmpeg ASF muxer, stream-copy WAVE comparison",
+      "stats": "codec=21 rate=44100 channels=2 bits=32 frames=44100 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=1273 endpoint_dry=0",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 234543,
+        "maximum_discarded": 44100,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "raw_stream_cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 44100,
+        "leading_frames": 0
+      },
+      "continuous_seek_limit": null,
+      "ffmpeg_snr_db": 999,
+      "ffmpeg_peak_error": 0.0
+    },
+    {
+      "test": "pcm_f32le-2.asf",
+      "result": "exact",
+      "note": "FFmpeg ASF muxer, stream-copy WAVE comparison",
+      "stats": "codec=21 rate=44100 channels=2 bits=32 frames=44100 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=1016 endpoint_dry=0",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 234543,
+        "maximum_discarded": 44100,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "raw_stream_cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 44100,
+        "leading_frames": 0
+      },
+      "continuous_seek_limit": null,
+      "ffmpeg_snr_db": 999,
+      "ffmpeg_peak_error": 0.0
+    },
+    {
+      "test": "pcm_f64le-1.asf",
+      "result": "exact",
+      "note": "FFmpeg ASF muxer, stream-copy WAVE comparison",
+      "stats": "codec=21 rate=44100 channels=1 bits=64 frames=44100 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1009 endpoint_dry=0",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 234543,
+        "maximum_discarded": 44100,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "raw_stream_cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 44100,
+        "leading_frames": 0
+      },
+      "continuous_seek_limit": null,
+      "ffmpeg_snr_db": 999,
+      "ffmpeg_peak_error": 0.0
+    },
+    {
+      "test": "pcm_alaw-1.asf",
+      "result": "exact",
+      "note": "FFmpeg ASF muxer, stream-copy WAVE comparison",
+      "stats": "codec=21 rate=8000 channels=1 bits=8 frames=8000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=593 endpoint_dry=0",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 69662,
+        "maximum_discarded": 8000,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "raw_stream_cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 8000,
+        "leading_frames": 0
+      },
+      "continuous_seek_limit": null,
+      "ffmpeg_snr_db": 999,
+      "ffmpeg_peak_error": 0.0
+    },
+    {
+      "test": "pcm_alaw-2.asf",
+      "result": "exact",
+      "note": "FFmpeg ASF muxer, stream-copy WAVE comparison",
+      "stats": "codec=21 rate=8000 channels=2 bits=8 frames=8000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=695 endpoint_dry=0",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 69662,
+        "maximum_discarded": 8000,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "raw_stream_cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 8000,
+        "leading_frames": 0
+      },
+      "continuous_seek_limit": null,
+      "ffmpeg_snr_db": 999,
+      "ffmpeg_peak_error": 0.0
+    },
+    {
+      "test": "pcm_mulaw-2.asf",
+      "result": "exact",
+      "note": "FFmpeg ASF muxer, stream-copy WAVE comparison",
+      "stats": "codec=21 rate=8000 channels=2 bits=8 frames=8000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=639 endpoint_dry=0",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 69662,
+        "maximum_discarded": 8000,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "raw_stream_cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 8000,
+        "leading_frames": 0
+      },
+      "continuous_seek_limit": null,
+      "ffmpeg_snr_db": 999,
+      "ffmpeg_peak_error": 0.0
+    },
+    {
+      "test": "adpcm_ima_wav-1.asf",
+      "result": "exact",
+      "note": "FFmpeg ASF muxer, stream-copy WAVE comparison",
+      "stats": "codec=21 rate=44100 channels=1 bits=4 frames=44902 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=938 endpoint_dry=0",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 11,
+        "discarded_frames": 11601,
+        "maximum_discarded": 2041,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "raw_stream_cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 44902,
+        "leading_frames": 0
+      },
+      "continuous_seek_limit": null,
+      "ffmpeg_snr_db": 999,
+      "ffmpeg_peak_error": 0.0
+    },
+    {
+      "test": "adpcm_ima_wav-2.asf",
+      "result": "exact",
+      "note": "FFmpeg ASF muxer, stream-copy WAVE comparison",
+      "stats": "codec=21 rate=44100 channels=2 bits=4 frames=44748 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=1287 endpoint_dry=0",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 11,
+        "discarded_frames": 5583,
+        "maximum_discarded": 1017,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "raw_stream_cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 44748,
+        "leading_frames": 0
+      },
+      "continuous_seek_limit": null,
+      "ffmpeg_snr_db": 999,
+      "ffmpeg_peak_error": 0.0
+    },
+    {
+      "test": "adpcm_ms-1.asf",
+      "result": "exact",
+      "note": "FFmpeg ASF muxer, stream-copy WAVE comparison",
+      "stats": "codec=21 rate=44100 channels=1 bits=4 frames=44792 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=976 endpoint_dry=0",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 11,
+        "discarded_frames": 11661,
+        "maximum_discarded": 2036,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "raw_stream_cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 44792,
+        "leading_frames": 0
+      },
+      "continuous_seek_limit": null,
+      "ffmpeg_snr_db": 999,
+      "ffmpeg_peak_error": 0.0
+    },
+    {
+      "test": "adpcm_ms-2.asf",
+      "result": "exact",
+      "note": "FFmpeg ASF muxer, stream-copy WAVE comparison",
+      "stats": "codec=21 rate=44100 channels=2 bits=4 frames=44528 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=1020 endpoint_dry=0",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 11,
+        "discarded_frames": 5733,
+        "maximum_discarded": 1012,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "raw_stream_cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 44528,
+        "leading_frames": 0
+      },
+      "continuous_seek_limit": null,
+      "ffmpeg_snr_db": 999,
+      "ffmpeg_peak_error": 0.0
+    },
+    {
+      "test": "mp2-2.asf",
+      "result": "exact",
+      "note": "FFmpeg ASF muxer, stream-copy WAVE comparison",
+      "stats": "codec=3 rate=44100 channels=2 bits=0 frames=44928 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=1294 endpoint_dry=0",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 11,
+        "discarded_frames": 34365,
+        "maximum_discarded": 3456,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "raw_stream_cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 44928,
+        "leading_frames": 0
+      },
+      "continuous_seek_limit": null,
+      "ffmpeg_snr_db": 124.30211084721493,
+      "ffmpeg_peak_error": 7.152557373046875e-07
+    },
+    {
+      "test": "libmp3lame-2.asf",
+      "result": "exact",
+      "note": "FFmpeg ASF muxer, stream-copy WAVE comparison",
+      "stats": "codec=3 rate=44100 channels=2 bits=0 frames=46080 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=2134 endpoint_dry=0",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 5,
+        "discarded_frames": 86781,
+        "maximum_discarded": 10368,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "raw_stream_cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 46080,
+        "leading_frames": 0
+      },
+      "continuous_seek_limit": null,
+      "ffmpeg_snr_db": 124.82487115025427,
+      "ffmpeg_peak_error": 1.2218952178955078e-06
+    },
+    {
+      "test": "ac3-2.asf",
+      "result": "exact",
+      "note": "FFmpeg ASF muxer, stream-copy WAVE comparison",
+      "stats": "codec=11 rate=44100 channels=2 bits=0 frames=44544 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=1644 endpoint_dry=0",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "seeks": null,
+      "raw_stream_cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 44544,
+        "leading_frames": 0
+      },
+      "continuous_seek_limit": "AC-3 dither restarts after seek",
+      "ffmpeg_snr_db": 140.43684256534593,
+      "ffmpeg_peak_error": 1.1920928955078125e-07
+    },
+    {
+      "test": "aac-2.asf",
+      "result": "exact",
+      "note": "FFmpeg ASF muxer, stream-copy WAVE comparison",
+      "stats": "codec=0 rate=44100 channels=2 bits=0 frames=46080 underruns=0 decode_error=0 audio_error=0 elapsed_ms=4 cpu_us=2361 endpoint_dry=0",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 11,
+        "discarded_frames": 7933,
+        "maximum_discarded": 1024,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "raw_stream_cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 46080,
+        "leading_frames": 0
+      },
+      "continuous_seek_limit": null,
+      "ffmpeg_snr_db": 138.7673827365315,
+      "ffmpeg_peak_error": 1.7881393432617188e-07
+    },
+    {
+      "test": "pcm-6ch.asf",
+      "result": "exact",
+      "note": "extensible WAVEFORMATEX and existing stereo mixing",
+      "stats": "codec=21 rate=48000 channels=6 bits=24 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=2188 endpoint_dry=0",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 252093,
+        "maximum_discarded": 48000,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "raw_stream_cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 48000,
+        "leading_frames": 0
+      },
+      "continuous_seek_limit": null,
+      "ffmpeg_snr_db": 999,
+      "ffmpeg_peak_error": 0.0
+    },
+    {
+      "test": "pcm-8ch.asf",
+      "result": "exact",
+      "note": "extensible WAVEFORMATEX and existing stereo mixing",
+      "stats": "codec=21 rate=48000 channels=8 bits=24 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=4 cpu_us=2578 endpoint_dry=0",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 252093,
+        "maximum_discarded": 48000,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "raw_stream_cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 48000,
+        "leading_frames": 0
+      },
+      "continuous_seek_limit": null,
+      "ffmpeg_snr_db": 999,
+      "ffmpeg_peak_error": 0.0
+    },
+    {
+      "test": "ac3-dither-free.asf",
+      "result": "exact",
+      "note": "dither-free AC-3, exact continuous-output seeks",
+      "stats": "codec=11 rate=48000 channels=2 bits=0 frames=61440 underruns=0 decode_error=0 audio_error=0 elapsed_ms=4 cpu_us=2851 endpoint_dry=0",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 11,
+        "discarded_frames": 11517,
+        "maximum_discarded": 1536,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "raw_stream_cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 61440,
+        "leading_frames": 0
+      },
+      "continuous_seek_limit": null,
+      "ffmpeg_snr_db": 139.38388504365358,
+      "ffmpeg_peak_error": 2.288818359375e-05
+    },
+    {
+      "test": "pcm_s16le-video.asf",
+      "result": "exact",
+      "note": "WMV2 video skipped; interleaved packet payloads",
+      "stats": "codec=21 rate=44100 channels=2 bits=16 frames=44100 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=1158 endpoint_dry=0",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 234543,
+        "maximum_discarded": 44100,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "raw_stream_cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 44100,
+        "leading_frames": 0
+      },
+      "continuous_seek_limit": null,
+      "ffmpeg_snr_db": 999,
+      "ffmpeg_peak_error": 0.0
+    },
+    {
+      "test": "libmp3lame-video.asf",
+      "result": "exact",
+      "note": "WMV2 video skipped; interleaved packet payloads",
+      "stats": "codec=3 rate=44100 channels=2 bits=0 frames=46080 underruns=0 decode_error=0 audio_error=0 elapsed_ms=4 cpu_us=2629 endpoint_dry=0",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 5,
+        "discarded_frames": 86781,
+        "maximum_discarded": 10368,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "raw_stream_cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 46080,
+        "leading_frames": 0
+      },
+      "continuous_seek_limit": null,
+      "ffmpeg_snr_db": 124.99974546135607,
+      "ffmpeg_peak_error": 1.2516975402832031e-06
+    },
+    {
+      "test": "fields-1.asf",
+      "result": "exact",
+      "note": "independent ASF writer, known PCM",
+      "stats": "codec=21 rate=44100 channels=2 bits=16 frames=4410 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=759 endpoint_dry=0",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 45932,
+        "maximum_discarded": 4410,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "raw_stream_cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 4410,
+        "leading_frames": 0
+      },
+      "continuous_seek_limit": null,
+      "ffmpeg_snr_db": 999,
+      "ffmpeg_peak_error": 0.0
+    },
+    {
+      "test": "fields-2.asf",
+      "result": "exact",
+      "note": "independent ASF writer, known PCM",
+      "stats": "codec=21 rate=44100 channels=2 bits=16 frames=4410 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=805 endpoint_dry=0",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 45932,
+        "maximum_discarded": 4410,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "raw_stream_cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 4410,
+        "leading_frames": 0
+      },
+      "continuous_seek_limit": null,
+      "ffmpeg_snr_db": 999,
+      "ffmpeg_peak_error": 0.0
+    },
+    {
+      "test": "fields-3.asf",
+      "result": "exact",
+      "note": "independent ASF writer, known PCM",
+      "stats": "codec=21 rate=44100 channels=2 bits=16 frames=4410 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=619 endpoint_dry=0",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 45932,
+        "maximum_discarded": 4410,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "raw_stream_cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 4410,
+        "leading_frames": 0
+      },
+      "continuous_seek_limit": null,
+      "ffmpeg_snr_db": 999,
+      "ffmpeg_peak_error": 0.0
+    },
+    {
+      "test": "layout-0.asf",
+      "result": "exact",
+      "note": "independent ASF writer, known PCM",
+      "stats": "codec=21 rate=44100 channels=2 bits=16 frames=4410 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=671 endpoint_dry=0",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 45932,
+        "maximum_discarded": 4410,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "raw_stream_cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 4410,
+        "leading_frames": 0
+      },
+      "continuous_seek_limit": null,
+      "ffmpeg_snr_db": 999,
+      "ffmpeg_peak_error": 0.0
+    },
+    {
+      "test": "layout-1.asf",
+      "result": "exact",
+      "note": "independent ASF writer, known PCM",
+      "stats": "codec=21 rate=44100 channels=2 bits=16 frames=4410 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=769 endpoint_dry=0",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 45932,
+        "maximum_discarded": 4410,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "raw_stream_cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 4410,
+        "leading_frames": 0
+      },
+      "continuous_seek_limit": null,
+      "ffmpeg_snr_db": 999,
+      "ffmpeg_peak_error": 0.0
+    },
+    {
+      "test": "layout-2.asf",
+      "result": "exact",
+      "note": "independent ASF writer, known PCM",
+      "stats": "codec=21 rate=44100 channels=2 bits=16 frames=4410 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=640 endpoint_dry=0",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 45932,
+        "maximum_discarded": 4410,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "raw_stream_cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 4410,
+        "leading_frames": 0
+      },
+      "continuous_seek_limit": null,
+      "ffmpeg_snr_db": 999,
+      "ffmpeg_peak_error": 0.0
+    },
+    {
+      "test": "layout-3.asf",
+      "result": "exact",
+      "note": "independent ASF writer, known PCM",
+      "stats": "codec=21 rate=44100 channels=2 bits=16 frames=4410 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=746 endpoint_dry=0",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 45932,
+        "maximum_discarded": 4410,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "raw_stream_cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 4410,
+        "leading_frames": 0
+      },
+      "continuous_seek_limit": null,
+      "ffmpeg_snr_db": 999,
+      "ffmpeg_peak_error": 0.0
+    },
+    {
+      "test": "fragments.asf",
+      "result": "exact",
+      "note": "independent ASF writer, known PCM",
+      "stats": "codec=21 rate=44100 channels=2 bits=16 frames=4410 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=623 endpoint_dry=0",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 45932,
+        "maximum_discarded": 4410,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "raw_stream_cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 4410,
+        "leading_frames": 0
+      },
+      "continuous_seek_limit": null,
+      "ffmpeg_snr_db": 999,
+      "ffmpeg_peak_error": 0.0
+    },
+    {
+      "test": "compressed-objects.asf",
+      "result": "exact",
+      "note": "independent ASF writer, known PCM",
+      "stats": "codec=21 rate=44100 channels=2 bits=16 frames=4410 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=649 endpoint_dry=0",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 45932,
+        "maximum_discarded": 4410,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "raw_stream_cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 4410,
+        "leading_frames": 0
+      },
+      "continuous_seek_limit": null,
+      "ffmpeg_snr_db": 999,
+      "ffmpeg_peak_error": 0.0
+    },
+    {
+      "test": "variable-packets.asf",
+      "result": "exact",
+      "note": "independent ASF writer, known PCM",
+      "stats": "codec=21 rate=44100 channels=2 bits=16 frames=4410 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=597 endpoint_dry=0",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 45932,
+        "maximum_discarded": 4410,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "raw_stream_cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 4410,
+        "leading_frames": 0
+      },
+      "continuous_seek_limit": null,
+      "ffmpeg_snr_db": 999,
+      "ffmpeg_peak_error": 0.0
+    },
+    {
+      "test": "broadcast.asf",
+      "result": "exact",
+      "note": "unknown object length/count in broadcast header",
+      "stats": "codec=21 rate=44100 channels=2 bits=16 frames=4410 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=688 endpoint_dry=0",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 45932,
+        "maximum_discarded": 4410,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "raw_stream_cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 4410,
+        "leading_frames": 0
+      },
+      "continuous_seek_limit": null,
+      "ffmpeg_snr_db": 999,
+      "ffmpeg_peak_error": 0.0
+    },
+    {
+      "test": "nested-stream.asf",
+      "result": "exact",
+      "note": "Stream Properties in bounded Header Extension",
+      "stats": "codec=21 rate=44100 channels=2 bits=16 frames=4410 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=601 endpoint_dry=0",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 45932,
+        "maximum_discarded": 4410,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "raw_stream_cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 4410,
+        "leading_frames": 0
+      },
+      "continuous_seek_limit": null,
+      "ffmpeg_snr_db": 999,
+      "ffmpeg_peak_error": 0.0
+    },
+    {
+      "test": "Unicode-\u97f3\u697d-\u03a9.asf",
+      "result": "exact",
+      "note": "Unicode path",
+      "stats": "codec=21 rate=44100 channels=2 bits=16 frames=4410 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=694 endpoint_dry=0",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 45932,
+        "maximum_discarded": 4410,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "raw_stream_cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 4410,
+        "leading_frames": 0
+      },
+      "continuous_seek_limit": null,
+      "ffmpeg_snr_db": 999,
+      "ffmpeg_peak_error": 0.0
+    },
+    {
+      "test": "catalog127-choice0.asf",
+      "result": "exact",
+      "note": "127 legal stream IDs; unsupported format placeholders count",
+      "stats": "codec=21 rate=44100 channels=2 bits=16 frames=4410 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=604 endpoint_dry=0",
+      "catalog": {
+        "audio_tracks": 127,
+        "selected_ordinal": 127,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 45932,
+        "maximum_discarded": 4410,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "raw_stream_cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 4410,
+        "leading_frames": 0
+      },
+      "continuous_seek_limit": null,
+      "ffmpeg_snr_db": 999,
+      "ffmpeg_peak_error": 0.0
+    },
+    {
+      "test": "catalog127-choice127.asf",
+      "result": "exact",
+      "note": "127 legal stream IDs; unsupported format placeholders count",
+      "stats": "codec=21 rate=44100 channels=2 bits=16 frames=4410 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=667 endpoint_dry=0",
+      "catalog": {
+        "audio_tracks": 127,
+        "selected_ordinal": 127,
+        "requested_ordinal": 127,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "seeks": null,
+      "raw_stream_cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 4410,
+        "leading_frames": 0
+      },
+      "continuous_seek_limit": null,
+      "ffmpeg_snr_db": 999,
+      "ffmpeg_peak_error": 0.0
+    },
+    {
+      "test": "skip-encrypted-stream.asf",
+      "result": "exact",
+      "note": "automatic choice skips encrypted audio but counts it",
+      "stats": "codec=21 rate=44100 channels=2 bits=16 frames=4410 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=643 endpoint_dry=0",
+      "catalog": {
+        "audio_tracks": 2,
+        "selected_ordinal": 2,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 45932,
+        "maximum_discarded": 4410,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "raw_stream_cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 4410,
+        "leading_frames": 0
+      },
+      "continuous_seek_limit": null,
+      "ffmpeg_snr_db": 999,
+      "ffmpeg_peak_error": 0.0
+    },
+    {
+      "test": "multitrack-choice0.asf",
+      "result": "exact",
+      "note": "audio ordinal includes unsupported WMA",
+      "stats": "codec=21 rate=44100 channels=2 bits=16 frames=46129 underruns=0 decode_error=0 audio_error=0 elapsed_ms=1 cpu_us=1043 endpoint_dry=0",
+      "catalog": {
+        "audio_tracks": 3,
+        "selected_ordinal": 2,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 14,
+        "discarded_frames": 0,
+        "maximum_discarded": 0,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "raw_stream_cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 46129,
+        "leading_frames": 2029
+      },
+      "continuous_seek_limit": null,
+      "ffmpeg_snr_db": 999,
+      "ffmpeg_peak_error": 0.0
+    },
+    {
+      "test": "multitrack-choice2.asf",
+      "result": "exact",
+      "note": "audio ordinal includes unsupported WMA",
+      "stats": "codec=21 rate=44100 channels=2 bits=16 frames=46129 underruns=0 decode_error=0 audio_error=0 elapsed_ms=2 cpu_us=1450 endpoint_dry=0",
+      "catalog": {
+        "audio_tracks": 3,
+        "selected_ordinal": 2,
+        "requested_ordinal": 2,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "seeks": null,
+      "raw_stream_cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 46129,
+        "leading_frames": 2029
+      },
+      "continuous_seek_limit": null,
+      "ffmpeg_snr_db": 999,
+      "ffmpeg_peak_error": 0.0
+    },
+    {
+      "test": "multitrack-choice3.asf",
+      "result": "exact",
+      "note": "audio ordinal includes unsupported WMA",
+      "stats": "codec=3 rate=44100 channels=2 bits=0 frames=47006 underruns=0 decode_error=0 audio_error=0 elapsed_ms=3 cpu_us=1904 endpoint_dry=0",
+      "catalog": {
+        "audio_tracks": 3,
+        "selected_ordinal": 3,
+        "requested_ordinal": 3,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "seeks": null,
+      "raw_stream_cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 47006,
+        "leading_frames": 926
+      },
+      "continuous_seek_limit": null,
+      "ffmpeg_snr_db": 124.99974546135607,
+      "ffmpeg_peak_error": 1.2516975402832031e-06
+    },
+    {
+      "test": "truncated-12.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 100
+      }
+    },
+    {
+      "test": "truncated-16.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 100
+      }
+    },
+    {
+      "test": "truncated-23.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 100
+      }
+    },
+    {
+      "test": "truncated-29.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 100
+      }
+    },
+    {
+      "test": "truncated-30.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 100
+      }
+    },
+    {
+      "test": "truncated-281.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 100
+      }
+    },
+    {
+      "test": "truncated-331.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 100
+      }
+    },
+    {
+      "test": "truncated-70987.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 100
+      }
+    },
+    {
+      "test": "bad-size-16-29.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 100
+      }
+    },
+    {
+      "test": "bad-size-16-18446744073709551615.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 100
+      }
+    },
+    {
+      "test": "bad-size-46-23.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 100
+      }
+    },
+    {
+      "test": "bad-size-46-18446744073709551615.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 100
+      }
+    },
+    {
+      "test": "bad-size-298-49.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 100
+      }
+    },
+    {
+      "test": "bad-size-298-18446744073709551615.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 100
+      }
+    },
+    {
+      "test": "bad-size-322-1.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 100
+      }
+    },
+    {
+      "test": "header-object-count.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 100
+      }
+    },
+    {
+      "test": "header-reserved.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 100
+      }
+    },
+    {
+      "test": "header-object-limit.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 101
+      }
+    },
+    {
+      "test": "header-depth-limit.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 100
+      }
+    },
+    {
+      "test": "zero-packet-length.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 100
+      }
+    },
+    {
+      "test": "oversize-packet.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 100
+      }
+    },
+    {
+      "test": "padding-overrun.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 100
+      }
+    },
+    {
+      "test": "zero-payload-count.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 100
+      }
+    },
+    {
+      "test": "stream-field-type.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 100
+      }
+    },
+    {
+      "test": "orphan-fragment.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 100
+      }
+    },
+    {
+      "test": "unknown-object-size.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 100
+      }
+    },
+    {
+      "test": "incomplete-object.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 100
+      }
+    },
+    {
+      "test": "object-overrun.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 100
+      }
+    },
+    {
+      "test": "zero-object.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 100
+      }
+    },
+    {
+      "test": "huge-object.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 100
+      }
+    },
+    {
+      "test": "bad-compressed.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 100
+      }
+    },
+    {
+      "test": "zero-compressed.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 100
+      }
+    },
+    {
+      "test": "replicated-size2.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 100
+      }
+    },
+    {
+      "test": "gap.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 100
+      }
+    },
+    {
+      "test": "number.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 100
+      }
+    },
+    {
+      "test": "changed-size.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 100
+      }
+    },
+    {
+      "test": "duplicate-id.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 100
+      }
+    },
+    {
+      "test": "zero-stream.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 100
+      }
+    },
+    {
+      "test": "encrypted.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 101
+      }
+    },
+    {
+      "test": "encrypted-stream.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 101
+      }
+    },
+    {
+      "test": "scrambled.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 101
+      }
+    },
+    {
+      "test": "format-private-limit.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 101
+      }
+    },
+    {
+      "test": "wma-choice.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 101
+      }
+    },
+    {
+      "test": "missing-track.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 101
+      }
+    },
+    {
+      "test": "fields-1.asf protected input boundaries",
+      "result": {
+        "result": "passed",
+        "guard_checks": 717,
+        "no_input_padding": true
+      }
+    },
+    {
+      "test": "aac-2.asf protected input boundaries",
+      "result": {
+        "result": "passed",
+        "guard_checks": 765,
+        "no_input_padding": true
+      }
+    },
+    {
+      "test": "64-bit object skip past 4 GiB",
+      "result": {
+        "result": "passed",
+        "logical_bytes": 4295010132,
+        "allocated_bytes": 49152,
+        "initial_allocation_report": 49152,
+        "frames": 4410
+      }
+    },
+    {
+      "test": "pcm_s16le-2.asf cancel-open",
+      "result": {
+        "result": "cancelled"
+      }
+    },
+    {
+      "test": "pcm_s16le-2.asf cancel-read",
+      "result": {
+        "result": "cancelled",
+        "frames_before_cancel": 24576
+      }
+    },
+    {
+      "test": "aac-2.asf cancel-open",
+      "result": {
+        "result": "cancelled"
+      }
+    },
+    {
+      "test": "aac-2.asf cancel-read",
+      "result": {
+        "result": "cancelled",
+        "frames_before_cancel": 24576
+      }
+    }
+  ],
+  "fixture_hashes": {
+    "aac-2.asf": "cff96e9b3f803616e72593ba4c3d87ed5537f503f451ff3c6ef7982fae2c31e8",
+    "aac-2.asf.ffmpeg.f32": "e5e2dc101e0c8097284c858cbbb7a24b6ba1b36283586088c2bbad51218c8c4d",
+    "ac3-2.asf": "a1a71828730d0f440ea78b267f1da4d9c17b98447d8ee88fda49f5b3b3555329",
+    "ac3-2.asf.ffmpeg.f32": "64c98912dfa71dbb4fe29832adf8ed2de0400b4b662c6c845c1ef69a82323336",
+    "ac3-2.asf.wav": "0a7c20f2501c433b7be5cca35067bcf2b6716bbb130097d38e92fa1e3c2ff81d",
+    "ac3-dither-free.asf": "1bcc0c2ada1e741f6bee29487d51d7d58c9a4a9029a4d48a9998327a8d1df5a0",
+    "ac3-dither-free.asf.ffmpeg.f32": "4cf122c13d0515fdd8ed117d50bbf3bcd0c912f8e808c8b6b7c4c1984e9d6c3b",
+    "ac3-dither-free.asf.wav": "30e77dad328efe0f1c8521b3be4c4f3419a7f88db98ebdd860ea70123001406a",
+    "adpcm_ima_wav-1.asf": "7d190dd73520ff4774985dec5f0f1e1c6afe4e1d1a3f4a70df052959c77d5249",
+    "adpcm_ima_wav-1.asf.ffmpeg.f32": "9ffb00bd7f9438e80cf4436303dcacb1cb8b3ebfd8c30384aa65570cce4baae2",
+    "adpcm_ima_wav-1.asf.wav": "e38f3bfe755635d1ad34b52e83c00b47ecc8e4bedac9847c05c8e24db19b1656",
+    "adpcm_ima_wav-2.asf": "081210bde8c5a1e8f222f15b85a7898ccb8458a1caf186f531827d8daa46ee5b",
+    "adpcm_ima_wav-2.asf.ffmpeg.f32": "a44b97238086ee680375e55a6498557c477ba732ee884e4be735adfdfdf4475c",
+    "adpcm_ima_wav-2.asf.wav": "9854d2b6cc1433cba14ff2531f1c5c62b1ec443d0902fb4235a75195ded4addc",
+    "adpcm_ms-1.asf": "ca4a3d03e14023c26f51c8535840fcf6c0abe993f887f8b22fa09dc594d7e7fc",
+    "adpcm_ms-1.asf.ffmpeg.f32": "ddd91b4fa57d4efcf1cddeaa7703826bd408e9d22f747a270d54f955c7486948",
+    "adpcm_ms-1.asf.wav": "b3aeab1e6dc6ac6baf67a0b6950fe37e4f78e00485c043654062f6eb3e3da6df",
+    "adpcm_ms-2.asf": "2868fb180b595c6e26fb11e71067d70c7f8313a7583ea37284bb5e859f0a16d0",
+    "adpcm_ms-2.asf.ffmpeg.f32": "d3b2f08192309c8cbfe9de438b4cfec1084165d32b43281c627f85a9b4d99043",
+    "adpcm_ms-2.asf.wav": "a483bc8a0209dd1ac7ea67e67240b2b710c41b2c651c6e68dfe10c1abe493b89",
+    "bad-compressed.asf": "07f9d1dbae88b97886ecbca8e2376f7e4a555c0412c69d9b6368f0feb758db10",
+    "bad-size-16-18446744073709551615.asf": "105561aff479e344a4cca6406c9c5631d7141d794425693172655f24a38daf39",
+    "bad-size-16-29.asf": "0575aee9739b2b05c71f25f4b756f7a1316c7476698e7414649bd3336e73e157",
+    "bad-size-298-18446744073709551615.asf": "8eb66e24ee70d565e33f411bb0f3c8545bcd3042d7bc849089801d2c897c90d3",
+    "bad-size-298-49.asf": "55ff8002aee6f767f775ef0ead8badd332ff0b118a45ac3250ff3654aa078201",
+    "bad-size-322-1.asf": "0c999d17be9f6a940da20e8cb51faf9f4acc03f5e2489fa30a5ae30ab18a8e65",
+    "bad-size-46-18446744073709551615.asf": "72959d4055d47a9cee788a3089b7822a28d0d2e01f23f75327c466bcf897cd1d",
+    "bad-size-46-23.asf": "0f66ade7fe6bdaa506dafc642dad0504710ecc851bd3df76cd3d7bde6c6512f3",
+    "broadcast.asf": "399e88bd92e87c2feadb26688bde26c55aca8f1dacd25d399e9326aa72b25bb0",
+    "broadcast.asf.ffmpeg.f32": "cec25fd38e314ea0e22fd583422fbf49f341ab9eb04c2087a2f93c90de082632",
+    "catalog127-choice0.asf": "417b28bd1c826a634e1e4363b4a26eced42544437e9b647091c79d538cfca5bc",
+    "catalog127-choice127.asf": "417b28bd1c826a634e1e4363b4a26eced42544437e9b647091c79d538cfca5bc",
+    "changed-size.asf": "f056f2823481f5bc86b84a6da51a263fcaed1a4f33f2c0183f3d96c6c98e568d",
+    "compressed-objects.asf": "c82770a53ddf2748a862d5d22ce07cf8d77b13a70ec106d83bcc20b6d6375e96",
+    "compressed-objects.asf.ffmpeg.f32": "cec25fd38e314ea0e22fd583422fbf49f341ab9eb04c2087a2f93c90de082632",
+    "duplicate-id.asf": "ec3215adf3450ce9044ace923f1ec9d54f0b3a0c22073a998be196c3a52fbca1",
+    "encrypted-stream.asf": "709a23f04d5ae41fd49c84205ca13c46faaf1062fe35a7c1736ed01127ed2919",
+    "encrypted.asf": "bf6748319305d74eeae267eff3a90010a2b8c7a66a736a464536c7ac950b02f9",
+    "fields-1.asf": "04263eb2e86547e8557bd597c89757032dceb3031994e2e0ed69f347e401ab00",
+    "fields-1.asf.ffmpeg.f32": "cec25fd38e314ea0e22fd583422fbf49f341ab9eb04c2087a2f93c90de082632",
+    "fields-2.asf": "a337ad8bb449c98f1ea2308620e197607c78736c0ddaf5c8cf70225bf91bb0d9",
+    "fields-2.asf.ffmpeg.f32": "cec25fd38e314ea0e22fd583422fbf49f341ab9eb04c2087a2f93c90de082632",
+    "fields-3.asf": "d6f07a81848589d483f1e428f7755df458ab4fce1440af7002bf08cca514f01e",
+    "fields-3.asf.ffmpeg.f32": "cec25fd38e314ea0e22fd583422fbf49f341ab9eb04c2087a2f93c90de082632",
+    "format-private-limit.asf": "0347d990b8d5b5ba4bfc6d2c45b0e443ac570437945fc87bd0396e96b40d77c7",
+    "fragments.asf": "c5027b46b97ec24c6f5eb0f06f7d1bb923eb321878fe79551b273bd853ec15b3",
+    "fragments.asf.ffmpeg.f32": "cec25fd38e314ea0e22fd583422fbf49f341ab9eb04c2087a2f93c90de082632",
+    "gap.asf": "eadbce625721700e7a01c49a1a7391be27eff684d629a0418828d4e616670775",
+    "header-depth-limit.asf": "1500f3d96dccad419f8feb12731276134d44ef275a3ccd601434d28a690aa256",
+    "header-object-count.asf": "962193a3ee1872858dd3f843e346b7a856a5bc9932ae5323cc58c04f04116229",
+    "header-object-limit.asf": "815d1635f05d528e11cf8c402f9f0955585bb0620c96bce29ed6e80d4bb53a1b",
+    "header-reserved.asf": "a5093582e5b97b8d585455ebc9604c6f76b2bd3386aebce0fc9412d599759710",
+    "huge-object.asf": "d10ec658ed74cf29f4f7b14a30fe6fa6d5a9dba8ae6cad98991ff4f58a44e1eb",
+    "incomplete-object.asf": "6425aa4d828c5ec79c335d66c86247b6bdd89f970bd64c4a0c9707f233a20e86",
+    "layout-0.asf": "dc4cea514fb64d2f8592476099bb6dc54749da9d619582dfb26dd1190e9ded09",
+    "layout-0.asf.ffmpeg.f32": "cec25fd38e314ea0e22fd583422fbf49f341ab9eb04c2087a2f93c90de082632",
+    "layout-1.asf": "63957921ce44e1a77b7ea7105d53a28d31ffc45f196657c65602c8dd8544f000",
+    "layout-1.asf.ffmpeg.f32": "cec25fd38e314ea0e22fd583422fbf49f341ab9eb04c2087a2f93c90de082632",
+    "layout-2.asf": "b9b82ad8cf75b76b82ea1153c02bfdf094520484b9328ccc12b6ea31194293b4",
+    "layout-2.asf.ffmpeg.f32": "cec25fd38e314ea0e22fd583422fbf49f341ab9eb04c2087a2f93c90de082632",
+    "layout-3.asf": "afa535558d634e59389836aebd094f7593907c572788d1873ab3a8895a8412e9",
+    "layout-3.asf.ffmpeg.f32": "cec25fd38e314ea0e22fd583422fbf49f341ab9eb04c2087a2f93c90de082632",
+    "libmp3lame-2.asf": "72301331176886e9a15ddf63622d9ae643196e198afbcdcf3829626737390d71",
+    "libmp3lame-2.asf.ffmpeg.f32": "2ad88d148eb773218fe76f4c87a7b25c3869327bc0b36613dcf8cf6f9034de9f",
+    "libmp3lame-2.asf.wav": "f913e95733e80640edc42fb7024b73dbe09cdecf8dbc5fb459d0cb0a479ffcec",
+    "libmp3lame-video.asf": "1f458e63d146f1e6deb26efa416693135bdc410819c53d63752a4ae367a0691e",
+    "libmp3lame-video.asf.ffmpeg.f32": "83eb78667cafacd64974753794c4e33983f6276ccdb6ee8365b9e5ddbaaa3cb7",
+    "libmp3lame-video.asf.wav": "53b09bcf3e22574f31f2df360f1a0772883548c8273e7a271601f136b3c611e9",
+    "missing-track.asf": "1a04463946edff919c87d355ff7a04bf8d997449ba18577d516004e584d4923d",
+    "mp2-2.asf": "a7cc868376874a75260a9cb6ad328cea16218ad6a1e9237f8997250ee2340e12",
+    "mp2-2.asf.ffmpeg.f32": "f335d83678f68773370be29ecc216ce7df39047628b69b8bc0e4bec75904a7c3",
+    "mp2-2.asf.wav": "5cfaa4d277433911e246e16e3eaab190c79428b7e2f5484af6419469dfbaab5d",
+    "multitrack-choice0.asf": "0860ea96b5872e644573de9b7c51f751f58ba403fd5d0ca503613098647a93b2",
+    "multitrack-choice0.asf.ffmpeg.f32": "64530431abaaecbf18d152f71ac7da34249ab4e62010c17fb953659e3898a5fb",
+    "multitrack-choice0.asf.wav": "71117acf61c92bd9830eb82e11e9fb55e455917b450d8ed11390557296ef6928",
+    "multitrack-choice2.asf": "0860ea96b5872e644573de9b7c51f751f58ba403fd5d0ca503613098647a93b2",
+    "multitrack-choice2.asf.ffmpeg.f32": "64530431abaaecbf18d152f71ac7da34249ab4e62010c17fb953659e3898a5fb",
+    "multitrack-choice2.asf.wav": "71117acf61c92bd9830eb82e11e9fb55e455917b450d8ed11390557296ef6928",
+    "multitrack-choice3.asf": "0860ea96b5872e644573de9b7c51f751f58ba403fd5d0ca503613098647a93b2",
+    "multitrack-choice3.asf.ffmpeg.f32": "2a07e1eb889cc247064ac9548078e451e87e203d6909b3140e1d6361e741a922",
+    "multitrack-choice3.asf.wav": "53b09bcf3e22574f31f2df360f1a0772883548c8273e7a271601f136b3c611e9",
+    "multitrack.asf": "0860ea96b5872e644573de9b7c51f751f58ba403fd5d0ca503613098647a93b2",
+    "nested-stream.asf": "bf7d0d67d1937a03b82dbc938f0c69dde1682821cb6ca58e3eaef16eab900a49",
+    "nested-stream.asf.ffmpeg.f32": "cec25fd38e314ea0e22fd583422fbf49f341ab9eb04c2087a2f93c90de082632",
+    "number.asf": "5c5103f544da6695f5da64096eb421acbc21b7b167e6b3984b5fd69dd7f54e0f",
+    "object-overrun.asf": "b21c4f51d6ee17ee0167d7ff511877409e8b2b0bb1986c26c2b309470b7c34b8",
+    "orphan-fragment.asf": "beb5f24e5443b1903512d10d2d454ba43d5e350275cb13b77c59e5909d9c6ec5",
+    "oversize-packet.asf": "057ec9cf8800221a4e91569c03bb27c88deb3af13dc6c820567c8daec6bdc66a",
+    "packet-source.wav": "28282d833826eb302f96b5faeef4893ecc0bb0c036050fe3c4bec594a911d98e",
+    "padding-overrun.asf": "ee3d4a9ce88fb41a333901f574c804fc92d58d3ac07adfe3f92ef077cb2cf778",
+    "pcm-6ch.asf": "1da615ba4c84595dcad1c8c6d1a8d4a79427294d02e657036765f27de5182ad0",
+    "pcm-6ch.asf.ffmpeg.f32": "46d2ea818ae4137b94699be6baf083d76462cd1c822310161a85269fd116833c",
+    "pcm-8ch.asf": "0237a7675c547a0732e01b9f6558bf0a1cc6c8b5fac7e1fce58e476941733bd9",
+    "pcm-8ch.asf.ffmpeg.f32": "3b170d0c33112a2824e53dd5eb3cda94cd38da8ff85bd0450a367e2033dbc689",
+    "pcm_alaw-1.asf": "8c94ca9aae479e88a51cebf8739721e846d64006dd89eaa240c77f9c1678e5a9",
+    "pcm_alaw-1.asf.ffmpeg.f32": "1b0ecef0f63744640f7bc380ac2347f4031deae83861cba54286160b2976cf2b",
+    "pcm_alaw-1.asf.wav": "24fc006cef89798664a636b09a8a438bcaa9f71612a3fd2078d6b310ed1a13be",
+    "pcm_alaw-2.asf": "2b42957d30f977aafe96e19c4f6af93d462e1cec2dd0cea3f7b13d5ba6018b9f",
+    "pcm_alaw-2.asf.ffmpeg.f32": "8ce3a7d03cbe0407082fce85eed35238df3c82abb94da06c18b0ae096bc3870b",
+    "pcm_alaw-2.asf.wav": "6bcb693030caa8b437480833d2154194b48ed20b53de1956728e40d2fc7b26b0",
+    "pcm_f32le-2.asf": "02444b6c1bf3ec9829f0f9b248efe6f7d106aee9b55a45dee7ce3c1b86a3a098",
+    "pcm_f32le-2.asf.ffmpeg.f32": "737076fb57f5af32ab767e3279564464d37ee60408533c485c176bc895ed6086",
+    "pcm_f32le-2.asf.wav": "a223c08afe0983b4f588ec4e7db8f0f80524b1d453d9f52b2b92c02b93d29706",
+    "pcm_f64le-1.asf": "1dc6c2d33cdf1f93659a3402b8c06da8610cc1d883478bc0e8be07002371e592",
+    "pcm_f64le-1.asf.ffmpeg.f32": "ac24d7fa4f2733f9d145fbe5df5193ddf11050e519c203668042940d57d6055c",
+    "pcm_f64le-1.asf.wav": "ba1c2a6b49593cf2f77f3eb17f5390e0515619c918279cba4f2a5b11b79766bc",
+    "pcm_mulaw-2.asf": "500d22eeb455c99c2db04cb2bad50b040e1199ed622cd69c378c0fab831e864a",
+    "pcm_mulaw-2.asf.ffmpeg.f32": "a938ae49c6a590f06fd375219e94922b7f6d05967d931ff81e1ec04f1878342f",
+    "pcm_mulaw-2.asf.wav": "80a0454b512be2cc10c422f22393948a14ce1fb3c06f59cbf9d55c6d533be4f7",
+    "pcm_s16le-1.asf": "16abadd34560125f0e56379392f99a094f09d31d2c94d2d3d3bb192733e137cc",
+    "pcm_s16le-1.asf.ffmpeg.f32": "e9c013aa90b893337054204070a2f58a64cb7030e668c8cf195c8a9b0772f7ff",
+    "pcm_s16le-1.asf.wav": "b294ce06fd2377cdc18e35a4d29f48871457223b601b0cefab497619e0ea49b0",
+    "pcm_s16le-2.asf": "5c52d50c005cbba9cb43e9fbd3298f4d2e94d56ef4e56ca24181b68090ab0802",
+    "pcm_s16le-2.asf.ffmpeg.f32": "14d0febf374246722871f4473f21677718d18be6eb8b6d13f089b1800d2a3e55",
+    "pcm_s16le-2.asf.wav": "71117acf61c92bd9830eb82e11e9fb55e455917b450d8ed11390557296ef6928",
+    "pcm_s16le-video.asf": "a0f74d8a0080f8b7c3780ed79169edef0711d3ab62dfdcd26f5795157301b6d4",
+    "pcm_s16le-video.asf.ffmpeg.f32": "14d0febf374246722871f4473f21677718d18be6eb8b6d13f089b1800d2a3e55",
+    "pcm_s16le-video.asf.wav": "71117acf61c92bd9830eb82e11e9fb55e455917b450d8ed11390557296ef6928",
+    "pcm_s24le-2.asf": "633fbfe4f92b27338d17f4fa5f6f2940cfd7f32ce058637956d3ecffa3234263",
+    "pcm_s24le-2.asf.ffmpeg.f32": "951852faf88a6a952ce509005416c94e24f59d3a049041e9a92fb0e8d52f452e",
+    "pcm_s24le-2.asf.wav": "b661b8a52b8c8d0ba4eb35428ae37e18a044cbf07092954d0088b80c37883e28",
+    "pcm_s32le-2.asf": "a04c94839e739ff176e7737fcac9bd29bb2c2bffe4e6ba23d81cd67aa1090ffd",
+    "pcm_s32le-2.asf.ffmpeg.f32": "568d98b410d07960b7cd3cf7752d3d4566b2012d2c9b96307ce7ba278b07bed2",
+    "pcm_s32le-2.asf.wav": "34d59aef5d954f4e7e342747a661a13b7cc208bc390e9f1a45bd7f77d9e22e73",
+    "pcm_u8-1.asf": "9538ee2b32f22c30334af62898c716e5ff507052f32f2dbab0d146efa5ea94e3",
+    "pcm_u8-1.asf.ffmpeg.f32": "a85ff04f336a57aefb5fe55a6883e8f14da96f3930413525908b5d30295def92",
+    "pcm_u8-1.asf.wav": "d042459e94d5c44fba32d1ab48af5b96dc009d30e3459ef0aaa96699fd61b921",
+    "replicated-size2.asf": "2429c7c1aaa975408603000977350f947900c58f239850c27f144036a942c354",
+    "scrambled.asf": "0aecb0d80a6199ce32eddd2fbfde31a6bf4c3cfc98df5104a3d7ce119b76cfb3",
+    "skip-encrypted-stream.asf": "6123b31eabc2672006dc2e17a481ed1862dd3e16110380dc289ee87111f794c1",
+    "source-0.wav": "515a0ff66002d97128ee28ec1cfd432007e749be553efc6bbc31fd264c12daaf",
+    "source-1.wav": "b294ce06fd2377cdc18e35a4d29f48871457223b601b0cefab497619e0ea49b0",
+    "source-10.wav": "571353dde290dbbb6115906137557728b9f9b0387be856175ddeb08060b266e4",
+    "source-11.wav": "87eb093fe6722051a0873027c3a141f22576f6e8f74a50bc1915d5d0f5fe3472",
+    "source-12.wav": "684f3c72015df06907ac7c76fe2c550ee9e6c1513d73ee531b0a2cfcefb3091e",
+    "source-13.wav": "90f9184a7cd1e5851ad72b66514adf1f93809344440cab671932de2276ceca9f",
+    "source-14.wav": "90b589711f4bc3fecda68d757549cccd3d2c5e9d60ec6b33f08dba31c3acdd3a",
+    "source-15.wav": "54fe0f8d4e5031f6c16128b8f3d81df93c8efcfa05f068bce36ec9b7728bc85a",
+    "source-16.wav": "1a8f985535e247746fde07f18252110b0934d0b2ba1b34c2094254a857d9b803",
+    "source-17.wav": "c992d7ac04abbc92993f0fc70bb58b635dd18b2619e15e56253a703c665106fd",
+    "source-2.wav": "71117acf61c92bd9830eb82e11e9fb55e455917b450d8ed11390557296ef6928",
+    "source-3.wav": "c599e94ccfff02922e35bec3abaed632a1f174eaab6fc94f078be5877ce6f0b9",
+    "source-4.wav": "b999f841dc23b4ffe7d1de337415996f6349d4be8b6a582a2080b0bb644d9bc3",
+    "source-5.wav": "b761e837b7e48508838f00a86a87490d082de3cf3aaa7ce29c2a030083c84391",
+    "source-6.wav": "3a1455a9adfbdb66123068c6bbba002d0167112581272d3c96ad8f48d7d2d1b9",
+    "source-6ch.wav": "d5cb592abf47885985f2dc64e27b7d0542b9424ef3fc657ca01bd7aab0efbc30",
+    "source-7.wav": "c07e0cc653610e7ebfb8a7f3650d26b60303ae7154f5e86c821a6011694e4b85",
+    "source-8.wav": "dda039a908af7c8b343f63988e236195d2ac6c9ac1226f2571cdf9171fff45da",
+    "source-8ch.wav": "e881b106a8b28f1d682742afefb9c81de2b350689bae76a8b8496499e8a54ae4",
+    "source-9.wav": "9c87a40464e08412c4eb1d79dbd3aa52189fb91a9731f4b6aa392e7ecd32d67d",
+    "stream-field-type.asf": "c3931cd807bc10feafa0bcac972b13cbe57ef2ace441526371e006d38d94b094",
+    "truncated-12.asf": "bb538b0996540c2d79592c72210f5112ae3525cb2bbc2d2ba07c3cc0fc5b6ee8",
+    "truncated-16.asf": "dc10d550244e742fee76ffedef1dfb417713ec0b3ae0a48e94d481509c6c5391",
+    "truncated-23.asf": "e3e29a2ec7da19b433f07d167bc6393d7127b06fa06dc77b14ca3cc0144fee68",
+    "truncated-281.asf": "667feb6f63fa0f20de234952900458bf399d777e8d2bec9e5f4928b3c81f3760",
+    "truncated-29.asf": "1c3e0174706f07e41475ad19f66ba933405d7865d0b43300e04e28b98a0e75cb",
+    "truncated-30.asf": "f0a66744de9ddc61b7dc5c93e4e1f38e846a13dcac0934fe804d1113811d9aa3",
+    "truncated-331.asf": "5a7c4cfa62a3d1631e65c5c7189a50e9b451ac2f5a62c43a8ea20ece4b4378a3",
+    "truncated-70987.asf": "3d2ef0cfab58cdf3f9ed310b94576de6e97e51acd9fef255e0a61799620431e8",
+    "Unicode-\u97f3\u697d-\u03a9.asf": "1a04463946edff919c87d355ff7a04bf8d997449ba18577d516004e584d4923d",
+    "Unicode-\u97f3\u697d-\u03a9.asf.ffmpeg.f32": "cec25fd38e314ea0e22fd583422fbf49f341ab9eb04c2087a2f93c90de082632",
+    "unknown-object-size.asf": "d447514fd54f10036ca24abb1d9f21edde57007a4f720139f0e048d4523109b8",
+    "variable-packets.asf": "596a4708ee3c1d1e97684f79da521572e1fb83b9fad190c8083e3d5dbb27cd54",
+    "variable-packets.asf.ffmpeg.f32": "cec25fd38e314ea0e22fd583422fbf49f341ab9eb04c2087a2f93c90de082632",
+    "wma-choice.asf": "0860ea96b5872e644573de9b7c51f751f58ba403fd5d0ca503613098647a93b2",
+    "zero-compressed.asf": "3e133e571c96630770698be90593fcbe551c2eaf05ddb4fc456a156058bebf07",
+    "zero-object.asf": "6422d03a35508bb387e71ce52a7464cd06b2e80c90952b8c307df34b4a96a52c",
+    "zero-packet-length.asf": "5cf6fb9e833d37c1ad9103cab03076049c221450386d029971f99a54cdf81af4",
+    "zero-payload-count.asf": "44c82eb4f7c13bcc7f623db5989422968c1e4f493af7ecfeccce8db31466deb4",
+    "zero-stream.asf": "14fb823812f204416224ca5148806c1bdffaeed08055fa297fe9a7acb0657f1a"
+  },
+  "fixture_ffmpeg": "ffmpeg version 8.0.1-essentials_build-www.gyan.dev Copyright (c) 2000-2025 the FFmpeg developers",
+  "runtime_platform": "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "runtime_sources": {
+    "src/asf.s": "f78e9f556775577c0401479e107513af14fa1bf865e0526604b72ec91b484c38",
+    "src/asf_views.inc": "ab65ca4272d76815c8d9ac2849d2c7174e11c775ebed744682465ce970ae666f",
+    "src/track_time.s": "958c15a5948f77753eeb635a1ebbf7fc89ee185a746ac2d0321fbf4dc42d05f2",
+    "src/avi.s": "56f1336d789997c4e4d2d11946129f8f2a1d22ee46c653cd40dacacb4ebeac59",
+    "src/decoder.s": "3bcbb77424903865ab49cc9a7ca0be92bb6c76c14eecdcc4637a45d4adc65047",
+    "src/mpegts.s": "5dafcb58db5d634684462207d45e55ff088d5bf032f62d8302adc39be6ef125e",
+    "src/track.s": "80e9d51c7f042f96563af226079e2be931f140a4711ac605813aeddf3047361d",
+    "tests/verify-asf.py": "9120058dd13a53fe5651a2f395bec7cfc45d8cf735d7354a91022dbb80a667e0",
+    "tests/seek-oracle.c": "355e938b312afce8454b68bb7859cb45fe7e8be747c39c7e9b649132e65514bb",
+    "tests/track-catalog-oracle.c": "93175cde74b34ab85aeb8838c5a428cd39955adf45fdd6407229ad45488e652f",
+    "tests/asf-boundary-oracle.c": "97b6194c817c720f69248995ca42bb79dd2eb3bff22e397284ada2ce9f6e84aa",
+    "tests/asf-seek-oracle.c": "353c03af77d040be6c332b04d2fa1af3d143d8687f50d2bb3ca6435380c9655b"
+  },
+  "cli_sha256": "54ca05afcb60c29f4d88abab31764a36417b6d003e4e63ea3a53e800942155f2",
+  "reference_hashes": {
+    "pcm_u8-1.asf": "a85ff04f336a57aefb5fe55a6883e8f14da96f3930413525908b5d30295def92",
+    "pcm_s16le-1.asf": "e9c013aa90b893337054204070a2f58a64cb7030e668c8cf195c8a9b0772f7ff",
+    "pcm_s16le-2.asf": "14d0febf374246722871f4473f21677718d18be6eb8b6d13f089b1800d2a3e55",
+    "pcm_s24le-2.asf": "951852faf88a6a952ce509005416c94e24f59d3a049041e9a92fb0e8d52f452e",
+    "pcm_s32le-2.asf": "568d98b410d07960b7cd3cf7752d3d4566b2012d2c9b96307ce7ba278b07bed2",
+    "pcm_f32le-2.asf": "737076fb57f5af32ab767e3279564464d37ee60408533c485c176bc895ed6086",
+    "pcm_f64le-1.asf": "ac24d7fa4f2733f9d145fbe5df5193ddf11050e519c203668042940d57d6055c",
+    "pcm_alaw-1.asf": "1b0ecef0f63744640f7bc380ac2347f4031deae83861cba54286160b2976cf2b",
+    "pcm_alaw-2.asf": "8ce3a7d03cbe0407082fce85eed35238df3c82abb94da06c18b0ae096bc3870b",
+    "pcm_mulaw-2.asf": "a938ae49c6a590f06fd375219e94922b7f6d05967d931ff81e1ec04f1878342f",
+    "adpcm_ima_wav-1.asf": "9ffb00bd7f9438e80cf4436303dcacb1cb8b3ebfd8c30384aa65570cce4baae2",
+    "adpcm_ima_wav-2.asf": "a44b97238086ee680375e55a6498557c477ba732ee884e4be735adfdfdf4475c",
+    "adpcm_ms-1.asf": "ddd91b4fa57d4efcf1cddeaa7703826bd408e9d22f747a270d54f955c7486948",
+    "adpcm_ms-2.asf": "d3b2f08192309c8cbfe9de438b4cfec1084165d32b43281c627f85a9b4d99043",
+    "mp2-2.asf": "98f8c52ea821cc1be609b184d39071d51876716683f9964e8a80f80484682b60",
+    "libmp3lame-2.asf": "dd39a53dbc3cf2a02f73a3b948a9615f6e31a6f8210aff07c809db246e85b899",
+    "ac3-2.asf": "713a82e43bf94b13ce5c55b0af9d142a86e65add8411ed551c0201cd7dbbeb6b",
+    "aac-2.asf": "f9431222dbd9495ea434df65de3b6e5891ecd2f9f1bc2d62836506ae4bab6279",
+    "pcm-6ch.asf": "46d2ea818ae4137b94699be6baf083d76462cd1c822310161a85269fd116833c",
+    "pcm-8ch.asf": "3b170d0c33112a2824e53dd5eb3cda94cd38da8ff85bd0450a367e2033dbc689",
+    "ac3-dither-free.asf": "068f61d23eebbc4a5a2c60056e27e1be6cd741678ea27158339e1f5c921dfb59",
+    "pcm_s16le-video.asf": "14d0febf374246722871f4473f21677718d18be6eb8b6d13f089b1800d2a3e55",
+    "libmp3lame-video.asf": "2f1d02e37d4e740d55d24cb33a79a1869b32a6f1648caf22561a5acc437ed654",
+    "fields-1.asf": "cec25fd38e314ea0e22fd583422fbf49f341ab9eb04c2087a2f93c90de082632",
+    "fields-2.asf": "cec25fd38e314ea0e22fd583422fbf49f341ab9eb04c2087a2f93c90de082632",
+    "fields-3.asf": "cec25fd38e314ea0e22fd583422fbf49f341ab9eb04c2087a2f93c90de082632",
+    "layout-0.asf": "cec25fd38e314ea0e22fd583422fbf49f341ab9eb04c2087a2f93c90de082632",
+    "layout-1.asf": "cec25fd38e314ea0e22fd583422fbf49f341ab9eb04c2087a2f93c90de082632",
+    "layout-2.asf": "cec25fd38e314ea0e22fd583422fbf49f341ab9eb04c2087a2f93c90de082632",
+    "layout-3.asf": "cec25fd38e314ea0e22fd583422fbf49f341ab9eb04c2087a2f93c90de082632",
+    "fragments.asf": "cec25fd38e314ea0e22fd583422fbf49f341ab9eb04c2087a2f93c90de082632",
+    "compressed-objects.asf": "cec25fd38e314ea0e22fd583422fbf49f341ab9eb04c2087a2f93c90de082632",
+    "variable-packets.asf": "cec25fd38e314ea0e22fd583422fbf49f341ab9eb04c2087a2f93c90de082632",
+    "broadcast.asf": "cec25fd38e314ea0e22fd583422fbf49f341ab9eb04c2087a2f93c90de082632",
+    "nested-stream.asf": "cec25fd38e314ea0e22fd583422fbf49f341ab9eb04c2087a2f93c90de082632",
+    "Unicode-\u97f3\u697d-\u03a9.asf": "cec25fd38e314ea0e22fd583422fbf49f341ab9eb04c2087a2f93c90de082632",
+    "catalog127-choice0.asf": "cec25fd38e314ea0e22fd583422fbf49f341ab9eb04c2087a2f93c90de082632",
+    "catalog127-choice127.asf": "cec25fd38e314ea0e22fd583422fbf49f341ab9eb04c2087a2f93c90de082632",
+    "skip-encrypted-stream.asf": "cec25fd38e314ea0e22fd583422fbf49f341ab9eb04c2087a2f93c90de082632",
+    "multitrack-choice0.asf": "64530431abaaecbf18d152f71ac7da34249ab4e62010c17fb953659e3898a5fb",
+    "multitrack-choice2.asf": "64530431abaaecbf18d152f71ac7da34249ab4e62010c17fb953659e3898a5fb",
+    "multitrack-choice3.asf": "95d87a96a6cece729eaf96576ef861bb21876b8e2695231bf60f21f0033b4d9f"
+  },
+  "git_source_sha256": {
+    "src/asf.s": "f78e9f556775577c0401479e107513af14fa1bf865e0526604b72ec91b484c38",
+    "src/asf_views.inc": "ab65ca4272d76815c8d9ac2849d2c7174e11c775ebed744682465ce970ae666f",
+    "src/track_time.s": "958c15a5948f77753eeb635a1ebbf7fc89ee185a746ac2d0321fbf4dc42d05f2",
+    "src/avi.s": "56f1336d789997c4e4d2d11946129f8f2a1d22ee46c653cd40dacacb4ebeac59",
+    "src/decoder.s": "3bcbb77424903865ab49cc9a7ca0be92bb6c76c14eecdcc4637a45d4adc65047",
+    "src/mpegts.s": "5dafcb58db5d634684462207d45e55ff088d5bf032f62d8302adc39be6ef125e",
+    "src/track.s": "80e9d51c7f042f96563af226079e2be931f140a4711ac605813aeddf3047361d",
+    "tests/verify-asf.py": "9120058dd13a53fe5651a2f395bec7cfc45d8cf735d7354a91022dbb80a667e0",
+    "tests/seek-oracle.c": "355e938b312afce8454b68bb7859cb45fe7e8be747c39c7e9b649132e65514bb",
+    "tests/track-catalog-oracle.c": "93175cde74b34ab85aeb8838c5a428cd39955adf45fdd6407229ad45488e652f",
+    "tests/asf-boundary-oracle.c": "39da9b58a61fcaa0dda90bd53818f429548fee2081989734b64c61aa614c7881",
+    "tests/asf-seek-oracle.c": "8e826138eb3732752f78fb06cc926c848a447838fa728956e66e8e7a943d659d"
+  },
+  "source_provenance": "sources/runtime_sources retain exact tested working-file bytes; git_source_sha256 records canonical staged Git bytes. Differences were checked to consist only of CRLF/LF line endings."
+}

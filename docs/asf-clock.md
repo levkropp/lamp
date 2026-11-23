@@ -7,9 +7,10 @@ overlaps are clipped. Duration and seeks follow the resulting media time.
 Codec packets and their history remain in source order, including packets
 whose entire presentation is clipped.
 
-This applies to ASF's packetized AAC path. PCM/float, G.711, ADPCM, MPEG audio,
-AC-3 and configuration-free ADTS gathering still present consecutive samples.
-WMA, video and A/V synchronization remain unfinished.
+The implementation now also applies object clocks to
+[PCM/float, G.711, ADPCM, MPEG audio, AC-3 and configuration-free ADTS](asf-gathered.md).
+The AAC-specific evidence below remains the packetized-AAC baseline. WMA,
+video and A/V synchronization remain unfinished.
 
 ## Clock contract
 

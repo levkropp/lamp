@@ -95,6 +95,7 @@ def writer_hash():
     return digest(Path(__file__).read_bytes().split(b'def main():')[0]+
                   Path(spread.__file__).read_bytes().split(b'def main():')[0]+
                   Path(writer.__file__).read_bytes().split(b'def main():')[0]+
+                  Path(spread.asf_clock_model.__file__).read_bytes()+
                   Path(metadata.__file__).read_bytes().split(b'def main():')[0]+
                   Path(chapters.__file__).read_bytes().split(b'def main():')[0])
 
@@ -148,14 +149,14 @@ def prepare(work):
     fmt,pcm=writer.wave_parts((base/base_case['raw']).read_bytes())
     for label,specs,replic in [('fixed-payload-extensions.asf',[system(b'first',3),system(b'second',2)],13),
                                ('variable-payload-extension.asf',[system(b'first',0),system(b'variable',65535)],10)]:
-        packets=[writer.packet([writer.payload(pcm[i:i+128],k&255,replic=replic)]) for k,i in enumerate(range(0,len(pcm),128))]
+        packets=[writer.packet([writer.payload(pcm[i:i+128],k&255,replic=replic,time=writer.pcm_time(fmt,i))]) for k,i in enumerate(range(0,len(pcm),128))]
         envelope=writer.asf([],packets,extra=[metadata.extension([extended(writer.stream(fmt),systems=specs)])])
         add(label,envelope,base_case,guards=True)
     # Placeholder formats establish 127 ordinals without claiming WMA decode.
     unavailable=bytearray(fmt);struct.pack_into('<H',unavailable,0,0xdead)
     catalog=[extended(writer.stream(bytes(unavailable),ident),ident) for ident in range(1,127)]
     catalog.append(extended(writer.stream(fmt,127),127,names=names))
-    pkt=[writer.packet([writer.payload(pcm[i:i+128],k&255,stream=127)]) for k,i in enumerate(range(0,len(pcm),128))]
+    pkt=[writer.packet([writer.payload(pcm[i:i+128],k&255,stream=127,time=writer.pcm_time(fmt,i))]) for k,i in enumerate(range(0,len(pcm),128))]
     high=writer.asf([],pkt,extra=[metadata.extension(catalog)])
     for choice in (0,127):add(f'catalog-127-{choice}.asf',high,base_case,comparator=False,choice=choice,count=127,selected=127)
     nochild=extended(names=[name('')]*65535)
@@ -223,7 +224,7 @@ def main():
     if manifest['writer_sha256']!=writer_hash():raise Failure('Fixture writer changed; prepare again')
     for file,sha in manifest['hashes'].items():
         if digest((work/file).read_bytes())!=sha:raise Failure('Fixture changed: '+file)
-    names={'asf-extended-oracle':'asf-extended-oracle.c','asf-seek-oracle':'asf-seek-oracle.c',
+    names={'decoder-bounded-oracle':'decoder-bounded-oracle.c','asf-extended-oracle':'asf-extended-oracle.c','asf-seek-oracle':'asf-seek-oracle.c',
            'seek-oracle':'seek-oracle.c','chain-oracle':'chain-oracle.c','track-catalog-oracle':'track-catalog-oracle.c',
            'asf-boundary-oracle':'asf-boundary-oracle.c','asf-spread-oracle':'asf-spread-oracle.c'}
     wine='--wine-only' in sys.argv;env=dict(os.environ,WINEDEBUG='err+all') if wine else None
@@ -300,14 +301,14 @@ def main():
     for file in ('legacy-zero-length.asf','aac.asf','fixed-payload-extensions.asf'):
         data=(work/file).read_bytes();decoded=rejected=seeks=0
         for i in range(50 if wine else 500):
-            mutation.write_bytes(robustness.mutate(data,rng));seek=['--start',f'{rng.random()*0.4:.6f}'] if i%4==0 else []
-            args=[str(a) for a in [*cli,'--check',*seek,mutation]]
+            mutation.write_bytes(robustness.mutate(data,rng));seek=[round(rng.random()*400000)] if i%4==0 else []
+            args=[str(a) for a in [*command('decoder-bounded-oracle'),mutation,*seek]]
             if wine:result=robustness.wine_run(args,env=env,timeout=30)
             else:result=subprocess.run(args,env=env,timeout=30,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,preexec_fn=robustness.limit_memory if robustness.resource else None)
             if result.returncode not in (0,2):raise Failure(file+f': mutation {i} exited {result.returncode}: '+str(result.stdout[-1024:]))
             decoded+=result.returncode==0;rejected+=result.returncode==2;seeks+=bool(seek)
-        checks.append(dict(test=file+' full decoder mutations',result='no crash, hang or runaway allocation',mutations=decoded+rejected,
-                           decoded=decoded,rejected=rejected,seeks=seeks,seed=9731,address_space_limit_bytes=None if wine or not robustness.resource else robustness.LIMIT))
+        checks.append(dict(test=file+' bounded full decoder mutations',result='no crash, hang or runaway allocation',mutations=decoded+rejected,
+                           decoded=decoded,rejected=rejected,seeks=seeks,seed=9731,max_read_calls=256,frames_per_read=2048,midpoint_seek_call=128,address_space_limit_bytes=None if wine or not robustness.resource else robustness.LIMIT))
         print(file+': full decoder mutations passed',flush=True)
     if '--baseline-cli' in sys.argv:
         baseline=Path(sys.argv[sys.argv.index('--baseline-cli')+1]).resolve();published_path=ROOT/'reports/asf-spread-verification.json'
@@ -318,10 +319,10 @@ def main():
             if result.returncode!=2:raise Failure('Published binary unexpectedly reads embedded streams')
             checks.append(dict(test=file+' published negative control',result='rejected before, exact PCM after',
                                baseline_commit='00c21b52be8ff6a34d462179b88698d229390129',baseline_cli_sha256=digest(baseline.read_bytes()),baseline_report_sha256=digest(published_path.read_bytes())))
-    sources=['src/asf.s','src/asf_extended.inc','src/asf_spread.inc','src/avi.s','src/decoder.s','src/track.s','src/mpegts.s',
+    sources=['src/asf.s','src/asf_views.inc','src/track_time.s','src/asf_extended.inc','src/asf_spread.inc','src/avi.s','src/decoder.s','src/track.s','src/mpegts.s','tests/asf_clock_model.py',
              'tests/verify-asf-extended.py','tests/asf-extended-oracle.c','tests/asf-boundary-oracle.c','tests/asf-spread-oracle.c',
              'tests/asf-seek-oracle.c','tests/seek-oracle.c','tests/chain-oracle.c','tests/track-catalog-oracle.c',
-             'tests/verify-asf-spread.py','tests/verify-asf.py','tests/verify-asf-metadata.py','tests/verify-asf-chapters.py','tests/verify-robustness.py']
+             'tests/decoder-bounded-oracle.c','tests/verify-asf-spread.py','tests/verify-asf.py','tests/verify-asf-metadata.py','tests/verify-asf-chapters.py','tests/verify-robustness.py']
     write_report('asf-extended-wine' if wine else 'asf-extended',dict(result='passed',checks=checks,
                  fixture_hashes=manifest['hashes'],fixture_ffmpeg=manifest['fixture_ffmpeg'],runtime_platform=platform.platform(),
                  runtime_sources={file:digest((ROOT/file).read_bytes()) for file in sources},cli_sha256=digest(Path(cli[-1]).read_bytes()),

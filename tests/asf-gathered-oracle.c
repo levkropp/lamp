@@ -1,0 +1,59 @@
+/* Test-only protected ASF framing plus whole-file clock/output bounds.
+   Direct parsing guards the first pass; file replay also exercises WAVE setup and the second pass. */
+#include "lamp-test.h"
+#include <math.h>
+LAMP_ABI int decoder_open(const lamp_char*);
+LAMP_ABI void decoder_close(void);
+LAMP_ABI unsigned decoder_read(float*,unsigned);
+LAMP_ABI uint64_t decoder_seek(uint64_t);
+extern uint64_t output_frames;
+extern unsigned output_rate,track_pcm_prepared,track_time_active;
+static const lamp_char *mutation_path;
+LAMP_ABI int asf_open(const unsigned char *,const unsigned char *);
+LAMP_ABI void track_close(void);
+LAMP_ABI void mts_close(void);
+LAMP_ABI unsigned track_read(float *,unsigned);
+LAMP_ABI unsigned track_time_read(float *,unsigned);
+LAMP_ABI uint64_t track_time_seek(uint64_t);
+extern unsigned decode_error,track_active,sample_rate,source_channels;
+extern uint64_t track_count,total_frames;
+static uint64_t checks,words,cases,prefixes,mutations;
+static unsigned expected_rate=16000,expected_channels=1;
+#define CHECK(x) do{checks++;if(!(x)){fprintf(stderr,"guard check line %d failed\n",__LINE__);exit(1);}}while(0)
+typedef struct{unsigned char *base,*data;size_t size,body,page;} Guard;
+static Guard guarded(size_t n){
+ SYSTEM_INFO info;GetSystemInfo(&info);size_t page=info.dwPageSize,body=(n+page-1)/page*page;if(!body)body=page;
+ Guard g={0};DWORD old;g.base=VirtualAlloc(NULL,body+2*page,MEM_RESERVE|MEM_COMMIT,PAGE_NOACCESS);CHECK(g.base&&VirtualProtect(g.base+page,body,PAGE_READWRITE,&old));g.data=g.base+page+body-n;g.size=n;g.body=body;g.page=page;return g;
+}
+static void readonly(Guard*g){DWORD old;CHECK(VirtualProtect(g->base+g->page,g->body,PAGE_READONLY,&old));}
+static void release(Guard*g){CHECK(VirtualFree(g->base,0,MEM_RELEASE));}
+static unsigned char *load(const lamp_char*path,size_t*bytes){FILE*f=lamp_fopen(path,LT("rb"));CHECK(f);CHECK(!fseek(f,0,SEEK_END));long n=ftell(f);CHECK(n>0&&n<=16777216);rewind(f);unsigned char*p=malloc(n);CHECK(p&&fread(p,1,n,f)==(size_t)n);fclose(f);*bytes=n;return p;}
+static void exercise(const unsigned char*data,size_t bytes,const unsigned char*expected,size_t expected_bytes,int exact){
+ Guard in=guarded(bytes),out=guarded(32+997*8);if(bytes)memcpy(in.data,data,bytes);readonly(&in);decode_error=0;
+ int parsed=asf_open(in.data,in.data+bytes);if(exact)CHECK(parsed&&!decode_error);track_close();mts_close();
+ FILE*file=lamp_fopen(mutation_path,LT("wb"));CHECK(file&&fwrite(data,1,bytes,file)==bytes&&!fclose(file));
+ int opened=decoder_open(mutation_path);uint64_t position=0;
+ if(exact)CHECK(opened==1&&!decode_error&&output_rate==expected_rate&&source_channels==expected_channels&&output_frames*8==expected_bytes);
+ if(opened==1){
+  CHECK(decoder_read((float*)(out.data+32),0)==0);
+  for(unsigned turn=0;;turn++){
+   CHECK(turn<65536);if(!exact&&turn==128)break;if(!exact&&turn==64)decoder_seek(output_frames/2);unsigned cap=1+(turn*137)%997;memset(out.data,0xa5,out.size);unsigned n=decoder_read((float*)(out.data+32),cap);CHECK(n<=cap);
+   for(unsigned j=0;j<32;j++)CHECK(out.data[j]==0xa5);
+   for(size_t j=32+(size_t)n*8;j<out.size;j++)CHECK(out.data[j]==0xa5);
+   if(!decode_error){float*p=(float*)(out.data+32);for(unsigned j=0;j<n*2;j++)CHECK(isfinite(p[j]));if(exact){CHECK((position+n)*8<=expected_bytes);CHECK(!memcmp(p,expected+position*8,(size_t)n*8));words+=(uint64_t)n*2;}position+=n;}
+   else CHECK(!exact);
+   if(!n||decode_error)break;
+  }
+ }
+ if(exact)CHECK(!decode_error&&position*8==expected_bytes);
+ decoder_close();CHECK(!track_time_active&&!track_pcm_prepared);track_close();mts_close();CHECK(!track_active&&!track_count&&!track_read((float*)(out.data+32),1));release(&out);release(&in);cases++;
+}
+int lamp_main(int argc,lamp_char**argv){
+ if(argc==3&&!lamp_strcmp(argv[1],LT("--reject"))){CHECK(!decoder_open(argv[2])&&decode_error);decoder_close();CHECK(!track_active&&!track_count&&!track_pcm_prepared&&!track_time_active);puts("{\"result\":\"passed\",\"rejected\":true}");return 0;}
+ if(argc!=7)return 2;mutation_path=argv[3];expected_rate=lamp_atoi(argv[5]);expected_channels=lamp_atoi(argv[6]);size_t bytes,reference_bytes;unsigned char*data=load(argv[1],&bytes),*reference=load(argv[2],&reference_bytes);exercise(data,bytes,reference,reference_bytes,1);
+ if(lamp_atoi(argv[4])){
+  size_t step=bytes/256+1;for(size_t n=0;n<bytes;n+=step){exercise(data,n,NULL,0,0);prefixes++;}
+  unsigned seed=0x36a21;for(unsigned i=0;i<512;i++){unsigned char*p=malloc(bytes);CHECK(p);memcpy(p,data,bytes);seed=seed*1664525u+1013904223u;size_t at=seed%bytes;seed=seed*1664525u+1013904223u;p[at]^=1u<<(seed>>29);exercise(p,bytes,NULL,0,0);free(p);mutations++;}
+ }
+ free(data);free(reference);printf("{\"result\":\"passed\",\"checks\":%llu,\"exact_float_words\":%llu,\"guarded_cases\":%llu,\"protected_prefixes\":%llu,\"mutations\":%llu}\n",(unsigned long long)checks,(unsigned long long)words,(unsigned long long)cases,(unsigned long long)prefixes,(unsigned long long)mutations);return 0;
+}

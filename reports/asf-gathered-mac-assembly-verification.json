@@ -1,0 +1,62 @@
+{
+  "result": "passed",
+  "scope": "Compile-only ARM64 macOS checks of the ASF and shared packet/media-clock path. No native linking, execution, device playback or Mac feature parity is established.",
+  "target": "arm64-apple-macosx12.0.0",
+  "cpu": "apple-m1",
+  "compiler": "Ubuntu LLVM version 18.1.3",
+  "sources": {
+    "tools/arm64.py": "f8abd01ad67063451181e0adc66e72b2a445ebe9a7b159f7b88ac52b79bdadc2",
+    "tools/arm64_lamp.py": "37e4a515283ef441f9d1ee647377716efbe0d6a3aae27ef7c62faf53118f35d0",
+    "src/lamp.inc": "d79c75543ab0d78863010b32e46faf23fda5b9cb54ec624e9dce0acfcabf03e6",
+    "src/asf_views.inc": "ab65ca4272d76815c8d9ac2849d2c7174e11c775ebed744682465ce970ae666f",
+    "src/asf_spread.inc": "29af589bc2f54e64db22fffa882ebf6045a8d1e31114ceedfc512dd6b076a608",
+    "src/asf_extended.inc": "f4a41d6572b245d8acc44fd93ace28a94ffa1deee5e71eab0a0eb4391abf296f"
+  },
+  "checks": [
+    {
+      "file": "src/asf.s",
+      "source_sha256": "f78e9f556775577c0401479e107513af14fa1bf865e0526604b72ec91b484c38",
+      "translated_sha256": "f59cf258a20a71ad330c20ddd4e34904e7927497d512915ed180c31230388e51",
+      "object_sha256": "f71cf1ade5817d76a8367470695a6b0901ad137379a7b7da51f3fa951ec071a0",
+      "object_bytes": 19168,
+      "result": "translated and assembled"
+    },
+    {
+      "file": "src/track.s",
+      "source_sha256": "80e9d51c7f042f96563af226079e2be931f140a4711ac605813aeddf3047361d",
+      "translated_sha256": "e770143d3337ab595efd28679c3da0e55c37431a25f0d8b48db652740c6c657a",
+      "object_sha256": "7afe1246b5ab67627e5f9710866bed55801d6ec884d0b4d238d6e19187ef6131",
+      "object_bytes": 15664,
+      "result": "translated and assembled"
+    },
+    {
+      "file": "src/track_time.s",
+      "source_sha256": "958c15a5948f77753eeb635a1ebbf7fc89ee185a746ac2d0321fbf4dc42d05f2",
+      "translated_sha256": "8a8e35d5a2f929c205145e66fdb3337f53b2423efecebe93f7aa5ec82a34a4f8",
+      "object_sha256": "1be1c23365aa120fa71a71ca1996b1a1e1a06a7ca43b2d84055817ba41a848df",
+      "object_bytes": 9600,
+      "result": "translated and assembled"
+    },
+    {
+      "file": "src/decoder.s",
+      "source_sha256": "3bcbb77424903865ab49cc9a7ca0be92bb6c76c14eecdcc4637a45d4adc65047",
+      "translated_sha256": "022584257a833645b45cfa93132d58a3c117ae60632aaa45c8a087a6fee7588d",
+      "object_sha256": "1dd87a576de8e258774dab681e61c84a97ca80b0bf16b10a1e92d6cf361b0601",
+      "object_bytes": 62128,
+      "result": "translated and assembled"
+    }
+  ],
+  "git_source_sha256": {
+    "tools/arm64.py": "f8abd01ad67063451181e0adc66e72b2a445ebe9a7b159f7b88ac52b79bdadc2",
+    "tools/arm64_lamp.py": "37e4a515283ef441f9d1ee647377716efbe0d6a3aae27ef7c62faf53118f35d0",
+    "src/lamp.inc": "d79c75543ab0d78863010b32e46faf23fda5b9cb54ec624e9dce0acfcabf03e6",
+    "src/asf_views.inc": "ab65ca4272d76815c8d9ac2849d2c7174e11c775ebed744682465ce970ae666f",
+    "src/asf_spread.inc": "29af589bc2f54e64db22fffa882ebf6045a8d1e31114ceedfc512dd6b076a608",
+    "src/asf_extended.inc": "f4a41d6572b245d8acc44fd93ace28a94ffa1deee5e71eab0a0eb4391abf296f",
+    "src/asf.s": "f78e9f556775577c0401479e107513af14fa1bf865e0526604b72ec91b484c38",
+    "src/track.s": "80e9d51c7f042f96563af226079e2be931f140a4711ac605813aeddf3047361d",
+    "src/track_time.s": "958c15a5948f77753eeb635a1ebbf7fc89ee185a746ac2d0321fbf4dc42d05f2",
+    "src/decoder.s": "3bcbb77424903865ab49cc9a7ca0be92bb6c76c14eecdcc4637a45d4adc65047"
+  },
+  "source_provenance": "sources/runtime_sources retain exact tested working-file bytes; git_source_sha256 records canonical staged Git bytes. Differences were checked to consist only of CRLF/LF line endings."
+}

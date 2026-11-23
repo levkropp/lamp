@@ -36,6 +36,11 @@ IDENT = bytes(range(16))
 def obj(key, body): return key + struct.pack('<Q', len(body) + 24) + body
 def field(value, width): return value.to_bytes((0, 1, 2, 4)[width], 'little') if width else b''
 
+def pcm_time(fmt, byte_offset):
+    rate = struct.unpack_from('<I', fmt, 4)[0]
+    align = struct.unpack_from('<H', fmt, 12)[0]
+    return ((byte_offset // align) * 1000 + rate // 2) // rate
+
 
 def payload(data, number=0, offset=0, size=None, stream=1, replic=8, time=0, delta=1):
     return dict(data=data, number=number, offset=offset, size=len(data) if size is None else size,
@@ -127,16 +132,18 @@ def writer_hash():
 def prepare(work):
     files, rejects = [], []
 
-    def add(name, data, note, channels=2, choice=0, count=1, selected=1, wave=None, comparator=True):
+    def add(name, data, note, channels=2, choice=0, count=1, selected=1, wave=None, comparator=True,
+            leading_ms=0, leading_rate=44100):
         path = work / name
         if data is not None: path.write_bytes(data)
         if comparator:
             ref = work / (name + '.ffmpeg.f32')
             decoder = ['-c:a', 'mp2float'] if name.startswith('mp2-') else []
             ffmpeg(*decoder, '-i', path, '-map', f'0:a:{selected - 1}', '-af', 'asetpts=N', '-f', 'f32le', ref)
-            ref.write_bytes(stereo_view(ref.read_bytes(), channels, 0))
+            ref.write_bytes(bytes(((leading_ms*leading_rate+500)//1000)*8) + stereo_view(ref.read_bytes(), channels, 0))
         files.append(dict(name=name, note=note, channels=channels, choice=choice, count=count,
-                          selected=selected, wave=wave, ffmpeg=comparator))
+                          selected=selected, wave=wave, ffmpeg=comparator,
+                          leading_frames=(leading_ms*leading_rate+500)//1000, leading_ms=leading_ms))
 
     codecs = [('pcm_u8', 1), ('pcm_s16le', 1), ('pcm_s16le', 2), ('pcm_s24le', 2), ('pcm_s32le', 2),
               ('pcm_f32le', 2), ('pcm_f64le', 1), ('pcm_alaw', 1), ('pcm_alaw', 2), ('pcm_mulaw', 2),
@@ -184,14 +191,14 @@ def prepare(work):
     variants = []
     for width in (1, 2, 3):
         small = [pcm[i:i + 100] for i in range(0, len(pcm), 100)]
-        packets = [packet([payload(d, k)], length=width, sequence=width, padding=width, number=width,
+        packets = [packet([payload(d, k, time=pcm_time(fmt, k*100))], length=width, sequence=width, padding=width, number=width,
                           offset=width, replic=width, payload_length=width, physical=240)
                    for k, d in enumerate(small)]
         variants.append((f'fields-{width}.asf', packets, 240, 240))
     for number, opts in enumerate((dict(ecc=False), dict(multi=False), dict(length=0, sequence=0, offset=0),
                                    dict(logical=240, physical=512))):
         small = [pcm[i:i + 128] for i in range(0, len(pcm), 128)]
-        packets = [packet([payload(d, k, replic=0 if opts.get('replic') == 0 else 8)], **opts)
+        packets = [packet([payload(d, k, replic=0 if opts.get('replic') == 0 else 8, time=pcm_time(fmt, k*128))], **opts)
                    for k, d in enumerate(small)]
         physical = opts.get('physical', 512)
         variants.append((f'layout-{number}.asf', packets, physical, physical))
@@ -202,23 +209,23 @@ def prepare(work):
         splits = [d[:3], d[3:401], d[401:]]
         off = 0
         for n, piece in enumerate(splits):
-            packets.append(packet([payload(piece, (254 + k) & 255, off, len(d), replic=8 if n == 0 else 0)],
+            packets.append(packet([payload(piece, (254 + k) & 255, off, len(d), replic=8 if n == 0 else 0, time=pcm_time(fmt, k*1200))],
                                   physical=1024, replic=1 if n == 0 else 0))
             off += len(piece)
     variants.append(('fragments.asf', packets, 1024, 1024))
     packets = []
-    small = [pcm[i:i + 100] for i in range(0, len(pcm), 100)]
+    small = [pcm[i:i + 176] for i in range(0, len(pcm), 176)]
     for i in range(0, len(small), 3):
         body = b''.join(bytes([len(d)]) + d for d in small[i:i + 3])
-        packets.append(packet([payload(body, i & 255, replic=1)]))
-    variants.append(('compressed-objects.asf', packets, 512, 512))
-    packets = [packet([payload(d, k)], physical=1280 if len(d) > 430 else 512)
+        packets.append(packet([payload(body, i & 255, offset=pcm_time(fmt, i*176), replic=1, delta=1)], physical=768))
+    variants.append(('compressed-objects.asf', packets, 768, 768))
+    packets = [packet([payload(d, k, time=pcm_time(fmt, k*1200))], physical=1280 if len(d) > 430 else 512)
                for k, d in enumerate(parts)]
     variants.append(('variable-packets.asf', packets, 512, 1280))
     for name, packets, minimum, maximum in variants:
         add(name, asf([stream(fmt)], packets, minimum, maximum), 'independent ASF writer, known PCM',
             wave='packet-source.wav')
-    base_packets = [packet([payload(d, k)]) for k, d in enumerate([pcm[i:i + 128] for i in range(0, len(pcm), 128)])]
+    base_packets = [packet([payload(d, k, time=pcm_time(fmt, k*128))]) for k, d in enumerate([pcm[i:i + 128] for i in range(0, len(pcm), 128)])]
     base = asf([stream(fmt)], base_packets)
     add('broadcast.asf', asf([stream(fmt)], base_packets, broadcast=True), 'unknown object length/count in broadcast header', wave='packet-source.wav')
     nested = obj(EXT, NONE + struct.pack('<HI', 6, len(stream(fmt))) + stream(fmt))
@@ -226,7 +233,7 @@ def prepare(work):
     add('Unicode-音楽-Ω.asf', base, 'Unicode path', wave='packet-source.wav')
     unsupported = bytearray(fmt); struct.pack_into('<H', unsupported, 0, 0x161)
     catalog_streams = [stream(bytes(unsupported), k) for k in range(1, 127)] + [stream(fmt, 127)]
-    high_packets = [packet([payload(pcm[i:i + 128], k, stream=127)]) for k, i in enumerate(range(0, len(pcm), 128))]
+    high_packets = [packet([payload(pcm[i:i + 128], k, stream=127, time=pcm_time(fmt, i))]) for k, i in enumerate(range(0, len(pcm), 128))]
     high = asf(catalog_streams, high_packets)
     for choice in (0, 127):
         add(f'catalog127-choice{choice}.asf', high, '127 legal stream IDs; unsupported format placeholders count',
@@ -244,8 +251,13 @@ def prepare(work):
         copy = work / (alias + '.wav')
         ffmpeg('-i', work / name, '-map', f'0:a:{selected - 1}', '-c:a', 'copy', copy)
         untrimmed_wave(copy)
+        # This real mux has WMA/MP3 encoder delays. Preserve its selected
+        # stream's actual initial gap rather than changing the ASF header.
+        probe = json.loads(run(['ffprobe', '-v', 'error', '-select_streams', f'a:{selected-1}',
+                               '-show_entries', 'stream=start_pts,sample_rate,time_base', '-of', 'json', work/name]))['streams'][0]
+        if probe['time_base'] != '1/1000': raise Failure('Unexpected ASF reference time base')
         add(alias, (work / name).read_bytes(), 'audio ordinal includes unsupported WMA', choice=choice,
-            count=3, selected=selected, wave=copy.name)
+            count=3, selected=selected, wave=copy.name, leading_ms=int(probe['start_pts']), leading_rate=int(probe['sample_rate']))
 
     def reject(name, data, error=100, choice=0):
         (work / name).write_bytes(data)
@@ -346,7 +358,8 @@ def main():
                 wave_output = work / (entry['name'] + '.wave.ours.f32')
                 wave_output.unlink(missing_ok=True)
                 run([*cli, '--decode', work / entry['wave'], wave_output], env=env, timeout=180)
-                if ours != wave_output.read_bytes(): raise Failure(entry['name'] + ': differs from same audio in WAVE')
+                expected = bytes(entry.get('leading_frames', 0)*8) + wave_output.read_bytes()
+                if ours != expected: raise Failure(entry['name'] + ': differs from WAVE with independently measured leading gap')
             other = (work / (entry['name'] + '.ffmpeg.f32')).read_bytes() if entry['ffmpeg'] else wave_output.read_bytes()
             if len(ours) != len(other): raise Failure(entry['name'] + ': FFmpeg length differs')
             import array
@@ -372,7 +385,7 @@ def main():
         # seek-oracle has no track parameter; exact selection is checked above,
         # while automatic selection uses its continuous reference for seeking.
         seeks = None if entry['choice'] or entry['name'] == 'ac3-2.asf' else json.loads(run([*command('seek-oracle'), path, reference, 0], env=env, timeout=180).splitlines()[-1])
-        cold_seeks = json.loads(run([*command('asf-seek-oracle'), path, work / entry['wave'], entry['choice']], env=env, timeout=180).splitlines()[-1]) if entry['wave'] else None
+        cold_seeks = json.loads(run([*command('asf-seek-oracle'), path, work / entry['wave'], entry['choice'], entry.get('leading_frames',0)], env=env, timeout=180).splitlines()[-1]) if entry['wave'] else None
         checks.append(dict(test=entry['name'], result='exact', note=entry['note'], stats=stats,
                            catalog=catalog, seeks=seeks, raw_stream_cold_seeks=cold_seeks,
                            continuous_seek_limit='AC-3 dither restarts after seek' if entry['name'] == 'ac3-2.asf' else None,
@@ -398,7 +411,7 @@ def main():
     if playback_requested(sys.argv[1:]) and not wine:
         for name in ('pcm_s16le-2.asf', 'libmp3lame-2.asf', 'aac-2.asf'):
             checks.append(dict(test=name + ' playback', result='passed', stats=play(work / name)))
-    sources = ['src/asf.s', 'src/avi.s', 'src/decoder.s', 'src/mpegts.s', 'src/track.s',
+    sources = ['src/asf.s', 'src/asf_views.inc', 'src/track_time.s', 'src/avi.s', 'src/decoder.s', 'src/mpegts.s', 'src/track.s',
                'tests/verify-asf.py', 'tests/seek-oracle.c', 'tests/track-catalog-oracle.c', 'tests/asf-boundary-oracle.c', 'tests/asf-seek-oracle.c']
     write_report('asf-wine' if wine else 'asf', dict(result='passed', checks=checks,
                  fixture_hashes=manifest['hashes'], fixture_ffmpeg=manifest['ffmpeg'],

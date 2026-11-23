@@ -1,0 +1,84 @@
+{
+  "result": "passed",
+  "platform": "Windows-11-10.0.26300-SP0",
+  "scope": "ID3v2 and Xing/encoder-trim reuse, source-order fragments, leading/negative media time, metadata-only prefix and ID3v1/APE tails. Codec DSP is independently covered elsewhere.",
+  "checks": [
+    {
+      "file": "whole.asf",
+      "reference": "whole.asf.f32",
+      "frames": 28665,
+      "result": "exact native metadata/trim PCM with independent presentation placement"
+    },
+    {
+      "file": "leading.asf",
+      "reference": "leading.asf.f32",
+      "frames": 29768,
+      "result": "exact native metadata/trim PCM with independent presentation placement"
+    },
+    {
+      "file": "negative.asf",
+      "reference": "negative.asf.f32",
+      "frames": 27783,
+      "result": "exact native metadata/trim PCM with independent presentation placement"
+    },
+    {
+      "file": "metadata-only-prefix.asf",
+      "reference": "metadata-only-prefix.asf.f32",
+      "frames": 28665,
+      "result": "exact native metadata/trim PCM with independent presentation placement"
+    },
+    {
+      "file": "id3v1-tail.asf",
+      "reference": "id3v1-tail.asf.f32",
+      "frames": 28665,
+      "result": "exact native metadata/trim PCM with independent presentation placement"
+    },
+    {
+      "file": "ape-tail.asf",
+      "reference": "ape-tail.asf.f32",
+      "frames": 28665,
+      "result": "exact native metadata/trim PCM with independent presentation placement"
+    }
+  ],
+  "fixture_hashes": {
+    "whole.asf": "ef0198c0699df552372ae6f7bbb97dc96540e921fd89baea92db1fec8873b649",
+    "whole.asf.f32": "305dc072f3ffaf96c048696e8d43c7d594cb2dc8dbbf31525372598f592fe409",
+    "leading.asf": "637b0eb24fc2724cd233ea028babad023e406bd6b59ba9ceb634b5eb3a3aada1",
+    "leading.asf.f32": "59fafe8f8c7bd6971c57359a2cd2661566a774649c98162a1f0ede16de184168",
+    "negative.asf": "96590ba250ea71b03f610aed39a763112ad909230b0d4197653c32f4a36f2a7f",
+    "negative.asf.f32": "16cc797ffc8aeb067e2d78af579335b8b2aa46fd60a3f87ece881b3a09b56d1c",
+    "metadata-only-prefix.asf": "b103a4c67cd7b5cf5febee314d9ef6e03401569b598885b9d2a097eeaa8d069e",
+    "metadata-only-prefix.asf.f32": "305dc072f3ffaf96c048696e8d43c7d594cb2dc8dbbf31525372598f592fe409",
+    "id3v1-tail.asf": "81a75fb7baaecb3917bbd6bc96d6ea22700f96ad3262d456b6bde3f54643c2dc",
+    "id3v1-tail.asf.f32": "305dc072f3ffaf96c048696e8d43c7d594cb2dc8dbbf31525372598f592fe409",
+    "ape-tail.asf": "3aeb7802711e93ddf36ef85ef33b04b45282a916a5d87f6bff4a5ff7bdb9f091",
+    "ape-tail.asf.f32": "305dc072f3ffaf96c048696e8d43c7d594cb2dc8dbbf31525372598f592fe409"
+  },
+  "native_reference_binary_sha256": "672ba741d433edf09a60f5734fc9b960d7ece9388e2c5bc5062c9221cb091558",
+  "sources": {
+    "src/asf.s": "f78e9f556775577c0401479e107513af14fa1bf865e0526604b72ec91b484c38",
+    "src/asf_views.inc": "ab65ca4272d76815c8d9ac2849d2c7174e11c775ebed744682465ce970ae666f",
+    "src/decoder.s": "3bcbb77424903865ab49cc9a7ca0be92bb6c76c14eecdcc4637a45d4adc65047",
+    "src/track.s": "80e9d51c7f042f96563af226079e2be931f140a4711ac605813aeddf3047361d",
+    "src/track_time.s": "958c15a5948f77753eeb635a1ebbf7fc89ee185a746ac2d0321fbf4dc42d05f2",
+    "src/mp3.s": "69a73284b0b5949b82f5b04123458e76f37d73ccb981f8042df3714ef9806916",
+    "tests/verify-asf-mpeg-metadata.py": "36af9fc70f66e78faf75bb2e7e25f49f434226ca8fdad4e7a9ac9f0e5facea57",
+    "tests/verify-asf.py": "9120058dd13a53fe5651a2f395bec7cfc45d8cf735d7354a91022dbb80a667e0",
+    "tests/verify-flv-gathered.py": "873098b0786f5f872cb60ce2c6f9659e81e1363150517969e6f9f7f372ce841e"
+  },
+  "binaries": {
+    "lamp-cli.exe": "672ba741d433edf09a60f5734fc9b960d7ece9388e2c5bc5062c9221cb091558"
+  },
+  "git_source_sha256": {
+    "src/asf.s": "f78e9f556775577c0401479e107513af14fa1bf865e0526604b72ec91b484c38",
+    "src/asf_views.inc": "ab65ca4272d76815c8d9ac2849d2c7174e11c775ebed744682465ce970ae666f",
+    "src/decoder.s": "3bcbb77424903865ab49cc9a7ca0be92bb6c76c14eecdcc4637a45d4adc65047",
+    "src/track.s": "80e9d51c7f042f96563af226079e2be931f140a4711ac605813aeddf3047361d",
+    "src/track_time.s": "958c15a5948f77753eeb635a1ebbf7fc89ee185a746ac2d0321fbf4dc42d05f2",
+    "src/mp3.s": "69a73284b0b5949b82f5b04123458e76f37d73ccb981f8042df3714ef9806916",
+    "tests/verify-asf-mpeg-metadata.py": "36af9fc70f66e78faf75bb2e7e25f49f434226ca8fdad4e7a9ac9f0e5facea57",
+    "tests/verify-asf.py": "9120058dd13a53fe5651a2f395bec7cfc45d8cf735d7354a91022dbb80a667e0",
+    "tests/verify-flv-gathered.py": "873098b0786f5f872cb60ce2c6f9659e81e1363150517969e6f9f7f372ce841e"
+  },
+  "source_provenance": "sources/runtime_sources retain exact tested working-file bytes; git_source_sha256 records canonical staged Git bytes. Differences were checked to consist only of CRLF/LF line endings."
+}

@@ -1,0 +1,61 @@
+{
+  "result": "passed",
+  "scope": "Only the track_read cancellation placement differs in a test-only object. Previous code returns buffered audio after cancellation; current code aborts before copying, preserves output guards and reopens cleanly. No control object enters shipping binaries.",
+  "checks": [
+    {
+      "file": "pcm_s16le-44100-2-continuous.asf",
+      "variant": "current",
+      "exit_code": 0,
+      "stdout": "{\"result\":\"passed\",\"cancelled_before_buffered_copy\":true,\"reopened\":true}",
+      "stderr": "",
+      "binary_sha256": "ab30eccfd38eb10b51157e0d472974150cb28bace8923b161fe2dfc02e3ed1fd",
+      "fixture_sha256": "db42568aac8432b0d9b96517f5350154257c804200e15d8813dc9738c9ed7c09"
+    },
+    {
+      "file": "pcm_s16le-44100-2-continuous.asf",
+      "variant": "previous",
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "buffered cancel line12 error0",
+      "binary_sha256": "4f1c317de1c401d5e3e7a9c9377518b3a7d77d92d3468543a1cbcb68b8a4f300",
+      "fixture_sha256": "db42568aac8432b0d9b96517f5350154257c804200e15d8813dc9738c9ed7c09"
+    },
+    {
+      "file": "continuous-pcm.flv",
+      "variant": "current",
+      "exit_code": 0,
+      "stdout": "{\"result\":\"passed\",\"cancelled_before_buffered_copy\":true,\"reopened\":true}",
+      "stderr": "",
+      "binary_sha256": "ab30eccfd38eb10b51157e0d472974150cb28bace8923b161fe2dfc02e3ed1fd",
+      "fixture_sha256": "591c47ce8103da021e64e0a841193c8b79072f0a7fc9d7d87894eef1e401727b"
+    },
+    {
+      "file": "continuous-pcm.flv",
+      "variant": "previous",
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "buffered cancel line12 error0",
+      "binary_sha256": "4f1c317de1c401d5e3e7a9c9377518b3a7d77d92d3468543a1cbcb68b8a4f300",
+      "fixture_sha256": "591c47ce8103da021e64e0a841193c8b79072f0a7fc9d7d87894eef1e401727b"
+    }
+  ],
+  "sources": {
+    "src/track.s": "80e9d51c7f042f96563af226079e2be931f140a4711ac605813aeddf3047361d",
+    "src/decoder.s": "3bcbb77424903865ab49cc9a7ca0be92bb6c76c14eecdcc4637a45d4adc65047",
+    "src/asf.s": "f78e9f556775577c0401479e107513af14fa1bf865e0526604b72ec91b484c38",
+    "src/asf_views.inc": "ab65ca4272d76815c8d9ac2849d2c7174e11c775ebed744682465ce970ae666f",
+    "tests/track-buffer-cancel-oracle.c": "52dfbfcd31f24946f7734070f36310bdc841ab8e92eaaaa8bfaafdea6c408e57",
+    "tests/verify-track-buffer-cancel.py": "61c59094e7ed5e7f5aa0d815dee126340275eb0eac7237cfe759e2a3ab0adf16"
+  },
+  "counterfactual_source_sha256": "c94138d6c0eb3df33552770e7519a20cc841ee39379c42d00146801e1b6d477c",
+  "counterfactual_object_sha256": "8df77f07056152dce7507a94bf07147ae5b8ec78c780f8b986b5ad63bd61a3a7",
+  "git_source_sha256": {
+    "src/track.s": "80e9d51c7f042f96563af226079e2be931f140a4711ac605813aeddf3047361d",
+    "src/decoder.s": "3bcbb77424903865ab49cc9a7ca0be92bb6c76c14eecdcc4637a45d4adc65047",
+    "src/asf.s": "f78e9f556775577c0401479e107513af14fa1bf865e0526604b72ec91b484c38",
+    "src/asf_views.inc": "ab65ca4272d76815c8d9ac2849d2c7174e11c775ebed744682465ce970ae666f",
+    "tests/track-buffer-cancel-oracle.c": "52dfbfcd31f24946f7734070f36310bdc841ab8e92eaaaa8bfaafdea6c408e57",
+    "tests/verify-track-buffer-cancel.py": "61c59094e7ed5e7f5aa0d815dee126340275eb0eac7237cfe759e2a3ab0adf16"
+  },
+  "source_provenance": "sources/runtime_sources retain exact tested working-file bytes; git_source_sha256 records canonical staged Git bytes. Differences were checked to consist only of CRLF/LF line endings."
+}

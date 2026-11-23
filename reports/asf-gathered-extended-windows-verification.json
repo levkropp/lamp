@@ -1,0 +1,2534 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "pcm_u8-1.asf",
+      "result": "exact",
+      "frames": 12288,
+      "pcm_sha256": "a8578d9d17983c3e3df53fc4cc0c6460fb495764f7810588290ea26e6560e63c",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 12288,
+        "leading_frames": 0
+      },
+      "continuous_seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 91389,
+        "maximum_discarded": 12288,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "protected_input": null,
+      "ffmpeg": {
+        "snr_db": 999,
+        "peak_error": 0.0
+      },
+      "note": "Stream Properties embedded after two counted names and two opaque payload-extension descriptions"
+    },
+    {
+      "test": "pcm_s16le-1.asf",
+      "result": "exact",
+      "frames": 12288,
+      "pcm_sha256": "aa1456ccfe694bca3a23074ba3dc645d3972331c1befee4d362a5fa6bedb4a69",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 12288,
+        "leading_frames": 0
+      },
+      "continuous_seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 91389,
+        "maximum_discarded": 12288,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "protected_input": null,
+      "ffmpeg": {
+        "snr_db": 999,
+        "peak_error": 0.0
+      },
+      "note": "Stream Properties embedded after two counted names and two opaque payload-extension descriptions"
+    },
+    {
+      "test": "pcm_s16le-2.asf",
+      "result": "exact",
+      "frames": 12288,
+      "pcm_sha256": "b832e0adfcdb115274845f1ef7d59c55b790996bf9466cc64620b08f99c7ee9d",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 12288,
+        "leading_frames": 0
+      },
+      "continuous_seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 91389,
+        "maximum_discarded": 12288,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "protected_input": null,
+      "ffmpeg": {
+        "snr_db": 999,
+        "peak_error": 0.0
+      },
+      "note": "Stream Properties embedded after two counted names and two opaque payload-extension descriptions"
+    },
+    {
+      "test": "pcm_s24le-2.asf",
+      "result": "exact",
+      "frames": 12288,
+      "pcm_sha256": "3d091bede7032281348efc08321aac7779801d1a7ccdc5efe85498957afbf5ae",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 12288,
+        "leading_frames": 0
+      },
+      "continuous_seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 91389,
+        "maximum_discarded": 12288,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "protected_input": null,
+      "ffmpeg": {
+        "snr_db": 999,
+        "peak_error": 0.0
+      },
+      "note": "Stream Properties embedded after two counted names and two opaque payload-extension descriptions"
+    },
+    {
+      "test": "pcm_s32le-2.asf",
+      "result": "exact",
+      "frames": 12288,
+      "pcm_sha256": "5ad019b76334334aa3ac313e3b4926105780197792786de303d671a933b6da11",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 12288,
+        "leading_frames": 0
+      },
+      "continuous_seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 91389,
+        "maximum_discarded": 12288,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "protected_input": null,
+      "ffmpeg": {
+        "snr_db": 999,
+        "peak_error": 0.0
+      },
+      "note": "Stream Properties embedded after two counted names and two opaque payload-extension descriptions"
+    },
+    {
+      "test": "pcm_f32le-2.asf",
+      "result": "exact",
+      "frames": 12288,
+      "pcm_sha256": "667ddef2cdc5a736fd8e6e8d041e5f767bac4da4a7eb0be6026f3cb25245b3eb",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 12288,
+        "leading_frames": 0
+      },
+      "continuous_seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 91389,
+        "maximum_discarded": 12288,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "protected_input": null,
+      "ffmpeg": {
+        "snr_db": 999,
+        "peak_error": 0.0
+      },
+      "note": "Stream Properties embedded after two counted names and two opaque payload-extension descriptions"
+    },
+    {
+      "test": "pcm_f64le-1.asf",
+      "result": "exact",
+      "frames": 12288,
+      "pcm_sha256": "8e05a13a202fe9642fddcc3f341c933b8abdc4dc7ef374d3a906c67a6facac62",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 12288,
+        "leading_frames": 0
+      },
+      "continuous_seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 91389,
+        "maximum_discarded": 12288,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "protected_input": null,
+      "ffmpeg": {
+        "snr_db": 999,
+        "peak_error": 0.0
+      },
+      "note": "Stream Properties embedded after two counted names and two opaque payload-extension descriptions"
+    },
+    {
+      "test": "pcm_alaw-1.asf",
+      "result": "exact",
+      "frames": 12288,
+      "pcm_sha256": "b20a7084012a66723f605a8c1daa46b8f9c463da56a2cf12ebc5e549a92e9773",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 12288,
+        "leading_frames": 0
+      },
+      "continuous_seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 91389,
+        "maximum_discarded": 12288,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "protected_input": null,
+      "ffmpeg": {
+        "snr_db": 999,
+        "peak_error": 0.0
+      },
+      "note": "Stream Properties embedded after two counted names and two opaque payload-extension descriptions"
+    },
+    {
+      "test": "pcm_alaw-2.asf",
+      "result": "exact",
+      "frames": 12288,
+      "pcm_sha256": "0c064715d7e5d9e543b95eaa01ae47f9830eafbd52d915d4ae604600a5395529",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 12288,
+        "leading_frames": 0
+      },
+      "continuous_seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 91389,
+        "maximum_discarded": 12288,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "protected_input": null,
+      "ffmpeg": {
+        "snr_db": 999,
+        "peak_error": 0.0
+      },
+      "note": "Stream Properties embedded after two counted names and two opaque payload-extension descriptions"
+    },
+    {
+      "test": "pcm_mulaw-2.asf",
+      "result": "exact",
+      "frames": 12288,
+      "pcm_sha256": "91e74c7e98aacfeda2bd388058d42a79537485394a25470542f955214665ae34",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 12288,
+        "leading_frames": 0
+      },
+      "continuous_seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 91389,
+        "maximum_discarded": 12288,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "protected_input": null,
+      "ffmpeg": {
+        "snr_db": 999,
+        "peak_error": 0.0
+      },
+      "note": "Stream Properties embedded after two counted names and two opaque payload-extension descriptions"
+    },
+    {
+      "test": "adpcm_ima_wav-1.asf",
+      "result": "exact",
+      "frames": 14287,
+      "pcm_sha256": "568684534561d937862d058e7d9e389374e75906eb0c45ac11b7f3a826810d4e",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 14287,
+        "leading_frames": 0
+      },
+      "continuous_seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 11,
+        "discarded_frames": 12621,
+        "maximum_discarded": 2041,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "protected_input": null,
+      "ffmpeg": {
+        "snr_db": 999,
+        "peak_error": 0.0
+      },
+      "note": "Stream Properties embedded after two counted names and two opaque payload-extension descriptions"
+    },
+    {
+      "test": "adpcm_ima_wav-2.asf",
+      "result": "exact",
+      "frames": 13221,
+      "pcm_sha256": "77185594d536062cc2ef8fba10e92d6f86bd2340110e9c03ae8941bc71d95da6",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 13221,
+        "leading_frames": 0
+      },
+      "continuous_seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 11,
+        "discarded_frames": 6091,
+        "maximum_discarded": 1017,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "protected_input": null,
+      "ffmpeg": {
+        "snr_db": 999,
+        "peak_error": 0.0
+      },
+      "note": "Stream Properties embedded after two counted names and two opaque payload-extension descriptions"
+    },
+    {
+      "test": "adpcm_ms-1.asf",
+      "result": "exact",
+      "frames": 14252,
+      "pcm_sha256": "f8582dfe8688d6dd097855fae2bf67df53fcc7d5cba6047a26d76c4793c589bd",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 14252,
+        "leading_frames": 0
+      },
+      "continuous_seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 11,
+        "discarded_frames": 12679,
+        "maximum_discarded": 2036,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "protected_input": null,
+      "ffmpeg": {
+        "snr_db": 999,
+        "peak_error": 0.0
+      },
+      "note": "Stream Properties embedded after two counted names and two opaque payload-extension descriptions"
+    },
+    {
+      "test": "adpcm_ms-2.asf",
+      "result": "exact",
+      "frames": 13156,
+      "pcm_sha256": "f36a1d5adda05420b661ccd657a6b0234c268d103100c3517f7446f0fe3702d7",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 13156,
+        "leading_frames": 0
+      },
+      "continuous_seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 11,
+        "discarded_frames": 6239,
+        "maximum_discarded": 1012,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "protected_input": null,
+      "ffmpeg": {
+        "snr_db": 999,
+        "peak_error": 0.0
+      },
+      "note": "Stream Properties embedded after two counted names and two opaque payload-extension descriptions"
+    },
+    {
+      "test": "mp2-2.asf",
+      "result": "exact",
+      "frames": 12672,
+      "pcm_sha256": "6e95714bb0ab1ec7a7d85360c576a7b8ae24c0101fdd09a4608ca3f58bc86766",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 12672,
+        "leading_frames": 0
+      },
+      "continuous_seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 11,
+        "discarded_frames": 34365,
+        "maximum_discarded": 3456,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "protected_input": null,
+      "ffmpeg": {
+        "snr_db": 124.44304360280623,
+        "peak_error": 6.556510925292969e-07
+      },
+      "note": "Stream Properties embedded after two counted names and two opaque payload-extension descriptions"
+    },
+    {
+      "test": "libmp3lame-2.asf",
+      "result": "exact",
+      "frames": 13824,
+      "pcm_sha256": "00643145d70f94e8a24036bc1c0ba56218dfa3e91fdd70a411fd3ff93c4c9200",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 13824,
+        "leading_frames": 0
+      },
+      "continuous_seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 4,
+        "discarded_frames": 84477,
+        "maximum_discarded": 10368,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "protected_input": null,
+      "ffmpeg": {
+        "snr_db": 124.23081085396306,
+        "peak_error": 1.817941665649414e-06
+      },
+      "note": "Stream Properties embedded after two counted names and two opaque payload-extension descriptions"
+    },
+    {
+      "test": "ac3.asf",
+      "result": "exact",
+      "frames": 18432,
+      "pcm_sha256": "b3f3611b9a254c4af61f8febb43fb0253fc313babcb424a78e7c209d5c20cfdb",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 18432,
+        "leading_frames": 0
+      },
+      "continuous_seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 11,
+        "discarded_frames": 11517,
+        "maximum_discarded": 1536,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "protected_input": null,
+      "ffmpeg": {
+        "snr_db": 139.476373298233,
+        "peak_error": 1.1444091796875e-05
+      },
+      "note": "Stream Properties embedded after two counted names and two opaque payload-extension descriptions"
+    },
+    {
+      "test": "aac.asf",
+      "result": "exact",
+      "frames": 12288,
+      "pcm_sha256": "35ed960c27c6550c3a2583a4502ddc05a5d4eca5358dc832c55af3ce61dac512",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 12288,
+        "leading_frames": 0
+      },
+      "continuous_seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 11,
+        "discarded_frames": 7421,
+        "maximum_discarded": 1024,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 717,
+        "no_input_padding": true
+      },
+      "ffmpeg": {
+        "snr_db": 138.04164753003565,
+        "peak_error": 1.7881393432617188e-07
+      },
+      "note": "Stream Properties embedded after two counted names and two opaque payload-extension descriptions"
+    },
+    {
+      "test": "legacy-zero-length.asf",
+      "result": "exact",
+      "frames": 12288,
+      "pcm_sha256": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 12288,
+        "leading_frames": 0
+      },
+      "continuous_seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 91389,
+        "maximum_discarded": 12288,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 717,
+        "no_input_padding": true
+      },
+      "ffmpeg": {
+        "snr_db": 999,
+        "peak_error": 0.0
+      },
+      "note": "Stream Properties embedded after two counted names and two opaque payload-extension descriptions"
+    },
+    {
+      "test": "odd-chunks.asf",
+      "result": "exact",
+      "frames": 12288,
+      "pcm_sha256": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 12288,
+        "leading_frames": 0
+      },
+      "continuous_seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 91389,
+        "maximum_discarded": 12288,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "protected_input": null,
+      "ffmpeg": {
+        "snr_db": 999,
+        "peak_error": 0.0
+      },
+      "note": "Stream Properties embedded after two counted names and two opaque payload-extension descriptions"
+    },
+    {
+      "test": "wide-span.asf",
+      "result": "exact",
+      "frames": 12288,
+      "pcm_sha256": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 12288,
+        "leading_frames": 0
+      },
+      "continuous_seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 91389,
+        "maximum_discarded": 12288,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "protected_input": null,
+      "ffmpeg": {
+        "snr_db": 999,
+        "peak_error": 0.0
+      },
+      "note": "Stream Properties embedded after two counted names and two opaque payload-extension descriptions"
+    },
+    {
+      "test": "compressed-objects.asf",
+      "result": "exact",
+      "frames": 12288,
+      "pcm_sha256": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 12288,
+        "leading_frames": 0
+      },
+      "continuous_seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 91389,
+        "maximum_discarded": 12288,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "protected_input": null,
+      "ffmpeg": {
+        "snr_db": 999,
+        "peak_error": 0.0
+      },
+      "note": "Stream Properties embedded after two counted names and two opaque payload-extension descriptions"
+    },
+    {
+      "test": "variable-packets.asf",
+      "result": "exact",
+      "frames": 12288,
+      "pcm_sha256": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 12288,
+        "leading_frames": 0
+      },
+      "continuous_seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 91389,
+        "maximum_discarded": 12288,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "protected_input": null,
+      "ffmpeg": {
+        "snr_db": 999,
+        "peak_error": 0.0
+      },
+      "note": "Stream Properties embedded after two counted names and two opaque payload-extension descriptions"
+    },
+    {
+      "test": "span-one.asf",
+      "result": "exact",
+      "frames": 12288,
+      "pcm_sha256": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 12288,
+        "leading_frames": 0
+      },
+      "continuous_seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 91389,
+        "maximum_discarded": 12288,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "protected_input": null,
+      "ffmpeg": {
+        "snr_db": 999,
+        "peak_error": 0.0
+      },
+      "note": "Stream Properties embedded after two counted names and two opaque payload-extension descriptions"
+    },
+    {
+      "test": "one-row.asf",
+      "result": "exact",
+      "frames": 12288,
+      "pcm_sha256": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 12288,
+        "leading_frames": 0
+      },
+      "continuous_seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 91389,
+        "maximum_discarded": 12288,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "protected_input": null,
+      "ffmpeg": {
+        "snr_db": 999,
+        "peak_error": 0.0
+      },
+      "note": "Stream Properties embedded after two counted names and two opaque payload-extension descriptions"
+    },
+    {
+      "test": "seven-byte-record.asf",
+      "result": "exact",
+      "frames": 12288,
+      "pcm_sha256": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 12288,
+        "leading_frames": 0
+      },
+      "continuous_seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 91389,
+        "maximum_discarded": 12288,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "protected_input": null,
+      "ffmpeg": null,
+      "note": "Stream Properties embedded after two counted names and two opaque payload-extension descriptions"
+    },
+    {
+      "test": "silence-data.asf",
+      "result": "exact",
+      "frames": 12288,
+      "pcm_sha256": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 12288,
+        "leading_frames": 0
+      },
+      "continuous_seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 91389,
+        "maximum_discarded": 12288,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "protected_input": null,
+      "ffmpeg": {
+        "snr_db": 999,
+        "peak_error": 0.0
+      },
+      "note": "Stream Properties embedded after two counted names and two opaque payload-extension descriptions"
+    },
+    {
+      "test": "Unicode-\u97f3\u697d-\u03a9.asf",
+      "result": "exact",
+      "frames": 12288,
+      "pcm_sha256": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 12288,
+        "leading_frames": 0
+      },
+      "continuous_seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 91389,
+        "maximum_discarded": 12288,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "protected_input": null,
+      "ffmpeg": {
+        "snr_db": 999,
+        "peak_error": 0.0
+      },
+      "note": "Stream Properties embedded after two counted names and two opaque payload-extension descriptions"
+    },
+    {
+      "test": "max-span.asf",
+      "result": "exact",
+      "frames": 65535,
+      "pcm_sha256": "b3fba10596556f816a426a414b4770647e3bcc003a830adb020ce20134b0f3cc",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 65535,
+        "leading_frames": 0
+      },
+      "continuous_seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 331000,
+        "maximum_discarded": 65535,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "protected_input": null,
+      "ffmpeg": {
+        "snr_db": 999,
+        "peak_error": 0.0
+      },
+      "note": "Stream Properties embedded after two counted names and two opaque payload-extension descriptions"
+    },
+    {
+      "test": "max-packet.asf",
+      "result": "exact",
+      "frames": 65535,
+      "pcm_sha256": "7aa4999174f53e475a7009c89f43c840cb4402b767c2d6049e34c1359a0b5d7f",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 65535,
+        "leading_frames": 0
+      },
+      "continuous_seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 331000,
+        "maximum_discarded": 65535,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "protected_input": null,
+      "ffmpeg": {
+        "snr_db": 999,
+        "peak_error": 0.0
+      },
+      "note": "Stream Properties embedded after two counted names and two opaque payload-extension descriptions"
+    },
+    {
+      "test": "max-chunk.asf",
+      "result": "exact",
+      "frames": 32767,
+      "pcm_sha256": "3e8f7bebd498a8b4a0c610db2a005ce76d65e9288b455cc0a0be4bcf501b7047",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 32767,
+        "leading_frames": 0
+      },
+      "continuous_seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 183544,
+        "maximum_discarded": 32767,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "protected_input": null,
+      "ffmpeg": {
+        "snr_db": 999,
+        "peak_error": 0.0
+      },
+      "note": "Stream Properties embedded after two counted names and two opaque payload-extension descriptions"
+    },
+    {
+      "test": "skip-unavailable-0.asf",
+      "result": "exact",
+      "frames": 12288,
+      "pcm_sha256": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+      "catalog": {
+        "audio_tracks": 2,
+        "selected_ordinal": 2,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 12288,
+        "leading_frames": 0
+      },
+      "continuous_seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 91389,
+        "maximum_discarded": 12288,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "protected_input": null,
+      "ffmpeg": null,
+      "note": "Stream Properties embedded after two counted names and two opaque payload-extension descriptions"
+    },
+    {
+      "test": "skip-unavailable-2.asf",
+      "result": "exact",
+      "frames": 12288,
+      "pcm_sha256": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+      "catalog": {
+        "audio_tracks": 2,
+        "selected_ordinal": 2,
+        "requested_ordinal": 2,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 12288,
+        "leading_frames": 0
+      },
+      "continuous_seeks": null,
+      "protected_input": null,
+      "ffmpeg": null,
+      "note": "Stream Properties embedded after two counted names and two opaque payload-extension descriptions"
+    },
+    {
+      "test": "multitrack-0.asf",
+      "result": "exact",
+      "frames": 12288,
+      "pcm_sha256": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+      "catalog": {
+        "audio_tracks": 2,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 12288,
+        "leading_frames": 0
+      },
+      "continuous_seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 91389,
+        "maximum_discarded": 12288,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "protected_input": null,
+      "ffmpeg": {
+        "snr_db": 999,
+        "peak_error": 0.0
+      },
+      "note": "Stream Properties embedded after two counted names and two opaque payload-extension descriptions"
+    },
+    {
+      "test": "multitrack-1.asf",
+      "result": "exact",
+      "frames": 12288,
+      "pcm_sha256": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+      "catalog": {
+        "audio_tracks": 2,
+        "selected_ordinal": 1,
+        "requested_ordinal": 1,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 12288,
+        "leading_frames": 0
+      },
+      "continuous_seeks": null,
+      "protected_input": null,
+      "ffmpeg": {
+        "snr_db": 999,
+        "peak_error": 0.0
+      },
+      "note": "Stream Properties embedded after two counted names and two opaque payload-extension descriptions"
+    },
+    {
+      "test": "multitrack-2.asf",
+      "result": "exact",
+      "frames": 12288,
+      "pcm_sha256": "8be13872807de301ea52369611289723c61afb713b61f0d753ac66553fbd1640",
+      "catalog": {
+        "audio_tracks": 2,
+        "selected_ordinal": 2,
+        "requested_ordinal": 2,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 12288,
+        "leading_frames": 0
+      },
+      "continuous_seeks": null,
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 741,
+        "no_input_padding": true
+      },
+      "ffmpeg": {
+        "snr_db": 999,
+        "peak_error": 0.0
+      },
+      "note": "Stream Properties embedded after two counted names and two opaque payload-extension descriptions"
+    },
+    {
+      "test": "metadata-chapters.asf",
+      "result": "exact",
+      "frames": 12288,
+      "pcm_sha256": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 12288,
+        "leading_frames": 0
+      },
+      "continuous_seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 91389,
+        "maximum_discarded": 12288,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "protected_input": null,
+      "ffmpeg": {
+        "snr_db": 999,
+        "peak_error": 0.0
+      },
+      "note": "Stream Properties embedded after two counted names and two opaque payload-extension descriptions"
+    },
+    {
+      "test": "no-lists.asf",
+      "result": "exact",
+      "frames": 12288,
+      "pcm_sha256": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 12288,
+        "leading_frames": 0
+      },
+      "continuous_seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 91389,
+        "maximum_discarded": 12288,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 717,
+        "no_input_padding": true
+      },
+      "ffmpeg": {
+        "snr_db": 999,
+        "peak_error": 0.0
+      },
+      "note": ""
+    },
+    {
+      "test": "top-level-wrapper.asf",
+      "result": "exact",
+      "frames": 12288,
+      "pcm_sha256": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 12288,
+        "leading_frames": 0
+      },
+      "continuous_seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 91389,
+        "maximum_discarded": 12288,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 717,
+        "no_input_padding": true
+      },
+      "ffmpeg": {
+        "snr_db": 999,
+        "peak_error": 0.0
+      },
+      "note": "Also accept an explicitly bounded top-level wrapper"
+    },
+    {
+      "test": "depth-four.asf",
+      "result": "exact",
+      "frames": 12288,
+      "pcm_sha256": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 12288,
+        "leading_frames": 0
+      },
+      "continuous_seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 91389,
+        "maximum_discarded": 12288,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 717,
+        "no_input_padding": true
+      },
+      "ffmpeg": {
+        "snr_db": 999,
+        "peak_error": 0.0
+      },
+      "note": ""
+    },
+    {
+      "test": "max-name.asf",
+      "result": "exact",
+      "frames": 12288,
+      "pcm_sha256": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 12288,
+        "leading_frames": 0
+      },
+      "continuous_seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 91389,
+        "maximum_discarded": 12288,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 717,
+        "no_input_padding": true
+      },
+      "ffmpeg": {
+        "snr_db": 999,
+        "peak_error": 0.0
+      },
+      "note": ""
+    },
+    {
+      "test": "large-info.asf",
+      "result": "exact",
+      "frames": 12288,
+      "pcm_sha256": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 12288,
+        "leading_frames": 0
+      },
+      "continuous_seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 91389,
+        "maximum_discarded": 12288,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 717,
+        "no_input_padding": true
+      },
+      "ffmpeg": {
+        "snr_db": 999,
+        "peak_error": 0.0
+      },
+      "note": "Opaque system info uses a DWORD length, beyond WORD capacity"
+    },
+    {
+      "test": "empty-names.asf",
+      "result": "exact",
+      "frames": 12288,
+      "pcm_sha256": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 12288,
+        "leading_frames": 0
+      },
+      "continuous_seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 91389,
+        "maximum_discarded": 12288,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 717,
+        "no_input_padding": true
+      },
+      "ffmpeg": {
+        "snr_db": 999,
+        "peak_error": 0.0
+      },
+      "note": ""
+    },
+    {
+      "test": "empty-system-info.asf",
+      "result": "exact",
+      "frames": 12288,
+      "pcm_sha256": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 12288,
+        "leading_frames": 0
+      },
+      "continuous_seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 91389,
+        "maximum_discarded": 12288,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 717,
+        "no_input_padding": true
+      },
+      "ffmpeg": {
+        "snr_db": 999,
+        "peak_error": 0.0
+      },
+      "note": ""
+    },
+    {
+      "test": "standalone-plus-extension.asf",
+      "result": "exact",
+      "frames": 12288,
+      "pcm_sha256": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 12288,
+        "leading_frames": 0
+      },
+      "continuous_seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 91389,
+        "maximum_discarded": 12288,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 741,
+        "no_input_padding": true
+      },
+      "ffmpeg": {
+        "snr_db": 999,
+        "peak_error": 0.0
+      },
+      "note": ""
+    },
+    {
+      "test": "fixed-payload-extensions.asf",
+      "result": "exact",
+      "frames": 12288,
+      "pcm_sha256": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 12288,
+        "leading_frames": 0
+      },
+      "continuous_seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 91389,
+        "maximum_discarded": 12288,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 717,
+        "no_input_padding": true
+      },
+      "ffmpeg": {
+        "snr_db": 999,
+        "peak_error": 0.0
+      },
+      "note": ""
+    },
+    {
+      "test": "variable-payload-extension.asf",
+      "result": "exact",
+      "frames": 12288,
+      "pcm_sha256": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 12288,
+        "leading_frames": 0
+      },
+      "continuous_seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 91389,
+        "maximum_discarded": 12288,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "protected_input": {
+        "result": "passed",
+        "guard_checks": 717,
+        "no_input_padding": true
+      },
+      "ffmpeg": {
+        "snr_db": 999,
+        "peak_error": 0.0
+      },
+      "note": ""
+    },
+    {
+      "test": "catalog-127-0.asf",
+      "result": "exact",
+      "frames": 12288,
+      "pcm_sha256": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+      "catalog": {
+        "audio_tracks": 127,
+        "selected_ordinal": 127,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 12288,
+        "leading_frames": 0
+      },
+      "continuous_seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 91389,
+        "maximum_discarded": 12288,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "protected_input": null,
+      "ffmpeg": null,
+      "note": ""
+    },
+    {
+      "test": "catalog-127-127.asf",
+      "result": "exact",
+      "frames": 12288,
+      "pcm_sha256": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+      "catalog": {
+        "audio_tracks": 127,
+        "selected_ordinal": 127,
+        "requested_ordinal": 127,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 12288,
+        "leading_frames": 0
+      },
+      "continuous_seeks": null,
+      "protected_input": null,
+      "ffmpeg": null,
+      "note": ""
+    },
+    {
+      "test": "quota-exact.asf",
+      "result": "exact",
+      "frames": 12288,
+      "pcm_sha256": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 12288,
+        "leading_frames": 0
+      },
+      "continuous_seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 91389,
+        "maximum_discarded": 12288,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "protected_input": null,
+      "ffmpeg": null,
+      "note": "65,536 list entries across two wrappers"
+    },
+    {
+      "test": "object-quota-exact.asf",
+      "result": "exact",
+      "frames": 12288,
+      "pcm_sha256": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+      "catalog": {
+        "audio_tracks": 1,
+        "selected_ordinal": 1,
+        "requested_ordinal": 0,
+        "failure_clears_catalog": true,
+        "reopen": true
+      },
+      "cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 12288,
+        "leading_frames": 0
+      },
+      "continuous_seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 91389,
+        "maximum_discarded": 12288,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "protected_input": null,
+      "ffmpeg": null,
+      "note": "Embedded Stream Properties consumes an object-budget entry: exactly 4,096 total"
+    },
+    {
+      "test": "short-fixed.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 100
+      }
+    },
+    {
+      "test": "zero-id.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 100
+      }
+    },
+    {
+      "test": "large-id.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 100
+      }
+    },
+    {
+      "test": "mismatched-id.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 100
+      }
+    },
+    {
+      "test": "short-name.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 100
+      }
+    },
+    {
+      "test": "odd-name.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 100
+      }
+    },
+    {
+      "test": "short-name-prefix.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 100
+      }
+    },
+    {
+      "test": "name-count.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 100
+      }
+    },
+    {
+      "test": "short-system-prefix.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 100
+      }
+    },
+    {
+      "test": "system-info-overrun.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 100
+      }
+    },
+    {
+      "test": "system-count.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 100
+      }
+    },
+    {
+      "test": "bad-child-guid.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 100
+      }
+    },
+    {
+      "test": "short-child.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 100
+      }
+    },
+    {
+      "test": "extra-child-byte.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 100
+      }
+    },
+    {
+      "test": "two-children.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 100
+      }
+    },
+    {
+      "test": "duplicate-stream-id.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 100
+      }
+    },
+    {
+      "test": "depth-five.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 100
+      }
+    },
+    {
+      "test": "quota-exceeded.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 101
+      }
+    },
+    {
+      "test": "single-quota-exceeded.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 101
+      }
+    },
+    {
+      "test": "object-quota-exceeded.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 101
+      }
+    },
+    {
+      "test": "unavailable-embedded-track.asf",
+      "result": {
+        "result": "rejected",
+        "stage": "open",
+        "decode_error": 101
+      }
+    },
+    {
+      "test": "unsigned DWORD info skip with embedded format after 4 GiB",
+      "result": "exact",
+      "logical_bytes": 4295066322,
+      "allocated_bytes": 196608,
+      "embedded_properties_offset": 4294967866,
+      "info_length": 4294966528,
+      "cold_seeks": {
+        "result": "passed",
+        "exact_cold_seeks": 15,
+        "frames": 12288,
+        "leading_frames": 0
+      },
+      "pcm_sha256": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1"
+    },
+    {
+      "test": "basic.object protected lists and mutations",
+      "result": {
+        "result": "passed",
+        "protected_checks": 1456,
+        "accepted": 649,
+        "rejected": 807,
+        "seed": 9721,
+        "source_unchanged": true,
+        "no_padding": true,
+        "cancelled_publication": false
+      }
+    },
+    {
+      "test": "lists.object protected lists and mutations",
+      "result": {
+        "result": "passed",
+        "protected_checks": 1523,
+        "accepted": 787,
+        "rejected": 736,
+        "seed": 9721,
+        "source_unchanged": true,
+        "no_padding": true,
+        "cancelled_publication": false
+      }
+    },
+    {
+      "test": "max-name.object protected lists and mutations",
+      "result": {
+        "result": "passed",
+        "protected_checks": 1523,
+        "accepted": 901,
+        "rejected": 622,
+        "seed": 9721,
+        "source_unchanged": true,
+        "no_padding": true,
+        "cancelled_publication": false
+      }
+    },
+    {
+      "test": "large-info.object protected lists and mutations",
+      "result": {
+        "result": "passed",
+        "protected_checks": 1523,
+        "accepted": 899,
+        "rejected": 624,
+        "seed": 9721,
+        "source_unchanged": true,
+        "no_padding": true,
+        "cancelled_publication": false
+      }
+    },
+    {
+      "test": "many-names.object protected lists and mutations",
+      "result": {
+        "result": "passed",
+        "protected_checks": 1523,
+        "accepted": 454,
+        "rejected": 1069,
+        "seed": 9721,
+        "source_unchanged": true,
+        "no_padding": true,
+        "cancelled_publication": false
+      }
+    },
+    {
+      "test": "legacy-zero-length.asf guarded full-envelope mutations",
+      "result": {
+        "result": "passed",
+        "guarded_mutations": 1200,
+        "seed": 9427,
+        "accepted": 844,
+        "rejected": 356,
+        "scratch_released": true
+      }
+    },
+    {
+      "test": "legacy-zero-length.asf cancel-open",
+      "result": {
+        "result": "cancelled"
+      }
+    },
+    {
+      "test": "legacy-zero-length.asf cancel-read",
+      "result": {
+        "result": "cancelled",
+        "frames_before_cancel": 8192
+      }
+    },
+    {
+      "test": "aac.asf guarded full-envelope mutations",
+      "result": {
+        "result": "passed",
+        "guarded_mutations": 1200,
+        "seed": 9427,
+        "accepted": 823,
+        "rejected": 377,
+        "scratch_released": true
+      }
+    },
+    {
+      "test": "aac.asf cancel-open",
+      "result": {
+        "result": "cancelled"
+      }
+    },
+    {
+      "test": "aac.asf cancel-read",
+      "result": {
+        "result": "cancelled",
+        "frames_before_cancel": 8192
+      }
+    },
+    {
+      "test": "embedded stream tags and chapters",
+      "result": "exact"
+    },
+    {
+      "test": "legacy-zero-length.asf bounded full decoder mutations",
+      "result": "no crash, hang or runaway allocation",
+      "mutations": 500,
+      "decoded": 146,
+      "rejected": 354,
+      "seeks": 125,
+      "seed": 9731,
+      "max_read_calls": 256,
+      "frames_per_read": 2048,
+      "midpoint_seek_call": 128,
+      "address_space_limit_bytes": null
+    },
+    {
+      "test": "aac.asf bounded full decoder mutations",
+      "result": "no crash, hang or runaway allocation",
+      "mutations": 500,
+      "decoded": 110,
+      "rejected": 390,
+      "seeks": 125,
+      "seed": 9731,
+      "max_read_calls": 256,
+      "frames_per_read": 2048,
+      "midpoint_seek_call": 128,
+      "address_space_limit_bytes": null
+    },
+    {
+      "test": "fixed-payload-extensions.asf bounded full decoder mutations",
+      "result": "no crash, hang or runaway allocation",
+      "mutations": 500,
+      "decoded": 172,
+      "rejected": 328,
+      "seeks": 125,
+      "seed": 9731,
+      "max_read_calls": 256,
+      "frames_per_read": 2048,
+      "midpoint_seek_call": 128,
+      "address_space_limit_bytes": null
+    }
+  ],
+  "fixture_hashes": {
+    "Unicode-\u97f3\u697d-\u03a9.asf": "fc1bf41521369b85c493e712794239615aa4db0d3224111a61f3802f1ebeeff2",
+    "Unicode-\u97f3\u697d-\u03a9.asf.ffmpeg.f32": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "aac.asf": "8fe3ce4a9e191c33bc0d01b9caf77dd3770603ee5ca4684c3e90db82d492c0b3",
+    "aac.asf.aac": "2f7d1d29db8674ee67a8911929e147c2857096c14be2ed142c8be8604d3f6e48",
+    "aac.asf.ffmpeg.f32": "fa5093ca6e00e4bc4becfd0a11eb6d96f28df44bdf2cdfbda2b1b70a9fc80d23",
+    "ac3.asf": "ef2caedfc6b9e12767f67a3d3839e12aad77f6adb6648ca8597d7612d456b46a",
+    "ac3.asf.ffmpeg.f32": "30a0d501853a1b8ed662b4012f4e3aaaad45dc04ce5b09a02e3e90ab3643abd8",
+    "ac3.asf.wav": "a73a944e843828ab69ac289f130db05b68bfc03d47be72cd1d19f9ee2af0a17d",
+    "adpcm_ima_wav-1.asf": "544948124ca2546d86788924271e4736d6850e6b52cbc3a49910d536b6355616",
+    "adpcm_ima_wav-1.asf.ffmpeg.f32": "568684534561d937862d058e7d9e389374e75906eb0c45ac11b7f3a826810d4e",
+    "adpcm_ima_wav-1.asf.wav": "322280531dcd343a67793dbdb53db14fd2dcc74ec148b8296feb960e729d8990",
+    "adpcm_ima_wav-2.asf": "82450e07be472da35b3115d0acf8563c3510fe61d381c26fb39f2c39b694b8d0",
+    "adpcm_ima_wav-2.asf.ffmpeg.f32": "77185594d536062cc2ef8fba10e92d6f86bd2340110e9c03ae8941bc71d95da6",
+    "adpcm_ima_wav-2.asf.wav": "e5f71c8e44c30b6ecf309e8c66fb28c5a0242a663a98fb03835928003e391c81",
+    "adpcm_ms-1.asf": "48fdff99b4efb1194a685b69928614de2d2be4b85689912bab4ab109be2d203b",
+    "adpcm_ms-1.asf.ffmpeg.f32": "f8582dfe8688d6dd097855fae2bf67df53fcc7d5cba6047a26d76c4793c589bd",
+    "adpcm_ms-1.asf.wav": "863bf79b68b6484ead266cab0791114e1082136d7db441de06894f3395f6d815",
+    "adpcm_ms-2.asf": "c7761d5031520ea1d8f18d2947aae123d854a3d7211728d19d0fba59a2ef33c9",
+    "adpcm_ms-2.asf.ffmpeg.f32": "f36a1d5adda05420b661ccd657a6b0234c268d103100c3517f7446f0fe3702d7",
+    "adpcm_ms-2.asf.wav": "afd2a599ade51721b3c4e72507061d751f2ab55ca762c2648ef9e0ac6836f395",
+    "bad-child-guid.asf": "9b3f146fb73ae5ef5a1059ff9a3990255d18043d6279fb4c0e240d710030fe02",
+    "basic.object": "b8db4310f79831c9950308f165273e5a625e1a4c11e3782243466a222c65829f",
+    "catalog-127-0.asf": "609bf6b4aeb68eaaa19b8825f9f4e01a0515227f419553b22338c1ec1dfd2f14",
+    "catalog-127-127.asf": "609bf6b4aeb68eaaa19b8825f9f4e01a0515227f419553b22338c1ec1dfd2f14",
+    "compressed-objects.asf": "86e234e9f8f43804faf6cb6287947c5cbe4c1eeb2e315f0973f6150a2c572a9f",
+    "compressed-objects.asf.ffmpeg.f32": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "depth-five.asf": "b1d3f62096429aa90e419b88efde6025d1d7cc4826e1163d9b0d4a75c860de3e",
+    "depth-four.asf": "affbd150400746e0dbb3f152fb7adaab3ded3c01e5921b0de496f5c79aade400",
+    "depth-four.asf.ffmpeg.f32": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "duplicate-stream-id.asf": "963e5bcf3eeceff50e07b036bb5503064d811dbc5cb129209bbf6eee0c927775",
+    "empty-names.asf": "7a093171fb05e8f9f6f48b43b04f1a7a05ae33e1c18842daf5a26810cf7e4445",
+    "empty-names.asf.ffmpeg.f32": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "empty-system-info.asf": "a6cf84c1b9d613742e44d136857fe332ce71a5fda954a457d84ad3c244900c5a",
+    "empty-system-info.asf.ffmpeg.f32": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "extra-child-byte.asf": "34e144ff37a5ed63d7ea242bad727bbdc1d49de7fa55d8f66d95ea52638eae0d",
+    "fixed-payload-extensions.asf": "508e8323de1d45fd95164cc9178940b09524d860ef24dd572d17c1f1ebdadade",
+    "fixed-payload-extensions.asf.ffmpeg.f32": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "large-id.asf": "fdbd72207b3935a8c9186c93ad5cc3e17d8298b04b85a7c6fd2c66d310a0dfe3",
+    "large-info.asf": "9518049ed7a67b1504b910baaad136b5d650ee21a7bfd404bf2d930902086235",
+    "large-info.asf.ffmpeg.f32": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "large-info.object": "3ddfc0e85b9cc9f64ed41a0cc638752648049ce62267162a195dc0c16ef2ab89",
+    "legacy-zero-length.asf": "938d5d3d2c88220fd2392c0a5178df8056a59f5e946cfb42a3b8e1232605a22a",
+    "legacy-zero-length.asf.ffmpeg.f32": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "libmp3lame-2.asf": "c35ccbadd3258119ef65f99f16b92605172c315a6d8d8a60e0ea1eefd968e202",
+    "libmp3lame-2.asf.ffmpeg.f32": "d8a86c3d57f72889d657c5afec6e17175317b7f573c56f73a7cca2e50dad08d3",
+    "libmp3lame-2.asf.wav": "788576aef040230d5dbf50833eafd1495dff46922f5c7602866f10ee8baca9ac",
+    "lists.object": "204daa62785e91d2a65db34a590bde2e134b8c8a17172b1cd3d017b302432954",
+    "many-names.object": "ab5df8e2c2c4f4fe355f06134d66e1ca4674bb2df97e5ed8e66fe45a92f1c534",
+    "max-chunk.asf": "7b823e62134672b816f605b51d7c257ef0b031dfa40737039765022f8844b427",
+    "max-chunk.asf.ffmpeg.f32": "3e8f7bebd498a8b4a0c610db2a005ce76d65e9288b455cc0a0be4bcf501b7047",
+    "max-chunk.asf.wav": "481edc4f6f64688a446a2136b066d2ada8d7d1dfb1b30b1850b631420969dc89",
+    "max-name.asf": "619c24524c59c498226893ab5241e93ae1378c4efa8db4dea450c97b9ab15e50",
+    "max-name.asf.ffmpeg.f32": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "max-name.object": "ffe99ec9ca2f5aad7a4bdd92e40c95bffb6419d5b9c4c7b584ac19a1dbe8f17d",
+    "max-packet.asf": "f4a1c6e3cad23d7aaea35a4c02eea74ee668a6c10ce72df7b91219a1ee925b27",
+    "max-packet.asf.ffmpeg.f32": "7aa4999174f53e475a7009c89f43c840cb4402b767c2d6049e34c1359a0b5d7f",
+    "max-packet.asf.wav": "58734a46d81787c846b9dcce590a953f17fec526f1164c874fa4dcbbf67c5e5e",
+    "max-span.asf": "ce21e4dd9a615c0f95a4d7e5b598d3f1fbf72cc005ff24c195a474dc5be79317",
+    "max-span.asf.ffmpeg.f32": "b3fba10596556f816a426a414b4770647e3bcc003a830adb020ce20134b0f3cc",
+    "max-span.asf.wav": "3c21fc786edfb77984a3805ca7b8300d279a1d58e8791a8c43761d6d7c609321",
+    "metadata-chapters.asf": "228f5f2f0c0ef5b23bdd098324e3777766f40762820cf0d9678a4bbeb42d1dd3",
+    "metadata-chapters.asf.ffmpeg.f32": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "mismatched-id.asf": "4aae5b0ebae5916f77ee79c6999aa2a3a65f876b0ae3599d79640bdd9345b33b",
+    "mp2-2.asf": "abc5dc28a1486165336e38b81bb78d994f35ac1405154d72f0f57b85bb790354",
+    "mp2-2.asf.ffmpeg.f32": "a45fcdd1f8c855544fa137d580360dc936da8f1e91a3a3bb3c0616f5a7def61a",
+    "mp2-2.asf.wav": "ba4f0866a0e73ac641c711f563339516e74d7f0232b2c72276d2be7f60865912",
+    "multitrack-0.asf": "c441055693e1776c63af2fea36e882952b7378ec4b1733668447daf88419b0f4",
+    "multitrack-0.asf.ffmpeg.f32": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "multitrack-1.asf": "c441055693e1776c63af2fea36e882952b7378ec4b1733668447daf88419b0f4",
+    "multitrack-1.asf.ffmpeg.f32": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "multitrack-2.asf": "c441055693e1776c63af2fea36e882952b7378ec4b1733668447daf88419b0f4",
+    "multitrack-2.asf.ffmpeg.f32": "8be13872807de301ea52369611289723c61afb713b61f0d753ac66553fbd1640",
+    "name-count.asf": "e14c11f85855cc9875610396eff0ee0c5e9b284c4b1060d77bb81d723a7761c8",
+    "no-lists.asf": "dc9f741d5b6a78c468810cf69e698dd144596d34ae4ca963867590b5862a41c0",
+    "no-lists.asf.ffmpeg.f32": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "object-quota-exact.asf": "2887c3a6efb1c4ed2c70e704722180f1067dbe78fce38361448f5e8f3738e5b2",
+    "object-quota-exceeded.asf": "254f86ffbbf871024df526df3a0479bb48e5b5288967e6730257a52d3567dd88",
+    "odd-chunks.asf": "d6e4a650daa168acdffe33494408c838404c6da672ef25e70b2a870c4e7030d8",
+    "odd-chunks.asf.ffmpeg.f32": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "odd-name.asf": "a62b1df8ac438f2035c18cf8673236ea39fc686711ad1af31f33f4e5f404efd5",
+    "one-row.asf": "9fa184414b6a9ce01d6379fbe7be26531f61007b4298c99ca36ca7834037e5aa",
+    "one-row.asf.ffmpeg.f32": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "other.wav": "1941451502ef81668a3bb40ddc302ff420aba01a8039b7c3e129cc19649f8b7f",
+    "packet-source.wav": "5a838235f4b0551f3345e1bfc0420928bb124c8f1aa8442e033d51030436ea1a",
+    "pcm_alaw-1.asf": "41a53da6d7bc41109580018f16cfd4e7a136274d1eb19b095209efecfd99dcc7",
+    "pcm_alaw-1.asf.ffmpeg.f32": "b20a7084012a66723f605a8c1daa46b8f9c463da56a2cf12ebc5e549a92e9773",
+    "pcm_alaw-1.asf.wav": "14bb22d19f103a369981987b8812fdd9bb9ead6755dd13684f41868f54795a10",
+    "pcm_alaw-2.asf": "5284ff222875cd59de44c2acc11734a2440f00043ce869f8dfb0fff63b060b7c",
+    "pcm_alaw-2.asf.ffmpeg.f32": "0c064715d7e5d9e543b95eaa01ae47f9830eafbd52d915d4ae604600a5395529",
+    "pcm_alaw-2.asf.wav": "73ccaa87345adcfccc64eaa3af3442d6a515a340184b7ea041d12227affa99d0",
+    "pcm_f32le-2.asf": "fb97733126cfa355eea146a74683d7640865c1948b3c91c57dde50e66f012fe4",
+    "pcm_f32le-2.asf.ffmpeg.f32": "667ddef2cdc5a736fd8e6e8d041e5f767bac4da4a7eb0be6026f3cb25245b3eb",
+    "pcm_f32le-2.asf.wav": "1cfba7be7b2eb7ad1546a4955e1db03a462002aee3304afeb813aca07581e983",
+    "pcm_f64le-1.asf": "b798e233fc57b039da4f8482fbe7b67fbbc9c35c8b1d0543ef29f5535063d9b0",
+    "pcm_f64le-1.asf.ffmpeg.f32": "8e05a13a202fe9642fddcc3f341c933b8abdc4dc7ef374d3a906c67a6facac62",
+    "pcm_f64le-1.asf.wav": "cfe3af1858d2c2e0112cf85c3205e942d3f53b556309c2f1f3b38d0b06051ae7",
+    "pcm_mulaw-2.asf": "ef5f160e5f5b278ea2452bbb91a2c96b6a7dd7900fee13a4a21ad4328b65cd8e",
+    "pcm_mulaw-2.asf.ffmpeg.f32": "91e74c7e98aacfeda2bd388058d42a79537485394a25470542f955214665ae34",
+    "pcm_mulaw-2.asf.wav": "0def982dbebd1c0f56b335e507cddebf57b328bea409d99a279fe51f4f6c8a86",
+    "pcm_s16le-1.asf": "eefa5ef377cfe39d9f0bbec2cd71b4eb3308224ac6b11706a5d292b49bc62614",
+    "pcm_s16le-1.asf.ffmpeg.f32": "aa1456ccfe694bca3a23074ba3dc645d3972331c1befee4d362a5fa6bedb4a69",
+    "pcm_s16le-1.asf.wav": "0bf0ed6633eb9cf3b617d564c3997fb3160432cf7e938829964d832917da0626",
+    "pcm_s16le-2.asf": "3b8f493d22253a9887bd53eff46c6dfe0b7763f9dd8ed90d846f00a3e07eb702",
+    "pcm_s16le-2.asf.ffmpeg.f32": "b832e0adfcdb115274845f1ef7d59c55b790996bf9466cc64620b08f99c7ee9d",
+    "pcm_s16le-2.asf.wav": "30396d5c34b6800fc6bc6093717b9cbfe5e423be15beb2c127c72e0625bcc21d",
+    "pcm_s24le-2.asf": "9349fa383aa4ed53cf6e5d0eaffc8f00789dcb67d47191d5d160bfd9bd4596ca",
+    "pcm_s24le-2.asf.ffmpeg.f32": "3d091bede7032281348efc08321aac7779801d1a7ccdc5efe85498957afbf5ae",
+    "pcm_s24le-2.asf.wav": "7e5cd971d562ade23f7306d4575656374b2ba494124de11e3acf2a28a8f08398",
+    "pcm_s32le-2.asf": "17ce82506b4b2bd817c2a35298da8b3cc6d5f8ca0290819d320b0fe97cdc3665",
+    "pcm_s32le-2.asf.ffmpeg.f32": "5ad019b76334334aa3ac313e3b4926105780197792786de303d671a933b6da11",
+    "pcm_s32le-2.asf.wav": "4de023516eead1f54d4071befdaa1f92cc3ad53cc19964ed420b58b2e7c69217",
+    "pcm_u8-1.asf": "79eda012d2af88e25911713e7bf5d2d377a59281d68686971a3f6cc9f4d7e8d0",
+    "pcm_u8-1.asf.ffmpeg.f32": "a8578d9d17983c3e3df53fc4cc0c6460fb495764f7810588290ea26e6560e63c",
+    "pcm_u8-1.asf.wav": "c890be8ee16df00cf1eabdbaa07d13d823b61afc2bef1561622d82cc92da42c9",
+    "quota-exact.asf": "cead4e1e29803f89a8f9739d8c0e57e87943c6d1a286ef6b3c46d0b6ad81e6b2",
+    "quota-exceeded.asf": "ee900eb399daea2de834d76da7dc67ffbbf4a0687bed9c88365346bee8945e73",
+    "seven-byte-record.asf": "37a0a70abaa854f5dbac561cdc736379fe42ddbd53e0407b6a8d890e3d112890",
+    "short-child.asf": "ffb4c367e38bef184ff15052cd0712d573c35fc3aa72280523b773bb5d068e11",
+    "short-fixed.asf": "179ee975954c03170573fb7ef566d2b523bcccce9cb86b51496bd758d6c5b29e",
+    "short-name-prefix.asf": "cc7e17e808ffdb13dfe2280064b77f35918f1c39d723cfd332465b0f18beb0ae",
+    "short-name.asf": "6512c709bd3add7407ba009dc2e1b501fc0a62d0f67e996499efe19be0605199",
+    "short-system-prefix.asf": "e6028d83dda49f9dd378270a8c01d010df0135ded6e063bebbd73069a75aeb6a",
+    "silence-data.asf": "6ff711f4acb7a16c09de4e6449744563290f24d8c6f0bf42420e284110c96b43",
+    "silence-data.asf.ffmpeg.f32": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "single-quota-exceeded.asf": "ca49667e4b72ed5dcbba5adcb29a6f8cec71689fcf936395c69615bda6fbf995",
+    "skip-unavailable-0.asf": "054605564c794e622b4d812b3da8984dfac48d760f11166e16622fb990821cfa",
+    "skip-unavailable-2.asf": "054605564c794e622b4d812b3da8984dfac48d760f11166e16622fb990821cfa",
+    "span-one.asf": "5e73bb9eea1e44645c5deca5c21ff9ebc2c3fd255738b7b2ce769ad2a6e2dc0a",
+    "span-one.asf.ffmpeg.f32": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "sparse-plan.json": "5c125b945ea0547b523cdd692964c39a4edfd1657b1eb958cd6b281e835e82bc",
+    "sparse-prefix.bin": "2787e6d23aa52c340ed6783ba35147ecf3d3297c59c1f42290cc31bae7b918b3",
+    "sparse-suffix.bin": "5a3da071161d05058b2e5e6c01954409db8b59a1251ead3fadce0383485a4814",
+    "standalone-plus-extension.asf": "c0e99aa49399ebf4d415c8725c1739021aa7e3877500286c8e383f26facf0b20",
+    "standalone-plus-extension.asf.ffmpeg.f32": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "system-count.asf": "b9393bc75266ed76a99e29e56ae32802a59e8994a33783d2b09741c334209c8a",
+    "system-info-overrun.asf": "da787cc812eee762b260d203c70421b91759f9429a6bb3130f743afd80772182",
+    "top-level-wrapper.asf": "3f46f7b4c45d40895157b475f96fe2c4e50b0bca3369d5472b019f1cb210423b",
+    "top-level-wrapper.asf.ffmpeg.f32": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "two-children.asf": "5eff79be9d21a1e3e6a15d7433ce5f62946e98553df0a1aed37c80cfe2a265d9",
+    "unavailable-embedded-track.asf": "609bf6b4aeb68eaaa19b8825f9f4e01a0515227f419553b22338c1ec1dfd2f14",
+    "variable-packets.asf": "a02a26c772deb129619eb12e8445fa457f7154ab94936bc953245c8637eefa93",
+    "variable-packets.asf.ffmpeg.f32": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "variable-payload-extension.asf": "0438276d7fcac81eae908c1a4c9b7ffcadf7a66415c39952d2725b9815e85b9c",
+    "variable-payload-extension.asf.ffmpeg.f32": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "wide-span.asf": "388a7d3f326e27aa3d22d2fa43d0b7e3635a5b23937c3c7fc3bdfd93b38b2bbc",
+    "wide-span.asf.ffmpeg.f32": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "zero-id.asf": "581ac8a240ef913c5d4b488d13aff6c68f04480109c954470e2cacce9b8ae84b"
+  },
+  "fixture_ffmpeg": "ffmpeg version 8.0.1-essentials_build-www.gyan.dev Copyright (c) 2000-2025 the FFmpeg developers",
+  "runtime_platform": "Windows-11-10.0.26300-SP0",
+  "runtime_sources": {
+    "src/asf.s": "f78e9f556775577c0401479e107513af14fa1bf865e0526604b72ec91b484c38",
+    "src/asf_views.inc": "ab65ca4272d76815c8d9ac2849d2c7174e11c775ebed744682465ce970ae666f",
+    "src/track_time.s": "958c15a5948f77753eeb635a1ebbf7fc89ee185a746ac2d0321fbf4dc42d05f2",
+    "src/asf_extended.inc": "f4a41d6572b245d8acc44fd93ace28a94ffa1deee5e71eab0a0eb4391abf296f",
+    "src/asf_spread.inc": "29af589bc2f54e64db22fffa882ebf6045a8d1e31114ceedfc512dd6b076a608",
+    "src/avi.s": "56f1336d789997c4e4d2d11946129f8f2a1d22ee46c653cd40dacacb4ebeac59",
+    "src/decoder.s": "3bcbb77424903865ab49cc9a7ca0be92bb6c76c14eecdcc4637a45d4adc65047",
+    "src/track.s": "80e9d51c7f042f96563af226079e2be931f140a4711ac605813aeddf3047361d",
+    "src/mpegts.s": "5dafcb58db5d634684462207d45e55ff088d5bf032f62d8302adc39be6ef125e",
+    "tests/asf_clock_model.py": "5a9736e38dabf6ff15dc9088623353a33735c51f0d37ba319b13354dd1ae13ca",
+    "tests/verify-asf-extended.py": "3cf73d41e48495c79841f77f76ecf0bc43c314d2c5bbdb64210b5bf2ea0f366c",
+    "tests/asf-extended-oracle.c": "2de9ddc605199a994d30efc00f0cd188ebefc92ed3a0191a641a8c2b12a0abbf",
+    "tests/asf-boundary-oracle.c": "97b6194c817c720f69248995ca42bb79dd2eb3bff22e397284ada2ce9f6e84aa",
+    "tests/asf-spread-oracle.c": "cc786a761f39e1302518a1a1c2eaf09581eadf2a1f227e2e1271ce5379302bf9",
+    "tests/asf-seek-oracle.c": "353c03af77d040be6c332b04d2fa1af3d143d8687f50d2bb3ca6435380c9655b",
+    "tests/seek-oracle.c": "355e938b312afce8454b68bb7859cb45fe7e8be747c39c7e9b649132e65514bb",
+    "tests/chain-oracle.c": "770757565631753a57a6a8352cbac5ffecd33bb380eec247f23874277f7a00f7",
+    "tests/track-catalog-oracle.c": "93175cde74b34ab85aeb8838c5a428cd39955adf45fdd6407229ad45488e652f",
+    "tests/decoder-bounded-oracle.c": "e204a34be1bd9bd0cbc1c4c5312d249aaee817bc5d8070291967b0cf028d5b9d",
+    "tests/verify-asf-spread.py": "20f386f23a08cbc32bbf70d8f85b99482370beee274a538c44e8988d57f85cb7",
+    "tests/verify-asf.py": "9120058dd13a53fe5651a2f395bec7cfc45d8cf735d7354a91022dbb80a667e0",
+    "tests/verify-asf-metadata.py": "3db9d546449303bd07b2744784185805526b375e5b76d0033229644752de78ac",
+    "tests/verify-asf-chapters.py": "006d96022c3b0756af839d2593a70d2fc9f8ec3abd69bc49c138a947dfac0489",
+    "tests/verify-robustness.py": "33133ac03d5006b41f34ff6575d6b6e02b5c72e702069176d39e72febb18aebf"
+  },
+  "cli_sha256": "672ba741d433edf09a60f5734fc9b960d7ece9388e2c5bc5062c9221cb091558",
+  "oracle_sha256": {
+    "decoder-bounded-oracle": "1645818a81e7c70cc91004bc57d6c61dd1cb192221674ca7e79c3a3805faa874",
+    "asf-extended-oracle": "9763bb2b8241612f6d67d63b0d1cfca228914cc2a9d2dd62c14c660a2d9ebf54",
+    "asf-seek-oracle": "6e5982c8fb6859cf0a03fb5e4163a514c87be1959b699492e6e074ea1db375da",
+    "seek-oracle": "78da18e0a0421ada0352994dc74e8159878c362fe0ea794bc1fd1f183f977ae3",
+    "chain-oracle": "6f86a6641b2a49c272455bdd767e7774909d9c05db80c399bfb9f1de2bc303d8",
+    "track-catalog-oracle": "630851a69ccc13331fed56697921e0965d3a98a8c0461c7450308e3608738df7",
+    "asf-boundary-oracle": "076237e96d9b88fa51954cb3460d8ad9344b9494ffdd143feffafd35d0138c46",
+    "asf-spread-oracle": "bed0a0a739f64af628703b4be1ac40977227d6cd22bfc74843dcde831b24edd7"
+  },
+  "reference_hashes": {
+    "pcm_u8-1.asf": "a8578d9d17983c3e3df53fc4cc0c6460fb495764f7810588290ea26e6560e63c",
+    "pcm_s16le-1.asf": "aa1456ccfe694bca3a23074ba3dc645d3972331c1befee4d362a5fa6bedb4a69",
+    "pcm_s16le-2.asf": "b832e0adfcdb115274845f1ef7d59c55b790996bf9466cc64620b08f99c7ee9d",
+    "pcm_s24le-2.asf": "3d091bede7032281348efc08321aac7779801d1a7ccdc5efe85498957afbf5ae",
+    "pcm_s32le-2.asf": "5ad019b76334334aa3ac313e3b4926105780197792786de303d671a933b6da11",
+    "pcm_f32le-2.asf": "667ddef2cdc5a736fd8e6e8d041e5f767bac4da4a7eb0be6026f3cb25245b3eb",
+    "pcm_f64le-1.asf": "8e05a13a202fe9642fddcc3f341c933b8abdc4dc7ef374d3a906c67a6facac62",
+    "pcm_alaw-1.asf": "b20a7084012a66723f605a8c1daa46b8f9c463da56a2cf12ebc5e549a92e9773",
+    "pcm_alaw-2.asf": "0c064715d7e5d9e543b95eaa01ae47f9830eafbd52d915d4ae604600a5395529",
+    "pcm_mulaw-2.asf": "91e74c7e98aacfeda2bd388058d42a79537485394a25470542f955214665ae34",
+    "adpcm_ima_wav-1.asf": "568684534561d937862d058e7d9e389374e75906eb0c45ac11b7f3a826810d4e",
+    "adpcm_ima_wav-2.asf": "77185594d536062cc2ef8fba10e92d6f86bd2340110e9c03ae8941bc71d95da6",
+    "adpcm_ms-1.asf": "f8582dfe8688d6dd097855fae2bf67df53fcc7d5cba6047a26d76c4793c589bd",
+    "adpcm_ms-2.asf": "f36a1d5adda05420b661ccd657a6b0234c268d103100c3517f7446f0fe3702d7",
+    "mp2-2.asf": "6e95714bb0ab1ec7a7d85360c576a7b8ae24c0101fdd09a4608ca3f58bc86766",
+    "libmp3lame-2.asf": "00643145d70f94e8a24036bc1c0ba56218dfa3e91fdd70a411fd3ff93c4c9200",
+    "ac3.asf": "b3f3611b9a254c4af61f8febb43fb0253fc313babcb424a78e7c209d5c20cfdb",
+    "aac.asf": "35ed960c27c6550c3a2583a4502ddc05a5d4eca5358dc832c55af3ce61dac512",
+    "legacy-zero-length.asf": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "odd-chunks.asf": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "wide-span.asf": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "compressed-objects.asf": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "variable-packets.asf": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "span-one.asf": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "one-row.asf": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "seven-byte-record.asf": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "silence-data.asf": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "Unicode-\u97f3\u697d-\u03a9.asf": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "max-span.asf": "b3fba10596556f816a426a414b4770647e3bcc003a830adb020ce20134b0f3cc",
+    "max-packet.asf": "7aa4999174f53e475a7009c89f43c840cb4402b767c2d6049e34c1359a0b5d7f",
+    "max-chunk.asf": "3e8f7bebd498a8b4a0c610db2a005ce76d65e9288b455cc0a0be4bcf501b7047",
+    "skip-unavailable-0.asf": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "skip-unavailable-2.asf": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "multitrack-0.asf": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "multitrack-1.asf": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "multitrack-2.asf": "8be13872807de301ea52369611289723c61afb713b61f0d753ac66553fbd1640",
+    "metadata-chapters.asf": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "no-lists.asf": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "top-level-wrapper.asf": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "depth-four.asf": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "max-name.asf": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "large-info.asf": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "empty-names.asf": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "empty-system-info.asf": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "standalone-plus-extension.asf": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "fixed-payload-extensions.asf": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "variable-payload-extension.asf": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "catalog-127-0.asf": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "catalog-127-127.asf": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "quota-exact.asf": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1",
+    "object-quota-exact.asf": "eed01902fbe660275cd33ee61aab7b66b4e7fefe50402abb01b1df4faa62d9a1"
+  },
+  "oracle_artifact_directory": "bin/asf-gathered-check/retained-oracles/verify-asf-extended",
+  "git_source_sha256": {
+    "src/asf.s": "f78e9f556775577c0401479e107513af14fa1bf865e0526604b72ec91b484c38",
+    "src/asf_views.inc": "ab65ca4272d76815c8d9ac2849d2c7174e11c775ebed744682465ce970ae666f",
+    "src/track_time.s": "958c15a5948f77753eeb635a1ebbf7fc89ee185a746ac2d0321fbf4dc42d05f2",
+    "src/asf_extended.inc": "f4a41d6572b245d8acc44fd93ace28a94ffa1deee5e71eab0a0eb4391abf296f",
+    "src/asf_spread.inc": "29af589bc2f54e64db22fffa882ebf6045a8d1e31114ceedfc512dd6b076a608",
+    "src/avi.s": "56f1336d789997c4e4d2d11946129f8f2a1d22ee46c653cd40dacacb4ebeac59",
+    "src/decoder.s": "3bcbb77424903865ab49cc9a7ca0be92bb6c76c14eecdcc4637a45d4adc65047",
+    "src/track.s": "80e9d51c7f042f96563af226079e2be931f140a4711ac605813aeddf3047361d",
+    "src/mpegts.s": "5dafcb58db5d634684462207d45e55ff088d5bf032f62d8302adc39be6ef125e",
+    "tests/asf_clock_model.py": "5a9736e38dabf6ff15dc9088623353a33735c51f0d37ba319b13354dd1ae13ca",
+    "tests/verify-asf-extended.py": "3cf73d41e48495c79841f77f76ecf0bc43c314d2c5bbdb64210b5bf2ea0f366c",
+    "tests/asf-extended-oracle.c": "69d3855f79b57669a87c6e44c7a8ab115f0749b293753bc3e7d7ef5da0f7ea43",
+    "tests/asf-boundary-oracle.c": "39da9b58a61fcaa0dda90bd53818f429548fee2081989734b64c61aa614c7881",
+    "tests/asf-spread-oracle.c": "42989ca1c8c32a83cb46bb09e15059481909dd619f07819119d17e8b34870595",
+    "tests/asf-seek-oracle.c": "8e826138eb3732752f78fb06cc926c848a447838fa728956e66e8e7a943d659d",
+    "tests/seek-oracle.c": "355e938b312afce8454b68bb7859cb45fe7e8be747c39c7e9b649132e65514bb",
+    "tests/chain-oracle.c": "770757565631753a57a6a8352cbac5ffecd33bb380eec247f23874277f7a00f7",
+    "tests/track-catalog-oracle.c": "93175cde74b34ab85aeb8838c5a428cd39955adf45fdd6407229ad45488e652f",
+    "tests/decoder-bounded-oracle.c": "e204a34be1bd9bd0cbc1c4c5312d249aaee817bc5d8070291967b0cf028d5b9d",
+    "tests/verify-asf-spread.py": "20f386f23a08cbc32bbf70d8f85b99482370beee274a538c44e8988d57f85cb7",
+    "tests/verify-asf.py": "9120058dd13a53fe5651a2f395bec7cfc45d8cf735d7354a91022dbb80a667e0",
+    "tests/verify-asf-metadata.py": "3db9d546449303bd07b2744784185805526b375e5b76d0033229644752de78ac",
+    "tests/verify-asf-chapters.py": "006d96022c3b0756af839d2593a70d2fc9f8ec3abd69bc49c138a947dfac0489",
+    "tests/verify-robustness.py": "33133ac03d5006b41f34ff6575d6b6e02b5c72e702069176d39e72febb18aebf"
+  },
+  "source_provenance": "sources/runtime_sources retain exact tested working-file bytes; git_source_sha256 records canonical staged Git bytes. Differences were checked to consist only of CRLF/LF line endings."
+}

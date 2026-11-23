@@ -1053,8 +1053,7 @@ LOCALFN decoder_open_format
     mov eax, [rip + wav_codec_kind]
     mov [rip + codec_kind], eax
     mov eax, 1
-    leave
-    ret
+    jmp .Lwav_open_success
 .Lwav_compressed:
     mov dword ptr [rip + pcm_mask_seen], 0
     mov dword ptr [rip + pcm_ignore_extra], 0
@@ -1119,8 +1118,7 @@ LOCALFN decoder_open_format
     mov eax, [rip + wav_codec_kind]
     mov [rip + codec_kind], eax
     mov eax, 1
-    leave
-    ret
+    jmp .Lwav_open_success
 .Lwav_adpcm_bad:
     call track_close
     jmp .Lopen_bad
@@ -1131,14 +1129,20 @@ LOCALFN decoder_open_format
     test eax, eax
     jz .Lopen_bad
     mov dword ptr [rip + codec_kind], 3
-    leave
-    ret
+    jmp .Lwav_open_success
 .Lwav_ac3:
     mov rcx, [rip + wav_begin]
     mov rdx, [rip + wav_end]
     call ac3_open
     test eax, eax
     jz .Lopen_bad
+.Lwav_open_success:
+    cmp dword ptr [rip + wav_codec_kind], 21
+    jne .Lwav_open_return
+    call asf_gathered_finish
+    test eax, eax
+    jz .Lopen_bad
+.Lwav_open_return:
     leave
     ret
 
@@ -1806,6 +1810,61 @@ FN flac_ogg_read
 .Lfo_read_return:
     ret
 ENDFN flac_ogg_read
+
+# Convert an already validated native WAVE PCM/G.711 stream into bounded
+# packet views without reinterpreting its precision or speaker layout.
+# -> EAX=1/0, EDX=sample-frame bytes. Called before any source reads.
+FN wav_track_packetize
+    push rbx
+    push rsi
+    push rdi
+    sub rsp, 32
+    mov rsi, [rip + wav_begin]
+    mov rdi, [rip + wav_end]
+    mov ebx, [rip + wav_align]
+    mov ecx, 1                        # TK_PCM
+    call track_begin
+    test eax, eax
+    jz .Lwav_packets_return
+    mov dword ptr [rip + track_pcm_prepared], 1
+    mov eax, [rip + source_channels]
+    mov [rip + track_pcm_channels], eax
+    mov eax, [rip + wav_container_bits]
+    mov [rip + track_pcm_bits], eax
+.Lwav_packets_next:
+    mov rcx, [rip + ogg_cancel_ptr]
+    test rcx, rcx
+    jz .Lwav_packets_continue
+    cmp dword ptr [rcx], 0
+    jne .Lwav_packets_bad
+.Lwav_packets_continue:
+    cmp rsi, rdi
+    je .Lwav_packets_finish
+    mov rdx, rdi
+    sub rdx, rsi
+    mov eax, 262144
+    imul rax, rbx
+    cmp rdx, rax
+    cmova rdx, rax
+    mov rcx, rsi
+    add rsi, rdx
+    call track_add
+    test eax, eax
+    jz .Lwav_packets_bad
+    jmp .Lwav_packets_next
+.Lwav_packets_finish:
+    call track_finish
+    jmp .Lwav_packets_return
+.Lwav_packets_bad:
+    xor eax, eax
+.Lwav_packets_return:
+    mov edx, ebx
+    add rsp, 32
+    pop rdi
+    pop rsi
+    pop rbx
+    ret
+ENDFN wav_track_packetize
 
 # Track mode for container PCM: ECX=channels (1-8), EDX=bits (8/16/24/32,
 # or 32/64 float), R8D=flags (1 big-endian, 2 float, 4 signed 8-bit,
