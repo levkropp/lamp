@@ -1,0 +1,409 @@
+{
+  "result": "passed",
+  "files": 6,
+  "frames": 48,
+  "image_bytes_compared": 40181760,
+  "pending_readbacks": 94,
+  "pending_frame_begins": 0,
+  "checks": 83683536,
+  "scope": "Hardware submission/readback component only. Test-only Python supplies H.264 headers and DXVA metadata. No assembly file parser, player video playback, presentation, reference pictures, A/V sync or other codec support is established.",
+  "verification_host": {
+    "cpu": "12th Gen Intel(R) Core(TM) i7-12700KF",
+    "platform": "Windows-11-10.0.26300-SP0",
+    "graphics": [
+      {
+        "Name": "Virtual Display Driver",
+        "DriverVersion": "11.30.4.434",
+        "VideoProcessor": null
+      },
+      {
+        "Name": "NVIDIA GeForce RTX 5070 Ti",
+        "DriverVersion": "32.0.16.1692",
+        "VideoProcessor": "NVIDIA GeForce RTX 5070 Ti"
+      }
+    ]
+  },
+  "elapsed_seconds": 2.869832,
+  "reference": "ffmpeg version 8.0.1-essentials_build-www.gyan.dev Copyright (c) 2000-2025 the FFmpeg developers",
+  "ffmpeg_executable_sha256": "a07104f51ccb15971c4affc34a392e34899cf8752f08f4d1aca58e8892a69859",
+  "mocked_failures": {
+    "result": "passed",
+    "checks": 381069,
+    "injected_com_failures": 22,
+    "short_or_null_driver_buffers": 8,
+    "bad_mapped_pitches": 3,
+    "nonblocking_retry_sequences": 1,
+    "unsupported_configurations": 5,
+    "invalid_submissions_before_driver": 14
+  },
+  "adapter_log": [
+    "adapter=NVIDIA GeForce RTX 5070 Ti vendor=10de device=2c05 config=1 pool=3"
+  ],
+  "fixtures": [
+    {
+      "width": 64,
+      "height": 64,
+      "frames": 8,
+      "sps": {
+        "id": 0,
+        "frame_bits": 4,
+        "poc": 2,
+        "poc_bits": 0,
+        "refs": 0,
+        "gaps": 0,
+        "width": 64,
+        "height": 64,
+        "direct": 1,
+        "level": 10
+      },
+      "pps": {
+        "id": 0,
+        "seq": 0,
+        "l0": 0,
+        "l1": 0,
+        "qp": -3,
+        "qs": 0,
+        "chroma": -2,
+        "deblock": 1,
+        "constrained": 0
+      },
+      "sha256": {
+        "64x64.h264": "c85bd19fad6fa1ea6b7bd268c5c14a0b82fc9bc8b839df90e2074275f82614b0",
+        "64x64.wv": "92b06239f5dca4c2cd2549ebfed50595f1e8bf62235023c1bc3fd49836873794",
+        "64x64.nv12": "29043b4058e14a203cdd5aabd2f393b59d8f6106ac5de4cc987857bfeb1ad4a1"
+      }
+    },
+    {
+      "width": 192,
+      "height": 112,
+      "frames": 8,
+      "sps": {
+        "id": 0,
+        "frame_bits": 4,
+        "poc": 2,
+        "poc_bits": 0,
+        "refs": 0,
+        "gaps": 0,
+        "width": 192,
+        "height": 112,
+        "direct": 1,
+        "level": 11
+      },
+      "pps": {
+        "id": 0,
+        "seq": 0,
+        "l0": 0,
+        "l1": 0,
+        "qp": -3,
+        "qs": 0,
+        "chroma": -2,
+        "deblock": 1,
+        "constrained": 0
+      },
+      "sha256": {
+        "192x112.h264": "2dafd703be708f86114dc82433f845e8970eb062c62fe9cff8dae3a5828605f1",
+        "192x112.wv": "f7a867a2e4fe5411cc38a05fd94a22bfc139713f7902dff50819f4c728c11c65",
+        "192x112.nv12": "68c748f02ada18186a55d1bacb8ccc5db717d9bb65102e02c7ca54f4e0a0c3f1"
+      }
+    },
+    {
+      "width": 320,
+      "height": 240,
+      "frames": 8,
+      "sps": {
+        "id": 0,
+        "frame_bits": 4,
+        "poc": 2,
+        "poc_bits": 0,
+        "refs": 0,
+        "gaps": 0,
+        "width": 320,
+        "height": 240,
+        "direct": 1,
+        "level": 13
+      },
+      "pps": {
+        "id": 0,
+        "seq": 0,
+        "l0": 0,
+        "l1": 0,
+        "qp": -3,
+        "qs": 0,
+        "chroma": -2,
+        "deblock": 1,
+        "constrained": 0
+      },
+      "sha256": {
+        "320x240.h264": "730161cee2294144738061216ad998530928ceb3ea82693f3215829c684f9b42",
+        "320x240.wv": "f8cb58822200ff0816d83f59d7c5878ccd15b1f5e632f000dfead58a2c0312da",
+        "320x240.nv12": "c5e758786ffc4e75017af4d8dbf9346922c26709f2a146db5d3d6e52e78adde1"
+      }
+    },
+    {
+      "width": 640,
+      "height": 368,
+      "frames": 8,
+      "sps": {
+        "id": 0,
+        "frame_bits": 4,
+        "poc": 2,
+        "poc_bits": 0,
+        "refs": 0,
+        "gaps": 0,
+        "width": 640,
+        "height": 368,
+        "direct": 1,
+        "level": 30
+      },
+      "pps": {
+        "id": 0,
+        "seq": 0,
+        "l0": 0,
+        "l1": 0,
+        "qp": -3,
+        "qs": 0,
+        "chroma": -2,
+        "deblock": 1,
+        "constrained": 0
+      },
+      "sha256": {
+        "640x368.h264": "2fa2ce8f1f74188730c123df917c7dc2b16ac9653baaf48a1bde215563d4d13e",
+        "640x368.wv": "8f1389a0493532aee3c82380f7507ab7a62caa5ab5df91ec87c1bb3cec497ace",
+        "640x368.nv12": "dc8e2de170b2ee8bd5a97e833f62e8bb7d14cdc98fa7c666adc22ac51bc505d1"
+      }
+    },
+    {
+      "width": 1280,
+      "height": 720,
+      "frames": 8,
+      "sps": {
+        "id": 0,
+        "frame_bits": 4,
+        "poc": 2,
+        "poc_bits": 0,
+        "refs": 0,
+        "gaps": 0,
+        "width": 1280,
+        "height": 720,
+        "direct": 1,
+        "level": 31
+      },
+      "pps": {
+        "id": 0,
+        "seq": 0,
+        "l0": 0,
+        "l1": 0,
+        "qp": -3,
+        "qs": 0,
+        "chroma": -2,
+        "deblock": 1,
+        "constrained": 0
+      },
+      "sha256": {
+        "1280x720.h264": "4f5e81062a6a443615c57dc8dfb23a1abda66abf07c1f8a93552936ee4d01794",
+        "1280x720.wv": "9d6170c0647bf377c781797d969ee036bf7a95591063cc3ba6c15bc93900a15b",
+        "1280x720.nv12": "cb09f990bb00da4e62fcc3831ce4ccf78d9fcc3750d873846a5d010042fa39df"
+      }
+    },
+    {
+      "width": 1920,
+      "height": 1088,
+      "frames": 8,
+      "sps": {
+        "id": 0,
+        "frame_bits": 4,
+        "poc": 2,
+        "poc_bits": 0,
+        "refs": 0,
+        "gaps": 0,
+        "width": 1920,
+        "height": 1088,
+        "direct": 1,
+        "level": 40
+      },
+      "pps": {
+        "id": 0,
+        "seq": 0,
+        "l0": 0,
+        "l1": 0,
+        "qp": -3,
+        "qs": 0,
+        "chroma": -2,
+        "deblock": 1,
+        "constrained": 0
+      },
+      "sha256": {
+        "1920x1088.h264": "de88e62515ed3cc4966b8f9b25e1d7f9f9d3b3522efff3582a357a009213d5a9",
+        "1920x1088.wv": "6b83f8d3da98ebfd7438c6f92fadd4b25e1d25896f313c7625d839ae6fc1af38",
+        "1920x1088.nv12": "0c928aef5fcc401696146675a71b03001b1d3941607f2c234d1f4e859bc25af3"
+      }
+    }
+  ],
+  "sources": {
+    "src/win/video.s": "d073eb62db2d47d63d359dd7600eb218aebd113aa20fd5f4e3eea65b991dce5a",
+    "src/win/video.inc": "60c54078b1de30cf3e1267f082c83dd954c2d51a0ed50dc95eb536e31b62b40d",
+    "src/win/d3d11.def": "6aff88dceb3efc79d865fe5289bdbcd74408d3e4707d2af590bcf6e6ff6aa5e5",
+    "src/lamp.inc": "d79c75543ab0d78863010b32e46faf23fda5b9cb54ec624e9dce0acfcabf03e6",
+    "tests/windows-video-oracle.c": "d6583de3bb8f4a2355eb1d2e31bf71f1a3de86064e1cc5308a574450c1c23e36",
+    "tests/windows-video-mock.c": "34334264683b67360c5be7f6490f253834ce6cc4328ddc537ab8f6a68028f323",
+    "tests/verify-windows-video.py": "9b2c8198ad664dc6bd717160a48338b667047b288dd442aac46c7aabb7cb9ac4"
+  },
+  "artifacts": {
+    "obj\\video.obj": "e73ca9e32418ef284476dbebc5455a42437c84fa172126ae714860bd0d7b47de",
+    "windows-video\\windows-video-oracle.exe": "f155d978fcd7bd0c41dac7beb7b1e9c2fee76d6aa42e031cb32d84767ca3a255",
+    "windows-video\\windows-video-mock.exe": "813984d7ae2eca729c0f55e8ee2bcfc605a16866c688e8bc2bc6e8c7ed28f747"
+  },
+  "negative_controls": [
+    {
+      "policy": "ignore-small-buffer",
+      "exit_code": 1,
+      "failure": "video-mock line149 step21 fault0",
+      "source_sha256": "11765202bebfb3579cf696a74c0261af463bd3c224ba9c6fd74a3af052f27ec9",
+      "object_sha256": "ad0c9dcf6afe7ecd268197d70858cc797e0389514a0fc4c0a383606ff0980c87",
+      "executable_sha256": "877a5b0f15c18c888a8240a846c1545769915f9633b90ff6a27bb0404f37944f"
+    },
+    {
+      "policy": "skip-release",
+      "exit_code": 1,
+      "failure": "video-mock line129 step22 fault0",
+      "source_sha256": "254a888e6b374b04a285851b2e415f9f189ea5d391e228b125d4ab584d4b56fb",
+      "object_sha256": "fe8681689c74fa2c7e498c5793c190e95febbefd66d9636da0ed7ae6f3742b48",
+      "executable_sha256": "a4ee74aa67cd5d16ca3d14e44bda3c407faf27432581e66cdbda4a965cb13d0c"
+    },
+    {
+      "policy": "repeat-copy",
+      "exit_code": 1,
+      "failure": "video-mock line156 step24 fault0",
+      "source_sha256": "89ce6023b98f30768936dfd7740c27e1955295665e4aaa4e7c164193d0c5db8c",
+      "object_sha256": "583e4462bfd13142344a925abecc56b30f7fbc53f3700de8001c9d3fd3ac75b2",
+      "executable_sha256": "84817d43b92f90d0e2d1d0aa996479fd56d01d57b5f540c686ca41f84868fbc6"
+    },
+    {
+      "policy": "blocking-map",
+      "exit_code": 1,
+      "failure": "video-mock line104 step22 fault0",
+      "source_sha256": "cada9885a9764b53a7aa36b00394da55c2830c99fe8517825ae3b8027ab7ec86",
+      "object_sha256": "9a57332e787cc1550c3679d6a68c84f807432a6b747ed74d01fc0f08d30f1606",
+      "executable_sha256": "8b3bc60dfb1704e9c787911be761a2934512989c8322bafbd39d23db2c1cbb1a"
+    },
+    {
+      "policy": "missing-syntax",
+      "exit_code": 1,
+      "failure": "video-mock line188 step21 fault0",
+      "source_sha256": "119d87cb9336184a214486e039980f4b6559b9bf81cd1d880d612db2700f785f",
+      "object_sha256": "530bc846968a584764215680471fd0a1847396d113c72ae48f55395c5a4ac93e",
+      "executable_sha256": "e8cbb2df016a0d9789bca20890f475142577296fdddc2c90570edc1bf0e79675"
+    }
+  ],
+  "git_source_sha256": {
+    "src/win/video.s": "d073eb62db2d47d63d359dd7600eb218aebd113aa20fd5f4e3eea65b991dce5a",
+    "src/win/video.inc": "60c54078b1de30cf3e1267f082c83dd954c2d51a0ed50dc95eb536e31b62b40d",
+    "src/win/d3d11.def": "6aff88dceb3efc79d865fe5289bdbcd74408d3e4707d2af590bcf6e6ff6aa5e5",
+    "src/lamp.inc": "d79c75543ab0d78863010b32e46faf23fda5b9cb54ec624e9dce0acfcabf03e6",
+    "tests/windows-video-oracle.c": "d6583de3bb8f4a2355eb1d2e31bf71f1a3de86064e1cc5308a574450c1c23e36",
+    "tests/windows-video-mock.c": "34334264683b67360c5be7f6490f253834ce6cc4328ddc537ab8f6a68028f323",
+    "tests/verify-windows-video.py": "9b2c8198ad664dc6bd717160a48338b667047b288dd442aac46c7aabb7cb9ac4"
+  },
+  "audio_binaries": {
+    "lamp.exe": "86f9677daf29d5e476e9e73a808e0141fcfb807c66034b666eb9ee491144db59",
+    "lamp-cli.exe": "e3e5132718e379a1e1852e6b30be2f7135462039bd303f38c37059a144bf6343"
+  },
+  "audio_smoke": [
+    {
+      "codec": "wav",
+      "frames": 12000,
+      "rate": 48000,
+      "peak": 0.08837890625,
+      "result": "passed"
+    },
+    {
+      "codec": "aiff",
+      "frames": 12000,
+      "rate": 48000,
+      "peak": 0.08837890625,
+      "result": "passed"
+    },
+    {
+      "codec": "flac",
+      "frames": 12000,
+      "rate": 48000,
+      "peak": 0.08837890625,
+      "result": "passed"
+    },
+    {
+      "codec": "mp3",
+      "frames": 12000,
+      "rate": 48000,
+      "peak": 0.0840023010969162,
+      "result": "passed"
+    },
+    {
+      "codec": "vorbis",
+      "frames": 12000,
+      "rate": 48000,
+      "peak": 0.08997303247451782,
+      "result": "passed"
+    },
+    {
+      "codec": "opus",
+      "frames": 12000,
+      "rate": 48000,
+      "peak": 0.08913379907608032,
+      "result": "passed"
+    }
+  ],
+  "audio_runtime_imports_and_resources": [
+    {
+      "file": "lamp-cli.exe",
+      "bytes": 510976,
+      "architecture": "x86-64",
+      "subsystem": "console",
+      "imports": [
+        "AVRT.dll",
+        "KERNEL32.dll",
+        "ole32.dll",
+        "SHELL32.dll"
+      ],
+      "iconSizes": [
+        16,
+        24,
+        32,
+        48,
+        64,
+        128,
+        256
+      ],
+      "version": "0.4.0-dev",
+      "result": "passed"
+    },
+    {
+      "file": "lamp.exe",
+      "bytes": 541696,
+      "architecture": "x86-64",
+      "subsystem": "windows",
+      "imports": [
+        "AVRT.dll",
+        "COMCTL32.dll",
+        "COMDLG32.dll",
+        "GDI32.dll",
+        "KERNEL32.dll",
+        "ole32.dll",
+        "SHELL32.dll",
+        "SHLWAPI.dll",
+        "USER32.dll"
+      ],
+      "iconSizes": [
+        16,
+        24,
+        32,
+        48,
+        64,
+        128,
+        256
+      ],
+      "version": "0.4.0-dev",
+      "result": "passed"
+    }
+  ],
+  "build_note": "video.obj is assembled alongside these unchanged audio executables, but is not linked into them before frontend/player integration. Only the native oracle links the backend and D3D11 system import; no mock or C code is a player dependency."
+}

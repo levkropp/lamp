@@ -175,6 +175,8 @@ Latest Opus work adds family 1 multistream decoding and the RFC stereo downmix. 
 
 The [video scheduling component](docs/video-sync.md) now has a bounded frame queue, audio-clock conversion, pause/step and late-frame rules, verified independently on Windows/Linux. It is not connected to decoding or presentation yet; source builds remain audio players.
 
+An unintegrated [Windows hardware backend](docs/windows-video.md) also decodes H.264 IDR test pictures through Direct3D 11; 48 images match the reference byte-for-byte on an RTX 5070 Ti. File parsing, presentation and A/V integration are still unfinished.
+
 Keep runtime and codec code in assembly. Use original implementations or carefully attributed permissive references (MIT, MIT-0, BSD-2-Clause, BSD-3-Clause, or CC0). Preserve applicable notices. Test tools may use other languages. Please include the failing media characteristics, a redistributable fixture when possible, and a reference comparison when reporting decoder issues.
 
 ## License and references

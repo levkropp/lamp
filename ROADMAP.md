@@ -264,6 +264,8 @@ ASF PCM/float, G.711, IMA/Microsoft/Duck ADPCM, MPEG audio, AC-3 and ADTS AAC/HE
 
 The [video scheduling foundation](docs/video-sync.md) now provides a bounded 32-frame assembly queue, audible-sample clock conversion, epoch rejection, pause/starvation holds, stepping and a late-frame policy. Windows/Linux component oracles pass 37,698,315 checks each, including randomized operations, exact clocks and simulated VFR sessions; Mac translation/assembly also passes. This component is not yet connected to a video decoder, GPU presenter or real audio clock. Video playback and the full synchronization gate remain open.
 
+The unintegrated [Windows D3D11 backend](docs/windows-video.md) now decodes H.264 IDR pictures on hardware: 48 Baseline test images through 1920×1088 match 40,181,760 reference NV12 bytes on an RTX 5070 Ti. Fault-injected COM cleanup and bounded/nonblocking readback checks pass. Test-only code still supplies parsed headers; assembly file parsing, presentation, inter-frame references, A/V integration and the other video codecs remain open.
+
 **Gate:** reference video vectors/images and synchronized mixed-media fixtures; measured dropped frames, latency, CPU/GPU use and fallback behavior. Hardware paths must have explicit supported-profile limits. Implementing mature software video codecs is a substantial project, not a quick extension of the audio decoder.
 
 ## 5 — Subtitles and network media
