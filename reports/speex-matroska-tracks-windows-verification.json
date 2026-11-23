@@ -1,0 +1,547 @@
+{
+  "result": "passed",
+  "vorbis_fixture_encoder": [
+    "-c:a",
+    "libvorbis"
+  ],
+  "checks": [
+    {
+      "test": "three.mkv",
+      "result": "exact",
+      "tracks": 3,
+      "automatic": 2,
+      "comparator": "FFmpeg -map 0:a:N -c copy"
+    },
+    {
+      "test": "three.mp4",
+      "result": "exact",
+      "tracks": 3,
+      "automatic": 1,
+      "comparator": "FFmpeg -map 0:a:N -c copy"
+    },
+    {
+      "test": "three.ts",
+      "result": "exact",
+      "tracks": 3,
+      "automatic": 1,
+      "comparator": "FFmpeg -map 0:a:N -c copy"
+    },
+    {
+      "test": "two.vob",
+      "result": "exact",
+      "tracks": 2,
+      "automatic": 1,
+      "comparator": "FFmpeg -map 0:a:N -c copy"
+    },
+    {
+      "test": "two.avi",
+      "result": "exact",
+      "tracks": 2,
+      "automatic": 1,
+      "comparator": "FFmpeg -map 0:a:N -c copy"
+    },
+    {
+      "test": "three.ogg",
+      "result": "exact",
+      "tracks": 3,
+      "automatic": 1,
+      "comparator": "FFmpeg -map 0:a:N -c copy"
+    },
+    {
+      "test": "chained.ogg --track 2",
+      "result": "exact",
+      "note": "track 2 of each link"
+    },
+    {
+      "test": "speex-opus.ogg",
+      "result": "exact",
+      "automatic": 1,
+      "note": "Speex and second-BOS Opus both match their copied streams"
+    },
+    {
+      "test": "queue --track 3",
+      "result": "exact",
+      "files": 2
+    },
+    {
+      "test": "eac3.ts track 2",
+      "result": "exact",
+      "comparator": "isolated E-AC-3 track"
+    },
+    {
+      "test": "unsupported and missing tracks",
+      "result": "rejected",
+      "files": [
+        "wma.mkv track 2",
+        "one.wav track 2",
+        "one.mp3 track 2",
+        "one.flv track 2",
+        "three.mkv track 4",
+        "three.mp4 track 4",
+        "three.ts track 4",
+        "two.vob track 3",
+        "two.avi track 3",
+        "three.ogg track 4"
+      ]
+    },
+    {
+      "test": "catalog-65.mpg",
+      "result": "exact",
+      "tracks": 65,
+      "automatic": 65,
+      "selected": 65,
+      "comparator": "catalog-65.mp2",
+      "note": "64 synthetic unsupported private IDs; remaining audio payloads are independently encoded"
+    },
+    {
+      "test": "catalog-104.mpg",
+      "result": "exact",
+      "tracks": 104,
+      "automatic": 65,
+      "selected": 104,
+      "comparator": "catalog-65.mp2",
+      "note": "64 synthetic unsupported private IDs; remaining audio payloads are independently encoded"
+    }
+  ],
+  "speex_fixture_source": "generated with local FFmpeg",
+  "speex_fixture_sha256": "80c65584681453b8ea4e631750b7f2ff724f94e32b65d2932d4a92fac7cb24c8",
+  "catalog_checks": [
+    {
+      "file": "three.mkv",
+      "choice": 1,
+      "count": 3,
+      "selected": 1,
+      "sha256": "dbde56cd84090fe61cb23fcc43fbb8530cf30dc8262f43acc6356cadc37fe295"
+    },
+    {
+      "file": "three.mkv",
+      "choice": 2,
+      "count": 3,
+      "selected": 2,
+      "sha256": "dbde56cd84090fe61cb23fcc43fbb8530cf30dc8262f43acc6356cadc37fe295"
+    },
+    {
+      "file": "three.mkv",
+      "choice": 3,
+      "count": 3,
+      "selected": 3,
+      "sha256": "dbde56cd84090fe61cb23fcc43fbb8530cf30dc8262f43acc6356cadc37fe295"
+    },
+    {
+      "file": "three.mkv",
+      "choice": 0,
+      "count": 3,
+      "selected": 2,
+      "sha256": "dbde56cd84090fe61cb23fcc43fbb8530cf30dc8262f43acc6356cadc37fe295"
+    },
+    {
+      "file": "three.mkv",
+      "choice": 4,
+      "count": 0,
+      "selected": 0,
+      "sha256": "dbde56cd84090fe61cb23fcc43fbb8530cf30dc8262f43acc6356cadc37fe295"
+    },
+    {
+      "file": "three.mp4",
+      "choice": 1,
+      "count": 3,
+      "selected": 1,
+      "sha256": "4e2b2e7329bfb66028269a57c9993297f376b0054adf65f238dc0017668762d4"
+    },
+    {
+      "file": "three.mp4",
+      "choice": 2,
+      "count": 3,
+      "selected": 2,
+      "sha256": "4e2b2e7329bfb66028269a57c9993297f376b0054adf65f238dc0017668762d4"
+    },
+    {
+      "file": "three.mp4",
+      "choice": 3,
+      "count": 3,
+      "selected": 3,
+      "sha256": "4e2b2e7329bfb66028269a57c9993297f376b0054adf65f238dc0017668762d4"
+    },
+    {
+      "file": "three.mp4",
+      "choice": 0,
+      "count": 3,
+      "selected": 1,
+      "sha256": "4e2b2e7329bfb66028269a57c9993297f376b0054adf65f238dc0017668762d4"
+    },
+    {
+      "file": "three.mp4",
+      "choice": 4,
+      "count": 0,
+      "selected": 0,
+      "sha256": "4e2b2e7329bfb66028269a57c9993297f376b0054adf65f238dc0017668762d4"
+    },
+    {
+      "file": "three.ts",
+      "choice": 1,
+      "count": 3,
+      "selected": 1,
+      "sha256": "2f912dac86a54f6490744cf5136cc63fe44bd06b71873cd8771fd2ac4af8e8a1"
+    },
+    {
+      "file": "three.ts",
+      "choice": 2,
+      "count": 3,
+      "selected": 2,
+      "sha256": "2f912dac86a54f6490744cf5136cc63fe44bd06b71873cd8771fd2ac4af8e8a1"
+    },
+    {
+      "file": "three.ts",
+      "choice": 3,
+      "count": 3,
+      "selected": 3,
+      "sha256": "2f912dac86a54f6490744cf5136cc63fe44bd06b71873cd8771fd2ac4af8e8a1"
+    },
+    {
+      "file": "three.ts",
+      "choice": 0,
+      "count": 3,
+      "selected": 1,
+      "sha256": "2f912dac86a54f6490744cf5136cc63fe44bd06b71873cd8771fd2ac4af8e8a1"
+    },
+    {
+      "file": "three.ts",
+      "choice": 4,
+      "count": 0,
+      "selected": 0,
+      "sha256": "2f912dac86a54f6490744cf5136cc63fe44bd06b71873cd8771fd2ac4af8e8a1"
+    },
+    {
+      "file": "two.vob",
+      "choice": 1,
+      "count": 2,
+      "selected": 1,
+      "sha256": "d57780b7e81dec35dd9f43e3bbe60291f5d661fe52523b193790241ddd48624c"
+    },
+    {
+      "file": "two.vob",
+      "choice": 2,
+      "count": 2,
+      "selected": 2,
+      "sha256": "d57780b7e81dec35dd9f43e3bbe60291f5d661fe52523b193790241ddd48624c"
+    },
+    {
+      "file": "two.vob",
+      "choice": 0,
+      "count": 2,
+      "selected": 1,
+      "sha256": "d57780b7e81dec35dd9f43e3bbe60291f5d661fe52523b193790241ddd48624c"
+    },
+    {
+      "file": "two.vob",
+      "choice": 3,
+      "count": 0,
+      "selected": 0,
+      "sha256": "d57780b7e81dec35dd9f43e3bbe60291f5d661fe52523b193790241ddd48624c"
+    },
+    {
+      "file": "two.avi",
+      "choice": 1,
+      "count": 2,
+      "selected": 1,
+      "sha256": "509556bebe8ab3f1e027521fa4eea35a993b33eb95554d372a8e663514c2daa6"
+    },
+    {
+      "file": "two.avi",
+      "choice": 2,
+      "count": 2,
+      "selected": 2,
+      "sha256": "509556bebe8ab3f1e027521fa4eea35a993b33eb95554d372a8e663514c2daa6"
+    },
+    {
+      "file": "two.avi",
+      "choice": 0,
+      "count": 2,
+      "selected": 1,
+      "sha256": "509556bebe8ab3f1e027521fa4eea35a993b33eb95554d372a8e663514c2daa6"
+    },
+    {
+      "file": "two.avi",
+      "choice": 3,
+      "count": 0,
+      "selected": 0,
+      "sha256": "509556bebe8ab3f1e027521fa4eea35a993b33eb95554d372a8e663514c2daa6"
+    },
+    {
+      "file": "three.ogg",
+      "choice": 1,
+      "count": 3,
+      "selected": 1,
+      "sha256": "d508cae0fb2d98141813ca50dc36905c10a85d314e32f7634bc8b1e03d58ba10"
+    },
+    {
+      "file": "three.ogg",
+      "choice": 2,
+      "count": 3,
+      "selected": 2,
+      "sha256": "d508cae0fb2d98141813ca50dc36905c10a85d314e32f7634bc8b1e03d58ba10"
+    },
+    {
+      "file": "three.ogg",
+      "choice": 3,
+      "count": 3,
+      "selected": 3,
+      "sha256": "d508cae0fb2d98141813ca50dc36905c10a85d314e32f7634bc8b1e03d58ba10"
+    },
+    {
+      "file": "three.ogg",
+      "choice": 0,
+      "count": 3,
+      "selected": 1,
+      "sha256": "d508cae0fb2d98141813ca50dc36905c10a85d314e32f7634bc8b1e03d58ba10"
+    },
+    {
+      "file": "three.ogg",
+      "choice": 4,
+      "count": 0,
+      "selected": 0,
+      "sha256": "d508cae0fb2d98141813ca50dc36905c10a85d314e32f7634bc8b1e03d58ba10"
+    },
+    {
+      "file": "chained.ogg",
+      "choice": 0,
+      "count": 2,
+      "selected": 1,
+      "sha256": "1622a322f97abb68694d18bb3719ffbb3dbbb25415903366785397c944e9293e"
+    },
+    {
+      "file": "chained.ogg",
+      "choice": 2,
+      "count": 2,
+      "selected": 2,
+      "sha256": "1622a322f97abb68694d18bb3719ffbb3dbbb25415903366785397c944e9293e"
+    },
+    {
+      "file": "speex-opus.ogg",
+      "choice": 0,
+      "count": 2,
+      "selected": 1,
+      "sha256": "80c65584681453b8ea4e631750b7f2ff724f94e32b65d2932d4a92fac7cb24c8"
+    },
+    {
+      "file": "speex-opus.ogg",
+      "choice": 2,
+      "count": 2,
+      "selected": 2,
+      "sha256": "80c65584681453b8ea4e631750b7f2ff724f94e32b65d2932d4a92fac7cb24c8"
+    },
+    {
+      "file": "speex-opus.ogg",
+      "choice": 1,
+      "count": 2,
+      "selected": 1,
+      "sha256": "80c65584681453b8ea4e631750b7f2ff724f94e32b65d2932d4a92fac7cb24c8"
+    },
+    {
+      "file": "wma.mkv",
+      "choice": 0,
+      "count": 2,
+      "selected": 1,
+      "sha256": "d665215ab1e4fc8041d17e930360d390c5237fb44f8a9522c9e18a93e9cc3dd4"
+    },
+    {
+      "file": "wma.mkv",
+      "choice": 2,
+      "count": 0,
+      "selected": 0,
+      "sha256": "d665215ab1e4fc8041d17e930360d390c5237fb44f8a9522c9e18a93e9cc3dd4"
+    },
+    {
+      "file": "eac3.ts",
+      "choice": 0,
+      "count": 2,
+      "selected": 1,
+      "sha256": "0189b8cfea3b8be5ec1a2f44b8c3be3815c8f450031db56c69d1d488bbaa588a"
+    },
+    {
+      "file": "eac3.ts",
+      "choice": 2,
+      "count": 2,
+      "selected": 2,
+      "sha256": "0189b8cfea3b8be5ec1a2f44b8c3be3815c8f450031db56c69d1d488bbaa588a"
+    },
+    {
+      "file": "one.wav",
+      "choice": 0,
+      "count": 1,
+      "selected": 1,
+      "sha256": "3ea74b2c4344d554577e8647181198a289a4d24232d8c095d0ba932e588ed8d7"
+    },
+    {
+      "file": "one.wav",
+      "choice": 1,
+      "count": 1,
+      "selected": 1,
+      "sha256": "3ea74b2c4344d554577e8647181198a289a4d24232d8c095d0ba932e588ed8d7"
+    },
+    {
+      "file": "one.wav",
+      "choice": 2,
+      "count": 0,
+      "selected": 0,
+      "sha256": "3ea74b2c4344d554577e8647181198a289a4d24232d8c095d0ba932e588ed8d7"
+    },
+    {
+      "file": "one.mp3",
+      "choice": 0,
+      "count": 1,
+      "selected": 1,
+      "sha256": "85836e928345e0ab2c59a58d188d4461da94f5db02793eac8923441356c6528b"
+    },
+    {
+      "file": "one.mp3",
+      "choice": 1,
+      "count": 1,
+      "selected": 1,
+      "sha256": "85836e928345e0ab2c59a58d188d4461da94f5db02793eac8923441356c6528b"
+    },
+    {
+      "file": "one.mp3",
+      "choice": 2,
+      "count": 0,
+      "selected": 0,
+      "sha256": "85836e928345e0ab2c59a58d188d4461da94f5db02793eac8923441356c6528b"
+    },
+    {
+      "file": "one.flv",
+      "choice": 0,
+      "count": 1,
+      "selected": 1,
+      "sha256": "441cfdb01bc50d1a9234613d371c15a00fdde92cd37023d9baf1e201fbebe270"
+    },
+    {
+      "file": "one.flv",
+      "choice": 1,
+      "count": 1,
+      "selected": 1,
+      "sha256": "441cfdb01bc50d1a9234613d371c15a00fdde92cd37023d9baf1e201fbebe270"
+    },
+    {
+      "file": "one.flv",
+      "choice": 2,
+      "count": 0,
+      "selected": 0,
+      "sha256": "441cfdb01bc50d1a9234613d371c15a00fdde92cd37023d9baf1e201fbebe270"
+    },
+    {
+      "file": "disabled-first.mp4",
+      "choice": 0,
+      "count": 3,
+      "selected": 2,
+      "sha256": "845d3274a5c46e85618e225ebf0da7f6bd07e416aa145150c4b4bf6f56d8dc46"
+    },
+    {
+      "file": "disabled-first.mp4",
+      "choice": 1,
+      "count": 3,
+      "selected": 1,
+      "sha256": "845d3274a5c46e85618e225ebf0da7f6bd07e416aa145150c4b4bf6f56d8dc46"
+    },
+    {
+      "file": "unequal.ogg",
+      "choice": 0,
+      "count": 1,
+      "selected": 1,
+      "sha256": "fdb62976c81a6a7f3316f7d217bf81ecbb2dc44b8e93fb29fed92448487b8dd6"
+    },
+    {
+      "file": "unequal.ogg",
+      "choice": 2,
+      "count": 0,
+      "selected": 0,
+      "sha256": "fdb62976c81a6a7f3316f7d217bf81ecbb2dc44b8e93fb29fed92448487b8dd6"
+    },
+    {
+      "file": "catalog-65.mpg",
+      "choice": 0,
+      "count": 65,
+      "selected": 65,
+      "sha256": "af59d9e50edc829e89a6d4f1afc31f8383d83fc9461fa8a8ccca1b80690e9305"
+    },
+    {
+      "file": "catalog-65.mpg",
+      "choice": 65,
+      "count": 65,
+      "selected": 65,
+      "sha256": "af59d9e50edc829e89a6d4f1afc31f8383d83fc9461fa8a8ccca1b80690e9305"
+    },
+    {
+      "file": "catalog-65.mpg",
+      "choice": 64,
+      "count": 0,
+      "selected": 0,
+      "sha256": "af59d9e50edc829e89a6d4f1afc31f8383d83fc9461fa8a8ccca1b80690e9305"
+    },
+    {
+      "file": "catalog-65.mpg",
+      "choice": 66,
+      "count": 0,
+      "selected": 0,
+      "sha256": "af59d9e50edc829e89a6d4f1afc31f8383d83fc9461fa8a8ccca1b80690e9305"
+    },
+    {
+      "file": "catalog-104.mpg",
+      "choice": 0,
+      "count": 104,
+      "selected": 65,
+      "sha256": "be87b262e25c666f081ee0238adc038d83626f50765120cbc2964db00715a21d"
+    },
+    {
+      "file": "catalog-104.mpg",
+      "choice": 104,
+      "count": 104,
+      "selected": 104,
+      "sha256": "be87b262e25c666f081ee0238adc038d83626f50765120cbc2964db00715a21d"
+    },
+    {
+      "file": "catalog-104.mpg",
+      "choice": 64,
+      "count": 0,
+      "selected": 0,
+      "sha256": "be87b262e25c666f081ee0238adc038d83626f50765120cbc2964db00715a21d"
+    },
+    {
+      "file": "catalog-104.mpg",
+      "choice": 105,
+      "count": 0,
+      "selected": 0,
+      "sha256": "be87b262e25c666f081ee0238adc038d83626f50765120cbc2964db00715a21d"
+    },
+    {
+      "file": "catalog-104.mpg",
+      "choice": 65,
+      "count": 104,
+      "selected": 65,
+      "sha256": "be87b262e25c666f081ee0238adc038d83626f50765120cbc2964db00715a21d"
+    },
+    {
+      "file": "catalog-104.mpg",
+      "choice": 73,
+      "count": 104,
+      "selected": 73,
+      "sha256": "be87b262e25c666f081ee0238adc038d83626f50765120cbc2964db00715a21d"
+    }
+  ],
+  "sources": {
+    "src/decoder.s": "0f5111391f497a1a667c5e5d6fac37840e6b4edc365ea8f5b351959f0b4ce8c5",
+    "src/mp4.s": "d498c8f74f2b157ad6a3e42984d8694667cb64b62074347c56a65cf7da3c622d",
+    "src/mkv.s": "5881e1b918f337fc4038311dd56dfe2c32c6e7391c4945e3beac724e200d3bdf",
+    "src/avi.s": "56f1336d789997c4e4d2d11946129f8f2a1d22ee46c653cd40dacacb4ebeac59",
+    "src/mpegts.s": "5dafcb58db5d634684462207d45e55ff088d5bf032f62d8302adc39be6ef125e",
+    "src/ogg_chain.s": "fc1565bb174d986a5714f2ecc471fa028773708441f583061d0965d83bab4791",
+    "tests/track-catalog-oracle.c": "93175cde74b34ab85aeb8838c5a428cd39955adf45fdd6407229ad45488e652f",
+    "tests/verify-tracks.py": "c53ed28d0d01530f0350de0d2d55eef04f3de73a70a7949789e403d3b7079874",
+    "src/track.s": "83aa69f8270556a1c3f497197a101aaf7c6922e44156c0cb3f4878213580e689",
+    "src/speex_track.s": "3822fd2600173166022611dfdb652df58cba4cd2b45761e8820cfc4b2ecd6c0a",
+    "tests/seek-oracle.c": "a03fd2777080de19f95aee235f83d0c02a067e4ab676601424e77ccac9377605"
+  },
+  "scope": "lamp-cli --track N in Matroska, MP4, MPEG-TS/PS, AVI and Ogg (multiplexed and chained) against FFmpeg -map 0:a:N copies; queues; unsupported, missing and single tracks.",
+  "platform": "Native Windows x64",
+  "ffmpeg": "ffmpeg version 8.0.1-essentials_build-www.gyan.dev Copyright (c) 2000-2025 the FFmpeg developers",
+  "binary_sha256": "25600cf21c5005e60373ff582d1c8ebaf6e456fb371894a5b2fc7d5e34e2d50e"
+}

@@ -9,7 +9,7 @@ LAMP_ABI int decoder_open(const lamp_char *);
 LAMP_ABI void decoder_close(void);
 LAMP_ABI uint64_t decoder_seek(uint64_t);
 LAMP_ABI unsigned decoder_read(float *,unsigned);
-extern unsigned decode_error,codec_kind;
+extern unsigned decode_error,codec_kind,track_choice;
 extern unsigned decoder_seek_probes;
 extern unsigned *ogg_cancel_ptr;
 extern unsigned mp3_index_count;
@@ -19,11 +19,13 @@ extern uint64_t vorbis_index_stride;
 extern uint64_t total_frames;
 static struct {uint64_t before;float values[4096];uint64_t after;} pcm;
 int lamp_main(int argc,lamp_char **argv){
- if(argc<4||argc>6)return 2;
+ if(argc<4||argc>7)return 2;
+ /* Optional seventh argument selects an audio ordinal before each reopen. */
+ if(argc==7)track_choice=(unsigned)lamp_atoi(argv[6]);
  unsigned bound=argc>=5&&lamp_atoi(argv[4])>0?(unsigned)lamp_atoi(argv[4]):UINT32_MAX;
  /* Optional sixth argument: largest sample deviation tolerated, in units of
     2^-15 (codecs whose state carries across packets, such as IMA4). */
- const float tolerance=argc==6?(float)lamp_atoi(argv[5])/32768.0f:0.0f;float deviation=0.0f;
+ const float tolerance=argc>=6?(float)lamp_atoi(argv[5])/32768.0f:0.0f;float deviation=0.0f;
  int invalid=lamp_atoi(argv[3]);
  if(invalid==5){
   if(!decoder_open(argv[1])||total_frames!=65537ULL*576||mp3_index_count>2048||mp3_index_stride!=64)return 1;

@@ -4,6 +4,8 @@ Source builds play Ogg/Speex (`.spx` or `.ogg`): narrowband, wideband and
 ultra-wideband, all submodes, mono and in-band stereo, grouped frames,
 CBR/VBR/VAD/DTX, comment tags, granule/delay trimming and exact seeks.
 [FLV Speex](flv.md#speex) also plays as 16 kHz mono with grouped packets.
+[Matroska Speex through ACM](matroska.md#speex-through-acm) supports all three
+bands in mono/stereo, packet lacing, final padding and exact selected-track seeks.
 The assembly decoder matches the BSD Speex 1.2.1 float reference. Speex
 participates in Ogg track selection, chained links, queue playback and
 output resampling. Windows and Linux decoding/seeking are verified;
@@ -13,7 +15,7 @@ The published v0.3.0 download predates this support.
 
 The following sections retain the individual component contracts and
 their separate verification scopes. File/player verification follows at
-the end. Matroska/Speex and other mappings remain unimplemented.
+the end. Further Speex container mappings remain unimplemented.
 
 ## Source and provenance
 

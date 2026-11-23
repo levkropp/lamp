@@ -15,10 +15,74 @@ The demuxer selects one audio track: the first enabled audio track with a suppor
 | `A_AAC` | [AAC-LC or HE-AAC (v1 and v2)](aac.md) (AudioSpecificConfig in CodecPrivate); the legacy `A_AAC/MPEG2/...` and `A_AAC/MPEG4/...` IDs are not recognised |
 | `A_AC3` | [AC-3](ac3.md); `A_EAC3` supports the partial [conventional-mantissa profile](eac3.md) |
 | `A_WAVPACK4` | [WavPack](wavpack.md) frames (block headers reduced to flags, CRC and sizes); CodecPrivate is optional |
+| `A_MS/ACM` | [Speex](speex.md), WAVE tag `0xa109`, with a WAVEFORMATEX wrapper and appended Speex identification header; NB/WB/UWB mono or stereo |
 | `A_MPEG/L1`, `A_MPEG/L2`, `A_MPEG/L3` | MPEG audio Layers I–III, one frame per packet |
 | `A_PCM/INT/LIT`, `A_PCM/INT/BIG`, `A_PCM/FLOAT/IEEE` | PCM: unsigned 8-bit, signed 16/24/32-bit in either byte order, float32/64; 1–8 channels; integral 8–192 kHz SamplingFrequency |
 
 DTS and other unsupported CodecIDs are skipped. AC-3 and the supported E-AC-3 profile pass through the track decoder.
+
+## Speex through ACM
+
+Speex files written by FFmpeg use the standard
+[`A_MS/ACM` mapping](https://www.matroska.org/technical/codec_specs.html#a_msacm),
+whose CodecPrivate contains an unpacked little-endian WAVEFORMATEX and its
+extra format bytes. LAMP recognizes the
+[Speex WAVE tag `0xa109`](https://github.com/FFmpeg/FFmpeg/blob/master/libavformat/riff.c).
+The 18-byte wrapper's `cbSize` must fit the private payload and contain at
+least the 80-byte Speex header. Extended headers are accepted within that
+declared size; undeclared trailing private bytes are ignored. WAVE and
+Speex sample rates and channel counts must agree. The Speex header then
+sets the decoder's mode, rate and channel count; Matroska Audio fields do
+not override this codec configuration. Arbitrary other ACM formats remain
+unsupported: they count as audio tracks and Automatic skips them, while an
+explicit unsupported choice rejects.
+
+All three Speex bands, mono/intensity stereo, CBR/VBR/VAD/DTX and 1–64
+frames per packet use the same assembly packet adapter as FLV. Packets may
+use the usual Matroska lacing, with a shorter or end-marker-filled final
+group. Float output is normalized by 1/32768 without int16 clipping; mono
+is duplicated. Speex seeks rebuild complete prediction, noise, filter and
+QMF histories from packet zero and discard up to the target. They are
+exact and cancellable, but a long recording may take time to seek.
+
+Every coded sample is presented except final DiscardPadding. No Ogg
+granule/delay trimming is inferred for this mapping. CodecDelay and
+timestamp scheduling/gaps remain unimplemented here. This adds Matroska
+audio coverage; it does not establish WebM Speex conformance or video/A/V
+synchronization. Matroska reports codec kind 8 as for its other audio codecs.
+
+The [Windows report](../reports/speex-matroska-windows-verification.json)
+and [Linux report](../reports/speex-matroska-linux-verification.json) each pass
+58 files and 870 exact seeks against independent packet extraction and the
+unchanged Speex 1.2.1 float decoder. The suite covers standard 8/16/32 kHz
+mono/stereo streams, qualities 0/5/10, grouped 1/2/5/8-frame packets,
+VBR/VAD/DTX, interleaved MPEG-4 video, all three lacing forms, unknown-size
+Segment/Clusters, 64-frame stereo null packets in each band, extended/trailing
+private data, final padding and header authority. Mixed-codec default and
+explicit ordinals include exact selected-track seeks, seven catalog/reopen
+checks and an unsupported ACM track before Speex. The third Opus track
+matches its standalone Matroska copy; remuxing it to Ogg would change its
+padding representation.
+
+Each platform also passes 65,353,842 guarded checks with 2,635,800 exact float
+words, 1,136 protected truncated file prefixes and 512 single-bit mutations;
+accepted mutations establish bounded behavior, not correct damaged-file
+audio. Sixteen malformed wrappers/headers/payloads/padding cases reject,
+and cancelled open/read plus reopen pass. Native Windows additionally passes
+muted play/pause/resume/stop/reopen, active/paused seek, cancelled open,
+simulated default-output callback recovery and exclusive 48 kHz output for
+8 kHz mono, 16 kHz stereo and 32 kHz stereo. Captured hardware PCM, audible
+latency and physical device hotplug are not established. Changed modules
+translate and assemble for ARM64 macOS; native Mac and Linux output-device
+execution remain unverified for this addition.
+
+Run `python3 tests/verify-speex-matroska.py --bin build/speex-mkv-check`.
+On Windows use `python`, `--bin bin/speex-mkv-check` and optionally `--probe`
+after a `--tests --probe-default-device --probe-exclusive --probe-silent`
+build. `--fixtures PATH` reuses the same encoded corpus without FFmpeg.
+The [52-check Matroska regression](../reports/speex-matroska-regression-windows-verification.json)
+and [13-check track regression](../reports/speex-matroska-tracks-windows-verification.json)
+also pass on the current native Windows decoder objects.
 
 ## Structure
 
@@ -28,7 +92,7 @@ DiscardPadding on the final packet trims the end, converted from nanoseconds to 
 
 ## Track layer
 
-A demuxer lists packets as pointers into the mapped file and names the codec, its private data and start/end trimming. `track_finish` opens the codec and asks it for every packet's duration: Opus TOC, Vorbis block sizes and overlap, FLAC frame headers (positions must be consecutive), ALAC frame headers, MPEG audio headers (layer, version, rate and channels must not change), and PCM sizes, which must be whole frames. Each decoded packet must produce exactly its scanned duration. A track may hold 16,777,216 packets; the table reserves 384 MiB of address space and commits 192 KiB per 8,192 packets, so memory follows the file. Packets of up to 65,536 decoded frames are supported.
+A demuxer lists packets as pointers into the mapped file and names the codec, its private data and start/end trimming. `track_finish` opens the codec and asks it for every packet's duration: Opus TOC, Vorbis block sizes and overlap, FLAC frame headers (positions must be consecutive), ALAC frame headers, MPEG audio headers (layer, version, rate and channels must not change), Speex frame structure, and PCM sizes, which must be whole frames. Each decoded packet must produce exactly its scanned duration. A track may hold 16,777,216 packets; the table reserves 384 MiB of address space and commits 192 KiB per 8,192 packets, so memory follows the file. The common PCM buffer permits up to 262,144 stereo frames per packet, subject to smaller codec limits; Speex permits at most 40,960 frames (64 UWB frames).
 
 Seeking finds the packet holding the target and restarts there with the codec's pre-roll: FLAC, ALAC and PCM packets decode independently, Vorbis decodes one primer packet whose output is skipped, MPEG audio decodes two frames before the target and Layer III also earlier frames holding up to 2 KiB of bit-reservoir data, and Opus starts at least 80 ms before the target. Layer III frames whose reservoir lies before the restart point emit silence and are discarded; once a frame finds all of its main data, later frames are exact. Vorbis, FLAC, PCM and MPEG audio seeks therefore equal continuous decoding; Opus seeks equal LAMP's Ogg Opus seeks.
 
@@ -37,7 +101,7 @@ Seeking finds the packet holding the target and restarts there with the codec's 
 `python3 tests/verify-matroska.py` muxes fixtures with FFmpeg:
 
 - 24 files: Opus stereo/mono CBR/5.1 and Vorbis stereo/mono/5.1 as both `.mka` and `.webm`; FLAC 16/24-bit and 5.1; MP3; MP2; PCM s16/s24/s32be/f32/f64/u8 and 5.1. Mono and stereo outputs are compared with FFmpeg's decode of the same file: exact for FLAC and PCM, and within the codec suites' tolerances for Opus, Vorbis and MPEG audio. Opus and FLAC must also equal LAMP's decode of the same stream remuxed to Ogg, 5.1 PCM its WAV remux, and 5.1 Vorbis a direct Ogg encode.
-- A test-only muxer rewrites seven of them with Xiph, EBML and fixed lacing, unknown-size Segment and Clusters, a second track with FlagDefault, and an unsupported AC-3 track and a VP9 video track before the audio; all 42 variants decode identically.
+- A test-only muxer rewrites seven of them with Xiph, EBML and fixed lacing, unknown-size Segment and Clusters, a second track with FlagDefault, and an unsupported DTS track and a VP9 video track before the audio; all 42 variants decode identically.
 - 90 exact seeks on six files (Vorbis, FLAC, PCM, MP3, MP2, 5.1 Vorbis WebM) and ten Opus seeks equal to Ogg Opus seeks.
 - Nine malformed files reject: a truncated file, a wrong DocType, no supported audio, a ContentEncodings track, Opus without CodecPrivate, a corrupt FLAC frame, Xiph and fixed lacing that do not fit, and DiscardPadding before the last packet. Cancelled open and read stop cleanly, and a WebM Opus file plays through the Linux null sink.
 

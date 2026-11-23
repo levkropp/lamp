@@ -85,6 +85,9 @@ mkv_codecs:
     .byte 10
     .ascii "A_WAVPACK4"
     .byte 9, 0
+    .byte 8
+    .ascii "A_MS/ACM"
+    .byte 11, 0                          # Speex WAVEFORMATEX tag0xa109 only
     .byte 0
 .p2align 3
 
@@ -410,6 +413,18 @@ LOCALFN mkv_track_entry
     # chosen track need only be supported.
     cmp qword ptr [rip + mkv_entry_type], 2
     jne .Lmkv_entry_ok
+    cmp dword ptr [rip + mkv_entry_codec], 11
+    jne .Lmkv_entry_audio_count
+    # ACM is a wrapper, not a codec. Only Speex is connected here. Other
+    # WAVE tags must still count as audio without becoming automatic choices.
+    cmp dword ptr [rip + mkv_entry_private_bytes], 2
+    jb .Lmkv_entry_acm_unknown
+    mov rcx, [rip + mkv_entry_private]
+    cmp word ptr [rcx], 0xa109
+    je .Lmkv_entry_audio_count
+.Lmkv_entry_acm_unknown:
+    mov dword ptr [rip + mkv_entry_codec], 0
+.Lmkv_entry_audio_count:
     inc dword ptr [rip + mkv_audio_index]
     mov eax, [rip + mkv_audio_index]
     mov [rip + audio_tracks_count], eax
@@ -956,6 +971,8 @@ FN mkv_open
     mov [rip + track_config], rcx
     mov [rip + track_config_bytes], edx
     mov eax, [rip + mkv_codec]
+    cmp eax, 11
+    je .Lmkv_config_speex_acm
     cmp eax, 4
     je .Lmkv_config_vorbis
     cmp eax, 1
@@ -968,6 +985,28 @@ FN mkv_open
     je .Lmkv_finish                      # so do WavPack frames (CodecPrivate is the version)
     test rcx, rcx                        # Opus, FLAC, ALAC and AAC need CodecPrivate
     jz .Lmkv_open_bad
+    jmp .Lmkv_finish
+.Lmkv_config_speex_acm:
+    # A_MS/ACM CodecPrivate is an unpacked little-endian WAVEFORMATEX.
+    # Its cbSize delimits the appended Speex identification header. Packet
+    # timing belongs to Matroska; no Ogg granule/encoder delay is inferred.
+    cmp edx, 18
+    jb .Lmkv_open_bad
+    movzx r8d, word ptr [rcx + 16]
+    cmp r8d, 80
+    jb .Lmkv_open_bad
+    sub edx, 18
+    cmp r8d, edx
+    ja .Lmkv_open_bad
+    mov eax, [rcx + 4]
+    cmp eax, [rcx + 18 + 36]              # WAVE and Speex rates agree
+    jne .Lmkv_open_bad
+    movzx eax, word ptr [rcx + 2]
+    cmp eax, [rcx + 18 + 48]              # so do channel counts
+    jne .Lmkv_open_bad
+    add rcx, 18
+    mov [rip + track_config], rcx
+    mov [rip + track_config_bytes], r8d
     jmp .Lmkv_finish
 .Lmkv_config_vorbis:
     # Xiph lacing of three headers: count-1 (2), two sizes, then the data.
