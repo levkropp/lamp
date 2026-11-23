@@ -4,6 +4,8 @@
 LAMP_ABI int mkv_open(const unsigned char *,const unsigned char *);
 LAMP_ABI void track_close(void);
 LAMP_ABI unsigned track_read(float *,unsigned);
+LAMP_ABI unsigned track_time_read(float *,unsigned);
+LAMP_ABI uint64_t track_time_seek(uint64_t);
 extern unsigned decode_error,track_active,sample_rate,source_channels;
 extern unsigned track_choice,track_choice_used,audio_tracks_count,audio_track_selected;
 extern uint64_t track_count,total_frames;
@@ -18,8 +20,10 @@ static void exercise(const unsigned char*data,size_t bytes,const unsigned char*e
  Guard in=guarded(bytes),out=guarded(32+997*8);if(bytes)memcpy(in.data,data,bytes);readonly(&in);decode_error=0;track_choice_used=audio_tracks_count=audio_track_selected=0;
  int opened=mkv_open(in.data,in.data+bytes);uint64_t position=0;
  if(exact)CHECK(opened==1&&!decode_error&&sample_rate==rate&&source_channels==channels&&total_frames*8==expected_bytes);
- if(opened==1){CHECK(track_read((float*)(out.data+32),0)==0);for(unsigned turn=0;;turn++){
-  CHECK(turn<65536);unsigned cap=1+(turn*137)%997;memset(out.data,0xa5,out.size);unsigned n=track_read((float*)(out.data+32),cap);CHECK(n<=cap);
+ if(opened==1){CHECK(track_time_read((float*)(out.data+32),0)==0);for(unsigned turn=0;;turn++){
+  CHECK(turn<65536);if(!exact&&turn>=128)break; /* valid mutated clocks may describe years of silence */
+  if(!exact&&turn==64)track_time_seek(total_frames/2);
+  unsigned cap=1+(turn*137)%997;memset(out.data,0xa5,out.size);unsigned n=track_time_read((float*)(out.data+32),cap);CHECK(n<=cap);
   for(unsigned j=0;j<32;j++)CHECK(out.data[j]==0xa5);for(size_t j=32+(size_t)n*8;j<out.size;j++)CHECK(out.data[j]==0xa5);
   if(!decode_error){float*p=(float*)(out.data+32);for(unsigned j=0;j<n*2;j++)CHECK(isfinite(p[j]));if(exact){CHECK((position+n)*8<=expected_bytes);CHECK(!memcmp(p,expected+position*8,(size_t)n*8));words+=(uint64_t)n*2;}position+=n;}else CHECK(!exact);
   if(!n||decode_error)break;

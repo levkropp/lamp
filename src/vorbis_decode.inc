@@ -1199,6 +1199,9 @@ FN vorbis_track_reset
     mov dword ptr [rip + vb_trim_start], 0
     mov qword ptr [rip + vb_emitted], 0
     mov dword ptr [rip + vb_scan_previous], 0
+    mov dword ptr [rip + vb_track_scan_n], 0
+    mov dword ptr [rip + vb_track_decode_n], 0
+    mov dword ptr [rip + vb_track_pending_count], 0
     ret
 ENDFN vorbis_track_reset
 
@@ -1214,23 +1217,25 @@ FN vorbis_track_samples
     mov ecx, [rip + vb_scan_previous]
     test ecx, ecx
     jnz .Lvb_track_samples_following
-    mov eax, [rip + vb_n]
-    shr eax, 1
-    mov edx, [rip + vb_right]
-    sub edx, eax                     # first packet: its unwindowed prefix only
-    mov eax, edx
     jmp .Lvb_track_samples_next
 .Lvb_track_samples_following:
     mov eax, [rip + vb_left_end]
     sub eax, [rip + vb_left]
     cmp eax, ecx
     jne .Lvb_track_samples_bad
-    mov eax, [rip + vb_right]
-    sub eax, [rip + vb_left]
 .Lvb_track_samples_next:
     mov ecx, [rip + vb_right_end]
     sub ecx, [rip + vb_right]
     mov [rip + vb_scan_previous], ecx
+    # Packet PTS refers to center-to-center overlap output. The synth can
+    # emit a long-to-short unwindowed prefix early; its adapter retains it.
+    mov eax, [rip + vb_track_scan_n]
+    mov ecx, [rip + vb_n]
+    mov [rip + vb_track_scan_n], ecx
+    test eax, eax
+    jz .Lvb_track_samples_return
+    add eax, ecx
+    shr eax, 2
     jmp .Lvb_track_samples_return
 .Lvb_track_samples_bad:
     mov eax, -1
@@ -1245,19 +1250,52 @@ FN vorbis_track_decode
     push rsi
     push rdi
     push rbx
+    push r12
+    push r13
     sub rsp, 32
     mov rdi, r8
     mov ebx, r9d
     call vb_frame_packet
     test eax, eax
     jz .Lvb_track_decode_bad
-    mov ecx, [rip + vb_available]
-    cmp ecx, ebx
+    mov r12d, [rip + vb_track_decode_n]
+    mov ecx, [rip + vb_n]
+    test r12d, r12d
+    jz .Lvb_track_decode_count
+    add r12d, ecx
+    shr r12d, 2
+.Lvb_track_decode_count:
+    cmp r12d, ebx
     ja .Lvb_track_decode_bad
-    lea rsi, [rip + vb_pcm]
-    mov eax, ecx
+    mov eax, [rip + vb_track_pending_count]
+    cmp eax, 2048
+    ja .Lvb_track_decode_bad
+    cmp eax, r12d
+    ja .Lvb_track_decode_bad
+    mov r13d, [rip + vb_available]
+    cmp r13d, 8192
+    ja .Lvb_track_decode_bad
+    add r13d, eax
+    sub r13d, r12d
+    jc .Lvb_track_decode_bad
+    cmp r13d, 2048
+    ja .Lvb_track_decode_bad
+    mov [rip + vb_track_decode_n], ecx
+    mov ebx, r12d
+    sub ebx, eax                     # PCM needed from the current synthesis
+    mov ecx, eax
+    lea rsi, [rip + vb_track_pending]
     rep movsq
+    lea rsi, [rip + vb_pcm]
+    mov ecx, ebx
+    rep movsq
+    lea rdi, [rip + vb_track_pending]
+    mov ecx, r13d
+    rep movsq
+    mov [rip + vb_track_pending_count], r13d
+    mov eax, [rip + vb_available]
     mov [rip + vb_used], eax
+    mov eax, r12d
     jmp .Lvb_track_decode_return
 .Lvb_track_decode_bad:
     cmp dword ptr [rip + decode_error], 0
@@ -1267,6 +1305,8 @@ FN vorbis_track_decode
     mov eax, -1
 .Lvb_track_decode_return:
     add rsp, 32
+    pop r13
+    pop r12
     pop rbx
     pop rdi
     pop rsi

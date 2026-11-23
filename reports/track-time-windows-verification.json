@@ -1,0 +1,17 @@
+{
+  "result": "passed",
+  "cases": 521,
+  "checks": 22255077,
+  "seek_positions": 27066,
+  "float_words": 12491704,
+  "peak_committed_bytes": 327680,
+  "platform": "Windows-11-10.0.26300-SP0",
+  "scope": "Per-sample source/media mapping, gaps, overlap/negative clipping, cut intersections, repeated seeks, exact gap seeks, sparse giant gaps, signed/scaled clocks, cancellation and allocator failures. This component does not establish Matroska demux or device playback.",
+  "sources": {
+    "src/track_time.s": "a57a520d3ee446ed55e25d0796e933068704cea1cace18052593286e8b67fade",
+    "tests/track-time-oracle.c": "da26cd5cd94cfdf5f78b4a3540fb22a1c556e144726c368c217c7edbace6ab0e",
+    "tests/track-time-probe.s": "b47f4916bd63949896db02f8a1825b176ee68e1638d97ec989fd2733359e67aa",
+    "tests/verify-track-time.py": "05f46839c88bc2d8eccfb4b6d49941bd183b8cd46725ab52b52bc83d28ff94f1"
+  },
+  "oracle_sha256": "60f758812567b73121d9ebcc1e1544395b13a7dabe11e214c5563515037705f9"
+}

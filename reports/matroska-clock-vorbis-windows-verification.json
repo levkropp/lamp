@@ -1,0 +1,676 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "vorbis-8000-1-q0.ogg",
+      "result": "matched",
+      "frames": 2960,
+      "snr_db": 140.53774678060634,
+      "peak_error": 4.470348358154297e-08,
+      "stats": "codec=4 rate=8000 channels=1 bits=32 frames=2960 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-8000-1-q8.ogg",
+      "result": "matched",
+      "frames": 2960,
+      "snr_db": 140.08706464107667,
+      "peak_error": 4.470348358154297e-08,
+      "stats": "codec=4 rate=8000 channels=1 bits=32 frames=2960 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-8000-2-q0.ogg",
+      "result": "matched",
+      "frames": 2960,
+      "snr_db": 140.80222467019775,
+      "peak_error": 3.725290298461914e-08,
+      "stats": "codec=4 rate=8000 channels=2 bits=32 frames=2960 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=46875 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-8000-2-q8.ogg",
+      "result": "matched",
+      "frames": 2960,
+      "snr_db": 140.47887925800956,
+      "peak_error": 4.470348358154297e-08,
+      "stats": "codec=4 rate=8000 channels=2 bits=32 frames=2960 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-16000-1-q0.ogg",
+      "result": "matched",
+      "frames": 5920,
+      "snr_db": 139.99779787350334,
+      "peak_error": 4.470348358154297e-08,
+      "stats": "codec=4 rate=16000 channels=1 bits=32 frames=5920 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-16000-1-q8.ogg",
+      "result": "matched",
+      "frames": 5920,
+      "snr_db": 139.94789047103575,
+      "peak_error": 4.470348358154297e-08,
+      "stats": "codec=4 rate=16000 channels=1 bits=32 frames=5920 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-16000-2-q0.ogg",
+      "result": "matched",
+      "frames": 5920,
+      "snr_db": 140.52916862907009,
+      "peak_error": 4.470348358154297e-08,
+      "stats": "codec=4 rate=16000 channels=2 bits=32 frames=5920 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-16000-2-q8.ogg",
+      "result": "matched",
+      "frames": 5920,
+      "snr_db": 139.87684674743096,
+      "peak_error": 5.960464477539063e-08,
+      "stats": "codec=4 rate=16000 channels=2 bits=32 frames=5920 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-22050-1-q0.ogg",
+      "result": "matched",
+      "frames": 8159,
+      "snr_db": 139.75733041882395,
+      "peak_error": 4.470348358154297e-08,
+      "stats": "codec=4 rate=22050 channels=1 bits=32 frames=8159 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-22050-1-q8.ogg",
+      "result": "matched",
+      "frames": 8159,
+      "snr_db": 139.48623535676194,
+      "peak_error": 4.470348358154297e-08,
+      "stats": "codec=4 rate=22050 channels=1 bits=32 frames=8159 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-22050-2-q0.ogg",
+      "result": "matched",
+      "frames": 8159,
+      "snr_db": 139.9653876153952,
+      "peak_error": 5.960464477539063e-08,
+      "stats": "codec=4 rate=22050 channels=2 bits=32 frames=8159 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-22050-2-q8.ogg",
+      "result": "matched",
+      "frames": 8159,
+      "snr_db": 139.5959214945492,
+      "peak_error": 4.470348358154297e-08,
+      "stats": "codec=4 rate=22050 channels=2 bits=32 frames=8159 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-32000-1-q0.ogg",
+      "result": "matched",
+      "frames": 11840,
+      "snr_db": 140.5622490471965,
+      "peak_error": 4.470348358154297e-08,
+      "stats": "codec=4 rate=32000 channels=1 bits=32 frames=11840 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-32000-1-q8.ogg",
+      "result": "matched",
+      "frames": 11840,
+      "snr_db": 139.57858080736824,
+      "peak_error": 4.470348358154297e-08,
+      "stats": "codec=4 rate=32000 channels=1 bits=32 frames=11840 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-32000-2-q0.ogg",
+      "result": "matched",
+      "frames": 11840,
+      "snr_db": 140.65617156294664,
+      "peak_error": 5.960464477539063e-08,
+      "stats": "codec=4 rate=32000 channels=2 bits=32 frames=11840 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-32000-2-q8.ogg",
+      "result": "matched",
+      "frames": 11840,
+      "snr_db": 139.97876842638462,
+      "peak_error": 4.470348358154297e-08,
+      "stats": "codec=4 rate=32000 channels=2 bits=32 frames=11840 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=31250 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-44100-1-q0.ogg",
+      "result": "matched",
+      "frames": 16317,
+      "snr_db": 139.02206859961194,
+      "peak_error": 4.470348358154297e-08,
+      "stats": "codec=4 rate=44100 channels=1 bits=32 frames=16317 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-44100-1-q8.ogg",
+      "result": "matched",
+      "frames": 16317,
+      "snr_db": 138.96739287506992,
+      "peak_error": 5.960464477539063e-08,
+      "stats": "codec=4 rate=44100 channels=1 bits=32 frames=16317 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-44100-2-q0.ogg",
+      "result": "matched",
+      "frames": 16317,
+      "snr_db": 139.42377420473224,
+      "peak_error": 5.960464477539063e-08,
+      "stats": "codec=4 rate=44100 channels=2 bits=32 frames=16317 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-44100-2-q8.ogg",
+      "result": "matched",
+      "frames": 16317,
+      "snr_db": 138.9336682069379,
+      "peak_error": 5.960464477539063e-08,
+      "stats": "codec=4 rate=44100 channels=2 bits=32 frames=16317 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-48000-1-q0.ogg",
+      "result": "matched",
+      "frames": 17760,
+      "snr_db": 139.48736063869526,
+      "peak_error": 4.470348358154297e-08,
+      "stats": "codec=4 rate=48000 channels=1 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-48000-1-q8.ogg",
+      "result": "matched",
+      "frames": 17760,
+      "snr_db": 139.43959377212812,
+      "peak_error": 5.960464477539063e-08,
+      "stats": "codec=4 rate=48000 channels=1 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-48000-2-q0.ogg",
+      "result": "matched",
+      "frames": 17760,
+      "snr_db": 139.6585946203723,
+      "peak_error": 5.960464477539063e-08,
+      "stats": "codec=4 rate=48000 channels=2 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-48000-2-q8.ogg",
+      "result": "matched",
+      "frames": 17760,
+      "snr_db": 139.4205861624331,
+      "peak_error": 5.21540641784668e-08,
+      "stats": "codec=4 rate=48000 channels=2 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-96000-1-q0.ogg",
+      "result": "matched",
+      "frames": 35520,
+      "snr_db": 139.58660361857173,
+      "peak_error": 5.21540641784668e-08,
+      "stats": "codec=4 rate=96000 channels=1 bits=32 frames=35520 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-96000-1-q8.ogg",
+      "result": "matched",
+      "frames": 35520,
+      "snr_db": 139.4246833000058,
+      "peak_error": 5.960464477539063e-08,
+      "stats": "codec=4 rate=96000 channels=1 bits=32 frames=35520 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-96000-2-q0.ogg",
+      "result": "matched",
+      "frames": 35520,
+      "snr_db": 139.8811216954701,
+      "peak_error": 4.470348358154297e-08,
+      "stats": "codec=4 rate=96000 channels=2 bits=32 frames=35520 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-96000-2-q8.ogg",
+      "result": "matched",
+      "frames": 35520,
+      "snr_db": 139.57522208809308,
+      "peak_error": 5.960464477539063e-08,
+      "stats": "codec=4 rate=96000 channels=2 bits=32 frames=35520 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-192000-1-q0.ogg",
+      "result": "matched",
+      "frames": 71040,
+      "snr_db": 140.00148748134836,
+      "peak_error": 5.960464477539063e-08,
+      "stats": "codec=4 rate=192000 channels=1 bits=32 frames=71040 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-192000-1-q8.ogg",
+      "result": "matched",
+      "frames": 71040,
+      "snr_db": 139.73020177400832,
+      "peak_error": 5.960464477539063e-08,
+      "stats": "codec=4 rate=192000 channels=1 bits=32 frames=71040 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-192000-2-q0.ogg",
+      "result": "matched",
+      "frames": 71040,
+      "snr_db": 140.3620074298237,
+      "peak_error": 5.960464477539063e-08,
+      "stats": "codec=4 rate=192000 channels=2 bits=32 frames=71040 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-192000-2-q8.ogg",
+      "result": "matched",
+      "frames": 71040,
+      "snr_db": 140.15662206362822,
+      "peak_error": 5.960464477539063e-08,
+      "stats": "codec=4 rate=192000 channels=2 bits=32 frames=71040 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=31250 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-noise.ogg",
+      "result": "matched",
+      "frames": 62400,
+      "snr_db": 138.29185521630433,
+      "peak_error": 4.470348358154297e-08,
+      "stats": "codec=4 rate=48000 channels=2 bits=32 frames=62400 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-transient.ogg",
+      "result": "matched",
+      "frames": 62400,
+      "snr_db": 139.83822809859336,
+      "peak_error": 1.1920928955078125e-07,
+      "stats": "codec=4 rate=48000 channels=2 bits=32 frames=62400 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-silence.ogg",
+      "result": "matched",
+      "frames": 62400,
+      "snr_db": null,
+      "peak_error": 0,
+      "stats": "codec=4 rate=48000 channels=2 bits=32 frames=62400 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "ogg-bad-crc.ogg",
+      "result": "rejected",
+      "frames": 0,
+      "snr_db": null,
+      "peak_error": 0,
+      "stats": "Skipped a file that is unsupported, malformed, or inaccessible.\r\nUnsupported, malformed, or inaccessible file. Supports WAV/W64, AIFF/AIFC, CAF, AU, FLAC, WavPack, Monkey's Audio, MP1/MP2/MP3, AAC (LC, HE), AC-3/E-AC-3, Ogg (Vorbis, Opus, Speex, FLAC), Matroska/WebM, MP4/MOV, AVI, FLV, ASF and MPEG-TS/PS audio."
+    },
+    {
+      "test": "ogg-version.ogg",
+      "result": "rejected",
+      "frames": 0,
+      "snr_db": null,
+      "peak_error": 0,
+      "stats": "Skipped a file that is unsupported, malformed, or inaccessible.\r\nUnsupported, malformed, or inaccessible file. Supports WAV/W64, AIFF/AIFC, CAF, AU, FLAC, WavPack, Monkey's Audio, MP1/MP2/MP3, AAC (LC, HE), AC-3/E-AC-3, Ogg (Vorbis, Opus, Speex, FLAC), Matroska/WebM, MP4/MOV, AVI, FLV, ASF and MPEG-TS/PS audio."
+    },
+    {
+      "test": "ogg-reserved.ogg",
+      "result": "rejected",
+      "frames": 0,
+      "snr_db": null,
+      "peak_error": 0,
+      "stats": "Skipped a file that is unsupported, malformed, or inaccessible.\r\nUnsupported, malformed, or inaccessible file. Supports WAV/W64, AIFF/AIFC, CAF, AU, FLAC, WavPack, Monkey's Audio, MP1/MP2/MP3, AAC (LC, HE), AC-3/E-AC-3, Ogg (Vorbis, Opus, Speex, FLAC), Matroska/WebM, MP4/MOV, AVI, FLV, ASF and MPEG-TS/PS audio."
+    },
+    {
+      "test": "ogg-first-sequence.ogg",
+      "result": "rejected",
+      "frames": 0,
+      "snr_db": null,
+      "peak_error": 0,
+      "stats": "Skipped a file that is unsupported, malformed, or inaccessible.\r\nUnsupported, malformed, or inaccessible file. Supports WAV/W64, AIFF/AIFC, CAF, AU, FLAC, WavPack, Monkey's Audio, MP1/MP2/MP3, AAC (LC, HE), AC-3/E-AC-3, Ogg (Vorbis, Opus, Speex, FLAC), Matroska/WebM, MP4/MOV, AVI, FLV, ASF and MPEG-TS/PS audio."
+    },
+    {
+      "test": "ogg-first-continued.ogg",
+      "result": "rejected",
+      "frames": 0,
+      "snr_db": null,
+      "peak_error": 0,
+      "stats": "Skipped a file that is unsupported, malformed, or inaccessible.\r\nUnsupported, malformed, or inaccessible file. Supports WAV/W64, AIFF/AIFC, CAF, AU, FLAC, WavPack, Monkey's Audio, MP1/MP2/MP3, AAC (LC, HE), AC-3/E-AC-3, Ogg (Vorbis, Opus, Speex, FLAC), Matroska/WebM, MP4/MOV, AVI, FLV, ASF and MPEG-TS/PS audio."
+    },
+    {
+      "test": "vorbis-channel-zero.ogg",
+      "result": "rejected",
+      "frames": 0,
+      "snr_db": null,
+      "peak_error": 0,
+      "stats": "Skipped a file that is unsupported, malformed, or inaccessible.\r\nUnsupported, malformed, or inaccessible file. Supports WAV/W64, AIFF/AIFC, CAF, AU, FLAC, WavPack, Monkey's Audio, MP1/MP2/MP3, AAC (LC, HE), AC-3/E-AC-3, Ogg (Vorbis, Opus, Speex, FLAC), Matroska/WebM, MP4/MOV, AVI, FLV, ASF and MPEG-TS/PS audio."
+    },
+    {
+      "test": "vorbis-block-order.ogg",
+      "result": "rejected",
+      "frames": 0,
+      "snr_db": null,
+      "peak_error": 0,
+      "stats": "Skipped a file that is unsupported, malformed, or inaccessible.\r\nUnsupported, malformed, or inaccessible file. Supports WAV/W64, AIFF/AIFC, CAF, AU, FLAC, WavPack, Monkey's Audio, MP1/MP2/MP3, AAC (LC, HE), AC-3/E-AC-3, Ogg (Vorbis, Opus, Speex, FLAC), Matroska/WebM, MP4/MOV, AVI, FLV, ASF and MPEG-TS/PS audio."
+    },
+    {
+      "test": "vorbis-ident-version.ogg",
+      "result": "rejected",
+      "frames": 0,
+      "snr_db": null,
+      "peak_error": 0,
+      "stats": "Skipped a file that is unsupported, malformed, or inaccessible.\r\nUnsupported, malformed, or inaccessible file. Supports WAV/W64, AIFF/AIFC, CAF, AU, FLAC, WavPack, Monkey's Audio, MP1/MP2/MP3, AAC (LC, HE), AC-3/E-AC-3, Ogg (Vorbis, Opus, Speex, FLAC), Matroska/WebM, MP4/MOV, AVI, FLV, ASF and MPEG-TS/PS audio."
+    },
+    {
+      "test": "ogg-truncated.ogg",
+      "result": "rejected",
+      "frames": 0,
+      "snr_db": null,
+      "peak_error": 0,
+      "stats": "Skipped a file that is unsupported, malformed, or inaccessible.\r\nUnsupported, malformed, or inaccessible file. Supports WAV/W64, AIFF/AIFC, CAF, AU, FLAC, WavPack, Monkey's Audio, MP1/MP2/MP3, AAC (LC, HE), AC-3/E-AC-3, Ogg (Vorbis, Opus, Speex, FLAC), Matroska/WebM, MP4/MOV, AVI, FLV, ASF and MPEG-TS/PS audio."
+    },
+    {
+      "test": "ogg-after-eos.ogg",
+      "result": "rejected",
+      "frames": 0,
+      "snr_db": null,
+      "peak_error": 0,
+      "stats": "Skipped a file that is unsupported, malformed, or inaccessible.\r\nUnsupported, malformed, or inaccessible file. Supports WAV/W64, AIFF/AIFC, CAF, AU, FLAC, WavPack, Monkey's Audio, MP1/MP2/MP3, AAC (LC, HE), AC-3/E-AC-3, Ogg (Vorbis, Opus, Speex, FLAC), Matroska/WebM, MP4/MOV, AVI, FLV, ASF and MPEG-TS/PS audio."
+    },
+    {
+      "test": "ogg-large-comment.ogg",
+      "result": "matched",
+      "frames": 17760,
+      "snr_db": 139.6585946203723,
+      "peak_error": 5.960464477539063e-08,
+      "stats": "codec=4 rate=48000 channels=2 bits=32 frames=17760 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-vector-r0-c1-plain-s0.ogg",
+      "result": "matched",
+      "frames": 128,
+      "snr_db": 70.79478903071038,
+      "peak_error": 3.0837953090667725e-05,
+      "stats": "codec=4 rate=48000 channels=1 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-vector-r0-c1-plain-s1.ogg",
+      "result": "matched",
+      "frames": 128,
+      "snr_db": 72.74076765898795,
+      "peak_error": 3.695487976074219e-05,
+      "stats": "codec=4 rate=48000 channels=1 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-vector-r0-c1-ordered-s0.ogg",
+      "result": "matched",
+      "frames": 128,
+      "snr_db": 70.79478903071038,
+      "peak_error": 3.0837953090667725e-05,
+      "stats": "codec=4 rate=48000 channels=1 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-vector-r0-c1-ordered-s1.ogg",
+      "result": "matched",
+      "frames": 128,
+      "snr_db": 72.74076765898795,
+      "peak_error": 3.695487976074219e-05,
+      "stats": "codec=4 rate=48000 channels=1 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-vector-r0-c1-sparse-s0.ogg",
+      "result": "matched",
+      "frames": 128,
+      "snr_db": 70.79478903071038,
+      "peak_error": 3.0837953090667725e-05,
+      "stats": "codec=4 rate=48000 channels=1 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-vector-r0-c1-sparse-s1.ogg",
+      "result": "matched",
+      "frames": 128,
+      "snr_db": 72.74076765898795,
+      "peak_error": 3.695487976074219e-05,
+      "stats": "codec=4 rate=48000 channels=1 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-vector-r0-c2-plain-s0.ogg",
+      "result": "matched",
+      "frames": 128,
+      "snr_db": 72.39152391634877,
+      "peak_error": 3.452599048614502e-05,
+      "stats": "codec=4 rate=48000 channels=2 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-vector-r0-c2-plain-s1.ogg",
+      "result": "matched",
+      "frames": 128,
+      "snr_db": 73.98218415168516,
+      "peak_error": 3.8951635360717773e-05,
+      "stats": "codec=4 rate=48000 channels=2 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-vector-r0-c2-ordered-s0.ogg",
+      "result": "matched",
+      "frames": 128,
+      "snr_db": 72.39152391634877,
+      "peak_error": 3.452599048614502e-05,
+      "stats": "codec=4 rate=48000 channels=2 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-vector-r0-c2-ordered-s1.ogg",
+      "result": "matched",
+      "frames": 128,
+      "snr_db": 73.98218415168516,
+      "peak_error": 3.8951635360717773e-05,
+      "stats": "codec=4 rate=48000 channels=2 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-vector-r0-c2-sparse-s0.ogg",
+      "result": "matched",
+      "frames": 128,
+      "snr_db": 72.39152391634877,
+      "peak_error": 3.452599048614502e-05,
+      "stats": "codec=4 rate=48000 channels=2 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-vector-r0-c2-sparse-s1.ogg",
+      "result": "matched",
+      "frames": 128,
+      "snr_db": 73.98218415168516,
+      "peak_error": 3.8951635360717773e-05,
+      "stats": "codec=4 rate=48000 channels=2 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-vector-r1-c1-plain-s0.ogg",
+      "result": "matched",
+      "frames": 128,
+      "snr_db": 70.28702433595335,
+      "peak_error": 3.5002827644348145e-05,
+      "stats": "codec=4 rate=48000 channels=1 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-vector-r1-c1-plain-s1.ogg",
+      "result": "matched",
+      "frames": 128,
+      "snr_db": 73.15168193300907,
+      "peak_error": 3.403425216674805e-05,
+      "stats": "codec=4 rate=48000 channels=1 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-vector-r1-c1-ordered-s0.ogg",
+      "result": "matched",
+      "frames": 128,
+      "snr_db": 70.28702433595335,
+      "peak_error": 3.5002827644348145e-05,
+      "stats": "codec=4 rate=48000 channels=1 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-vector-r1-c1-ordered-s1.ogg",
+      "result": "matched",
+      "frames": 128,
+      "snr_db": 73.15168193300907,
+      "peak_error": 3.403425216674805e-05,
+      "stats": "codec=4 rate=48000 channels=1 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-vector-r1-c1-sparse-s0.ogg",
+      "result": "matched",
+      "frames": 128,
+      "snr_db": 70.28702433595335,
+      "peak_error": 3.5002827644348145e-05,
+      "stats": "codec=4 rate=48000 channels=1 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-vector-r1-c1-sparse-s1.ogg",
+      "result": "matched",
+      "frames": 128,
+      "snr_db": 73.15168193300907,
+      "peak_error": 3.403425216674805e-05,
+      "stats": "codec=4 rate=48000 channels=1 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-vector-r1-c2-plain-s0.ogg",
+      "result": "matched",
+      "frames": 128,
+      "snr_db": 73.27982872889068,
+      "peak_error": 3.898143768310547e-05,
+      "stats": "codec=4 rate=48000 channels=2 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-vector-r1-c2-plain-s1.ogg",
+      "result": "matched",
+      "frames": 128,
+      "snr_db": 73.8441307128393,
+      "peak_error": 4.953145980834961e-05,
+      "stats": "codec=4 rate=48000 channels=2 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-vector-r1-c2-ordered-s0.ogg",
+      "result": "matched",
+      "frames": 128,
+      "snr_db": 73.27982872889068,
+      "peak_error": 3.898143768310547e-05,
+      "stats": "codec=4 rate=48000 channels=2 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-vector-r1-c2-ordered-s1.ogg",
+      "result": "matched",
+      "frames": 128,
+      "snr_db": 73.8441307128393,
+      "peak_error": 4.953145980834961e-05,
+      "stats": "codec=4 rate=48000 channels=2 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-vector-r1-c2-sparse-s0.ogg",
+      "result": "matched",
+      "frames": 128,
+      "snr_db": 73.27982872889068,
+      "peak_error": 3.898143768310547e-05,
+      "stats": "codec=4 rate=48000 channels=2 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-vector-r1-c2-sparse-s1.ogg",
+      "result": "matched",
+      "frames": 128,
+      "snr_db": 73.8441307128393,
+      "peak_error": 4.953145980834961e-05,
+      "stats": "codec=4 rate=48000 channels=2 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-vector-r2-c1-plain-s0.ogg",
+      "result": "matched",
+      "frames": 128,
+      "snr_db": 70.28702433595335,
+      "peak_error": 3.5002827644348145e-05,
+      "stats": "codec=4 rate=48000 channels=1 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-vector-r2-c1-plain-s1.ogg",
+      "result": "matched",
+      "frames": 128,
+      "snr_db": 73.15168193300907,
+      "peak_error": 3.403425216674805e-05,
+      "stats": "codec=4 rate=48000 channels=1 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-vector-r2-c1-ordered-s0.ogg",
+      "result": "matched",
+      "frames": 128,
+      "snr_db": 70.28702433595335,
+      "peak_error": 3.5002827644348145e-05,
+      "stats": "codec=4 rate=48000 channels=1 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-vector-r2-c1-ordered-s1.ogg",
+      "result": "matched",
+      "frames": 128,
+      "snr_db": 73.15168193300907,
+      "peak_error": 3.403425216674805e-05,
+      "stats": "codec=4 rate=48000 channels=1 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-vector-r2-c1-sparse-s0.ogg",
+      "result": "matched",
+      "frames": 128,
+      "snr_db": 70.28702433595335,
+      "peak_error": 3.5002827644348145e-05,
+      "stats": "codec=4 rate=48000 channels=1 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-vector-r2-c1-sparse-s1.ogg",
+      "result": "matched",
+      "frames": 128,
+      "snr_db": 73.15168193300907,
+      "peak_error": 3.403425216674805e-05,
+      "stats": "codec=4 rate=48000 channels=1 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-vector-r2-c2-plain-s0.ogg",
+      "result": "matched",
+      "frames": 128,
+      "snr_db": 70.875346162815,
+      "peak_error": 3.261864185333252e-05,
+      "stats": "codec=4 rate=48000 channels=2 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-vector-r2-c2-plain-s1.ogg",
+      "result": "matched",
+      "frames": 128,
+      "snr_db": 73.00031487744413,
+      "peak_error": 3.9964914321899414e-05,
+      "stats": "codec=4 rate=48000 channels=2 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-vector-r2-c2-ordered-s0.ogg",
+      "result": "matched",
+      "frames": 128,
+      "snr_db": 70.875346162815,
+      "peak_error": 3.261864185333252e-05,
+      "stats": "codec=4 rate=48000 channels=2 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-vector-r2-c2-ordered-s1.ogg",
+      "result": "matched",
+      "frames": 128,
+      "snr_db": 73.00031487744413,
+      "peak_error": 3.9964914321899414e-05,
+      "stats": "codec=4 rate=48000 channels=2 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-vector-r2-c2-sparse-s0.ogg",
+      "result": "matched",
+      "frames": 128,
+      "snr_db": 70.875346162815,
+      "peak_error": 3.261864185333252e-05,
+      "stats": "codec=4 rate=48000 channels=2 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "vorbis-vector-r2-c2-sparse-s1.ogg",
+      "result": "matched",
+      "frames": 128,
+      "snr_db": 73.00031487744413,
+      "peak_error": 3.9964914321899414e-05,
+      "stats": "codec=4 rate=48000 channels=2 bits=32 frames=128 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    }
+  ],
+  "binary_sha256": "c26bd1c44954ce72a13d0b7a727b76a2c5c6bc7cf4f8fce8519a9a6642018341",
+  "sources": {
+    "src/decoder.s": "7b68210e4a3338a9b59c90fd39b1c6578baa63c71af6e1daeccee500fee41a26",
+    "src/mkv.s": "3e9e203b33186b8cd643b0ff3e802457442c9ac3f53e266b3e6648e47379a3bb",
+    "src/track.s": "b7266d9daf9f7db223941c22d7e29917635de223c51309a7e28716617c67607b",
+    "src/track_cuts.s": "fa3f9442743150a974b4f9e47ed67d2ba586905af127dc60552cb7781a5976f9",
+    "src/track_time.s": "a57a520d3ee446ed55e25d0796e933068704cea1cace18052593286e8b67fade",
+    "src/vorbis.s": "265157f893c9749d531bacbded12fa8f05121ad36b1b1887296a5c10b7c52958",
+    "src/vorbis_decode.inc": "5e55cb077ed617c9f41c2b745c758ef9b91d8206beea8e739cf7d8b05a4d52b3",
+    "tests/verify-vorbis.py": "4a098dc0a63171eba80efb618e6d8977ad88948ee5ca72f9f632c53e5e6a0e55",
+    "tests/chain-oracle.c": "770757565631753a57a6a8352cbac5ffecd33bb380eec247f23874277f7a00f7",
+    "tests/seek-oracle.c": "a03fd2777080de19f95aee235f83d0c02a067e4ab676601424e77ccac9377605",
+    "tests/track-source-oracle.c": "f7fd763aa449eb0ca09a7c438b2d62a2e5977e65ad140a731d6699a4445f7e33",
+    "tests/track-catalog-oracle.c": "93175cde74b34ab85aeb8838c5a428cd39955adf45fdd6407229ad45488e652f"
+  }
+}

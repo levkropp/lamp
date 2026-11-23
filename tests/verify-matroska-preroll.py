@@ -43,11 +43,16 @@ def main():
     extension = '.exe' if WINDOWS else ''
     cli = out / ('lamp-cli' + extension)
     mkv = module('mkv_helpers', ROOT / 'tests/verify-matroska.py')
+    shared = {p.stem for p in (ROOT / 'src').glob('*.s')} | {'platform', 'linux_platform'}
+    objects = [p for p in sorted((out / 'obj').glob('*.obj' if WINDOWS else '*.o')) if p.stem in shared]
+    libraries = list((out / 'obj').glob('*.lib')) if WINDOWS else ['-no-pie', '-Wl,-z,noexecstack']
+    source_oracle=out/('matroska-preroll-source'+extension)
+    compile_c(source_oracle,[ROOT/'tests/track-source-oracle.c'],objects=objects,libraries=libraries)
 
     def decode(path):
         target = work / 'scratch.f32'
         target.unlink(missing_ok=True)
-        run([cli, '--decode', path, target])
+        run([source_oracle, path, 0, target])
         return target.read_bytes()
 
     if args.fixtures:
@@ -80,19 +85,26 @@ def main():
                 entry += mkv.uint(0x56AA, 6500000)
             other = mkv.element(0xAE, mkv.uint(0xD7, 91) + mkv.uint(0x83, 2) + mkv.element(0x86, b'A_DTS') + mkv.uint(0x56BB, (1 << 64) - 1)) if extra else b''
             groups = mkv.blocks_of(track['frames'], 3 if padded else 0, 3)
-            blocks, removed, raw, packet = [], [], 0, 0
+            blocks, removed, raw, packet, presented = [], [], 0, 0, 0
+            head = (6500000 * track['rate'] + 500000000) // 1000000000 if padded else int.from_bytes(track['private'][10:12], 'little') if track['codec'] == 'A_OPUS' else 0
             for index, group in enumerate(groups):
                 count = sum(lengths[packet:packet + len(group)])
                 packet += len(group)
                 amount = (min(count, [1, 17, count, count // 2][index % 4]) * (-1 if index % 2 == 0 else 1)) if padded else 0
-                payload = mkv.size_bytes(7) + b'\0\0' + bytes([0x86 if len(group) > 1 else 0x80])
+                first=max(raw+max(-amount,0),head);end=raw+count-max(amount,0)
+                coded=presented+head-(first-raw) if first<end else raw
+                pts=(abs(coded)*1000000000+track['rate']//2)//track['rate'];pts=-pts if coded<0 else pts
+                ticks=(abs(pts)+500)//1000;ticks=-ticks if pts<0 else ticks
+                cluster=max(0,ticks);relative=ticks-cluster
+                payload = mkv.size_bytes(7) + struct.pack('>h',relative) + bytes([0x86 if len(group) > 1 else 0x80])
                 payload += mkv.lace(group, 3) if len(group) > 1 else group[0]
                 body = mkv.element(0xA1, payload)
                 if amount:
                     value = (abs(amount) * 1000000000 + track['rate'] // 2) // track['rate']
                     body += mkv.sint(0x75A2, -value if amount < 0 else value)
                     removed.append((raw, raw - amount) if amount < 0 else (raw + count - amount, raw + count))
-                blocks.append(mkv.element(0xA0, body))
+                blocks.append(mkv.element(0x1F43B675,mkv.uint(0xE7,cluster)+mkv.element(0xA0, body),padded))
+                if first<end:presented+=end-first
                 raw += count
             head = (6500000 * track['rate'] + 500000000) // 1000000000 if padded else int.from_bytes(track['private'][10:12], 'little') if track['codec'] == 'A_OPUS' else 0
             visibility = bytearray(b'\1' * raw)
@@ -100,7 +112,7 @@ def main():
             for a, b in removed:
                 visibility[a:b] = bytes(b - a)
             visible = [i for i, included in enumerate(visibility) if included]
-            data = mkv.element(0x1A45DFA3, mkv.element(0x4282, b'matroska')) + mkv.element(0x18538067, mkv.element(0x1654AE6B, other + mkv.element(0xAE, entry)) + mkv.element(0x1F43B675, mkv.uint(0xE7, 0) + b''.join(blocks)), padded)
+            data = mkv.element(0x1A45DFA3, mkv.element(0x4282, b'matroska')) + mkv.element(0x18538067, mkv.element(0x1549A966,mkv.uint(0x2AD7B1,1000))+mkv.element(0x1654AE6B, other + mkv.element(0xAE, entry)) + b''.join(blocks), padded)
             return data, visible
 
         sources = []
@@ -242,8 +254,8 @@ def main():
         detail = run([probe, work / 'lifecycle.mka'], timeout=75)
         assert 'Passed: playback, pause, resume, stop, reopen, seek, paused seek and cancelled open.' in detail
         lifecycle.append({'file': 'lifecycle.mka', 'details': detail.splitlines(), 'probe_sha256': hashlib.sha256(probe.read_bytes()).hexdigest()})
-    sources = ['src/mkv.s', 'src/track.s', 'src/track_cuts.s', 'src/aac.s', 'tests/matroska-preroll-oracle.c', 'tests/speex-matroska-oracle.c', 'tests/verify-matroska-preroll.py', 'tests/verify-matroska.py']
-    report = {'result': 'passed', 'platform': platform.platform(), 'ffmpeg': manifest['ffmpeg'], 'scope': 'Selected-track SeekPreRoll, ceil conversion, codec history minima, coded/presented mapping through delay and signed laced padding, fresh suffix PCM for Opus/AAC, repeated zero rewinds, malformed metadata, ignored unselected values, cancellation and clear/reopen. Timestamp gap scheduling and A/V synchronization are not established.', 'checks': checks, 'guarded': bounds, 'rejections': rejected, 'zero_length_unsigned': 'accepted as zero' if not args.case else 'not run', 'native_lifecycle': lifecycle, 'sources': {p: hashlib.sha256((ROOT / p).read_bytes()).hexdigest() for p in sources}, 'binaries': {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in [cli, oracle, chain, guard]}}
+    sources = ['src/mkv.s', 'src/track.s', 'src/track_cuts.s', 'src/track_time.s', 'src/aac.s', 'src/vorbis.s', 'src/vorbis_decode.inc', 'tests/track-source-oracle.c', 'tests/matroska-preroll-oracle.c', 'tests/speex-matroska-oracle.c', 'tests/verify-matroska-preroll.py', 'tests/verify-matroska.py']
+    report = {'result': 'passed', 'platform': platform.platform(), 'ffmpeg': manifest['ffmpeg'], 'scope': 'Selected-track SeekPreRoll with coherent compressed-presentation clocks, ceil conversion, codec history minima, coded/presented mapping through delay and signed laced padding, independent source/suffix PCM for Opus/AAC, repeated zero rewinds, malformed metadata, ignored unselected values, cancellation and clear/reopen. Mutation reads are capped at128, with a midpoint seek at64; damaged PCM correctness and A/V synchronization are not established.', 'checks': checks, 'guarded': bounds, 'rejections': rejected, 'zero_length_unsigned': 'accepted as zero' if not args.case else 'not run', 'native_lifecycle': lifecycle, 'sources': {p: hashlib.sha256((ROOT / p).read_bytes()).hexdigest() for p in sources}, 'binaries': {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in [cli, oracle, chain, guard,source_oracle]}}
     (out / ('matroska-preroll-debug.json' if args.case else 'matroska-preroll-verification.json')).write_text(json.dumps(report, indent=2) + '\n', encoding='utf-8')
     print('Passed', len(checks), 'files and', sum(c['oracle']['seeks'] for c in checks), 'modeled seeks.')
 

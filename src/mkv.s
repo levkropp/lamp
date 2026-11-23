@@ -23,6 +23,9 @@
 .equ ID_CODEC_PRIVATE, 0x63a2
 .equ ID_CODEC_DELAY, 0x56aa
 .equ ID_SEEK_PREROLL, 0x56bb
+.equ ID_TRACK_CLOCK_SCALE, 0x23314f
+.equ ID_TIMESTAMP_SCALE, 0x2ad7b1
+.equ ID_TIMESTAMP, 0xe7
 .equ ID_AUDIO, 0xe1
 .equ ID_SAMPLING, 0xb5
 .equ ID_CHANNELS, 0x9f
@@ -107,6 +110,10 @@ mkv_discard: .quad 0                 # DiscardPadding ns of the latest block gro
 mkv_codec_delay: .quad 0
 mkv_codec_delay_active: .long 0
 mkv_seek_preroll: .quad 0
+mkv_info_seen: .long 0
+mkv_scale_seen: .long 0
+mkv_cluster_clock: .quad 0
+mkv_cluster_clock_seen: .long 0
 mkv_vorbis_headers: .zero 3*16
 # Candidate track being parsed.
 mkv_entry_number: .quad 0
@@ -121,6 +128,8 @@ mkv_entry_delay: .quad 0
 mkv_entry_delay_active: .long 0
 mkv_entry_preroll: .quad 0
 mkv_entry_preroll_seen: .long 0
+mkv_entry_clock_scale: .double 1.0
+mkv_entry_clock_scale_seen: .long 0
 mkv_entry_encoded: .long 0
 mkv_entry_rate: .double 0.0
 mkv_entry_channels: .quad 1
@@ -339,6 +348,9 @@ LOCALFN mkv_track_entry
     mov dword ptr [rip + mkv_entry_delay_active], 0
     mov qword ptr [rip + mkv_entry_preroll], 0
     mov dword ptr [rip + mkv_entry_preroll_seen], 0
+    mov rax, 0x3ff0000000000000
+    mov [rip + mkv_entry_clock_scale], rax
+    mov dword ptr [rip + mkv_entry_clock_scale_seen], 0
     mov dword ptr [rip + mkv_entry_encoded], 0
     xorpd xmm0, xmm0
     movsd [rip + mkv_entry_rate], xmm0
@@ -371,6 +383,8 @@ LOCALFN mkv_track_entry
     je .Lmkv_entry_delay
     cmp eax, ID_SEEK_PREROLL
     je .Lmkv_entry_preroll
+    cmp eax, ID_TRACK_CLOCK_SCALE
+    je .Lmkv_entry_clock_scale
     cmp eax, ID_ENCODINGS
     je .Lmkv_entry_encodings
     cmp eax, ID_AUDIO
@@ -428,6 +442,25 @@ LOCALFN mkv_track_entry
     call mkv_uint
     mov [rip + mkv_entry_preroll], rax
     mov dword ptr [rip + mkv_entry_preroll_seen], 1
+    jmp .Lmkv_entry_child
+.Lmkv_entry_clock_scale:
+    cmp dword ptr [rip + mkv_entry_clock_scale_seen], 0
+    jne .Lmkv_entry_bad
+    cmp rdx, 4
+    je .Lmkv_entry_clock_float
+    cmp rdx, 8
+    jne .Lmkv_entry_bad
+.Lmkv_entry_clock_float:
+    mov rcx, r8
+    call mkv_float
+    movq rax, xmm0
+    test rax, rax
+    jle .Lmkv_entry_bad
+    mov rdx, 0x7ff0000000000000
+    cmp rax, rdx
+    jae .Lmkv_entry_bad
+    mov [rip + mkv_entry_clock_scale], rax
+    mov dword ptr [rip + mkv_entry_clock_scale_seen], 1
     jmp .Lmkv_entry_child
 .Lmkv_entry_audio:
     lea rbx, [r8 + rdx]                  # Audio children
@@ -532,6 +565,8 @@ LOCALFN mkv_track_entry
     mov [rip + mkv_codec_delay_active], eax
     mov rax, [rip + mkv_entry_preroll]
     mov [rip + mkv_seek_preroll], rax
+    mov rax, [rip + mkv_entry_clock_scale]
+    mov [rip + track_time_track_scale], rax
     movsd xmm0, [rip + mkv_entry_rate]
     movsd [rip + mkv_rate], xmm0
     mov rax, [rip + mkv_entry_channels]
@@ -563,7 +598,8 @@ LOCALFN mkv_block
     push rdi
     push r12
     push r13
-    sub rsp, 32
+    sub rsp, 64
+    mov qword ptr [rsp + 32], -1        # first packet, only for this track
     mov rsi, rcx
     lea rdi, [rcx + rdx]
     # Track number: an EBML variable-length integer.
@@ -597,6 +633,12 @@ LOCALFN mkv_block
     lea rax, [rsi + 3]                   # 16-bit timestamp and flags
     cmp rax, rdi
     ja .Lmkv_block_bad
+    mov rdx, [rip + track_count]
+    mov [rsp + 32], rdx
+    movzx edx, word ptr [rsi]
+    rol dx, 8
+    movsx edx, dx
+    mov [rsp + 40], edx
     movzx ebx, byte ptr [rsi + 2]
     shr ebx, 1
     and ebx, 3                           # lacing
@@ -737,12 +779,21 @@ LOCALFN mkv_block
     dec r12d
     jnz .Lmkv_fixed_frame
 .Lmkv_block_ok:
+    mov rcx, [rsp + 32]
+    cmp rcx, -1
+    je .Lmkv_block_success
+    mov rdx, [rip + mkv_cluster_clock]
+    mov r8d, [rsp + 40]
+    call track_time_mark
+    test eax, eax
+    jz .Lmkv_block_bad
+.Lmkv_block_success:
     mov eax, 1
     jmp .Lmkv_block_return
 .Lmkv_block_bad:
     xor eax, eax
 .Lmkv_block_return:
-    add rsp, 32
+    add rsp, 64
     pop r13
     pop r12
     pop rdi
@@ -777,6 +828,112 @@ LOCALFN mkv_level1
     ret
 ENDFN mkv_level1
 
+# RCX=Info payload, RDX=end ->1/0. Metadata may follow Clusters because the
+# packet index retains original clock ticks until track_finish scans it.
+LOCALFN mkv_info
+    push rsi
+    push rdi
+    sub rsp, 40
+    mov rsi, rcx
+    mov rdi, rdx
+.Lmkv_info_child:
+    cmp rsi, rdi
+    jae .Lmkv_info_ok
+    mov rcx, rsi
+    mov rdx, rdi
+    call mkv_element
+    test eax, eax
+    jz .Lmkv_info_bad
+    cmp rdx, -1
+    je .Lmkv_info_bad
+    lea rsi, [r8 + rdx]
+    cmp eax, ID_TIMESTAMP_SCALE
+    jne .Lmkv_info_child
+    cmp rdx, 8
+    ja .Lmkv_info_bad
+    cmp dword ptr [rip + mkv_scale_seen], 0
+    jne .Lmkv_info_bad
+    mov rcx, r8
+    call mkv_uint
+    test rax, rax
+    jle .Lmkv_info_bad
+    mov [rip + track_time_scale_ns], rax
+    mov dword ptr [rip + mkv_scale_seen], 1
+    jmp .Lmkv_info_child
+.Lmkv_info_ok:
+    mov eax, 1
+    jmp .Lmkv_info_return
+.Lmkv_info_bad:
+    xor eax, eax
+.Lmkv_info_return:
+    add rsp, 40
+    pop rdi
+    pop rsi
+    ret
+ENDFN mkv_info
+
+# RCX=Cluster payload, RDX=parent limit, R8D=unknown-size flag ->1/0.
+# Find its one mandatory Timestamp before parsing any Block, independent of
+# child ordering. Unknown Clusters stop at the next Segment-level element.
+LOCALFN mkv_cluster_timestamp
+    push rbx
+    push rsi
+    push rdi
+    push r12
+    sub rsp, 40
+    mov rsi, rcx
+    mov rdi, rdx
+    mov r12d, r8d
+    mov dword ptr [rip + mkv_cluster_clock_seen], 0
+.Lmkv_clock_child:
+    cmp rsi, rdi
+    jae .Lmkv_clock_done
+    mov rax, [rip + ogg_cancel_ptr]
+    test rax, rax
+    jz .Lmkv_clock_continue
+    cmp dword ptr [rax], 0
+    jne .Lmkv_clock_bad
+.Lmkv_clock_continue:
+    mov rcx, rsi
+    mov rdx, rdi
+    call mkv_element
+    test eax, eax
+    jz .Lmkv_clock_bad
+    mov ebx, eax
+    test r12d, r12d
+    jz .Lmkv_clock_sized
+    call mkv_level1
+    test eax, eax
+    jnz .Lmkv_clock_done
+.Lmkv_clock_sized:
+    cmp rdx, -1
+    je .Lmkv_clock_bad
+    lea rsi, [r8 + rdx]
+    cmp ebx, ID_TIMESTAMP
+    jne .Lmkv_clock_child
+    cmp rdx, 8
+    ja .Lmkv_clock_bad
+    cmp dword ptr [rip + mkv_cluster_clock_seen], 0
+    jne .Lmkv_clock_bad
+    mov rcx, r8
+    call mkv_uint
+    mov [rip + mkv_cluster_clock], rax
+    mov dword ptr [rip + mkv_cluster_clock_seen], 1
+    jmp .Lmkv_clock_child
+.Lmkv_clock_done:
+    mov eax, [rip + mkv_cluster_clock_seen]
+    jmp .Lmkv_clock_return
+.Lmkv_clock_bad:
+    xor eax, eax
+.Lmkv_clock_return:
+    add rsp, 40
+    pop r12
+    pop rdi
+    pop rsi
+    pop rbx
+    ret
+ENDFN mkv_cluster_timestamp
+
 # RCX=mapped start, RDX=end -> EAX=1 with the selected track's packets listed
 # and its codec opened by track_finish.
 FN mkv_open
@@ -797,6 +954,8 @@ FN mkv_open
     mov qword ptr [rip + mkv_codec_delay], 0
     mov dword ptr [rip + mkv_codec_delay_active], 0
     mov qword ptr [rip + mkv_seek_preroll], 0
+    mov dword ptr [rip + mkv_info_seen], 0
+    mov dword ptr [rip + mkv_scale_seen], 0
     # EBML header with DocType matroska or webm.
     mov rcx, rsi
     mov rdx, rdi
@@ -864,6 +1023,7 @@ FN mkv_open
     call track_begin
     test eax, eax
     jz .Lmkv_open_bad
+    mov dword ptr [rip + track_time_enabled], 1
 .Lmkv_top:
     mov rax, [rip + ogg_cancel_ptr]
     test rax, rax
@@ -884,9 +1044,24 @@ FN mkv_open
     je .Lmkv_tracks
     cmp eax, ID_CLUSTER
     je .Lmkv_cluster
+    cmp eax, ID_INFO
+    je .Lmkv_info
     cmp rdx, -1
     je .Lmkv_open_bad                    # only Segment and Cluster may be unsized
     lea rsi, [r8 + rdx]
+    jmp .Lmkv_top
+.Lmkv_info:
+    cmp r13, -1
+    je .Lmkv_open_bad
+    cmp dword ptr [rip + mkv_info_seen], 0
+    jne .Lmkv_open_bad
+    mov dword ptr [rip + mkv_info_seen], 1
+    mov rcx, r12
+    lea rdx, [r12 + r13]
+    call mkv_info
+    test eax, eax
+    jz .Lmkv_open_bad
+    lea rsi, [r12 + r13]
     jmp .Lmkv_top
 .Lmkv_tracks:
     cmp rdx, -1
@@ -931,8 +1106,17 @@ FN mkv_open
     je .Lmkv_open_bad
     mov r14, rdi                         # unknown size: until a level-1 element
     cmp r13, -1
-    je .Lmkv_cluster_child
+    je .Lmkv_cluster_clock
     lea r14, [r12 + r13]
+.Lmkv_cluster_clock:
+    mov rcx, r12
+    mov rdx, r14
+    xor r8d, r8d
+    cmp r13, -1
+    sete r8b
+    call mkv_cluster_timestamp
+    test eax, eax
+    jz .Lmkv_open_bad
 .Lmkv_cluster_child:
     cmp r12, r14
     jae .Lmkv_cluster_done

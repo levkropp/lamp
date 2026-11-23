@@ -27,6 +27,23 @@ FN track_cuts_close
     ret
 ENDFN track_cuts_close
 
+# ECX=resolved removal index -> RAX=raw begin, RDX=raw end; -1/-1 past end.
+# Read-only iterator used when resolving a timestamped presentation timeline.
+FN track_cut_at
+    cmp ecx, [rip+track_cut_count]
+    jae .Ltc_at_none
+    mov eax, ecx
+    shl rax, 5
+    add rax, [rip+tc_data]
+    mov rdx, [rax+8]
+    mov rax, [rax]
+    ret
+.Ltc_at_none:
+    mov rax, -1
+    mov rdx, -1
+    ret
+ENDFN track_cut_at
+
 # RCX=first packet, RDX=exclusive last, R8=signed nanoseconds ->1/0.
 # Blocks are appended in order and cannot overlap. Zero padding is a no-op.
 FN track_cut_add

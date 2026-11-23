@@ -47,8 +47,8 @@ exact and cancellable, but a long recording may take time to seek.
 
 CodecDelay and signed per-block DiscardPadding trim the presentation as
 described below. No Ogg granule trimming is inferred for this mapping.
-Timestamp scheduling/gaps remain unimplemented here. This adds Matroska
-audio coverage; it does not establish WebM Speex conformance or video/A/V
+Selected Block timestamps now schedule gaps and clip overlap/negative media
+positions ([clock contracts](matroska-clock.md)). This adds Matroska audio coverage; it does not establish WebM Speex conformance or video/A/V
 synchronization. Matroska reports codec kind 8 as for its other audio codecs.
 
 The [Windows report](../reports/speex-matroska-windows-verification.json)
@@ -86,7 +86,7 @@ also pass on the current native Windows decoder objects.
 
 ## Structure
 
-The EBML header must name DocType `matroska` or `webm`. Element sizes are checked against their parents. Segment and Cluster may have unknown sizes, as live recorders write them; an unknown-size Cluster ends at the next Segment-level element. Other elements must have known sizes. SimpleBlock and BlockGroup/Block frames of the selected track become packets in file order, with Xiph, EBML and fixed lacing; laced sizes must fit their block and fixed lacing must divide it exactly. Timestamps are not used for decoding: the codec's own packet durations place samples, so gaps or overlaps in timestamps do not change output.
+The EBML header must name DocType `matroska` or `webm`. Element sizes are checked against their parents. Segment and Cluster may have unknown sizes, as live recorders write them; an unknown-size Cluster ends at the next Segment-level element. Other elements must have known sizes. SimpleBlock and BlockGroup/Block frames of the selected track become packets in file order, with Xiph, EBML and fixed lacing; laced sizes must fit their block and fixed lacing must divide it exactly. Selected Block timestamps now place decoded samples into media time, with bounded silence for gaps and clipping for overlaps/negative prefixes. See [media-clock rules and verification](matroska-clock.md).
 
 Opening reads every cluster, so opening a long video file reads most of it; Cues are not used yet.
 
@@ -148,8 +148,8 @@ paused seeks, cancelled open, simulated default-output recovery and
 exclusive 48 kHz output. Hardware PCM capture and physical hotplug are
 not established. Changed sources translate and assemble for Apple Silicon;
 native Mac execution and Linux output-device playback remain unverified
-for this addition. Timestamp gaps/overlaps, video and A/V synchronization
-remain open. Track-requested seek history is covered separately below.
+for this addition. Matroska timestamp placement is covered by the later
+[media-clock suite](matroska-clock.md); video and A/V synchronization remain open. Track-requested seek history is covered separately below.
 
 Run `python3 tests/verify-track-cuts.py --bin build/mkv-timing-check` and
 `python3 tests/verify-matroska-timing.py --bin build/mkv-timing-check`.
@@ -178,7 +178,8 @@ Missing and zero values add no container minimum. Empty unsigned elements
 mean zero; duplicate values or payloads over eight bytes reject. Unselected
 tracks' values do not affect playback, and close clears the selected
 history. This applies to audio in the existing coded packet timeline;
-timestamp gaps and A/V clock scheduling remain unfinished.
+timestamp gaps are now handled by the [media map](matroska-clock.md), while
+video/A/V clock scheduling remains unfinished.
 
 Repeated seeks now reset the decoder when the requested position is zero,
 including after EOF. AAC reset also restores its PNS noise seed alongside

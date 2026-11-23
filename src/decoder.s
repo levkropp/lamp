@@ -2515,7 +2515,7 @@ FN decoder_seek
     call chain_seek
     jmp .Lseek_return
 .Lseek_track:
-    call track_seek
+    call track_time_seek
     jmp .Lseek_return
 .Lseek_wav:
     mov rdx, [rip + ogg_cancel_ptr]
@@ -3628,7 +3628,7 @@ FN decoder_read
     je .Lread_single
     mov rcx, rdi
     mov edx, r12d
-    call track_read
+    call track_time_read
     mov ebx, eax
     jmp .Lread_done
 .Lread_single:

@@ -39,3 +39,5 @@ Before promoting a capability to supported, record its exact codec profiles/cont
 Track CPU, memory, wakeups, startup/seek latency, dropped frames and underruns on named hardware with repeatable inputs. Preserve license/provenance information for source and data. Expand rows into individual features as work starts, and update this matrix, the README and website together when support changes. Keep relevant gaps explicit until implemented or scoped out with a documented reason.
 
 The macOS backend uses Core Audio float stereo queues; platform differences are recorded in [the Mac guide](macos.md).
+
+Matroska/WebM audio now has [selected-track media timestamp placement](matroska-clock.md), including signed/scaled clocks, gaps, overlap/negative clipping and media seeks. The clock reports record current Windows/Linux integration and component coverage; earlier format reports remain historical snapshots. Video/A/V synchronization and timestamp scheduling in other containers remain open.

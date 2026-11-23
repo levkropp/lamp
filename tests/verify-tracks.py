@@ -198,7 +198,8 @@ def main():
         for n in range(1, count + 1):
             single = work / f'{path.stem}-a{n}{path.suffix}'
             extra = ['-f', 'vob'] if path.suffix == '.vob' else []
-            ffmpeg('-i', path, '-map', f'0:a:{n - 1}', '-c', 'copy', *extra, single)
+            clocked=path.suffix.lower() in ('.mkv','.mka','.webm')
+            ffmpeg(*(['-copyts'] if clocked else []),'-i', path, '-map', f'0:a:{n - 1}', '-c', 'copy', *extra,*(['-avoid_negative_ts','disabled'] if clocked else []), single)
             code, stats, ours = decode(path, n)
             if code:
                 raise Failure(f'{name} --track {n}: {stats}')

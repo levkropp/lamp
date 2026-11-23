@@ -43,7 +43,8 @@ def main():
             packets=track['frames'];reference=name+'.packets';(work/reference).write_bytes(struct.pack('<I',len(header))+header+struct.pack('<I',len(packets))+b''.join(struct.pack('<I',len(x))+x for x in packets))
             trim=(track.get('discard',0)*rate+500000000)//1000000000
             start=(track.get('codec_delay',0)*rate+500000000)//1000000000
-            manifest['cases'].append({'file':name,'reference':reference,'rate':rate,'channels':channels,'trim_samples':trim,'start_samples':start,'track_choice':choice,'fuzz':fuzz,'description':description})
+            lead=max(0,(track['timestamps_ns'][0]*rate+500000000)//1000000000) if track.get('timestamps_ns') else 0
+            manifest['cases'].append({'file':name,'reference':reference,'rate':rate,'channels':channels,'trim_samples':trim,'start_samples':start,'leading_frames':lead,'track_choice':choice,'fuzz':fuzz,'description':description})
         def encode(name,rate,channels,quality=8,group=1,vbr=False,duration=.53,video=False):
             tone=f'aevalsrc=if(lt(mod(t\\,0.4)\\,0.22)\\,0.23*sin(2*PI*337*t)\\,0)|0.14*sin(2*PI*911*t):s={rate}:d={duration}'
             cmd=['-f','lavfi','-i',tone]
@@ -69,7 +70,7 @@ def main():
                 if len(bits)%8:bits+='0'+'1'*((-len(bits)-1)%8)
                 frames.append(int(bits,2).to_bytes(len(bits)//8,'big'))
             private=bytearray(t['private']);struct.pack_into('<I',private,18+64,64)
-            bounded=dict(t,private=bytes(private),frames=frames,discard=0)
+            bounded=dict(t,private=bytes(private),frames=frames,discard=0,rate=rate,sample_lengths=[n*rate//50 for n in (1,2,64,3)])
             add(f'maximum-group-{rate}.mka',bounded,'64-frame packet capacity, stereo, null submodes',data=mkv.mux(bounded,lacing=3))
         t=tracks['16000-2-q5.mka'];private=t['private']
         # cbSize is authoritative; permitted trailing private bytes are ignored.
@@ -81,8 +82,8 @@ def main():
         ff('-i',work/'8000-1-q5.mka','-i',work/'32000-2-q5.mka','-f','lavfi','-i','sine=frequency=557:sample_rate=48000:duration=0.53','-map','0:a','-map','1:a','-map','2:a','-c:a:0','copy','-c:a:1','copy','-c:a:2','libopus','-disposition:a:0','0','-disposition:a:1','default','-disposition:a:2','0',work/'multiple.mka')
         manifest['extras'].append('multiple.mka')
         for choice,base in [(0,'32000-2-q5.mka'),(1,'8000-1-q5.mka'),(2,'32000-2-q5.mka')]:
-            name=f'multiple-{choice}.mka';shutil.copyfile(work/'multiple.mka',work/name);add(name,tracks[base],'mixed-codec default/explicit audio ordinal',choice=choice)
-        ff('-i',work/'multiple.mka','-map','0:a:2','-c','copy',work/'third.mka');manifest['extras'].append('third.mka')
+            name=f'multiple-{choice}.mka';shutil.copyfile(work/'multiple.mka',work/name);add(name,mkv.parse(work/name,choice or 2),'mixed-codec default/explicit audio ordinal with its actual media origin',choice=choice)
+        ff('-copyts','-i',work/'multiple.mka','-map','0:a:2','-c','copy','-avoid_negative_ts','disabled',work/'third.mka');manifest['extras'].append('third.mka')
         # Unsupported ACM tracks count but must not capture Automatic.
         unknown=bytearray(private);struct.pack_into('<H',unknown,0,0x161)
         before=mkv.uint(0xD7,91)+mkv.uint(0x83,2)+mkv.uint(0x88,1)+mkv.element(0x86,b'A_MS/ACM')+mkv.element(0x63A2,unknown)
@@ -90,8 +91,8 @@ def main():
         add('unsupported-before.mka',t,'unknown ACM is counted and skipped by Automatic',data=data)
         # Private before CodecID and unrelated track metadata remain valid.
         entry=mkv.element(0x63A2,private)+mkv.element(0x86,b'A_MS/ACM')+mkv.uint(0xD7,1)+mkv.uint(0x83,2)+mkv.element(0xE1,t['audio'])+mkv.uint(0x56AA,t.get('codec_delay',0))
-        body=mkv.uint(0xE7,0)+b''.join(mkv.element(0xA3,mkv.size_bytes(1)+b'\0\0\x80'+f) for f in t['frames'])
-        data=mkv.element(0x1A45DFA3,mkv.element(0x4282,b'matroska'))+mkv.element(0x18538067,mkv.element(0x1654AE6B,mkv.element(0xAE,entry))+mkv.element(0x1F43B675,body))
+        clusters=b''.join(mkv.element(0x1F43B675,mkv.uint(0xE7,ts//1000000)+mkv.element(0xA3,mkv.size_bytes(1)+b'\0\0\x80'+f)) for ts,f in zip(t['timestamps_ns'],t['frames']))
+        data=mkv.element(0x1A45DFA3,mkv.element(0x4282,b'matroska'))+mkv.element(0x18538067,mkv.element(0x1654AE6B,mkv.element(0xAE,entry))+clusters)
         add('private-first.mka',t,'CodecPrivate precedes CodecID',data=data)
         # Malformed wrappers and headers are rejected before any unsafe read.
         def bad(name,payload=None,**change):
@@ -110,7 +111,7 @@ def main():
     for target,file in [(seek,'seek-oracle.c'),(chain,'chain-oracle.c'),(guard,'speex-matroska-oracle.c'),(catalog,'track-catalog-oracle.c')]:compile_c(target,[ROOT/'tests'/file],objects=objects,libraries=libraries)
     checks=[]
     for case in manifest['cases']:
-        path=work/case['file'];raw=work/(path.stem+'.raw.f32');run([reference,work/case['reference'],raw]);expected=work/(path.stem+'.reference.f32');data=raw.read_bytes()[case.get('start_samples',0)*8:];trim=case['trim_samples'];expected.write_bytes(data[:-trim*8] if trim else data);pcm=work/(path.stem+'.lamp.f32');pcm.unlink(missing_ok=True);choice=case['track_choice'];options=['--track',choice] if choice else [];stats=run([cli,'--decode',*options,path,pcm]);assert pcm.read_bytes()==expected.read_bytes(),(case,stats)
+        path=work/case['file'];raw=work/(path.stem+'.raw.f32');run([reference,work/case['reference'],raw]);expected=work/(path.stem+'.reference.f32');data=raw.read_bytes()[case.get('start_samples',0)*8:];trim=case['trim_samples'];expected.write_bytes(bytes(case.get('leading_frames',0)*8)+(data[:-trim*8] if trim else data));pcm=work/(path.stem+'.lamp.f32');pcm.unlink(missing_ok=True);choice=case['track_choice'];options=['--track',choice] if choice else [];stats=run([cli,'--decode',*options,path,pcm]);assert pcm.read_bytes()==expected.read_bytes(),(case,stats)
         detail=json.loads(run([seek,path,expected,0,0,0,choice]).strip().splitlines()[-1])
         bounds=json.loads(run([guard,path,expected,case['rate'],case['channels'],choice,int(case['fuzz'])]).strip().splitlines()[-1]);checks.append({**case,'result':'exact official float PCM','frames':pcm.stat().st_size//8,'seeks':detail,'guarded':bounds,'fixture_sha256':hashlib.sha256(path.read_bytes()).hexdigest()});print(f"{path.name}: exact PCM and guarded input/output",flush=True)
     rejected=[]
@@ -130,5 +131,7 @@ def main():
             detail=run([probe,work/f'lifecycle-{rate}.mka'],timeout=75);assert 'Passed: playback, pause, resume, stop, reopen, seek, paused seek and cancelled open.' in detail;lifecycle.append({'rate':rate,'details':detail.splitlines(),'probe_sha256':hashlib.sha256(probe.read_bytes()).hexdigest()})
     paths=['src/mkv.s','src/track.s','src/speex_track.s','src/speex_packet.s','tests/verify-speex-matroska.py','tests/verify-matroska.py','tests/speex-matroska-oracle.c','tests/speex-file-reference.c','tests/seek-oracle.c','tests/chain-oracle.c','tests/track-catalog-oracle.c']
     report={'result':'passed','suite':'speex-matroska','platform':platform.platform(),'recorded_utc':datetime.now(timezone.utc).isoformat(),'ffmpeg':version,'reference':'Unchanged test-only Speex 1.2.1 float decoder on independent packet extraction','archive_url':ref.URL,'archive_sha256':ref.SHA256,'checks':checks,'rejections':rejected,'catalogs':catalogs,'third_track_opus':'exact against standalone','cancellation':cancellation,'native_lifecycle':lifecycle,'scope':'Matroska A_MS/ACM Speex tag0xa109, NB/WB/UWB mono/stereo, packet grouping, lacing, CodecDelay, final padding and selected ordinals. Timestamp scheduling/gaps, broader ACM codecs and native Mac execution are not established.','binaries':{p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in [cli,reference,seek,chain,guard,catalog]},'sources':{p:hashlib.sha256((ROOT/p).read_bytes()).hexdigest() for p in paths}}
+    report['scope']='Matroska A_MS/ACM Speex tag 0xa109, NB/WB/UWB mono/stereo, packet grouping, lacing, CodecDelay, final padding and selected ordinals. References retain actual selected-track media origins, and standalone copies preserve timestamps. Guarded mutations are capped at 128 reads and seek at 64. General timestamp scheduling has a separate suite; broader ACM codecs and native Mac execution are not established.'
+    report['sources'].update({p:hashlib.sha256((ROOT/p).read_bytes()).hexdigest() for p in ['src/track_time.s','src/track_cuts.s','src/decoder.s']})
     (out/'speex-matroska-verification.json').write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8');print('Passed',len(checks),'files,',sum(x['seeks']['checks'] for x in checks if x['seeks']),'exact seeks and',len(rejected),'malformed cases.')
 if __name__=='__main__':main()

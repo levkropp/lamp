@@ -14,6 +14,10 @@ def main():
  p=argparse.ArgumentParser();p.add_argument('--bin',type=Path,default=ROOT/('bin/mkv-timing-check' if WINDOWS else 'build/mkv-timing-check'));p.add_argument('--fixtures',type=Path);p.add_argument('--probe',action='store_true');p.add_argument('--case',help='debug one filename prefix; writes a separate partial report');args=p.parse_args();out=args.bin.resolve();work=out/'matroska-timing';work.mkdir(parents=True,exist_ok=True);suffix='.exe' if WINDOWS else '';cli=out/('lamp-cli'+suffix);m=module('mkv_helpers',ROOT/'tests/verify-matroska.py')
  def decode(path,output,choice=0):
   output.unlink(missing_ok=True);stats=run([cli,'--decode',*(['--track',choice] if choice else []),path,output]);return output.read_bytes(),stats
+ shared={p.stem for p in (ROOT/'src').glob('*.s')}|{'platform','linux_platform'};objects=[p for p in sorted((out/'obj').glob('*.obj' if WINDOWS else '*.o')) if p.stem in shared];libraries=list((out/'obj').glob('*.lib')) if WINDOWS else ['-no-pie','-Wl,-z,noexecstack']
+ source_oracle=out/('matroska-timing-source'+suffix);compile_c(source_oracle,[ROOT/'tests/track-source-oracle.c'],objects=objects,libraries=libraries)
+ def source_decode(path,output,target=0):
+  run([source_oracle,path,target,output]);return output.read_bytes(),''
  if args.fixtures:
   source=args.fixtures.resolve();manifest=json.loads((source/'fixtures.json').read_text(encoding='utf-8'))
   if source!=work:
@@ -27,7 +31,8 @@ def main():
    if bad=='duplicate-delay':entry+=m.uint(0x56AA,1)+m.uint(0x56AA,2)
    if bad=='long-delay':entry+=m.element(0x56AA,bytes(9))
    header=m.element(0x1A45DFA3,m.element(0x4282,b'matroska'));tracks=m.element(0x1654AE6B,m.element(0xAE,entry)+extra_entries)
-   groups=m.blocks_of(t['frames'],lacing,3);blocks=[];intervals=[];raw=0;packet=0
+   groups=m.blocks_of(t['frames'],lacing,3);blocks=[];intervals=[];raw=0;packet=0;presented=0
+   head=(delay*t['rate']+500000000)//1000000000 if delay is not None else int.from_bytes(t['private'][10:12],'little') if t['codec']=='A_OPUS' else 0
    for i,group in enumerate(groups):
     n=sum(lengths[packet:packet+len(group)]);packet+=len(group);amount=0
     if padding=='mixed' and n:amount=(1 if i%2 else -1)*min(n,[1,17,n,n//2][i%4])
@@ -41,13 +46,22 @@ def main():
     if bad=='duplicate-padding' and i==0:body+=m.sint(0x75A2,1)+m.sint(0x75A2,2)
     if bad=='duplicate-block' and i==0:body+=m.element(0xA1,block)
     if bad=='missing-block' and i==0:body=m.sint(0x75A2,1)
-    blocks.append(m.element(0xA0,body))
+    first=max(raw+max(-amount,0),head);end=raw+n-max(amount,0)
+    coded=presented+head-(first-raw) if first<end else raw
+    pts=(abs(coded)*1000000000+t['rate']//2)//t['rate'];pts=-pts if coded<0 else pts
+    ticks=(abs(pts)+500)//1000;ticks=-ticks if pts<0 else ticks
+    cluster=max(0,ticks);relative=ticks-cluster
+    # Replace the placeholder Block time, then wrap each group in a Clock.
+    block=m.size_bytes(1)+struct.pack('>h',relative)+bytes([0x80|((lacing<<1) if len(group)>1 else 0)])+(m.lace(group,lacing) if len(group)>1 else group[0])
+    original=m.element(0xA1,m.size_bytes(1)+b'\0\0'+bytes([0x80|((lacing<<1) if len(group)>1 else 0)])+(m.lace(group,lacing) if len(group)>1 else group[0]))
+    body=body.replace(original,m.element(0xA1,block),1)
+    blocks.append(m.element(0x1F43B675,m.uint(0xE7,cluster)+m.element(0xA0,body),unknown))
+    if first<end:presented+=end-first
     if amount<0:intervals.append((raw,raw-amount))
     elif amount>0:intervals.append((raw+n-amount,raw+n))
     raw+=n
-   if foreign:blocks.insert(0,m.element(0xA0,m.element(0xA1,m.size_bytes(2)+b'\0\0\x80junk')+m.sint(0x75A2,-(1<<63))))
-   cluster=m.element(0x1F43B675,m.uint(0xE7,0)+b''.join(blocks),unknown)
-   return header+m.element(0x18538067,tracks+cluster,unknown),intervals
+   if foreign:blocks.insert(0,m.element(0x1F43B675,m.uint(0xE7,0)+m.element(0xA0,m.element(0xA1,m.size_bytes(2)+b'\0\0\x80junk')+m.sint(0x75A2,-(1<<63)))))
+   return header+m.element(0x18538067,m.element(0x1549A966,m.uint(0x2AD7B1,1000))+tracks+b''.join(blocks),unknown),intervals
   # All expected trimming is applied to an unpadded decode of unchanged packets.
   # PCM additionally has a direct integer-to-float reference independent of LAMP.
   sources=[]
@@ -64,7 +78,7 @@ def main():
    source=work/(codec+'-encoder.mka');run(['ffmpeg','-v','error','-y','-f','lavfi','-i',f'aevalsrc=0.2*sin(2*PI*317*t)|0.13*sin(2*PI*733*t):s={rate}:d=0.53','-c:a',encoder,source]);t=m.parse(source);t.update(rate=rate,channels=2,discard=0)
    clean=dict(t);clean.pop('codec_delay',None)
    if codec=='opus':private=bytearray(t['private']);private[10:12]=b'\0\0';clean['private']=bytes(private)
-   base=work/(codec+'-base.mka');base.write_bytes(m.mux(clean));raw,_=decode(base,work/(codec+'-raw.f32'))
+   base=work/(codec+'-base.mka');base.write_bytes(m.mux(clean));raw,_=source_decode(base,work/(codec+'-raw.f32'))
    if codec in ['opus','aac']:
     save(codec+'-seek-base.mka',base.read_bytes());t['seek_base']=codec+'-seek-base.mka'
    if codec=='opus':
@@ -80,7 +94,7 @@ def main():
     prefix=dict(clean);lengths=[];before=0
     if codec=='flac':private=bytearray(clean['private']);private[21]&=0xf0;private[22:26]=bytes(4);prefix['private']=bytes(private)
     for n in range(1,len(t['frames'])+1):
-     prefix['frames']=t['frames'][:n];path=work/(codec+'-prefix.mka');path.write_bytes(m.mux(prefix));data,_=decode(path,work/(codec+'-prefix.f32'));lengths.append(len(data)//8-before);before=len(data)//8
+     prefix['frames']=t['frames'][:n];path=work/(codec+'-prefix.mka');path.write_bytes(m.mux(prefix));data,_=source_decode(path,work/(codec+'-prefix.f32'));lengths.append(len(data)//8-before);before=len(data)//8
    assert sum(lengths)*8==len(raw),(codec,lengths,len(raw));sources.append((codec,t,lengths,raw))
   for label,t,lengths,raw in sources:
    count=sum(lengths);head=int.from_bytes(t['private'][10:12],'little') if t['codec']=='A_OPUS' else 0
@@ -112,7 +126,7 @@ def main():
    positions=[p for p,v in enumerate(visible) if v];frames=case['model_frames'];targets=[0,1,2,17,119,120,511,512,4095,4096,frames//3,frames//2+1,frames-1 if frames else 0,frames,frames+1,(1<<64)-1];blob=bytearray()
    for requested in targets:
     target=min(requested,frames);raw_target=positions[target] if target<frames else case['raw_frames'];remaining=case['raw_frames']-raw_target;dump=work/'seek-raw.f32'
-    if remaining:run([oracle,'--dump',work/case['seek_base'],raw_target,dump]);raw=dump.read_bytes();assert len(raw)==remaining*8
+    if remaining:run([source_oracle,work/case['seek_base'],raw_target,dump]);raw=dump.read_bytes();assert len(raw)==remaining*8
     else:raw=b''
     tail=b''.join(raw[(p-raw_target)*8:(p-raw_target+1)*8] for p in positions[target:]);blob+=struct.pack('<QI',target,len(tail))+tail
    reset_file=work/(path.stem+'.seek-reference');reset_file.write_bytes(blob);reset=[reset_file]
@@ -135,5 +149,7 @@ def main():
    target=work/(name+'.ffmpeg.f32');run(['ffmpeg','-v','error','-y','-i',work/name,'-f','f32le','-acodec','pcm_f32le',target]);assert target.read_bytes()==(work/(name+'.reference.f32')).read_bytes();interoperability.append({'file':name,'result':'exact installed FFmpeg PCM'})
  report={'result':'passed','platform':platform.platform(),'ffmpeg':manifest['ffmpeg'],'scope':'CodecDelay and signed BlockGroup padding; normative whole-block intervals including lacing, global-delay intersection, compressed presentation seeks and empty output. Expected intervals are selected by an independent per-sample mask from unchanged unpadded PCM; codec DSP has separate conformance suites. Timestamp gap scheduling and arbitrary SeekPreRoll are not established.','checks':checks,'rejections':rejected,'cancellation':cancellation,'binaries':{p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in [cli,oracle,chain,guard]},'sources':{p:hashlib.sha256((ROOT/p).read_bytes()).hexdigest() for p in ['src/mkv.s','src/track.s','src/track_cuts.s','tests/verify-matroska-timing.py','tests/matroska-timing-oracle.c','tests/speex-matroska-oracle.c','tests/chain-oracle.c','tests/verify-matroska.py']}}
  report['native_lifecycle']=lifecycle;report['ffmpeg_interoperability']=interoperability;report['ffmpeg_comparator_limits']='FFmpeg 8.0.1 exposes CodecDelay as initial_padding without applying generic skip_samples; whole-block laced padding is checked against the normative mask rather than repeated per-lace trimming.';report['sources']['src/decoder.s']=hashlib.sha256((ROOT/'src/decoder.s').read_bytes()).hexdigest()
+ report['scope']='CodecDelay and signed whole-Block padding, including lacing, global-delay intersections, compressed presentation seeks and empty output. Fine block clocks describe the intended compressed presentation. Independent sample masks select untimed source PCM; Opus/AAC seeks use fresh source seeks. Codec DSP, timestamp scheduling and SeekPreRoll have separate suites. Guarded mutations are capped at 128 reads and seek at 64.'
+ report['sources'].update({p:hashlib.sha256((ROOT/p).read_bytes()).hexdigest() for p in ['src/track_time.s','src/vorbis.s','src/vorbis_decode.inc','tests/track-source-oracle.c']});report['binaries'][source_oracle.name]=hashlib.sha256(source_oracle.read_bytes()).hexdigest()
  (out/('matroska-timing-debug.json' if args.case else 'matroska-timing-verification.json')).write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8');print('Passed',len(checks),'files and',len(checks)*16,'presentation seeks.')
 if __name__=='__main__':main()

@@ -36,6 +36,9 @@ vb_track_mode: .long 0              # container packets; no Ogg granule trimming
 vb_header_list: .quad 0             # track mode: three (pointer, bytes) headers
 vb_header_index: .long 0
 vb_scan_previous: .long 0
+vb_track_scan_n: .long 0
+vb_track_decode_n: .long 0
+vb_track_pending_count: .long 0
 vb_origin: .quad 0
 vb_initial_skip: .long 0
 vb_trim_start: .long 0
@@ -103,6 +106,7 @@ vb_really_zero: .zero 255*4
 vb_classdata: .zero 32768*4
 vb_audio_checkpoint: .zero 2*8
 vb_scan_checkpoint: .zero 2*8
+vb_track_pending: .zero 2048*8       # early long-to-short PCM, stereo
 .text
 # Bounded little-endian bit reader. Only EAX and flags are clobbered.
 LOCALFN vb_bits

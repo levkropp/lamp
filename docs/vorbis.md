@@ -49,3 +49,12 @@ Xiph's `vorbis_book_decodevv_add` rounds residue-2 partition boundaries to chann
 The full run passes 797 files and 71,042,304 native float values. It records 11,955 native plus 11,955 stereo exact seeks, 201,056 guarded reads, 22,190 mixed-reader checks, 3,188 cancellation checks, 17,968 valid-stream reopens and 14 malformed/resource rejections. Rejected streams also undergo 24 reopen/cleanup attempts each. The minimum observed SNR is 129.09 dB and maximum scaled peak error is 0.000000429. All 24 WASAPI lifecycle scenarios pass, including Vorbis 5.1/7.1 stereo downmix; the prior 83 Vorbis checks and 1,305 mono/stereo seeks pass.
 
 Native comparisons require at least 90 dB SNR and peak error divided by `1 + reference_peak` no greater than 0.00004. Stereo routing and seeks must match the verified native/continuous assembly PCM exactly. The [recorded report](../reports/vorbis-multichannel-verification.json) identifies each comparator path and retains source/object hashes and observed errors. Tests establish this documented coverage, not full Vorbis conformance.
+
+## Packet timestamps
+
+Matroska/MP4 packet output follows center-to-center sample intervals. A bounded
+stereo buffer retains PCM emitted early at long-to-short transitions. Direct
+packet counts and PCM match the pinned Xiph reference across 34 mono/stereo
+streams, including extreme 64/8192 windows and cold suffix resets, on Windows
+and Linux. Native Ogg overlap/granule handling remains separate. See the
+[media-clock contracts and reports](matroska-clock.md).

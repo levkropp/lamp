@@ -69,6 +69,7 @@ track_primer: .long 0                # packets still to decode without output
 .text
 FN track_close
     sub rsp, 40
+    call track_time_close
     call track_cuts_close
     mov rcx, [rip + track_packets]
     test rcx, rcx
@@ -193,6 +194,8 @@ FN track_add
     add rax, [rip + track_packets]
     mov [rax + TK_POINTER], rbx
     mov [rax + TK_BYTES], esi
+    mov qword ptr [rax + TK_START], 0
+    mov dword ptr [rax + TK_SAMPLES], 0
     inc qword ptr [rip + track_count]
     mov eax, 1
     jmp .Ltk_add_return
@@ -204,6 +207,29 @@ FN track_add
     pop rbx
     ret
 ENDFN track_add
+
+# RCX=first packet of a Block, RDX=unsigned Cluster Timestamp,
+# R8D=signed 16-bit relative timestamp ->1/0. Reuses fields not scanned yet;
+# no timestamp index is allocated while parsing a normally timed file.
+FN track_time_mark
+    cmp rcx, [rip + track_count]
+    jae .Ltk_mark_bad
+    cmp r8d, -32768
+    jl .Ltk_mark_bad
+    cmp r8d, 32767
+    jg .Ltk_mark_bad
+    imul rax, rcx, TK_ENTRY
+    add rax, [rip + track_packets]
+    mov [rax + TK_START], rdx
+    movzx r8d, r8w
+    or r8d, 0x80000000
+    mov [rax + TK_SAMPLES], r8d
+    mov eax, 1
+    ret
+.Ltk_mark_bad:
+    xor eax, eax
+    ret
+ENDFN track_time_mark
 
 # RCX=data, EDX=bytes, R8D=limit -> EAX=1. Extends the previous packet when
 # the data follows it directly and the total stays within the limit (PCM).
@@ -606,6 +632,18 @@ FN track_finish
     cmp dword ptr [rax], 0
     jne .Ltk_finish_bad
 .Ltk_scan_continue:
+    cmp dword ptr [rip + track_time_enabled], 0
+    je .Ltk_scan_clock_ready
+    mov eax, [rsi + TK_SAMPLES]
+    test eax, 0x80000000
+    jz .Ltk_scan_clock_ready
+    movsx r8d, ax
+    mov rdx, [rsi + TK_START]
+    mov rcx, rdi
+    call track_time_anchor
+    test eax, eax
+    jz .Ltk_finish_bad
+.Ltk_scan_clock_ready:
     mov [rsi + TK_START], rdi
     mov rcx, rsi
     call track_samples
@@ -649,6 +687,10 @@ FN track_finish
     mov rdx, [rip + track_count]
     mov r8, [rip + track_raw_total]
     call track_cuts_finish
+    test eax, eax
+    jz .Ltk_finish_bad
+    mov rcx, rdi
+    call track_time_finish
     test eax, eax
     jz .Ltk_finish_bad
     xor ecx, ecx
@@ -840,8 +882,13 @@ FN track_seek
 .Ltk_seek_not_cancelled:
     test rcx, rcx
     jz .Ltk_seek_from_zero              # reset even after earlier reads/seeks
-    cmp rcx, [rip + total_frames]
-    cmova rcx, [rip + total_frames]
+    mov rax, [rip + total_frames]
+    cmp dword ptr [rip + track_time_active], 0
+    je .Ltk_seek_bound_ready
+    mov rax, [rip + track_time_source_frames]
+.Ltk_seek_bound_ready:
+    cmp rcx, rax
+    cmova rcx, rax
     call track_cut_to_raw
     mov rdi, rax
     mov rsi, rax

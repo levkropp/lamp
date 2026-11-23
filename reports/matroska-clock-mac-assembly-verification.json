@@ -1,0 +1,63 @@
+{
+  "result": "passed",
+  "scope": "Compile-only ARM64 macOS checks of changed runtime modules. Vorbis includes vorbis_decode.inc. No native linking, execution, device playback or Mac feature parity is established.",
+  "target": "arm64-apple-macosx12.0.0",
+  "cpu": "apple-m1",
+  "compiler": "Ubuntu LLVM version 18.1.3",
+  "sources": {
+    "tools/arm64.py": "f8abd01ad67063451181e0adc66e72b2a445ebe9a7b159f7b88ac52b79bdadc2",
+    "tools/arm64_lamp.py": "37e4a515283ef441f9d1ee647377716efbe0d6a3aae27ef7c62faf53118f35d0",
+    "src/lamp.inc": "d79c75543ab0d78863010b32e46faf23fda5b9cb54ec624e9dce0acfcabf03e6",
+    "src/vorbis_decode.inc": "5e55cb077ed617c9f41c2b745c758ef9b91d8206beea8e739cf7d8b05a4d52b3"
+  },
+  "checks": [
+    {
+      "file": "src/decoder.s",
+      "source_sha256": "7b68210e4a3338a9b59c90fd39b1c6578baa63c71af6e1daeccee500fee41a26",
+      "translated_sha256": "49efe91a06e432d5c541aee74141e71e62a26e8dd17c06a6524bb85bb6b73663",
+      "object_sha256": "c499621a061e8f4222e1a311e8a73d4c55b8e92b854ca23448e5eaa80b029cd5",
+      "object_bytes": 61504,
+      "result": "translated and assembled"
+    },
+    {
+      "file": "src/mkv.s",
+      "source_sha256": "3e9e203b33186b8cd643b0ff3e802457442c9ac3f53e266b3e6648e47379a3bb",
+      "translated_sha256": "e75a9ba5a7f2ea66f03c9104ca58c23f37ac9caac73bd58d575f2d0c6b99b358",
+      "object_sha256": "79a8936ad1104344a5901162df6473ecb2c4647dcf4ee0dc3af38712205ccd1f",
+      "object_bytes": 15144,
+      "result": "translated and assembled"
+    },
+    {
+      "file": "src/track.s",
+      "source_sha256": "b7266d9daf9f7db223941c22d7e29917635de223c51309a7e28716617c67607b",
+      "translated_sha256": "9bb46d37b2639d78211670be0c1c09273d159f790f3ef14b1fc815cc755f77b5",
+      "object_sha256": "472e31c9ca7f9b879b2a222f6c0644fc755efa0f07696d392e5f77bb171eb281",
+      "object_bytes": 14808,
+      "result": "translated and assembled"
+    },
+    {
+      "file": "src/track_cuts.s",
+      "source_sha256": "fa3f9442743150a974b4f9e47ed67d2ba586905af127dc60552cb7781a5976f9",
+      "translated_sha256": "0ab369ac5dcee0336b390b9dcf89007d58b3f83cb811d3128e175555ffe5379e",
+      "object_sha256": "3eb0abd3ee36f1c179153581cc9e2b4cdd4ead43485b188818e32c4e67c3a367",
+      "object_bytes": 4224,
+      "result": "translated and assembled"
+    },
+    {
+      "file": "src/track_time.s",
+      "source_sha256": "a57a520d3ee446ed55e25d0796e933068704cea1cace18052593286e8b67fade",
+      "translated_sha256": "3ecefef15eeb17e7cce84368cec42c31cbead690660ccf38ca3afedacca81610",
+      "object_sha256": "3b3784741f8c8235bcb5a35e0e38bbec93105539820557133703e061a2f241a2",
+      "object_bytes": 9336,
+      "result": "translated and assembled"
+    },
+    {
+      "file": "src/vorbis.s",
+      "source_sha256": "265157f893c9749d531bacbded12fa8f05121ad36b1b1887296a5c10b7c52958",
+      "translated_sha256": "3a8c80c8e6039fbe4fffac58d21c23e06b3fdbd7ed546d0084eb024ade6a94fa",
+      "object_sha256": "87b94dd8590aaad9e66bffb8496898ca9bb7ac00aa9981de581e3cafa7e96771",
+      "object_bytes": 33056,
+      "result": "translated and assembled"
+    }
+  ]
+}

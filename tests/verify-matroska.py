@@ -12,7 +12,9 @@ Vorbis, FLAC, PCM and MPEG audio; Opus seeks must equal Ogg Opus seeks.
 Writes <out>/matroska-verification.json.
 """
 import array
+import json
 import math
+from decimal import Decimal
 from pathlib import Path
 import struct
 import sys
@@ -70,26 +72,39 @@ def sint(ident, value):
     return element(ident, value.to_bytes(width, 'big', signed=True))
 
 
-def parse(path):
+def parse(path, audio_track=1):
     """Codec settings and the frames of the first audio track of an FFmpeg file."""
     data = Path(path).read_bytes()
     segment = next(e for e in elements(data, 0, len(data)) if e[0] == 0x18538067)
-    track = {'frames': [], 'discard': 0}
+    track = {'frames': [], 'discard': 0, 'timestamps_ns': [], 'timestamp_scale': 1000000}
     number = None
-    for ident, a, b in elements(data, segment[1], segment[2]):
+    children = list(elements(data, segment[1], segment[2]))
+    for ident, a, b in children:
+        if ident == 0x1549A966:
+            for key, c, d in elements(data, a, b):
+                if key == 0x2AD7B1:track['timestamp_scale'] = int.from_bytes(data[c:d], 'big')
+    track_scale = 1.0
+    audio_seen=0
+    for ident, a, b in children:
         if ident == 0x1654AE6B:
             for entry, ta, tb in elements(data, a, b):
                 if entry != 0xAE:                      # TrackEntry; FFmpeg also writes CRC-32
                     continue
                 fields = {i: data[pa:pb] for i, pa, pb in elements(data, ta, tb)}
-                if int.from_bytes(fields.get(0x83, b'\0'), 'big') == 2 and number is None:
+                if int.from_bytes(fields.get(0x83, b'\0'), 'big') == 2:audio_seen+=1
+                if int.from_bytes(fields.get(0x83, b'\0'), 'big') == 2 and audio_seen==audio_track and number is None:
                     number = int.from_bytes(fields[0xD7], 'big')
                     track['codec'] = fields[0x86].rstrip(b'\0').decode()
                     track['private'] = fields.get(0x63A2)
                     track['audio'] = fields.get(0xE1, b'')
                     if 0x56AA in fields:track['codec_delay'] = int.from_bytes(fields[0x56AA], 'big')
+                    if 0x56BB in fields:track['seek_preroll'] = int.from_bytes(fields[0x56BB], 'big')
+                    if 0x23314F in fields:
+                        value=fields[0x23314F];track_scale=struct.unpack('>f' if len(value)==4 else '>d',value)[0]
         elif ident == 0x1F43B675:
-            for ci, ca, cb in elements(data, a, b):
+            entries=list(elements(data,a,b))
+            clock=next(int.from_bytes(data[c:d],'big') for i,c,d in entries if i==0xE7)
+            for ci, ca, cb in entries:
                 blocks = []
                 if ci == 0xA3:
                     blocks.append((ca, cb, 0))
@@ -107,6 +122,14 @@ def parse(path):
                     if (data[ba + n + 2] >> 1) & 3:
                         raise Failure('FFmpeg fixture unexpectedly uses lacing')
                     track['frames'].append(data[ba + n + 3:bb])
+                    relative=int.from_bytes(data[ba+n:ba+n+2],'big',signed=True)
+                    if track_scale==1.0:stamp=(clock+relative)*track['timestamp_scale']
+                    else:
+                        from fractions import Fraction
+                        value=relative*Fraction.from_float(track_scale)*track['timestamp_scale']
+                        part=(abs(value.numerator)*2+value.denominator)//(2*value.denominator)
+                        stamp=clock*track['timestamp_scale']+(-part if value<0 else part)
+                    track['timestamps_ns'].append(stamp)
                     track['discard'] = pad
     return track
 
@@ -154,22 +177,34 @@ def mux(track, lacing=0, group=4, unknown=False, extra_tracks=(), selected_defau
     if track.get('audio'):
         entry += element(0xE1, track['audio'])
     if 'codec_delay' in track:entry += uint(0x56AA, track['codec_delay'])
+    if 'seek_preroll' in track:entry += uint(0x56BB, track['seek_preroll'])
     tracks = element(0x1654AE6B, b''.join(element(0xAE, e) for e in extra_tracks) + element(0xAE, entry))
     header = element(0x1A45DFA3, uint(0x4286, 1) + element(0x4282, b'matroska'))
-    blocks = blocks_of(track['frames'], lacing, group)
-    clusters = []
-    for c in range(0, len(blocks), cluster_blocks):
-        body = uint(0xE7, c)
-        for k, chunk in enumerate(blocks[c:c + cluster_blocks]):
-            flags = 0x80 | ((lacing << 1) if len(chunk) > 1 else 0)
-            payload = size_bytes(number) + b'\0\0' + bytes([flags])
-            payload += lace(chunk, lacing) if len(chunk) > 1 else chunk[0]
-            if c + k == len(blocks) - 1 and track['discard']:
-                body += element(0xA0, element(0xA1, payload) + sint(0x75A2, track['discard']))
-            else:
-                body += element(0xA3, payload)
-        clusters.append(element(0x1F43B675, body, unknown))
-    info = element(0x1549A966, uint(0x2AD7B1, 1000000))
+    # The non-output Vorbis primer cannot absorb the first audible PTS.
+    blocks = ([track['frames'][:1]] + blocks_of(track['frames'][1:],lacing,group)) if track['codec']=='A_VORBIS' and lacing and track['frames'] else blocks_of(track['frames'], lacing, group)
+    scale=track.get('timestamp_scale',1000000)
+    if 'sample_lengths' in track:
+        rate=track['rate'];position=0;times=[]
+        for count in track['sample_lengths']:
+            times.append((position*1000000000+rate//2)//rate);position+=count
+    else:
+        times=track.get('timestamps_ns')
+    if times is None or len(times)<len(track['frames']):raise Failure('Test mux needs packet timestamps or explicit sample lengths')
+    clusters=[];body=b'';clock=None;packet=0;count=0
+    for index,chunk in enumerate(blocks):
+        ns=times[packet];ticks=(abs(ns)+scale//2)//scale;ticks=-ticks if ns<0 else ticks
+        if clock is None or count>=cluster_blocks or not -32768<=ticks-clock<=32767:
+            if body:clusters.append(element(0x1F43B675,body,unknown))
+            clock=max(0,ticks);body=uint(0xE7,clock);count=0
+        if not -32768<=ticks-clock<=32767:raise Failure('Test timestamp needs a coarser scale')
+        flags=0x80|((lacing<<1) if len(chunk)>1 else 0)
+        payload=size_bytes(number)+struct.pack('>h',ticks-clock)+bytes([flags])
+        payload+=lace(chunk,lacing) if len(chunk)>1 else chunk[0]
+        if index==len(blocks)-1 and track['discard']:body+=element(0xA0,element(0xA1,payload)+sint(0x75A2,track['discard']))
+        else:body+=element(0xA3,payload)
+        packet+=len(chunk);count+=1
+    if body:clusters.append(element(0x1F43B675,body,unknown))
+    info = element(0x1549A966, uint(0x2AD7B1, scale))
     return header + element(0x18538067, info + tracks + b''.join(clusters), unknown)
 
 
@@ -187,7 +222,7 @@ def measure(ours, reference):
 
 def main():
     library = build_lamp()
-    build_oracles(out_dir(), {'seek-oracle': 'seek-oracle.c', 'chain-oracle': 'chain-oracle.c'}, library)
+    build_oracles(out_dir(), {'seek-oracle': 'seek-oracle.c', 'chain-oracle': 'chain-oracle.c','source-oracle':'track-source-oracle.c'}, library)
     seek, chain = exe('seek-oracle'), exe('chain-oracle')
     work = scratch('matroska')
     checks = []
@@ -240,6 +275,11 @@ def main():
                 adjusted = False
                 if kind != 'opus' and delay and reference.stat().st_size == ours.stat().st_size + delay * 8:
                     reference.write_bytes(reference.read_bytes()[delay * 8:]);adjusted = True
+                lead=0
+                if kind=='vorbis':
+                    frames_info=json.loads(run(['ffprobe','-v','error','-select_streams','a:0','-show_frames','-show_entries','frame=pts_time','-of','json',path]))['frames']
+                    lead=max(0,int(Decimal(frames_info[0]['pts_time'])*rate+Decimal('0.5')))
+                    reference.write_bytes(bytes(lead*8)+reference.read_bytes())
                 peak, snr, frames, expected = measure(ours, reference)
                 if frames != expected:
                     raise Failure(f'{path.name}: {frames // 2} frames, FFmpeg {expected // 2}')
@@ -247,6 +287,7 @@ def main():
                 if peak > limit or snr < min_snr:
                     raise Failure(f'{path.name}: peak error {peak:.3g}, SNR {snr:.1f} dB against FFmpeg')
                 comparator = 'FFmpeg with explicit CodecDelay sample removal' if adjusted else 'FFmpeg'
+                if lead:comparator+=' PCM with decoded-frame timestamp origin'
             else:
                 comparator = 'multichannel: LAMP Ogg/native decode below'
                 peak, snr = None, None
@@ -288,11 +329,13 @@ def main():
             decode_f32(other, other_pcm)
             a = Path(str(work / f'{name}.mka') + '.f32').read_bytes()
             b = other_pcm.read_bytes()
+            if kind=='vorbis':
+                untimed=work/f'{name}.source.f32';run([exe('source-oracle'),work/f'{name}.mka',0,untimed]);a=untimed.read_bytes()
             if kind == 'pcm' and a != b:
                 raise Failure(f'{name}: Matroska and WAV decodes differ')
             if kind == 'vorbis' and (a != b[:len(a)] or len(b) - len(a) > 2048 * 8):
                 raise Failure(f'{name}: Matroska and Ogg Vorbis decodes differ')
-            checks.append({'test': f'{name} Matroska vs {other.suffix}', 'result': 'exact'})
+            checks.append({'test': f'{name} Matroska vs {other.suffix}', 'result': 'exact source PCM, excluding media timestamp origin' if kind=='vorbis' else 'exact'})
 
     # Lacing, unknown sizes and track selection: the same frames, re-muxed.
     variants = 0
@@ -424,11 +467,16 @@ def mux_discard_early(track):
     """DiscardPadding on a packet that is not the last one."""
     header = element(0x1A45DFA3, uint(0x4286, 1) + element(0x4282, b'webm'))
     entry = uint(0xD7, 1) + uint(0x83, 2) + element(0x86, b'A_OPUS') + element(0x63A2, track['private'])
-    body = uint(0xE7, 0)
+    clusters=[];raw=0;removed=0
     for k, frame in enumerate(track['frames']):
+        ticks=((raw-removed)*1000000+24000)//48000
         block = element(0xA1, size_bytes(1) + b'\0\0\0' + frame)
-        body += element(0xA0, block + (sint(0x75A2, 2500000) if k == 3 else b''))
-    return header + element(0x18538067, element(0x1654AE6B, element(0xAE, entry)) + element(0x1F43B675, body))
+        clusters.append(element(0x1F43B675,uint(0xE7,ticks)+element(0xA0, block + (sint(0x75A2, 2500000) if k == 3 else b''))))
+        config,code=frame[0]>>3,frame[0]&3
+        per=(480,960,1920,2880)[config&3] if config<12 else (480<<(config&1)) if config<16 else 120<<(config&3)
+        raw+=per*(1 if code==0 else frame[1]&63 if code==3 else 2)
+        if k==3:removed+=120
+    return header + element(0x18538067,element(0x1549A966,uint(0x2AD7B1,1000))+element(0x1654AE6B, element(0xAE, entry))+b''.join(clusters))
 
 
 if __name__ == '__main__':
