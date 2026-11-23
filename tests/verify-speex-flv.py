@@ -23,8 +23,16 @@ def run(args,timeout=180):
 def tag(kind,data,timestamp=0):
     return bytes([kind])+len(data).to_bytes(3,'big')+(timestamp&0xffffff).to_bytes(3,'big')+bytes([timestamp>>24&255])+bytes(3)+data+(11+len(data)).to_bytes(4,'big')
 
-def flv(tags,extra=0):
-    return b'FLV\x01\x04'+(9+extra).to_bytes(4,'big')+bytes(extra)+bytes(4)+b''.join(tag(k,d,20*i) for i,(k,d) in enumerate(tags))
+def flv(tags,extra=0,lengths=None):
+    # Packet duration, rather than unrelated tag ordinals, defines these
+    # continuous synthetic fixtures. Clock-discontinuity cases are separate.
+    out=[];frames=0;index=0
+    for kind,data in tags:
+        out.append(tag(kind,data,frames//16))
+        if kind==8 and len(data)>1 and data[0]>>4==11:
+            frames+=lengths[index] if lengths is not None else 320;index+=1
+    if lengths is not None:assert index==len(lengths)
+    return b'FLV\x01\x04'+(9+extra).to_bytes(4,'big')+bytes(extra)+bytes(4)+b''.join(out)
 
 def tags(data):
     at=int.from_bytes(data[5:9],'big')+4;out=[]
@@ -85,8 +93,8 @@ def main():
         for k,d in audio:interleaved += [(8,d),(18,b'ignored script'),(9,b'video'),(0x28,d),(8,b'\x72\0\1')]
         written('skipped-tags.flv',flv(interleaved),'script, video, encrypted and other audio tags skipped')
         mixed=[(8,b'\xb2'+packet) for name in ['q8.flv','group2.flv','group5.flv','group8.flv'] for packet in packets(work/name)[:3]]
-        written('changing-groups.flv',flv(mixed),'packet frame counts change across tags')
-        written('null-groups.flv',flv([(8,b'\xb2'+null_packet(n)) for n in (1,2,8,64,3)]),'null WB modes, including 64 frames in one bounded packet')
+        written('changing-groups.flv',flv(mixed,lengths=[320*n for n in [1,2,5,8] for _ in range(3)]),'packet frame counts change across tags')
+        written('null-groups.flv',flv([(8,b'\xb2'+null_packet(n)) for n in (1,2,8,64,3)],lengths=[320*n for n in [1,2,8,64,3]]),'null WB modes, including 64 frames in one bounded packet')
         written('large-header.flv',flv(audio,23),'extended FLV header')
         whole=flv(audio);last=audio[-1][1];written('cut-final-tag.flv',whole[:-(4+len(last)//2)],'incomplete final Speex tag dropped')
         written('empty-tags.flv',flv([item for entry in audio for item in [(8,b''),(8,b'\xb2'),entry]]),'empty audio tags ignored')
@@ -118,5 +126,7 @@ def main():
         lifecycle={'result':'passed','details':detail.splitlines(),'probe_sha256':hashlib.sha256(probe.read_bytes()).hexdigest()}
     paths=['src/flv.s','src/track.s','src/speex_track.s','tests/speex-file-reference.c','tests/speex-flv-oracle.c','tests/verify-speex-flv.py','tests/seek-oracle.c','tests/chain-oracle.c']
     report={'result':'passed','suite':'speex-flv','recorded_utc':datetime.now(timezone.utc).isoformat(),'platform':platform.platform(),'ffmpeg':version,'reference':'Unchanged test-only Speex 1.2.1 encoder/float decoder; no Ogg trimming for FLV packets','archive_url':ref.URL,'archive_sha256':ref.SHA256,'checks':checks,'rejections':rejected,'cancellation':cancellation,'native_lifecycle':lifecycle,'scope':'FLV 16 kHz mono Speex, grouped packets, ignored low flags, bounded parser/decoding, exact cold seeks and cancellation. FLV timestamp gaps/scheduling, audible latency, captured hardware PCM and native Mac execution are not established.','binaries':{x.name:hashlib.sha256(x.read_bytes()).hexdigest() for x in [cli,reference,seek,chain,guard]},'sources':{p:hashlib.sha256((ROOT/p).read_bytes()).hexdigest() for p in paths}}
+    report['scope']='FLV 16 kHz mono Speex, grouped packets, ignored low flags, bounded parser/decoding, exact cold seeks and cancellation. Synthetic continuous files use packet-duration clocks. Timestamp gaps have a separate integration suite. Guarded mutations stop at128 reads and seek at64; audible latency, captured hardware PCM and native Mac execution are not established.'
+    report['sources'].update({p:hashlib.sha256((ROOT/p).read_bytes()).hexdigest() for p in ['src/track_time.s','src/decoder.s']})
     (out/'speex-flv-verification.json').write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8');print(f'Passed {len(checks)} files, {len(checks)*15} exact seeks, {len(rejected)} malformed cases and cancellation.')
 if __name__=='__main__':main()

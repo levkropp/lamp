@@ -5,9 +5,12 @@ LAMP_ABI int flv_open(const unsigned char *,const unsigned char *);
 LAMP_ABI void track_close(void);
 LAMP_ABI void mts_close(void);
 LAMP_ABI unsigned track_read(float *,unsigned);
+LAMP_ABI unsigned track_time_read(float *,unsigned);
+LAMP_ABI uint64_t track_time_seek(uint64_t);
 extern unsigned decode_error,track_active,sample_rate,source_channels;
 extern uint64_t track_count,total_frames;
 static uint64_t checks,words,cases,prefixes,mutations;
+static unsigned expected_rate=16000,expected_channels=1;
 #define CHECK(x) do{checks++;if(!(x)){fprintf(stderr,"guard check line %d failed\n",__LINE__);exit(1);}}while(0)
 typedef struct{unsigned char *base,*data;size_t size,body,page;} Guard;
 static Guard guarded(size_t n){
@@ -20,11 +23,11 @@ static unsigned char *load(const lamp_char*path,size_t*bytes){FILE*f=lamp_fopen(
 static void exercise(const unsigned char*data,size_t bytes,const unsigned char*expected,size_t expected_bytes,int exact){
  Guard in=guarded(bytes),out=guarded(32+997*8);if(bytes)memcpy(in.data,data,bytes);readonly(&in);decode_error=0;
  int opened=flv_open(in.data,in.data+bytes);uint64_t position=0;
- if(exact)CHECK(opened==1&&!decode_error&&sample_rate==16000&&source_channels==1&&total_frames*8==expected_bytes);
+ if(exact)CHECK(opened==1&&!decode_error&&sample_rate==expected_rate&&source_channels==expected_channels&&total_frames*8==expected_bytes);
  if(opened==1){
-  CHECK(track_read((float*)(out.data+32),0)==0);
+  CHECK(track_time_read((float*)(out.data+32),0)==0);
   for(unsigned turn=0;;turn++){
-   CHECK(turn<65536);unsigned cap=1+(turn*137)%997;memset(out.data,0xa5,out.size);unsigned n=track_read((float*)(out.data+32),cap);CHECK(n<=cap);
+   CHECK(turn<65536);if(!exact&&turn==128)break;if(!exact&&turn==64)track_time_seek(total_frames/2);unsigned cap=1+(turn*137)%997;memset(out.data,0xa5,out.size);unsigned n=track_time_read((float*)(out.data+32),cap);CHECK(n<=cap);
    for(unsigned j=0;j<32;j++)CHECK(out.data[j]==0xa5);
    for(size_t j=32+(size_t)n*8;j<out.size;j++)CHECK(out.data[j]==0xa5);
    if(!decode_error){float*p=(float*)(out.data+32);for(unsigned j=0;j<n*2;j++)CHECK(isfinite(p[j]));if(exact){CHECK((position+n)*8<=expected_bytes);CHECK(!memcmp(p,expected+position*8,(size_t)n*8));words+=(uint64_t)n*2;}position+=n;}
@@ -36,7 +39,7 @@ static void exercise(const unsigned char*data,size_t bytes,const unsigned char*e
  track_close();mts_close();CHECK(!track_active&&!track_count&&!track_read((float*)(out.data+32),1));release(&out);release(&in);cases++;
 }
 int lamp_main(int argc,lamp_char**argv){
- if(argc!=4)return 2;size_t bytes,reference_bytes;unsigned char*data=load(argv[1],&bytes),*reference=load(argv[2],&reference_bytes);exercise(data,bytes,reference,reference_bytes,1);
+ if(argc!=4&&argc!=6)return 2;if(argc==6){expected_rate=lamp_atoi(argv[4]);expected_channels=lamp_atoi(argv[5]);}size_t bytes,reference_bytes;unsigned char*data=load(argv[1],&bytes),*reference=load(argv[2],&reference_bytes);exercise(data,bytes,reference,reference_bytes,1);
  if(lamp_atoi(argv[3])){
   size_t step=bytes/256+1;for(size_t n=0;n<bytes;n+=step){exercise(data,n,NULL,0,0);prefixes++;}
   unsigned seed=0x36a21;for(unsigned i=0;i<512;i++){unsigned char*p=malloc(bytes);CHECK(p);memcpy(p,data,bytes);seed=seed*1664525u+1013904223u;size_t at=seed%bytes;seed=seed*1664525u+1013904223u;p[at]^=1u<<(seed>>29);exercise(p,bytes,NULL,0,0);free(p);mutations++;}

@@ -231,6 +231,23 @@ FN track_time_mark
     ret
 ENDFN track_time_mark
 
+# RCX=packet, EDX=signed 32-bit timestamp in the selected clock ticks.
+# FLV uses a signed millisecond field, wider than Matroska's relative word.
+FN track_time_mark_signed
+    cmp rcx, [rip + track_count]
+    jae .Ltk_mark_signed_bad
+    imul rax, rcx, TK_ENTRY
+    add rax, [rip + track_packets]
+    movsxd rdx, edx
+    mov [rax + TK_START], rdx
+    mov dword ptr [rax + TK_SAMPLES], 0xc0000000
+    mov eax, 1
+    ret
+.Ltk_mark_signed_bad:
+    xor eax, eax
+    ret
+ENDFN track_time_mark_signed
+
 # RCX=data, EDX=bytes, R8D=limit -> EAX=1. Extends the previous packet when
 # the data follows it directly and the total stays within the limit (PCM).
 FN track_append
@@ -637,8 +654,15 @@ FN track_finish
     mov eax, [rsi + TK_SAMPLES]
     test eax, 0x80000000
     jz .Ltk_scan_clock_ready
+    test eax, 0x40000000
+    jnz .Ltk_scan_signed_clock
     movsx r8d, ax
     mov rdx, [rsi + TK_START]
+    jmp .Ltk_scan_anchor
+.Ltk_scan_signed_clock:
+    mov r8d, [rsi + TK_START]
+    xor edx, edx
+.Ltk_scan_anchor:
     mov rcx, rdi
     call track_time_anchor
     test eax, eax

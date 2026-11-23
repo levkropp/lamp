@@ -55,9 +55,26 @@ def flv_tag(kind, data, timestamp=0):
 
 
 def flv_file(tags, extra=0):
-    """FLV header (audio flag), extra header bytes, then tags (type, data)."""
-    return (b'FLV\x01\x04' + (9 + extra).to_bytes(4, 'big') + bytes(extra) + bytes(4) +
-            b''.join(flv_tag(kind, data, 23 * k) for k, (kind, data) in enumerate(tags)))
+    """Write coherent continuous audio clocks for these LC/ADPCM fixtures."""
+    selected=None;rate=44100;frames=0;out=[]
+    for kind,data in tags:
+        timestamp=(frames*1000+rate//2)//rate
+        if kind==8 and data:
+            codec=data[0]>>4
+            if selected is None:selected=codec
+            if codec==selected==10 and len(data)>2:
+                if data[1]==0:
+                    index=(data[2]&7)<<1 | data[3]>>7
+                    rate=[96000,88200,64000,48000,44100,32000,24000,22050,16000,12000,11025,8000,7350][index]
+                    timestamp=(frames*1000+rate//2)//rate
+                elif data[1]==1:frames+=1024
+            elif codec==selected==1 and len(data)>1:
+                rate=[5512,11025,22050,44100][data[0]>>2&3];timestamp=(frames*1000+rate//2)//rate
+                channels=(data[0]&1)+1;bits=(data[1]>>6)+2;header=22*channels;group=bits*channels
+                blocks,remaining=divmod((len(data)-1)*8-2,header+4095*group)
+                frames+=blocks*4096+(1+(remaining-header)//group if remaining>=header else 0)
+        out.append(flv_tag(kind,data,timestamp))
+    return b'FLV\x01\x04'+(9+extra).to_bytes(4,'big')+bytes(extra)+bytes(4)+b''.join(out)
 
 
 def flv_tags(data):

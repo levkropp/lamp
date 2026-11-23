@@ -1,6 +1,6 @@
 # FLV
 
-LAMP 0.4.0-dev plays the audio of Flash Video files (`.flv`) with a handwritten demuxer (`src/flv.s`) following Adobe's Video File Format Specification (version 10.1, annex E): an `FLV` version 1 header of at least nine bytes, then tags with a type, a 24-bit data size, a timestamp and the previous tag's size. The first audio tag's sound format chooses the stream, and audio tags of that format are read in file order; video tags, script data (`onMetaData`), encrypted tags and audio tags of another sound format are skipped. Timestamps are not used.
+LAMP 0.4.0-dev plays the audio of Flash Video files (`.flv`) with a handwritten demuxer (`src/flv.s`) following Adobe's Video File Format Specification (version 10.1, annex E): an `FLV` version 1 header of at least nine bytes, then tags with a type, a 24-bit data size, a timestamp and the previous tag's size. The first audio tag's sound format chooses the stream, and audio tags of that format are read in file order; video tags, script data (`onMetaData`), encrypted tags and audio tags of another sound format are skipped. AAC/HE-AAC, Flash ADPCM and Speex now use signed tag timestamps for audio gaps, overlap/negative clipping and media-time seeks; PCM, G.711 and MPEG audio still use the untimed gathered path. See [clock rules and verification](flv-clock.md).
 
 | Sound format | Audio |
 | --- | --- |
@@ -35,10 +35,9 @@ bits. Control-only payloads and invalid modes reject; empty tags are ignored.
 `src/speex_track.s` parses the implied stream configuration and connects the
 same assembly frame decoder used by Ogg. It normalizes float samples by
 1/32768 and duplicates mono, without int16 clipping. Every coded frame is
-presented: FLV supplies no Ogg pre-skip or granule trimming. As for the
-other current FLV codecs, timestamps, gaps and synchronization are not yet
-scheduled; packets play in file order. This is audio decoding coverage,
-not completion of the video/synchronization milestone.
+decoded without inferred Ogg pre-skip or granule trimming. The selected tag
+timestamps now place that PCM into media time, including gaps and clipping
+([clock contracts](flv-clock.md)). Video/A/V synchronization remains open.
 
 Seeks reset and decode/discard from the beginning, retaining exact prediction,
 noise, filter and QMF histories at the target. They are cancellable, but cold

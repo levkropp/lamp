@@ -1,0 +1,428 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "pcm_s16le-11025-1.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=15 rate=11025 channels=1 bits=16 frames=11025 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_s16le-11025-2.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=15 rate=11025 channels=2 bits=16 frames=11025 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_s16le-22050-1.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=15 rate=22050 channels=1 bits=16 frames=22050 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_s16le-22050-2.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=15 rate=22050 channels=2 bits=16 frames=22050 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_s16le-44100-1.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=15 rate=44100 channels=1 bits=16 frames=44100 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_s16le-44100-2.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=15 rate=44100 channels=2 bits=16 frames=44100 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=62500 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_u8-11025-1.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=15 rate=11025 channels=1 bits=8 frames=11025 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_u8-11025-2.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=15 rate=11025 channels=2 bits=8 frames=11025 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_u8-22050-1.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=15 rate=22050 channels=1 bits=8 frames=22050 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_u8-22050-2.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=15 rate=22050 channels=2 bits=8 frames=22050 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_u8-44100-1.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=15 rate=44100 channels=1 bits=8 frames=44100 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_u8-44100-2.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=15 rate=44100 channels=2 bits=8 frames=44100 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_alaw-8000-1.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=15 rate=8000 channels=1 bits=8 frames=8000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_alaw-8000-2.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "stereo flag set by the test",
+      "stats": "codec=15 rate=8000 channels=2 bits=8 frames=8000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_mulaw-8000-1.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=15 rate=8000 channels=1 bits=8 frames=8000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_mulaw-8000-2.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "stereo flag set by the test",
+      "stats": "codec=15 rate=8000 channels=2 bits=8 frames=8000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "adpcm_swf-11025-1.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=15 rate=11025 channels=1 bits=4 frames=12288 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "adpcm_swf-11025-2.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=15 rate=11025 channels=2 bits=4 frames=12288 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "adpcm_swf-22050-1.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=15 rate=22050 channels=1 bits=4 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "adpcm_swf-22050-2.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=15 rate=22050 channels=2 bits=4 frames=24576 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "adpcm_swf-44100-1.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=15 rate=44100 channels=1 bits=4 frames=45056 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "adpcm_swf-44100-2.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "",
+      "stats": "codec=15 rate=44100 channels=2 bits=4 frames=45056 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=62500 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_s16le-video.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "with video",
+      "stats": "codec=15 rate=22050 channels=2 bits=16 frames=44100 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "adpcm_swf-video.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "with video",
+      "stats": "codec=15 rate=22050 channels=2 bits=4 frames=45056 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "mp3.flv",
+      "result": "exact",
+      "comparator": "the raw mp3 stream",
+      "note": "",
+      "stats": "codec=3 rate=44100 channels=2 bits=0 frames=89856 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "mp3.flv against FFmpeg",
+      "result": "matched",
+      "snr_db": 128.4
+    },
+    {
+      "test": "mp3-vbr.flv",
+      "result": "exact",
+      "comparator": "the raw mp3 stream",
+      "note": "",
+      "stats": "codec=3 rate=44100 channels=2 bits=0 frames=89856 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "mp3-vbr.flv against FFmpeg",
+      "result": "matched",
+      "snr_db": 128.5
+    },
+    {
+      "test": "mp3-22050.flv",
+      "result": "exact",
+      "comparator": "the raw mp3 stream",
+      "note": "",
+      "stats": "codec=3 rate=22050 channels=2 bits=0 frames=45504 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "mp3-22050.flv against FFmpeg",
+      "result": "matched",
+      "snr_db": 129.3
+    },
+    {
+      "test": "aac.flv",
+      "result": "exact",
+      "comparator": "the raw adts stream",
+      "note": "",
+      "stats": "codec=10 rate=44100 channels=2 bits=0 frames=90112 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "aac.flv against FFmpeg",
+      "result": "matched",
+      "snr_db": 138.3
+    },
+    {
+      "test": "aac-mono.flv",
+      "result": "exact",
+      "comparator": "the raw adts stream",
+      "note": "",
+      "stats": "codec=10 rate=32000 channels=1 bits=0 frames=65536 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "aac-mono.flv against FFmpeg",
+      "result": "matched",
+      "snr_db": 138.5
+    },
+    {
+      "test": "swf-2bit-1.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "2-bit codes",
+      "stats": "codec=15 rate=11025 channels=1 bits=4 frames=37604 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=62500 endpoint_dry=0"
+    },
+    {
+      "test": "swf-2bit-2.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "2-bit codes",
+      "stats": "codec=15 rate=22050 channels=2 bits=4 frames=64173 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "swf-3bit-1.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "3-bit codes",
+      "stats": "codec=15 rate=22050 channels=1 bits=4 frames=67830 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "swf-3bit-2.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "3-bit codes",
+      "stats": "codec=15 rate=44100 channels=2 bits=4 frames=58915 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "swf-4bit-1.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "4-bit codes",
+      "stats": "codec=15 rate=44100 channels=1 bits=4 frames=51728 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "swf-4bit-2.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "4-bit codes",
+      "stats": "codec=15 rate=11025 channels=2 bits=4 frames=48462 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "swf-5bit-1.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "5-bit codes",
+      "stats": "codec=15 rate=11025 channels=1 bits=4 frames=54043 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "swf-5bit-2.flv",
+      "result": "exact",
+      "comparator": "FFmpeg",
+      "note": "5-bit codes",
+      "stats": "codec=15 rate=22050 channels=2 bits=4 frames=60706 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "mp3-8000.flv",
+      "result": "exact",
+      "comparator": "mp3-8000.mp3",
+      "note": "sound format 14, tags cutting frames",
+      "stats": "codec=3 rate=8000 channels=1 bits=0 frames=17280 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "skipped-tags.flv",
+      "result": "exact",
+      "comparator": "pcm_s16le-video.flv",
+      "note": "other sound formats, encryption, script data",
+      "stats": "codec=15 rate=22050 channels=2 bits=16 frames=44100 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "long-header.flv",
+      "result": "exact",
+      "comparator": "pcm_s16le-video.flv",
+      "note": "32-byte header",
+      "stats": "codec=15 rate=22050 channels=2 bits=16 frames=44100 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=31250 endpoint_dry=0"
+    },
+    {
+      "test": "aac-repeated-header.flv",
+      "result": "exact",
+      "comparator": "aac.adts",
+      "note": "a second sequence header",
+      "stats": "codec=10 rate=44100 channels=2 bits=0 frames=90112 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "pcm-truncated.flv",
+      "result": "exact",
+      "comparator": "the first 44282 frames of pcm_s16le-44100-2.flv",
+      "note": "cut inside the last tag",
+      "stats": "codec=15 rate=44100 channels=2 bits=16 frames=44100 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "aac-truncated.flv",
+      "result": "exact",
+      "comparator": "aac-shorter.adts",
+      "note": "the last frame cut",
+      "stats": "codec=10 rate=44100 channels=2 bits=0 frames=89088 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "pcm_s16le-video.flv seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":14,\"discarded_frames\":0,\"maximum_discarded\":0,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "pcm_u8-11025-1.flv seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":14,\"discarded_frames\":0,\"maximum_discarded\":0,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "pcm_alaw-8000-2.flv seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":14,\"discarded_frames\":0,\"maximum_discarded\":0,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "adpcm_swf-44100-2.flv seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":10,\"discarded_frames\":25853,\"maximum_discarded\":4096,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "swf-5bit-2.flv seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":7,\"discarded_frames\":36699,\"maximum_discarded\":4608,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "swf-2bit-1.flv seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":32761,\"maximum_discarded\":4096,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "mp3.flv seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":30333,\"maximum_discarded\":3455,\"maximum_probes\":0,\"index_points\":3,\"maximum_skimmed_headers\":12,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "mp3-vbr.flv seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":30333,\"maximum_discarded\":3455,\"maximum_probes\":0,\"index_points\":3,\"maximum_skimmed_headers\":12,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "aac.flv seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":7421,\"maximum_discarded\":1024,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "mp3-8000.flv seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":14781,\"maximum_discarded\":1727,\"maximum_probes\":0,\"index_points\":1,\"maximum_skimmed_headers\":28,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "flv-nellymoser.flv",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "flv-video-only.flv",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "flv-5512.flv",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "flv-encrypted.flv",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "flv-aac-no-header.flv",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":100}"
+    },
+    {
+      "test": "flv-short.flv",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":100}"
+    },
+    {
+      "test": "flv-small-offset.flv",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":100}"
+    },
+    {
+      "test": "flv-adpcm-oversized.flv",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":101}"
+    },
+    {
+      "test": "cancel-open swf-4bit-2.flv",
+      "result": "{\"result\":\"cancelled\"}"
+    }
+  ],
+  "rejections": 8,
+  "scope": "FLV audio (PCM, G.711, Flash ADPCM, MP3, AAC) from FFmpeg's muxer and written (Flash ADPCM at every code size, MP3 at 8 kHz, skipped tags, truncation) against FFmpeg or equivalent files; seeks; malformed and unsupported files; cancellation.",
+  "binary_sha256": "a693c41f0cfd23bf98ca4883ec1b2c9e21de333486d69c56c4a4c7c5b23cce97",
+  "sources": {
+    "src/decoder.s": "7b68210e4a3338a9b59c90fd39b1c6578baa63c71af6e1daeccee500fee41a26",
+    "src/flv.s": "5d43acb0f601ac9e0a6fe32c07d98555edc72ce8120f4ae1e95e6b7ab5e292b2",
+    "src/track.s": "d6f510b9e45572cf5c126a888440aa1ff87797cebf2cfcedcce7c2ebdb8e6ccc",
+    "src/track_time.s": "a57a520d3ee446ed55e25d0796e933068704cea1cace18052593286e8b67fade",
+    "src/aac.s": "44191d88ad88e0a782d0da9ea67ce1b83d644be0d0170e41412e653087fc03b8",
+    "tests/verify-flv.py": "5077c5d35778c28c67b2512ffbb74d0ee1e881ba26d1b0e0a17508575bce3d17",
+    "tests/chain-oracle.c": "770757565631753a57a6a8352cbac5ffecd33bb380eec247f23874277f7a00f7",
+    "tests/seek-oracle.c": "a03fd2777080de19f95aee235f83d0c02a067e4ab676601424e77ccac9377605"
+  }
+}

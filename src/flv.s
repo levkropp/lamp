@@ -41,6 +41,7 @@ flv_started: .long 0
 flv_config: .quad 0                 # AAC AudioSpecificConfig
 flv_config_bytes: .long 0
 flv_largest: .long 0                # largest Flash ADPCM packet
+flv_timestamp: .long 0              # complete signed millisecond tag clock
 .p2align 2
 flv_fmt: .zero 16                   # WAVE format: the image's or the ADPCM track's
 
@@ -140,7 +141,7 @@ LOCALFN flv_start
     mov dword ptr [rip + flv_mode], FLV_AAC
     mov ecx, TK_AAC
     call track_begin
-    jmp .Lflv_start_return
+    jmp .Lflv_start_timed
 .Lflv_start_adpcm:
     mov word ptr [r8], ADPCM_SWF
     mov word ptr [r8 + 14], 4
@@ -149,11 +150,17 @@ LOCALFN flv_start
     mov dword ptr [rip + flv_mode], FLV_ADPCM
     mov ecx, TK_ADPCM
     call track_begin
-    jmp .Lflv_start_return
+    jmp .Lflv_start_timed
 .Lflv_start_speex:
     mov dword ptr [rip + flv_mode], FLV_SPEEX
     mov ecx, TK_SPEEX
     call track_begin
+    jmp .Lflv_start_timed
+.Lflv_start_timed:
+    test eax, eax
+    jz .Lflv_start_return
+    mov dword ptr [rip + track_time_enabled], 1
+    mov qword ptr [rip + track_time_scale_ns], 1000000
     jmp .Lflv_start_return
 .Lflv_start_unsupported:
     mov dword ptr [rip + decode_error], FLV_UNSUPPORTED
@@ -163,6 +170,22 @@ LOCALFN flv_start
     pop rbx
     ret
 ENDFN flv_start
+
+# RCX=payload, EDX=bytes ->1/0. Only accepted complete audio packets own
+# timestamps; sequence headers and skipped/encrypted tags do not anchor PCM.
+LOCALFN flv_add_packet
+    sub rsp, 40
+    call track_add
+    test eax, eax
+    jz .Lflv_add_return
+    mov rcx, [rip + track_count]
+    dec rcx
+    mov edx, [rip + flv_timestamp]
+    call track_time_mark_signed
+.Lflv_add_return:
+    add rsp, 40
+    ret
+ENDFN flv_add_packet
 
 # RCX=audio tag data, RDX=bytes (at least 1), R8D=1 when the file ends
 # inside it -> EAX=1, 0 on failure.
@@ -230,7 +253,7 @@ LOCALFN flv_audio
     jnz .Lflv_audio_return                # a truncated frame
     lea rcx, [rsi + 2]
     lea edx, [rdi - 2]
-    call track_add
+    call flv_add_packet
     jmp .Lflv_audio_return
 .Lflv_audio_adpcm:
     test edx, edx
@@ -251,7 +274,7 @@ LOCALFN flv_audio
     mov [rip + flv_largest], edx
 .Lflv_audio_packet:
     lea rcx, [rsi + 1]
-    call track_add
+    call flv_add_packet
     jmp .Lflv_audio_return
 .Lflv_audio_speex:
     test ebx, ebx
@@ -328,6 +351,10 @@ FN flv_open
     jz .Lflv_open_next
     lea rcx, [r12 + 11]
     mov rdx, rbx
+    mov eax, [r12 + 4]
+    bswap eax
+    ror eax, 8                           # upper eight bits are TimestampExtended
+    mov [rip + flv_timestamp], eax
     mov [rsp + 32], r8d
     call flv_audio
     test eax, eax
