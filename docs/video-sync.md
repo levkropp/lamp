@@ -8,6 +8,12 @@ present images, or connect to the audio engine yet. The separate Windows
 connected to that window or the real audio clock; end-to-end A/V and accurate
 video seeking remain unfinished.
 
+The [Windows engine snapshot](audio-clock.md) now publishes coherent consumed
+audio position, rate, state and generation. It remains a separate component;
+the future controller must map session frames to the media timeline, handle
+terminal states and coordinate audio/video generations. Shared endpoint-queue
+consumption does not measure physical speaker latency.
+
 ## Contract
 
 `src/video_sync.s` exports Microsoft x64 ABI functions on Windows and Linux.

@@ -3,6 +3,7 @@
 # before write_count; consumer publishes read_count after copying. Only the
 # producer accesses the file/decoder. Render path has no locks or allocations.
 .include "lamp.inc"
+.include "audio_clock.inc"
 .globl engine_mode, engine_stop_requested
 .globl engine_position, engine_seek_seconds, engine_volume, pause_requested
 .globl engine_ready, engine_opened, engine_play_list, engine_command, engine_heard_index, engine_heard_ms
@@ -224,6 +225,7 @@ endpoint_dry: .quad 0
 producer_done: .long 0
 pause_requested: .long 0
 was_paused: .long 0
+audio_started: .long 0
 audio_hresult: .long 0
 enum_obj: .quad 0
 device_obj: .quad 0
@@ -292,6 +294,8 @@ exclusive_map: .zero 64*24           # bounded device-start, PCM-start, real-fra
 bytes_written: .zero 4
 input_record: .zero 20
 number_buffer: .zero 32
+.p2align 6
+engine_clock_context: .zero AC_BYTES
 
 .text
 # Called on a dedicated rendering thread by the native UI: RCX=path, played
@@ -826,6 +830,11 @@ FN start
     mov dword ptr [rip + exit_code], 2
     jmp .Lreport_finish
 start_playback:
+    mov dword ptr [rip+audio_started], 0
+    mov dword ptr [rip+padding], 0
+    call pc_begin
+    test eax, eax
+    js .Lbad_audio
     xor eax, eax
     mov [rip + exclusive_submitted], rax
     mov [rip + exclusive_tail], rax
@@ -1020,7 +1029,14 @@ start_playback:
 .Lprebuffer_ready:
     mov dword ptr [rip + engine_ready], 1
     cmp qword ptr [rip + write_count], 0
-    je .Lplayback_stopped
+    jne .Lprebuffer_media_ready
+    cmp dword ptr [rip+engine_stop_requested], 0
+    jne .Lplayback_stopped
+    call pc_ended
+    test eax, eax
+    js .Lbad_audio
+    jmp .Lplayback_stopped
+.Lprebuffer_media_ready:
     lea rcx, [rip + audio_task]
     lea rdx, [rip + task_index]
     call AvSetMmThreadCharacteristicsW
@@ -1075,6 +1091,9 @@ start_playback:
     je .Linitial_audio_start
     # A seek while paused must never start the new endpoint before resume.
     mov dword ptr [rip + was_paused], 1
+    lea rcx, [rip+engine_clock_context]
+    mov edx, AC_PAUSED
+    call audio_clock_status
     jmp .Lpause_wait
 .Linitial_audio_start:
     call output_notifications_take
@@ -1083,6 +1102,9 @@ start_playback:
     mov rcx, [rip + client_obj]
     mov rax, [rcx]
     call qword ptr [rax + 80]
+    test eax, eax
+    js .Lbad_audio
+    call pc_started
     test eax, eax
     js .Lbad_audio
 .Laudio_wait:
@@ -1115,9 +1137,7 @@ start_playback:
     test eax, eax
     js .Lbad_audio
     mov dword ptr [rip + was_paused], 1
-    cmp dword ptr [rip + engine_exclusive], 0
-    je .Lpause_wait
-    call exclusive_update_position
+    call pc_pause_position
     test eax, eax
     js .Lbad_audio
 .Lpause_wait:
@@ -1143,6 +1163,9 @@ start_playback:
     call qword ptr [rax + 80]
     test eax, eax
     js .Lbad_audio
+    call pc_started
+    test eax, eax
+    js .Lbad_audio
     mov dword ptr [rip + was_paused], 0
     cmp dword ptr [rip + engine_exclusive], 0
     jne .Laudio_wait                    # wait for a device wake after Start
@@ -1165,6 +1188,9 @@ start_playback:
     je .Laudio_drained
     jmp .Laudio_wait
 .Laudio_drained:
+    call pc_ended
+    test eax, eax
+    js .Lbad_audio
     # Repeat turned on after the producer read the last file: play the list
     # again from its first file (when this run played anything).
     cmp dword ptr [rip + engine_mode], 0
@@ -1279,6 +1305,9 @@ start_playback:
     jz .Lstopped_no_client
     mov rax, [rcx]
     call qword ptr [rax + 88]
+    test eax, eax
+    js .Lstopped_no_client
+    call pc_pause_position
 .Lstopped_no_client:
     mov rcx, [rip + producer_thread]
     test rcx, rcx
@@ -1292,6 +1321,12 @@ start_playback:
     mov edx, -1
     call WaitForSingleObject
 .Ljoined_keyboard:
+    # An automatic endpoint restart follows the final stopped cursor. A user's
+    # pending command already owns its paired file/time and must keep that pair.
+    cmp dword ptr [rip+engine_command], 5
+    jne .Lstopped_heard_ready
+    call console_note_heard
+.Lstopped_heard_ready:
     mov rcx, [rip + mmcss]
     test rcx, rcx
     jz .Lno_mmcss
@@ -1308,6 +1343,7 @@ start_playback:
     test eax, eax
     jnz start_playback
 .Lstopped_report:
+    call pc_stopped
     cmp dword ptr [rip + engine_mode], 0
     jne .Lstopped_decode
     cmp dword ptr [rip + cli_resume], 0
@@ -1512,14 +1548,10 @@ LOCALFN fill_render
     je .Lfill_padding_ok
     inc qword ptr [rip + endpoint_dry] # endpoint emptied before this refill
 .Lfill_padding_ok:
-    mov rax, [rip + read_count]
-    mov edx, [rip + padding]
-    cmp rax, rdx
-    jb .Lfill_position_done
-    sub rax, rdx
-    add rax, [rip + engine_seek_frames]
-    mov [rip + engine_position], rax
-.Lfill_position_done:
+    xor r8d, r8d
+    call pc_shared_position
+    test eax, eax
+    js .Lfill_bad
     mov eax, [rip + buffer_frames]
     sub eax, [rip + padding]
     jz .Lfill_done
@@ -1540,19 +1572,25 @@ LOCALFN fill_render
 .Lfill_size:
     mov [rip + render_frames], eax
     mov r12d, eax
+    mov r8, [rip+write_count]
+    sub r8, rbx
+    cmp r8, r12
+    cmova r8, r12
+    mov [rsp+32], r8
+    lea rcx, [rip+engine_clock_context]
+    mov rdx, r12
+    call audio_clock_can_submit
+    test eax, eax
+    jz .Lfill_clock_bad
     mov rcx, [rip + render_obj]
-    mov edx, eax
+    mov edx, [rip+render_frames]
     lea r8, [rip + render_buffer]
     mov rax, [rcx]
     call qword ptr [rax + 24]
     test eax, eax
     js .Lfill_bad
     mov rdi, [rip + render_buffer]
-    mov rdx, [rip + write_count]
-    sub rdx, rbx
-    cmp rdx, r12
-    jbe .Lfill_have
-    mov rdx, r12
+    mov rdx, [rsp+32]
 .Lfill_have:
     mov [rsp + 32], rdx
     mov r8, rdx
@@ -1607,6 +1645,15 @@ LOCALFN fill_render
     call qword ptr [rax + 32]
     test eax, eax
     js .Lfill_bad
+    lea rcx, [rip+engine_clock_context]
+    mov edx, [rip+render_frames]
+    mov r8, [rsp+32]
+    call audio_clock_submit
+    test eax, eax
+    jz .Lfill_clock_bad
+    call pc_shared_refresh
+    test eax, eax
+    js .Lfill_bad
     mov rax, [rsp + 32]
     add [rip + read_count], rax      # publish consumed PCM after copy and ReleaseBuffer
     mov rax, [rip + write_count]     # wake the producer only once it can refill
@@ -1616,6 +1663,8 @@ LOCALFN fill_render
     mov rcx, [rip + space_event]
     call SetEvent
     jmp .Lfill_done
+.Lfill_clock_bad:
+    mov eax, 0x8000ffff
 .Lfill_bad:
     mov [rip + audio_hresult], eax
 .Lfill_done:
@@ -1691,7 +1740,16 @@ LOCALFN exclusive_update_position
     add rax, [rdx+8]
     add rax, [rip + engine_seek_frames]
     mov [rip + engine_position], rax
+    xor r8d, r8d
+    jmp .Lex_update_publish
 .Lex_update_ok:
+    mov r8d, AC_STARVED
+.Lex_update_publish:
+    lea rcx, [rip+engine_clock_context]
+    mov rdx, [rip+engine_position]
+    call audio_clock_publish
+    test eax, eax
+    jz .Lex_update_bad
     xor eax, eax
     jmp .Lex_update_done
 .Lex_update_bad:
@@ -1701,6 +1759,8 @@ LOCALFN exclusive_update_position
     pop rbx
     ret
 ENDFN exclusive_update_position
+
+.include "player_clock.inc"
 
 LOCALFN exclusive_fill_render
     push rbx
@@ -1782,6 +1842,9 @@ LOCALFN exclusive_fill_render
     add [rip + exclusive_submitted], rax
     add rbx, r12
     mov [rip + read_count], rbx           # publish only after successful ReleaseBuffer
+    call pc_exclusive_refresh
+    test eax, eax
+    js .Lex_fill_error
     mov rax, [rip + write_count]
     sub rax, rbx
     cmp rax, REFILL_FRAMES

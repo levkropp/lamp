@@ -1,0 +1,22 @@
+{
+  "result": "passed",
+  "scope": "Shared audio clock translation/assembly and six explicit ordering barriers only; native Mac execution and concurrent-reader semantics unverified.",
+  "barriers": 6,
+  "sources": {
+    "src/audio_clock.s": "f1f5c6b2045ee736f2111800a72735909c7e678f629d2db541ed6cdcc4fabbd0",
+    "src/audio_clock.inc": "bc7c9df4ee2f6bd7c38d3869aab36fe617dfeef29e3f68924835b37584b7dbcf",
+    "src/lamp.inc": "d79c75543ab0d78863010b32e46faf23fda5b9cb54ec624e9dce0acfcabf03e6",
+    "tools/arm64.py": "f8abd01ad67063451181e0adc66e72b2a445ebe9a7b159f7b88ac52b79bdadc2",
+    "tools/arm64_lamp.py": "91c0ea5a5a117506d29b66e8b1c9075ab15f9a9dc57f096b58ef28c14436cc97"
+  },
+  "translated_sha256": "30ae9a3cc7ad5bab28ccdb937293b3e3afb27b3209f330b6cbd94e6340b50970",
+  "object_sha256": "5c3de0c90b5aac5a77b5e7b445da94ae4a4880902271d62180479face0adcf94",
+  "object_bytes": 3368,
+  "git_source_sha256": {
+    "src/audio_clock.s": "f1f5c6b2045ee736f2111800a72735909c7e678f629d2db541ed6cdcc4fabbd0",
+    "src/audio_clock.inc": "bc7c9df4ee2f6bd7c38d3869aab36fe617dfeef29e3f68924835b37584b7dbcf",
+    "src/lamp.inc": "d79c75543ab0d78863010b32e46faf23fda5b9cb54ec624e9dce0acfcabf03e6",
+    "tools/arm64.py": "f8abd01ad67063451181e0adc66e72b2a445ebe9a7b159f7b88ac52b79bdadc2",
+    "tools/arm64_lamp.py": "91c0ea5a5a117506d29b66e8b1c9075ab15f9a9dc57f096b58ef28c14436cc97"
+  }
+}

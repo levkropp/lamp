@@ -1,0 +1,37 @@
+{
+  "result": "passed",
+  "scope": "Isolated published previous/current shared render objects, CPU-only fake clients; never opens an audio endpoint.",
+  "baseline": "ba8f3fd335c4f9fa83059b2c4769646d4fd76b7c",
+  "comparisons": [
+    {
+      "name": "previous",
+      "exit": 2,
+      "stdout": "",
+      "stderr": "padding counterexample: heard0 expected20",
+      "binary_sha256": "5f6cf08598bcd7328560e5db398834cba8ec4067211863b2b42a577d9290a420"
+    },
+    {
+      "name": "current",
+      "exit": 0,
+      "stdout": "{\"result\":\"passed\",\"heard_frames\":20,\"remaining_padding\":80}",
+      "stderr": "",
+      "binary_sha256": "5bfb28f1fd3a3d0eee0bc1c79a2da9b4de8c02e5daee0deb43a908eda2f3c6c9"
+    }
+  ],
+  "sources": {
+    "tests/player-padding-oracle.c": "ac28fb115b221f7be0cf60bf80f5466fa56d763464151a94068ee5cfac07e861",
+    "tests/verify-player-padding.py": "6f09f2a0d8610e418819e5764b15672d0809c63ff87506f86b13e97d1e559fd6"
+  },
+  "artifacts": {
+    "player-padding/previous-player.s": "a4ea0b0ee3830814dfca1e773cb10d50c1568672dc93301188d43fa766c616ea",
+    "player-padding/previous-probe.s": "eb631eb4ac5e3185da4d6f0efe7385166f4d8965267ae5233bb5a677312487d1",
+    "player-padding/previous-player.obj": "99cc13764a1eefe8c46cccda5ac1264709eb13351331be9f72d1afd63b8cfdf6",
+    "player-clock/player-clock-probe.obj": "32d970ffc2d600d5cc7aa4309a14932f0ea1fe6a48c83e2040618e76dceb617f",
+    "player-padding/previous.exe": "5f6cf08598bcd7328560e5db398834cba8ec4067211863b2b42a577d9290a420",
+    "player-padding/current.exe": "5bfb28f1fd3a3d0eee0bc1c79a2da9b4de8c02e5daee0deb43a908eda2f3c6c9"
+  },
+  "git_source_sha256": {
+    "tests/player-padding-oracle.c": "ac28fb115b221f7be0cf60bf80f5466fa56d763464151a94068ee5cfac07e861",
+    "tests/verify-player-padding.py": "6f09f2a0d8610e418819e5764b15672d0809c63ff87506f86b13e97d1e559fd6"
+  }
+}

@@ -238,6 +238,9 @@ class Translator(a.Translator):
     def i_pause(self, st, ops, need, k):
         self.emit('yield')
 
+    def i_mfence(self, st, ops, need, k):
+        self.emit('dmb ish')
+
     def i_rep_movsq(self, st, ops, need, k):
         self.emit('lsl x3, x3, #3')
         self.emit('bl x_rep_movsb')

@@ -1,0 +1,26 @@
+{
+  "result": "passed",
+  "checks": 10380206,
+  "model_operations": 150000,
+  "reader_snapshots": 202,
+  "reader_retries": 12140,
+  "fingerprint": "e632bf0e7d29bebf",
+  "platform": "linux",
+  "scope": "Submitted-frame map and explicit already-mapped clock publication; CPU-only, no audio/GPU endpoint",
+  "sources": {
+    "src/audio_clock.s": "f1f5c6b2045ee736f2111800a72735909c7e678f629d2db541ed6cdcc4fabbd0",
+    "src/audio_clock.inc": "bc7c9df4ee2f6bd7c38d3869aab36fe617dfeef29e3f68924835b37584b7dbcf",
+    "tests/audio-clock-oracle.c": "21d26e9cbfcfa9d1df4d5a8a45cc7474b0c4388856ae94fe0363c8915ceb103d",
+    "tests/verify-audio-clock.py": "8f829216f78dbe6fdab00e326b56286851a148b75be4b52f23bd85fe4d4e3263"
+  },
+  "artifacts": {
+    "audio-clock-oracle": "393660dd3b368241a303f8bca3ce9b82098c1a5c12670dcaead2e5bfda1ff5d9",
+    "obj/audio_clock.o": "1a361274ee8a01f3345cc3d75efcb9b6c8a8c96ce1366216d89aa98af4bf1fb6"
+  },
+  "git_source_sha256": {
+    "src/audio_clock.s": "f1f5c6b2045ee736f2111800a72735909c7e678f629d2db541ed6cdcc4fabbd0",
+    "src/audio_clock.inc": "bc7c9df4ee2f6bd7c38d3869aab36fe617dfeef29e3f68924835b37584b7dbcf",
+    "tests/audio-clock-oracle.c": "21d26e9cbfcfa9d1df4d5a8a45cc7474b0c4388856ae94fe0363c8915ceb103d",
+    "tests/verify-audio-clock.py": "8f829216f78dbe6fdab00e326b56286851a148b75be4b52f23bd85fe4d4e3263"
+  }
+}
