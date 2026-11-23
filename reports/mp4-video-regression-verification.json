@@ -1,0 +1,951 @@
+{
+  "windows": {
+    "result": "passed",
+    "scope": "All prior runtime objects byte-identical; linked CLI audio decode-only comparisons against the published packet-frontend build. No audio endpoint opened.",
+    "unchanged_objects": [
+      {
+        "name": "aac.obj",
+        "sha256": "1b7ed6dadca5c426deacbc692e5d34756506a97ac80cb50328dac4620df5b4f0"
+      },
+      {
+        "name": "ac3.obj",
+        "sha256": "52cdbe03da398650d15a109d563dcbae686089c8c7e8d58afb78c8f2f9fc9ec7"
+      },
+      {
+        "name": "accessibility.obj",
+        "sha256": "ae36f494c0f9cb58aec9c82487d3d23eae5757456d137156748e8ad54bdcd37d"
+      },
+      {
+        "name": "adpcm.obj",
+        "sha256": "ab05017a4977083e234ca8b729832b42cc491889b4c1f59c988647a0c5b3be6b"
+      },
+      {
+        "name": "alac.obj",
+        "sha256": "6ab4591aff5a38c5a5ee1d97e3fccfc822722cb41ff04a7b7d6f2540dad09d1f"
+      },
+      {
+        "name": "ape.obj",
+        "sha256": "87759e2f9c2b0e1637a37c1dc11ad313e69f709db150f518328c5fb99f372538"
+      },
+      {
+        "name": "asf.obj",
+        "sha256": "c201c3c921f03a0b5a7408a8dcb8b21c6b4555f8d6cfc411c851d4cd98d97f43"
+      },
+      {
+        "name": "avi.obj",
+        "sha256": "84acf23ed3474b82d71736284c2f4c08b141e04fc9fce8163df73664f1113a8c"
+      },
+      {
+        "name": "avrt.lib",
+        "sha256": "e12829c50f62c6e5e7b5087b4cbcd4aa05cbc2f080c99a818f34b3b44715bcf5"
+      },
+      {
+        "name": "comctl32.lib",
+        "sha256": "ad9cea6a7fe0631877cad5f3a4532c1ec2ebb49ecfb64b4d7b996d370d1bbbbb"
+      },
+      {
+        "name": "comdlg32.lib",
+        "sha256": "5aec52637f64c4e0e387933e0834790673ec76bba93ce9b7fb34d2ff9a9d17e2"
+      },
+      {
+        "name": "d3d11.lib",
+        "sha256": "d72695c5fc6ee05c5460a62345c4670809b2d1fbf78d3ddbfe4de07d23869d1a"
+      },
+      {
+        "name": "decoder.obj",
+        "sha256": "338106e9bac9bf471ef18b8754f629d032e4818d1e1bae991eae767a109c1ca4"
+      },
+      {
+        "name": "engine-probe.obj",
+        "sha256": "d23343353b7df152e22410c655701c9677a8955d6ecbc709be5326df026c0aa7"
+      },
+      {
+        "name": "flv.obj",
+        "sha256": "67cfb504c298a5283f5530dc9332147f8d2f48f92f776e9fe9c22c75a40c319f"
+      },
+      {
+        "name": "g72x.obj",
+        "sha256": "42580cea5a73df21a17bba8f64d1ccf0850b5c131b9358c5c5de0187679cc822"
+      },
+      {
+        "name": "gdi32.lib",
+        "sha256": "ce724d724ba1654c9d06640c561d68d0fddf171d9e932e29adef36265567e341"
+      },
+      {
+        "name": "gsm.obj",
+        "sha256": "1d874967aef9564c49369ef555e1a5f6af772e5eb42be9d2b523f20c150582c8"
+      },
+      {
+        "name": "h264.obj",
+        "sha256": "7d44acfb78e0661ee23066a3164ff828d7c165f1e5b029d2218e3c80135f0838"
+      },
+      {
+        "name": "kernel32.lib",
+        "sha256": "7c07c919f02fba74d2fb359d5151d6266c10221f784cc85852294d3c1512141c"
+      },
+      {
+        "name": "lamp-cli.rc",
+        "sha256": "3b250d85f7054f12cf1eeea1fa6e49e0b01f58ab887241e233b9461c930f64fe"
+      },
+      {
+        "name": "lamp-cli.res",
+        "sha256": "0ec7641a960785778c10cc5dd37bb196aa425a0e2de79d5214258d5b4e6ef21c"
+      },
+      {
+        "name": "lamp.rc",
+        "sha256": "d9190272c961ae45f537696f7e76a8be5c28cabd37f2964dd8d2c5162f2a5a55"
+      },
+      {
+        "name": "lamp.res",
+        "sha256": "6e02c61f724bd2901af5d7cdb37f632bef9fc9e28aa7e66bae10c8d489fdd819"
+      },
+      {
+        "name": "latm.obj",
+        "sha256": "c1d189f73d1551247c83e57e8e939571bd3da5a3e6237374d305153cc1d0d830"
+      },
+      {
+        "name": "lpcm.obj",
+        "sha256": "2eef467abf41cf40df3515b943b3513e37a5433033ce5eb654312b2a96b449ea"
+      },
+      {
+        "name": "mkv.obj",
+        "sha256": "8613e1af0f77675e74b08c631ef5892acddfe0f575efa0b9022bc9ee7ec1fbc8"
+      },
+      {
+        "name": "mp2.obj",
+        "sha256": "cd8114d1793bbf6cd4afff39ae08683cabaa407b3473ed455d045e67dcf92a6c"
+      },
+      {
+        "name": "mp3.obj",
+        "sha256": "a37d1e475b58e8dc69cd7059e02c266e2c4cad3e55779887b11da30e92cc4e1a"
+      },
+      {
+        "name": "mp3_synthesis.obj",
+        "sha256": "5714c299b54d8be0aea1db127e45a630f057f48b7d0bc82df2ef4d247b2307a9"
+      },
+      {
+        "name": "mp4.obj",
+        "sha256": "9f681eda1e39b040801cebf35e9e046d28ea913972bf070d528baa162af83dd3"
+      },
+      {
+        "name": "mpegts.obj",
+        "sha256": "6ebcaccebc3b773456f3c7cc3225b29495f59bc3c0c81691b3dcd929b6802db5"
+      },
+      {
+        "name": "ogg.obj",
+        "sha256": "694a4bb9b5926ec8cabe95b65e226e0583535bebf417fd9fe554cb06476e04c3"
+      },
+      {
+        "name": "ogg_chain.obj",
+        "sha256": "a50011d8ec5e8df7e348ffc17390cb4ca74ef05c8970b1a820580fb2f0551b41"
+      },
+      {
+        "name": "ole32.lib",
+        "sha256": "0e7d593efba1246aebe77ed1977a18fbc75651061fc5714497af27f4d630946d"
+      },
+      {
+        "name": "oleacc.lib",
+        "sha256": "beccb02afc43a3337f2c98b49cf20f60d70acf31787b8cc96af689bc0e2dc07d"
+      },
+      {
+        "name": "oleaut32.lib",
+        "sha256": "f336991661bf62208a9c903763097dc27c522c29354798663c307813d9fc589e"
+      },
+      {
+        "name": "opus.obj",
+        "sha256": "536b0b8dbfdc841f143b7b3e2a7a87fd68cbc497e20cf88cd0967598dc378760"
+      },
+      {
+        "name": "opus_allocation.obj",
+        "sha256": "fe2b612863ed8d082100e4d45c35320f7ef170cba12cfb0dd102713615d3a927"
+      },
+      {
+        "name": "opus_band.obj",
+        "sha256": "b944b4ee2196ea5af5e136313e51956ebbb830729f4ee2e582699dcfa31d4794"
+      },
+      {
+        "name": "opus_band_transform.obj",
+        "sha256": "dcf35f97daaac041d072971343ba89889f93a4eb3a5b27dc40c1faafcf48c457"
+      },
+      {
+        "name": "opus_bands.obj",
+        "sha256": "38c3a8128dac3abcf44387d7a5220832be4d0504c1b037599ed8de8f6e4364eb"
+      },
+      {
+        "name": "opus_controls.obj",
+        "sha256": "8292c5bc577af9e614fe4cfebec5dbb6eaf1d8cd9922f1162db0c227c88b8bce"
+      },
+      {
+        "name": "opus_cwrs.obj",
+        "sha256": "265956cf1897f2f56c9e27483500198595bca223f3b96f037518377e3a9e1025"
+      },
+      {
+        "name": "opus_decoder.obj",
+        "sha256": "1b9f5542f39898b341c1a3d9650ffa6e073ca9ba3316d8f841a7c579f6d40535"
+      },
+      {
+        "name": "opus_energy.obj",
+        "sha256": "ce9c97b9e81db9acdbca66583adc9edffd4028162ace5b6deb74c35429266cc0"
+      },
+      {
+        "name": "opus_fft.obj",
+        "sha256": "8ac0fdbdf9c75449cbc395b5d6ad59d3ab8f1ee20c2eb7dac1e8db96f7201080"
+      },
+      {
+        "name": "opus_filter.obj",
+        "sha256": "b30dad483ac765f2f302a171aa636aa760fffb34f40809ac4550ebd98d4bfe83"
+      },
+      {
+        "name": "opus_lpc.obj",
+        "sha256": "9abdd19fb2dfe5cbd5c0d0e11d1adf774a19a8bfb75e1543ecb2ca1a4dcd0469"
+      },
+      {
+        "name": "opus_mdct.obj",
+        "sha256": "c9962298d648a28ede8a0db6f532a2078dd6637181b386d7bcfb6a80ac81685d"
+      },
+      {
+        "name": "opus_mode.obj",
+        "sha256": "09a98d3cfde5718e6d97af40fb79dcd5374e591cf3023ba538fdf5fa3455dbea"
+      },
+      {
+        "name": "opus_packet.obj",
+        "sha256": "3518faf1598caa7feb3cb99ddbc43072dd1d4b80f6a53334fd87d89211035637"
+      },
+      {
+        "name": "opus_pitch.obj",
+        "sha256": "9e1e507423aaea8d338706e0e9d0b40dc7d6b1717eb434da681cc62e281776b6"
+      },
+      {
+        "name": "opus_plc.obj",
+        "sha256": "b4fb75bc18994a80337ec8a374a4ccd37e8fd27ca24649a416b6eef211f3e046"
+      },
+      {
+        "name": "opus_range.obj",
+        "sha256": "0b23595a627cc864e2484f81a64e5f0927cf89e4c33f6420bbf9911ce622bd00"
+      },
+      {
+        "name": "opus_silk_cng.obj",
+        "sha256": "f635f3993989f2981f6dbc55fddb5401a0b4ee053fe607f3eef901bee47a7132"
+      },
+      {
+        "name": "opus_silk_decoder.obj",
+        "sha256": "912b27d33648c662d606f6bc14d8c774296ae73413a249e83dc7df73a19f6c45"
+      },
+      {
+        "name": "opus_silk_frame.obj",
+        "sha256": "250d10e9c42107e056645139e0497353018377459342b712e6c80f0d3ce6ba51"
+      },
+      {
+        "name": "opus_silk_indices.obj",
+        "sha256": "8de34dc2d2bfe1ac864a54346c6e01fc13a24d1b72b8b905d383ba1783b94213"
+      },
+      {
+        "name": "opus_silk_lpc.obj",
+        "sha256": "1661822c29a5e3f479ab28142f369a86e19fadb993eaa6982682952b565cdc9d"
+      },
+      {
+        "name": "opus_silk_nlsf.obj",
+        "sha256": "7e1467f487416ef17f9eca55177fcf248344e573bd8d73d869779e3765ed077f"
+      },
+      {
+        "name": "opus_silk_packet.obj",
+        "sha256": "72312650ffe73ad1fc2297f08aa3f316829cfebd0ba099885b81ca685f130c27"
+      },
+      {
+        "name": "opus_silk_parameters.obj",
+        "sha256": "a5251c4e1b3fbce3d34fc8d9a0e043be339826bc3e47e8848259c6d1e90b50a6"
+      },
+      {
+        "name": "opus_silk_plc.obj",
+        "sha256": "cde2d280d0af0791154b4709fcbdf85aa7fe1658dab28fe5919df0e7c4cf6a3b"
+      },
+      {
+        "name": "opus_silk_prediction.obj",
+        "sha256": "f6a084fc8e3fe2a49fbff5591a3920b0bc8eeeb2e2592e5c9b9f6f6634ec6bfc"
+      },
+      {
+        "name": "opus_silk_pulses.obj",
+        "sha256": "7b7a3ab950c6ef5e123a3ef568eb86a9bd103d758a7eba1d89c2007a07d523cc"
+      },
+      {
+        "name": "opus_silk_resampler.obj",
+        "sha256": "88c46ccb64f485ab59d12503ec1422de3ba0dd5404dc7dafbffb42f158fc6af7"
+      },
+      {
+        "name": "opus_silk_state.obj",
+        "sha256": "fca463bc93e7e1688e620968815afb4271e932c595a1b7782163ebc8beeaa420"
+      },
+      {
+        "name": "opus_silk_stereo.obj",
+        "sha256": "ebd0ca765a688818c4a45fdb594b0104918ce5dc5be394a83298e724d14663cc"
+      },
+      {
+        "name": "opus_silk_synthesis.obj",
+        "sha256": "f8322e313dc31c129b93814177ec674ee0840540e707613973ffafad9b7b8d47"
+      },
+      {
+        "name": "opus_spectral.obj",
+        "sha256": "df225d4e7c4ddb8272aa2cb554c01e0c0f9370fbe78bbd4ca768b08c28dc8e34"
+      },
+      {
+        "name": "opus_stream.obj",
+        "sha256": "7cd663ec25e35b62d70492c22028adbd46cc432d731c82b472a48b4ef09c3da7"
+      },
+      {
+        "name": "opus_theta.obj",
+        "sha256": "6e96b0db746a318ce51d5460943c390c06a297f6691f353b09e67bd49d043613"
+      },
+      {
+        "name": "opus_vq.obj",
+        "sha256": "b9919e3f97021a95eb6b165ece2a663c0b478f856f33cec69827999f638a71d2"
+      },
+      {
+        "name": "output_exclusive.obj",
+        "sha256": "d2aa4a88e8d64cd6ef537d65055db6dbd19449329633d2fda68c0778b1e11516"
+      },
+      {
+        "name": "output_format.obj",
+        "sha256": "957567ec80045b61084c7cf4a29948f0d526702987dcbe1ebfc24e8dde4d5c8a"
+      },
+      {
+        "name": "output_notifications.obj",
+        "sha256": "7e7766746502fa750d16539f5f3af262b8324f6ccd206b3e727fb5652cec3440"
+      },
+      {
+        "name": "platform.obj",
+        "sha256": "22ec4d40ecb059a5f86ec71aac0d1da485f7526ae89c3e712926b6fdcd7474d7"
+      },
+      {
+        "name": "player.obj",
+        "sha256": "10456127b626891a8911d711aa5188f5a81af6743fa801f46425a72ae561eced"
+      },
+      {
+        "name": "playlist.obj",
+        "sha256": "fb31ec44bedbc87e463458724f63d46e747ac28eb93d2a0dac8cb7e3b6415027"
+      },
+      {
+        "name": "queue.obj",
+        "sha256": "2472337c4fef39da4261b3fa12294dd37de8014097185e67103bdd64524dbecf"
+      },
+      {
+        "name": "resample.obj",
+        "sha256": "ad3b99638a930c597c682dce71b7fd734c7afaacdcacb4f362e3e4396e66888d"
+      },
+      {
+        "name": "resume.obj",
+        "sha256": "a717ee49404dc72e3e2adc44a37f2dc6de4642081c17d3df07529112bca2691f"
+      },
+      {
+        "name": "shell32.lib",
+        "sha256": "a52e8fd5b405db4bb33cc7c1544ef9491217be54a6151c997cfad01be53f8018"
+      },
+      {
+        "name": "shlwapi.lib",
+        "sha256": "7b402128f9d40f6071a3cb332974ac9c9b64860a4f842ebcb3b8e9a8ae9f3288"
+      },
+      {
+        "name": "speex.obj",
+        "sha256": "879470f988260906b0760c2f1f5fe04e74e4cac1c12c179b5330a9dedaff08ad"
+      },
+      {
+        "name": "speex_decoder.obj",
+        "sha256": "0fcdb60576e61da5fc0f53b2b3eaa93f40f71102fc036f8745f962b61e0f6541"
+      },
+      {
+        "name": "speex_excitation.obj",
+        "sha256": "08675c823f4aebda98ea3459acd9f91ae6094e6c3de2527f9ef6ea88fbb19dde"
+      },
+      {
+        "name": "speex_filters.obj",
+        "sha256": "95b6ee9de185ce8deb6788d4e86ac8061bd38878a13c771fe775f973ecfa37ba"
+      },
+      {
+        "name": "speex_lsp.obj",
+        "sha256": "194d08140afec5abb1d1317fdc47e42e90567ec8cf499e64b126b19e40a631e1"
+      },
+      {
+        "name": "speex_nb.obj",
+        "sha256": "b8d8e4ece89cdc7316f4b59e9bd6f01bf510a93b09c253a0f270805a282d15d8"
+      },
+      {
+        "name": "speex_packet.obj",
+        "sha256": "8270c24cb01fac21a4e2c7882ec60812810a401ace9429c18ca12c2ec4ca2bc6"
+      },
+      {
+        "name": "speex_qmf.obj",
+        "sha256": "a0325e0a0ebf399fcfc145c26f6d26727402600a700a460990e25b80f8d07aac"
+      },
+      {
+        "name": "speex_stereo.obj",
+        "sha256": "d62dfe8cced8db5897a41ed9a422a46542896eb54de72e3d4920c61c223caebf"
+      },
+      {
+        "name": "speex_track.obj",
+        "sha256": "c5217ecd8e5f2c2b07391c17efd9ec4e2154c3b554c1c9225501fd0302d24b8d"
+      },
+      {
+        "name": "tags.obj",
+        "sha256": "716e0cce1be4a33e7ba6c4cd19453a11624fcd5b498a028c566881eec14b5dfc"
+      },
+      {
+        "name": "track.obj",
+        "sha256": "525ab6715f55dde549e11803d2ae9d52b2d34f6fc25129002ecbaaa78fce0033"
+      },
+      {
+        "name": "track_cuts.obj",
+        "sha256": "acc5699657737e200bf28236336600dd3551f7ee184abe00c962318fa19838db"
+      },
+      {
+        "name": "track_time.obj",
+        "sha256": "7a874ad8badcfe34578f1c9e9fc446e878dca5f8c218152f58c3a31495428d03"
+      },
+      {
+        "name": "ui-driver.obj",
+        "sha256": "f5e38b9d65ecd3d8c11b849b9120c9036c6a5ad5f27d1b62fc35d2643504eaaa"
+      },
+      {
+        "name": "ui-list.obj",
+        "sha256": "5fb55547521143377d05f76b99ba3a355ec33dd7843ac4d75016a45bcfb5d84c"
+      },
+      {
+        "name": "ui-preview.obj",
+        "sha256": "f81a6caa5c6aa0d9f91a569dc788b1216c6d93f943e8e778f6f2dd4141865f8e"
+      },
+      {
+        "name": "ui.obj",
+        "sha256": "cb2c26c49c23f0053d968d202b4d534ecbb4d2258f83ba0a0ee1b9a12d25268a"
+      },
+      {
+        "name": "user32.lib",
+        "sha256": "808f88ba6cfc548877069661f6d601c3cfe049159d8b2c8af4a77c304891c189"
+      },
+      {
+        "name": "video.obj",
+        "sha256": "a013b81fd1312acc2e3c2da2f17cdc2c20e44e882a6de185bb3e861c02a7f1f8"
+      },
+      {
+        "name": "video_cli.obj",
+        "sha256": "1d22813fc7f14bcaf0a569e34ac99c77097635c29c22a3d54b9a19c446462691"
+      },
+      {
+        "name": "video_present.obj",
+        "sha256": "f77901be00d70714410f0056f4ab7a43e9a3bfc7da02e057e6fabca461e41d7a"
+      },
+      {
+        "name": "video_stream.obj",
+        "sha256": "dde47168f048f9b6b212a0f365de89a8078ece26213b32b1e26886e48cc6531b"
+      },
+      {
+        "name": "video_sync.obj",
+        "sha256": "69d302f71cf18514dc8b24b3d91e119bb85aaa7ec22929870832c007480409b4"
+      },
+      {
+        "name": "video_window.obj",
+        "sha256": "8364bc037c96328b8304c57e33a098e6b6352fdea84f3126738e80359b223881"
+      },
+      {
+        "name": "vorbis.obj",
+        "sha256": "82d98fbbdea593e1bff461fe4998beadc8d623104712b7fa225abf680f307f6d"
+      },
+      {
+        "name": "vorbis_transform.obj",
+        "sha256": "b1d1160ed146561b7f425d476f4dc620bb6b24568258b7d66ea93789c0b8dc1e"
+      },
+      {
+        "name": "wavpack.obj",
+        "sha256": "3a469d70bad2a3590206ca1d4da0ca9e30f39ad65b058402bc243fef42acaa18"
+      }
+    ],
+    "audio": [
+      {
+        "input": "tests/generated/windows-crossbuild/alaw.wav",
+        "source_sha256": "69f10faf4a8923b0ad5bbc54a2c9b93c67a3e42a1332d0614dbc4eb52b2a74ac",
+        "bytes": 11072,
+        "sha256": "c2a8fbae64e707190c2eb1a573c5b82b471a8b426eef7128db10fddbb839b54b"
+      },
+      {
+        "input": "tests/generated/windows-crossbuild/alac.m4a",
+        "source_sha256": "334a39fd3b175972b8a1f8c5211af5df2feda360661fa733b0d04ec3ad5161a1",
+        "bytes": 66432,
+        "sha256": "3d8120b34f804996b5129e35b9886f4b89c93d2304c125a6ac217320d351a1a5"
+      },
+      {
+        "input": "tests/generated/windows-crossbuild/aac.m4a",
+        "source_sha256": "a9d2e9afcef2322ef9245c02146e41945ce367fc0c57c3b3db2874173ce117ef",
+        "bytes": 61032,
+        "sha256": "f37345dbb8e19b5057e202a6452cfc1c235c9697f3feaec870e402b26020ff85"
+      },
+      {
+        "input": "tests/generated/windows-crossbuild/fragmented.mp4",
+        "source_sha256": "dc898d4f620f2ef0c403165277a442a750514a77c3f271673326d35c33450bbd",
+        "bytes": 74624,
+        "sha256": "2aac009feaf6d986003ac2ceb5347245484aebdcaa0bcc3399e2e4eef48ead7f"
+      },
+      {
+        "input": "tests/generated/windows-crossbuild/opus.opus",
+        "source_sha256": "502bc872d5b362ce3419eb3710c44c901c47522b9b37db77eddd6df92f48c8f2",
+        "bytes": 66432,
+        "sha256": "a29a91a42170309e1823d394e77fc0bfc4cedab650cc59082b86fb572da7837c"
+      },
+      {
+        "input": "tests/generated/windows-crossbuild/lossless.flac",
+        "source_sha256": "907a9b377138676cd9307739c41ec341ee48c10a1462a77c96c39d3da411c558",
+        "bytes": 61032,
+        "sha256": "b6b098f865cf6a7b2e70ba57aa27b8105751953ff12c439ca427d66e9851c606"
+      }
+    ],
+    "binaries": {
+      "lamp-cli.exe": "4a33429d6fffefcee14354f449cf285c78a69f633d7472990a38530b94c1911e",
+      "lamp.exe": "4e5662bd8d5ccdd02b07161e231a996f92cf32c76856624a9bcb90f83c63412f"
+    }
+  },
+  "linux": {
+    "result": "passed",
+    "scope": "All prior runtime objects byte-identical; linked CLI audio decode-only comparisons against the published packet-frontend build. No audio endpoint opened.",
+    "unchanged_objects": [
+      {
+        "name": "aac.o",
+        "sha256": "20c0e9dd000df1c3efcd609f1f5917c390883c5d0e9ca6a750044d4808c27569"
+      },
+      {
+        "name": "ac3.o",
+        "sha256": "7e3971fa7cd65752ff01ecc7b0f1a2107eaba57de2f9540afa8a4c5c77973385"
+      },
+      {
+        "name": "adpcm.o",
+        "sha256": "e0a88964d42d02e02bcf28098f5e3f0615c21f3c9b6945df3b31bb0f99acd620"
+      },
+      {
+        "name": "alac.o",
+        "sha256": "1b57c642714fe4af2e7cd80f0b05c4858dc4a169c3dc592ab2506f3ce84f951f"
+      },
+      {
+        "name": "ape.o",
+        "sha256": "a12215b8927bb40e928d0dfcef708766bf6d73499d579541f7146e1d68aa9896"
+      },
+      {
+        "name": "asf.o",
+        "sha256": "a69568d99ce20b7cdc00d432cb6bc4d88b88417403a222bb3ce6635f8d9df71c"
+      },
+      {
+        "name": "avi.o",
+        "sha256": "ea205f98a29c07e94203abfe93260df665d7f0dc4b15b42fe4f525f07d3f239b"
+      },
+      {
+        "name": "decoder.o",
+        "sha256": "cf294d8cce7f13a7e297992c8e46864d1186e7bbb7b740715b09fcec24c90283"
+      },
+      {
+        "name": "flv.o",
+        "sha256": "65ae8f11104e3e99a36d32bb6cd3db0f3549b0c18ac180b01c465d4c5359091b"
+      },
+      {
+        "name": "g72x.o",
+        "sha256": "d17df917bd7d53c153640c23c62d535095093d14f104b1d349e4a459d9253832"
+      },
+      {
+        "name": "gsm.o",
+        "sha256": "01d8364828ba78609305b24d148572dc6c04f54d248c40caad978f9ff33042c9"
+      },
+      {
+        "name": "h264.o",
+        "sha256": "978c65b23572017e9dd19559d1a55557807a7c4dffc6758e194389f47a7abaf2"
+      },
+      {
+        "name": "latm.o",
+        "sha256": "10701634307b93540a4f5d6b5d04298b70d50500d689a7057dc690be0a59a5ab"
+      },
+      {
+        "name": "linux_cli.o",
+        "sha256": "0923622206da3f2b1ac439ed75510ae94ebe50e3b1497693ab83fe30defb7076"
+      },
+      {
+        "name": "linux_engine.o",
+        "sha256": "01fb4c4d19dfb0d4c6306811acbbc3cd603cdd79835227448754b748269dc426"
+      },
+      {
+        "name": "linux_platform.o",
+        "sha256": "1ae9cf60439e66ddd92a30703c702d76d875fd55c243ca00fe7534390325d9c9"
+      },
+      {
+        "name": "linux_pulse.o",
+        "sha256": "08eb22b789b06950ce355997603ff950da38ee61745723a4dc500afdcf4abbc3"
+      },
+      {
+        "name": "linux_thread.o",
+        "sha256": "387b1b09333080b1a85d0e0644815282f2039a36af68aa29baeec1a2e8256234"
+      },
+      {
+        "name": "lpcm.o",
+        "sha256": "b729681a20509cdd0ace7c88ffa4d78a5c79006f6e62d1d79a0f88202b625c15"
+      },
+      {
+        "name": "mkv.o",
+        "sha256": "2858dbba4143d324245b5463370a82ec7e3102a437fb6362ca04b6ded04247e0"
+      },
+      {
+        "name": "mp2.o",
+        "sha256": "37a76c70787139413388ab368652268833f6a774ee87e5046fad54b45dd735f7"
+      },
+      {
+        "name": "mp3.o",
+        "sha256": "de86cd37041965d46cab49b4cb5bf035e509125767ab0b9f5bd4e19d13a5ec15"
+      },
+      {
+        "name": "mp3_synthesis.o",
+        "sha256": "a5d7ac285fe2611426b20649965d365eb27ea2d5bb0582f41006f44498dbb70a"
+      },
+      {
+        "name": "mp4.o",
+        "sha256": "ad33d21aaf57e1b561f81ad1923059284d62eb7218a09d17d2f04111fd946373"
+      },
+      {
+        "name": "mpegts.o",
+        "sha256": "cf45f2bd693e50acf9b4115796a81223127654bb6cdc977e54111dda6261df1d"
+      },
+      {
+        "name": "ogg.o",
+        "sha256": "9a7a5eb685b9463e8548d5eb24a4996aac84179264fce1e39ae25d1963bbac05"
+      },
+      {
+        "name": "ogg_chain.o",
+        "sha256": "8047fcfa7479b005da2ee0dc22926b5c93dfcfc8bbea815facef8e51256a7edf"
+      },
+      {
+        "name": "opus.o",
+        "sha256": "0fb5cf8008952d43ed868bbc8b17f8bb89a028fd3962c02dc1ffb8ba5cd93687"
+      },
+      {
+        "name": "opus_allocation.o",
+        "sha256": "c0676fb0a0e57a49bdb88431a7ad965a8f7834f552eb83d0fd1bad1f1e33ccd0"
+      },
+      {
+        "name": "opus_band.o",
+        "sha256": "ac960885648cc0ed8e2f19aefc9f3a95fad0eeec3908f8e9a2714632b4e53fc8"
+      },
+      {
+        "name": "opus_band_transform.o",
+        "sha256": "2cdbeb949770b5d931371a5481cbd5595bd73c0c2447f3fbaf6015ad2bd99914"
+      },
+      {
+        "name": "opus_bands.o",
+        "sha256": "088d7d54c6846b11f4cff4e06be7780a3173a2f214fd51fafade10144fed12ee"
+      },
+      {
+        "name": "opus_controls.o",
+        "sha256": "3ee6831935ac5a87a2d7ed6cf2908e73a59e6e9300dcfbd80965620008423e7a"
+      },
+      {
+        "name": "opus_cwrs.o",
+        "sha256": "b4ac0a3773d98853809160d62b32c4885437201644d3b55085ed089ccb0eaab0"
+      },
+      {
+        "name": "opus_decoder.o",
+        "sha256": "ffa1d4d75f77c8c8a6c6d5ccb78bf05a793787adb8aa1d90c1a9e5311ac90ae3"
+      },
+      {
+        "name": "opus_energy.o",
+        "sha256": "f00dede188d6e59ee793787aed51897f6562c889c484644cbbbc06f2280d571e"
+      },
+      {
+        "name": "opus_fft.o",
+        "sha256": "c0d44926b466e9f95a14cac7703e955a780b46dd9311100fb2d019882a4b3e38"
+      },
+      {
+        "name": "opus_filter.o",
+        "sha256": "794e7091b924e18cb5a09e8a8536b28079b14560bc2d1c96bd813fbfaee1ce06"
+      },
+      {
+        "name": "opus_lpc.o",
+        "sha256": "23776343fd38aed4307b76907b27bc1c234822a89f3a90d1ee3c32eaf2d0cd20"
+      },
+      {
+        "name": "opus_mdct.o",
+        "sha256": "3514eeb666be1502ec70d07954b6eff1ae1704e65f74bbc419f3eb186c3d5b50"
+      },
+      {
+        "name": "opus_mode.o",
+        "sha256": "fb40c5612c231116c3a40f2534bde1c9953dd7cec6d62a74ee16f48475efc45f"
+      },
+      {
+        "name": "opus_packet.o",
+        "sha256": "319e805bfca8dbb2ff28e417c5639cabf8dcba4a75efa2655cf1d3960b83d9e8"
+      },
+      {
+        "name": "opus_pitch.o",
+        "sha256": "06af5c6a01a019af42dfce21b276fa850441154bb80753099d8afc7e270f22f1"
+      },
+      {
+        "name": "opus_plc.o",
+        "sha256": "e146fc9f9e244ed334128bbb04fbb7048e04b3643ff3966b8c3ce9a1262b82c1"
+      },
+      {
+        "name": "opus_range.o",
+        "sha256": "553f80b547a613da3da900f04e6097210f591ca76601232b456a783b6908b65e"
+      },
+      {
+        "name": "opus_silk_cng.o",
+        "sha256": "5b99dbed6caad008c85e5876ae4534e2493853f4d1a915745483be8c02026789"
+      },
+      {
+        "name": "opus_silk_decoder.o",
+        "sha256": "65e99b50d55eef6089ede7ef67b1b33d11fd357509c5c40a36ec22860a87a4d0"
+      },
+      {
+        "name": "opus_silk_frame.o",
+        "sha256": "f38ca79a28689e642936aab90eb7badb49e1f87df302b6180aea1f918a11c13b"
+      },
+      {
+        "name": "opus_silk_indices.o",
+        "sha256": "ff858245b4a5d0af41a1873f030a0814ebb2f4bddeb6f15b8450b161ce904625"
+      },
+      {
+        "name": "opus_silk_lpc.o",
+        "sha256": "47b68a8487d870f531019f48e38a8740726da61227bddf1538e8713f496f79e8"
+      },
+      {
+        "name": "opus_silk_nlsf.o",
+        "sha256": "2d2e026404c3b4443849d24fb1a547b6377ff8dbe37f0b5c4dc4e523ae586fe4"
+      },
+      {
+        "name": "opus_silk_packet.o",
+        "sha256": "62668b756b841d94553d9363affcce9c546f831435942e663c179146ccc90ced"
+      },
+      {
+        "name": "opus_silk_parameters.o",
+        "sha256": "51f1049c088c045211df1c8182d2b42b1050136b3d966781693598f2366e9b66"
+      },
+      {
+        "name": "opus_silk_plc.o",
+        "sha256": "8ceaf096b3f0b88e7d83381fd6035d21283fd269d4cbe9ee6d7c6a1f158a3436"
+      },
+      {
+        "name": "opus_silk_prediction.o",
+        "sha256": "b301fb994301989f92733d6ff5bc0182ef082970a1e4ada59166fe2083c3c55c"
+      },
+      {
+        "name": "opus_silk_pulses.o",
+        "sha256": "8b5b2e482370eab553586b4e696972bb51cd6ec352e174c978da01edb39c75d8"
+      },
+      {
+        "name": "opus_silk_resampler.o",
+        "sha256": "3c5665be88993f27a3e6f604b34b3395086e5adf553ba8e935713af9ac09a1c3"
+      },
+      {
+        "name": "opus_silk_state.o",
+        "sha256": "5239966a1633e5bad404dd4b1dc1a88ffcd6ced1b88060f12516b67640795f3b"
+      },
+      {
+        "name": "opus_silk_stereo.o",
+        "sha256": "4dcf603f92660a273e62331bcd20dbe9cb32e9b84748d4a505ca5d2f1473ea47"
+      },
+      {
+        "name": "opus_silk_synthesis.o",
+        "sha256": "a274b382d4f15140887076fd45d227cbe34ffbfce90e0139d8ba5b19e125d8f9"
+      },
+      {
+        "name": "opus_spectral.o",
+        "sha256": "2b6b4202cc5fe8da74e020ebd00c01de4235849aba2a122e8d020282a527e575"
+      },
+      {
+        "name": "opus_stream.o",
+        "sha256": "99e054b4903d5622478f45f26b02dc4d3dcdc8b70b6d91c9506ca3e3ff872a8e"
+      },
+      {
+        "name": "opus_theta.o",
+        "sha256": "88a55a76271310c362975735f6cced5303585c6b69400f77e16f14715ea0a928"
+      },
+      {
+        "name": "opus_vq.o",
+        "sha256": "6b18c9255824cae701daf3e64c96da4d2da969a334acb9a5bf80c2f2e7eae134"
+      },
+      {
+        "name": "playlist.o",
+        "sha256": "a49019881ad45e9a000f40dbbfc69e27fd637f6f5fe2704bca8e0e7cfe9858ee"
+      },
+      {
+        "name": "queue.o",
+        "sha256": "9c80030f84f078fe656615f1ace188dcf6f6387a9fa3ea2177c3fa7c7cff2adc"
+      },
+      {
+        "name": "resample.o",
+        "sha256": "613ab2432eedfe9546229b49b032320935df883e057123685fda1c7bf9048107"
+      },
+      {
+        "name": "resume.o",
+        "sha256": "ad8818665705c28422fd01b208f5eff3fc7d19620337ad5e2f4226107059767a"
+      },
+      {
+        "name": "speex.o",
+        "sha256": "ae560d1e940aacef7ea6e402428f9e3c2f253017277dce5a3d07744f039c5ea8"
+      },
+      {
+        "name": "speex_decoder.o",
+        "sha256": "8ebb3780f60e121e2ffee2ee0908de8849c0f67d7cedeedbe1f348bdeec072f3"
+      },
+      {
+        "name": "speex_excitation.o",
+        "sha256": "f201999bb4988e2e440240396d468e1f3405538d94ee4a4a8fc0847dc023abf6"
+      },
+      {
+        "name": "speex_filters.o",
+        "sha256": "8d6c1fa3f2a7869f1041792dfc653526e4d2a510707dbce345f5c0bd816a4216"
+      },
+      {
+        "name": "speex_lsp.o",
+        "sha256": "02137237000947db120a85792fbcf7248b58f4c01b4b7b5b39ee4148e9288259"
+      },
+      {
+        "name": "speex_nb.o",
+        "sha256": "431a84c710d4d6a1b0f492721acb0986db0d5072de9841247ed3fc72d1a256dc"
+      },
+      {
+        "name": "speex_packet.o",
+        "sha256": "4eb5a3631ba0536979a73cfdea5c086f2d6ee36a0e5fccceab9a50c2979cfcd4"
+      },
+      {
+        "name": "speex_qmf.o",
+        "sha256": "90c1d7fc0beed569111068f3e43557bed8b97f68337549d3be8c02e3e7267b3e"
+      },
+      {
+        "name": "speex_stereo.o",
+        "sha256": "ac7c25cda75cb90ee50beef7ef736cc4553637805b4b4ac76617ffd40e2be53e"
+      },
+      {
+        "name": "speex_track.o",
+        "sha256": "6cd048dc1b9fe39ad7aa83abf8c5c4f210111d2c132f7dcbef3e479823f84900"
+      },
+      {
+        "name": "tags.o",
+        "sha256": "4b9b489c66879d0fe82ec3ee9a03d169a40b5d288dcc28951acb9a86d1f1d301"
+      },
+      {
+        "name": "track.o",
+        "sha256": "98d88bbcbae9aae60b1046581fcbfefe710ffa9a7c577f6042e28cc947de4e93"
+      },
+      {
+        "name": "track_cuts.o",
+        "sha256": "bc740b2603eaadbe55a314bf434ba765071a85021e70451b1f9ff34970301758"
+      },
+      {
+        "name": "track_time.o",
+        "sha256": "de52765be59c88358181a000205f621cebf7bfaefc8f6dbf7c62822d7f6084e6"
+      },
+      {
+        "name": "video_sync.o",
+        "sha256": "dbd2f53f74b66e2d8c658c6c78f3b6031f4269298cb9847327660af0c22bb54b"
+      },
+      {
+        "name": "vorbis.o",
+        "sha256": "fc7c87b41ed5790e1c6b37c607ada51f3a196b5f1c6a84f1fee2ad1b10bb2072"
+      },
+      {
+        "name": "vorbis_transform.o",
+        "sha256": "15eff4888419133364ca3d351d0dff20080afa014a1985b3914828dc80ef6e9e"
+      },
+      {
+        "name": "wavpack.o",
+        "sha256": "c426f5ba1ac08b315c8674d8f43366265e89984f5e80f62855d56e5efd30c7a0"
+      }
+    ],
+    "audio": [
+      {
+        "input": "tests/generated/windows-crossbuild/alaw.wav",
+        "source_sha256": "69f10faf4a8923b0ad5bbc54a2c9b93c67a3e42a1332d0614dbc4eb52b2a74ac",
+        "bytes": 11072,
+        "sha256": "c2a8fbae64e707190c2eb1a573c5b82b471a8b426eef7128db10fddbb839b54b"
+      },
+      {
+        "input": "tests/generated/windows-crossbuild/alac.m4a",
+        "source_sha256": "334a39fd3b175972b8a1f8c5211af5df2feda360661fa733b0d04ec3ad5161a1",
+        "bytes": 66432,
+        "sha256": "3d8120b34f804996b5129e35b9886f4b89c93d2304c125a6ac217320d351a1a5"
+      },
+      {
+        "input": "tests/generated/windows-crossbuild/aac.m4a",
+        "source_sha256": "a9d2e9afcef2322ef9245c02146e41945ce367fc0c57c3b3db2874173ce117ef",
+        "bytes": 61032,
+        "sha256": "f37345dbb8e19b5057e202a6452cfc1c235c9697f3feaec870e402b26020ff85"
+      },
+      {
+        "input": "tests/generated/windows-crossbuild/fragmented.mp4",
+        "source_sha256": "dc898d4f620f2ef0c403165277a442a750514a77c3f271673326d35c33450bbd",
+        "bytes": 74624,
+        "sha256": "2aac009feaf6d986003ac2ceb5347245484aebdcaa0bcc3399e2e4eef48ead7f"
+      },
+      {
+        "input": "tests/generated/windows-crossbuild/opus.opus",
+        "source_sha256": "502bc872d5b362ce3419eb3710c44c901c47522b9b37db77eddd6df92f48c8f2",
+        "bytes": 66432,
+        "sha256": "a29a91a42170309e1823d394e77fc0bfc4cedab650cc59082b86fb572da7837c"
+      },
+      {
+        "input": "tests/generated/windows-crossbuild/lossless.flac",
+        "source_sha256": "907a9b377138676cd9307739c41ec341ee48c10a1462a77c96c39d3da411c558",
+        "bytes": 61032,
+        "sha256": "b6b098f865cf6a7b2e70ba57aa27b8105751953ff12c439ca427d66e9851c606"
+      }
+    ],
+    "binaries": {
+      "lamp-cli": "50d1a950dd46009e94b5b5b0eaed6e411a6f9fc587dd2550efb1ba764c09a1ac"
+    }
+  },
+  "result": "passed",
+  "runtime": [
+    {
+      "file": "lamp-cli.exe",
+      "bytes": 546304,
+      "architecture": "x86-64",
+      "subsystem": "console",
+      "imports": [
+        "AVRT.dll",
+        "d3d11.dll",
+        "KERNEL32.dll",
+        "ole32.dll",
+        "SHELL32.dll",
+        "USER32.dll"
+      ],
+      "iconSizes": [
+        16,
+        24,
+        32,
+        48,
+        64,
+        128,
+        256
+      ],
+      "version": "0.4.0-dev",
+      "result": "passed"
+    },
+    {
+      "file": "lamp.exe",
+      "bytes": 576000,
+      "architecture": "x86-64",
+      "subsystem": "windows",
+      "imports": [
+        "AVRT.dll",
+        "COMCTL32.dll",
+        "COMDLG32.dll",
+        "d3d11.dll",
+        "GDI32.dll",
+        "KERNEL32.dll",
+        "ole32.dll",
+        "SHELL32.dll",
+        "SHLWAPI.dll",
+        "USER32.dll"
+      ],
+      "iconSizes": [
+        16,
+        24,
+        32,
+        48,
+        64,
+        128,
+        256
+      ],
+      "version": "0.4.0-dev",
+      "result": "passed"
+    }
+  ],
+  "scope": "Previous objects unchanged and linked audio decode regressions; no audio endpoint opened."
+}

@@ -276,6 +276,8 @@ The [timestamped H.264 packet frontend](docs/h264-packets.md) now accepts AVC co
 
 **Gate:** reference video vectors/images and synchronized mixed-media fixtures; measured dropped frames, latency, CPU/GPU use and fallback behavior. Hardware paths must have explicit supported-profile limits. Implementing mature software video codecs is a substantial project, not a quick extension of the audio decoder.
 
+The [native MP4 video reader](docs/mp4-video.md) now supplies selected AVC packets with classic/fragmented byte placement, DTS/PTS, rational movie/media clocks and edit-clipped display intervals. All 1,185 hardware images match 56,277,720 reference bytes after native extraction. Windows/Linux each pass 188 independent models, 50 rejected layouts, 18,444 protected opens, allocation/cancellation checks and exact sample/media-range limits, with matching packets and mutation fingerprints. Apple Silicon translation/assembly passes. The public video commands remain Annex B only; connecting container timestamps to the window, the real audio-master clock, accurate seeking and all other milestone gates remains open.
+
 ## 5 — Subtitles and network media
 
 - [ ] External and embedded SRT, WebVTT and MP4 text; ASS/SSA styling, font attachments and layout.

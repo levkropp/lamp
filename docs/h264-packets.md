@@ -3,9 +3,10 @@
 The shared assembly frontend now accepts an AVC decoder configuration record
 (`avcC`) and complete length-prefixed access units with timestamps. This is a
 component for connecting MP4/Matroska/FLV video to the existing hardware decoder.
-**The shipping video commands still accept Annex B files only.** Native container
-video extraction, timestamp-driven presentation, the real audio clock and seeking
-remain unfinished.
+The [native MP4 video reader](mp4-video.md) now supplies selected AVC samples to
+this API. **The shipping video commands still accept Annex B files only.**
+Timestamp-driven presentation, other container video readers, the real audio
+clock and seeking remain unfinished.
 
 ## API and ownership
 

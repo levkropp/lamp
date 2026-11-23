@@ -1,0 +1,33 @@
+{
+  "result": "passed",
+  "scope": "Shared MP4 video demuxer translation/assembly only; no native Mac execution or video playback established.",
+  "target": "arm64-apple-macosx12.0.0",
+  "cpu": "apple-m1",
+  "sources": {
+    "src/video_mp4.inc": "1c9ea068b78c3f825fe045e55055512fb459b58aea214563538f8f8b44a34176",
+    "src/video_mp4.s": "80a0ead1292e4d3c417cd0a4f42d50dcd094f077e12e147ef868a4d5a23f1941",
+    "src/video_mp4_fragments.inc": "c37259c298b1f60da547aeb8bdf6a53a8063ec72ef01ee146daffdf935fe7ed4",
+    "src/video_mp4_headers.inc": "9e611a82f17b5dd11ba7d765b46d8866c88ff898b358cf203c7daba488f885f4",
+    "src/video_mp4_tables.inc": "be0ac1033ee7a311d770f209f08845911a9cb5275c861acac67ef8034994d367",
+    "src/video_mp4_time.inc": "ed482b51c096364574a37eacd2a600df8e406992cc601ade8f66461dc41c3b9f",
+    "src/video_mp4_traf.inc": "a7ac22fd5f9a7fb71e04ab2768f05102abc24ae3958258411046276c08b410ea",
+    "src/lamp.inc": "d79c75543ab0d78863010b32e46faf23fda5b9cb54ec624e9dce0acfcabf03e6",
+    "tools/arm64.py": "f8abd01ad67063451181e0adc66e72b2a445ebe9a7b159f7b88ac52b79bdadc2",
+    "tools/arm64_lamp.py": "37e4a515283ef441f9d1ee647377716efbe0d6a3aae27ef7c62faf53118f35d0"
+  },
+  "translated_sha256": "7c44c76ced5b23a48d00666f2b295bb06735d38e27a039543cfe69b19d6f14f3",
+  "object_sha256": "530a4968fb58a80aaf76950dc70a1e54ec06144e01c75d16e0d8c57f5025626f",
+  "object_bytes": 17344,
+  "git_source_sha256": {
+    "src/video_mp4.inc": "1c9ea068b78c3f825fe045e55055512fb459b58aea214563538f8f8b44a34176",
+    "src/video_mp4.s": "80a0ead1292e4d3c417cd0a4f42d50dcd094f077e12e147ef868a4d5a23f1941",
+    "src/video_mp4_fragments.inc": "c37259c298b1f60da547aeb8bdf6a53a8063ec72ef01ee146daffdf935fe7ed4",
+    "src/video_mp4_headers.inc": "9e611a82f17b5dd11ba7d765b46d8866c88ff898b358cf203c7daba488f885f4",
+    "src/video_mp4_tables.inc": "be0ac1033ee7a311d770f209f08845911a9cb5275c861acac67ef8034994d367",
+    "src/video_mp4_time.inc": "ed482b51c096364574a37eacd2a600df8e406992cc601ade8f66461dc41c3b9f",
+    "src/video_mp4_traf.inc": "a7ac22fd5f9a7fb71e04ab2768f05102abc24ae3958258411046276c08b410ea",
+    "src/lamp.inc": "d79c75543ab0d78863010b32e46faf23fda5b9cb54ec624e9dce0acfcabf03e6",
+    "tools/arm64.py": "f8abd01ad67063451181e0adc66e72b2a445ebe9a7b159f7b88ac52b79bdadc2",
+    "tools/arm64_lamp.py": "37e4a515283ef441f9d1ee647377716efbe0d6a3aae27ef7c62faf53118f35d0"
+  }
+}
