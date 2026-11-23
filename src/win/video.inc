@@ -21,6 +21,7 @@
 .equ WV_DECODED_MASK, 104
 .equ WV_REQUIRED, 108
 .equ WV_SELECT, 112
+.equ WV_INITIALIZED, 116     # Successful surfaces across IDR, for held output.
 .equ WV_DESC, 128
 .equ WV_CONFIG, 160
 .equ WV_VIEW_DESC, 272

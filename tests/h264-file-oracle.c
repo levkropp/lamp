@@ -21,6 +21,7 @@ extern void ABI h264_close(void*);
 static uint64_t checks,opens,pictures;
 static uint64_t mutation_fingerprint=1469598103934665603ULL;
 static uint32_t metadata[15];
+static uint32_t ordering[2];
 static uint32_t random_state=0x4c414d50;
 #define CHECK(x) do { ++checks; if(!(x)) { fprintf(stderr,"h264-file line%d open%llu\n",__LINE__,(unsigned long long)opens); exit(2); } } while(0)
 static uint32_t u32(const void *p) { uint32_t v; memcpy(&v,p,4); return v; }
@@ -66,6 +67,7 @@ static int scan(const unsigned char *data,size_t bytes,FILE *out,int cancel_afte
     } else result=-1;
     { const unsigned offsets[]={136,140,144,148,152,156,228,232,236,240,244,248,256,260,252};
       for(i=0;i<15;++i)metadata[i]=u32(g.ctx+offsets[i]); }
+    ordering[0]=u32(g.ctx+14824);ordering[1]=u32(g.ctx+14828);
     guards(&g); h264_close(g.ctx); h264_close(g.ctx); guards(&g);
     for(i=0;i<HC_CTX;++i)CHECK(!g.ctx[i]); return result;
 }
@@ -110,6 +112,6 @@ int main(int argc,char **argv) {
         out=fopen(argv[2],"wb"); CHECK(out!=0); result=scan(data,length,out,0); fclose(out);
     }
     printf("{\"result\":\"%s\",\"checks\":%llu,\"opens\":%llu,\"pictures\":%llu,\"mutation_fingerprint\":\"%016llx\",\"metadata\":[",result?"rejected":"passed",(unsigned long long)checks,(unsigned long long)opens,(unsigned long long)pictures,(unsigned long long)mutation_fingerprint);
-    { unsigned i; for(i=0;i<15;++i)printf("%s%u",i?",":"",metadata[i]); } puts("]}");
+    { unsigned i; for(i=0;i<15;++i)printf("%s%u",i?",":"",metadata[i]); } printf("],\"ordering\":[%u,%u]}\n",ordering[0],ordering[1]);
     free(data); return result?1:0;
 }

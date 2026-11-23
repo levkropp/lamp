@@ -2,6 +2,7 @@
 .include "lamp.inc"
 .include "h264.inc"
 .include "video.inc"
+.include "video_stream.inc"
 RODATA
 vc_check: .short '-','-','v','i','d','e','o','-','c','h','e','c','k',0
 vc_decode: .short '-','-','v','i','d','e','o','-','d','e','c','o','d','e',0
@@ -32,6 +33,7 @@ vc_written: .long 0
 .p2align 6
 vc_parser: .zero HP_BYTES
 vc_gpu: .zero WV_BYTES
+vc_stream: .zero VS_BYTES
 vc_play_info: .zero 56
 .text
 
@@ -108,12 +110,23 @@ FN win_video_cli
     lea rcx, [rip+vc_gpu]
     mov edx, [rax+HP_WIDTH]
     mov r8d, [rax+HP_HEIGHT]
-    mov r9d, [rax+HP_REFS]
-    call win_video_open_refs
+    mov r9d, [rax+HP_MAX_BUFFER]
+    test r9d, r9d
+    jnz .Lvc_pool
+    inc r9d
+.Lvc_pool:
+    add r9d, 2
+    call win_video_open_pool
     test eax, eax
     js .Lvc_gpu_error
     cmp esi, 5
     je .Lvc_play_window
+    lea rcx, [rip+vc_stream]
+    lea rdx, [rip+vc_gpu]
+    lea r8, [rip+vc_parser]
+    call win_video_stream_open
+    test eax, eax
+    js .Lvc_gpu_error
     lea rax, [rip+vc_parser]
     mov ecx, [rax+HP_WIDTH]
     imul ecx, [rax+HP_HEIGHT]
@@ -143,19 +156,13 @@ FN win_video_cli
     cmp rax, -1
     je .Lvc_output_error
 .Lvc_next:
-    lea rcx, [rip+vc_parser]
-    call h264_next
-    test eax, eax
-    js .Lvc_input_error
-    jz .Lvc_success
     call GetTickCount64
     lea r12, [rax+5000]
 .Lvc_decode_try:
     cmp dword ptr [rip+vc_cancel], 0
     jne .Lvc_cancelled
-    lea rcx, [rip+vc_gpu]
-    lea rdx, [rip+vc_parser+HP_DESC]
-    call win_video_decode
+    lea rcx, [rip+vc_stream]
+    call win_video_stream_next
     cmp eax, WV_PENDING
     jne .Lvc_decoded
     call vc_wait
@@ -165,6 +172,8 @@ FN win_video_cli
 .Lvc_decoded:
     test eax, eax
     js .Lvc_gpu_error
+    cmp eax, 1
+    je .Lvc_success
     call GetTickCount64
     lea r12, [rax+5000]
 .Lvc_read_try:
@@ -245,7 +254,7 @@ FN win_video_cli
     call print_number
     lea rcx, [rip+vc_frames_text]
     call print_text
-    mov rcx, [rbx+HP_FRAMES]
+    mov rcx, [rip+vc_stream+VS_OUTPUTS]
     call print_number
     lea rcx, [rip+vc_newline]
     call print_text
@@ -278,6 +287,8 @@ FN win_video_cli
     mov rcx, [rip+vc_output_path]
     call DeleteFileW             # only a file created by this invocation
 .Lvc_cleanup_gpu:
+    lea rcx, [rip+vc_stream]
+    call win_video_stream_close
     lea rcx, [rip+vc_gpu]
     call win_video_close
     lea rcx, [rip+vc_parser]

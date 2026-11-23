@@ -3,6 +3,7 @@
 .include "lamp.inc"
 .include "h264.inc"
 .include "video.inc"
+.include "video_stream.inc"
 .include "video_present.inc"
 .include "video_window.inc"
 RODATA
@@ -284,10 +285,27 @@ FN win_video_play
     mov [rbx+VW_DEADLINE], rax
     jmp .Lvw_render
 .Lvw_choose:
-    mov rax, [rdi+HP_FRAMES]
+    mov rax, [rbx+VW_STREAM+VS_OUTPUTS]
     cmp rax, [r12+24]
     ja .Lvw_invalid
-    jb .Lvw_frame_available
+    cmp dword ptr [rbx+VW_SOURCE_EOF], 0
+    jne .Lvw_clock_end
+    # Preflight counted every input. Once all are decoded and output is drained,
+    # a paused last-frame step can reach EOF without requesting another step.
+    mov rdx, [rbx+VW_STREAM+VS_DECODED]
+    cmp rdx, [r12+24]
+    jne .Lvw_frame_available
+    cmp dword ptr [rbx+VW_STREAM+VS_COUNT], 0
+    jne .Lvw_frame_available
+    cmp dword ptr [rbx+VW_STREAM+VS_PENDING], 0
+    jne .Lvw_frame_available
+    mov dword ptr [rbx+VW_SOURCE_EOF], 1
+    mov rcx, rbx
+    call vw_frame_ns
+    test rax, rax
+    js .Lvw_unexpected
+    mov [rbx+VW_DURATION], rax
+.Lvw_clock_end:
     cmp dword ptr [rbx+VW_EOF], 0
     jne .Lvw_hold
     mov rcx, rbx
@@ -300,6 +318,7 @@ FN win_video_play
     jb .Lvw_wait_end
     mov rax, [rbx+VW_DURATION]
 .Lvw_eof:
+    mov rax, [rbx+VW_DURATION]
     mov [rbx+VW_BASE_NS], rax
     mov dword ptr [rbx+VW_EOF], 1
     mov dword ptr [rbx+VW_PAUSED], 1
@@ -350,10 +369,6 @@ FN win_video_play
     mov [rbx+VW_WAIT_MS], eax
     jmp .Lvw_wait
 .Lvw_parse:
-    mov rcx, rdi
-    call h264_next
-    cmp eax, 1
-    jne .Lvw_invalid
     mov dword ptr [rbx+VW_STAGE], 1
     call GetTickCount64
     add rax, 5000
@@ -361,13 +376,14 @@ FN win_video_play
 .Lvw_inflight:
     cmp dword ptr [rbx+VW_STAGE], 1
     jne .Lvw_render
-    mov rcx, rsi
-    lea rdx, [rdi+HP_DESC]
-    call win_video_decode
+    lea rcx, [rbx+VW_STREAM]
+    call win_video_stream_next
     cmp eax, WV_PENDING
     je .Lvw_retry
     test eax, eax
     js .Lvw_failed
+    cmp eax, 1
+    je .Lvw_source_end
     mov dword ptr [rbx+VW_STAGE], 2
     call GetTickCount64
     add rax, 5000
@@ -418,6 +434,16 @@ FN win_video_play
     mov rcx, rbx
     call vw_sync
     jmp .Lvw_loop
+.Lvw_source_end:
+    mov dword ptr [rbx+VW_STAGE], 0
+    mov dword ptr [rbx+VW_SOURCE_EOF], 1
+    mov rcx, rbx
+    mov rax, [rbx+VW_STREAM+VS_OUTPUTS]
+    call vw_frame_ns
+    test rax, rax
+    js .Lvw_unexpected
+    mov [rbx+VW_DURATION], rax
+    jmp .Lvw_choose
 .Lvw_retry:
     call GetTickCount64
     cmp rax, [rbx+VW_DEADLINE]
@@ -492,6 +518,8 @@ FN win_video_play
 .Lvw_cleanup_present:
     lea rcx, [rbx+VW_PRESENT]
     call win_present_close
+    lea rcx, [rbx+VW_STREAM]
+    call win_video_stream_close
     mov rcx, [rbx+VW_HWND]
     test rcx, rcx
     jz .Lvw_cleanup_class
@@ -529,6 +557,14 @@ LOCALFN vw_restart
     push rbx
     sub rsp, 32
     mov rbx, rcx
+    lea rcx, [rbx+VW_STREAM]
+    call win_video_stream_close
+    lea rcx, [rbx+VW_STREAM]
+    mov rdx, [rbx+VW_GPU]
+    mov r8, [rbx+VW_PARSER]
+    call win_video_stream_open
+    test eax, eax
+    js .Lvw_restart_failed
     mov rcx, [rbx+VW_PARSER]
     call h264_close
     mov rax, [rbx+VW_INFO]
@@ -541,12 +577,16 @@ LOCALFN vw_restart
     jz .Lvw_restart_return
     mov dword ptr [rbx+VW_PAUSED], 0
     mov dword ptr [rbx+VW_EOF], 0
+    mov dword ptr [rbx+VW_SOURCE_EOF], 0
     mov dword ptr [rbx+VW_STEP], 0
     mov dword ptr [rbx+VW_HAS_FRAME], 0
     mov dword ptr [rbx+VW_STARTED], 0
     mov qword ptr [rbx+VW_BASE_NS], 0
     mov rcx, rbx
     call vw_anchor
+    jmp .Lvw_restart_return
+.Lvw_restart_failed:
+    xor eax, eax
 .Lvw_restart_return:
     add rsp, 32
     pop rbx

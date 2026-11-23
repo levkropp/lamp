@@ -1,7 +1,7 @@
 # Windows video presentation and playback
 
 Windows source builds provide an experimental video-only window for the
-[supported H.264 Annex B I/P subset](h264.md):
+[supported H.264 Annex B subset](h264.md), including [Main/High B pictures](h264-b.md):
 
 ```
 lamp-cli.exe --video-play file.h264
@@ -10,7 +10,7 @@ lamp-cli.exe --video-play file.h264
 Space pauses or resumes, `.` advances one picture while paused, and Esc or Q
 closes the window. At the end, the last picture stays visible and Space replays
 the file. The audio-library window remains separate. Video containers, audio,
-seeking, B pictures, broader H.264 profiles and other video codecs are not yet
+seeking, higher bit depths/chroma formats and other video codecs are not yet
 connected to this path.
 
 ## Image path

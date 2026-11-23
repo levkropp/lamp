@@ -31,6 +31,7 @@ FN h264_open
     mov [rbx+HP_CURSOR], rsi
     mov [rbx+HP_END], r8
     mov [rbx+HP_CANCEL], r9
+    mov dword ptr [rbx+HP_SURFACES], 17
     lea rdi, [rbx+HP_MATRIX]
     mov ecx, 224
     mov al, 16
@@ -372,6 +373,7 @@ LOCALFN hp_nal
 ENDFN hp_nal
 
 .include "h264_scaling.inc"
+.include "h264_limits.inc"
 .include "h264_headers.inc"
 .include "h264_dpb.inc"
 .include "h264_frames.inc"

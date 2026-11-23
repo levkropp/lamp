@@ -1,14 +1,15 @@
 # Windows hardware video backend
 
 This backend now feeds the experimental [Windows file check/export commands](h264.md).
-The assembly module `src/win/video.s` submits H.264 I/P pictures directly to
+The assembly module `src/win/video.s` submits H.264 I/P/B pictures directly to
 Direct3D 11 and reads back decoded NV12 images. The normal Windows build links it
 with the assembly Annex B frontend. Source builds can check files and export
 cropped NV12 or use the [GPU video-only window](video-present.md). The
 [reference-picture extension](h264-references.md) adds short/long-term DPB
 surfaces; the [Main/High extension](h264-profiles.md) adds CABAC, P weights and
-8×8/custom quantization. B pictures and the real audio clock/scheduler connection
-remain to be implemented. The earlier backend
+8×8/custom quantization. The [B-picture extension](h264-b.md) adds bidirectional
+prediction, output holds and display order. The real audio clock/scheduler
+connection remains unfinished. The earlier backend
 report below retains its component-only scope; the file integration has its own
 current reports.
 
@@ -21,14 +22,14 @@ with short slice controls (`ConfigBitstreamRaw = 2`). It uses the returned
 minimum surface count, limited to 1–32, and a texture-array configuration.
 Other adapters, configurations and software fallback are not implemented.
 
-The current submission contract is a progressive, 8-bit 4:2:0 **I/P picture with
+The current submission contract is a progressive, 8-bit 4:2:0 **I/P/B picture with
 retained reference surfaces**, at coded widths/heights from 16 through 4,096 in
 multiples of 16. Dimensions, current/reference surface indices, bitstream bounds
 and contiguous short-slice locations are checked
 before calling the driver. The caller must provide consistent, already parsed
 picture/matrix/slice data; this API is not a validator for arbitrary H.264 files.
 It accepts VCL NAL types 1/5 and 4×4/8×8 transforms while rejecting field pictures.
-The assembly frontend enforces the supported 8-bit I/P profile syntax and normative
+The assembly frontend enforces the supported 8-bit profile syntax and normative
 reference marking. The [current image reports](h264-references.md#verification)
 extend the historical IDR component evidence below.
 
@@ -47,7 +48,9 @@ The exported Microsoft x64 ABI functions are:
 | --- | --- | --- |
 | `win_video_open` | context, coded width, coded height | HRESULT; partial resources released on failure |
 | `win_video_open_refs` | context, coded width, coded height, max reference count | HRESULT; pool also includes a free destination surface |
+| `win_video_open_pool` | context, coded width, coded height, required pool count (2–32) | HRESULT; used for reference and output holds, subject to driver minima and memory cap |
 | `win_video_decode` | context, pointer to 48-byte submission | HRESULT; picture selects a destination distinct from retained references |
+| `win_video_select` | context, retained surface index | HRESULT; selects an initialized output, preserving the current selection while readback is pending |
 | `win_video_readback` | context, destination, capacity in bytes | HRESULT; packed NV12 (Y then interleaved UV) on success |
 | `win_video_close` | context | releases resources, clears context; idempotent |
 
@@ -117,6 +120,6 @@ into the runtime. Copyrighted specifications are not redistributed.
 
 The assembly frontend now supplies bounded file-derived decode metadata to the
 GPU video window. Next, connect actual container timestamps and the
-[audio-master scheduler](video-sync.md). Extend H.264 profile coverage and
-reordered output, followed by HEVC, VP9 and AV1. Their
+[audio-master scheduler](video-sync.md). Extend H.264 profile coverage,
+followed by HEVC, VP9 and AV1. Their
 software fallbacks and other milestone requirements remain explicit roadmap work.

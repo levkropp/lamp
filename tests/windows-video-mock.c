@@ -15,12 +15,14 @@ typedef struct { const void *pic,*matrix,*bits; UINT bytes,pad; const void *slic
 typedef struct { BYTE a[64],ctx[1024],b[64]; } Guarded;
 extern HRESULT win_video_open(void*,UINT,UINT);
 extern HRESULT win_video_open_refs(void*,UINT,UINT,UINT);
+extern HRESULT win_video_open_pool(void*,UINT,UINT,UINT);
+extern HRESULT win_video_select(void*,UINT);
 extern void win_video_close(void*);
 extern HRESULT win_video_decode(void*,const Frame*);
 extern HRESULT win_video_readback(void*,void*,uint64_t);
 static Object objects[40]; static void *tables[8][112];
 static unsigned checks,step,fail_at,short_type,null_type,begun,locked,copies,flushes,maps,unmaps;
-static unsigned busy_begin,busy_maps,bad_pitch,min_pool,config_count,format_supported,wanted_pool;
+static unsigned busy_begin,busy_maps,bad_pitch,min_pool,config_count,format_supported,wanted_pool,wanted_read_surface;
 static BYTE buffers[4][4224],pixels[80*96];
 static DXVA_PicParams_H264 pic; static DXVA_Qmatrix_H264 matrix;
 static DXVA_Slice_H264_Short slice; static BYTE bits[128]; static Frame frame;
@@ -98,7 +100,7 @@ static HRESULT STDMETHODCALLTYPE submit(Object *o,Object *d,UINT n,const D3D11_V
     return fault();
 }
 static void STDMETHODCALLTYPE copy(Object *o,Object *dst,UINT sub,UINT x,UINT y,UINT z,Object *src,UINT source_sub,const void *box) {
-    CHECK(o->id==1 && dst->id==7 && src->id==5 && !sub && !x && !y && !z && source_sub==pic.CurrPic.Index7Bits && !box); ++copies;
+    CHECK(o->id==1 && dst->id==7 && src->id==5 && !sub && !x && !y && !z && source_sub==(wanted_read_surface==UINT_MAX?pic.CurrPic.Index7Bits:wanted_read_surface) && !box); ++copies;
 }
 static void STDMETHODCALLTYPE flush(Object *o) { CHECK(o->id==1); ++flushes; }
 static HRESULT STDMETHODCALLTYPE map(Object *o,Object *r,UINT sub,UINT type,UINT flags,D3D11_MAPPED_SUBRESOURCE *m) {
@@ -119,6 +121,7 @@ static void reset(Guarded *g) {
     tables[1][14]=map; tables[1][15]=unmap; tables[1][46]=copy; tables[1][111]=flush;
     step=fail_at=short_type=null_type=begun=locked=copies=flushes=maps=unmaps=busy_begin=busy_maps=bad_pitch=0;
     wanted_pool=min_pool=3; config_count=format_supported=1;
+    wanted_read_surface=UINT_MAX;
     memset(&pic,0,sizeof(pic)); pic.wFrameWidthInMbsMinus1=pic.wFrameHeightInMbsMinus1=3;
     pic.wBitFields=0x9850; pic.ContinuationFlag=1; memset(pic.RefFrameList,255,16);
     memset(&matrix,16,sizeof(matrix)); memset(bits,0,sizeof(bits)); bits[2]=1; bits[3]=0x65;
@@ -133,7 +136,7 @@ static void closed(Guarded *g) {
     for(i=0;i<4;++i)for(j=0;j<64;++j)CHECK(buffers[i][j]==0xcd && buffers[i][4160+j]==0xcd);
 }
 int main(void) {
-    Guarded g; BYTE output[6144+128]; unsigned i,j,total_steps,reference_open_steps;
+    Guarded g; BYTE output[6144+128]; unsigned i,j,total_steps,reference_open_steps,explicit_pool_failures=0;
     reset(&g); CHECK(SUCCEEDED(win_video_open(g.ctx,64,64))); CHECK(SUCCEEDED(win_video_decode(g.ctx,&frame)));
     memset(output,0xa7,sizeof(output)); CHECK(SUCCEEDED(win_video_readback(g.ctx,output+64,6144)));
     total_steps=step; CHECK(total_steps==24); CHECK(copies==1 && flushes==1 && maps==1 && unmaps==1);
@@ -199,6 +202,22 @@ int main(void) {
     {unsigned before=step;pic.RefFrameList[0].bPicEntry=2;CHECK(win_video_decode(g.ctx,&frame)==E_INVALIDARG);CHECK(step==before);
      pic.RefFrameList[0].bPicEntry=1;CHECK(win_video_decode(g.ctx,&frame)==E_INVALIDARG);CHECK(step==before);}
     closed(&g);
-    printf("{\"result\":\"passed\",\"checks\":%u,\"injected_com_failures\":%u,\"reference_open_failures\":%u,\"short_or_null_driver_buffers\":8,\"bad_mapped_pitches\":3,\"nonblocking_retry_sequences\":1,\"unsupported_configurations\":6,\"invalid_submissions_before_driver\":17,\"reference_surface_cases\":3}\n",checks,total_steps,reference_open_steps);
+    /* An IDR clears reference validity, but already-held output is selectable. */
+    reset(&g);CHECK(win_video_open_pool(g.ctx,64,64,3)==S_OK);
+    CHECK(win_video_select(g.ctx,0)==E_INVALIDARG);CHECK(win_video_decode(g.ctx,&frame)==S_OK);
+    pic.CurrPic.bPicEntry=1;CHECK(win_video_decode(g.ctx,&frame)==S_OK);
+    CHECK(*(UINT*)(g.ctx+104)==2 && *(UINT*)(g.ctx+116)==3);
+    CHECK(win_video_select(g.ctx,0)==S_OK && *(UINT*)(g.ctx+100)==0);
+    CHECK(win_video_select(g.ctx,2)==E_INVALIDARG && *(UINT*)(g.ctx+100)==0);
+    CHECK(win_video_select(g.ctx,3)==E_INVALIDARG);CHECK(win_video_select(g.ctx,32)==E_INVALIDARG);
+    wanted_read_surface=0;busy_maps=1;CHECK(win_video_readback(g.ctx,output+64,6144)==E_PENDING);
+    CHECK(win_video_select(g.ctx,1)==E_PENDING && *(UINT*)(g.ctx+100)==0);
+    CHECK(win_video_readback(g.ctx,output+64,6144)==S_OK);CHECK(win_video_select(g.ctx,1)==S_OK);closed(&g);
+    for(j=18;j<=32;j+=14){
+        unsigned steps;reset(&g);wanted_pool=j;CHECK(win_video_open_pool(g.ctx,64,64,j)==S_OK);steps=step;closed(&g);
+        for(i=1;i<=steps;++i){reset(&g);wanted_pool=j;fail_at=i;CHECK(FAILED(win_video_open_pool(g.ctx,64,64,j)));closed(&g);++explicit_pool_failures;}
+    }
+    reset(&g);CHECK(win_video_open_pool(g.ctx,64,64,1)==E_INVALIDARG);CHECK(win_video_open_pool(g.ctx,64,64,33)==E_INVALIDARG);CHECK(!step);closed(&g);
+    printf("{\"result\":\"passed\",\"checks\":%u,\"injected_com_failures\":%u,\"reference_open_failures\":%u,\"explicit_pool_failures\":%u,\"output_selection\":true,\"short_or_null_driver_buffers\":8,\"bad_mapped_pitches\":3,\"nonblocking_retry_sequences\":1,\"unsupported_configurations\":6,\"invalid_submissions_before_driver\":17,\"reference_surface_cases\":3}\n",checks,total_steps,reference_open_steps,explicit_pool_failures);
     return 0;
 }

@@ -33,6 +33,18 @@ FN win_video_open_refs
     ret
 ENDFN win_video_open_refs
 
+# R9D=explicit surface count for DPB plus pending/last displayed outputs.
+FN win_video_open_pool
+    cmp r9d, 2
+    jb .Lwv_pool_invalid
+    cmp r9d, 32
+    ja .Lwv_pool_invalid
+    jmp wv_open
+.Lwv_pool_invalid:
+    mov eax, WV_INVALID
+    ret
+ENDFN win_video_open_pool
+
 LOCALFN wv_open
     push rbx
     push rbp
@@ -547,6 +559,7 @@ FN win_video_decode
     mov dword ptr [rbx+WV_DECODED_MASK], 0
 .Lwv_decode_mask:
     bts [rbx+WV_DECODED_MASK], eax
+    bts [rbx+WV_INITIALIZED], eax
     xor eax, eax
     jmp .Lwv_decode_return
 .Lwv_decode_copy_error:
@@ -579,6 +592,28 @@ FN win_video_decode
     pop rbx
     ret
 ENDFN win_video_decode
+
+# Select a retained successful output, not a new decode. Owner ensures pin/fence.
+FN win_video_select
+    cmp dword ptr [rcx+WV_READY], 1
+    jne .Lwv_select_bad
+    cmp dword ptr [rcx+WV_COPY_PENDING], 0
+    jne .Lwv_select_pending
+    cmp edx, [rcx+WV_POOL]
+    jae .Lwv_select_bad
+    bt [rcx+WV_INITIALIZED], edx
+    jnc .Lwv_select_bad
+    mov [rcx+WV_CURRENT], edx
+    mov dword ptr [rcx+WV_HAVE_FRAME], 1
+    xor eax, eax
+    ret
+.Lwv_select_pending:
+    mov eax, WV_PENDING
+    ret
+.Lwv_select_bad:
+    mov eax, WV_INVALID
+    ret
+ENDFN win_video_select
 
 # RCX=context, RDX=packed NV12 destination, R8=capacity in bytes.
 # Nonblocking Map: E_PENDING means retry on a later bounded/cancellable wake.

@@ -13,6 +13,7 @@ extern int h264_open(void*,const void*,uint64_t,const volatile DWORD*);
 extern int h264_next(void*); extern void h264_close(void*);
 extern HRESULT win_video_open(void*,UINT,UINT); extern void win_video_close(void*);
 extern HRESULT win_video_open_refs(void*,UINT,UINT,UINT);
+extern HRESULT win_video_open_pool(void*,UINT,UINT,UINT);
 extern HRESULT win_video_play(void*,void*,const Info*);
 static volatile Report report;
 static volatile DWORD cancel;
@@ -28,7 +29,7 @@ static DWORD WINAPI worker(void *unused) {
     CHECK(h264_open(parser.ctx,data,bytes,&cancel));
     while((next=h264_next(parser.ctx))==1){} CHECK(next==0);
     memcpy(&frames,parser.ctx+48,8);CHECK(frames>=60);
-    result=win_video_open_refs(gpu.ctx,u32(parser.ctx+136),u32(parser.ctx+140),u32(parser.ctx+180));CHECK(SUCCEEDED(result));
+    result=win_video_open_pool(gpu.ctx,u32(parser.ctx+136),u32(parser.ctx+140),max(1,u32(parser.ctx+14828))+2);CHECK(SUCCEEDED(result));
     memset(&info,0,sizeof(info));info.data=data;info.bytes=bytes;info.cancel=&cancel;
     info.frames=frames;info.report=&report;info.event=event;
     result=win_video_play(gpu.ctx,parser.ctx,&info);
@@ -87,7 +88,12 @@ int main(int argc,char **argv) {
     start();key(VK_SPACE,0);wait_for(1,2,3000);
     InterlockedExchange(&cancel,1);CHECK(SetEvent(event));finish(E_ABORT);
     start();key(VK_ESCAPE,0);finish(S_OK);
+    /* Stepping the final output must reach EOF without an extra input request. */
+    start();key(VK_SPACE,0);wait_for(1,2,3000);Sleep(30);
+    while(report.played<frames){uint64_t step=report.steps+1;key(VK_OEM_PERIOD,0);wait_for(2,step,3000);wait_for(1,report.played,3000);}
+    wait_for(4,0,3000);CHECK(report.paused && report.played==frames && report.media==3000000000LL);
+    key(VK_ESCAPE,0);finish(S_OK);
     CloseHandle(event);event=0;free(data);
-    printf("{\"result\":\"passed\",\"checks\":%llu,\"source_frames\":%llu,\"cases\":[\"pause\",\"autorepeat\",\"two_steps\",\"resize\",\"minimize\",\"eof\",\"replay\",\"close\",\"cancel\",\"escape\"]}\n",(unsigned long long)checks,(unsigned long long)frames);
+    printf("{\"result\":\"passed\",\"checks\":%llu,\"source_frames\":%llu,\"cases\":[\"pause\",\"autorepeat\",\"two_steps\",\"resize\",\"minimize\",\"eof\",\"replay\",\"close\",\"cancel\",\"escape\",\"step_to_eof\"]}\n",(unsigned long long)checks,(unsigned long long)frames);
     return 0;
 }

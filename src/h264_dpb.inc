@@ -87,6 +87,8 @@ LOCALFN hp_dpb
     mov dword ptr [rbx+HP_CURRENT_LONG], -1
     cmp dword ptr [rbx+HP_FRAME_NAL], 5
     jne .Lhp_dpb_non_idr
+    inc qword ptr [rbx+HP_EPOCH]
+    jz .Lhp_dpb_limit
     mov dword ptr [rbx+HP_DPB_COUNT], 0
     mov dword ptr [rbx+HP_SEEN_IDR], 1
     mov dword ptr [rbx+HP_PREV_NUM], 0
@@ -211,21 +213,22 @@ LOCALFN hp_dpb
     inc edi
     jmp .Lhp_dpb_snapshot
 .Lhp_dpb_slot:
+    or esi, [rbx+HP_HOLD_MASK]
     xor eax, eax
 .Lhp_dpb_slot_next:
     bt esi, eax
     jnc .Lhp_dpb_slot_found
     inc eax
-    cmp eax, 17
+    cmp eax, [rbx+HP_SURFACES]
     jb .Lhp_dpb_slot_next
-    jmp .Lhp_dpb_bad
+    jmp .Lhp_dpb_limit
 .Lhp_dpb_slot_found:
     mov [rbx+HP_CURRENT_SLOT], eax
     mov [rbx+HP_PICTURE+4], al
     cmp dword ptr [rbx+HP_FRAME_NAL], 5
     je .Lhp_dpb_insert
-    cmp dword ptr [rbx+HP_FRAME_TYPE], 0
-    jne .Lhp_dpb_mark
+    cmp dword ptr [rbx+HP_FRAME_TYPE], 2
+    je .Lhp_dpb_mark
     cmp dword ptr [rbx+HP_DPB_COUNT], 0
     je .Lhp_dpb_bad
 .Lhp_dpb_mark:
@@ -339,6 +342,8 @@ LOCALFN hp_dpb
     mov dword ptr [rbx+HP_DPB_COUNT], 0
     mov dword ptr [rbx+HP_MAX_LONG], -1
     mov dword ptr [rbx+HP_MMCO5], 1
+    inc qword ptr [rbx+HP_EPOCH]
+    jz .Lhp_dpb_limit
 .Lhp_dpb_mmco_next:
     add rsi, 12
     dec r12d
@@ -409,16 +414,12 @@ LOCALFN hp_dpb
 .Lhp_dpb_insert_count:
     inc dword ptr [rbx+HP_DPB_COUNT]
 .Lhp_dpb_history:
-    cmp dword ptr [rbx+HP_FRAME_NAL], 5
-    je .Lhp_dpb_history_store
     cmp dword ptr [rbx+HP_MMCO5], 0
     jne .Lhp_dpb_history_reset
-    mov eax, [rbx+HP_CURRENT_POC]
-    cmp eax, [rbx+HP_LAST_POC]
-    jle .Lhp_dpb_unsupported # Display reordering will use a later output queue.
 .Lhp_dpb_history_store:
     mov eax, [rbx+HP_CURRENT_POC]
     mov [rbx+HP_LAST_POC], eax
+    mov [rbx+HP_OUTPUT_POC], eax
     mov eax, [rbx+HP_FRAME_NUM]
     mov [rbx+HP_PREV_NUM], eax
     cmp dword ptr [rbx+HP_FRAME_REF], 0
@@ -430,6 +431,7 @@ LOCALFN hp_dpb
     mov [rbx+HP_PREV_POC_LSB], rax
     jmp .Lhp_dpb_ok
 .Lhp_dpb_history_reset:
+    mov dword ptr [rbx+HP_OUTPUT_POC], 0
     mov dword ptr [rbx+HP_LAST_POC], 0
     mov dword ptr [rbx+HP_PREV_NUM], 0
     mov dword ptr [rbx+HP_PREV_REF_NUM], 0

@@ -155,6 +155,9 @@ FN h264_next
     mov eax, [rbx+HP_TEMP_LONG]
     cmp eax, [rbx+HP_FRAME_LONG]
     jne .Lhp_next_bad
+    mov eax, [rbx+HP_TEMP_NOOUTPUT]
+    cmp eax, [rbx+HP_FRAME_NOOUTPUT]
+    jne .Lhp_next_bad
     mov eax, [rbx+HP_TEMP_MMCO_COUNT]
     cmp eax, [rbx+HP_FRAME_MMCO_COUNT]
     jne .Lhp_next_bad
@@ -164,9 +167,10 @@ FN h264_next
     lea rdi, [rbx+HP_FRAME_MMCO]
     repe cmpsb
     jne .Lhp_next_bad
-    cmp dword ptr [rbx+HP_TEMP_TYPE], 0
-    jne .Lhp_next_append
-    mov dword ptr [rbx+HP_FRAME_TYPE], 0
+    cmp dword ptr [rbx+HP_TEMP_TYPE], 2
+    je .Lhp_next_append
+    mov eax, [rbx+HP_TEMP_TYPE]
+    mov [rbx+HP_FRAME_TYPE], eax
     jmp .Lhp_next_append
 .Lhp_next_first:
     cmp dword ptr [rbx+HP_TEMP_MB], 0
@@ -189,6 +193,8 @@ FN h264_next
     mov [rbx+HP_FRAME_ADAPT], eax
     mov eax, [rbx+HP_TEMP_LONG]
     mov [rbx+HP_FRAME_LONG], eax
+    mov eax, [rbx+HP_TEMP_NOOUTPUT]
+    mov [rbx+HP_FRAME_NOOUTPUT], eax
     mov eax, [rbx+HP_TEMP_MMCO_COUNT]
     mov [rbx+HP_FRAME_MMCO_COUNT], eax
     lea ecx, [rax+rax*2]

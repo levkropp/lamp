@@ -1,0 +1,311 @@
+{
+  "result": "passed",
+  "files": 6,
+  "frames": 48,
+  "image_bytes_compared": 40181760,
+  "pending_readbacks": 95,
+  "pending_frame_begins": 0,
+  "checks": 85387090,
+  "scope": "Hardware submission/readback component only. Test-only Python supplies H.264 headers and DXVA metadata. No assembly file parser, player video playback, presentation, reference pictures, A/V sync or other codec support is established.",
+  "verification_host": {
+    "cpu": "12th Gen Intel(R) Core(TM) i7-12700KF",
+    "platform": "Windows-11-10.0.26300-SP0",
+    "graphics": [
+      {
+        "Name": "Virtual Display Driver",
+        "DriverVersion": "11.30.4.434",
+        "VideoProcessor": null
+      },
+      {
+        "Name": "NVIDIA GeForce RTX 5070 Ti",
+        "DriverVersion": "32.0.16.1692",
+        "VideoProcessor": "NVIDIA GeForce RTX 5070 Ti"
+      }
+    ]
+  },
+  "elapsed_seconds": 3.074344,
+  "reference": "ffmpeg version 8.0.1-essentials_build-www.gyan.dev Copyright (c) 2000-2025 the FFmpeg developers",
+  "ffmpeg_executable_sha256": "a07104f51ccb15971c4affc34a392e34899cf8752f08f4d1aca58e8892a69859",
+  "mocked_failures": {
+    "result": "passed",
+    "checks": 608251,
+    "injected_com_failures": 24,
+    "reference_open_failures": 26,
+    "explicit_pool_failures": 68,
+    "output_selection": true,
+    "short_or_null_driver_buffers": 8,
+    "bad_mapped_pitches": 3,
+    "nonblocking_retry_sequences": 1,
+    "unsupported_configurations": 6,
+    "invalid_submissions_before_driver": 17,
+    "reference_surface_cases": 3
+  },
+  "adapter_log": [
+    "adapter=NVIDIA GeForce RTX 5070 Ti vendor=10de device=2c05 config=1 pool=3"
+  ],
+  "fixtures": [
+    {
+      "width": 64,
+      "height": 64,
+      "frames": 8,
+      "sps": {
+        "id": 0,
+        "frame_bits": 4,
+        "poc": 2,
+        "poc_bits": 0,
+        "refs": 0,
+        "gaps": 0,
+        "width": 64,
+        "height": 64,
+        "direct": 1,
+        "level": 10
+      },
+      "pps": {
+        "id": 0,
+        "seq": 0,
+        "l0": 0,
+        "l1": 0,
+        "qp": -3,
+        "qs": 0,
+        "chroma": -2,
+        "deblock": 1,
+        "constrained": 0
+      },
+      "sha256": {
+        "64x64.h264": "c85bd19fad6fa1ea6b7bd268c5c14a0b82fc9bc8b839df90e2074275f82614b0",
+        "64x64.wv": "92b06239f5dca4c2cd2549ebfed50595f1e8bf62235023c1bc3fd49836873794",
+        "64x64.nv12": "29043b4058e14a203cdd5aabd2f393b59d8f6106ac5de4cc987857bfeb1ad4a1"
+      }
+    },
+    {
+      "width": 192,
+      "height": 112,
+      "frames": 8,
+      "sps": {
+        "id": 0,
+        "frame_bits": 4,
+        "poc": 2,
+        "poc_bits": 0,
+        "refs": 0,
+        "gaps": 0,
+        "width": 192,
+        "height": 112,
+        "direct": 1,
+        "level": 11
+      },
+      "pps": {
+        "id": 0,
+        "seq": 0,
+        "l0": 0,
+        "l1": 0,
+        "qp": -3,
+        "qs": 0,
+        "chroma": -2,
+        "deblock": 1,
+        "constrained": 0
+      },
+      "sha256": {
+        "192x112.h264": "2dafd703be708f86114dc82433f845e8970eb062c62fe9cff8dae3a5828605f1",
+        "192x112.wv": "f7a867a2e4fe5411cc38a05fd94a22bfc139713f7902dff50819f4c728c11c65",
+        "192x112.nv12": "68c748f02ada18186a55d1bacb8ccc5db717d9bb65102e02c7ca54f4e0a0c3f1"
+      }
+    },
+    {
+      "width": 320,
+      "height": 240,
+      "frames": 8,
+      "sps": {
+        "id": 0,
+        "frame_bits": 4,
+        "poc": 2,
+        "poc_bits": 0,
+        "refs": 0,
+        "gaps": 0,
+        "width": 320,
+        "height": 240,
+        "direct": 1,
+        "level": 13
+      },
+      "pps": {
+        "id": 0,
+        "seq": 0,
+        "l0": 0,
+        "l1": 0,
+        "qp": -3,
+        "qs": 0,
+        "chroma": -2,
+        "deblock": 1,
+        "constrained": 0
+      },
+      "sha256": {
+        "320x240.h264": "730161cee2294144738061216ad998530928ceb3ea82693f3215829c684f9b42",
+        "320x240.wv": "f8cb58822200ff0816d83f59d7c5878ccd15b1f5e632f000dfead58a2c0312da",
+        "320x240.nv12": "c5e758786ffc4e75017af4d8dbf9346922c26709f2a146db5d3d6e52e78adde1"
+      }
+    },
+    {
+      "width": 640,
+      "height": 368,
+      "frames": 8,
+      "sps": {
+        "id": 0,
+        "frame_bits": 4,
+        "poc": 2,
+        "poc_bits": 0,
+        "refs": 0,
+        "gaps": 0,
+        "width": 640,
+        "height": 368,
+        "direct": 1,
+        "level": 30
+      },
+      "pps": {
+        "id": 0,
+        "seq": 0,
+        "l0": 0,
+        "l1": 0,
+        "qp": -3,
+        "qs": 0,
+        "chroma": -2,
+        "deblock": 1,
+        "constrained": 0
+      },
+      "sha256": {
+        "640x368.h264": "2fa2ce8f1f74188730c123df917c7dc2b16ac9653baaf48a1bde215563d4d13e",
+        "640x368.wv": "8f1389a0493532aee3c82380f7507ab7a62caa5ab5df91ec87c1bb3cec497ace",
+        "640x368.nv12": "dc8e2de170b2ee8bd5a97e833f62e8bb7d14cdc98fa7c666adc22ac51bc505d1"
+      }
+    },
+    {
+      "width": 1280,
+      "height": 720,
+      "frames": 8,
+      "sps": {
+        "id": 0,
+        "frame_bits": 4,
+        "poc": 2,
+        "poc_bits": 0,
+        "refs": 0,
+        "gaps": 0,
+        "width": 1280,
+        "height": 720,
+        "direct": 1,
+        "level": 31
+      },
+      "pps": {
+        "id": 0,
+        "seq": 0,
+        "l0": 0,
+        "l1": 0,
+        "qp": -3,
+        "qs": 0,
+        "chroma": -2,
+        "deblock": 1,
+        "constrained": 0
+      },
+      "sha256": {
+        "1280x720.h264": "4f5e81062a6a443615c57dc8dfb23a1abda66abf07c1f8a93552936ee4d01794",
+        "1280x720.wv": "9d6170c0647bf377c781797d969ee036bf7a95591063cc3ba6c15bc93900a15b",
+        "1280x720.nv12": "cb09f990bb00da4e62fcc3831ce4ccf78d9fcc3750d873846a5d010042fa39df"
+      }
+    },
+    {
+      "width": 1920,
+      "height": 1088,
+      "frames": 8,
+      "sps": {
+        "id": 0,
+        "frame_bits": 4,
+        "poc": 2,
+        "poc_bits": 0,
+        "refs": 0,
+        "gaps": 0,
+        "width": 1920,
+        "height": 1088,
+        "direct": 1,
+        "level": 40
+      },
+      "pps": {
+        "id": 0,
+        "seq": 0,
+        "l0": 0,
+        "l1": 0,
+        "qp": -3,
+        "qs": 0,
+        "chroma": -2,
+        "deblock": 1,
+        "constrained": 0
+      },
+      "sha256": {
+        "1920x1088.h264": "de88e62515ed3cc4966b8f9b25e1d7f9f9d3b3522efff3582a357a009213d5a9",
+        "1920x1088.wv": "6b83f8d3da98ebfd7438c6f92fadd4b25e1d25896f313c7625d839ae6fc1af38",
+        "1920x1088.nv12": "0c928aef5fcc401696146675a71b03001b1d3941607f2c234d1f4e859bc25af3"
+      }
+    }
+  ],
+  "sources": {
+    "src/win/video.s": "24ead0927154d3ad95c6f7a916978e72c10d8bba7b50d3c8c5e8eff8af6b99e3",
+    "src/win/video.inc": "1979ab1e3907a428bb39ac10052f803b9e18b0d18b21b292fb26b36eacf9f38a",
+    "src/win/d3d11.def": "6aff88dceb3efc79d865fe5289bdbcd74408d3e4707d2af590bcf6e6ff6aa5e5",
+    "src/lamp.inc": "d79c75543ab0d78863010b32e46faf23fda5b9cb54ec624e9dce0acfcabf03e6",
+    "tests/windows-video-oracle.c": "d6583de3bb8f4a2355eb1d2e31bf71f1a3de86064e1cc5308a574450c1c23e36",
+    "tests/windows-video-mock.c": "16560f330df0a0636be628670fc6928ccd4769436561827912ca0bd7bf57b278",
+    "tests/verify-windows-video.py": "9f9e413df9d58e91ba0202f301b598be5ffae0a964f49a1698689615aff9be8e"
+  },
+  "artifacts": {
+    "obj\\video.obj": "a013b81fd1312acc2e3c2da2f17cdc2c20e44e882a6de185bb3e861c02a7f1f8",
+    "windows-video\\windows-video-oracle.exe": "c9e6943d06ecabf4f14fd98d2cda9e43d3824f00897f9e78c612e5a0ad945823",
+    "windows-video\\windows-video-mock.exe": "4818e89ec1b9b19d1fa801cb157c31c92108e4accbfb2c2219fa52929b4b429c"
+  },
+  "negative_controls": [
+    {
+      "policy": "ignore-small-buffer",
+      "exit_code": 1,
+      "failure": "video-mock line154 step23 fault0",
+      "source_sha256": "970f215c1437b774e2087df123a591ecb86ffa1212b6c3dc1cb7ba8617276160",
+      "object_sha256": "d513d6714b4a8f3d433ad223360eb8b17c162836cf58a24c5ab19bc1aa1f4fa6",
+      "executable_sha256": "2cb8d9ab6a9af314bb0d1de3961b2e687063d9b323c29b77763748d6cf613052"
+    },
+    {
+      "policy": "skip-release",
+      "exit_code": 1,
+      "failure": "video-mock line134 step24 fault0",
+      "source_sha256": "5d8751e1b4efccff912f83e3103d8e4a31a72cd19501284e4e83115bd6e0075d",
+      "object_sha256": "db7c5fe6cd4925e9cc72dd18b24b149bf8a128894baa69ae39938f7321c6c74d",
+      "executable_sha256": "36a2ef50f6269c9e070a2472f108c545d5f1dc61b7ad0aaf60896913f24247e8"
+    },
+    {
+      "policy": "repeat-copy",
+      "exit_code": 1,
+      "failure": "video-mock line161 step26 fault0",
+      "source_sha256": "45daf254f21fffb75409250a19037430ccf19c7203b51de8ae2c5de534d3191e",
+      "object_sha256": "7910aca3af4daa04b2290531ee275dfd443ce1766b1c9a8ced0b4f73d89cbb10",
+      "executable_sha256": "24550c350af08fa16ed64ee3d0ebc659f807520f725327ffe1594a48d58f439a"
+    },
+    {
+      "policy": "blocking-map",
+      "exit_code": 1,
+      "failure": "video-mock line107 step24 fault0",
+      "source_sha256": "e9e82b2f3b77c9e0228fd87402b67265e34eb64589777e8af56bac1de21b8844",
+      "object_sha256": "2a83dc38860449e8c7d0dae9cf1c11468bec231f23bc7977a88a7d3cdf28e0a8",
+      "executable_sha256": "448c59f575d9009b11e574c7adb3667199dca7df9595a918f274dc54b68d8ed6"
+    },
+    {
+      "policy": "missing-syntax",
+      "exit_code": 1,
+      "failure": "video-mock line193 step23 fault0",
+      "source_sha256": "b66cafdb0454e8a7c386021918128231487410577232b53d05aa8f742ac1a5b4",
+      "object_sha256": "9c225c37e90de3b22607ec8947427264e8210b5bc60ebe76f97f95779cdc9807",
+      "executable_sha256": "cb33336acdd6faa2e49436c7f5f2a14e03152b106d3f013b2deb1d1926e22235"
+    }
+  ],
+  "git_source_sha256": {
+    "src/win/video.s": "24ead0927154d3ad95c6f7a916978e72c10d8bba7b50d3c8c5e8eff8af6b99e3",
+    "src/win/video.inc": "1979ab1e3907a428bb39ac10052f803b9e18b0d18b21b292fb26b36eacf9f38a",
+    "src/win/d3d11.def": "6aff88dceb3efc79d865fe5289bdbcd74408d3e4707d2af590bcf6e6ff6aa5e5",
+    "src/lamp.inc": "d79c75543ab0d78863010b32e46faf23fda5b9cb54ec624e9dce0acfcabf03e6",
+    "tests/windows-video-oracle.c": "d6583de3bb8f4a2355eb1d2e31bf71f1a3de86064e1cc5308a574450c1c23e36",
+    "tests/windows-video-mock.c": "16560f330df0a0636be628670fc6928ccd4769436561827912ca0bd7bf57b278",
+    "tests/verify-windows-video.py": "9f9e413df9d58e91ba0202f301b598be5ffae0a964f49a1698689615aff9be8e"
+  }
+}

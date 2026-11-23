@@ -110,6 +110,17 @@
 .equ HP_TRANSFORM8, 14480
 .equ HP_SEQ_SCALING, 14484
 .equ HP_SPS_MATRIX, 14592   # Preserved224B sequence-level scaling lists.
+.equ HP_HOLD_MASK, 14816    # Client-owned output pins; excluded from free slots.
+.equ HP_SURFACES, 14820     # 1..32 slot limit; default17 for packet-only callers.
+.equ HP_MAX_REORDER, 14824
+.equ HP_MAX_BUFFER, 14828
+.equ HP_EPOCH, 14832        # IDR/MMCO5 output-order generation, u64.
+.equ HP_CONSTRAINTS, 14840
+.equ HP_TEMP_ACTIVE1, 14844
+.equ HP_RESTRICTION, 14848
+.equ HP_FRAME_NOOUTPUT, 14852
+.equ HP_TEMP_NOOUTPUT, 14856
+.equ HP_OUTPUT_POC, 14860
 
 # Checked syntax readers used by the original SPS/PPS/slice implementation.
 .macro HP_BITS n, field, maximum, bad

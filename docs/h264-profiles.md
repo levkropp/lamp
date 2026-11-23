@@ -3,8 +3,9 @@
 Windows source builds now accept progressive 8-bit 4:2:0 **Baseline, Main and
 High I/P pictures** through the existing [play/check/export commands](h264.md).
 Main/High add CABAC, explicit P-picture luma/chroma weights and the High profile's
-8×8 transform and custom quantization matrices. B pictures/reordered output,
-10-bit/4:2:2/4:4:4, transform bypass, bottom-field POC deltas, fields and video
+8×8 transform and custom quantization matrices. The [B-picture extension](h264-b.md)
+adds bidirectional prediction and display-order output. Higher bit depths including
+10-bit, 4:2:2/4:4:4, transform bypass, bottom-field POC deltas, fields and video
 containers remain unfinished.
 This does not establish general playback of every Main/High file.
 
@@ -72,7 +73,8 @@ image checks / 3,225 RGB samples each, with at most one 8-bit level of conversio
 difference. Their real 90-picture sequences pass pause, exact single-frame steps,
 resize, minimize/restore, EOF timing, replay and cancellation; the actual CLI
 also opens/closes its own hidden child window. Positive fixtures explicitly
-disable B pictures. Genuine B-picture and High10 files reject before windows.
+disable B pictures. Current window rejection controls use High10 and 4:2:2 inputs;
+B pictures are covered by the separate [B-picture extension](h264-b.md).
 No test sends global desktop input or audio.
 
 The current [reference-picture regression](../reports/h264-profile-reference-windows-verification.json)

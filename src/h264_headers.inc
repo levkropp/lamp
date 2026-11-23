@@ -25,7 +25,7 @@ LOCALFN hp_sps
     cmp eax, 100
     jne .Lhp_sps_unsupported
 .Lhp_sps_profile_ok:
-    HP_BITS 8,-1,255,.Lhp_sps_bad
+    HP_BITS 8,HP_CONSTRAINTS,255,.Lhp_sps_bad
     test eax, 3
     jnz .Lhp_sps_bad
     HP_BITS 8,HP_LEVEL,62,.Lhp_sps_bad
@@ -110,6 +110,10 @@ LOCALFN hp_sps
 .Lhp_sps_trailing:
     mov rcx, rbx
     call hp_trailing
+    test eax, eax
+    jz .Lhp_sps_return
+    mov rcx, rbx
+    call hp_limits
     jmp .Lhp_sps_return
 .Lhp_sps_unsupported:
     cmp dword ptr [rbx+HP_ERROR], 0
@@ -218,14 +222,15 @@ LOCALFN hp_vui
     HP_BITS 1,-1,1,.Lhp_vui_bad
     test eax, eax
     jz .Lhp_vui_ok
+    mov dword ptr [rbx+HP_RESTRICTION], 1
     HP_BITS 1,-1,1,.Lhp_vui_bad
     HP_UE -1,16,.Lhp_vui_bad
     HP_UE -1,16,.Lhp_vui_bad
     HP_UE -1,16,.Lhp_vui_bad
     HP_UE -1,16,.Lhp_vui_bad
-    HP_UE -1,16,.Lhp_vui_bad
+    HP_UE HP_MAX_REORDER,16,.Lhp_vui_bad
     mov esi, eax
-    HP_UE -1,16,.Lhp_vui_bad
+    HP_UE HP_MAX_BUFFER,16,.Lhp_vui_bad
     cmp eax, esi
     jb .Lhp_vui_bad
     cmp eax, [rbx+HP_REFS]
@@ -380,6 +385,12 @@ LOCALFN hp_slice
     mov [rbx+HP_TEMP_TYPE], eax
     test eax, eax
     jz .Lhp_slice_type_ok
+    cmp eax, 1
+    jne .Lhp_slice_intra_type
+    cmp dword ptr [rbx+HP_PROFILE], 66
+    je .Lhp_slice_unsupported
+    jmp .Lhp_slice_type_ok
+.Lhp_slice_intra_type:
     cmp eax, 2
     jne .Lhp_slice_unsupported
 .Lhp_slice_type_ok:
@@ -414,25 +425,41 @@ LOCALFN hp_slice
     call hp_bits
     mov [rbx+HP_TEMP_POC], eax
 .Lhp_slice_prediction:
-    cmp dword ptr [rbx+HP_TEMP_TYPE], 0
-    jne .Lhp_slice_marking
+    cmp dword ptr [rbx+HP_TEMP_TYPE], 2
+    je .Lhp_slice_marking
+    cmp dword ptr [rbx+HP_TEMP_TYPE], 1
+    jne .Lhp_slice_ref_counts
+    HP_BITS 1,-1,1,.Lhp_slice_bad # direct_spatial_mv_pred_flag
+.Lhp_slice_ref_counts:
     mov eax, [rbx+HP_L0]
     mov [rbx+HP_TEMP_ACTIVE], eax
+    mov eax, [rbx+HP_L1]
+    mov [rbx+HP_TEMP_ACTIVE1], eax
     HP_BITS 1,-1,1,.Lhp_slice_bad
     test eax, eax
     jz .Lhp_slice_active
     HP_UE HP_TEMP_ACTIVE,15,.Lhp_slice_bad
+    cmp dword ptr [rbx+HP_TEMP_TYPE], 1
+    jne .Lhp_slice_active
+    HP_UE HP_TEMP_ACTIVE1,15,.Lhp_slice_bad
 .Lhp_slice_active:
     cmp dword ptr [rbx+HP_TEMP_ACTIVE], 15
     ja .Lhp_slice_unsupported
+    cmp dword ptr [rbx+HP_TEMP_TYPE], 1
+    jne .Lhp_slice_lists
+    cmp dword ptr [rbx+HP_TEMP_ACTIVE1], 15
+    ja .Lhp_slice_unsupported
+.Lhp_slice_lists:
+    xor edi, edi
+.Lhp_slice_list_flag:
     HP_BITS 1,-1,1,.Lhp_slice_bad # ref_pic_list_modification_flag_l0
     test eax, eax
-    jz .Lhp_slice_weights
+    jz .Lhp_slice_next_list
     xor r12d, r12d
 .Lhp_slice_list_mod:
     HP_UE -1,3,.Lhp_slice_bad
     cmp eax, 3
-    je .Lhp_slice_weights
+    je .Lhp_slice_next_list
     inc r12d
     cmp r12d, 32
     ja .Lhp_slice_unsupported
@@ -449,14 +476,29 @@ LOCALFN hp_slice
 .Lhp_slice_list_long:
     HP_UE -1,15,.Lhp_slice_bad
     jmp .Lhp_slice_list_mod
+.Lhp_slice_next_list:
+    test edi, edi
+    jnz .Lhp_slice_weights
+    cmp dword ptr [rbx+HP_TEMP_TYPE], 1
+    jne .Lhp_slice_weights
+    inc edi
+    jmp .Lhp_slice_list_flag
 .Lhp_slice_weights:
+    cmp dword ptr [rbx+HP_TEMP_TYPE], 1
+    jne .Lhp_slice_p_weights
+    cmp dword ptr [rbx+HP_BIPRED], 1
+    jne .Lhp_slice_marking
+    jmp .Lhp_slice_read_weights
+.Lhp_slice_p_weights:
     cmp dword ptr [rbx+HP_WEIGHTED], 0
     je .Lhp_slice_marking
+.Lhp_slice_read_weights:
     mov rcx, rbx
     call hp_weights
     test eax, eax
     jz .Lhp_slice_return
 .Lhp_slice_marking:
+    mov dword ptr [rbx+HP_TEMP_NOOUTPUT], 0
     mov dword ptr [rbx+HP_TEMP_MMCO_COUNT], 0
     mov dword ptr [rbx+HP_TEMP_ADAPT], 0
     mov dword ptr [rbx+HP_TEMP_LONG], 0
@@ -464,7 +506,7 @@ LOCALFN hp_slice
     je .Lhp_slice_qp
     cmp dword ptr [rbx+HP_TEMP_NAL], 5
     jne .Lhp_slice_adaptive
-    HP_BITS 1,-1,1,.Lhp_slice_bad # no_output_of_prior_pics_flag
+    HP_BITS 1,HP_TEMP_NOOUTPUT,1,.Lhp_slice_bad
     HP_BITS 1,HP_TEMP_LONG,1,.Lhp_slice_bad
     jmp .Lhp_slice_qp
 .Lhp_slice_adaptive:
@@ -583,11 +625,13 @@ ENDFN hp_slice
 LOCALFN hp_weights
     push rbx
     push rsi
-    sub rsp, 40
+    push rdi
+    sub rsp, 32
     mov rbx, rcx
     HP_UE -1,7,.Lhp_weights_bad
     HP_UE -1,7,.Lhp_weights_bad
     xor esi, esi
+    xor edi, edi
 .Lhp_weights_ref:
     HP_BITS 1,-1,1,.Lhp_weights_bad
     test eax, eax
@@ -604,15 +648,27 @@ LOCALFN hp_weights
     HP_SE -1,-128,127,.Lhp_weights_bad
 .Lhp_weights_next:
     inc esi
+    test edi, edi
+    jnz .Lhp_weights_last
     cmp esi, [rbx+HP_TEMP_ACTIVE]
     jbe .Lhp_weights_ref
+    cmp dword ptr [rbx+HP_TEMP_TYPE], 1
+    jne .Lhp_weights_done
+    inc edi
+    xor esi, esi
+    jmp .Lhp_weights_ref
+.Lhp_weights_last:
+    cmp esi, [rbx+HP_TEMP_ACTIVE1]
+    jbe .Lhp_weights_ref
+.Lhp_weights_done:
     mov eax, 1
     jmp .Lhp_weights_return
 .Lhp_weights_bad:
     mov dword ptr [rbx+HP_ERROR], 1
     xor eax, eax
 .Lhp_weights_return:
-    add rsp, 40
+    add rsp, 32
+    pop rdi
     pop rsi
     pop rbx
     ret

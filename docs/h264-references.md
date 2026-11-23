@@ -3,7 +3,8 @@
 Windows source builds now decode and present progressive Baseline/CAVLC H.264
 I/P pictures, including non-IDR I pictures and retained short/long-term references.
 The existing [play/check/export commands](h264.md) accept these elementary Annex B
-files. B pictures, higher bit depths/chroma formats, video containers, accurate seeking and
+files. [B pictures and output reordering](h264-b.md) extend Main/High support.
+Higher bit depths/chroma formats, video containers, accurate seeking and
 audio/video synchronization remain unfinished.
 
 ## Parser and reference ownership
@@ -24,9 +25,9 @@ conflicting commands and DPB overflow reject. Header work is bounded to 64
 memory-control operations and 32 list modifications per slice, at most 16 active
 P references and the existing 256-slice/16 MiB compressed-picture limits.
 
-The current output path follows decode order. Streams requiring reordered output
-reject when POC decreases or repeats outside an IDR/MMCO5 reset. Missing/inferred
-frame-number gaps, POC type 1, fields/MBAFF, B/SP/SI slices,
+The [output bridge](h264-b.md) now retains pictures and returns display order;
+the parser can emit decreasing POC in decode order. Missing/inferred
+frame-number gaps, POC type 1, fields/MBAFF, SP/SI slices,
 redundant pictures, slice groups and changing parameter sets remain unsupported.
 Unsupported input fails preflight before creating an export or opening the video
 window. Slice coefficient/entropy conformance is delegated to the driver.

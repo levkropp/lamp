@@ -129,6 +129,8 @@ def cases():
     # Non-reference pictures do not enter the retained list or update PrevRefFrameNum.
     yield 'non-reference', annex(sps(), picture(), slice(idr=True), slice(1, ref=False), slice(1)), [
         (0, 0, 0, []), (1, 1, 1, [(0, 0, 0, False)]), (1, 1, 2, [(0, 0, 0, False)])]
+    yield 'poc-reorder', annex(sps(poc=0), picture(), slice(idr=True, poc=0), slice(1, poc=4), slice(2, poc=2)), [
+        (0,0,0,[]), (1,1,4,[(0,0,0,False)]), (2,2,2,[(0,0,0,False),(1,1,4,False)])]
     for name, body, sequence in [
         ('gap', [slice(idr=True), slice(3)], sps()),
         ('missing-idr', [slice(1)], sps()),
@@ -145,7 +147,6 @@ def cases():
         ('duplicate-reference-frame-num', [slice(idr=True), slice(1), slice(1)], sps()),
         ('too-many-commands', [slice(idr=True), slice(1, mmco=[(4, 0)]*65)], sps()),
         ('adaptive-overflow', [slice(idr=True), slice(1), slice(2), slice(3, mmco=[])], sps()),
-        ('poc-reorder', [slice(idr=True, poc=0), slice(1, poc=4), slice(2, poc=2)], sps(poc=0)),
         ('slice-marking-mismatch', [slice(idr=True), slice(1, mmco=[(4, 2)]), slice(1, mmco=[(4, 1)], mb=1)], sps()),
         ('all-long-sliding', [slice(idr=True, long=True), slice(1, mmco=[(4, 3), (6, 1)]), slice(2, mmco=[(6, 2)]), slice(3)], sps()),
     ]:

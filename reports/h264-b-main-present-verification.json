@@ -1,0 +1,275 @@
+{
+  "result": "passed",
+  "scope": "Native hardware NV12-to-BGRA SDR crop/range/matrix/SAR/letterbox/resize and owned hidden-window video-only timing/controls. No real display latency, audio synchronization, seeking, HDR, power or GPU-utilization claims.",
+  "reference_dependent_playback": true,
+  "bframes": 3,
+  "encoder_profile": "main",
+  "window_profile_idc": 77,
+  "platform": "Windows-11-10.0.26300-SP0",
+  "reference": "ffmpeg version 8.0.1-essentials_build-www.gyan.dev Copyright (c) 2000-2025 the FFmpeg developers",
+  "images": [
+    {
+      "name": "smpte170m-False",
+      "result": "passed",
+      "checks": 35341,
+      "color_samples": 150,
+      "max_rgb_error": 0,
+      "pending_retries": 6,
+      "frames": 1,
+      "rendered_images": 2,
+      "sha256": {
+        "smpte170m-False.yuv": "034bf57ae203c235dd3ada1b5a4fbec60f4b84c4de66511b8350b66cc1346d4c",
+        "smpte170m-False.h264": "bae8a381671cc0927dff5e6d625143ac2bfc0e4c8fcef70f4cc29c56f547d323",
+        "smpte170m-False.nv12": "34c4ded78e1424867fedbd37679eb1519356693b0bc236d3310a1d02b8a91933",
+        "smpte170m-False.bgra": "189a198bde448e033c6a9186b6f0dd20ebcbe85be620fabe52843b4a18435f6a"
+      }
+    },
+    {
+      "name": "bt709-False",
+      "result": "passed",
+      "checks": 35341,
+      "color_samples": 150,
+      "max_rgb_error": 0,
+      "pending_retries": 6,
+      "frames": 1,
+      "rendered_images": 2,
+      "sha256": {
+        "bt709-False.yuv": "034bf57ae203c235dd3ada1b5a4fbec60f4b84c4de66511b8350b66cc1346d4c",
+        "bt709-False.h264": "0c33a1b9b374fd514198dea15915914e473e936a9f2ce93a53c3318ad83bc9bb",
+        "bt709-False.nv12": "f47f3639301020e7fd718f735c90285c1ec6060c5c13f8f74b47305aafd2d0d6",
+        "bt709-False.bgra": "1ccf7ed3cfa91de0da8aa3c240d4b1226102b0031d8ce5e17cb120fb04e161c7"
+      }
+    },
+    {
+      "name": "smpte170m-True",
+      "result": "passed",
+      "checks": 35341,
+      "color_samples": 150,
+      "max_rgb_error": 0,
+      "pending_retries": 6,
+      "frames": 1,
+      "rendered_images": 2,
+      "sha256": {
+        "smpte170m-True.yuv": "034bf57ae203c235dd3ada1b5a4fbec60f4b84c4de66511b8350b66cc1346d4c",
+        "smpte170m-True.h264": "01293dad7797e67a590fee8b959bee88820386a3bdd43dea1cdfec67f32a80f1",
+        "smpte170m-True.nv12": "36fd99417cc97991225dad0d8351896a8c538f55f9d1e5cce5ffe7d9eb2ae8e7",
+        "smpte170m-True.bgra": "862faff6c8e3520e9ca864e9e4d9fe1d275c567eacb0b6dfe17ea909cd050794"
+      }
+    },
+    {
+      "name": "bt709-True",
+      "result": "passed",
+      "checks": 35341,
+      "color_samples": 150,
+      "max_rgb_error": 0,
+      "pending_retries": 6,
+      "frames": 1,
+      "rendered_images": 2,
+      "sha256": {
+        "bt709-True.yuv": "034bf57ae203c235dd3ada1b5a4fbec60f4b84c4de66511b8350b66cc1346d4c",
+        "bt709-True.h264": "5ad31a5100dd4003e4913f5c8cf97116a3298651de37d3b943933d52e40c385f",
+        "bt709-True.nv12": "447c5a70dd28a30d0844162544b185136df61b61fc5082e4d74f8b1f6c35108e",
+        "bt709-True.bgra": "673bb5daeb506020b25742602feea0ea2389f55f2bbb7ae3313be2e781655031"
+      }
+    },
+    {
+      "name": "black-limited",
+      "result": "passed",
+      "checks": 35341,
+      "color_samples": 150,
+      "max_rgb_error": 0,
+      "pending_retries": 6,
+      "frames": 1,
+      "rendered_images": 2,
+      "sha256": {
+        "black-limited.yuv": "ea9e3dd5ac3926c3b532515984de59fece80f298e98b6e0d0791d0a6d43bc3c5",
+        "black-limited.h264": "91d9870d9f6c55791a65a8532fc49beadaf03a11fd20a697c413850588af8314",
+        "black-limited.nv12": "ea9e3dd5ac3926c3b532515984de59fece80f298e98b6e0d0791d0a6d43bc3c5",
+        "black-limited.bgra": "b3d177c911f9a5b44be41e4aec6456bafe51500656a1da4c48cbbf311028e2e9"
+      }
+    },
+    {
+      "name": "white-limited",
+      "result": "passed",
+      "checks": 35341,
+      "color_samples": 150,
+      "max_rgb_error": 0,
+      "pending_retries": 6,
+      "frames": 1,
+      "rendered_images": 2,
+      "sha256": {
+        "white-limited.yuv": "99addd147822470eb9d2ba5e107f7ccd3d2e667ff29248de02a380ff5fb723fd",
+        "white-limited.h264": "7cee58ad4b6b9cf9057d7349519fea0bf0a62be9db51ec0ec63d8a5c32f314ae",
+        "white-limited.nv12": "749bf38912b5e07751a13ea170593e10a0f18350fd525150608e7644082b1e6e",
+        "white-limited.bgra": "fc51a2946ab9d914e35e97afea7547d256f0e9532d2b5b3f61b6ac9b85f64fdf"
+      }
+    },
+    {
+      "name": "black-full",
+      "result": "passed",
+      "checks": 35341,
+      "color_samples": 150,
+      "max_rgb_error": 0,
+      "pending_retries": 6,
+      "frames": 1,
+      "rendered_images": 2,
+      "sha256": {
+        "black-full.yuv": "69b3c1eb3ad60d9a97e96f80ff6562bdddac86e62462542e01fd5f4eaad1e787",
+        "black-full.h264": "da233780fdea2ca4cfda2d200ddb04bebdfbe167ca091939a4a8cf0e3bee5656",
+        "black-full.nv12": "90a01ebc4b443851d75c2ca91c8ceaedaf28ebae8104d5c2e13abbd9bd18c908",
+        "black-full.bgra": "58d9679b8f01be31389e6a99f93b591c45d6a27351d4baeea88876b3c148abd0"
+      }
+    },
+    {
+      "name": "white-full",
+      "result": "passed",
+      "checks": 35341,
+      "color_samples": 150,
+      "max_rgb_error": 0,
+      "pending_retries": 6,
+      "frames": 1,
+      "rendered_images": 2,
+      "sha256": {
+        "white-full.yuv": "a3ea1fa110203680e7d48d698e165b22b92f87350a591c86f3dcdb4ebe348ba3",
+        "white-full.h264": "e882c77140e4335f2946d856499f8eced54b682b5552604dab9f1af6e5b28ff1",
+        "white-full.nv12": "b93a9be712e3edb6c92f90aa7cbef45efb5efff92abe2d4c62232ecad81c6ad6",
+        "white-full.bgra": "325419447f4c8d93393abc51d5706c954aee036f8c19869ce7488887ca78d4c9"
+      }
+    },
+    {
+      "name": "crop-sar",
+      "result": "passed",
+      "checks": 32966,
+      "color_samples": 150,
+      "max_rgb_error": 0,
+      "pending_retries": 6,
+      "frames": 1,
+      "rendered_images": 2,
+      "sha256": {
+        "crop-sar.yuv": "d44d59d7b43b587558eee770ddec16fb4f3205e6a0d2ac92cf7b86b2ba33428a",
+        "crop-sar.h264": "d3ae01e021f23dfb9486e6ef276c64a7bf08146425034f7416d738a9924ed94d",
+        "crop-sar.nv12": "254f6991ad5e26094cabccd03c7c6ff803e08791fd663c019917556f08d9425d",
+        "crop-sar.bgra": "ba13186d1f91898029a6f3cb623d15a8548e6c23fdf7cd5b662604ce993feab2"
+      }
+    },
+    {
+      "name": "p-flat",
+      "result": "passed",
+      "checks": 599633,
+      "color_samples": 1875,
+      "max_rgb_error": 1,
+      "pending_retries": 62,
+      "frames": 24,
+      "rendered_images": 25,
+      "sha256": {
+        "p-flat.yuv": "a658f5d2a1c105382ddca4d32c82b84e6540e9a57a3c2f64f410ff144e717a86",
+        "p-flat.h264": "b7aed7b12c74a40311b7ca1853ff83f11b1e1f7404152f5ef712baaad142ea89",
+        "p-flat.nv12": "33086f8ecbf227643e621d6d38347219632fa083d045826f09b303a18b01c4a4",
+        "p-flat.bgra": "2e047ee94c8de9c819a06740fbc32e2d69a420de76c466df818e682c812c8708"
+      }
+    }
+  ],
+  "window": {
+    "result": "passed",
+    "checks": 1335,
+    "source_frames": 90,
+    "cases": [
+      "pause",
+      "autorepeat",
+      "two_steps",
+      "resize",
+      "minimize",
+      "eof",
+      "replay",
+      "close",
+      "cancel",
+      "escape",
+      "step_to_eof"
+    ]
+  },
+  "mock": {
+    "result": "passed",
+    "checks": 45404,
+    "open_failures": 15,
+    "resize_failures": 11,
+    "gpu_failures": 5,
+    "bad_maps": 2,
+    "busy_retries": 6
+  },
+  "cli_window": {
+    "result": "passed",
+    "scope": "Actual --video-play command, PID-owned hidden window, pause title, step request and clean close; direct API oracle establishes exact step counts."
+  },
+  "cli_rejections": [
+    {
+      "arguments": [],
+      "exit_code": 2,
+      "message": "Usage: --video-play file.h264 | --video-check file.h264 | --video-decode file.h264 output.nv12"
+    },
+    {
+      "arguments": [
+        "bin\\h264-b-check\\video-present-main-b3\\high422-profile.h264"
+      ],
+      "exit_code": 1,
+      "message": "Unsupported, malformed or inaccessible H.264 file."
+    },
+    {
+      "arguments": [
+        "bin\\h264-b-check\\video-present-main-b3\\high10-profile.h264"
+      ],
+      "exit_code": 1,
+      "message": "Unsupported, malformed or inaccessible H.264 file."
+    }
+  ],
+  "sha256": {
+    "src/win/video_present.s": "6d369ffd0ddbd465f9de8f46eca66fb619e796e180d4d1d0b1369b8b85737a0c",
+    "src/win/video_present.inc": "f66546922f8a25bc6ce4a86a50a84ef6f3abe652c44d0b07c8123a11e473016d",
+    "src/win/video_window.s": "d5ffe5f1a6377e0f065a50104920b48635a74edf8c7c6674fecdab443d16ee82",
+    "src/win/video_window.inc": "f8be86f5070b9250a6d9223b42aea68160d8f12730a58a42c85960dbb0444d3f",
+    "src/win/video_cli.s": "51573b13a216b33c9628a24e5dae2d5e465e17725c198ba5747ecf0fc6eea31f",
+    "src/win/player.s": "a4ea0b0ee3830814dfca1e773cb10d50c1568672dc93301188d43fa766c616ea",
+    "src/win/kernel32.def": "723dab404498c79ab1fc1aaa716f23476e6a4901ac96febf03f797c48647f241",
+    "src/win/user32.def": "8060bc2b30c17fc5bf2a879006fd4d7fcfaaa3803651a6cfd67d33146af9baa5",
+    "tests/video-present-oracle.c": "a949213edb6c737019ffa5d72a04c9aaa5d3d80adb73c2b5d391e2d4a7160670",
+    "tests/video-present-mock.c": "d3b8b5b967059b85ac15565243a297f988885b9239bb6d19fa81242ef290169f",
+    "tests/video-window-oracle.c": "198b8c5a42a9b7789f1935bdc9d7b46a60882a7c124eb3e1c35a8626faebe897",
+    "tests/verify-video-present.py": "dcf5bbc2e6f4ce45796abaf354d10d9996e9f487b6f436937cbc527c01b5dd9b",
+    "tests/verify-h264-file.py": "a90c89ef7e689c1cfe40632dc5def1a8175ee934e5b1ac39deea6355e3796d51",
+    "tests/verify-runtime.js": "a0b0a8af963548b7f8b3989850fae10a2a78578c2307fcb150b88663baa7bf33",
+    "tools/build-windows.py": "b41f3da1b32c389943bcae381952592a51b4debef38477a61e6e6d2574812be2",
+    "reports/video-present-h264-regression.json": "08ee08fad12f2917f1376dd2d585e3b8b3028ab5dad7d88849d1c1fc0613b528",
+    "bin/h264-b-check/obj/h264.obj": "6c32dd8ad4ab16cbbd5ddbb2e8b9d63e5351a3563020f31c86c6cecccbbcdde3",
+    "bin/h264-b-check/obj/platform.obj": "22ec4d40ecb059a5f86ec71aac0d1da485f7526ae89c3e712926b6fdcd7474d7",
+    "bin/h264-b-check/obj/video.obj": "a013b81fd1312acc2e3c2da2f17cdc2c20e44e882a6de185bb3e861c02a7f1f8",
+    "bin/h264-b-check/obj/video_stream.obj": "b0640faa714636df786a23d34049cd089cf2913c142d3a6183b5dedc643c5469",
+    "bin/h264-b-check/obj/video_present.obj": "16e9313acabb41841d3d0f7917554a357065bb5f41a3fb834bc24481d0c65426",
+    "bin/h264-b-check/obj/video_window.obj": "91e9d87d64d3ae2b0598637a340a12fb85996bf74fae08bc6e5e735146cfa813",
+    "bin/h264-b-check/obj/video_cli.obj": "1f73cc1b2de802540d0efa470699f99541a4a291e6b3fee55ecfc734a2cc4fa3",
+    "bin/h264-b-check/video-present-main-b3/video-present-oracle.exe": "6b520fe4f6a63cf517997d68a0f54103fe085bf1ec41e312f2634c11cabfef8a",
+    "bin/h264-b-check/video-present-main-b3/video-window-oracle.exe": "aad3d1e3100d9c9ad5669749cc3854104e76cc4c026b9635d8fdb62d999a23ee",
+    "bin/h264-b-check/video-present-main-b3/video-present-mock.exe": "e4507753d0552cd3649184297356b5a2a8f6f4dcfc3930840d95ad110a217ee6",
+    "bin/h264-b-check/lamp-cli.exe": "878e739a4033dc38521802fd3127b124fe502cdb8887435ac1e242e54c05cb03",
+    "bin/h264-b-check/lamp.exe": "1b9d7f93fb252f3ddd4f52e87d63bc4a8f68953cf75e0916da1687359199a930",
+    "C:/ProgramData/chocolatey/bin/ffmpeg.exe": "a07104f51ccb15971c4affc34a392e34899cf8752f08f4d1aca58e8892a69859",
+    "bin/h264-b-check/video-present-main-b3/timed.h264": "317b5eac5da4dd5dbbb949cb467a5b0092b4262fb4cf69076ad20ded5a46cb2f",
+    "bin/h264-b-check/video-present-main-b3/high422-profile.h264": "b4845d103f52d686b153bd13f24428a5d6297d2f983b594e83407cab3063fc67",
+    "bin/h264-b-check/video-present-main-b3/high10-profile.h264": "84a922fbe68871bc895160a096b6885c72dab4610212ccb6e0042cb230afdf8b"
+  },
+  "git_source_sha256": {
+    "src/win/video_present.s": "6d369ffd0ddbd465f9de8f46eca66fb619e796e180d4d1d0b1369b8b85737a0c",
+    "src/win/video_present.inc": "f66546922f8a25bc6ce4a86a50a84ef6f3abe652c44d0b07c8123a11e473016d",
+    "src/win/video_window.s": "d5ffe5f1a6377e0f065a50104920b48635a74edf8c7c6674fecdab443d16ee82",
+    "src/win/video_window.inc": "f8be86f5070b9250a6d9223b42aea68160d8f12730a58a42c85960dbb0444d3f",
+    "src/win/video_cli.s": "51573b13a216b33c9628a24e5dae2d5e465e17725c198ba5747ecf0fc6eea31f",
+    "src/win/player.s": "a4ea0b0ee3830814dfca1e773cb10d50c1568672dc93301188d43fa766c616ea",
+    "src/win/kernel32.def": "723dab404498c79ab1fc1aaa716f23476e6a4901ac96febf03f797c48647f241",
+    "src/win/user32.def": "8060bc2b30c17fc5bf2a879006fd4d7fcfaaa3803651a6cfd67d33146af9baa5",
+    "tests/video-present-oracle.c": "a949213edb6c737019ffa5d72a04c9aaa5d3d80adb73c2b5d391e2d4a7160670",
+    "tests/video-present-mock.c": "d3b8b5b967059b85ac15565243a297f988885b9239bb6d19fa81242ef290169f",
+    "tests/video-window-oracle.c": "198b8c5a42a9b7789f1935bdc9d7b46a60882a7c124eb3e1c35a8626faebe897",
+    "tests/verify-video-present.py": "dcf5bbc2e6f4ce45796abaf354d10d9996e9f487b6f436937cbc527c01b5dd9b",
+    "tests/verify-h264-file.py": "a90c89ef7e689c1cfe40632dc5def1a8175ee934e5b1ac39deea6355e3796d51",
+    "tests/verify-runtime.js": "29775ecd7215e63629e41dc2654e00b3291c6a46dcc8258e6aa3167150c442b8",
+    "tools/build-windows.py": "b41f3da1b32c389943bcae381952592a51b4debef38477a61e6e6d2574812be2"
+  }
+}

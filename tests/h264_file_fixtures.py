@@ -220,14 +220,14 @@ def generate(folder, ffmpeg):
     for name, data, accepted, meta in cases:
         file = folder/(name+'.synthetic'); file.write_bytes(data)
         synthetic.append(dict(name=name, accepted=accepted, metadata=meta, sha256=hashlib.sha256(data).hexdigest()))
-    # Genuine unsupported B-picture and High10 files; CPU preflight must reject.
+    # Genuine unsupported 4:2:2 and High10 files; CPU preflight must reject.
     negatives = []
-    for name, profile, params in [('inter-frame', 'main', 'keyint=30:bframes=2:cabac=1:8x8dct=0'),
+    for name, profile, params in [('high422-profile', 'high422', 'keyint=30:bframes=2:cabac=1:8x8dct=0'),
                                   ('high10-profile', 'high10', 'keyint=1:cabac=1:8x8dct=1')]:
         file = folder/(name+'.h264')
         subprocess.run([ffmpeg, '-hide_banner', '-loglevel', 'error', '-y', '-f', 'lavfi', '-i',
                         'testsrc2=size=320x240:rate=24', '-frames:v', '4', '-c:v', 'libx264',
-                        '-profile:v', profile, '-pix_fmt', 'yuv420p10le' if profile == 'high10' else 'yuv420p',
+                        '-profile:v', profile, '-pix_fmt', 'yuv420p10le' if profile == 'high10' else 'yuv422p',
                         '-x264-params', params+':threads=1', '-f', 'h264', str(file)], check=True)
         negatives.append(dict(name=name, sha256=hashlib.sha256(file.read_bytes()).hexdigest()))
     manifest = dict(reference=subprocess.check_output([ffmpeg, '-version'], text=True).splitlines()[0],
