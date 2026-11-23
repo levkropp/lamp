@@ -1,0 +1,4230 @@
+{
+  "result": "passed",
+  "platform": "Windows-11-10.0.26300-SP0",
+  "scope": "ASF AAC-LC and HE-AAC v1/v2 object clocks, preroll and stream offset. Independent media placement and codec primer suffix seeks. Gathered ASF codecs, video synchronization, native Mac and Linux device playback remain unestablished.",
+  "fixture_hashes": {
+    "aac-8000-1-continuous.asf": "e7efb8763d92a15a37c8dc1c023366f99ecd82a8cacfb00a63564717e9f8534a",
+    "aac-8000-1-continuous.asf.f32": "aea78078e4815918d615fd8853f102c1ff6d34d3ec8148c9b8d2e6af577a7d26",
+    "aac-8000-1-continuous.asf.seek-reference": "476101bb6e06543965c5c2f723c5c0ba23d5b71bc87e1b6335535641cb710adb",
+    "aac-8000-1-leading.asf": "6c62ae09dab3ab54c60c55777f5337f605d5406bf5b21ee266ac8d8fff8134e9",
+    "aac-8000-1-leading.asf.f32": "0475eeb00ad0c131edb564e3ca6d708ff551bf787d4fc9b5d78bd81ecfe432e9",
+    "aac-8000-1-leading.asf.seek-reference": "438fa272c7a143329852b72756856d641bb61c2d3de252e09a17aa593ed32628",
+    "aac-8000-1-internal.asf": "51417435592e4da66bad4f5fb851b3402e101c068e21512030f7f0ead2d86685",
+    "aac-8000-1-internal.asf.f32": "d39af7bd7ea61106133f0c7283363304689a70f3adf0954e4a4229b10298a242",
+    "aac-8000-1-internal.asf.seek-reference": "c4f0371881e97f2f74fd2b7cf3030836d776a5630ddf3dd6d613b8fe528c939a",
+    "aac-8000-1-overlap.asf": "f7004df0fa31be6a2817723b720df999523f7a07f726d49e47ae7d4e20b3dfc0",
+    "aac-8000-1-overlap.asf.f32": "4714b84bb430e0655ac2f5ee982794e34e2a08aae95315a568db187cbf0f29e2",
+    "aac-8000-1-overlap.asf.seek-reference": "2334cc576356a9176397b2940c4f4988505a432e6d037fb25a1464905f85b72b",
+    "aac-8000-1-negative.asf": "c69aa20f7ff275a7d9a96cb6a5d50cd0720e10b6cea2ea7555370d68ce17c17c",
+    "aac-8000-1-negative.asf.f32": "d00bb330f083c51ea921402dff04c98918838d557a098dd59b80ab07d58de970",
+    "aac-8000-1-negative.asf.seek-reference": "c1fafcf4e97d5b25d99dfa2f87f42e977c521cef829e24e2bdadfbe6864c89c3",
+    "aac-8000-1-reorder.asf": "3f9d562ca02dcffccc74610af637c21c73c7c4a5b9a2ed801a815fa81dee9a0d",
+    "aac-8000-1-reorder.asf.f32": "d2904182a60d499cde9e0d58a8e25aa6db7832149b2d9d38d4e3a4179247c1ec",
+    "aac-8000-1-reorder.asf.seek-reference": "7bfef4b8e058502a8f97a0bf55d172eb4e6c8452034e268ab61cfdffe5a5c857",
+    "aac-8000-1-foreign.asf": "68fcd210bb9b552c33ce58140fbe16c96a721fc3c4ae465147bb0ec77c3f4802",
+    "aac-8000-1-foreign.asf.f32": "aea78078e4815918d615fd8853f102c1ff6d34d3ec8148c9b8d2e6af577a7d26",
+    "aac-8000-1-foreign.asf.seek-reference": "476101bb6e06543965c5c2f723c5c0ba23d5b71bc87e1b6335535641cb710adb",
+    "aac-8000-1-fragment.asf": "26886c295e306f1e442cbba5d35fedd78e2421a269aaa8e1f8fb94cdb77c02ab",
+    "aac-8000-1-fragment.asf.f32": "aea78078e4815918d615fd8853f102c1ff6d34d3ec8148c9b8d2e6af577a7d26",
+    "aac-8000-1-fragment.asf.seek-reference": "476101bb6e06543965c5c2f723c5c0ba23d5b71bc87e1b6335535641cb710adb",
+    "aac-8000-1-offset.asf": "50d9298ca3f595ec681bc628f0e8c77a3a6e156927e3e921de408227140fd5de",
+    "aac-8000-1-offset.asf.f32": "0475eeb00ad0c131edb564e3ca6d708ff551bf787d4fc9b5d78bd81ecfe432e9",
+    "aac-8000-1-offset.asf.seek-reference": "438fa272c7a143329852b72756856d641bb61c2d3de252e09a17aa593ed32628",
+    "aac-8000-1-cancel-large.asf": "f7eaa47876acd5dc996494cc8ba32f41243358246ae37641d32d5c936fef844a",
+    "aac-8000-1-cancel-large.asf.f32": "aea78078e4815918d615fd8853f102c1ff6d34d3ec8148c9b8d2e6af577a7d26",
+    "aac-8000-1-cancel-large.asf.seek-reference": "476101bb6e06543965c5c2f723c5c0ba23d5b71bc87e1b6335535641cb710adb",
+    "aac-8000-1-all-negative.asf": "0f4a89a8adf21d1a88e7d1821ade73d3a6da97fda36f778ea2f85319615f9059",
+    "aac-8000-1-all-negative.asf.f32": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "aac-8000-1-all-negative.asf.seek-reference": "5d89f056865052bcb89c910d2d62872e029fb273c3db03f8968a52a41593c1b5",
+    "aac-8000-1-repeat.asf": "02dcbccbd2866fb9b9242d09c8651543819e3a27637038049ac1a2f14e34ab8d",
+    "aac-8000-1-repeat.asf.f32": "863264ce0311dda7c6b8af44c3d3c5b78313ac2ec94cb7c3bc12b737e26e5a9d",
+    "aac-8000-1-repeat.asf.seek-reference": "15d2de255dfd271919ca84115a6952ce2a284741d0b0660d925374d994b5b7f3",
+    "aac-11025-2-continuous.asf": "691f358ef63202ea355a6802d47d1b47caf70990310da7d17a6208ba0dd505ae",
+    "aac-11025-2-continuous.asf.f32": "70a05a1b93e80cd248456152d1624bba193d530a51ae5813dbbb4bc24c474cbd",
+    "aac-11025-2-continuous.asf.seek-reference": "0abf1af1b854ad3808b7f6b29a7bf4aec8fc27adaafd7b069f270a999729665a",
+    "aac-11025-2-leading.asf": "a870e708acebe1a1fa11cdfc966810cf6872646a32f49318a8281ec3111fcb22",
+    "aac-11025-2-leading.asf.f32": "f16f6028a414621a6cb31f7753b8d10a9e938e3683e2854c0925340ccd52feeb",
+    "aac-11025-2-leading.asf.seek-reference": "c603ae7527e4179ebd3975aca49981379591062e11cba16f9fce6b4b753c0ca5",
+    "aac-11025-2-internal.asf": "f53fb18a3525025442aae6f5f054da6420b3f29fa8b0979cdf2596e25b3e8347",
+    "aac-11025-2-internal.asf.f32": "0a52dbf581c3739c2ba6709094071a290c6df3f975c5b393b8ea6c04dda175bf",
+    "aac-11025-2-internal.asf.seek-reference": "691c21d85b5f9830800c47f7434ce86d34cdc63b24038094ed8107a32f24f181",
+    "aac-11025-2-overlap.asf": "058ef760a812346f098e2ae68899dfadb0e829ce011147b3883bc19e96c10378",
+    "aac-11025-2-overlap.asf.f32": "a53e2ea791039669437a15c151b7459307d8e934e3255dd74ae06d3bb3680e36",
+    "aac-11025-2-overlap.asf.seek-reference": "fe855a5224e08be279d3dddab91ee949033bab3da617e414d0f6abdfa1731fd6",
+    "aac-11025-2-negative.asf": "bab37f9bdb60833d0bfd57c61a1f46fceb675e9ca34079dc97ac79b90a7ea473",
+    "aac-11025-2-negative.asf.f32": "94289859277e8c41bd1f4845620c55d411b828c08d950fb81694eee0a6469b18",
+    "aac-11025-2-negative.asf.seek-reference": "c3f8478dc77384e3d992d0b767fb8b8bf75397adccb9b56b9888b44ea4c4859f",
+    "aac-11025-2-reorder.asf": "21a1a96981909b072366ed18dbb13c4398dfa384da4b1f51a148b432c2a072e3",
+    "aac-11025-2-reorder.asf.f32": "45fac18d6495cafc9fd0e908bde7b2c3f9fb0a08197c8b72bf0152034325630d",
+    "aac-11025-2-reorder.asf.seek-reference": "0ef4d91ac9198f0f31fefbb28d52708462def82cfb2f201d89773da12f719194",
+    "aac-11025-2-foreign.asf": "56a9bd1b7c7c947b041737ca7fb210a8588c88d2037493c54392a2cdec1f1c4a",
+    "aac-11025-2-foreign.asf.f32": "70a05a1b93e80cd248456152d1624bba193d530a51ae5813dbbb4bc24c474cbd",
+    "aac-11025-2-foreign.asf.seek-reference": "0abf1af1b854ad3808b7f6b29a7bf4aec8fc27adaafd7b069f270a999729665a",
+    "aac-11025-2-fragment.asf": "0d22d49c211128ad2e94c014890796112162e758c3b7ee3e4613f45846c85ce3",
+    "aac-11025-2-fragment.asf.f32": "70a05a1b93e80cd248456152d1624bba193d530a51ae5813dbbb4bc24c474cbd",
+    "aac-11025-2-fragment.asf.seek-reference": "0abf1af1b854ad3808b7f6b29a7bf4aec8fc27adaafd7b069f270a999729665a",
+    "aac-11025-2-offset.asf": "9c2da6893906344d50a93860f925710737e0403f0022580766e28d8ce6886d5d",
+    "aac-11025-2-offset.asf.f32": "f16f6028a414621a6cb31f7753b8d10a9e938e3683e2854c0925340ccd52feeb",
+    "aac-11025-2-offset.asf.seek-reference": "c603ae7527e4179ebd3975aca49981379591062e11cba16f9fce6b4b753c0ca5",
+    "aac-11025-2-cancel-large.asf": "b87a2c0b72382c0765432b4462c0e0f6922af73faeff027a22bc2f1393b532c4",
+    "aac-11025-2-cancel-large.asf.f32": "70a05a1b93e80cd248456152d1624bba193d530a51ae5813dbbb4bc24c474cbd",
+    "aac-11025-2-cancel-large.asf.seek-reference": "0abf1af1b854ad3808b7f6b29a7bf4aec8fc27adaafd7b069f270a999729665a",
+    "aac-11025-2-all-negative.asf": "3dc651fd84b9cf85cce5886faac5c48b2bdf08b157acb3774488c3e8fd7a1494",
+    "aac-11025-2-all-negative.asf.f32": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "aac-11025-2-all-negative.asf.seek-reference": "5d89f056865052bcb89c910d2d62872e029fb273c3db03f8968a52a41593c1b5",
+    "aac-11025-2-repeat.asf": "a52415707944f490424cf81b5949016e62b02f607ee9c35ce33701662b5785b9",
+    "aac-11025-2-repeat.asf.f32": "71295a3c39434faedad222fac2cb1a4d5c59982648d7f01ce4bad5e46c8b9551",
+    "aac-11025-2-repeat.asf.seek-reference": "070e9dfe8566373c58d618d750349424c06cce05db5a687bdf4fc383b2245c4a",
+    "aac-12000-1-continuous.asf": "00cde47ea8230b6a0949e8d58926c88ce236e1928deb08a571b999e239265e08",
+    "aac-12000-1-continuous.asf.f32": "fe0792c8387b18fbb0aaaf49192da2c15d4f794fb7e6df1eceeff29147c0ef34",
+    "aac-12000-1-continuous.asf.seek-reference": "228a82213cf61226a9505d7373dd3b2a09912aec01b735d906fe8e2314e4c6d5",
+    "aac-12000-1-leading.asf": "b39b30d1b1d9a52eed4d453579c2e55edb6e3157817b8286ab263220eddbfd6f",
+    "aac-12000-1-leading.asf.f32": "44b4297f74f1c27c489879b6c359babd8e8536c2c847267638479770c46732ac",
+    "aac-12000-1-leading.asf.seek-reference": "2e78a1896e6e316d481011abfca784bc229e6dedaec29cff5c5488a5f2425a9e",
+    "aac-12000-1-internal.asf": "5fc64ebf94fd421b18b93b1434d8208404df76503aeb74043a2e3412b424f6a8",
+    "aac-12000-1-internal.asf.f32": "99392d019b874af79d3f54335ba91eb0c85a2073ad957f60bdf5e46b9d8df5d6",
+    "aac-12000-1-internal.asf.seek-reference": "8c183c4429a501dde680206a872e6f707b3b8d85c74051c4a54c176e50cf6e96",
+    "aac-12000-1-overlap.asf": "c94ef2fc66acefb69d4ed4b48575e5a6d0aa37e12e574bc26f75dcaf2a3a42ee",
+    "aac-12000-1-overlap.asf.f32": "4764d8eaf7119cc2a64f22cb812aa66a081dad9ba2c6c6180be0682e14942a38",
+    "aac-12000-1-overlap.asf.seek-reference": "8b09413e8ba1b303a5be572471f9c19934fde3c55ffb0e25700b2b297fda7900",
+    "aac-12000-1-negative.asf": "73c175da504e35563d64ee66bfd1e66513bdccac8c0b642046fbb4e1e8d1da41",
+    "aac-12000-1-negative.asf.f32": "aff0fd7211463fd8f822cb989db4eb46bb261f32200e6d36b2c54df76d39face",
+    "aac-12000-1-negative.asf.seek-reference": "3500fe0886ddbcc109783eef6578d55598ad832615752b0f3104aeabc2bb336d",
+    "aac-12000-1-reorder.asf": "4c239c109797aee2cc72ff870f7b3c8e437e5c52aaf00057988a1b23196b8a0d",
+    "aac-12000-1-reorder.asf.f32": "2f14ce3ef83ff07cf9dcb87f51e2cf19e91db601d5f756103e23fc7e5626cc5f",
+    "aac-12000-1-reorder.asf.seek-reference": "b25d03eeded1d711f750e5576567aa10eb83e836cceda4b2f49111c79d178050",
+    "aac-12000-1-foreign.asf": "a505e10f9c99ae78c7ccebe44f3ea4a368f1a3655ab679a09709932daf6d42b3",
+    "aac-12000-1-foreign.asf.f32": "fe0792c8387b18fbb0aaaf49192da2c15d4f794fb7e6df1eceeff29147c0ef34",
+    "aac-12000-1-foreign.asf.seek-reference": "228a82213cf61226a9505d7373dd3b2a09912aec01b735d906fe8e2314e4c6d5",
+    "aac-12000-1-fragment.asf": "06f9dfb4567692312fa31bced0b50f965896899e6173343ab95426246ca72208",
+    "aac-12000-1-fragment.asf.f32": "fe0792c8387b18fbb0aaaf49192da2c15d4f794fb7e6df1eceeff29147c0ef34",
+    "aac-12000-1-fragment.asf.seek-reference": "228a82213cf61226a9505d7373dd3b2a09912aec01b735d906fe8e2314e4c6d5",
+    "aac-12000-1-offset.asf": "01a305f22d4fec9d6fcfa683ec4090fb41d138527bac432a8201cff418f91f7f",
+    "aac-12000-1-offset.asf.f32": "44b4297f74f1c27c489879b6c359babd8e8536c2c847267638479770c46732ac",
+    "aac-12000-1-offset.asf.seek-reference": "2e78a1896e6e316d481011abfca784bc229e6dedaec29cff5c5488a5f2425a9e",
+    "aac-12000-1-cancel-large.asf": "18eccb5bdb34db9cf2088d6ab0f2f6591966200dffcb6fa4ec346746e4281752",
+    "aac-12000-1-cancel-large.asf.f32": "fe0792c8387b18fbb0aaaf49192da2c15d4f794fb7e6df1eceeff29147c0ef34",
+    "aac-12000-1-cancel-large.asf.seek-reference": "228a82213cf61226a9505d7373dd3b2a09912aec01b735d906fe8e2314e4c6d5",
+    "aac-12000-1-all-negative.asf": "d86bee9c8a0e4e13b2379dd8ffeca1ca4f42f0b11e02d2a87f9e616564a67f18",
+    "aac-12000-1-all-negative.asf.f32": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "aac-12000-1-all-negative.asf.seek-reference": "5d89f056865052bcb89c910d2d62872e029fb273c3db03f8968a52a41593c1b5",
+    "aac-12000-1-repeat.asf": "69d7c4c9235fa780842808f477815d0097db3c9eb88abb559d906614bbde1499",
+    "aac-12000-1-repeat.asf.f32": "ff36ee2729d9d91c324ac289bd8ec95dfeac5d82ef353fe2aebd7fbe6a8c1532",
+    "aac-12000-1-repeat.asf.seek-reference": "9a919eb6686a31a94b4b6175a1204c06652ae03d080c12efb4fe309c51e68581",
+    "aac-16000-2-continuous.asf": "9f037584fd22b48900dd460dfc208f8477194836afb4158abdabe85e0c2feacb",
+    "aac-16000-2-continuous.asf.f32": "014449e4ee7943542d4d81d6aeb2435d28ea8c3e9eaa5bebc3594316ddcb953a",
+    "aac-16000-2-continuous.asf.seek-reference": "e375906b1c39b314db8f67cfb7336962fe5e051510425134a27cebc832a1d4c5",
+    "aac-16000-2-leading.asf": "79255276bf20f960b380dda3cb018f53ca122175e7af63c5b1282c90716981fe",
+    "aac-16000-2-leading.asf.f32": "0182e9f59f568a7a9f8f2c5c542585c7bb6162182118e223ef9a832ced7c5248",
+    "aac-16000-2-leading.asf.seek-reference": "b66abbf5e4be36bf3975536b22829ae902e965d365606c438b4231b07da6fb13",
+    "aac-16000-2-internal.asf": "d8377e60b144b1616b209d236e0f7001bd440093241ca1bf226e032ad83d3469",
+    "aac-16000-2-internal.asf.f32": "296be5c241fcf0fd4f8d20f70aa4748dd1947442906fef8cba6b532625b14954",
+    "aac-16000-2-internal.asf.seek-reference": "4490b9a962743be7ec9c23b88fe31a5672d0c85db0074e086ed9a6aba6b662c7",
+    "aac-16000-2-overlap.asf": "b70e44ca190176699c74b690cc016418c4f9c83006ffc45fafa0aeb7c83f98a9",
+    "aac-16000-2-overlap.asf.f32": "d35a3f4037a373868a37be9be686701217538232e4270a8f35bd28fdcca72c85",
+    "aac-16000-2-overlap.asf.seek-reference": "2fba337a1220b2d89043eddf4f25943b31a803e02626abb48f259c6845b36deb",
+    "aac-16000-2-negative.asf": "22fdaef6f9a8d9e6927ddfbab25f50d264e696dcf2837e80924f16be465b140b",
+    "aac-16000-2-negative.asf.f32": "b6dab1bd4f3375cf76adc6778c8b84513879fc9e1adf46ddff7610801aa7c5a6",
+    "aac-16000-2-negative.asf.seek-reference": "8b09df8482b18b7423215f3f8125205bd576c2db78d11834f9ad44362c8fa3bb",
+    "aac-16000-2-reorder.asf": "8391ec330a6ec2e9a3c043937fec3631667e2733be40a8096af76c5fca2402ae",
+    "aac-16000-2-reorder.asf.f32": "76bd4ae5fdc7b9a02c4e1e092b0b2dd18e8340808e2c1dda90f2533daaa661c5",
+    "aac-16000-2-reorder.asf.seek-reference": "01442b0bc3fcfde0b2cb7da48766ce3d0ec0af5fe0c061ca9622d4819eea6632",
+    "aac-16000-2-foreign.asf": "21b77ea148a7b2bb8c49d93d9e4fa80be9f294836fa6d2dba427d6abb70fc9b8",
+    "aac-16000-2-foreign.asf.f32": "014449e4ee7943542d4d81d6aeb2435d28ea8c3e9eaa5bebc3594316ddcb953a",
+    "aac-16000-2-foreign.asf.seek-reference": "e375906b1c39b314db8f67cfb7336962fe5e051510425134a27cebc832a1d4c5",
+    "aac-16000-2-fragment.asf": "44f8d8b80dad4fb1a4f597abcdbe15912416bc4b409ce13956a75fdccc4257d6",
+    "aac-16000-2-fragment.asf.f32": "014449e4ee7943542d4d81d6aeb2435d28ea8c3e9eaa5bebc3594316ddcb953a",
+    "aac-16000-2-fragment.asf.seek-reference": "e375906b1c39b314db8f67cfb7336962fe5e051510425134a27cebc832a1d4c5",
+    "aac-16000-2-offset.asf": "399d064784bf72165027d61f74191f32f9f1693c91e673d0b44fbbbb693ef837",
+    "aac-16000-2-offset.asf.f32": "0182e9f59f568a7a9f8f2c5c542585c7bb6162182118e223ef9a832ced7c5248",
+    "aac-16000-2-offset.asf.seek-reference": "b66abbf5e4be36bf3975536b22829ae902e965d365606c438b4231b07da6fb13",
+    "aac-16000-2-cancel-large.asf": "daffe3b7b72c7c3c1ecb56417b15f8a6fe4fb43ba210ca8b5656b77190b063d0",
+    "aac-16000-2-cancel-large.asf.f32": "014449e4ee7943542d4d81d6aeb2435d28ea8c3e9eaa5bebc3594316ddcb953a",
+    "aac-16000-2-cancel-large.asf.seek-reference": "e375906b1c39b314db8f67cfb7336962fe5e051510425134a27cebc832a1d4c5",
+    "aac-16000-2-all-negative.asf": "35f545651ac01ae75fd3c0373b1bdb97b16f15a632bbc295fdd117bfe3808d79",
+    "aac-16000-2-all-negative.asf.f32": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "aac-16000-2-all-negative.asf.seek-reference": "5d89f056865052bcb89c910d2d62872e029fb273c3db03f8968a52a41593c1b5",
+    "aac-16000-2-repeat.asf": "cb657cda4795945dcec760a719bc8e8e8c0c0ed4b7254c2cf816f71fe45be8ce",
+    "aac-16000-2-repeat.asf.f32": "a2ab4d7e327e20bd9fb0bd308ce6a561fe086d2b2d09c9ca20bbe63f6d75c67e",
+    "aac-16000-2-repeat.asf.seek-reference": "4a32bc68cb2565472a590a210dd06618ca7a2a6f016e4f8116b4142741370d8e",
+    "aac-22050-1-continuous.asf": "c4c522cf8b601a71f62661364b3eb436522691eafd6a758dd96fd62044b65feb",
+    "aac-22050-1-continuous.asf.f32": "1b773a2ecca328d15165e3302e845f8162ca9b3427546fe57c50cb366c3626b6",
+    "aac-22050-1-continuous.asf.seek-reference": "fccc12eaf6207e25daf7de656eb1c643fd772157be911d04af94932cbf9ab7e7",
+    "aac-22050-1-leading.asf": "4ac37241a66cbd72461a199ea544f577534af2cbbf3913f4ae38a57caacfe215",
+    "aac-22050-1-leading.asf.f32": "808bc85afad9d82c65b68cb421399beba420f8969b9ba8a84d0a852c48bf35c9",
+    "aac-22050-1-leading.asf.seek-reference": "d1396986bacdc7a892556aaa90422cc91501d253a756c7343d40309894deda92",
+    "aac-22050-1-internal.asf": "cc28861bdd08a9fd0d3e063b93459b52720b2b9723d6c78130f718106fe9b559",
+    "aac-22050-1-internal.asf.f32": "f9a1170fb5224cfcfba32eced7de007994d03ceb7edc7e49227613a8ddfd5143",
+    "aac-22050-1-internal.asf.seek-reference": "33f7829f07f43a96ab3106c20ccb27a4589f6c70760aff22514990899b1e3e99",
+    "aac-22050-1-overlap.asf": "87cd9abf05b8c01dcb0d2b60cb588f1907cd16da49d95de1f7c3d5b2ae585993",
+    "aac-22050-1-overlap.asf.f32": "fb16542e4634483d8c9fa6c60c4c9f63b316db4ebb8caf7a1546fbba7f99d20b",
+    "aac-22050-1-overlap.asf.seek-reference": "02f17eff8e40ad7bbabfe14a1f16f50600fc15e6f35f44df5b8dddb394da8523",
+    "aac-22050-1-negative.asf": "95858204b7ef5b9f9cc13f251ac17ec24617550e69246ccb52c2e9e4021f2965",
+    "aac-22050-1-negative.asf.f32": "96d65e30c3df87cffbbc64ed33c2674e96347cef3065c204671077efe624ff8c",
+    "aac-22050-1-negative.asf.seek-reference": "ff4d417de54b1bf16ba19f1031764e196b8e90e46cf09cb7677160d937e5a5a9",
+    "aac-22050-1-reorder.asf": "486fbc8eb431e6b36282aea573ab2d94d242be328eb6754eee2752cd0f900e44",
+    "aac-22050-1-reorder.asf.f32": "7ad8df34aa170c9e7f8869c7c4255a6599f1e93fa1d212cb7719967c003d25fe",
+    "aac-22050-1-reorder.asf.seek-reference": "fc27fdcdb26d7e6b99ad4631250089eec78afbf980af06e77d00f086264be9d6",
+    "aac-22050-1-foreign.asf": "e2a9c0ee52c69d7179c7c5772a3b4cbbce8727255f7e0b7acdddc1c119c35dea",
+    "aac-22050-1-foreign.asf.f32": "1b773a2ecca328d15165e3302e845f8162ca9b3427546fe57c50cb366c3626b6",
+    "aac-22050-1-foreign.asf.seek-reference": "fccc12eaf6207e25daf7de656eb1c643fd772157be911d04af94932cbf9ab7e7",
+    "aac-22050-1-fragment.asf": "7d3b7b98ff91660441163abac868a53e2838eb49adffc8af363fa3b28c7902b2",
+    "aac-22050-1-fragment.asf.f32": "1b773a2ecca328d15165e3302e845f8162ca9b3427546fe57c50cb366c3626b6",
+    "aac-22050-1-fragment.asf.seek-reference": "fccc12eaf6207e25daf7de656eb1c643fd772157be911d04af94932cbf9ab7e7",
+    "aac-22050-1-offset.asf": "11dee47885cf953a38234ea6998c7ff2ca9eff4aa235b7fba69ea97b0d97d39c",
+    "aac-22050-1-offset.asf.f32": "808bc85afad9d82c65b68cb421399beba420f8969b9ba8a84d0a852c48bf35c9",
+    "aac-22050-1-offset.asf.seek-reference": "d1396986bacdc7a892556aaa90422cc91501d253a756c7343d40309894deda92",
+    "aac-22050-1-cancel-large.asf": "334d744d00684f25b4a94e2bf2fad96e5bb44d6166dfb76aa0495873b3cea110",
+    "aac-22050-1-cancel-large.asf.f32": "1b773a2ecca328d15165e3302e845f8162ca9b3427546fe57c50cb366c3626b6",
+    "aac-22050-1-cancel-large.asf.seek-reference": "fccc12eaf6207e25daf7de656eb1c643fd772157be911d04af94932cbf9ab7e7",
+    "aac-22050-1-all-negative.asf": "de56fd08d97c62133ff8e0a02907f8510883bfe0f4a2b6cbd1319244da5b4646",
+    "aac-22050-1-all-negative.asf.f32": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "aac-22050-1-all-negative.asf.seek-reference": "5d89f056865052bcb89c910d2d62872e029fb273c3db03f8968a52a41593c1b5",
+    "aac-22050-1-repeat.asf": "63d5fb9018b1ed4417f019628351b97fd05c066d76a8b79ef96024e79b1bccc7",
+    "aac-22050-1-repeat.asf.f32": "bfc54e203c4e84ff8856bcc6a08a7bd376c23af1200ff19d9a43e87c2088ab8f",
+    "aac-22050-1-repeat.asf.seek-reference": "9f28f7532f79859ef75f9086854974e565e0ee9ab040913a7a180a8e0215f2e2",
+    "aac-24000-2-continuous.asf": "e89a0b3c6203f3c1bc1ae2f69ced99ee384cfb7d1512eb1d41044e25d4acf2ec",
+    "aac-24000-2-continuous.asf.f32": "9d04f69e022bfce05d3105fdd71cc6915a8c4d8df099cacc7a5db570038785f3",
+    "aac-24000-2-continuous.asf.seek-reference": "a3ff39e5d1871780889469a58fb3054768d05a0759485b05c8ae9b4d1aa9a921",
+    "aac-24000-2-leading.asf": "5b857f413d61118f93d0da5caa04ef050c97eb6d1b1372c7a3cf4b019a7fc633",
+    "aac-24000-2-leading.asf.f32": "437271825d8f79328473465d2ac060905108333e25fe5f3f0e9274bdd0b399f8",
+    "aac-24000-2-leading.asf.seek-reference": "5b67e2fae64476b14469f470a61504508905f56eb4705010ba31cb29b1f9894c",
+    "aac-24000-2-internal.asf": "4936b595bddf2272a702ba60ab8b24c754eb79d75e707e4c63264a3561536acc",
+    "aac-24000-2-internal.asf.f32": "6c71614b4a1401dd148266f8d3d58d6e9623112654586c91652a94e9d8316de9",
+    "aac-24000-2-internal.asf.seek-reference": "be3a792d9f940bfc4946fbf597d7ae48d932ba533fc4cb1a70a3e85ec0d7f383",
+    "aac-24000-2-overlap.asf": "f6619ac7eae10ea582f48d10132e46d65e79bca620ae04cbd17e2700e71c7781",
+    "aac-24000-2-overlap.asf.f32": "8d22727190932e4571bf73e47183a243630a992278868fd3ce5976b668494cc4",
+    "aac-24000-2-overlap.asf.seek-reference": "4814dab752b15c04e02ed03cbed53e8dfd035e1b63fcf477e73884e64816241d",
+    "aac-24000-2-negative.asf": "0eab6b0b12dfbaa1ce9a92ff9414ea930532a860f5b1a45d3d901efd119325f5",
+    "aac-24000-2-negative.asf.f32": "fdf25a1391c02670de807259b127ee085bda370267e200b23f909d301dea7d93",
+    "aac-24000-2-negative.asf.seek-reference": "be5d704d18f210bee1e7f4dcb90aacd39682d55d1c4d05f40e282cc8bc587888",
+    "aac-24000-2-reorder.asf": "1aa26456a9b79082dce43efc393c4a9fdc15aceb3407c3172536de46376b7fc7",
+    "aac-24000-2-reorder.asf.f32": "7cb719298b75774843b216e400a5741056a5eaa3055a0b72efafb111c32c98f9",
+    "aac-24000-2-reorder.asf.seek-reference": "3fc11708170d5d433c62a7ca664d9c705adb1ab03856272c3d0534aa7ee35299",
+    "aac-24000-2-foreign.asf": "07b60265882831fd38211c4562886a7b1aff781292ce389270777040058ca103",
+    "aac-24000-2-foreign.asf.f32": "9d04f69e022bfce05d3105fdd71cc6915a8c4d8df099cacc7a5db570038785f3",
+    "aac-24000-2-foreign.asf.seek-reference": "a3ff39e5d1871780889469a58fb3054768d05a0759485b05c8ae9b4d1aa9a921",
+    "aac-24000-2-fragment.asf": "d9bcb16e9778e9fbeb4c938588d367c7278058448e81afb01eeea3d366e2cd85",
+    "aac-24000-2-fragment.asf.f32": "9d04f69e022bfce05d3105fdd71cc6915a8c4d8df099cacc7a5db570038785f3",
+    "aac-24000-2-fragment.asf.seek-reference": "a3ff39e5d1871780889469a58fb3054768d05a0759485b05c8ae9b4d1aa9a921",
+    "aac-24000-2-offset.asf": "f42493be2654cc3c030e2bf9dcd286c4dc28ff0c94329bb4dd693007f843d5a7",
+    "aac-24000-2-offset.asf.f32": "437271825d8f79328473465d2ac060905108333e25fe5f3f0e9274bdd0b399f8",
+    "aac-24000-2-offset.asf.seek-reference": "5b67e2fae64476b14469f470a61504508905f56eb4705010ba31cb29b1f9894c",
+    "aac-24000-2-cancel-large.asf": "cc75e2f614adf2f761fa514c42f617f25972a84e0a706393d64270568ca42ceb",
+    "aac-24000-2-cancel-large.asf.f32": "9d04f69e022bfce05d3105fdd71cc6915a8c4d8df099cacc7a5db570038785f3",
+    "aac-24000-2-cancel-large.asf.seek-reference": "a3ff39e5d1871780889469a58fb3054768d05a0759485b05c8ae9b4d1aa9a921",
+    "aac-24000-2-all-negative.asf": "790136b06aa06ea34b684581ff068ae5264f58e93d5de228ff70e06961123469",
+    "aac-24000-2-all-negative.asf.f32": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "aac-24000-2-all-negative.asf.seek-reference": "5d89f056865052bcb89c910d2d62872e029fb273c3db03f8968a52a41593c1b5",
+    "aac-24000-2-repeat.asf": "01f2f6b1875edb0daa138ac232f2e6ecf247c632b7f729f950b38a35f06d1dbb",
+    "aac-24000-2-repeat.asf.f32": "b2c80abeaa9179170cb40f7238ca2b055722aa85625de9aac8d3e86525e1c79e",
+    "aac-24000-2-repeat.asf.seek-reference": "fddfedfbc90625fbde1f5697a4dd4ce45597e6cb607b94fe214235b778a8da2f",
+    "aac-24000-2-compressed.asf": "24f405346aee68c80f0ad65708499369a5d0f346d5e500e77ef71b86490adedd",
+    "aac-24000-2-compressed.asf.f32": "9d04f69e022bfce05d3105fdd71cc6915a8c4d8df099cacc7a5db570038785f3",
+    "aac-24000-2-compressed.asf.seek-reference": "a3ff39e5d1871780889469a58fb3054768d05a0759485b05c8ae9b4d1aa9a921",
+    "aac-32000-1-continuous.asf": "1e50369ee700e10a4794fa91a1e23d816d78c88fcddcca6a5d6d19084f2038dd",
+    "aac-32000-1-continuous.asf.f32": "393fa453343961dbcb4834fdfb44734fb4b8d24e5ed058cfb0580cab8d9bea0f",
+    "aac-32000-1-continuous.asf.seek-reference": "5a22668669e9b137ddab964244df14f0c1ae4caaea02d67e9a312f8a68d6fd0f",
+    "aac-32000-1-leading.asf": "1b749eb1cd7473eff9789958ebf6debd02ae9ea9c79be4bd6b9e3da715ff8c40",
+    "aac-32000-1-leading.asf.f32": "fabf1e27ab562f29012593e65c7b006788529de6b3d29df92742e28f0fa5be8f",
+    "aac-32000-1-leading.asf.seek-reference": "551344ccb1fdaeb88d6a0125916641f5f45d11f821f0481c3eaa1feba7491a38",
+    "aac-32000-1-internal.asf": "f6f981032537b251312946baf8f5897ab52b664d9b60beec7aef228fd544bf04",
+    "aac-32000-1-internal.asf.f32": "05605bb062c2c1e50009e405724f38611a33eca272a3b80bd4742dafdec852fe",
+    "aac-32000-1-internal.asf.seek-reference": "c6175d91736192ce949d2407f2eb3f6b811a2a6822c1e66cd716cf94bdeb0dd8",
+    "aac-32000-1-overlap.asf": "97218062e47a91f0162a5574d5a7f60fda375dd6033fb2788dbd481ed64d0735",
+    "aac-32000-1-overlap.asf.f32": "babfe551a529c990f9118ab1f47d43759a0e4d99365c7308b9803cdb7218a414",
+    "aac-32000-1-overlap.asf.seek-reference": "c6cdb30927467ef7554d92ac6a331133c411b726eee610a3c2b4a427e08bdbba",
+    "aac-32000-1-negative.asf": "45d2512e4cbb7fa749c46d72eecbbf3ce68c9161b00a6b20ac5d57df7950b7c6",
+    "aac-32000-1-negative.asf.f32": "58442a4acd2b589ce93787bb66b322cf26d579ba00a86492391a1785d06be82c",
+    "aac-32000-1-negative.asf.seek-reference": "e41729b372e896505460d1174143cea04f162b346d358ab2a324f4012c73b2f1",
+    "aac-32000-1-reorder.asf": "624a9a9032916b744887ea3886e5e6f2705942531af030df62bad616e3e003fc",
+    "aac-32000-1-reorder.asf.f32": "6ec6569bcd9ce6d3a0fa59895542ecfd2b989f20e77a43a69cb9c2c08bcf93a5",
+    "aac-32000-1-reorder.asf.seek-reference": "08ed40651ce12e45b39ead1c3992f64e4157b16fcbbddbf4f3fb343852e96dc0",
+    "aac-32000-1-foreign.asf": "c6813a321dea90485ad4fbbf12af21f3203bc8fd37c4edfc38484c45cc4be9f0",
+    "aac-32000-1-foreign.asf.f32": "393fa453343961dbcb4834fdfb44734fb4b8d24e5ed058cfb0580cab8d9bea0f",
+    "aac-32000-1-foreign.asf.seek-reference": "5a22668669e9b137ddab964244df14f0c1ae4caaea02d67e9a312f8a68d6fd0f",
+    "aac-32000-1-fragment.asf": "5e73688970705a1eb83df64d52bdd405690d92e0ecf52af22fbcbfa0ce89f8ff",
+    "aac-32000-1-fragment.asf.f32": "393fa453343961dbcb4834fdfb44734fb4b8d24e5ed058cfb0580cab8d9bea0f",
+    "aac-32000-1-fragment.asf.seek-reference": "5a22668669e9b137ddab964244df14f0c1ae4caaea02d67e9a312f8a68d6fd0f",
+    "aac-32000-1-offset.asf": "7202c7fdf6a9c8651cfd1b89b3551cca0ad9f00f59cc056d7b47fdf6de3a483a",
+    "aac-32000-1-offset.asf.f32": "fabf1e27ab562f29012593e65c7b006788529de6b3d29df92742e28f0fa5be8f",
+    "aac-32000-1-offset.asf.seek-reference": "551344ccb1fdaeb88d6a0125916641f5f45d11f821f0481c3eaa1feba7491a38",
+    "aac-32000-1-cancel-large.asf": "eeb6f59c076a4730bb2fc828d7c35b341299c1ddf6cb47df0934826f386b0732",
+    "aac-32000-1-cancel-large.asf.f32": "393fa453343961dbcb4834fdfb44734fb4b8d24e5ed058cfb0580cab8d9bea0f",
+    "aac-32000-1-cancel-large.asf.seek-reference": "5a22668669e9b137ddab964244df14f0c1ae4caaea02d67e9a312f8a68d6fd0f",
+    "aac-32000-1-all-negative.asf": "b3860b9de8ffd663629c250999315ffdd2aaf3eeb2495798fc9ba0eb4e2845f1",
+    "aac-32000-1-all-negative.asf.f32": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "aac-32000-1-all-negative.asf.seek-reference": "5d89f056865052bcb89c910d2d62872e029fb273c3db03f8968a52a41593c1b5",
+    "aac-32000-1-repeat.asf": "6c24faea698f971a196942b4a30c1bc47146d095d6a3fb167525a76575a90d13",
+    "aac-32000-1-repeat.asf.f32": "c6df16a43d7744ac7098c477ff23be48a2cad021ae500c252bd7df332e7ecdd9",
+    "aac-32000-1-repeat.asf.seek-reference": "3e48abd6e0802c7bbdc0004340f90716eb37f59e980f5e3639a155c0200586d1",
+    "aac-32000-1-compressed.asf": "5d12d1b2fb9d31f96e664f087a4c8e404a91b75d1ef755b776cb53253118c15e",
+    "aac-32000-1-compressed.asf.f32": "393fa453343961dbcb4834fdfb44734fb4b8d24e5ed058cfb0580cab8d9bea0f",
+    "aac-32000-1-compressed.asf.seek-reference": "5a22668669e9b137ddab964244df14f0c1ae4caaea02d67e9a312f8a68d6fd0f",
+    "aac-44100-2-continuous.asf": "593cc040df5221678e30865d1b54d4d1388a7f9314e58c68d6417f79c0a8211e",
+    "aac-44100-2-continuous.asf.f32": "7d7fae2585d5554d1abe51563849ffc2ef22ccb9b5dd47a22bf3ac6a412fed70",
+    "aac-44100-2-continuous.asf.seek-reference": "1c4d2f5f442e3b68da7f0b7931e3525aa2d8794434a605054049a687f23cf002",
+    "aac-44100-2-leading.asf": "1556859b767cbf1cde1d982b36726d199856c41a13d0609d71ffe2894e55efdc",
+    "aac-44100-2-leading.asf.f32": "9af7530724db8766372dd5cd6a66a99e76fe24ae4f59cc00c24979d977487176",
+    "aac-44100-2-leading.asf.seek-reference": "bfff65a320da669a44832f681e0801eb49d02ae56d199a7f14fcae41405ea7fc",
+    "aac-44100-2-internal.asf": "83cd3a419af3c6dc2d9dc24b7d5b71644571bc8c927553d5f5c8d12215798144",
+    "aac-44100-2-internal.asf.f32": "ef09bcccc0ac50527bc52d614fed5b158396f5656a1f92d3648e9bd3211e36cf",
+    "aac-44100-2-internal.asf.seek-reference": "d3f12d4e3ba4cbf8c38fd547bf09f1e9e8a3a177f881d0d5ef5ff35d882381de",
+    "aac-44100-2-overlap.asf": "772fc396323ecc74290e94b04089df16521e3198950d8997aecaf6db6df84a77",
+    "aac-44100-2-overlap.asf.f32": "5aef791dbdcc56bb1d66a4bd450ddfeac1c2ee369f4a2aab41633f7c6bb272b9",
+    "aac-44100-2-overlap.asf.seek-reference": "0aa14f07178f2685723eec9e51b464bc67007a6a7eab129ffed9467089b2853d",
+    "aac-44100-2-negative.asf": "0dec5bc1599b825df3654f5f1aaa796ddb673180214edf8c13da3a6383fe5b00",
+    "aac-44100-2-negative.asf.f32": "405d3ef259f0d8d08d823412b5160913b4fc204b2122b6a48f25a59079c69fc3",
+    "aac-44100-2-negative.asf.seek-reference": "574805388b2c398e0518fd3fdd9f761f229e46adc043ec8ae6c73ec8eb4d514a",
+    "aac-44100-2-reorder.asf": "7ed173931175c0b7b784c6b0cd1f5556e8ebdebe3c3f38f0331c32c53a96d155",
+    "aac-44100-2-reorder.asf.f32": "87a6932971ce080634154e5c255e636edce3ccea684434de986230dd45fae2eb",
+    "aac-44100-2-reorder.asf.seek-reference": "3bb1d6b8c61c68e1fc5a7e88072c9f45dcae8ec70f5940f2820f0261a10150ef",
+    "aac-44100-2-foreign.asf": "31235aae280251944d2c1828d6c10e98ab9e5ac5023f456d601c21447e04f1b8",
+    "aac-44100-2-foreign.asf.f32": "7d7fae2585d5554d1abe51563849ffc2ef22ccb9b5dd47a22bf3ac6a412fed70",
+    "aac-44100-2-foreign.asf.seek-reference": "1c4d2f5f442e3b68da7f0b7931e3525aa2d8794434a605054049a687f23cf002",
+    "aac-44100-2-fragment.asf": "6064393ec80fa6cf15af884b9e8ad623f329e1dca7962e59d5ab60f714fb2383",
+    "aac-44100-2-fragment.asf.f32": "7d7fae2585d5554d1abe51563849ffc2ef22ccb9b5dd47a22bf3ac6a412fed70",
+    "aac-44100-2-fragment.asf.seek-reference": "1c4d2f5f442e3b68da7f0b7931e3525aa2d8794434a605054049a687f23cf002",
+    "aac-44100-2-offset.asf": "416fc51e0514e762a846729a95299bd5a903a6a6050e1bfa20762a3ccebf5f1f",
+    "aac-44100-2-offset.asf.f32": "9af7530724db8766372dd5cd6a66a99e76fe24ae4f59cc00c24979d977487176",
+    "aac-44100-2-offset.asf.seek-reference": "bfff65a320da669a44832f681e0801eb49d02ae56d199a7f14fcae41405ea7fc",
+    "aac-44100-2-cancel-large.asf": "039df2789bee5605998e7c4b7c5396dde509938235a97c80b4375da1a00ce3dc",
+    "aac-44100-2-cancel-large.asf.f32": "7d7fae2585d5554d1abe51563849ffc2ef22ccb9b5dd47a22bf3ac6a412fed70",
+    "aac-44100-2-cancel-large.asf.seek-reference": "1c4d2f5f442e3b68da7f0b7931e3525aa2d8794434a605054049a687f23cf002",
+    "aac-44100-2-all-negative.asf": "0fe5bf0d03fd4d62687de41535ec160fb0783ededa1674970bd69a3517530634",
+    "aac-44100-2-all-negative.asf.f32": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "aac-44100-2-all-negative.asf.seek-reference": "5d89f056865052bcb89c910d2d62872e029fb273c3db03f8968a52a41593c1b5",
+    "aac-44100-2-repeat.asf": "c0c5769164415f4513a68d4a1987e289acbc1f5bdd4f219db9d23bd9730e8bb4",
+    "aac-44100-2-repeat.asf.f32": "ccbcd4b86dbba71599394af54ee4cf27b531d53da1ca9cfc16e9a8d1716e951b",
+    "aac-44100-2-repeat.asf.seek-reference": "66d25fddc908ee45ee900a32a06256bccd5ec437c41b212cad27a1cca71aaa0b",
+    "aac-44100-2-compressed.asf": "df9f125f89ad7a98b24cda7383bf636fd8a053310568a29aeb5abbbf9f2d8ae1",
+    "aac-44100-2-compressed.asf.f32": "7d7fae2585d5554d1abe51563849ffc2ef22ccb9b5dd47a22bf3ac6a412fed70",
+    "aac-44100-2-compressed.asf.seek-reference": "1c4d2f5f442e3b68da7f0b7931e3525aa2d8794434a605054049a687f23cf002",
+    "aac-48000-2-continuous.asf": "b5f5f31c4f5fc9edd41bd05ae32c2b0b19cb1b4f9dbb9ef94c984bf3920893db",
+    "aac-48000-2-continuous.asf.f32": "8bd54ce8af40db16ee7f96919968d6af91d7766fd0b8440ab659dfa4d565fcfd",
+    "aac-48000-2-continuous.asf.seek-reference": "aaa4f48e639cdda167fb97eb575bd8953e8ab36fde2428c8f02f52fa9d8d3873",
+    "aac-48000-2-leading.asf": "c7a081dd57dd423890e4a5d796b3842f5f65865ddbccbc7474e248fe2a387eb9",
+    "aac-48000-2-leading.asf.f32": "5d39cc3d8271a12fbcb82e7ea6162e9062f1b1acc8f176b450947a53c7e3191d",
+    "aac-48000-2-leading.asf.seek-reference": "096332950338c94639635ed55f45560566931c15e6b0df6cb78c817e54e8a0eb",
+    "aac-48000-2-internal.asf": "76b59f01856660f5a352008a459e1367c38d88e88b547987629454885e21c216",
+    "aac-48000-2-internal.asf.f32": "9bd3985972c528048640f5defb3e27333221c668c99fed149454eab8abed4dd0",
+    "aac-48000-2-internal.asf.seek-reference": "7048dbf6f1c23b522e2a8f7dd594fbd16d2dd3ba52d88d4ca7fa6b5897664d58",
+    "aac-48000-2-overlap.asf": "4f93ed52e0f0d873e1048d2a2d8d18607a64068b8b55ca7d8de1f0cc60932151",
+    "aac-48000-2-overlap.asf.f32": "f1fcab103ebfc6118aea8bcc1ed58351b0a5e16e01d726795796ef6b3250c9c0",
+    "aac-48000-2-overlap.asf.seek-reference": "356e6b7b9ce78f5c0f065ea3d4df193a566ef449fcddcb765b436aed6cab4101",
+    "aac-48000-2-negative.asf": "9f1d68cd5b2181569f79987d6c7d2aa691eeb00917087049a713d2386d7ae416",
+    "aac-48000-2-negative.asf.f32": "ac8377f853e4c5c3f03fabd9a08311e845cd6e0b682baac0682f73ef7c0180ad",
+    "aac-48000-2-negative.asf.seek-reference": "eea57467a02ae43720cbad08d06fc3a2966077324c8d35032ff1a2ed37a9cd9f",
+    "aac-48000-2-reorder.asf": "8ab6e8b9c8926681655d511a6eddf9b7e69271bb966d15e7bc776bbc226ecced",
+    "aac-48000-2-reorder.asf.f32": "46ee4513ef496862cc88591113c2225fbf4e82f2df915d0af5ec43952b1f1ffa",
+    "aac-48000-2-reorder.asf.seek-reference": "eef41d804e43832beb75d80612f6a6adb63c4491d4df9d6d9792b806f24ca3b5",
+    "aac-48000-2-foreign.asf": "cc69e496167a2ae0d9bb29b851a00df9c5aa1885ea3c0eea86275f9989eb5a91",
+    "aac-48000-2-foreign.asf.f32": "8bd54ce8af40db16ee7f96919968d6af91d7766fd0b8440ab659dfa4d565fcfd",
+    "aac-48000-2-foreign.asf.seek-reference": "aaa4f48e639cdda167fb97eb575bd8953e8ab36fde2428c8f02f52fa9d8d3873",
+    "aac-48000-2-fragment.asf": "f4bc66b5bd1e015239d7caf54b3ba8c5a27bccf0b8c5351506e655cbd6ae3700",
+    "aac-48000-2-fragment.asf.f32": "8bd54ce8af40db16ee7f96919968d6af91d7766fd0b8440ab659dfa4d565fcfd",
+    "aac-48000-2-fragment.asf.seek-reference": "aaa4f48e639cdda167fb97eb575bd8953e8ab36fde2428c8f02f52fa9d8d3873",
+    "aac-48000-2-offset.asf": "cd7e39e9182b01cdd3bef81590474aecd2be730a0edc9a3c62362fce6ca1afb1",
+    "aac-48000-2-offset.asf.f32": "5d39cc3d8271a12fbcb82e7ea6162e9062f1b1acc8f176b450947a53c7e3191d",
+    "aac-48000-2-offset.asf.seek-reference": "096332950338c94639635ed55f45560566931c15e6b0df6cb78c817e54e8a0eb",
+    "aac-48000-2-cancel-large.asf": "f4e119aeeba713017f2352bd83310ee1a6933d666588e8e15b3ec2efc6b631d1",
+    "aac-48000-2-cancel-large.asf.f32": "8bd54ce8af40db16ee7f96919968d6af91d7766fd0b8440ab659dfa4d565fcfd",
+    "aac-48000-2-cancel-large.asf.seek-reference": "aaa4f48e639cdda167fb97eb575bd8953e8ab36fde2428c8f02f52fa9d8d3873",
+    "aac-48000-2-all-negative.asf": "ff1e8fa787dfafe67c2ee978729b5b2dba3544bc9ff034647f0360b7a3075dfd",
+    "aac-48000-2-all-negative.asf.f32": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "aac-48000-2-all-negative.asf.seek-reference": "5d89f056865052bcb89c910d2d62872e029fb273c3db03f8968a52a41593c1b5",
+    "aac-48000-2-repeat.asf": "e4a79d681662074c570112e34357c96f603f0eef3db00cb30454751f193793d9",
+    "aac-48000-2-repeat.asf.f32": "eb967e6feb89bb97f2cd884ce4d9960f483fa77e588794ea6c3676e332bb1714",
+    "aac-48000-2-repeat.asf.seek-reference": "457775377237f395623bf0b685200de22a0fcf2dc4103697835ab0454a750b0c",
+    "aac-48000-2-compressed.asf": "ee11d0cd1c5cdf9efb0bace3f096d3965bdbfee2e880ade7a28f44fb6680d24b",
+    "aac-48000-2-compressed.asf.f32": "8bd54ce8af40db16ee7f96919968d6af91d7766fd0b8440ab659dfa4d565fcfd",
+    "aac-48000-2-compressed.asf.seek-reference": "aaa4f48e639cdda167fb97eb575bd8953e8ab36fde2428c8f02f52fa9d8d3873",
+    "compressed-4294967295-0.asf": "a60a461fa42c6036bc42f549557e8c321ccd32030693a60c354c999c663486cd",
+    "compressed-4294967295-0.asf.f32": "eb967e6feb89bb97f2cd884ce4d9960f483fa77e588794ea6c3676e332bb1714",
+    "compressed-4294967295-255.asf": "b4b602008b5f75c2ac250501aee838f1b01f68fb1350dd39178c2dc3e79cbc95",
+    "compressed-tail-1.asf": "8ed16c608da37f952f31aff99203b15e7fd9d9104e55896c53b7c8cdd485e299",
+    "compressed-tail-1.asf.f32": "eb967e6feb89bb97f2cd884ce4d9960f483fa77e588794ea6c3676e332bb1714",
+    "compressed-tail-2.asf": "996d3eeb67c7e0be969e56464bd91c1c203db85b34c344b4ed7a46e18264fd65",
+    "compressed-tail-2.asf.f32": "987cec26034d82504fc3c6efbd78449ab85c9f1c1dd0172631b9c1ab62272512",
+    "compressed-tail-3.asf": "b4b602008b5f75c2ac250501aee838f1b01f68fb1350dd39178c2dc3e79cbc95",
+    "compressed-tail-3.asf.f32": "1ee6765a0fdb4cf96f88de5c8256e8230f554455aa897e2bf211f6dafb28ab81",
+    "offset-limit-9223372036854775800.asf": "ff22ccf02491ea6b05857d95882a060f2a1b7c2797fa39f6348e38e71f4061f8",
+    "offset-limit-9223372036854775800.asf.f32": "eb967e6feb89bb97f2cd884ce4d9960f483fa77e588794ea6c3676e332bb1714",
+    "offset-limit-9223372036854775700.asf": "f6469ec922725e97a3867ebd8cfc84b23ee2223895ce70d3bc70d0797f291287",
+    "offset-limit-9223372036854775700.asf.f32": "eb967e6feb89bb97f2cd884ce4d9960f483fa77e588794ea6c3676e332bb1714",
+    "offset-overflow.asf": "e74873cbb25e307a3880593ade5061db76135feb3e5afd15576bd4551b8d9231",
+    "preroll-overflow.asf": "b9836817f846c3d2d1457bf592b10b21511ca0be31320ee97254b8faca3bb0e6",
+    "fragment-time-conflict.asf": "7bf099fad96d4dbf37725a441bccbfbd81b8be846aa6e680f42124a8ac9b8f1d",
+    "compressed-missing-time.asf": "57dfa80baa26040ae69c58093da82c7b3022700a558a62475437700349ce8dc0",
+    "aac-48000-2-lifecycle.asf": "deeef7488cbfdf2dd00fb9e0218c4beee5f72378ef3378d1d72b8305c5bc9a78",
+    "aac-64000-2-continuous.asf": "02f95dfbbff05015b2cc0233c1080edf2b387ae7b1f1bac6970a794984b56e05",
+    "aac-64000-2-continuous.asf.f32": "d59f96b108d86c89e66788a6ecb2b9c5c5b4e5e5a56a98d4291578ca8aed8436",
+    "aac-64000-2-continuous.asf.seek-reference": "1fb75fbc14541d50363ed10cbfc1fda0794951a3713d92b5bc421e2443cf4957",
+    "aac-64000-2-leading.asf": "ca32bdb0a582092af82c00656b9cd6a2356ae8052dbca2f5c741a8621657e4a5",
+    "aac-64000-2-leading.asf.f32": "eb8e4b35da189f330a6a9bdab86ab3c71a7f86e18686740c7c7e63443d830f06",
+    "aac-64000-2-leading.asf.seek-reference": "0670866ab1a90ef2a2f7edce78ccaa020b2ad9d8c0aca3e07849a2cd420493f9",
+    "aac-64000-2-internal.asf": "0d5d7cc7225660f5ae2f60c9ab64208571487b328324584120ddfe9582a6c59e",
+    "aac-64000-2-internal.asf.f32": "1f0d0d5da535d25a88edc3f29cbf928588f34fe718ef5400ec5463092386b942",
+    "aac-64000-2-internal.asf.seek-reference": "8652d889ae04d0b8efdd7b6610c49cf9778ba1e8fa835b7dfd654f9055d0f28e",
+    "aac-64000-2-overlap.asf": "c94a4438ce885d40555deff26637654aa243bfc1b4fc0229008cd63099dd6510",
+    "aac-64000-2-overlap.asf.f32": "c9ffd7696fc2e0abb144ac94ef8a6e543e130f6ef56cbb9d964d176dbdc0af14",
+    "aac-64000-2-overlap.asf.seek-reference": "42a252265479cc98d5f34e5c18ff17bbb537e0b9c54bbcb11885a0be6b4fd269",
+    "aac-64000-2-negative.asf": "284090110ab23831008df56156ce238a9f7657ad8713285c86af0c7db24640be",
+    "aac-64000-2-negative.asf.f32": "70ec00f7b7966b90218f99c6769c21c001e73a634d8f7af063eb8a6204e3a057",
+    "aac-64000-2-negative.asf.seek-reference": "ab9caa5f2d49a657a26623f0d4255faf101a453027f72aee35f24271b5b3c5da",
+    "aac-64000-2-reorder.asf": "73626a3ebda8c8776fb4db4ffc8747a5ea72d039e6bd5bc5f9d6c6488b22347f",
+    "aac-64000-2-reorder.asf.f32": "26ba5fa42d1f7d22eb4f29c131743646835dda7e201dcc19ec6d94c0ed646242",
+    "aac-64000-2-reorder.asf.seek-reference": "206041c777691deb2e03cb588d3f837a222102ec146adec951f1f59c5f123a85",
+    "aac-64000-2-foreign.asf": "3acc6e402d4f80e062df3f4fc0ce36389969ecb38c61847c1eedfd06e7d65f97",
+    "aac-64000-2-foreign.asf.f32": "d59f96b108d86c89e66788a6ecb2b9c5c5b4e5e5a56a98d4291578ca8aed8436",
+    "aac-64000-2-foreign.asf.seek-reference": "1fb75fbc14541d50363ed10cbfc1fda0794951a3713d92b5bc421e2443cf4957",
+    "aac-64000-2-fragment.asf": "75474ac281bd52f9c0232c36fa0a89d0fb52bab655343bdf0414a3737af3e376",
+    "aac-64000-2-fragment.asf.f32": "d59f96b108d86c89e66788a6ecb2b9c5c5b4e5e5a56a98d4291578ca8aed8436",
+    "aac-64000-2-fragment.asf.seek-reference": "1fb75fbc14541d50363ed10cbfc1fda0794951a3713d92b5bc421e2443cf4957",
+    "aac-64000-2-offset.asf": "a2391ed7de40f778f8611e10ac97b4c3c009e4bf4c3811c1982dc1fff7a7e341",
+    "aac-64000-2-offset.asf.f32": "eb8e4b35da189f330a6a9bdab86ab3c71a7f86e18686740c7c7e63443d830f06",
+    "aac-64000-2-offset.asf.seek-reference": "0670866ab1a90ef2a2f7edce78ccaa020b2ad9d8c0aca3e07849a2cd420493f9",
+    "aac-64000-2-cancel-large.asf": "36d53080a62ea263de2c35edafece67a26d08ef161a02e8f6684f4a4a32d4cf5",
+    "aac-64000-2-cancel-large.asf.f32": "d59f96b108d86c89e66788a6ecb2b9c5c5b4e5e5a56a98d4291578ca8aed8436",
+    "aac-64000-2-cancel-large.asf.seek-reference": "1fb75fbc14541d50363ed10cbfc1fda0794951a3713d92b5bc421e2443cf4957",
+    "aac-64000-2-all-negative.asf": "cbaca36f5f1561bcc9466e4580588eba14c6e14d91dc7642621ed5eba14cf605",
+    "aac-64000-2-all-negative.asf.f32": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "aac-64000-2-all-negative.asf.seek-reference": "5d89f056865052bcb89c910d2d62872e029fb273c3db03f8968a52a41593c1b5",
+    "aac-64000-2-repeat.asf": "f2cad40702bb09ef66d97a01a8cafa5df541e5e6fe285d968bdfec130d15c420",
+    "aac-64000-2-repeat.asf.f32": "a289b399d3c4cc43e988afe819ebcea9c43e58fe05d6f75a213f817c0c8bfe60",
+    "aac-64000-2-repeat.asf.seek-reference": "a22f3cceea735b7717c7547fe715e1649e0f6e8573b041949525479d4610a86d",
+    "aac-64000-2-compressed.asf": "48f88fbded041b14124fd2926324b2378fe6e60c51a5003241357e1d1d9d39ae",
+    "aac-64000-2-compressed.asf.f32": "d59f96b108d86c89e66788a6ecb2b9c5c5b4e5e5a56a98d4291578ca8aed8436",
+    "aac-64000-2-compressed.asf.seek-reference": "1fb75fbc14541d50363ed10cbfc1fda0794951a3713d92b5bc421e2443cf4957",
+    "aac-88200-1-continuous.asf": "96918e29654f64430eba86a8726eabc1ac15bd49c7168a80f1518f30f5386a0c",
+    "aac-88200-1-continuous.asf.f32": "2998616e0f0d09b78b3f15c2c022579656f1fd3f0c731f2b16ad22d310255ed6",
+    "aac-88200-1-continuous.asf.seek-reference": "531f878e1beadc98679b83cde82a138da95254015460be26bcbbbf45e1c94eec",
+    "aac-88200-1-leading.asf": "4ab21eae201272261900fe685e305ccbcd2f64e8666ec6c773e4e898025658aa",
+    "aac-88200-1-leading.asf.f32": "aae481b14063436d4ddbf18e9676e47cf53e2d770ab36796aed4f78b6b3237a7",
+    "aac-88200-1-leading.asf.seek-reference": "3a05ee781f7068d68ba4fc86cd99e3e2467c3677002abb680db23e04161ff972",
+    "aac-88200-1-internal.asf": "da43365b34d9903b51a95ac895eea8648faf2a9c4e5fae5b9cd33086329786ee",
+    "aac-88200-1-internal.asf.f32": "4c6091c57d7d10ca484fa8712f67cf90b6fabec270bba02c2afb796eaed27a5a",
+    "aac-88200-1-internal.asf.seek-reference": "3498022401a831927f50c8a86642a3748277c23d384e526d00fd2e6a3590d2e1",
+    "aac-88200-1-overlap.asf": "c530ff52f631b9b98b0890b49d959eb4f8cc92785c5e93c91cdd9fd61bdd24d7",
+    "aac-88200-1-overlap.asf.f32": "4aab279c4bfd825f2f478621b9e72ce7cd552558da2abf201927475e0b4167fe",
+    "aac-88200-1-overlap.asf.seek-reference": "aaf99a717b81574cbd289a81c740af045a32e3b5690c73a69a03f70d53e7d076",
+    "aac-88200-1-negative.asf": "0e2007c72178de29d1baf36fea5b71c9754e2b17f7f459512e94e2caf5cf6b1b",
+    "aac-88200-1-negative.asf.f32": "c115d588c4fbbab01f5aebf7b048d085665a1ce8a9e084b74b304ba6c1cda031",
+    "aac-88200-1-negative.asf.seek-reference": "8888ad4bb3dbef52ecf3e89fdae490052bd107a81e3f2a88dfe30ef8dae37c9e",
+    "aac-88200-1-reorder.asf": "6eb8987cd09702ee70a6bb1eb52b97e95a7d4107e30d280dc68aa613de4fa76a",
+    "aac-88200-1-reorder.asf.f32": "cb08dd0e96429b9e083a88054da78dd803f61b2c20684fb809c28b808123e983",
+    "aac-88200-1-reorder.asf.seek-reference": "e0b65319d2de93a0eaba7d73878b63970408c1655bfd53df627e1bad3e8581c2",
+    "aac-88200-1-foreign.asf": "52cba3db6cbabb478c68ea36dc0704063cedaea70e6daa140a9733eedc89f580",
+    "aac-88200-1-foreign.asf.f32": "2998616e0f0d09b78b3f15c2c022579656f1fd3f0c731f2b16ad22d310255ed6",
+    "aac-88200-1-foreign.asf.seek-reference": "531f878e1beadc98679b83cde82a138da95254015460be26bcbbbf45e1c94eec",
+    "aac-88200-1-fragment.asf": "7875b0f7380b8390ea0f7c44a5bf47ef426598226d4abd2b79cb822a3a177bc6",
+    "aac-88200-1-fragment.asf.f32": "2998616e0f0d09b78b3f15c2c022579656f1fd3f0c731f2b16ad22d310255ed6",
+    "aac-88200-1-fragment.asf.seek-reference": "531f878e1beadc98679b83cde82a138da95254015460be26bcbbbf45e1c94eec",
+    "aac-88200-1-offset.asf": "33d82c6b351f8b43fc251608ebeba0895334b1bb5ae362201945e8d30e5db291",
+    "aac-88200-1-offset.asf.f32": "a0ef25991887ab9ee9173c9f5c7054eccd90f4a9e3918ba1cbacba18c5ab48d2",
+    "aac-88200-1-offset.asf.seek-reference": "0249fbdc7251cef8d2f627724ff875cb8a316bc5ba1c7ad29ad8c9b8c9b0ca8e",
+    "aac-88200-1-cancel-large.asf": "76a512789cab2441c7d6a1c1bb39825aef8f97f68a30bf5d23cadf5fac98528b",
+    "aac-88200-1-cancel-large.asf.f32": "2998616e0f0d09b78b3f15c2c022579656f1fd3f0c731f2b16ad22d310255ed6",
+    "aac-88200-1-cancel-large.asf.seek-reference": "531f878e1beadc98679b83cde82a138da95254015460be26bcbbbf45e1c94eec",
+    "aac-88200-1-all-negative.asf": "ca54a4962407e5f63083a497eabbdadd01a74b0705e6815180723b9efede64ce",
+    "aac-88200-1-all-negative.asf.f32": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "aac-88200-1-all-negative.asf.seek-reference": "5d89f056865052bcb89c910d2d62872e029fb273c3db03f8968a52a41593c1b5",
+    "aac-88200-1-repeat.asf": "15753f8d340e9653b97ebfa12ca5d167ece1317fffd0509badabc9e35a1813d5",
+    "aac-88200-1-repeat.asf.f32": "509aa39e42f9e2aab647ae4d0f86f89f33579f282df8a7002249b0bea0a42347",
+    "aac-88200-1-repeat.asf.seek-reference": "394420e07e57584e3bf0e22c008489e907a4ec41ac8444743181ddb8d873eaea",
+    "aac-88200-1-compressed.asf": "fff7742252b11def552f6920e9a42ea4bea202971dea03a54107c49f8748e788",
+    "aac-88200-1-compressed.asf.f32": "ae302cf084abc77b3c7c0d05f7db3f53ec30b82d6c32f9be136e27afb3f5caba",
+    "aac-88200-1-compressed.asf.seek-reference": "4b02dc9b81d94f0b80771b550f22f35ef3772e8f6feea4276057723a39642b2e",
+    "aac-96000-2-continuous.asf": "f5b6e5f1d4dafbfcb6b1075d516ef27d52f1ecbc4b74690b36a42b9d43472d15",
+    "aac-96000-2-continuous.asf.f32": "11081a5470bd4e5e004f53b9141332fe1db9d0014d56bdd93bcc978850ed802e",
+    "aac-96000-2-continuous.asf.seek-reference": "e44603ea0d694ccf5c0fa731950aacf1abbaf39c601d995211c8630c5be6fdac",
+    "aac-96000-2-leading.asf": "f62d863fd788e97cc6e815fcf0a7752bdbabaf8779ef948af17bf763bfda2fa6",
+    "aac-96000-2-leading.asf.f32": "2e314ad1434ca3998f03de387a3bf60b25242dd3930939dfbeb6b8bb6e43362b",
+    "aac-96000-2-leading.asf.seek-reference": "2beba85bdec1e11f8d65f70e579d56f2ffe7fa9c307ed29232ca14bc28a4ef42",
+    "aac-96000-2-internal.asf": "46e7dbd590205aae7ef5ebe9f0b99df01ea8d4e2b6b5ca05ee7d84c4aef124ae",
+    "aac-96000-2-internal.asf.f32": "3f5a27799d3f775f27b120a14654e4625f3f386c405b56d0d9594ae7af9543a6",
+    "aac-96000-2-internal.asf.seek-reference": "493bd6cc11ba38f4733fd3a83630b2f97214d3c387376c4812f79630609374b8",
+    "aac-96000-2-overlap.asf": "a11557e258d429b19238d60e538c9833d5ca8eceb30db3d2160e9fc2ad02f9fa",
+    "aac-96000-2-overlap.asf.f32": "ba9a2962efd9efc894074fc01a4ec667b76692c4669d9475180e271ae239746e",
+    "aac-96000-2-overlap.asf.seek-reference": "8fc7102e70a87d6e860d3a5dba24112590613274724ecca0cac9bbd03532dcc1",
+    "aac-96000-2-negative.asf": "f6a9f51c23e4b84499adcfd6f00695a683ef9fe4ea9a4f60060e2645e9bfe73e",
+    "aac-96000-2-negative.asf.f32": "1d99a8985f09fdbad6e5543d5059ddd3a775fdae0494c282b30f85d5afd393e7",
+    "aac-96000-2-negative.asf.seek-reference": "a2fd8f97cd9ec0531fcc95085591e3f8d2d2e7480da1e06555775d71445513e9",
+    "aac-96000-2-reorder.asf": "825f1f02ce358a476dda782cc5e7f23376b4871cebfdec8e4bc5ef75a0c4df9c",
+    "aac-96000-2-reorder.asf.f32": "37ffea41873ad688ffacc4d13d57b7e5cbb2d991b31831a8d8c96c43b1b8f16a",
+    "aac-96000-2-reorder.asf.seek-reference": "f8a2e219324143d7ab5c29b42c81ff18f7928bb7848f47314ef03a46cb24e595",
+    "aac-96000-2-foreign.asf": "21d765cbe732e7afe449593c769111bef2504fa0745ac37afeff6d5ac15cd08a",
+    "aac-96000-2-foreign.asf.f32": "11081a5470bd4e5e004f53b9141332fe1db9d0014d56bdd93bcc978850ed802e",
+    "aac-96000-2-foreign.asf.seek-reference": "e44603ea0d694ccf5c0fa731950aacf1abbaf39c601d995211c8630c5be6fdac",
+    "aac-96000-2-fragment.asf": "3c2e05a8b4d7f57de66bb065f71067e725b4f704fccd498ed89ce0b685422f78",
+    "aac-96000-2-fragment.asf.f32": "11081a5470bd4e5e004f53b9141332fe1db9d0014d56bdd93bcc978850ed802e",
+    "aac-96000-2-fragment.asf.seek-reference": "e44603ea0d694ccf5c0fa731950aacf1abbaf39c601d995211c8630c5be6fdac",
+    "aac-96000-2-offset.asf": "a7d9f3fd89bc67a1a8092965a636ba20bdd88a5b208dfdf8aa4a3de6281bfc63",
+    "aac-96000-2-offset.asf.f32": "a4a0fd9c9337ed7a53dbf63c93d332652d9971ec912a84dc3232e0948f03d092",
+    "aac-96000-2-offset.asf.seek-reference": "40a85b2066d83f40b7e754806174cfc0a6c180c4ea6818be43027b80a47dd970",
+    "aac-96000-2-cancel-large.asf": "4628aa12f87c1e8decc17052b5f5cf4946a144807c57b2336bbc9abfa4a46b38",
+    "aac-96000-2-cancel-large.asf.f32": "11081a5470bd4e5e004f53b9141332fe1db9d0014d56bdd93bcc978850ed802e",
+    "aac-96000-2-cancel-large.asf.seek-reference": "e44603ea0d694ccf5c0fa731950aacf1abbaf39c601d995211c8630c5be6fdac",
+    "aac-96000-2-all-negative.asf": "51f225bb3ad205da1812f5a306ccb6c062db8ae86c5f3198737522f58f678d7e",
+    "aac-96000-2-all-negative.asf.f32": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "aac-96000-2-all-negative.asf.seek-reference": "5d89f056865052bcb89c910d2d62872e029fb273c3db03f8968a52a41593c1b5",
+    "aac-96000-2-repeat.asf": "a3c5666da7168b30935164b62bfb5246359d7aad65d7f7b52976f8bc5ee406f8",
+    "aac-96000-2-repeat.asf.f32": "8c9447fd96cf0a27da6b0d553a503a91d3fe5e11418341c985d0d4bbcbfc22c1",
+    "aac-96000-2-repeat.asf.seek-reference": "1856b52000b94f21b094e8414f5a7dbfd58fda059565f575eac5ca8da532142c",
+    "aac-96000-2-compressed.asf": "5541bffcea5697ac6154a995efc6f7128481a14d24658f7007ad66efd2b7fefc",
+    "aac-96000-2-compressed.asf.f32": "11081a5470bd4e5e004f53b9141332fe1db9d0014d56bdd93bcc978850ed802e",
+    "aac-96000-2-compressed.asf.seek-reference": "e44603ea0d694ccf5c0fa731950aacf1abbaf39c601d995211c8630c5be6fdac",
+    "aac-sbr-implicit-continuous.asf": "64ff81eeb81b0b7b6ca6e79c8b745f509c74d90e3458bbcbdd92036c0f978c30",
+    "aac-sbr-implicit-continuous.asf.f32": "2797af92a4986968607cbe9179d651a6f8b0154acf7151831df682aaa1a722cf",
+    "aac-sbr-implicit-continuous.asf.seek-reference": "703fddd9cf586cda8a5c67e0293b93d6e8e19f375f2b7a17a55f2526d9d65a16",
+    "aac-sbr-implicit-leading.asf": "5878969a0df7f334326add6489e7fad2d39f33992f975d96777d25864c79c3bc",
+    "aac-sbr-implicit-leading.asf.f32": "a6d607c3a18fede6b43f81363507c38dfb148f078172bf2c39254de5012a0064",
+    "aac-sbr-implicit-leading.asf.seek-reference": "70b77d9d2e90a3355f6bbbfa1ffff9072a788f5b44a1cb03a3d9ba2c2b8a755c",
+    "aac-sbr-implicit-internal.asf": "1e10b8e5e9268b7ed4973dc4403e4927b8520b14d918eda9733d1e9a408ba564",
+    "aac-sbr-implicit-internal.asf.f32": "baa7db846c412b1b09e2d36b11eb65433050f06d3f00774d58cf9f05201f0a7f",
+    "aac-sbr-implicit-internal.asf.seek-reference": "464773b943643c02da83de4e853ea044ec68b45b79df1e9034a4e18f39224314",
+    "aac-sbr-implicit-overlap.asf": "753a06d4462e039deabb0885bb9f7a93622eb3d0237ff773b13948c516a25d59",
+    "aac-sbr-implicit-overlap.asf.f32": "1fb73bf93c9d1903d693d531258d6eaed87b2a653dc524d123d9a0af243c9e4a",
+    "aac-sbr-implicit-overlap.asf.seek-reference": "316ec254dda164535e25ed7778d63fb67d05955de458311b0ea3da6b531b9935",
+    "aac-sbr-implicit-negative.asf": "e8236aa687f626c370fb6a9e2851815e7a90c82ad3ff0fe4355c2aa7da984932",
+    "aac-sbr-implicit-negative.asf.f32": "8257557c6d01cea65c40b5fda6ba85407e9ba9b37d466a30f57584b4432e7ac8",
+    "aac-sbr-implicit-negative.asf.seek-reference": "af7b69a34e4317c085fc7ea4d657fe84b03e41c1d5a711271cd7a0ac1b175156",
+    "aac-sbr-implicit-reorder.asf": "8029f5cfa463562a304ee9f0597a4ee42fc6c83750105fd3dca7f643c2253ab5",
+    "aac-sbr-implicit-reorder.asf.f32": "73e7c80a7429a004b18175fcc83801824f9d7cf1d60943d665b3a18523a51bae",
+    "aac-sbr-implicit-reorder.asf.seek-reference": "d8e95fa61c38c68ad73554a2852b623d9a0408500883fd71ef23e893a9744183",
+    "aac-sbr-implicit-foreign.asf": "c55424339a82014fcb227c05d14de75cf76e24f4a406d014b280a9a3d40d4d46",
+    "aac-sbr-implicit-foreign.asf.f32": "2797af92a4986968607cbe9179d651a6f8b0154acf7151831df682aaa1a722cf",
+    "aac-sbr-implicit-foreign.asf.seek-reference": "703fddd9cf586cda8a5c67e0293b93d6e8e19f375f2b7a17a55f2526d9d65a16",
+    "aac-sbr-implicit-fragment.asf": "a1f0acc78242d4fec81c257902879457b34091e89d063ba1c9fa7672c7d7b8d6",
+    "aac-sbr-implicit-fragment.asf.f32": "2797af92a4986968607cbe9179d651a6f8b0154acf7151831df682aaa1a722cf",
+    "aac-sbr-implicit-fragment.asf.seek-reference": "703fddd9cf586cda8a5c67e0293b93d6e8e19f375f2b7a17a55f2526d9d65a16",
+    "aac-sbr-implicit-offset.asf": "a878236c30d0eb3cdd9619827789e63394081d06a84b8a8049fd8713d4c8a9a8",
+    "aac-sbr-implicit-offset.asf.f32": "a6d607c3a18fede6b43f81363507c38dfb148f078172bf2c39254de5012a0064",
+    "aac-sbr-implicit-offset.asf.seek-reference": "70b77d9d2e90a3355f6bbbfa1ffff9072a788f5b44a1cb03a3d9ba2c2b8a755c",
+    "aac-sbr-implicit-cancel-large.asf": "dbdbb2f10a875f1d28cb364f356cd6d22fb779f57245f553e418ebdd7dd29255",
+    "aac-sbr-implicit-cancel-large.asf.f32": "2797af92a4986968607cbe9179d651a6f8b0154acf7151831df682aaa1a722cf",
+    "aac-sbr-implicit-cancel-large.asf.seek-reference": "703fddd9cf586cda8a5c67e0293b93d6e8e19f375f2b7a17a55f2526d9d65a16",
+    "aac-sbr-implicit-all-negative.asf": "bae388902ae10d82dc292e7738bf3349b76e7d4c4e2808c9557f80e4dc46a8d7",
+    "aac-sbr-implicit-all-negative.asf.f32": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "aac-sbr-implicit-all-negative.asf.seek-reference": "5d89f056865052bcb89c910d2d62872e029fb273c3db03f8968a52a41593c1b5",
+    "aac-sbr-implicit-repeat.asf": "bdf1e011188e66648c114dd027e8a896e27023ae786bbcf70991f0683a3070cc",
+    "aac-sbr-implicit-repeat.asf.f32": "a7e6d360d472db8db35d4f84ee550108a4c42e3c60b663dae10d4fba5100b851",
+    "aac-sbr-implicit-repeat.asf.seek-reference": "1c4ecf07cff1017bef037215a0f35a42250c177d4d6729efdc705ec695d40710",
+    "aac-sbr-explicit-continuous.asf": "0749e0899f56eba39f4f573c46e4bac74c8b09d6d132eb043fce4b90b77200d6",
+    "aac-sbr-explicit-continuous.asf.f32": "2797af92a4986968607cbe9179d651a6f8b0154acf7151831df682aaa1a722cf",
+    "aac-sbr-explicit-continuous.asf.seek-reference": "703fddd9cf586cda8a5c67e0293b93d6e8e19f375f2b7a17a55f2526d9d65a16",
+    "aac-sbr-explicit-leading.asf": "ba51449517feefd0f234a7138b3446c9011bc324b7b810b9e482afc1ce87fe01",
+    "aac-sbr-explicit-leading.asf.f32": "a6d607c3a18fede6b43f81363507c38dfb148f078172bf2c39254de5012a0064",
+    "aac-sbr-explicit-leading.asf.seek-reference": "70b77d9d2e90a3355f6bbbfa1ffff9072a788f5b44a1cb03a3d9ba2c2b8a755c",
+    "aac-sbr-explicit-internal.asf": "d2738b1088a3a01b827b1b52b3e48b5d91a901071e127e6c9e26922beb67a12c",
+    "aac-sbr-explicit-internal.asf.f32": "baa7db846c412b1b09e2d36b11eb65433050f06d3f00774d58cf9f05201f0a7f",
+    "aac-sbr-explicit-internal.asf.seek-reference": "464773b943643c02da83de4e853ea044ec68b45b79df1e9034a4e18f39224314",
+    "aac-sbr-explicit-overlap.asf": "d3e80c5ae1181a6d1e8cb58bfab8e06348b1aa904ea7acb5f912cc6b814e887c",
+    "aac-sbr-explicit-overlap.asf.f32": "1fb73bf93c9d1903d693d531258d6eaed87b2a653dc524d123d9a0af243c9e4a",
+    "aac-sbr-explicit-overlap.asf.seek-reference": "316ec254dda164535e25ed7778d63fb67d05955de458311b0ea3da6b531b9935",
+    "aac-sbr-explicit-negative.asf": "ba2c1aae0a0d098d8bc04de29a73bf741becbf72fde796a23025a84e088456b1",
+    "aac-sbr-explicit-negative.asf.f32": "8257557c6d01cea65c40b5fda6ba85407e9ba9b37d466a30f57584b4432e7ac8",
+    "aac-sbr-explicit-negative.asf.seek-reference": "af7b69a34e4317c085fc7ea4d657fe84b03e41c1d5a711271cd7a0ac1b175156",
+    "aac-sbr-explicit-reorder.asf": "0d9dcfcbcdebc376cf3d0d150c2cf62e4ba0d8adf0e5bad927ed3f89d93b5f81",
+    "aac-sbr-explicit-reorder.asf.f32": "73e7c80a7429a004b18175fcc83801824f9d7cf1d60943d665b3a18523a51bae",
+    "aac-sbr-explicit-reorder.asf.seek-reference": "d8e95fa61c38c68ad73554a2852b623d9a0408500883fd71ef23e893a9744183",
+    "aac-sbr-explicit-foreign.asf": "9a5d5d706fb764871351684ed20811908cca3efb2d6871bd242e2537b5de7403",
+    "aac-sbr-explicit-foreign.asf.f32": "2797af92a4986968607cbe9179d651a6f8b0154acf7151831df682aaa1a722cf",
+    "aac-sbr-explicit-foreign.asf.seek-reference": "703fddd9cf586cda8a5c67e0293b93d6e8e19f375f2b7a17a55f2526d9d65a16",
+    "aac-sbr-explicit-fragment.asf": "eb65a7662944f0b765708c6277c0b3f98aa4468d2816f9a76e5718eb94991793",
+    "aac-sbr-explicit-fragment.asf.f32": "2797af92a4986968607cbe9179d651a6f8b0154acf7151831df682aaa1a722cf",
+    "aac-sbr-explicit-fragment.asf.seek-reference": "703fddd9cf586cda8a5c67e0293b93d6e8e19f375f2b7a17a55f2526d9d65a16",
+    "aac-sbr-explicit-offset.asf": "784a2db6985b4a38e726f5df68dcf0dea1c06339699a4f06d11633045e50f766",
+    "aac-sbr-explicit-offset.asf.f32": "a6d607c3a18fede6b43f81363507c38dfb148f078172bf2c39254de5012a0064",
+    "aac-sbr-explicit-offset.asf.seek-reference": "70b77d9d2e90a3355f6bbbfa1ffff9072a788f5b44a1cb03a3d9ba2c2b8a755c",
+    "aac-sbr-explicit-cancel-large.asf": "81488c4fcd20c4248af08d7c9c64b99b6f97d886cfa03f6f71e663d648d9406e",
+    "aac-sbr-explicit-cancel-large.asf.f32": "2797af92a4986968607cbe9179d651a6f8b0154acf7151831df682aaa1a722cf",
+    "aac-sbr-explicit-cancel-large.asf.seek-reference": "703fddd9cf586cda8a5c67e0293b93d6e8e19f375f2b7a17a55f2526d9d65a16",
+    "aac-sbr-explicit-all-negative.asf": "a96e6527325d5dbdbe1a4328af38dc739d7c58f6be072406151379d5f97d8678",
+    "aac-sbr-explicit-all-negative.asf.f32": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "aac-sbr-explicit-all-negative.asf.seek-reference": "5d89f056865052bcb89c910d2d62872e029fb273c3db03f8968a52a41593c1b5",
+    "aac-sbr-explicit-repeat.asf": "915fa81d0b4418af0b7ba5d307f16f0e96444e6c2c5a824cf558c5fa48e93b5c",
+    "aac-sbr-explicit-repeat.asf.f32": "a7e6d360d472db8db35d4f84ee550108a4c42e3c60b663dae10d4fba5100b851",
+    "aac-sbr-explicit-repeat.asf.seek-reference": "1c4ecf07cff1017bef037215a0f35a42250c177d4d6729efdc705ec695d40710",
+    "aac-sbr-sync-continuous.asf": "878f058187e5e460b61089dea55846c89b42767e25e8e9c01e87f527dd1846c2",
+    "aac-sbr-sync-continuous.asf.f32": "2797af92a4986968607cbe9179d651a6f8b0154acf7151831df682aaa1a722cf",
+    "aac-sbr-sync-continuous.asf.seek-reference": "703fddd9cf586cda8a5c67e0293b93d6e8e19f375f2b7a17a55f2526d9d65a16",
+    "aac-sbr-sync-leading.asf": "a64058bbaa1deb7fb032bb2bce427daa6e3aabdb6b45f5c5085d8d4873cc2ebe",
+    "aac-sbr-sync-leading.asf.f32": "a6d607c3a18fede6b43f81363507c38dfb148f078172bf2c39254de5012a0064",
+    "aac-sbr-sync-leading.asf.seek-reference": "70b77d9d2e90a3355f6bbbfa1ffff9072a788f5b44a1cb03a3d9ba2c2b8a755c",
+    "aac-sbr-sync-internal.asf": "81bc90d831e784fbf3559dffe94cacec14924051d0f405068820baa12931c5d8",
+    "aac-sbr-sync-internal.asf.f32": "baa7db846c412b1b09e2d36b11eb65433050f06d3f00774d58cf9f05201f0a7f",
+    "aac-sbr-sync-internal.asf.seek-reference": "464773b943643c02da83de4e853ea044ec68b45b79df1e9034a4e18f39224314",
+    "aac-sbr-sync-overlap.asf": "a2ddee9a0f092f7b5b20dde8584870549e1c19b40a96fe7a3e41d407485c5f94",
+    "aac-sbr-sync-overlap.asf.f32": "1fb73bf93c9d1903d693d531258d6eaed87b2a653dc524d123d9a0af243c9e4a",
+    "aac-sbr-sync-overlap.asf.seek-reference": "316ec254dda164535e25ed7778d63fb67d05955de458311b0ea3da6b531b9935",
+    "aac-sbr-sync-negative.asf": "e490d7b346df4e15766d66cdc7523a86f0cf6bdf753f6e1cd1278a8aca77e811",
+    "aac-sbr-sync-negative.asf.f32": "8257557c6d01cea65c40b5fda6ba85407e9ba9b37d466a30f57584b4432e7ac8",
+    "aac-sbr-sync-negative.asf.seek-reference": "af7b69a34e4317c085fc7ea4d657fe84b03e41c1d5a711271cd7a0ac1b175156",
+    "aac-sbr-sync-reorder.asf": "26eb4c6c9dec39445a133e794aa2c76223a35032c33f14b20eb780e1147303ce",
+    "aac-sbr-sync-reorder.asf.f32": "73e7c80a7429a004b18175fcc83801824f9d7cf1d60943d665b3a18523a51bae",
+    "aac-sbr-sync-reorder.asf.seek-reference": "d8e95fa61c38c68ad73554a2852b623d9a0408500883fd71ef23e893a9744183",
+    "aac-sbr-sync-foreign.asf": "3fa03772844fa6e4ad63494db01dc99be9d1e811db0000730bc9fdd06e605999",
+    "aac-sbr-sync-foreign.asf.f32": "2797af92a4986968607cbe9179d651a6f8b0154acf7151831df682aaa1a722cf",
+    "aac-sbr-sync-foreign.asf.seek-reference": "703fddd9cf586cda8a5c67e0293b93d6e8e19f375f2b7a17a55f2526d9d65a16",
+    "aac-sbr-sync-fragment.asf": "84baf21c01daf2be3de6c22f41551940ce6944e755e3885f69d35c1040654689",
+    "aac-sbr-sync-fragment.asf.f32": "2797af92a4986968607cbe9179d651a6f8b0154acf7151831df682aaa1a722cf",
+    "aac-sbr-sync-fragment.asf.seek-reference": "703fddd9cf586cda8a5c67e0293b93d6e8e19f375f2b7a17a55f2526d9d65a16",
+    "aac-sbr-sync-offset.asf": "016c1ab3366bf69f26974d35055284937b613c9b67814f3c6e936e3156faea82",
+    "aac-sbr-sync-offset.asf.f32": "a6d607c3a18fede6b43f81363507c38dfb148f078172bf2c39254de5012a0064",
+    "aac-sbr-sync-offset.asf.seek-reference": "70b77d9d2e90a3355f6bbbfa1ffff9072a788f5b44a1cb03a3d9ba2c2b8a755c",
+    "aac-sbr-sync-cancel-large.asf": "cacbeeae8ca8d992cda32e655b9d831f6851455b303fcbac8e42e7560ab11312",
+    "aac-sbr-sync-cancel-large.asf.f32": "2797af92a4986968607cbe9179d651a6f8b0154acf7151831df682aaa1a722cf",
+    "aac-sbr-sync-cancel-large.asf.seek-reference": "703fddd9cf586cda8a5c67e0293b93d6e8e19f375f2b7a17a55f2526d9d65a16",
+    "aac-sbr-sync-all-negative.asf": "bbba0d8b4b0eb9526fa38ef12aa9ebf3c3407774697fcc2d78eda07ea65c65b2",
+    "aac-sbr-sync-all-negative.asf.f32": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "aac-sbr-sync-all-negative.asf.seek-reference": "5d89f056865052bcb89c910d2d62872e029fb273c3db03f8968a52a41593c1b5",
+    "aac-sbr-sync-repeat.asf": "a900fd0a77ccd5f13f1ff4fb56c8d75050d1b7aa769704b0102012d1c50c9e24",
+    "aac-sbr-sync-repeat.asf.f32": "a7e6d360d472db8db35d4f84ee550108a4c42e3c60b663dae10d4fba5100b851",
+    "aac-sbr-sync-repeat.asf.seek-reference": "1c4ecf07cff1017bef037215a0f35a42250c177d4d6729efdc705ec695d40710",
+    "aac-ps-implicit-continuous.asf": "d431bf85a5b53fff90602b7785c1aeff0c500218785421d3553446447e9a6276",
+    "aac-ps-implicit-continuous.asf.f32": "84f4a4d557b209c3ba5fda4559514b6fb47002d2d1442f5f111b2c9c811692e4",
+    "aac-ps-implicit-continuous.asf.seek-reference": "8f096a2a7ba7d8729479ef2a88796f9fb18cc39b460aeb8e05ab94d7e7f94920",
+    "aac-ps-implicit-leading.asf": "48284eab817030230ff609f2d34cc76f6936b26b3e69caaf0571691172f8df8f",
+    "aac-ps-implicit-leading.asf.f32": "047b0af1ad1920eb69f289f51ee4bb2b80ff55d71e9701b62e238c72e6528e15",
+    "aac-ps-implicit-leading.asf.seek-reference": "7689e0bb13e507ac7c1121f2f7e7607d21e5e4888f60251b1dc3eac910f73ff2",
+    "aac-ps-implicit-internal.asf": "9507fe812dc773031a21871e5013a9ccfbbe2aef6cbc03cfafb29f67118479c3",
+    "aac-ps-implicit-internal.asf.f32": "6bee2d808e4382177fa6bd70e8fc0f01ab74a5f4c085b76d254e1171963282a6",
+    "aac-ps-implicit-internal.asf.seek-reference": "6da5e08284c110ae7a44d9b56168bab40a38b1e11ee17a4fa348dc24529f48e9",
+    "aac-ps-implicit-overlap.asf": "c553107a788ff1333c6cc15360a07bd46194d3b7fa2661cd897f11434af24a8c",
+    "aac-ps-implicit-overlap.asf.f32": "d1d7d5f2791f838f6c71dd6d65ee4c8a7769ad235169b46cd4641bdbb4bb380b",
+    "aac-ps-implicit-overlap.asf.seek-reference": "da78aa267d2aa10497dbbf238c4b75ac30d2fb2a3ff2c46a9329ecd56208ae94",
+    "aac-ps-implicit-negative.asf": "0fa23e83fffa8287765bb8021773e6c878acaa85b988fb4ab5d1f9a6ae74ec5c",
+    "aac-ps-implicit-negative.asf.f32": "b74061215bf4b92ec49b3378d0a871496c34b474e2b8b035e56dc1f85c3927c8",
+    "aac-ps-implicit-negative.asf.seek-reference": "0872087d85fa5620e89bab7cf722a13a9bbc1058d7983822c2628a45e2f26f1f",
+    "aac-ps-implicit-reorder.asf": "fec5599e2c023819e313e63a9dcc47049e3cc9766af0c6da1c810434392affdf",
+    "aac-ps-implicit-reorder.asf.f32": "d0b994e2a31172bb982223f0ad7bb6816bd4db5bb69fe2aef56433d5b5deee74",
+    "aac-ps-implicit-reorder.asf.seek-reference": "c0038e7b85058bea0dcb500e3720a2b2c98ada910453495a16105a55b221f1cf",
+    "aac-ps-implicit-foreign.asf": "3d5d99ad42561f679465efdee94f2ae4509056d43bde31b70643d5c06f03458e",
+    "aac-ps-implicit-foreign.asf.f32": "84f4a4d557b209c3ba5fda4559514b6fb47002d2d1442f5f111b2c9c811692e4",
+    "aac-ps-implicit-foreign.asf.seek-reference": "8f096a2a7ba7d8729479ef2a88796f9fb18cc39b460aeb8e05ab94d7e7f94920",
+    "aac-ps-implicit-fragment.asf": "2f51befb3c3cd1d178a84ed1e9a796bd581c58076d46bc94c1e2da19c353b193",
+    "aac-ps-implicit-fragment.asf.f32": "84f4a4d557b209c3ba5fda4559514b6fb47002d2d1442f5f111b2c9c811692e4",
+    "aac-ps-implicit-fragment.asf.seek-reference": "8f096a2a7ba7d8729479ef2a88796f9fb18cc39b460aeb8e05ab94d7e7f94920",
+    "aac-ps-implicit-offset.asf": "c68f3bffa550250230f98c353b19c6f51500e1ed225e6c189b107c7adb17f630",
+    "aac-ps-implicit-offset.asf.f32": "047b0af1ad1920eb69f289f51ee4bb2b80ff55d71e9701b62e238c72e6528e15",
+    "aac-ps-implicit-offset.asf.seek-reference": "7689e0bb13e507ac7c1121f2f7e7607d21e5e4888f60251b1dc3eac910f73ff2",
+    "aac-ps-implicit-cancel-large.asf": "4270ab1017c4d73faf203c7963493f444b4f7fddd9f3e8c8a6f9160570d605ae",
+    "aac-ps-implicit-cancel-large.asf.f32": "84f4a4d557b209c3ba5fda4559514b6fb47002d2d1442f5f111b2c9c811692e4",
+    "aac-ps-implicit-cancel-large.asf.seek-reference": "8f096a2a7ba7d8729479ef2a88796f9fb18cc39b460aeb8e05ab94d7e7f94920",
+    "aac-ps-implicit-all-negative.asf": "ae93fc7e9acd371c1f20167a06eb7d126f92255c886e0e132e549b10bdc1494b",
+    "aac-ps-implicit-all-negative.asf.f32": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "aac-ps-implicit-all-negative.asf.seek-reference": "5d89f056865052bcb89c910d2d62872e029fb273c3db03f8968a52a41593c1b5",
+    "aac-ps-implicit-repeat.asf": "a51045aeed0c15e09177ce18f239cedca89898c685eb9a82dac706b4aab3114c",
+    "aac-ps-implicit-repeat.asf.f32": "934224fea51c7902dbffe9bc2cf4006b47660560c3cfcbd3212efd70f5e9cd26",
+    "aac-ps-implicit-repeat.asf.seek-reference": "bb9b21d8664dd01751b878b6002ed8970bdf684d3d29d4fa31d92ffcc0d50e63",
+    "aac-ps-explicit-continuous.asf": "5e85e90e4fb7f05c7e693034e942fd557a39c6851b6d3c6d7e81576008e165d7",
+    "aac-ps-explicit-continuous.asf.f32": "84f4a4d557b209c3ba5fda4559514b6fb47002d2d1442f5f111b2c9c811692e4",
+    "aac-ps-explicit-continuous.asf.seek-reference": "8f096a2a7ba7d8729479ef2a88796f9fb18cc39b460aeb8e05ab94d7e7f94920",
+    "aac-ps-explicit-leading.asf": "e1768529a1b64e2a9de932d4e2805fc7586394b34317165141de085cfb0a433e",
+    "aac-ps-explicit-leading.asf.f32": "047b0af1ad1920eb69f289f51ee4bb2b80ff55d71e9701b62e238c72e6528e15",
+    "aac-ps-explicit-leading.asf.seek-reference": "7689e0bb13e507ac7c1121f2f7e7607d21e5e4888f60251b1dc3eac910f73ff2",
+    "aac-ps-explicit-internal.asf": "3f59a113f590ce9375a345039207d1797cdb8cdd93414d6772ca99e834e8a974",
+    "aac-ps-explicit-internal.asf.f32": "6bee2d808e4382177fa6bd70e8fc0f01ab74a5f4c085b76d254e1171963282a6",
+    "aac-ps-explicit-internal.asf.seek-reference": "6da5e08284c110ae7a44d9b56168bab40a38b1e11ee17a4fa348dc24529f48e9",
+    "aac-ps-explicit-overlap.asf": "8462d50c1eaacd395d299ccc66877c1f07507460c052715518470f134b58bc59",
+    "aac-ps-explicit-overlap.asf.f32": "d1d7d5f2791f838f6c71dd6d65ee4c8a7769ad235169b46cd4641bdbb4bb380b",
+    "aac-ps-explicit-overlap.asf.seek-reference": "da78aa267d2aa10497dbbf238c4b75ac30d2fb2a3ff2c46a9329ecd56208ae94",
+    "aac-ps-explicit-negative.asf": "11524b4d2e23508d8c74c3f69a958e35c6ffbb800b188e44cf87d100cb31e571",
+    "aac-ps-explicit-negative.asf.f32": "b74061215bf4b92ec49b3378d0a871496c34b474e2b8b035e56dc1f85c3927c8",
+    "aac-ps-explicit-negative.asf.seek-reference": "0872087d85fa5620e89bab7cf722a13a9bbc1058d7983822c2628a45e2f26f1f",
+    "aac-ps-explicit-reorder.asf": "331e7217f61ba1fd9569ecb88cdeac0fc38cd0baa6e527a71bdc6f654b905973",
+    "aac-ps-explicit-reorder.asf.f32": "d0b994e2a31172bb982223f0ad7bb6816bd4db5bb69fe2aef56433d5b5deee74",
+    "aac-ps-explicit-reorder.asf.seek-reference": "c0038e7b85058bea0dcb500e3720a2b2c98ada910453495a16105a55b221f1cf",
+    "aac-ps-explicit-foreign.asf": "9f0f65cf6a05e183f866afc335777b8fc5e4fea5f09684e79ca31c99aad09d6a",
+    "aac-ps-explicit-foreign.asf.f32": "84f4a4d557b209c3ba5fda4559514b6fb47002d2d1442f5f111b2c9c811692e4",
+    "aac-ps-explicit-foreign.asf.seek-reference": "8f096a2a7ba7d8729479ef2a88796f9fb18cc39b460aeb8e05ab94d7e7f94920",
+    "aac-ps-explicit-fragment.asf": "721d6e3197608bed76fe7e0deca0ff3dc556bdc4e58f8c6cc15bb08a0fa6e5ea",
+    "aac-ps-explicit-fragment.asf.f32": "84f4a4d557b209c3ba5fda4559514b6fb47002d2d1442f5f111b2c9c811692e4",
+    "aac-ps-explicit-fragment.asf.seek-reference": "8f096a2a7ba7d8729479ef2a88796f9fb18cc39b460aeb8e05ab94d7e7f94920",
+    "aac-ps-explicit-offset.asf": "2b36c3fa3159274da0e3a8679838023c84baeede6d48047e30010f8604cae12d",
+    "aac-ps-explicit-offset.asf.f32": "047b0af1ad1920eb69f289f51ee4bb2b80ff55d71e9701b62e238c72e6528e15",
+    "aac-ps-explicit-offset.asf.seek-reference": "7689e0bb13e507ac7c1121f2f7e7607d21e5e4888f60251b1dc3eac910f73ff2",
+    "aac-ps-explicit-cancel-large.asf": "ba30d1727e63588878c946b34b17e2d4e66c876c053750990d158f1bc8f914be",
+    "aac-ps-explicit-cancel-large.asf.f32": "84f4a4d557b209c3ba5fda4559514b6fb47002d2d1442f5f111b2c9c811692e4",
+    "aac-ps-explicit-cancel-large.asf.seek-reference": "8f096a2a7ba7d8729479ef2a88796f9fb18cc39b460aeb8e05ab94d7e7f94920",
+    "aac-ps-explicit-all-negative.asf": "5db763b7867d262af04da67f53411830ff959643a2ee6da1c75bfd0da962126e",
+    "aac-ps-explicit-all-negative.asf.f32": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "aac-ps-explicit-all-negative.asf.seek-reference": "5d89f056865052bcb89c910d2d62872e029fb273c3db03f8968a52a41593c1b5",
+    "aac-ps-explicit-repeat.asf": "47564ef6f0c634186e93aa0c5dcf9291a244d7d4e3315fb265bc75498a06e2d6",
+    "aac-ps-explicit-repeat.asf.f32": "934224fea51c7902dbffe9bc2cf4006b47660560c3cfcbd3212efd70f5e9cd26",
+    "aac-ps-explicit-repeat.asf.seek-reference": "bb9b21d8664dd01751b878b6002ed8970bdf684d3d29d4fa31d92ffcc0d50e63",
+    "aac-ps-explicit-lifecycle.asf": "7f418788d3befd43124dac1b466609be062c5d68b7ef8c4bd7c66b663e09ed31",
+    "aac-ps-sync-continuous.asf": "1db240e16fd4a1e34cf306240cd61b1cd739e68205d9cc911fe56febef968114",
+    "aac-ps-sync-continuous.asf.f32": "84f4a4d557b209c3ba5fda4559514b6fb47002d2d1442f5f111b2c9c811692e4",
+    "aac-ps-sync-continuous.asf.seek-reference": "8f096a2a7ba7d8729479ef2a88796f9fb18cc39b460aeb8e05ab94d7e7f94920",
+    "aac-ps-sync-leading.asf": "a3c0f15996e8ac038367ffcaf9cf96b484dd7597b9854d3569e48c12caf46007",
+    "aac-ps-sync-leading.asf.f32": "047b0af1ad1920eb69f289f51ee4bb2b80ff55d71e9701b62e238c72e6528e15",
+    "aac-ps-sync-leading.asf.seek-reference": "7689e0bb13e507ac7c1121f2f7e7607d21e5e4888f60251b1dc3eac910f73ff2",
+    "aac-ps-sync-internal.asf": "3fe5ff7e155710e7f0aff6b3c77f5f9e09a3ddba9d3ff5bf69c9ec64f983fde9",
+    "aac-ps-sync-internal.asf.f32": "6bee2d808e4382177fa6bd70e8fc0f01ab74a5f4c085b76d254e1171963282a6",
+    "aac-ps-sync-internal.asf.seek-reference": "6da5e08284c110ae7a44d9b56168bab40a38b1e11ee17a4fa348dc24529f48e9",
+    "aac-ps-sync-overlap.asf": "6170ddce8f6f793135cdfd251c34bcee7bbb4bde1176d81fea06d9abe4302d75",
+    "aac-ps-sync-overlap.asf.f32": "d1d7d5f2791f838f6c71dd6d65ee4c8a7769ad235169b46cd4641bdbb4bb380b",
+    "aac-ps-sync-overlap.asf.seek-reference": "da78aa267d2aa10497dbbf238c4b75ac30d2fb2a3ff2c46a9329ecd56208ae94",
+    "aac-ps-sync-negative.asf": "2a3bd8d93ae69cd05ab0ff56122fb5f25236cf7d7b0d71f3399604f736947672",
+    "aac-ps-sync-negative.asf.f32": "b74061215bf4b92ec49b3378d0a871496c34b474e2b8b035e56dc1f85c3927c8",
+    "aac-ps-sync-negative.asf.seek-reference": "0872087d85fa5620e89bab7cf722a13a9bbc1058d7983822c2628a45e2f26f1f",
+    "aac-ps-sync-reorder.asf": "ee208fca91ddbb3b7f39832b331dd5656e05b9e8b0e8e4354645ccbebe5c1328",
+    "aac-ps-sync-reorder.asf.f32": "d0b994e2a31172bb982223f0ad7bb6816bd4db5bb69fe2aef56433d5b5deee74",
+    "aac-ps-sync-reorder.asf.seek-reference": "c0038e7b85058bea0dcb500e3720a2b2c98ada910453495a16105a55b221f1cf",
+    "aac-ps-sync-foreign.asf": "3010f762ea87737843c16a8ffd531a1ab49d2147ffe3d370a40ed7d4e15146ca",
+    "aac-ps-sync-foreign.asf.f32": "84f4a4d557b209c3ba5fda4559514b6fb47002d2d1442f5f111b2c9c811692e4",
+    "aac-ps-sync-foreign.asf.seek-reference": "8f096a2a7ba7d8729479ef2a88796f9fb18cc39b460aeb8e05ab94d7e7f94920",
+    "aac-ps-sync-fragment.asf": "1849053bcc8a7db0643f9f6501f377fcbd360f4e83d054143ae23074f9e1a4f8",
+    "aac-ps-sync-fragment.asf.f32": "84f4a4d557b209c3ba5fda4559514b6fb47002d2d1442f5f111b2c9c811692e4",
+    "aac-ps-sync-fragment.asf.seek-reference": "8f096a2a7ba7d8729479ef2a88796f9fb18cc39b460aeb8e05ab94d7e7f94920",
+    "aac-ps-sync-offset.asf": "209393d43cd395e60553fc0b50eb625cce7972fbb52bb12a29763954fb09598f",
+    "aac-ps-sync-offset.asf.f32": "047b0af1ad1920eb69f289f51ee4bb2b80ff55d71e9701b62e238c72e6528e15",
+    "aac-ps-sync-offset.asf.seek-reference": "7689e0bb13e507ac7c1121f2f7e7607d21e5e4888f60251b1dc3eac910f73ff2",
+    "aac-ps-sync-cancel-large.asf": "59a2dbcc3532d32d13e0b82d5ac1e0f93b26341d6610c34929343b416000037e",
+    "aac-ps-sync-cancel-large.asf.f32": "84f4a4d557b209c3ba5fda4559514b6fb47002d2d1442f5f111b2c9c811692e4",
+    "aac-ps-sync-cancel-large.asf.seek-reference": "8f096a2a7ba7d8729479ef2a88796f9fb18cc39b460aeb8e05ab94d7e7f94920",
+    "aac-ps-sync-all-negative.asf": "39b01c53105b23c6c0320fbedcde90515b8193dd031dc5d68d1e6685b194b136",
+    "aac-ps-sync-all-negative.asf.f32": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "aac-ps-sync-all-negative.asf.seek-reference": "5d89f056865052bcb89c910d2d62872e029fb273c3db03f8968a52a41593c1b5",
+    "aac-ps-sync-repeat.asf": "3cee6a3bf92d55279c9e206e1dc57d43397d004c9750fda5a831980d33e75a14",
+    "aac-ps-sync-repeat.asf.f32": "934224fea51c7902dbffe9bc2cf4006b47660560c3cfcbd3212efd70f5e9cd26",
+    "aac-ps-sync-repeat.asf.seek-reference": "bb9b21d8664dd01751b878b6002ed8970bdf684d3d29d4fa31d92ffcc0d50e63"
+  },
+  "fixture_writer_sha256": "704ddf4021b0048521ca59a664d205d8d4d7f48f53bce1d73d27967306366861",
+  "checks": [
+    {
+      "file": "aac-8000-1-continuous.asf",
+      "reference": "aac-8000-1-continuous.asf.f32",
+      "seek_reference": "aac-8000-1-continuous.asf.seek-reference",
+      "rate": 8000,
+      "channels": 1,
+      "frames": 5120,
+      "oracle": {
+        "result": "passed",
+        "frames": 5120,
+        "seeks": 16,
+        "checks": 1213873,
+        "exact_float_words": 17262
+      }
+    },
+    {
+      "file": "aac-8000-1-leading.asf",
+      "reference": "aac-8000-1-leading.asf.f32",
+      "seek_reference": "aac-8000-1-leading.asf.seek-reference",
+      "rate": 8000,
+      "channels": 1,
+      "frames": 5320,
+      "oracle": {
+        "result": "passed",
+        "frames": 5320,
+        "seeks": 16,
+        "checks": 814267,
+        "exact_float_words": 17662
+      }
+    },
+    {
+      "file": "aac-8000-1-internal.asf",
+      "reference": "aac-8000-1-internal.asf.f32",
+      "seek_reference": "aac-8000-1-internal.asf.seek-reference",
+      "rate": 8000,
+      "channels": 1,
+      "frames": 5440,
+      "oracle": {
+        "result": "passed",
+        "frames": 5440,
+        "seeks": 16,
+        "checks": 813307,
+        "exact_float_words": 17902
+      }
+    },
+    {
+      "file": "aac-8000-1-overlap.asf",
+      "reference": "aac-8000-1-overlap.asf.f32",
+      "seek_reference": "aac-8000-1-overlap.asf.seek-reference",
+      "rate": 8000,
+      "channels": 1,
+      "frames": 4960,
+      "oracle": {
+        "result": "passed",
+        "frames": 4960,
+        "seeks": 16,
+        "checks": 817147,
+        "exact_float_words": 16942
+      }
+    },
+    {
+      "file": "aac-8000-1-negative.asf",
+      "reference": "aac-8000-1-negative.asf.f32",
+      "seek_reference": "aac-8000-1-negative.asf.seek-reference",
+      "rate": 8000,
+      "channels": 1,
+      "frames": 4960,
+      "oracle": {
+        "result": "passed",
+        "frames": 4960,
+        "seeks": 16,
+        "checks": 817147,
+        "exact_float_words": 16942
+      }
+    },
+    {
+      "file": "aac-8000-1-reorder.asf",
+      "reference": "aac-8000-1-reorder.asf.f32",
+      "seek_reference": "aac-8000-1-reorder.asf.seek-reference",
+      "rate": 8000,
+      "channels": 1,
+      "frames": 2720,
+      "oracle": {
+        "result": "passed",
+        "frames": 2720,
+        "seeks": 16,
+        "checks": 743975,
+        "exact_float_words": 10656
+      }
+    },
+    {
+      "file": "aac-8000-1-foreign.asf",
+      "reference": "aac-8000-1-foreign.asf.f32",
+      "seek_reference": "aac-8000-1-foreign.asf.seek-reference",
+      "rate": 8000,
+      "channels": 1,
+      "frames": 5120,
+      "oracle": {
+        "result": "passed",
+        "frames": 5120,
+        "seeks": 16,
+        "checks": 1213873,
+        "exact_float_words": 17262
+      }
+    },
+    {
+      "file": "aac-8000-1-fragment.asf",
+      "reference": "aac-8000-1-fragment.asf.f32",
+      "seek_reference": "aac-8000-1-fragment.asf.seek-reference",
+      "rate": 8000,
+      "channels": 1,
+      "frames": 5120,
+      "oracle": {
+        "result": "passed",
+        "frames": 5120,
+        "seeks": 16,
+        "checks": 1213873,
+        "exact_float_words": 17262
+      }
+    },
+    {
+      "file": "aac-8000-1-offset.asf",
+      "reference": "aac-8000-1-offset.asf.f32",
+      "seek_reference": "aac-8000-1-offset.asf.seek-reference",
+      "rate": 8000,
+      "channels": 1,
+      "frames": 5320,
+      "oracle": {
+        "result": "passed",
+        "frames": 5320,
+        "seeks": 16,
+        "checks": 814267,
+        "exact_float_words": 17662
+      }
+    },
+    {
+      "file": "aac-8000-1-cancel-large.asf",
+      "reference": "aac-8000-1-cancel-large.asf.f32",
+      "seek_reference": "aac-8000-1-cancel-large.asf.seek-reference",
+      "rate": 8000,
+      "channels": 1,
+      "frames": 5120,
+      "oracle": {
+        "result": "passed",
+        "frames": 5120,
+        "seeks": 16,
+        "checks": 1213873,
+        "exact_float_words": 17262
+      }
+    },
+    {
+      "file": "aac-8000-1-all-negative.asf",
+      "reference": "aac-8000-1-all-negative.asf.f32",
+      "seek_reference": "aac-8000-1-all-negative.asf.seek-reference",
+      "rate": 8000,
+      "channels": 1,
+      "frames": 0,
+      "oracle": {
+        "result": "passed",
+        "frames": 0,
+        "seeks": 16,
+        "checks": 557195,
+        "exact_float_words": 0
+      }
+    },
+    {
+      "file": "aac-8000-1-repeat.asf",
+      "reference": "aac-8000-1-repeat.asf.f32",
+      "seek_reference": "aac-8000-1-repeat.asf.seek-reference",
+      "rate": 8000,
+      "channels": 1,
+      "frames": 1024,
+      "oracle": {
+        "result": "passed",
+        "frames": 1024,
+        "seeks": 16,
+        "checks": 692583,
+        "exact_float_words": 7118
+      }
+    },
+    {
+      "file": "aac-11025-2-continuous.asf",
+      "reference": "aac-11025-2-continuous.asf.f32",
+      "seek_reference": "aac-11025-2-continuous.asf.seek-reference",
+      "rate": 11025,
+      "channels": 2,
+      "frames": 6144,
+      "oracle": {
+        "result": "passed",
+        "frames": 6144,
+        "seeks": 16,
+        "checks": 1182464,
+        "exact_float_words": 19310
+      }
+    },
+    {
+      "file": "aac-11025-2-leading.asf",
+      "reference": "aac-11025-2-leading.asf.f32",
+      "seek_reference": "aac-11025-2-leading.asf.seek-reference",
+      "rate": 11025,
+      "channels": 2,
+      "frames": 6420,
+      "oracle": {
+        "result": "passed",
+        "frames": 6420,
+        "seeks": 16,
+        "checks": 838239,
+        "exact_float_words": 19862
+      }
+    },
+    {
+      "file": "aac-11025-2-internal.asf",
+      "reference": "aac-11025-2-internal.asf.f32",
+      "seek_reference": "aac-11025-2-internal.asf.seek-reference",
+      "rate": 11025,
+      "channels": 2,
+      "frames": 6589,
+      "oracle": {
+        "result": "passed",
+        "frames": 6589,
+        "seeks": 16,
+        "checks": 836887,
+        "exact_float_words": 20200
+      }
+    },
+    {
+      "file": "aac-11025-2-overlap.asf",
+      "reference": "aac-11025-2-overlap.asf.f32",
+      "seek_reference": "aac-11025-2-overlap.asf.seek-reference",
+      "rate": 11025,
+      "channels": 2,
+      "frames": 5927,
+      "oracle": {
+        "result": "passed",
+        "frames": 5927,
+        "seeks": 16,
+        "checks": 809411,
+        "exact_float_words": 18876
+      }
+    },
+    {
+      "file": "aac-11025-2-negative.asf",
+      "reference": "aac-11025-2-negative.asf.f32",
+      "seek_reference": "aac-11025-2-negative.asf.seek-reference",
+      "rate": 11025,
+      "channels": 2,
+      "frames": 5923,
+      "oracle": {
+        "result": "passed",
+        "frames": 5923,
+        "seeks": 16,
+        "checks": 809443,
+        "exact_float_words": 18868
+      }
+    },
+    {
+      "file": "aac-11025-2-reorder.asf",
+      "reference": "aac-11025-2-reorder.asf.f32",
+      "seek_reference": "aac-11025-2-reorder.asf.seek-reference",
+      "rate": 11025,
+      "channels": 2,
+      "frames": 3072,
+      "oracle": {
+        "result": "passed",
+        "frames": 3072,
+        "seeks": 16,
+        "checks": 773931,
+        "exact_float_words": 11360
+      }
+    },
+    {
+      "file": "aac-11025-2-foreign.asf",
+      "reference": "aac-11025-2-foreign.asf.f32",
+      "seek_reference": "aac-11025-2-foreign.asf.seek-reference",
+      "rate": 11025,
+      "channels": 2,
+      "frames": 6144,
+      "oracle": {
+        "result": "passed",
+        "frames": 6144,
+        "seeks": 16,
+        "checks": 1182464,
+        "exact_float_words": 19310
+      }
+    },
+    {
+      "file": "aac-11025-2-fragment.asf",
+      "reference": "aac-11025-2-fragment.asf.f32",
+      "seek_reference": "aac-11025-2-fragment.asf.seek-reference",
+      "rate": 11025,
+      "channels": 2,
+      "frames": 6144,
+      "oracle": {
+        "result": "passed",
+        "frames": 6144,
+        "seeks": 16,
+        "checks": 1182464,
+        "exact_float_words": 19310
+      }
+    },
+    {
+      "file": "aac-11025-2-offset.asf",
+      "reference": "aac-11025-2-offset.asf.f32",
+      "seek_reference": "aac-11025-2-offset.asf.seek-reference",
+      "rate": 11025,
+      "channels": 2,
+      "frames": 6420,
+      "oracle": {
+        "result": "passed",
+        "frames": 6420,
+        "seeks": 16,
+        "checks": 838239,
+        "exact_float_words": 19862
+      }
+    },
+    {
+      "file": "aac-11025-2-cancel-large.asf",
+      "reference": "aac-11025-2-cancel-large.asf.f32",
+      "seek_reference": "aac-11025-2-cancel-large.asf.seek-reference",
+      "rate": 11025,
+      "channels": 2,
+      "frames": 6144,
+      "oracle": {
+        "result": "passed",
+        "frames": 6144,
+        "seeks": 16,
+        "checks": 1182464,
+        "exact_float_words": 19310
+      }
+    },
+    {
+      "file": "aac-11025-2-all-negative.asf",
+      "reference": "aac-11025-2-all-negative.asf.f32",
+      "seek_reference": "aac-11025-2-all-negative.asf.seek-reference",
+      "rate": 11025,
+      "channels": 2,
+      "frames": 0,
+      "oracle": {
+        "result": "passed",
+        "frames": 0,
+        "seeks": 16,
+        "checks": 557195,
+        "exact_float_words": 0
+      }
+    },
+    {
+      "file": "aac-11025-2-repeat.asf",
+      "reference": "aac-11025-2-repeat.asf.f32",
+      "seek_reference": "aac-11025-2-repeat.asf.seek-reference",
+      "rate": 11025,
+      "channels": 2,
+      "frames": 1024,
+      "oracle": {
+        "result": "passed",
+        "frames": 1024,
+        "seeks": 16,
+        "checks": 692583,
+        "exact_float_words": 7118
+      }
+    },
+    {
+      "file": "aac-12000-1-continuous.asf",
+      "reference": "aac-12000-1-continuous.asf.f32",
+      "seek_reference": "aac-12000-1-continuous.asf.seek-reference",
+      "rate": 12000,
+      "channels": 1,
+      "frames": 6144,
+      "oracle": {
+        "result": "passed",
+        "frames": 6144,
+        "seeks": 16,
+        "checks": 1182464,
+        "exact_float_words": 19310
+      }
+    },
+    {
+      "file": "aac-12000-1-leading.asf",
+      "reference": "aac-12000-1-leading.asf.f32",
+      "seek_reference": "aac-12000-1-leading.asf.seek-reference",
+      "rate": 12000,
+      "channels": 1,
+      "frames": 6444,
+      "oracle": {
+        "result": "passed",
+        "frames": 6444,
+        "seeks": 16,
+        "checks": 838047,
+        "exact_float_words": 19910
+      }
+    },
+    {
+      "file": "aac-12000-1-internal.asf",
+      "reference": "aac-12000-1-internal.asf.f32",
+      "seek_reference": "aac-12000-1-internal.asf.seek-reference",
+      "rate": 12000,
+      "channels": 1,
+      "frames": 6624,
+      "oracle": {
+        "result": "passed",
+        "frames": 6624,
+        "seeks": 16,
+        "checks": 836607,
+        "exact_float_words": 20270
+      }
+    },
+    {
+      "file": "aac-12000-1-overlap.asf",
+      "reference": "aac-12000-1-overlap.asf.f32",
+      "seek_reference": "aac-12000-1-overlap.asf.seek-reference",
+      "rate": 12000,
+      "channels": 1,
+      "frames": 5904,
+      "oracle": {
+        "result": "passed",
+        "frames": 5904,
+        "seeks": 16,
+        "checks": 809595,
+        "exact_float_words": 18830
+      }
+    },
+    {
+      "file": "aac-12000-1-negative.asf",
+      "reference": "aac-12000-1-negative.asf.f32",
+      "seek_reference": "aac-12000-1-negative.asf.seek-reference",
+      "rate": 12000,
+      "channels": 1,
+      "frames": 5904,
+      "oracle": {
+        "result": "passed",
+        "frames": 5904,
+        "seeks": 16,
+        "checks": 809595,
+        "exact_float_words": 18830
+      }
+    },
+    {
+      "file": "aac-12000-1-reorder.asf",
+      "reference": "aac-12000-1-reorder.asf.f32",
+      "seek_reference": "aac-12000-1-reorder.asf.seek-reference",
+      "rate": 12000,
+      "channels": 1,
+      "frames": 3072,
+      "oracle": {
+        "result": "passed",
+        "frames": 3072,
+        "seeks": 16,
+        "checks": 773931,
+        "exact_float_words": 11360
+      }
+    },
+    {
+      "file": "aac-12000-1-foreign.asf",
+      "reference": "aac-12000-1-foreign.asf.f32",
+      "seek_reference": "aac-12000-1-foreign.asf.seek-reference",
+      "rate": 12000,
+      "channels": 1,
+      "frames": 6144,
+      "oracle": {
+        "result": "passed",
+        "frames": 6144,
+        "seeks": 16,
+        "checks": 1182464,
+        "exact_float_words": 19310
+      }
+    },
+    {
+      "file": "aac-12000-1-fragment.asf",
+      "reference": "aac-12000-1-fragment.asf.f32",
+      "seek_reference": "aac-12000-1-fragment.asf.seek-reference",
+      "rate": 12000,
+      "channels": 1,
+      "frames": 6144,
+      "oracle": {
+        "result": "passed",
+        "frames": 6144,
+        "seeks": 16,
+        "checks": 1182464,
+        "exact_float_words": 19310
+      }
+    },
+    {
+      "file": "aac-12000-1-offset.asf",
+      "reference": "aac-12000-1-offset.asf.f32",
+      "seek_reference": "aac-12000-1-offset.asf.seek-reference",
+      "rate": 12000,
+      "channels": 1,
+      "frames": 6444,
+      "oracle": {
+        "result": "passed",
+        "frames": 6444,
+        "seeks": 16,
+        "checks": 838047,
+        "exact_float_words": 19910
+      }
+    },
+    {
+      "file": "aac-12000-1-cancel-large.asf",
+      "reference": "aac-12000-1-cancel-large.asf.f32",
+      "seek_reference": "aac-12000-1-cancel-large.asf.seek-reference",
+      "rate": 12000,
+      "channels": 1,
+      "frames": 6144,
+      "oracle": {
+        "result": "passed",
+        "frames": 6144,
+        "seeks": 16,
+        "checks": 1182464,
+        "exact_float_words": 19310
+      }
+    },
+    {
+      "file": "aac-12000-1-all-negative.asf",
+      "reference": "aac-12000-1-all-negative.asf.f32",
+      "seek_reference": "aac-12000-1-all-negative.asf.seek-reference",
+      "rate": 12000,
+      "channels": 1,
+      "frames": 0,
+      "oracle": {
+        "result": "passed",
+        "frames": 0,
+        "seeks": 16,
+        "checks": 557195,
+        "exact_float_words": 0
+      }
+    },
+    {
+      "file": "aac-12000-1-repeat.asf",
+      "reference": "aac-12000-1-repeat.asf.f32",
+      "seek_reference": "aac-12000-1-repeat.asf.seek-reference",
+      "rate": 12000,
+      "channels": 1,
+      "frames": 1024,
+      "oracle": {
+        "result": "passed",
+        "frames": 1024,
+        "seeks": 16,
+        "checks": 692583,
+        "exact_float_words": 7118
+      }
+    },
+    {
+      "file": "aac-16000-2-continuous.asf",
+      "reference": "aac-16000-2-continuous.asf.f32",
+      "seek_reference": "aac-16000-2-continuous.asf.seek-reference",
+      "rate": 16000,
+      "channels": 2,
+      "frames": 8192,
+      "oracle": {
+        "result": "passed",
+        "frames": 8192,
+        "seeks": 16,
+        "checks": 1258937,
+        "exact_float_words": 23406
+      }
+    },
+    {
+      "file": "aac-16000-2-leading.asf",
+      "reference": "aac-16000-2-leading.asf.f32",
+      "seek_reference": "aac-16000-2-leading.asf.seek-reference",
+      "rate": 16000,
+      "channels": 2,
+      "frames": 8592,
+      "oracle": {
+        "result": "passed",
+        "frames": 8592,
+        "seeks": 16,
+        "checks": 853635,
+        "exact_float_words": 24206
+      }
+    },
+    {
+      "file": "aac-16000-2-internal.asf",
+      "reference": "aac-16000-2-internal.asf.f32",
+      "seek_reference": "aac-16000-2-internal.asf.seek-reference",
+      "rate": 16000,
+      "channels": 2,
+      "frames": 8832,
+      "oracle": {
+        "result": "passed",
+        "frames": 8832,
+        "seeks": 16,
+        "checks": 851715,
+        "exact_float_words": 24686
+      }
+    },
+    {
+      "file": "aac-16000-2-overlap.asf",
+      "reference": "aac-16000-2-overlap.asf.f32",
+      "seek_reference": "aac-16000-2-overlap.asf.seek-reference",
+      "rate": 16000,
+      "channels": 2,
+      "frames": 7872,
+      "oracle": {
+        "result": "passed",
+        "frames": 7872,
+        "seeks": 16,
+        "checks": 859395,
+        "exact_float_words": 22766
+      }
+    },
+    {
+      "file": "aac-16000-2-negative.asf",
+      "reference": "aac-16000-2-negative.asf.f32",
+      "seek_reference": "aac-16000-2-negative.asf.seek-reference",
+      "rate": 16000,
+      "channels": 2,
+      "frames": 7872,
+      "oracle": {
+        "result": "passed",
+        "frames": 7872,
+        "seeks": 16,
+        "checks": 859395,
+        "exact_float_words": 22766
+      }
+    },
+    {
+      "file": "aac-16000-2-reorder.asf",
+      "reference": "aac-16000-2-reorder.asf.f32",
+      "seek_reference": "aac-16000-2-reorder.asf.seek-reference",
+      "rate": 16000,
+      "channels": 2,
+      "frames": 4096,
+      "oracle": {
+        "result": "passed",
+        "frames": 4096,
+        "seeks": 16,
+        "checks": 798503,
+        "exact_float_words": 13410
+      }
+    },
+    {
+      "file": "aac-16000-2-foreign.asf",
+      "reference": "aac-16000-2-foreign.asf.f32",
+      "seek_reference": "aac-16000-2-foreign.asf.seek-reference",
+      "rate": 16000,
+      "channels": 2,
+      "frames": 8192,
+      "oracle": {
+        "result": "passed",
+        "frames": 8192,
+        "seeks": 16,
+        "checks": 1258937,
+        "exact_float_words": 23406
+      }
+    },
+    {
+      "file": "aac-16000-2-fragment.asf",
+      "reference": "aac-16000-2-fragment.asf.f32",
+      "seek_reference": "aac-16000-2-fragment.asf.seek-reference",
+      "rate": 16000,
+      "channels": 2,
+      "frames": 8192,
+      "oracle": {
+        "result": "passed",
+        "frames": 8192,
+        "seeks": 16,
+        "checks": 1258937,
+        "exact_float_words": 23406
+      }
+    },
+    {
+      "file": "aac-16000-2-offset.asf",
+      "reference": "aac-16000-2-offset.asf.f32",
+      "seek_reference": "aac-16000-2-offset.asf.seek-reference",
+      "rate": 16000,
+      "channels": 2,
+      "frames": 8592,
+      "oracle": {
+        "result": "passed",
+        "frames": 8592,
+        "seeks": 16,
+        "checks": 853635,
+        "exact_float_words": 24206
+      }
+    },
+    {
+      "file": "aac-16000-2-cancel-large.asf",
+      "reference": "aac-16000-2-cancel-large.asf.f32",
+      "seek_reference": "aac-16000-2-cancel-large.asf.seek-reference",
+      "rate": 16000,
+      "channels": 2,
+      "frames": 8192,
+      "oracle": {
+        "result": "passed",
+        "frames": 8192,
+        "seeks": 16,
+        "checks": 1258937,
+        "exact_float_words": 23406
+      }
+    },
+    {
+      "file": "aac-16000-2-all-negative.asf",
+      "reference": "aac-16000-2-all-negative.asf.f32",
+      "seek_reference": "aac-16000-2-all-negative.asf.seek-reference",
+      "rate": 16000,
+      "channels": 2,
+      "frames": 0,
+      "oracle": {
+        "result": "passed",
+        "frames": 0,
+        "seeks": 16,
+        "checks": 557195,
+        "exact_float_words": 0
+      }
+    },
+    {
+      "file": "aac-16000-2-repeat.asf",
+      "reference": "aac-16000-2-repeat.asf.f32",
+      "seek_reference": "aac-16000-2-repeat.asf.seek-reference",
+      "rate": 16000,
+      "channels": 2,
+      "frames": 1024,
+      "oracle": {
+        "result": "passed",
+        "frames": 1024,
+        "seeks": 16,
+        "checks": 692583,
+        "exact_float_words": 7118
+      }
+    },
+    {
+      "file": "aac-22050-1-continuous.asf",
+      "reference": "aac-22050-1-continuous.asf.f32",
+      "seek_reference": "aac-22050-1-continuous.asf.seek-reference",
+      "rate": 22050,
+      "channels": 1,
+      "frames": 10240,
+      "oracle": {
+        "result": "passed",
+        "frames": 10240,
+        "seeks": 16,
+        "checks": 1278053,
+        "exact_float_words": 27502
+      }
+    },
+    {
+      "file": "aac-22050-1-leading.asf",
+      "reference": "aac-22050-1-leading.asf.f32",
+      "seek_reference": "aac-22050-1-leading.asf.seek-reference",
+      "rate": 22050,
+      "channels": 1,
+      "frames": 10791,
+      "oracle": {
+        "result": "passed",
+        "frames": 10791,
+        "seeks": 16,
+        "checks": 901587,
+        "exact_float_words": 28604
+      }
+    },
+    {
+      "file": "aac-22050-1-internal.asf",
+      "reference": "aac-22050-1-internal.asf.f32",
+      "seek_reference": "aac-22050-1-internal.asf.seek-reference",
+      "rate": 22050,
+      "channels": 1,
+      "frames": 11118,
+      "oracle": {
+        "result": "passed",
+        "frames": 11118,
+        "seeks": 16,
+        "checks": 898971,
+        "exact_float_words": 29258
+      }
+    },
+    {
+      "file": "aac-22050-1-overlap.asf",
+      "reference": "aac-22050-1-overlap.asf.f32",
+      "seek_reference": "aac-22050-1-overlap.asf.seek-reference",
+      "rate": 22050,
+      "channels": 1,
+      "frames": 9795,
+      "oracle": {
+        "result": "passed",
+        "frames": 9795,
+        "seeks": 16,
+        "checks": 876783,
+        "exact_float_words": 26612
+      }
+    },
+    {
+      "file": "aac-22050-1-negative.asf",
+      "reference": "aac-22050-1-negative.asf.f32",
+      "seek_reference": "aac-22050-1-negative.asf.seek-reference",
+      "rate": 22050,
+      "channels": 1,
+      "frames": 9799,
+      "oracle": {
+        "result": "passed",
+        "frames": 9799,
+        "seeks": 16,
+        "checks": 876751,
+        "exact_float_words": 26620
+      }
+    },
+    {
+      "file": "aac-22050-1-reorder.asf",
+      "reference": "aac-22050-1-reorder.asf.f32",
+      "seek_reference": "aac-22050-1-reorder.asf.seek-reference",
+      "rate": 22050,
+      "channels": 1,
+      "frames": 5120,
+      "oracle": {
+        "result": "passed",
+        "frames": 5120,
+        "seeks": 16,
+        "checks": 815867,
+        "exact_float_words": 17262
+      }
+    },
+    {
+      "file": "aac-22050-1-foreign.asf",
+      "reference": "aac-22050-1-foreign.asf.f32",
+      "seek_reference": "aac-22050-1-foreign.asf.seek-reference",
+      "rate": 22050,
+      "channels": 1,
+      "frames": 10240,
+      "oracle": {
+        "result": "passed",
+        "frames": 10240,
+        "seeks": 16,
+        "checks": 1278053,
+        "exact_float_words": 27502
+      }
+    },
+    {
+      "file": "aac-22050-1-fragment.asf",
+      "reference": "aac-22050-1-fragment.asf.f32",
+      "seek_reference": "aac-22050-1-fragment.asf.seek-reference",
+      "rate": 22050,
+      "channels": 1,
+      "frames": 10240,
+      "oracle": {
+        "result": "passed",
+        "frames": 10240,
+        "seeks": 16,
+        "checks": 1278053,
+        "exact_float_words": 27502
+      }
+    },
+    {
+      "file": "aac-22050-1-offset.asf",
+      "reference": "aac-22050-1-offset.asf.f32",
+      "seek_reference": "aac-22050-1-offset.asf.seek-reference",
+      "rate": 22050,
+      "channels": 1,
+      "frames": 10791,
+      "oracle": {
+        "result": "passed",
+        "frames": 10791,
+        "seeks": 16,
+        "checks": 901587,
+        "exact_float_words": 28604
+      }
+    },
+    {
+      "file": "aac-22050-1-cancel-large.asf",
+      "reference": "aac-22050-1-cancel-large.asf.f32",
+      "seek_reference": "aac-22050-1-cancel-large.asf.seek-reference",
+      "rate": 22050,
+      "channels": 1,
+      "frames": 10240,
+      "oracle": {
+        "result": "passed",
+        "frames": 10240,
+        "seeks": 16,
+        "checks": 1278053,
+        "exact_float_words": 27502
+      }
+    },
+    {
+      "file": "aac-22050-1-all-negative.asf",
+      "reference": "aac-22050-1-all-negative.asf.f32",
+      "seek_reference": "aac-22050-1-all-negative.asf.seek-reference",
+      "rate": 22050,
+      "channels": 1,
+      "frames": 0,
+      "oracle": {
+        "result": "passed",
+        "frames": 0,
+        "seeks": 16,
+        "checks": 557195,
+        "exact_float_words": 0
+      }
+    },
+    {
+      "file": "aac-22050-1-repeat.asf",
+      "reference": "aac-22050-1-repeat.asf.f32",
+      "seek_reference": "aac-22050-1-repeat.asf.seek-reference",
+      "rate": 22050,
+      "channels": 1,
+      "frames": 1024,
+      "oracle": {
+        "result": "passed",
+        "frames": 1024,
+        "seeks": 16,
+        "checks": 692583,
+        "exact_float_words": 7118
+      }
+    },
+    {
+      "file": "aac-24000-2-continuous.asf",
+      "reference": "aac-24000-2-continuous.asf.f32",
+      "seek_reference": "aac-24000-2-continuous.asf.seek-reference",
+      "rate": 24000,
+      "channels": 2,
+      "frames": 11264,
+      "oracle": {
+        "result": "passed",
+        "frames": 11264,
+        "seeks": 16,
+        "checks": 1295809,
+        "exact_float_words": 29550
+      }
+    },
+    {
+      "file": "aac-24000-2-leading.asf",
+      "reference": "aac-24000-2-leading.asf.f32",
+      "seek_reference": "aac-24000-2-leading.asf.seek-reference",
+      "rate": 24000,
+      "channels": 2,
+      "frames": 11864,
+      "oracle": {
+        "result": "passed",
+        "frames": 11864,
+        "seeks": 16,
+        "checks": 893003,
+        "exact_float_words": 30750
+      }
+    },
+    {
+      "file": "aac-24000-2-internal.asf",
+      "reference": "aac-24000-2-internal.asf.f32",
+      "seek_reference": "aac-24000-2-internal.asf.seek-reference",
+      "rate": 24000,
+      "channels": 2,
+      "frames": 12216,
+      "oracle": {
+        "result": "passed",
+        "frames": 12216,
+        "seeks": 16,
+        "checks": 890187,
+        "exact_float_words": 31454
+      }
+    },
+    {
+      "file": "aac-24000-2-overlap.asf",
+      "reference": "aac-24000-2-overlap.asf.f32",
+      "seek_reference": "aac-24000-2-overlap.asf.seek-reference",
+      "rate": 24000,
+      "channels": 2,
+      "frames": 10776,
+      "oracle": {
+        "result": "passed",
+        "frames": 10776,
+        "seeks": 16,
+        "checks": 901707,
+        "exact_float_words": 28574
+      }
+    },
+    {
+      "file": "aac-24000-2-negative.asf",
+      "reference": "aac-24000-2-negative.asf.f32",
+      "seek_reference": "aac-24000-2-negative.asf.seek-reference",
+      "rate": 24000,
+      "channels": 2,
+      "frames": 10784,
+      "oracle": {
+        "result": "passed",
+        "frames": 10784,
+        "seeks": 16,
+        "checks": 901643,
+        "exact_float_words": 28590
+      }
+    },
+    {
+      "file": "aac-24000-2-reorder.asf",
+      "reference": "aac-24000-2-reorder.asf.f32",
+      "seek_reference": "aac-24000-2-reorder.asf.seek-reference",
+      "rate": 24000,
+      "channels": 2,
+      "frames": 5120,
+      "oracle": {
+        "result": "passed",
+        "frames": 5120,
+        "seeks": 16,
+        "checks": 815867,
+        "exact_float_words": 17262
+      }
+    },
+    {
+      "file": "aac-24000-2-foreign.asf",
+      "reference": "aac-24000-2-foreign.asf.f32",
+      "seek_reference": "aac-24000-2-foreign.asf.seek-reference",
+      "rate": 24000,
+      "channels": 2,
+      "frames": 11264,
+      "oracle": {
+        "result": "passed",
+        "frames": 11264,
+        "seeks": 16,
+        "checks": 1295809,
+        "exact_float_words": 29550
+      }
+    },
+    {
+      "file": "aac-24000-2-fragment.asf",
+      "reference": "aac-24000-2-fragment.asf.f32",
+      "seek_reference": "aac-24000-2-fragment.asf.seek-reference",
+      "rate": 24000,
+      "channels": 2,
+      "frames": 11264,
+      "oracle": {
+        "result": "passed",
+        "frames": 11264,
+        "seeks": 16,
+        "checks": 1295809,
+        "exact_float_words": 29550
+      }
+    },
+    {
+      "file": "aac-24000-2-offset.asf",
+      "reference": "aac-24000-2-offset.asf.f32",
+      "seek_reference": "aac-24000-2-offset.asf.seek-reference",
+      "rate": 24000,
+      "channels": 2,
+      "frames": 11864,
+      "oracle": {
+        "result": "passed",
+        "frames": 11864,
+        "seeks": 16,
+        "checks": 893003,
+        "exact_float_words": 30750
+      }
+    },
+    {
+      "file": "aac-24000-2-cancel-large.asf",
+      "reference": "aac-24000-2-cancel-large.asf.f32",
+      "seek_reference": "aac-24000-2-cancel-large.asf.seek-reference",
+      "rate": 24000,
+      "channels": 2,
+      "frames": 11264,
+      "oracle": {
+        "result": "passed",
+        "frames": 11264,
+        "seeks": 16,
+        "checks": 1295809,
+        "exact_float_words": 29550
+      }
+    },
+    {
+      "file": "aac-24000-2-all-negative.asf",
+      "reference": "aac-24000-2-all-negative.asf.f32",
+      "seek_reference": "aac-24000-2-all-negative.asf.seek-reference",
+      "rate": 24000,
+      "channels": 2,
+      "frames": 0,
+      "oracle": {
+        "result": "passed",
+        "frames": 0,
+        "seeks": 16,
+        "checks": 557195,
+        "exact_float_words": 0
+      }
+    },
+    {
+      "file": "aac-24000-2-repeat.asf",
+      "reference": "aac-24000-2-repeat.asf.f32",
+      "seek_reference": "aac-24000-2-repeat.asf.seek-reference",
+      "rate": 24000,
+      "channels": 2,
+      "frames": 1024,
+      "oracle": {
+        "result": "passed",
+        "frames": 1024,
+        "seeks": 16,
+        "checks": 692583,
+        "exact_float_words": 7118
+      }
+    },
+    {
+      "file": "aac-24000-2-compressed.asf",
+      "reference": "aac-24000-2-compressed.asf.f32",
+      "seek_reference": "aac-24000-2-compressed.asf.seek-reference",
+      "rate": 24000,
+      "channels": 2,
+      "frames": 11264,
+      "oracle": {
+        "result": "passed",
+        "frames": 11264,
+        "seeks": 16,
+        "checks": 1295809,
+        "exact_float_words": 29550
+      }
+    },
+    {
+      "file": "aac-32000-1-continuous.asf",
+      "reference": "aac-32000-1-continuous.asf.f32",
+      "seek_reference": "aac-32000-1-continuous.asf.seek-reference",
+      "rate": 32000,
+      "channels": 1,
+      "frames": 14336,
+      "oracle": {
+        "result": "passed",
+        "frames": 14336,
+        "seeks": 16,
+        "checks": 1308101,
+        "exact_float_words": 35694
+      }
+    },
+    {
+      "file": "aac-32000-1-leading.asf",
+      "reference": "aac-32000-1-leading.asf.f32",
+      "seek_reference": "aac-32000-1-leading.asf.seek-reference",
+      "rate": 32000,
+      "channels": 1,
+      "frames": 15136,
+      "oracle": {
+        "result": "passed",
+        "frames": 15136,
+        "seeks": 16,
+        "checks": 932371,
+        "exact_float_words": 37294
+      }
+    },
+    {
+      "file": "aac-32000-1-internal.asf",
+      "reference": "aac-32000-1-internal.asf.f32",
+      "seek_reference": "aac-32000-1-internal.asf.seek-reference",
+      "rate": 32000,
+      "channels": 1,
+      "frames": 15616,
+      "oracle": {
+        "result": "passed",
+        "frames": 15616,
+        "seeks": 16,
+        "checks": 928531,
+        "exact_float_words": 38254
+      }
+    },
+    {
+      "file": "aac-32000-1-overlap.asf",
+      "reference": "aac-32000-1-overlap.asf.f32",
+      "seek_reference": "aac-32000-1-overlap.asf.seek-reference",
+      "rate": 32000,
+      "channels": 1,
+      "frames": 13696,
+      "oracle": {
+        "result": "passed",
+        "frames": 13696,
+        "seeks": 16,
+        "checks": 911119,
+        "exact_float_words": 34414
+      }
+    },
+    {
+      "file": "aac-32000-1-negative.asf",
+      "reference": "aac-32000-1-negative.asf.f32",
+      "seek_reference": "aac-32000-1-negative.asf.seek-reference",
+      "rate": 32000,
+      "channels": 1,
+      "frames": 13696,
+      "oracle": {
+        "result": "passed",
+        "frames": 13696,
+        "seeks": 16,
+        "checks": 911119,
+        "exact_float_words": 34414
+      }
+    },
+    {
+      "file": "aac-32000-1-reorder.asf",
+      "reference": "aac-32000-1-reorder.asf.f32",
+      "seek_reference": "aac-32000-1-reorder.asf.seek-reference",
+      "rate": 32000,
+      "channels": 1,
+      "frames": 7168,
+      "oracle": {
+        "result": "passed",
+        "frames": 7168,
+        "seeks": 16,
+        "checks": 832255,
+        "exact_float_words": 21358
+      }
+    },
+    {
+      "file": "aac-32000-1-foreign.asf",
+      "reference": "aac-32000-1-foreign.asf.f32",
+      "seek_reference": "aac-32000-1-foreign.asf.seek-reference",
+      "rate": 32000,
+      "channels": 1,
+      "frames": 14336,
+      "oracle": {
+        "result": "passed",
+        "frames": 14336,
+        "seeks": 16,
+        "checks": 1308101,
+        "exact_float_words": 35694
+      }
+    },
+    {
+      "file": "aac-32000-1-fragment.asf",
+      "reference": "aac-32000-1-fragment.asf.f32",
+      "seek_reference": "aac-32000-1-fragment.asf.seek-reference",
+      "rate": 32000,
+      "channels": 1,
+      "frames": 14336,
+      "oracle": {
+        "result": "passed",
+        "frames": 14336,
+        "seeks": 16,
+        "checks": 1308101,
+        "exact_float_words": 35694
+      }
+    },
+    {
+      "file": "aac-32000-1-offset.asf",
+      "reference": "aac-32000-1-offset.asf.f32",
+      "seek_reference": "aac-32000-1-offset.asf.seek-reference",
+      "rate": 32000,
+      "channels": 1,
+      "frames": 15136,
+      "oracle": {
+        "result": "passed",
+        "frames": 15136,
+        "seeks": 16,
+        "checks": 932371,
+        "exact_float_words": 37294
+      }
+    },
+    {
+      "file": "aac-32000-1-cancel-large.asf",
+      "reference": "aac-32000-1-cancel-large.asf.f32",
+      "seek_reference": "aac-32000-1-cancel-large.asf.seek-reference",
+      "rate": 32000,
+      "channels": 1,
+      "frames": 14336,
+      "oracle": {
+        "result": "passed",
+        "frames": 14336,
+        "seeks": 16,
+        "checks": 1308101,
+        "exact_float_words": 35694
+      }
+    },
+    {
+      "file": "aac-32000-1-all-negative.asf",
+      "reference": "aac-32000-1-all-negative.asf.f32",
+      "seek_reference": "aac-32000-1-all-negative.asf.seek-reference",
+      "rate": 32000,
+      "channels": 1,
+      "frames": 0,
+      "oracle": {
+        "result": "passed",
+        "frames": 0,
+        "seeks": 16,
+        "checks": 557195,
+        "exact_float_words": 0
+      }
+    },
+    {
+      "file": "aac-32000-1-repeat.asf",
+      "reference": "aac-32000-1-repeat.asf.f32",
+      "seek_reference": "aac-32000-1-repeat.asf.seek-reference",
+      "rate": 32000,
+      "channels": 1,
+      "frames": 1024,
+      "oracle": {
+        "result": "passed",
+        "frames": 1024,
+        "seeks": 16,
+        "checks": 692583,
+        "exact_float_words": 7118
+      }
+    },
+    {
+      "file": "aac-32000-1-compressed.asf",
+      "reference": "aac-32000-1-compressed.asf.f32",
+      "seek_reference": "aac-32000-1-compressed.asf.seek-reference",
+      "rate": 32000,
+      "channels": 1,
+      "frames": 14336,
+      "oracle": {
+        "result": "passed",
+        "frames": 14336,
+        "seeks": 16,
+        "checks": 1308101,
+        "exact_float_words": 35694
+      }
+    },
+    {
+      "file": "aac-44100-2-continuous.asf",
+      "reference": "aac-44100-2-continuous.asf.f32",
+      "seek_reference": "aac-44100-2-continuous.asf.seek-reference",
+      "rate": 44100,
+      "channels": 2,
+      "frames": 19456,
+      "oracle": {
+        "result": "passed",
+        "frames": 19456,
+        "seeks": 16,
+        "checks": 1364089,
+        "exact_float_words": 45934
+      }
+    },
+    {
+      "file": "aac-44100-2-leading.asf",
+      "reference": "aac-44100-2-leading.asf.f32",
+      "seek_reference": "aac-44100-2-leading.asf.seek-reference",
+      "rate": 44100,
+      "channels": 2,
+      "frames": 20559,
+      "oracle": {
+        "result": "passed",
+        "frames": 20559,
+        "seeks": 16,
+        "checks": 954531,
+        "exact_float_words": 48140
+      }
+    },
+    {
+      "file": "aac-44100-2-internal.asf",
+      "reference": "aac-44100-2-internal.asf.f32",
+      "seek_reference": "aac-44100-2-internal.asf.seek-reference",
+      "rate": 44100,
+      "channels": 2,
+      "frames": 21221,
+      "oracle": {
+        "result": "passed",
+        "frames": 21221,
+        "seeks": 16,
+        "checks": 982007,
+        "exact_float_words": 49464
+      }
+    },
+    {
+      "file": "aac-44100-2-overlap.asf",
+      "reference": "aac-44100-2-overlap.asf.f32",
+      "seek_reference": "aac-44100-2-overlap.asf.seek-reference",
+      "rate": 44100,
+      "channels": 2,
+      "frames": 18575,
+      "oracle": {
+        "result": "passed",
+        "frames": 18575,
+        "seeks": 16,
+        "checks": 937631,
+        "exact_float_words": 44172
+      }
+    },
+    {
+      "file": "aac-44100-2-negative.asf",
+      "reference": "aac-44100-2-negative.asf.f32",
+      "seek_reference": "aac-44100-2-negative.asf.seek-reference",
+      "rate": 44100,
+      "channels": 2,
+      "frames": 18574,
+      "oracle": {
+        "result": "passed",
+        "frames": 18574,
+        "seeks": 16,
+        "checks": 937639,
+        "exact_float_words": 44170
+      }
+    },
+    {
+      "file": "aac-44100-2-reorder.asf",
+      "reference": "aac-44100-2-reorder.asf.f32",
+      "seek_reference": "aac-44100-2-reorder.asf.seek-reference",
+      "rate": 44100,
+      "channels": 2,
+      "frames": 9216,
+      "oracle": {
+        "result": "passed",
+        "frames": 9216,
+        "seeks": 16,
+        "checks": 881415,
+        "exact_float_words": 25454
+      }
+    },
+    {
+      "file": "aac-44100-2-foreign.asf",
+      "reference": "aac-44100-2-foreign.asf.f32",
+      "seek_reference": "aac-44100-2-foreign.asf.seek-reference",
+      "rate": 44100,
+      "channels": 2,
+      "frames": 19456,
+      "oracle": {
+        "result": "passed",
+        "frames": 19456,
+        "seeks": 16,
+        "checks": 1364089,
+        "exact_float_words": 45934
+      }
+    },
+    {
+      "file": "aac-44100-2-fragment.asf",
+      "reference": "aac-44100-2-fragment.asf.f32",
+      "seek_reference": "aac-44100-2-fragment.asf.seek-reference",
+      "rate": 44100,
+      "channels": 2,
+      "frames": 19456,
+      "oracle": {
+        "result": "passed",
+        "frames": 19456,
+        "seeks": 16,
+        "checks": 1364089,
+        "exact_float_words": 45934
+      }
+    },
+    {
+      "file": "aac-44100-2-offset.asf",
+      "reference": "aac-44100-2-offset.asf.f32",
+      "seek_reference": "aac-44100-2-offset.asf.seek-reference",
+      "rate": 44100,
+      "channels": 2,
+      "frames": 20559,
+      "oracle": {
+        "result": "passed",
+        "frames": 20559,
+        "seeks": 16,
+        "checks": 954531,
+        "exact_float_words": 48140
+      }
+    },
+    {
+      "file": "aac-44100-2-cancel-large.asf",
+      "reference": "aac-44100-2-cancel-large.asf.f32",
+      "seek_reference": "aac-44100-2-cancel-large.asf.seek-reference",
+      "rate": 44100,
+      "channels": 2,
+      "frames": 19456,
+      "oracle": {
+        "result": "passed",
+        "frames": 19456,
+        "seeks": 16,
+        "checks": 1364089,
+        "exact_float_words": 45934
+      }
+    },
+    {
+      "file": "aac-44100-2-all-negative.asf",
+      "reference": "aac-44100-2-all-negative.asf.f32",
+      "seek_reference": "aac-44100-2-all-negative.asf.seek-reference",
+      "rate": 44100,
+      "channels": 2,
+      "frames": 0,
+      "oracle": {
+        "result": "passed",
+        "frames": 0,
+        "seeks": 16,
+        "checks": 557195,
+        "exact_float_words": 0
+      }
+    },
+    {
+      "file": "aac-44100-2-repeat.asf",
+      "reference": "aac-44100-2-repeat.asf.f32",
+      "seek_reference": "aac-44100-2-repeat.asf.seek-reference",
+      "rate": 44100,
+      "channels": 2,
+      "frames": 1024,
+      "oracle": {
+        "result": "passed",
+        "frames": 1024,
+        "seeks": 16,
+        "checks": 692583,
+        "exact_float_words": 7118
+      }
+    },
+    {
+      "file": "aac-44100-2-compressed.asf",
+      "reference": "aac-44100-2-compressed.asf.f32",
+      "seek_reference": "aac-44100-2-compressed.asf.seek-reference",
+      "rate": 44100,
+      "channels": 2,
+      "frames": 19456,
+      "oracle": {
+        "result": "passed",
+        "frames": 19456,
+        "seeks": 16,
+        "checks": 1364089,
+        "exact_float_words": 45934
+      }
+    },
+    {
+      "file": "aac-48000-2-continuous.asf",
+      "reference": "aac-48000-2-continuous.asf.f32",
+      "seek_reference": "aac-48000-2-continuous.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 20480,
+      "oracle": {
+        "result": "passed",
+        "frames": 20480,
+        "seeks": 16,
+        "checks": 1357265,
+        "exact_float_words": 47982
+      }
+    },
+    {
+      "file": "aac-48000-2-leading.asf",
+      "reference": "aac-48000-2-leading.asf.f32",
+      "seek_reference": "aac-48000-2-leading.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 21680,
+      "oracle": {
+        "result": "passed",
+        "frames": 21680,
+        "seeks": 16,
+        "checks": 978335,
+        "exact_float_words": 50382
+      }
+    },
+    {
+      "file": "aac-48000-2-internal.asf",
+      "reference": "aac-48000-2-internal.asf.f32",
+      "seek_reference": "aac-48000-2-internal.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 22384,
+      "oracle": {
+        "result": "passed",
+        "frames": 22384,
+        "seeks": 16,
+        "checks": 972703,
+        "exact_float_words": 51790
+      }
+    },
+    {
+      "file": "aac-48000-2-overlap.asf",
+      "reference": "aac-48000-2-overlap.asf.f32",
+      "seek_reference": "aac-48000-2-overlap.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 19504,
+      "oracle": {
+        "result": "passed",
+        "frames": 19504,
+        "seeks": 16,
+        "checks": 962971,
+        "exact_float_words": 46030
+      }
+    },
+    {
+      "file": "aac-48000-2-negative.asf",
+      "reference": "aac-48000-2-negative.asf.f32",
+      "seek_reference": "aac-48000-2-negative.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 19520,
+      "oracle": {
+        "result": "passed",
+        "frames": 19520,
+        "seeks": 16,
+        "checks": 962843,
+        "exact_float_words": 46062
+      }
+    },
+    {
+      "file": "aac-48000-2-reorder.asf",
+      "reference": "aac-48000-2-reorder.asf.f32",
+      "seek_reference": "aac-48000-2-reorder.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 10240,
+      "oracle": {
+        "result": "passed",
+        "frames": 10240,
+        "seeks": 16,
+        "checks": 873223,
+        "exact_float_words": 27502
+      }
+    },
+    {
+      "file": "aac-48000-2-foreign.asf",
+      "reference": "aac-48000-2-foreign.asf.f32",
+      "seek_reference": "aac-48000-2-foreign.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 20480,
+      "oracle": {
+        "result": "passed",
+        "frames": 20480,
+        "seeks": 16,
+        "checks": 1357265,
+        "exact_float_words": 47982
+      }
+    },
+    {
+      "file": "aac-48000-2-fragment.asf",
+      "reference": "aac-48000-2-fragment.asf.f32",
+      "seek_reference": "aac-48000-2-fragment.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 20480,
+      "oracle": {
+        "result": "passed",
+        "frames": 20480,
+        "seeks": 16,
+        "checks": 1357265,
+        "exact_float_words": 47982
+      }
+    },
+    {
+      "file": "aac-48000-2-offset.asf",
+      "reference": "aac-48000-2-offset.asf.f32",
+      "seek_reference": "aac-48000-2-offset.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 21680,
+      "oracle": {
+        "result": "passed",
+        "frames": 21680,
+        "seeks": 16,
+        "checks": 978335,
+        "exact_float_words": 50382
+      }
+    },
+    {
+      "file": "aac-48000-2-cancel-large.asf",
+      "reference": "aac-48000-2-cancel-large.asf.f32",
+      "seek_reference": "aac-48000-2-cancel-large.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 20480,
+      "oracle": {
+        "result": "passed",
+        "frames": 20480,
+        "seeks": 16,
+        "checks": 1357265,
+        "exact_float_words": 47982
+      }
+    },
+    {
+      "file": "aac-48000-2-all-negative.asf",
+      "reference": "aac-48000-2-all-negative.asf.f32",
+      "seek_reference": "aac-48000-2-all-negative.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 0,
+      "oracle": {
+        "result": "passed",
+        "frames": 0,
+        "seeks": 16,
+        "checks": 557195,
+        "exact_float_words": 0
+      }
+    },
+    {
+      "file": "aac-48000-2-repeat.asf",
+      "reference": "aac-48000-2-repeat.asf.f32",
+      "seek_reference": "aac-48000-2-repeat.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 1024,
+      "oracle": {
+        "result": "passed",
+        "frames": 1024,
+        "seeks": 16,
+        "checks": 692583,
+        "exact_float_words": 7118
+      }
+    },
+    {
+      "file": "aac-48000-2-compressed.asf",
+      "reference": "aac-48000-2-compressed.asf.f32",
+      "seek_reference": "aac-48000-2-compressed.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 20480,
+      "oracle": {
+        "result": "passed",
+        "frames": 20480,
+        "seeks": 16,
+        "checks": 1357265,
+        "exact_float_words": 47982
+      }
+    },
+    {
+      "file": "aac-64000-2-continuous.asf",
+      "reference": "aac-64000-2-continuous.asf.f32",
+      "seek_reference": "aac-64000-2-continuous.asf.seek-reference",
+      "rate": 64000,
+      "channels": 2,
+      "frames": 26624,
+      "oracle": {
+        "result": "passed",
+        "frames": 26624,
+        "seeks": 16,
+        "checks": 1406429,
+        "exact_float_words": 60270
+      }
+    },
+    {
+      "file": "aac-64000-2-leading.asf",
+      "reference": "aac-64000-2-leading.asf.f32",
+      "seek_reference": "aac-64000-2-leading.asf.seek-reference",
+      "rate": 64000,
+      "channels": 2,
+      "frames": 28224,
+      "oracle": {
+        "result": "passed",
+        "frames": 28224,
+        "seeks": 16,
+        "checks": 991527,
+        "exact_float_words": 63470
+      }
+    },
+    {
+      "file": "aac-64000-2-internal.asf",
+      "reference": "aac-64000-2-internal.asf.f32",
+      "seek_reference": "aac-64000-2-internal.asf.seek-reference",
+      "rate": 64000,
+      "channels": 2,
+      "frames": 29184,
+      "oracle": {
+        "result": "passed",
+        "frames": 29184,
+        "seeks": 16,
+        "checks": 1016619,
+        "exact_float_words": 65390
+      }
+    },
+    {
+      "file": "aac-64000-2-overlap.asf",
+      "reference": "aac-64000-2-overlap.asf.f32",
+      "seek_reference": "aac-64000-2-overlap.asf.seek-reference",
+      "rate": 64000,
+      "channels": 2,
+      "frames": 25344,
+      "oracle": {
+        "result": "passed",
+        "frames": 25344,
+        "seeks": 16,
+        "checks": 981795,
+        "exact_float_words": 57710
+      }
+    },
+    {
+      "file": "aac-64000-2-negative.asf",
+      "reference": "aac-64000-2-negative.asf.f32",
+      "seek_reference": "aac-64000-2-negative.asf.seek-reference",
+      "rate": 64000,
+      "channels": 2,
+      "frames": 25344,
+      "oracle": {
+        "result": "passed",
+        "frames": 25344,
+        "seeks": 16,
+        "checks": 981795,
+        "exact_float_words": 57710
+      }
+    },
+    {
+      "file": "aac-64000-2-reorder.asf",
+      "reference": "aac-64000-2-reorder.asf.f32",
+      "seek_reference": "aac-64000-2-reorder.asf.seek-reference",
+      "rate": 64000,
+      "channels": 2,
+      "frames": 13312,
+      "oracle": {
+        "result": "passed",
+        "frames": 13312,
+        "seeks": 16,
+        "checks": 914191,
+        "exact_float_words": 33646
+      }
+    },
+    {
+      "file": "aac-64000-2-foreign.asf",
+      "reference": "aac-64000-2-foreign.asf.f32",
+      "seek_reference": "aac-64000-2-foreign.asf.seek-reference",
+      "rate": 64000,
+      "channels": 2,
+      "frames": 26624,
+      "oracle": {
+        "result": "passed",
+        "frames": 26624,
+        "seeks": 16,
+        "checks": 1406429,
+        "exact_float_words": 60270
+      }
+    },
+    {
+      "file": "aac-64000-2-fragment.asf",
+      "reference": "aac-64000-2-fragment.asf.f32",
+      "seek_reference": "aac-64000-2-fragment.asf.seek-reference",
+      "rate": 64000,
+      "channels": 2,
+      "frames": 26624,
+      "oracle": {
+        "result": "passed",
+        "frames": 26624,
+        "seeks": 16,
+        "checks": 1406429,
+        "exact_float_words": 60270
+      }
+    },
+    {
+      "file": "aac-64000-2-offset.asf",
+      "reference": "aac-64000-2-offset.asf.f32",
+      "seek_reference": "aac-64000-2-offset.asf.seek-reference",
+      "rate": 64000,
+      "channels": 2,
+      "frames": 28224,
+      "oracle": {
+        "result": "passed",
+        "frames": 28224,
+        "seeks": 16,
+        "checks": 991527,
+        "exact_float_words": 63470
+      }
+    },
+    {
+      "file": "aac-64000-2-cancel-large.asf",
+      "reference": "aac-64000-2-cancel-large.asf.f32",
+      "seek_reference": "aac-64000-2-cancel-large.asf.seek-reference",
+      "rate": 64000,
+      "channels": 2,
+      "frames": 26624,
+      "oracle": {
+        "result": "passed",
+        "frames": 26624,
+        "seeks": 16,
+        "checks": 1406429,
+        "exact_float_words": 60270
+      }
+    },
+    {
+      "file": "aac-64000-2-all-negative.asf",
+      "reference": "aac-64000-2-all-negative.asf.f32",
+      "seek_reference": "aac-64000-2-all-negative.asf.seek-reference",
+      "rate": 64000,
+      "channels": 2,
+      "frames": 0,
+      "oracle": {
+        "result": "passed",
+        "frames": 0,
+        "seeks": 16,
+        "checks": 557195,
+        "exact_float_words": 0
+      }
+    },
+    {
+      "file": "aac-64000-2-repeat.asf",
+      "reference": "aac-64000-2-repeat.asf.f32",
+      "seek_reference": "aac-64000-2-repeat.asf.seek-reference",
+      "rate": 64000,
+      "channels": 2,
+      "frames": 1024,
+      "oracle": {
+        "result": "passed",
+        "frames": 1024,
+        "seeks": 16,
+        "checks": 692583,
+        "exact_float_words": 7118
+      }
+    },
+    {
+      "file": "aac-64000-2-compressed.asf",
+      "reference": "aac-64000-2-compressed.asf.f32",
+      "seek_reference": "aac-64000-2-compressed.asf.seek-reference",
+      "rate": 64000,
+      "channels": 2,
+      "frames": 26624,
+      "oracle": {
+        "result": "passed",
+        "frames": 26624,
+        "seeks": 16,
+        "checks": 1406429,
+        "exact_float_words": 60270
+      }
+    },
+    {
+      "file": "aac-88200-1-continuous.asf",
+      "reference": "aac-88200-1-continuous.asf.f32",
+      "seek_reference": "aac-88200-1-continuous.asf.seek-reference",
+      "rate": 88200,
+      "channels": 1,
+      "frames": 36864,
+      "oracle": {
+        "result": "passed",
+        "frames": 36864,
+        "seeks": 16,
+        "checks": 1395512,
+        "exact_float_words": 80750
+      }
+    },
+    {
+      "file": "aac-88200-1-leading.asf",
+      "reference": "aac-88200-1-leading.asf.f32",
+      "seek_reference": "aac-88200-1-leading.asf.seek-reference",
+      "rate": 88200,
+      "channels": 1,
+      "frames": 39069,
+      "oracle": {
+        "result": "passed",
+        "frames": 39069,
+        "seeks": 16,
+        "checks": 1035855,
+        "exact_float_words": 85160
+      }
+    },
+    {
+      "file": "aac-88200-1-internal.asf",
+      "reference": "aac-88200-1-internal.asf.f32",
+      "seek_reference": "aac-88200-1-internal.asf.seek-reference",
+      "rate": 88200,
+      "channels": 1,
+      "frames": 40394,
+      "oracle": {
+        "result": "passed",
+        "frames": 40394,
+        "seeks": 16,
+        "checks": 1025255,
+        "exact_float_words": 87810
+      }
+    },
+    {
+      "file": "aac-88200-1-overlap.asf",
+      "reference": "aac-88200-1-overlap.asf.f32",
+      "seek_reference": "aac-88200-1-overlap.asf.seek-reference",
+      "rate": 88200,
+      "channels": 1,
+      "frames": 35102,
+      "oracle": {
+        "result": "passed",
+        "frames": 35102,
+        "seeks": 16,
+        "checks": 1034819,
+        "exact_float_words": 77226
+      }
+    },
+    {
+      "file": "aac-88200-1-negative.asf",
+      "reference": "aac-88200-1-negative.asf.f32",
+      "seek_reference": "aac-88200-1-negative.asf.seek-reference",
+      "rate": 88200,
+      "channels": 1,
+      "frames": 35100,
+      "oracle": {
+        "result": "passed",
+        "frames": 35100,
+        "seeks": 16,
+        "checks": 1034835,
+        "exact_float_words": 77222
+      }
+    },
+    {
+      "file": "aac-88200-1-reorder.asf",
+      "reference": "aac-88200-1-reorder.asf.f32",
+      "seek_reference": "aac-88200-1-reorder.asf.seek-reference",
+      "rate": 88200,
+      "channels": 1,
+      "frames": 18432,
+      "oracle": {
+        "result": "passed",
+        "frames": 18432,
+        "seeks": 16,
+        "checks": 938775,
+        "exact_float_words": 43886
+      }
+    },
+    {
+      "file": "aac-88200-1-foreign.asf",
+      "reference": "aac-88200-1-foreign.asf.f32",
+      "seek_reference": "aac-88200-1-foreign.asf.seek-reference",
+      "rate": 88200,
+      "channels": 1,
+      "frames": 36864,
+      "oracle": {
+        "result": "passed",
+        "frames": 36864,
+        "seeks": 16,
+        "checks": 1395512,
+        "exact_float_words": 80750
+      }
+    },
+    {
+      "file": "aac-88200-1-fragment.asf",
+      "reference": "aac-88200-1-fragment.asf.f32",
+      "seek_reference": "aac-88200-1-fragment.asf.seek-reference",
+      "rate": 88200,
+      "channels": 1,
+      "frames": 36864,
+      "oracle": {
+        "result": "passed",
+        "frames": 36864,
+        "seeks": 16,
+        "checks": 1395512,
+        "exact_float_words": 80750
+      }
+    },
+    {
+      "file": "aac-88200-1-offset.asf",
+      "reference": "aac-88200-1-offset.asf.f32",
+      "seek_reference": "aac-88200-1-offset.asf.seek-reference",
+      "rate": 88200,
+      "channels": 1,
+      "frames": 39070,
+      "oracle": {
+        "result": "passed",
+        "frames": 39070,
+        "seeks": 16,
+        "checks": 1035847,
+        "exact_float_words": 85162
+      }
+    },
+    {
+      "file": "aac-88200-1-cancel-large.asf",
+      "reference": "aac-88200-1-cancel-large.asf.f32",
+      "seek_reference": "aac-88200-1-cancel-large.asf.seek-reference",
+      "rate": 88200,
+      "channels": 1,
+      "frames": 36864,
+      "oracle": {
+        "result": "passed",
+        "frames": 36864,
+        "seeks": 16,
+        "checks": 1395512,
+        "exact_float_words": 80750
+      }
+    },
+    {
+      "file": "aac-88200-1-all-negative.asf",
+      "reference": "aac-88200-1-all-negative.asf.f32",
+      "seek_reference": "aac-88200-1-all-negative.asf.seek-reference",
+      "rate": 88200,
+      "channels": 1,
+      "frames": 0,
+      "oracle": {
+        "result": "passed",
+        "frames": 0,
+        "seeks": 16,
+        "checks": 557195,
+        "exact_float_words": 0
+      }
+    },
+    {
+      "file": "aac-88200-1-repeat.asf",
+      "reference": "aac-88200-1-repeat.asf.f32",
+      "seek_reference": "aac-88200-1-repeat.asf.seek-reference",
+      "rate": 88200,
+      "channels": 1,
+      "frames": 1024,
+      "oracle": {
+        "result": "passed",
+        "frames": 1024,
+        "seeks": 16,
+        "checks": 692583,
+        "exact_float_words": 7118
+      }
+    },
+    {
+      "file": "aac-88200-1-compressed.asf",
+      "reference": "aac-88200-1-compressed.asf.f32",
+      "seek_reference": "aac-88200-1-compressed.asf.seek-reference",
+      "rate": 88200,
+      "channels": 1,
+      "frames": 36921,
+      "oracle": {
+        "result": "passed",
+        "frames": 36921,
+        "seeks": 16,
+        "checks": 1020267,
+        "exact_float_words": 80864
+      }
+    },
+    {
+      "file": "aac-96000-2-continuous.asf",
+      "reference": "aac-96000-2-continuous.asf.f32",
+      "seek_reference": "aac-96000-2-continuous.asf.seek-reference",
+      "rate": 96000,
+      "channels": 2,
+      "frames": 39936,
+      "oracle": {
+        "result": "passed",
+        "frames": 39936,
+        "seeks": 16,
+        "checks": 1399612,
+        "exact_float_words": 86894
+      }
+    },
+    {
+      "file": "aac-96000-2-leading.asf",
+      "reference": "aac-96000-2-leading.asf.f32",
+      "seek_reference": "aac-96000-2-leading.asf.seek-reference",
+      "rate": 96000,
+      "channels": 2,
+      "frames": 42336,
+      "oracle": {
+        "result": "passed",
+        "frames": 42336,
+        "seeks": 16,
+        "checks": 1042491,
+        "exact_float_words": 91694
+      }
+    },
+    {
+      "file": "aac-96000-2-internal.asf",
+      "reference": "aac-96000-2-internal.asf.f32",
+      "seek_reference": "aac-96000-2-internal.asf.seek-reference",
+      "rate": 96000,
+      "channels": 2,
+      "frames": 43808,
+      "oracle": {
+        "result": "passed",
+        "frames": 43808,
+        "seeks": 16,
+        "checks": 1030715,
+        "exact_float_words": 94638
+      }
+    },
+    {
+      "file": "aac-96000-2-overlap.asf",
+      "reference": "aac-96000-2-overlap.asf.f32",
+      "seek_reference": "aac-96000-2-overlap.asf.seek-reference",
+      "rate": 96000,
+      "channels": 2,
+      "frames": 38048,
+      "oracle": {
+        "result": "passed",
+        "frames": 38048,
+        "seeks": 16,
+        "checks": 1044023,
+        "exact_float_words": 83118
+      }
+    },
+    {
+      "file": "aac-96000-2-negative.asf",
+      "reference": "aac-96000-2-negative.asf.f32",
+      "seek_reference": "aac-96000-2-negative.asf.seek-reference",
+      "rate": 96000,
+      "channels": 2,
+      "frames": 38016,
+      "oracle": {
+        "result": "passed",
+        "frames": 38016,
+        "seeks": 16,
+        "checks": 1044279,
+        "exact_float_words": 83054
+      }
+    },
+    {
+      "file": "aac-96000-2-reorder.asf",
+      "reference": "aac-96000-2-reorder.asf.f32",
+      "seek_reference": "aac-96000-2-reorder.asf.seek-reference",
+      "rate": 96000,
+      "channels": 2,
+      "frames": 19456,
+      "oracle": {
+        "result": "passed",
+        "frames": 19456,
+        "seeks": 16,
+        "checks": 963355,
+        "exact_float_words": 45934
+      }
+    },
+    {
+      "file": "aac-96000-2-foreign.asf",
+      "reference": "aac-96000-2-foreign.asf.f32",
+      "seek_reference": "aac-96000-2-foreign.asf.seek-reference",
+      "rate": 96000,
+      "channels": 2,
+      "frames": 39936,
+      "oracle": {
+        "result": "passed",
+        "frames": 39936,
+        "seeks": 16,
+        "checks": 1399612,
+        "exact_float_words": 86894
+      }
+    },
+    {
+      "file": "aac-96000-2-fragment.asf",
+      "reference": "aac-96000-2-fragment.asf.f32",
+      "seek_reference": "aac-96000-2-fragment.asf.seek-reference",
+      "rate": 96000,
+      "channels": 2,
+      "frames": 39936,
+      "oracle": {
+        "result": "passed",
+        "frames": 39936,
+        "seeks": 16,
+        "checks": 1399612,
+        "exact_float_words": 86894
+      }
+    },
+    {
+      "file": "aac-96000-2-offset.asf",
+      "reference": "aac-96000-2-offset.asf.f32",
+      "seek_reference": "aac-96000-2-offset.asf.seek-reference",
+      "rate": 96000,
+      "channels": 2,
+      "frames": 42337,
+      "oracle": {
+        "result": "passed",
+        "frames": 42337,
+        "seeks": 16,
+        "checks": 1042483,
+        "exact_float_words": 91696
+      }
+    },
+    {
+      "file": "aac-96000-2-cancel-large.asf",
+      "reference": "aac-96000-2-cancel-large.asf.f32",
+      "seek_reference": "aac-96000-2-cancel-large.asf.seek-reference",
+      "rate": 96000,
+      "channels": 2,
+      "frames": 39936,
+      "oracle": {
+        "result": "passed",
+        "frames": 39936,
+        "seeks": 16,
+        "checks": 1399612,
+        "exact_float_words": 86894
+      }
+    },
+    {
+      "file": "aac-96000-2-all-negative.asf",
+      "reference": "aac-96000-2-all-negative.asf.f32",
+      "seek_reference": "aac-96000-2-all-negative.asf.seek-reference",
+      "rate": 96000,
+      "channels": 2,
+      "frames": 0,
+      "oracle": {
+        "result": "passed",
+        "frames": 0,
+        "seeks": 16,
+        "checks": 557195,
+        "exact_float_words": 0
+      }
+    },
+    {
+      "file": "aac-96000-2-repeat.asf",
+      "reference": "aac-96000-2-repeat.asf.f32",
+      "seek_reference": "aac-96000-2-repeat.asf.seek-reference",
+      "rate": 96000,
+      "channels": 2,
+      "frames": 1024,
+      "oracle": {
+        "result": "passed",
+        "frames": 1024,
+        "seeks": 16,
+        "checks": 692583,
+        "exact_float_words": 7118
+      }
+    },
+    {
+      "file": "aac-96000-2-compressed.asf",
+      "reference": "aac-96000-2-compressed.asf.f32",
+      "seek_reference": "aac-96000-2-compressed.asf.seek-reference",
+      "rate": 96000,
+      "channels": 2,
+      "frames": 39936,
+      "oracle": {
+        "result": "passed",
+        "frames": 39936,
+        "seeks": 16,
+        "checks": 1399612,
+        "exact_float_words": 86894
+      }
+    },
+    {
+      "file": "aac-sbr-implicit-continuous.asf",
+      "reference": "aac-sbr-implicit-continuous.asf.f32",
+      "seek_reference": "aac-sbr-implicit-continuous.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 36864,
+      "oracle": {
+        "result": "passed",
+        "frames": 36864,
+        "seeks": 16,
+        "checks": 1354552,
+        "exact_float_words": 80750
+      }
+    },
+    {
+      "file": "aac-sbr-implicit-leading.asf",
+      "reference": "aac-sbr-implicit-leading.asf.f32",
+      "seek_reference": "aac-sbr-implicit-leading.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 38064,
+      "oracle": {
+        "result": "passed",
+        "frames": 38064,
+        "seeks": 16,
+        "checks": 1043895,
+        "exact_float_words": 83150
+      }
+    },
+    {
+      "file": "aac-sbr-implicit-internal.asf",
+      "reference": "aac-sbr-implicit-internal.asf.f32",
+      "seek_reference": "aac-sbr-implicit-internal.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 38784,
+      "oracle": {
+        "result": "passed",
+        "frames": 38784,
+        "seeks": 16,
+        "checks": 1038135,
+        "exact_float_words": 84590
+      }
+    },
+    {
+      "file": "aac-sbr-implicit-overlap.asf",
+      "reference": "aac-sbr-implicit-overlap.asf.f32",
+      "seek_reference": "aac-sbr-implicit-overlap.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 35904,
+      "oracle": {
+        "result": "passed",
+        "frames": 35904,
+        "seeks": 16,
+        "checks": 1028403,
+        "exact_float_words": 78830
+      }
+    },
+    {
+      "file": "aac-sbr-implicit-negative.asf",
+      "reference": "aac-sbr-implicit-negative.asf.f32",
+      "seek_reference": "aac-sbr-implicit-negative.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 35904,
+      "oracle": {
+        "result": "passed",
+        "frames": 35904,
+        "seeks": 16,
+        "checks": 1028403,
+        "exact_float_words": 78830
+      }
+    },
+    {
+      "file": "aac-sbr-implicit-reorder.asf",
+      "reference": "aac-sbr-implicit-reorder.asf.f32",
+      "seek_reference": "aac-sbr-implicit-reorder.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 22464,
+      "oracle": {
+        "result": "passed",
+        "frames": 22464,
+        "seeks": 16,
+        "checks": 972063,
+        "exact_float_words": 51950
+      }
+    },
+    {
+      "file": "aac-sbr-implicit-foreign.asf",
+      "reference": "aac-sbr-implicit-foreign.asf.f32",
+      "seek_reference": "aac-sbr-implicit-foreign.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 36864,
+      "oracle": {
+        "result": "passed",
+        "frames": 36864,
+        "seeks": 16,
+        "checks": 1354552,
+        "exact_float_words": 80750
+      }
+    },
+    {
+      "file": "aac-sbr-implicit-fragment.asf",
+      "reference": "aac-sbr-implicit-fragment.asf.f32",
+      "seek_reference": "aac-sbr-implicit-fragment.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 36864,
+      "oracle": {
+        "result": "passed",
+        "frames": 36864,
+        "seeks": 16,
+        "checks": 1354552,
+        "exact_float_words": 80750
+      }
+    },
+    {
+      "file": "aac-sbr-implicit-offset.asf",
+      "reference": "aac-sbr-implicit-offset.asf.f32",
+      "seek_reference": "aac-sbr-implicit-offset.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 38064,
+      "oracle": {
+        "result": "passed",
+        "frames": 38064,
+        "seeks": 16,
+        "checks": 1043895,
+        "exact_float_words": 83150
+      }
+    },
+    {
+      "file": "aac-sbr-implicit-cancel-large.asf",
+      "reference": "aac-sbr-implicit-cancel-large.asf.f32",
+      "seek_reference": "aac-sbr-implicit-cancel-large.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 36864,
+      "oracle": {
+        "result": "passed",
+        "frames": 36864,
+        "seeks": 16,
+        "checks": 1354552,
+        "exact_float_words": 80750
+      }
+    },
+    {
+      "file": "aac-sbr-implicit-all-negative.asf",
+      "reference": "aac-sbr-implicit-all-negative.asf.f32",
+      "seek_reference": "aac-sbr-implicit-all-negative.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 0,
+      "oracle": {
+        "result": "passed",
+        "frames": 0,
+        "seeks": 16,
+        "checks": 557195,
+        "exact_float_words": 0
+      }
+    },
+    {
+      "file": "aac-sbr-implicit-repeat.asf",
+      "reference": "aac-sbr-implicit-repeat.asf.f32",
+      "seek_reference": "aac-sbr-implicit-repeat.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 2048,
+      "oracle": {
+        "result": "passed",
+        "frames": 2048,
+        "seeks": 16,
+        "checks": 716579,
+        "exact_float_words": 9312
+      }
+    },
+    {
+      "file": "aac-sbr-explicit-continuous.asf",
+      "reference": "aac-sbr-explicit-continuous.asf.f32",
+      "seek_reference": "aac-sbr-explicit-continuous.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 36864,
+      "oracle": {
+        "result": "passed",
+        "frames": 36864,
+        "seeks": 16,
+        "checks": 1354552,
+        "exact_float_words": 80750
+      }
+    },
+    {
+      "file": "aac-sbr-explicit-leading.asf",
+      "reference": "aac-sbr-explicit-leading.asf.f32",
+      "seek_reference": "aac-sbr-explicit-leading.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 38064,
+      "oracle": {
+        "result": "passed",
+        "frames": 38064,
+        "seeks": 16,
+        "checks": 1043895,
+        "exact_float_words": 83150
+      }
+    },
+    {
+      "file": "aac-sbr-explicit-internal.asf",
+      "reference": "aac-sbr-explicit-internal.asf.f32",
+      "seek_reference": "aac-sbr-explicit-internal.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 38784,
+      "oracle": {
+        "result": "passed",
+        "frames": 38784,
+        "seeks": 16,
+        "checks": 1038135,
+        "exact_float_words": 84590
+      }
+    },
+    {
+      "file": "aac-sbr-explicit-overlap.asf",
+      "reference": "aac-sbr-explicit-overlap.asf.f32",
+      "seek_reference": "aac-sbr-explicit-overlap.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 35904,
+      "oracle": {
+        "result": "passed",
+        "frames": 35904,
+        "seeks": 16,
+        "checks": 1028403,
+        "exact_float_words": 78830
+      }
+    },
+    {
+      "file": "aac-sbr-explicit-negative.asf",
+      "reference": "aac-sbr-explicit-negative.asf.f32",
+      "seek_reference": "aac-sbr-explicit-negative.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 35904,
+      "oracle": {
+        "result": "passed",
+        "frames": 35904,
+        "seeks": 16,
+        "checks": 1028403,
+        "exact_float_words": 78830
+      }
+    },
+    {
+      "file": "aac-sbr-explicit-reorder.asf",
+      "reference": "aac-sbr-explicit-reorder.asf.f32",
+      "seek_reference": "aac-sbr-explicit-reorder.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 22464,
+      "oracle": {
+        "result": "passed",
+        "frames": 22464,
+        "seeks": 16,
+        "checks": 972063,
+        "exact_float_words": 51950
+      }
+    },
+    {
+      "file": "aac-sbr-explicit-foreign.asf",
+      "reference": "aac-sbr-explicit-foreign.asf.f32",
+      "seek_reference": "aac-sbr-explicit-foreign.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 36864,
+      "oracle": {
+        "result": "passed",
+        "frames": 36864,
+        "seeks": 16,
+        "checks": 1354552,
+        "exact_float_words": 80750
+      }
+    },
+    {
+      "file": "aac-sbr-explicit-fragment.asf",
+      "reference": "aac-sbr-explicit-fragment.asf.f32",
+      "seek_reference": "aac-sbr-explicit-fragment.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 36864,
+      "oracle": {
+        "result": "passed",
+        "frames": 36864,
+        "seeks": 16,
+        "checks": 1354552,
+        "exact_float_words": 80750
+      }
+    },
+    {
+      "file": "aac-sbr-explicit-offset.asf",
+      "reference": "aac-sbr-explicit-offset.asf.f32",
+      "seek_reference": "aac-sbr-explicit-offset.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 38064,
+      "oracle": {
+        "result": "passed",
+        "frames": 38064,
+        "seeks": 16,
+        "checks": 1043895,
+        "exact_float_words": 83150
+      }
+    },
+    {
+      "file": "aac-sbr-explicit-cancel-large.asf",
+      "reference": "aac-sbr-explicit-cancel-large.asf.f32",
+      "seek_reference": "aac-sbr-explicit-cancel-large.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 36864,
+      "oracle": {
+        "result": "passed",
+        "frames": 36864,
+        "seeks": 16,
+        "checks": 1354552,
+        "exact_float_words": 80750
+      }
+    },
+    {
+      "file": "aac-sbr-explicit-all-negative.asf",
+      "reference": "aac-sbr-explicit-all-negative.asf.f32",
+      "seek_reference": "aac-sbr-explicit-all-negative.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 0,
+      "oracle": {
+        "result": "passed",
+        "frames": 0,
+        "seeks": 16,
+        "checks": 557195,
+        "exact_float_words": 0
+      }
+    },
+    {
+      "file": "aac-sbr-explicit-repeat.asf",
+      "reference": "aac-sbr-explicit-repeat.asf.f32",
+      "seek_reference": "aac-sbr-explicit-repeat.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 2048,
+      "oracle": {
+        "result": "passed",
+        "frames": 2048,
+        "seeks": 16,
+        "checks": 716579,
+        "exact_float_words": 9312
+      }
+    },
+    {
+      "file": "aac-sbr-sync-continuous.asf",
+      "reference": "aac-sbr-sync-continuous.asf.f32",
+      "seek_reference": "aac-sbr-sync-continuous.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 36864,
+      "oracle": {
+        "result": "passed",
+        "frames": 36864,
+        "seeks": 16,
+        "checks": 1354552,
+        "exact_float_words": 80750
+      }
+    },
+    {
+      "file": "aac-sbr-sync-leading.asf",
+      "reference": "aac-sbr-sync-leading.asf.f32",
+      "seek_reference": "aac-sbr-sync-leading.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 38064,
+      "oracle": {
+        "result": "passed",
+        "frames": 38064,
+        "seeks": 16,
+        "checks": 1043895,
+        "exact_float_words": 83150
+      }
+    },
+    {
+      "file": "aac-sbr-sync-internal.asf",
+      "reference": "aac-sbr-sync-internal.asf.f32",
+      "seek_reference": "aac-sbr-sync-internal.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 38784,
+      "oracle": {
+        "result": "passed",
+        "frames": 38784,
+        "seeks": 16,
+        "checks": 1038135,
+        "exact_float_words": 84590
+      }
+    },
+    {
+      "file": "aac-sbr-sync-overlap.asf",
+      "reference": "aac-sbr-sync-overlap.asf.f32",
+      "seek_reference": "aac-sbr-sync-overlap.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 35904,
+      "oracle": {
+        "result": "passed",
+        "frames": 35904,
+        "seeks": 16,
+        "checks": 1028403,
+        "exact_float_words": 78830
+      }
+    },
+    {
+      "file": "aac-sbr-sync-negative.asf",
+      "reference": "aac-sbr-sync-negative.asf.f32",
+      "seek_reference": "aac-sbr-sync-negative.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 35904,
+      "oracle": {
+        "result": "passed",
+        "frames": 35904,
+        "seeks": 16,
+        "checks": 1028403,
+        "exact_float_words": 78830
+      }
+    },
+    {
+      "file": "aac-sbr-sync-reorder.asf",
+      "reference": "aac-sbr-sync-reorder.asf.f32",
+      "seek_reference": "aac-sbr-sync-reorder.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 22464,
+      "oracle": {
+        "result": "passed",
+        "frames": 22464,
+        "seeks": 16,
+        "checks": 972063,
+        "exact_float_words": 51950
+      }
+    },
+    {
+      "file": "aac-sbr-sync-foreign.asf",
+      "reference": "aac-sbr-sync-foreign.asf.f32",
+      "seek_reference": "aac-sbr-sync-foreign.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 36864,
+      "oracle": {
+        "result": "passed",
+        "frames": 36864,
+        "seeks": 16,
+        "checks": 1354552,
+        "exact_float_words": 80750
+      }
+    },
+    {
+      "file": "aac-sbr-sync-fragment.asf",
+      "reference": "aac-sbr-sync-fragment.asf.f32",
+      "seek_reference": "aac-sbr-sync-fragment.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 36864,
+      "oracle": {
+        "result": "passed",
+        "frames": 36864,
+        "seeks": 16,
+        "checks": 1354552,
+        "exact_float_words": 80750
+      }
+    },
+    {
+      "file": "aac-sbr-sync-offset.asf",
+      "reference": "aac-sbr-sync-offset.asf.f32",
+      "seek_reference": "aac-sbr-sync-offset.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 38064,
+      "oracle": {
+        "result": "passed",
+        "frames": 38064,
+        "seeks": 16,
+        "checks": 1043895,
+        "exact_float_words": 83150
+      }
+    },
+    {
+      "file": "aac-sbr-sync-cancel-large.asf",
+      "reference": "aac-sbr-sync-cancel-large.asf.f32",
+      "seek_reference": "aac-sbr-sync-cancel-large.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 36864,
+      "oracle": {
+        "result": "passed",
+        "frames": 36864,
+        "seeks": 16,
+        "checks": 1354552,
+        "exact_float_words": 80750
+      }
+    },
+    {
+      "file": "aac-sbr-sync-all-negative.asf",
+      "reference": "aac-sbr-sync-all-negative.asf.f32",
+      "seek_reference": "aac-sbr-sync-all-negative.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 0,
+      "oracle": {
+        "result": "passed",
+        "frames": 0,
+        "seeks": 16,
+        "checks": 557195,
+        "exact_float_words": 0
+      }
+    },
+    {
+      "file": "aac-sbr-sync-repeat.asf",
+      "reference": "aac-sbr-sync-repeat.asf.f32",
+      "seek_reference": "aac-sbr-sync-repeat.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 2048,
+      "oracle": {
+        "result": "passed",
+        "frames": 2048,
+        "seeks": 16,
+        "checks": 716579,
+        "exact_float_words": 9312
+      }
+    },
+    {
+      "file": "aac-ps-implicit-continuous.asf",
+      "reference": "aac-ps-implicit-continuous.asf.f32",
+      "seek_reference": "aac-ps-implicit-continuous.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 36864,
+      "oracle": {
+        "result": "passed",
+        "frames": 36864,
+        "seeks": 16,
+        "checks": 1354552,
+        "exact_float_words": 80750
+      }
+    },
+    {
+      "file": "aac-ps-implicit-leading.asf",
+      "reference": "aac-ps-implicit-leading.asf.f32",
+      "seek_reference": "aac-ps-implicit-leading.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 38064,
+      "oracle": {
+        "result": "passed",
+        "frames": 38064,
+        "seeks": 16,
+        "checks": 1043895,
+        "exact_float_words": 83150
+      }
+    },
+    {
+      "file": "aac-ps-implicit-internal.asf",
+      "reference": "aac-ps-implicit-internal.asf.f32",
+      "seek_reference": "aac-ps-implicit-internal.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 38784,
+      "oracle": {
+        "result": "passed",
+        "frames": 38784,
+        "seeks": 16,
+        "checks": 1038135,
+        "exact_float_words": 84590
+      }
+    },
+    {
+      "file": "aac-ps-implicit-overlap.asf",
+      "reference": "aac-ps-implicit-overlap.asf.f32",
+      "seek_reference": "aac-ps-implicit-overlap.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 35904,
+      "oracle": {
+        "result": "passed",
+        "frames": 35904,
+        "seeks": 16,
+        "checks": 1028403,
+        "exact_float_words": 78830
+      }
+    },
+    {
+      "file": "aac-ps-implicit-negative.asf",
+      "reference": "aac-ps-implicit-negative.asf.f32",
+      "seek_reference": "aac-ps-implicit-negative.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 35904,
+      "oracle": {
+        "result": "passed",
+        "frames": 35904,
+        "seeks": 16,
+        "checks": 1028403,
+        "exact_float_words": 78830
+      }
+    },
+    {
+      "file": "aac-ps-implicit-reorder.asf",
+      "reference": "aac-ps-implicit-reorder.asf.f32",
+      "seek_reference": "aac-ps-implicit-reorder.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 22464,
+      "oracle": {
+        "result": "passed",
+        "frames": 22464,
+        "seeks": 16,
+        "checks": 972063,
+        "exact_float_words": 51950
+      }
+    },
+    {
+      "file": "aac-ps-implicit-foreign.asf",
+      "reference": "aac-ps-implicit-foreign.asf.f32",
+      "seek_reference": "aac-ps-implicit-foreign.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 36864,
+      "oracle": {
+        "result": "passed",
+        "frames": 36864,
+        "seeks": 16,
+        "checks": 1354552,
+        "exact_float_words": 80750
+      }
+    },
+    {
+      "file": "aac-ps-implicit-fragment.asf",
+      "reference": "aac-ps-implicit-fragment.asf.f32",
+      "seek_reference": "aac-ps-implicit-fragment.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 36864,
+      "oracle": {
+        "result": "passed",
+        "frames": 36864,
+        "seeks": 16,
+        "checks": 1354552,
+        "exact_float_words": 80750
+      }
+    },
+    {
+      "file": "aac-ps-implicit-offset.asf",
+      "reference": "aac-ps-implicit-offset.asf.f32",
+      "seek_reference": "aac-ps-implicit-offset.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 38064,
+      "oracle": {
+        "result": "passed",
+        "frames": 38064,
+        "seeks": 16,
+        "checks": 1043895,
+        "exact_float_words": 83150
+      }
+    },
+    {
+      "file": "aac-ps-implicit-cancel-large.asf",
+      "reference": "aac-ps-implicit-cancel-large.asf.f32",
+      "seek_reference": "aac-ps-implicit-cancel-large.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 36864,
+      "oracle": {
+        "result": "passed",
+        "frames": 36864,
+        "seeks": 16,
+        "checks": 1354552,
+        "exact_float_words": 80750
+      }
+    },
+    {
+      "file": "aac-ps-implicit-all-negative.asf",
+      "reference": "aac-ps-implicit-all-negative.asf.f32",
+      "seek_reference": "aac-ps-implicit-all-negative.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 0,
+      "oracle": {
+        "result": "passed",
+        "frames": 0,
+        "seeks": 16,
+        "checks": 557195,
+        "exact_float_words": 0
+      }
+    },
+    {
+      "file": "aac-ps-implicit-repeat.asf",
+      "reference": "aac-ps-implicit-repeat.asf.f32",
+      "seek_reference": "aac-ps-implicit-repeat.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 2048,
+      "oracle": {
+        "result": "passed",
+        "frames": 2048,
+        "seeks": 16,
+        "checks": 716579,
+        "exact_float_words": 9312
+      }
+    },
+    {
+      "file": "aac-ps-explicit-continuous.asf",
+      "reference": "aac-ps-explicit-continuous.asf.f32",
+      "seek_reference": "aac-ps-explicit-continuous.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 36864,
+      "oracle": {
+        "result": "passed",
+        "frames": 36864,
+        "seeks": 16,
+        "checks": 1354552,
+        "exact_float_words": 80750
+      }
+    },
+    {
+      "file": "aac-ps-explicit-leading.asf",
+      "reference": "aac-ps-explicit-leading.asf.f32",
+      "seek_reference": "aac-ps-explicit-leading.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 38064,
+      "oracle": {
+        "result": "passed",
+        "frames": 38064,
+        "seeks": 16,
+        "checks": 1043895,
+        "exact_float_words": 83150
+      }
+    },
+    {
+      "file": "aac-ps-explicit-internal.asf",
+      "reference": "aac-ps-explicit-internal.asf.f32",
+      "seek_reference": "aac-ps-explicit-internal.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 38784,
+      "oracle": {
+        "result": "passed",
+        "frames": 38784,
+        "seeks": 16,
+        "checks": 1038135,
+        "exact_float_words": 84590
+      }
+    },
+    {
+      "file": "aac-ps-explicit-overlap.asf",
+      "reference": "aac-ps-explicit-overlap.asf.f32",
+      "seek_reference": "aac-ps-explicit-overlap.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 35904,
+      "oracle": {
+        "result": "passed",
+        "frames": 35904,
+        "seeks": 16,
+        "checks": 1028403,
+        "exact_float_words": 78830
+      }
+    },
+    {
+      "file": "aac-ps-explicit-negative.asf",
+      "reference": "aac-ps-explicit-negative.asf.f32",
+      "seek_reference": "aac-ps-explicit-negative.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 35904,
+      "oracle": {
+        "result": "passed",
+        "frames": 35904,
+        "seeks": 16,
+        "checks": 1028403,
+        "exact_float_words": 78830
+      }
+    },
+    {
+      "file": "aac-ps-explicit-reorder.asf",
+      "reference": "aac-ps-explicit-reorder.asf.f32",
+      "seek_reference": "aac-ps-explicit-reorder.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 22464,
+      "oracle": {
+        "result": "passed",
+        "frames": 22464,
+        "seeks": 16,
+        "checks": 972063,
+        "exact_float_words": 51950
+      }
+    },
+    {
+      "file": "aac-ps-explicit-foreign.asf",
+      "reference": "aac-ps-explicit-foreign.asf.f32",
+      "seek_reference": "aac-ps-explicit-foreign.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 36864,
+      "oracle": {
+        "result": "passed",
+        "frames": 36864,
+        "seeks": 16,
+        "checks": 1354552,
+        "exact_float_words": 80750
+      }
+    },
+    {
+      "file": "aac-ps-explicit-fragment.asf",
+      "reference": "aac-ps-explicit-fragment.asf.f32",
+      "seek_reference": "aac-ps-explicit-fragment.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 36864,
+      "oracle": {
+        "result": "passed",
+        "frames": 36864,
+        "seeks": 16,
+        "checks": 1354552,
+        "exact_float_words": 80750
+      }
+    },
+    {
+      "file": "aac-ps-explicit-offset.asf",
+      "reference": "aac-ps-explicit-offset.asf.f32",
+      "seek_reference": "aac-ps-explicit-offset.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 38064,
+      "oracle": {
+        "result": "passed",
+        "frames": 38064,
+        "seeks": 16,
+        "checks": 1043895,
+        "exact_float_words": 83150
+      }
+    },
+    {
+      "file": "aac-ps-explicit-cancel-large.asf",
+      "reference": "aac-ps-explicit-cancel-large.asf.f32",
+      "seek_reference": "aac-ps-explicit-cancel-large.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 36864,
+      "oracle": {
+        "result": "passed",
+        "frames": 36864,
+        "seeks": 16,
+        "checks": 1354552,
+        "exact_float_words": 80750
+      }
+    },
+    {
+      "file": "aac-ps-explicit-all-negative.asf",
+      "reference": "aac-ps-explicit-all-negative.asf.f32",
+      "seek_reference": "aac-ps-explicit-all-negative.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 0,
+      "oracle": {
+        "result": "passed",
+        "frames": 0,
+        "seeks": 16,
+        "checks": 557195,
+        "exact_float_words": 0
+      }
+    },
+    {
+      "file": "aac-ps-explicit-repeat.asf",
+      "reference": "aac-ps-explicit-repeat.asf.f32",
+      "seek_reference": "aac-ps-explicit-repeat.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 2048,
+      "oracle": {
+        "result": "passed",
+        "frames": 2048,
+        "seeks": 16,
+        "checks": 716579,
+        "exact_float_words": 9312
+      }
+    },
+    {
+      "file": "aac-ps-sync-continuous.asf",
+      "reference": "aac-ps-sync-continuous.asf.f32",
+      "seek_reference": "aac-ps-sync-continuous.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 36864,
+      "oracle": {
+        "result": "passed",
+        "frames": 36864,
+        "seeks": 16,
+        "checks": 1354552,
+        "exact_float_words": 80750
+      }
+    },
+    {
+      "file": "aac-ps-sync-leading.asf",
+      "reference": "aac-ps-sync-leading.asf.f32",
+      "seek_reference": "aac-ps-sync-leading.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 38064,
+      "oracle": {
+        "result": "passed",
+        "frames": 38064,
+        "seeks": 16,
+        "checks": 1043895,
+        "exact_float_words": 83150
+      }
+    },
+    {
+      "file": "aac-ps-sync-internal.asf",
+      "reference": "aac-ps-sync-internal.asf.f32",
+      "seek_reference": "aac-ps-sync-internal.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 38784,
+      "oracle": {
+        "result": "passed",
+        "frames": 38784,
+        "seeks": 16,
+        "checks": 1038135,
+        "exact_float_words": 84590
+      }
+    },
+    {
+      "file": "aac-ps-sync-overlap.asf",
+      "reference": "aac-ps-sync-overlap.asf.f32",
+      "seek_reference": "aac-ps-sync-overlap.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 35904,
+      "oracle": {
+        "result": "passed",
+        "frames": 35904,
+        "seeks": 16,
+        "checks": 1028403,
+        "exact_float_words": 78830
+      }
+    },
+    {
+      "file": "aac-ps-sync-negative.asf",
+      "reference": "aac-ps-sync-negative.asf.f32",
+      "seek_reference": "aac-ps-sync-negative.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 35904,
+      "oracle": {
+        "result": "passed",
+        "frames": 35904,
+        "seeks": 16,
+        "checks": 1028403,
+        "exact_float_words": 78830
+      }
+    },
+    {
+      "file": "aac-ps-sync-reorder.asf",
+      "reference": "aac-ps-sync-reorder.asf.f32",
+      "seek_reference": "aac-ps-sync-reorder.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 22464,
+      "oracle": {
+        "result": "passed",
+        "frames": 22464,
+        "seeks": 16,
+        "checks": 972063,
+        "exact_float_words": 51950
+      }
+    },
+    {
+      "file": "aac-ps-sync-foreign.asf",
+      "reference": "aac-ps-sync-foreign.asf.f32",
+      "seek_reference": "aac-ps-sync-foreign.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 36864,
+      "oracle": {
+        "result": "passed",
+        "frames": 36864,
+        "seeks": 16,
+        "checks": 1354552,
+        "exact_float_words": 80750
+      }
+    },
+    {
+      "file": "aac-ps-sync-fragment.asf",
+      "reference": "aac-ps-sync-fragment.asf.f32",
+      "seek_reference": "aac-ps-sync-fragment.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 36864,
+      "oracle": {
+        "result": "passed",
+        "frames": 36864,
+        "seeks": 16,
+        "checks": 1354552,
+        "exact_float_words": 80750
+      }
+    },
+    {
+      "file": "aac-ps-sync-offset.asf",
+      "reference": "aac-ps-sync-offset.asf.f32",
+      "seek_reference": "aac-ps-sync-offset.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 38064,
+      "oracle": {
+        "result": "passed",
+        "frames": 38064,
+        "seeks": 16,
+        "checks": 1043895,
+        "exact_float_words": 83150
+      }
+    },
+    {
+      "file": "aac-ps-sync-cancel-large.asf",
+      "reference": "aac-ps-sync-cancel-large.asf.f32",
+      "seek_reference": "aac-ps-sync-cancel-large.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 36864,
+      "oracle": {
+        "result": "passed",
+        "frames": 36864,
+        "seeks": 16,
+        "checks": 1354552,
+        "exact_float_words": 80750
+      }
+    },
+    {
+      "file": "aac-ps-sync-all-negative.asf",
+      "reference": "aac-ps-sync-all-negative.asf.f32",
+      "seek_reference": "aac-ps-sync-all-negative.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 0,
+      "oracle": {
+        "result": "passed",
+        "frames": 0,
+        "seeks": 16,
+        "checks": 557195,
+        "exact_float_words": 0
+      }
+    },
+    {
+      "file": "aac-ps-sync-repeat.asf",
+      "reference": "aac-ps-sync-repeat.asf.f32",
+      "seek_reference": "aac-ps-sync-repeat.asf.seek-reference",
+      "rate": 48000,
+      "channels": 2,
+      "frames": 2048,
+      "oracle": {
+        "result": "passed",
+        "frames": 2048,
+        "seeks": 16,
+        "checks": 716579,
+        "exact_float_words": 9312
+      }
+    }
+  ],
+  "guarded": [
+    {
+      "file": "aac-48000-2-fragment.asf",
+      "result": "passed",
+      "checks": 116562367,
+      "exact_float_words": 40960,
+      "guarded_cases": 769,
+      "protected_prefixes": 256,
+      "mutations": 512
+    },
+    {
+      "file": "aac-sbr-explicit-internal.asf",
+      "result": "passed",
+      "checks": 251050996,
+      "exact_float_words": 77568,
+      "guarded_cases": 768,
+      "protected_prefixes": 255,
+      "mutations": 512
+    },
+    {
+      "file": "aac-ps-sync-overlap.asf",
+      "result": "passed",
+      "checks": 257382633,
+      "exact_float_words": 71808,
+      "guarded_cases": 768,
+      "protected_prefixes": 255,
+      "mutations": 512
+    }
+  ],
+  "sparse": [
+    {
+      "file": "compressed-4294967295-0.asf",
+      "reference": "compressed-4294967295-0.asf.f32",
+      "gap_frames": 206158430160,
+      "result": "passed",
+      "checks": 24
+    },
+    {
+      "file": "compressed-tail-1.asf",
+      "reference": "compressed-tail-1.asf.f32",
+      "gap_frames": 206158430160,
+      "tail_only": true,
+      "result": "passed",
+      "bounded_tail_seek": true
+    },
+    {
+      "file": "compressed-tail-2.asf",
+      "reference": "compressed-tail-2.asf.f32",
+      "gap_frames": 206158442400,
+      "tail_only": true,
+      "result": "passed",
+      "bounded_tail_seek": true
+    },
+    {
+      "file": "compressed-tail-3.asf",
+      "reference": "compressed-tail-3.asf.f32",
+      "gap_frames": 206158454640,
+      "tail_only": true,
+      "result": "passed",
+      "bounded_tail_seek": true
+    },
+    {
+      "file": "offset-limit-9223372036854775800.asf",
+      "reference": "offset-limit-9223372036854775800.asf.f32",
+      "gap_frames": 442721857769029,
+      "result": "passed",
+      "checks": 24
+    },
+    {
+      "file": "offset-limit-9223372036854775700.asf",
+      "reference": "offset-limit-9223372036854775700.asf.f32",
+      "gap_frames": 442721857769029,
+      "result": "passed",
+      "checks": 24
+    }
+  ],
+  "rejects": [
+    {
+      "file": "offset-overflow.asf",
+      "result": "passed",
+      "rejected": true
+    },
+    {
+      "file": "preroll-overflow.asf",
+      "result": "passed",
+      "rejected": true
+    },
+    {
+      "file": "fragment-time-conflict.asf",
+      "result": "passed",
+      "rejected": true
+    },
+    {
+      "file": "compressed-missing-time.asf",
+      "result": "passed",
+      "rejected": true
+    }
+  ],
+  "cancellation": [
+    {
+      "mode": "cancel-open",
+      "result": "cancelled"
+    },
+    {
+      "mode": "cancel-read",
+      "result": "cancelled",
+      "frames_before_cancel": 311296
+    }
+  ],
+  "native_lifecycle": [
+    {
+      "file": "aac-48000-2-lifecycle.asf",
+      "details": [
+        "Passed: playback, pause, resume, stop, reopen, seek, paused seek and cancelled open.",
+        "Muted output: lifecycle exercised with volume zero.",
+        "Default-device callback: paused and active restart passed; pending command preserved.",
+        "Exclusive output: 48000 Hz session lifecycle passed."
+      ],
+      "probe_sha256": "cf8d2af4d7a44d0e52142a162420345b273e8de6f61ebefb4edde013e73d08c5"
+    },
+    {
+      "file": "aac-ps-explicit-lifecycle.asf",
+      "details": [
+        "Passed: playback, pause, resume, stop, reopen, seek, paused seek and cancelled open.",
+        "Muted output: lifecycle exercised with volume zero.",
+        "Default-device callback: paused and active restart passed; pending command preserved.",
+        "Exclusive output: 48000 Hz session lifecycle passed."
+      ],
+      "probe_sha256": "cf8d2af4d7a44d0e52142a162420345b273e8de6f61ebefb4edde013e73d08c5"
+    }
+  ],
+  "sources": {
+    "src/asf.s": "f9d2eeff500136e3c2770c61c1874216c6c64e8c4c679d9ddc832fe650985bc7",
+    "src/asf_spread.inc": "29af589bc2f54e64db22fffa882ebf6045a8d1e31114ceedfc512dd6b076a608",
+    "src/asf_extended.inc": "f4a41d6572b245d8acc44fd93ace28a94ffa1deee5e71eab0a0eb4391abf296f",
+    "src/track.s": "d882c87afacc6e35595293b508009b51065180a74fbde95c733a82ae22bcb0d9",
+    "src/track_time.s": "958c15a5948f77753eeb635a1ebbf7fc89ee185a746ac2d0321fbf4dc42d05f2",
+    "src/decoder.s": "eb8a1d8e3902d75f76a2c729d08366387cd367c47511288675758dc18d0ca6f3",
+    "tests/verify-asf-clock.py": "f3cd13041e5b87f7ee747dca147eae40edd848142a8c0adc78ade400bb1354f4",
+    "tests/verify-asf.py": "b2446d2c5bc3a7635260de70fe0cd4d6697abf842305fdd51ff3b1386c390f34",
+    "tests/verify-flv-clock.py": "435d72748fc9d9ebc5e41a190328c066447e3b62abd78360be4c938c997360fc",
+    "tests/lamp_test.py": "570da1afe419d642ea19968f9c286e0fa58b60b1afacae97d6e6517eadea47bf",
+    "tests/lamp-test.h": "d1d539ca99dd263422ec826d97d8236eb0568a4909aa761e26c91798bf32b88b",
+    "tests/verify-heaac.py": "c96f753ed26f082397b676b4a1946f7af6c39cf9a5f53b7bdaf77b45b48f8dcd",
+    "tests/sbr_vectors.py": "3d1799bec74e5b6d381726f3dc22e395c62d24215d79c5fd72fb525dbeeaee62",
+    "tests/sbr_model.py": "b3e4066ed28ed936d42f9af5ba0cfe8c0ab1901f311437ed4e24712ac68c3bc2",
+    "tests/ps_model.py": "27f7711782875257150813c291cc29a4681c79556bfcb70281a16d9db9902e4b",
+    "tests/asf-clock-oracle.c": "5210295640e10347c9b6554870e5faa1d85d3cf42ea40c8ceb289d3f8ffd52d4",
+    "tests/asf-compressed-clock-oracle.c": "9e14f0453a68fa6ae008450ddde7c05a0b6101d51c5c005a12ed67546035b548",
+    "tests/flv-clock-sparse-oracle.c": "ce51366fa6be45fcabe847701a6ac0efca1952e77a25cdc3704c32241434894a",
+    "tests/matroska-timing-oracle.c": "6a6720abcc0a5039f019d4afa3cd7b9442539912f9302d1ba9580b0fd0cea24c",
+    "tests/track-source-oracle.c": "f7fd763aa449eb0ca09a7c438b2d62a2e5977e65ad140a731d6699a4445f7e33",
+    "tests/chain-oracle.c": "770757565631753a57a6a8352cbac5ffecd33bb380eec247f23874277f7a00f7"
+  },
+  "binaries": {
+    "lamp-cli.exe": "8f3c6034269fda6e02672e787f115669f863a181b4d1be5b2d663de73007e720",
+    "asf-clock-source.exe": "0d3bf57a1d1c72c5221404defc727e801dd3571bb1833085d483fe677b699823",
+    "asf-clock-oracle.exe": "e808319717dc4e0352a436515cbb957b97543694434eaea4596ef7bc77769422",
+    "asf-clock-chain.exe": "f81a325378287f083dfb99e695aa51b82a444613e7049d34878d423232267827",
+    "asf-clock-guard.exe": "69b269f994ca5f97af9f2e6f6a3fc19b29120dcd4c123946d362ef9dcca15dc4",
+    "asf-clock-sparse.exe": "aff3720e135bfb45288143564414f51575ad1b7ef2d788c04c586421f143e5cb",
+    "asf-clock-compressed.exe": "65eb8233faa6ef36dd9e3ce9dad55f9b98aac32d5158b264b8d35850ff0b53e9"
+  },
+  "git_source_sha256": {
+    "src/asf.s": "f9d2eeff500136e3c2770c61c1874216c6c64e8c4c679d9ddc832fe650985bc7",
+    "src/asf_spread.inc": "29af589bc2f54e64db22fffa882ebf6045a8d1e31114ceedfc512dd6b076a608",
+    "src/asf_extended.inc": "f4a41d6572b245d8acc44fd93ace28a94ffa1deee5e71eab0a0eb4391abf296f",
+    "src/track.s": "d882c87afacc6e35595293b508009b51065180a74fbde95c733a82ae22bcb0d9",
+    "src/track_time.s": "958c15a5948f77753eeb635a1ebbf7fc89ee185a746ac2d0321fbf4dc42d05f2",
+    "src/decoder.s": "eb8a1d8e3902d75f76a2c729d08366387cd367c47511288675758dc18d0ca6f3",
+    "tests/verify-asf-clock.py": "f3cd13041e5b87f7ee747dca147eae40edd848142a8c0adc78ade400bb1354f4",
+    "tests/verify-asf.py": "b2446d2c5bc3a7635260de70fe0cd4d6697abf842305fdd51ff3b1386c390f34",
+    "tests/verify-flv-clock.py": "435d72748fc9d9ebc5e41a190328c066447e3b62abd78360be4c938c997360fc",
+    "tests/lamp_test.py": "570da1afe419d642ea19968f9c286e0fa58b60b1afacae97d6e6517eadea47bf",
+    "tests/lamp-test.h": "7f969c37e3dff7d63ec3b5ce4e0e07a9b52b06d950d30811bac06afc9a5d362d",
+    "tests/verify-heaac.py": "c96f753ed26f082397b676b4a1946f7af6c39cf9a5f53b7bdaf77b45b48f8dcd",
+    "tests/sbr_vectors.py": "3d1799bec74e5b6d381726f3dc22e395c62d24215d79c5fd72fb525dbeeaee62",
+    "tests/sbr_model.py": "b3e4066ed28ed936d42f9af5ba0cfe8c0ab1901f311437ed4e24712ac68c3bc2",
+    "tests/ps_model.py": "27f7711782875257150813c291cc29a4681c79556bfcb70281a16d9db9902e4b",
+    "tests/asf-clock-oracle.c": "5210295640e10347c9b6554870e5faa1d85d3cf42ea40c8ceb289d3f8ffd52d4",
+    "tests/asf-compressed-clock-oracle.c": "9e14f0453a68fa6ae008450ddde7c05a0b6101d51c5c005a12ed67546035b548",
+    "tests/flv-clock-sparse-oracle.c": "ce51366fa6be45fcabe847701a6ac0efca1952e77a25cdc3704c32241434894a",
+    "tests/matroska-timing-oracle.c": "6a6720abcc0a5039f019d4afa3cd7b9442539912f9302d1ba9580b0fd0cea24c",
+    "tests/track-source-oracle.c": "f7fd763aa449eb0ca09a7c438b2d62a2e5977e65ad140a731d6699a4445f7e33",
+    "tests/chain-oracle.c": "770757565631753a57a6a8352cbac5ffecd33bb380eec247f23874277f7a00f7"
+  },
+  "source_provenance": "sources/runtime_sources retain exact tested working-file bytes; git_source_sha256 records canonical staged Git bytes. Any difference was checked to consist only of CRLF/LF line endings."
+}

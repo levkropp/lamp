@@ -3,8 +3,8 @@
 # length fields, interleaving, fragmented and compressed media objects.
 # WAVE formats reuse AVI's format policy and gathered Wave64 image; AAC
 # with an AudioSpecificConfig uses complete rebuilt objects as track packets.
-# No timestamps are synthesized: the presented audio is consecutive decoded
-# samples. Network chunk framing and DVR-MS stay unsupported.
+# AAC objects preserve presentation time, stream offset and file preroll.
+# Network chunk framing and DVR-MS stay unsupported.
 .include "lamp.inc"
 .globl asf_open, asf_stream, asf_spread_scratch, asf_extended_budget
 .equ ASF_MALFORMED, 100
@@ -51,17 +51,22 @@ asf_tag: .long 0
 asf_fmt_bytes: .long 0
 asf_fmt: .quad 0
 asf_packets: .quad 0
+asf_preroll: .quad 0
+asf_time_offset: .quad 0
 asf_seen_ids: .zero 128
 asf_pending: .long 0
 asf_object: .long 0
 asf_object_size: .long 0
 asf_object_have: .long 0
 asf_object_start: .quad 0
+asf_object_time: .quad 0
 asf_payload_stream: .long 0
 asf_payload_object: .long 0
 asf_payload_offset: .long 0
 asf_payload_replic: .long 0
 asf_payload_size: .long 0
+asf_payload_time: .long 0
+asf_payload_delta: .long 0
 
 .text
 # RCX=data, RDX=GUID -> ZF=1 if equal. Caller bounds the sixteen bytes.
@@ -185,6 +190,8 @@ LOCALFN asf_stream_properties
 .Lasf_stream_take:
     mov [rip + asf_tag], eax
     mov [rip + asf_mode], edx
+    mov rax, [rsi + 56]
+    mov [rip + asf_time_offset], rax
     mov eax, [rsp + 32]
     mov [rip + asf_spread_span], eax
     mov eax, [rsp + 36]
@@ -295,6 +302,8 @@ LOCALFN asf_objects
     mov [rip + asf_file_id], rax
     mov rax, [rsi + 32]
     mov [rip + asf_file_id + 8], rax
+    mov rax, [rsi + 80]
+    mov [rip + asf_preroll], rax
     mov eax, [rsi + 88]
     and eax, 1
     mov [rip + asf_broadcast], eax
@@ -356,6 +365,43 @@ LOCALFN asf_objects
     ret
 ENDFN asf_objects
 
+# RCX=unsigned presentation milliseconds -> EAX=1, RDX=signed ns, or EAX=0.
+# Keep the full unsigned products until after subtraction: large stream
+# offsets and prerolls can cancel to a representable presentation time.
+LOCALFN asf_clock_ns
+    sub rsp, 56
+    mov rax, rcx
+    mov ecx, 1000000
+    mul rcx
+    mov [rsp + 32], rax
+    mov [rsp + 40], rdx
+    mov rax, [rip + asf_time_offset]
+    mov ecx, 100
+    mul rcx
+    add [rsp + 32], rax
+    adc [rsp + 40], rdx
+    mov rax, [rip + asf_preroll]
+    mov ecx, 1000000
+    mul rcx
+    sub [rsp + 32], rax
+    sbb [rsp + 40], rdx
+    mov rdx, [rsp + 32]
+    mov rax, rdx
+    sar rax, 63
+    cmp rax, [rsp + 40]
+    jne .Lasf_clock_bad
+    mov rax, 0x8000000000000000
+    cmp rdx, rax
+    je .Lasf_clock_bad
+    mov eax, 1
+    jmp .Lasf_clock_return
+.Lasf_clock_bad:
+    xor eax, eax
+.Lasf_clock_return:
+    add rsp, 56
+    ret
+ENDFN asf_clock_ns
+
 # -> EAX=1/0. Restores spreading, then publishes a completed AAC packet.
 LOCALFN asf_complete
     push rsi
@@ -395,10 +441,21 @@ LOCALFN asf_complete
     mov eax, 1
     cmp dword ptr [rip + asf_mode], 1
     jne .Lasf_complete_return
+    mov rcx, [rip + asf_object_time]
+    call asf_clock_ns
+    test eax, eax
+    jz .Lasf_complete_bad
+    mov [rsp + 32], rdx
     mov rcx, [rip + mts_buffer]
     add rcx, [rip + asf_object_start]
     mov edx, [rip + asf_object_have]
     call track_add
+    test eax, eax
+    jz .Lasf_complete_bad
+    mov ecx, [rip + track_count]
+    dec ecx
+    mov rdx, [rsp + 32]
+    call track_time_mark_ns
     jmp .Lasf_complete_return
 .Lasf_complete_bad:
     xor eax, eax
@@ -426,6 +483,8 @@ LOCALFN asf_fragment
     jne .Lasf_fragment_bad
     mov eax, [rip + asf_payload_object]
     mov [rip + asf_object], eax
+    mov eax, [rip + asf_payload_time]
+    mov [rip + asf_object_time], rax
     mov eax, [rip + asf_payload_size]
     cmp dword ptr [rip + asf_payload_replic], 0
     je .Lasf_fragment_bad
@@ -453,6 +512,9 @@ LOCALFN asf_fragment
     je .Lasf_fragment_append
     mov eax, [rip + asf_payload_size]
     cmp eax, [rip + asf_object_size]
+    jne .Lasf_fragment_bad
+    mov eax, [rip + asf_payload_time]
+    cmp rax, [rip + asf_object_time]
     jne .Lasf_fragment_bad
 .Lasf_fragment_append:
     mov eax, [rip + asf_object_size]
@@ -609,6 +671,8 @@ LOCALFN asf_packet
     jc .Lasf_packet_bad
     mov [rip + asf_payload_replic], eax
     mov dword ptr [rip + asf_payload_size], 0
+    mov dword ptr [rip + asf_payload_time], 0
+    mov dword ptr [rip + asf_payload_delta], 0
     mov rdx, rdi
     sub rdx, rsi
     cmp rax, rdx
@@ -616,11 +680,17 @@ LOCALFN asf_packet
     test eax, eax
     jz .Lasf_packet_rep_done
     cmp eax, 1
-    je .Lasf_packet_rep_done
+    je .Lasf_packet_rep_delta
     cmp eax, 8
     jb .Lasf_packet_bad
     mov edx, [rsi]
     mov [rip + asf_payload_size], edx
+    mov edx, [rsi + 4]
+    mov [rip + asf_payload_time], edx
+    jmp .Lasf_packet_rep_done
+.Lasf_packet_rep_delta:
+    movzx edx, byte ptr [rsi]
+    mov [rip + asf_payload_delta], edx
 .Lasf_packet_rep_done:
     add rsi, rax
     test r12d, 1
@@ -653,7 +723,14 @@ LOCALFN asf_packet
 .Lasf_packet_compressed:
     cmp dword ptr [rip + asf_pending], 0
     jne .Lasf_packet_bad
+    test r13d, 0x0c                   # compressed objects need a start time
+    jz .Lasf_packet_bad
+    mov eax, [rip + asf_payload_offset]
+    mov [rip + asf_object_time], rax
 .Lasf_packet_subpayload:
+    call asf_cancelled
+    test eax, eax
+    jnz .Lasf_packet_bad
     cmp rsi, [rsp + 48]
     je .Lasf_packet_next
     movzx edx, byte ptr [rsi]
@@ -675,6 +752,8 @@ LOCALFN asf_packet
     call asf_complete
     test eax, eax
     jz .Lasf_packet_bad
+    mov eax, [rip + asf_payload_delta]
+    add [rip + asf_object_time], rax
     mov edx, [rsp + 56]
     add rsi, rdx
     jmp .Lasf_packet_subpayload
@@ -723,6 +802,9 @@ FN asf_open
     mov qword ptr [rip + asf_spread_scratch], 0
     mov dword ptr [rip + asf_pending], 0
     mov qword ptr [rip + asf_packets], 0
+    mov qword ptr [rip + asf_preroll], 0
+    mov qword ptr [rip + asf_time_offset], 0
+    mov qword ptr [rip + asf_object_time], 0
     lea rdx, [rip + asf_seen_ids]
     xor eax, eax
     mov ecx, 128
@@ -818,6 +900,10 @@ FN asf_open
     jne .Lasf_open_started
     mov ecx, 7                        # TK_AAC
     call track_begin
+    test eax, eax
+    jz .Lasf_open_bad
+    mov dword ptr [rip + track_time_enabled], 1
+    mov qword ptr [rip + track_time_scale_ns], 1000000
 .Lasf_open_started:
     test eax, eax
     jz .Lasf_open_bad

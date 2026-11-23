@@ -31,6 +31,27 @@ PRIVATE=writer.guid('782f9c87-e21e-483c-9212-c84f2d1b9257')
 
 def digest(data):return hashlib.sha256(data).hexdigest()
 
+def mark_sparse(file):
+    if os.name!='nt':return
+    import ctypes,msvcrt
+    from ctypes import wintypes
+    call=ctypes.WinDLL('kernel32',use_last_error=True).DeviceIoControl
+    call.argtypes=[wintypes.HANDLE,wintypes.DWORD,ctypes.c_void_p,wintypes.DWORD,
+                   ctypes.c_void_p,wintypes.DWORD,ctypes.POINTER(wintypes.DWORD),ctypes.c_void_p]
+    call.restype=wintypes.BOOL;returned=wintypes.DWORD()
+    if not call(msvcrt.get_osfhandle(file.fileno()),0x900c4,None,0,None,0,ctypes.byref(returned),None):
+        raise ctypes.WinError(ctypes.get_last_error())
+
+def allocated_bytes(path):
+    if os.name!='nt':return path.stat().st_blocks*512
+    import ctypes
+    from ctypes import wintypes
+    call=ctypes.WinDLL('kernel32',use_last_error=True).GetCompressedFileSizeW
+    call.argtypes=[wintypes.LPCWSTR,ctypes.POINTER(wintypes.DWORD)];call.restype=wintypes.DWORD
+    high=wintypes.DWORD();ctypes.set_last_error(0);low=call(str(path),ctypes.byref(high))
+    if low==0xffffffff and ctypes.get_last_error():raise ctypes.WinError(ctypes.get_last_error())
+    return high.value<<32|low
+
 def name(text,language=0):
     text=text.encode('utf-16-le') if isinstance(text,str) else text
     return struct.pack('<HH',language,len(text))+text
@@ -251,15 +272,17 @@ def main():
     plan=json.loads((work/'sparse-plan.json').read_text());sparse=work/'large-embedded-info.asf'
     prefix=(work/plan['prefix']).read_bytes();suffix=(work/plan['suffix']).read_bytes()
     with sparse.open('wb') as file:
+        mark_sparse(file)
         file.write(prefix);file.seek(len(prefix)+plan['gap_bytes']);file.write(suffix)
-    if sparse.stat().st_size!=plan['logical_bytes'] or sparse.stat().st_blocks*512>1024*1024:
+    allocated=allocated_bytes(sparse)
+    if sparse.stat().st_size!=plan['logical_bytes'] or allocated>1024*1024:
         raise Failure('Large embedded fixture is not the intended sparse file')
     sparse_output=work/'sparse-output.f32';sparse_output.unlink(missing_ok=True)
     run([*cli,'--decode',sparse,sparse_output],env=env,timeout=180)
     if sparse_output.read_bytes()!=(work/(plan['reference_case']+'.reference.f32')).read_bytes():raise Failure('Sparse embedded PCM differs')
     sparse_seeks=oracle('asf-seek-oracle',sparse,work/plan['raw'],0)
     checks.append(dict(test='unsigned DWORD info skip with embedded format after 4 GiB',result='exact',
-                       logical_bytes=sparse.stat().st_size,allocated_bytes=sparse.stat().st_blocks*512,
+                       logical_bytes=sparse.stat().st_size,allocated_bytes=allocated,
                        embedded_properties_offset=plan['embedded_properties_offset'],info_length=plan['gap_bytes'],
                        cold_seeks=sparse_seeks,pcm_sha256=digest(sparse_output.read_bytes())))
     sparse.unlink()

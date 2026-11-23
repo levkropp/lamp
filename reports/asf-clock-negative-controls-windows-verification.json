@@ -1,0 +1,70 @@
+{
+  "result": "passed",
+  "scope": "Read-only saved published-binary controls; no test variant enters runtime links.",
+  "baseline_commit": "64859ad",
+  "baseline_binary_sha256": "13d533e54b0c13eb90f8ab246fed926689d82e2f00ed912911360298c8056a7c",
+  "baseline_report": "reports/flv-gathered-windows-verification.json",
+  "baseline_runtime_source_sha256": "e82d9c9e864eae694320d5bae237e9714c63f9ef73111369d988eed5bd10e6b7",
+  "current_binary_sha256": "8f3c6034269fda6e02672e787f115669f863a181b4d1be5b2d663de73007e720",
+  "sources": {
+    "src/asf.s": "f9d2eeff500136e3c2770c61c1874216c6c64e8c4c679d9ddc832fe650985bc7"
+  },
+  "checks": [
+    {
+      "file": "aac-48000-2-leading.asf",
+      "result": "published baseline differs from independent media placement",
+      "baseline_frames": 20480,
+      "expected_frames": 21680,
+      "input_sha256": "c7a081dd57dd423890e4a5d796b3842f5f65865ddbccbc7474e248fe2a387eb9",
+      "reference_sha256": "5d39cc3d8271a12fbcb82e7ea6162e9062f1b1acc8f176b450947a53c7e3191d"
+    },
+    {
+      "file": "aac-48000-2-overlap.asf",
+      "result": "published baseline differs from independent media placement",
+      "baseline_frames": 20480,
+      "expected_frames": 19504,
+      "input_sha256": "4f93ed52e0f0d873e1048d2a2d8d18607a64068b8b55ca7d8de1f0cc60932151",
+      "reference_sha256": "f1fcab103ebfc6118aea8bcc1ed58351b0a5e16e01d726795796ef6b3250c9c0"
+    },
+    {
+      "file": "aac-48000-2-negative.asf",
+      "result": "published baseline differs from independent media placement",
+      "baseline_frames": 20480,
+      "expected_frames": 19520,
+      "input_sha256": "9f1d68cd5b2181569f79987d6c7d2aa691eeb00917087049a713d2386d7ae416",
+      "reference_sha256": "ac8377f853e4c5c3f03fabd9a08311e845cd6e0b682baac0682f73ef7c0180ad"
+    },
+    {
+      "file": "fragment-time-conflict.asf",
+      "result": "published baseline accepts; updated runtime rejects at open",
+      "baseline_exit": 0,
+      "current_exit": 2,
+      "input_sha256": "7bf099fad96d4dbf37725a441bccbfbd81b8be846aa6e680f42124a8ac9b8f1d"
+    },
+    {
+      "file": "offset-overflow.asf",
+      "result": "published baseline accepts; updated runtime rejects at open",
+      "baseline_exit": 0,
+      "current_exit": 2,
+      "input_sha256": "e74873cbb25e307a3880593ade5061db76135feb3e5afd15576bd4551b8d9231"
+    },
+    {
+      "file": "preroll-overflow.asf",
+      "result": "published baseline accepts; updated runtime rejects at open",
+      "baseline_exit": 0,
+      "current_exit": 2,
+      "input_sha256": "b9836817f846c3d2d1457bf592b10b21511ca0be31320ee97254b8faca3bb0e6"
+    },
+    {
+      "file": "compressed-missing-time.asf",
+      "result": "published baseline accepts; updated runtime rejects at open",
+      "baseline_exit": 0,
+      "current_exit": 2,
+      "input_sha256": "57dfa80baa26040ae69c58093da82c7b3022700a558a62475437700349ce8dc0"
+    }
+  ],
+  "git_source_sha256": {
+    "src/asf.s": "f9d2eeff500136e3c2770c61c1874216c6c64e8c4c679d9ddc832fe650985bc7"
+  },
+  "source_provenance": "sources/runtime_sources retain exact tested working-file bytes; git_source_sha256 records canonical staged Git bytes. Any difference was checked to consist only of CRLF/LF line endings."
+}

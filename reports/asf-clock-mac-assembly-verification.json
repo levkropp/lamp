@@ -1,0 +1,56 @@
+{
+  "result": "passed",
+  "scope": "Compile-only ARM64 macOS checks of the ASF and shared packet/media-clock path. No native linking, execution, device playback or Mac feature parity is established.",
+  "target": "arm64-apple-macosx12.0.0",
+  "cpu": "apple-m1",
+  "compiler": "Ubuntu LLVM version 18.1.3",
+  "sources": {
+    "tools/arm64.py": "f8abd01ad67063451181e0adc66e72b2a445ebe9a7b159f7b88ac52b79bdadc2",
+    "tools/arm64_lamp.py": "37e4a515283ef441f9d1ee647377716efbe0d6a3aae27ef7c62faf53118f35d0",
+    "src/lamp.inc": "d79c75543ab0d78863010b32e46faf23fda5b9cb54ec624e9dce0acfcabf03e6"
+  },
+  "checks": [
+    {
+      "file": "src/asf.s",
+      "source_sha256": "f9d2eeff500136e3c2770c61c1874216c6c64e8c4c679d9ddc832fe650985bc7",
+      "translated_sha256": "29131fb4b924db426e8e9854ac1f583860700ca53ffd9f8843390737dbd0bf0c",
+      "object_sha256": "2b226a3ee905b56d4c2db85ac1a0aeef63d4ff79581ab2ecd1aefbdfa4a89617",
+      "object_bytes": 14560,
+      "result": "translated and assembled"
+    },
+    {
+      "file": "src/track.s",
+      "source_sha256": "d882c87afacc6e35595293b508009b51065180a74fbde95c733a82ae22bcb0d9",
+      "translated_sha256": "787251a47ad3a2a3fdeb1617d845fc1428abbf7f151f86224290b7ce21fe7d09",
+      "object_sha256": "ae685b4bfbfad0a692bbd55470e8ce8b995a5561b3271063755a6324b7cba15c",
+      "object_bytes": 15560,
+      "result": "translated and assembled"
+    },
+    {
+      "file": "src/track_time.s",
+      "source_sha256": "958c15a5948f77753eeb635a1ebbf7fc89ee185a746ac2d0321fbf4dc42d05f2",
+      "translated_sha256": "8a8e35d5a2f929c205145e66fdb3337f53b2423efecebe93f7aa5ec82a34a4f8",
+      "object_sha256": "1be1c23365aa120fa71a71ca1996b1a1e1a06a7ca43b2d84055817ba41a848df",
+      "object_bytes": 9600,
+      "result": "translated and assembled"
+    },
+    {
+      "file": "src/decoder.s",
+      "source_sha256": "eb8a1d8e3902d75f76a2c729d08366387cd367c47511288675758dc18d0ca6f3",
+      "translated_sha256": "4b1ac0a0050700fb5eb0e3c88e8a5d00db592f88d5400665c7224212f5592ebc",
+      "object_sha256": "94fbff6757868809d7ad1e3452962bae3e478bd685e0cadfa6ce9e1439e9d29c",
+      "object_bytes": 61432,
+      "result": "translated and assembled"
+    }
+  ],
+  "git_source_sha256": {
+    "tools/arm64.py": "f8abd01ad67063451181e0adc66e72b2a445ebe9a7b159f7b88ac52b79bdadc2",
+    "tools/arm64_lamp.py": "37e4a515283ef441f9d1ee647377716efbe0d6a3aae27ef7c62faf53118f35d0",
+    "src/lamp.inc": "d79c75543ab0d78863010b32e46faf23fda5b9cb54ec624e9dce0acfcabf03e6",
+    "src/asf.s": "f9d2eeff500136e3c2770c61c1874216c6c64e8c4c679d9ddc832fe650985bc7",
+    "src/track.s": "d882c87afacc6e35595293b508009b51065180a74fbde95c733a82ae22bcb0d9",
+    "src/track_time.s": "958c15a5948f77753eeb635a1ebbf7fc89ee185a746ac2d0321fbf4dc42d05f2",
+    "src/decoder.s": "eb8a1d8e3902d75f76a2c729d08366387cd367c47511288675758dc18d0ca6f3"
+  },
+  "source_provenance": "sources/runtime_sources retain exact tested working-file bytes; git_source_sha256 records canonical staged Git bytes. Any difference was checked to consist only of CRLF/LF line endings."
+}

@@ -47,7 +47,8 @@ def spread(data, span, packet, chunk):
     return b''.join(data[(row*span+col)*chunk:(row*span+col+1)*chunk]
                     for col in range(span) for row in range(rows))
 
-def packets(data, span, packet, chunk, ident=1, *, fragmented=True, variable=False, compressed=False):
+def packets(data, span, packet, chunk, ident=1, *, fragmented=True, variable=False, compressed=False,
+            clock_rate=0, clock_frames=1024):
     group = span*packet
     if len(data) % group: raise ValueError('Incomplete media object')
     coded = [spread(data[i:i+group], span, packet, chunk) for i in range(0, len(data), group)]
@@ -65,7 +66,8 @@ def packets(data, span, packet, chunk, ident=1, *, fragmented=True, variable=Fal
             size = cuts.pop(0) if cuts else min(400, len(data)-off)
             piece = data[off:off+size]
             physical = (512 if k%2 else 768) if variable else 512
-            item = writer.payload(piece, (254+k)&255, off, len(data), stream=ident, replic=8 if not off else 0)
+            time = (k*clock_frames*1000+clock_rate//2)//clock_rate if clock_rate else 0
+            item = writer.payload(piece, (254+k)&255, off, len(data), stream=ident, replic=8 if not off else 0, time=time)
             result.append(writer.packet([item], physical=physical, replic=1 if not off else 0))
             off += len(piece)
     return result
@@ -89,6 +91,8 @@ def prepare(work):
         raw = raw or name+'.wav'
         if not (work/raw).exists(): (work/raw).write_bytes(wave(fmt, data))
         framing = {k:options.pop(k) for k in ('fragmented','variable','compressed') if k in options}
+        if struct.unpack_from('<H',fmt)[0] == 0xff:
+            framing['clock_rate'] = struct.unpack_from('<I',fmt,4)[0]
         physical = 1024 if framing.get('compressed') else 512
         maximum = 768 if framing.get('variable') else physical
         stream_id = selected

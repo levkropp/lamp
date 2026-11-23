@@ -37,9 +37,9 @@ def obj(key, body): return key + struct.pack('<Q', len(body) + 24) + body
 def field(value, width): return value.to_bytes((0, 1, 2, 4)[width], 'little') if width else b''
 
 
-def payload(data, number=0, offset=0, size=None, stream=1, replic=8):
+def payload(data, number=0, offset=0, size=None, stream=1, replic=8, time=0, delta=1):
     return dict(data=data, number=number, offset=offset, size=len(data) if size is None else size,
-                stream=stream, replic=replic)
+                stream=stream, replic=replic, time=time, delta=delta)
 
 
 def packet(items, length=2, sequence=1, padding=2, number=1, offset=3, replic=1,
@@ -58,8 +58,8 @@ def packet(items, length=2, sequence=1, padding=2, number=1, offset=3, replic=1,
         rep = item['replic']
         body += bytes([item['stream'] | 0x80]) + field(item['number'], number)
         body += field(item['offset'], offset) + field(rep, replic)
-        if rep >= 8: body += struct.pack('<II', item['size'], 0) + bytes(rep - 8)
-        elif rep == 1: body += b'\x01'
+        if rep >= 8: body += struct.pack('<II', item['size'], item['time']) + bytes(rep - 8)
+        elif rep == 1: body += bytes([item['delta']])
         if multi: body += field(len(item['data']), payload_length)
         body += item['data']
     pad = logical - head_bytes - len(body)
@@ -69,16 +69,16 @@ def packet(items, length=2, sequence=1, padding=2, number=1, offset=3, replic=1,
     return prefix + body + bytes(pad) + bytes(physical - logical)
 
 
-def stream(fmt, ident=1, encrypted=False, span=1):
+def stream(fmt, ident=1, encrypted=False, span=1, time_offset=0):
     # Eight spreading bytes are carried despite a zero error-data length,
     # as FFmpeg's muxer writes them. Span 1 is already in byte order.
-    body = AUDIO + NONE + bytes(8) + struct.pack('<IIHI', len(fmt), 0, ident | (0x8000 if encrypted else 0), 0)
+    body = AUDIO + NONE + struct.pack('<Q', time_offset) + struct.pack('<IIHI', len(fmt), 0, ident | (0x8000 if encrypted else 0), 0)
     return obj(STREAM, body + fmt + struct.pack('<BHHHB', span, 1, 1, 1, 0))
 
 
-def asf(streams, packets, minimum=512, maximum=None, extra=(), broadcast=False):
+def asf(streams, packets, minimum=512, maximum=None, extra=(), broadcast=False, preroll=0):
     maximum = minimum if maximum is None else maximum
-    props = IDENT + bytes(16) + struct.pack('<QQQQIIII', len(packets), 10000000, 10000000, 0,
+    props = IDENT + bytes(16) + struct.pack('<QQQQIIII', len(packets), 10000000, 10000000, preroll,
                                           1 if broadcast else 2, minimum, maximum, 768000)
     children = [obj(FILE, props), obj(EXT, NONE + struct.pack('<HI', 6, 0)), *streams, *extra]
     children_bytes = b''.join(children)
