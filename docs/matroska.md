@@ -8,7 +8,7 @@ The demuxer selects one audio track: the first enabled audio track with a suppor
 
 | CodecID | Decoder |
 | --- | --- |
-| `A_OPUS` | Opus families 0/1 (OpusHead in CodecPrivate); pre-skip from OpusHead |
+| `A_OPUS` | Opus families 0/1 (OpusHead in CodecPrivate); CodecDelay when present, otherwise OpusHead pre-skip |
 | `A_VORBIS` | Vorbis (three Xiph-laced headers in CodecPrivate) |
 | `A_FLAC` | FLAC (`fLaC` and metadata blocks in CodecPrivate) |
 | `A_ALAC` | Apple Lossless (`ALACSpecificConfig` in CodecPrivate); see [MP4 notes](mp4.md#apple-lossless) |
@@ -45,9 +45,9 @@ is duplicated. Speex seeks rebuild complete prediction, noise, filter and
 QMF histories from packet zero and discard up to the target. They are
 exact and cancellable, but a long recording may take time to seek.
 
-Every coded sample is presented except final DiscardPadding. No Ogg
-granule/delay trimming is inferred for this mapping. CodecDelay and
-timestamp scheduling/gaps remain unimplemented here. This adds Matroska
+CodecDelay and signed per-block DiscardPadding trim the presentation as
+described below. No Ogg granule trimming is inferred for this mapping.
+Timestamp scheduling/gaps remain unimplemented here. This adds Matroska
 audio coverage; it does not establish WebM Speex conformance or video/A/V
 synchronization. Matroska reports codec kind 8 as for its other audio codecs.
 
@@ -88,7 +88,77 @@ also pass on the current native Windows decoder objects.
 
 The EBML header must name DocType `matroska` or `webm`. Element sizes are checked against their parents. Segment and Cluster may have unknown sizes, as live recorders write them; an unknown-size Cluster ends at the next Segment-level element. Other elements must have known sizes. SimpleBlock and BlockGroup/Block frames of the selected track become packets in file order, with Xiph, EBML and fixed lacing; laced sizes must fit their block and fixed lacing must divide it exactly. Timestamps are not used for decoding: the codec's own packet durations place samples, so gaps or overlaps in timestamps do not change output.
 
-DiscardPadding on the final packet trims the end, converted from nanoseconds to samples at the codec's rate with rounding to nearest, as FFmpeg does. DiscardPadding on any other packet rejects, as does a negative value. Opening reads every cluster, so opening a long video file reads most of it; Cues are not used yet.
+Opening reads every cluster, so opening a long video file reads most of it; Cues are not used yet.
+
+## Codec delay and block padding
+
+The selected track's unsigned `CodecDelay` removes initial coded samples.
+An explicitly present value, including zero, takes precedence over OpusHead
+pre-skip; an absent value retains the existing OpusHead fallback. The two
+values are never added. Other tracks' timing does not alter the selected
+audio. Delay beyond the coded stream rejects; delay equal to its length
+produces an empty presentation.
+
+Signed `DiscardPadding` works on any BlockGroup. Positive values remove
+the end of its Block; negative values remove the beginning. A laced Block
+is one interval across all its packets, so padding can span several
+packets. Magnitudes cannot exceed that Block's coded duration. Overlap with
+global start/end trimming is removed once. Nanoseconds convert at the
+decoded sample rate using a 128-bit product and nearest rounding, with
+half-sample ties away from zero. Duplicate timing elements, multiple or
+missing Blocks in a BlockGroup, and integers longer than eight bytes reject.
+These rules follow the [Matroska element definitions](https://www.matroska.org/technical/elements.html).
+
+The existing 24-byte packet index retains coded positions. An optional
+32-byte-per-padded-Block map reserves up to 512 MiB of virtual address space
+and commits 64 KiB at a time; files without block padding allocate no map.
+Presentation duration excludes removed samples. Reads still decode fully
+discarded packets to preserve codec history, and seeks translate between
+coded and presented positions before applying the existing codec pre-roll.
+Packet FLAC validates frame positions against its complete coded scan,
+including when playback duration is shortened by trimming.
+
+The [Windows](../reports/matroska-timing-windows-verification.json) and
+[Linux](../reports/matroska-timing-linux-verification.json) timing suites
+each cover 117 files and 1,872 presentation seeks: six PCM rates from
+8–192 kHz, FLAC, Opus, MP2/MP3, AAC, ALAC, Speex and Vorbis, lacing,
+interior/head/whole-block deletion, explicit zero delay, rounding boundaries,
+empty output, unselected timing, eight malformed inputs and cancellation.
+An independent per-sample visibility mask selects unchanged unpadded PCM;
+this establishes trimming rather than new codec DSP conformance. Opus/AAC
+seek PCM is compared to fresh unpadded codec seeks at the same coded
+position, preserving their existing reset/pre-roll policy. Other tested
+formats compare seek output to continuous PCM. Separate map-only
+[Windows](../reports/track-cuts-windows-verification.json) and
+[Linux](../reports/track-cuts-linux-verification.json) tests each pass
+2,054 cases and 3,016,820 checks, including adjacent removals, resource and
+allocation failures and commit-boundary growth.
+
+Two unlaced PCM padding cases match FFmpeg 8.0.1 exactly. That FFmpeg
+version exposes generic CodecDelay as `initial_padding` without applying
+the generic sample skip; its Opus decoder consumes OpusHead pre-skip.
+Its laced padding handling can also differ from the whole-Block rule.
+The independent interval model therefore remains the timing comparator;
+the ordinary MP2/MP3 regression explicitly removes the declared delay from
+older FFmpeg output when its frame count shows the omission.
+
+Muted native Windows testing covers a delayed, laced Speex stream with
+mixed signed padding through play/pause/resume, stop/reopen, active and
+paused seeks, cancelled open, simulated default-output recovery and
+exclusive 48 kHz output. Hardware PCM capture and physical hotplug are
+not established. Changed sources translate and assemble for Apple Silicon;
+native Mac execution and Linux output-device playback remain unverified
+for this addition. Timestamp gaps/overlaps, arbitrary `SeekPreRoll`, video
+and A/V synchronization remain open.
+
+Run `python3 tests/verify-track-cuts.py --bin build/mkv-timing-check` and
+`python3 tests/verify-matroska-timing.py --bin build/mkv-timing-check`.
+On Windows use `python` and `--bin bin/mkv-timing-check`; `--probe` requires
+a build marked with `--probe-silent` (plus the default-device/exclusive
+options for those lifecycle checks). `--fixtures PATH` reuses generated
+fixtures without FFmpeg.
+For the Windows map-only oracle, first assemble its test wrapper:
+`llvm-mc -triple=x86_64-pc-windows-msvc -filetype=obj -defsym=WINDOWS=1 -I src tests/track-cuts-probe.s -o bin/mkv-timing-check/track-cuts-probe.obj`.
 
 ## Track layer
 
@@ -103,6 +173,6 @@ Seeking finds the packet holding the target and restarts there with the codec's 
 - 24 files: Opus stereo/mono CBR/5.1 and Vorbis stereo/mono/5.1 as both `.mka` and `.webm`; FLAC 16/24-bit and 5.1; MP3; MP2; PCM s16/s24/s32be/f32/f64/u8 and 5.1. Mono and stereo outputs are compared with FFmpeg's decode of the same file: exact for FLAC and PCM, and within the codec suites' tolerances for Opus, Vorbis and MPEG audio. Opus and FLAC must also equal LAMP's decode of the same stream remuxed to Ogg, 5.1 PCM its WAV remux, and 5.1 Vorbis a direct Ogg encode.
 - A test-only muxer rewrites seven of them with Xiph, EBML and fixed lacing, unknown-size Segment and Clusters, a second track with FlagDefault, and an unsupported DTS track and a VP9 video track before the audio; all 42 variants decode identically.
 - 90 exact seeks on six files (Vorbis, FLAC, PCM, MP3, MP2, 5.1 Vorbis WebM) and ten Opus seeks equal to Ogg Opus seeks.
-- Nine malformed files reject: a truncated file, a wrong DocType, no supported audio, a ContentEncodings track, Opus without CodecPrivate, a corrupt FLAC frame, Xiph and fixed lacing that do not fit, and DiscardPadding before the last packet. Cancelled open and read stop cleanly, and a WebM Opus file plays through the Linux null sink.
+- Eight malformed files reject: a truncated file, a wrong DocType, no supported audio, a ContentEncodings track, Opus without CodecPrivate, a corrupt FLAC frame, and Xiph and fixed lacing that do not fit. Midstream DiscardPadding has an exact sample-interval check. Cancelled open and read stop cleanly; optional playback checks use a WebM Opus file.
 
 FFmpeg's Ogg remux from Matroska drops DiscardPadding and rounds granules from millisecond timestamps. LAMP therefore compares Opus against the Matroska presentation range, ignores FLAC-in-Ogg granules (FLAC frames carry exact positions), and uses a direct Ogg encode for the Vorbis comparison, because LAMP rejects Vorbis granules that contradict packet durations.

@@ -1,0 +1,39 @@
+{
+  "result": "passed",
+  "recorded_utc": "2026-11-23T01:17:31.122864+00:00",
+  "scope": "Three counterfactual checks against the previous published build, not independent codec conformance.",
+  "previous_binary_sha256": "25600cf21c5005e60373ff582d1c8ebaf6e456fb371894a5b2fc7d5e34e2d50e",
+  "current_binary_sha256": "15d195cc30c3f1fb3eccf4bf268d856afcc3101460da83cb3d107eb578230a38",
+  "checks": [
+    {
+      "file": "pcm-8000-delay.mka",
+      "fixture_sha256": "f8805b503a42328b6d5a6eb664f3baedfe19d878b8e35ecb2b783f6d41453670",
+      "previous_exit": 0,
+      "previous_output": "codec=8 rate=8000 channels=2 bits=16 frames=1414 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0",
+      "current_exit": 0,
+      "current_output": "codec=8 rate=8000 channels=2 bits=16 frames=1362 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0",
+      "expected_frames": 1362,
+      "result": "previous build reproduces missing timing support; current matches model"
+    },
+    {
+      "file": "pcm-8000-head.mka",
+      "fixture_sha256": "5ff5291883df2dca596c05bb657df98815e830373ee274686efc6ce401a379a0",
+      "previous_exit": 2,
+      "previous_output": "Skipped a file that is unsupported, malformed, or inaccessible.\nUnsupported, malformed, or inaccessible file. Supports WAV/W64, AIFF/AIFC, CAF, AU, FLAC, WavPack, Monkey's Audio, MP1/MP2/MP3, AAC (LC, HE), AC-3/E-AC-3, Ogg (Vorbis, Opus, Speex, FLAC), Matroska/WebM, MP4/MOV, AVI, FLV, ASF and MPEG-TS/PS audio.",
+      "current_exit": 0,
+      "current_output": "codec=8 rate=8000 channels=2 bits=16 frames=1413 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=31250 endpoint_dry=0",
+      "expected_frames": 1413,
+      "result": "previous build reproduces missing timing support; current matches model"
+    },
+    {
+      "file": "pcm-8000-middle.mka",
+      "fixture_sha256": "8aba208a29d93647a1b33c761bb279343c131545cb7a2d88a4517de977047155",
+      "previous_exit": 2,
+      "previous_output": "Skipped a file that is unsupported, malformed, or inaccessible.\nUnsupported, malformed, or inaccessible file. Supports WAV/W64, AIFF/AIFC, CAF, AU, FLAC, WavPack, Monkey's Audio, MP1/MP2/MP3, AAC (LC, HE), AC-3/E-AC-3, Ogg (Vorbis, Opus, Speex, FLAC), Matroska/WebM, MP4/MOV, AVI, FLV, ASF and MPEG-TS/PS audio.",
+      "current_exit": 0,
+      "current_output": "codec=8 rate=8000 channels=2 bits=16 frames=1397 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0",
+      "expected_frames": 1397,
+      "result": "previous build reproduces missing timing support; current matches model"
+    }
+  ]
+}

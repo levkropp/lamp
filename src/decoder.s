@@ -3122,9 +3122,18 @@ LOCALFN decode_frame
     jne .Lframe_bad
     mov ecx, [rip + frame_samples]
     add rax, rcx
-    cmp qword ptr [rip + total_frames], 0
-    je .Lframe_position_valid
-    cmp rax, [rip + total_frames]
+    mov rcx, [rip + total_frames]
+    cmp dword ptr [rip + track_active], 0
+    je .Lframe_position_bound
+    cmp dword ptr [rip + track_codec], 2
+    jne .Lframe_position_bound
+    # Packet tracks may trim/delay presentation. Validate FLAC frame positions
+    # against the complete coded scan, retaining frames needed for history.
+    mov rcx, [rip + flac_scan_position]
+.Lframe_position_bound:
+    test rcx, rcx
+    jz .Lframe_position_valid
+    cmp rax, rcx
     ja .Lframe_bad
 .Lframe_position_valid:
     lea rcx, [rip + left_samples]

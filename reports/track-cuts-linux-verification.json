@@ -1,0 +1,17 @@
+{
+  "result": "passed",
+  "cases": 2054,
+  "checks": 3016820,
+  "mapped_positions": 2892648,
+  "packet_spans": 44423,
+  "peak_committed_bytes": 131072,
+  "platform": "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "scope": "Independent sample-mask comparisons of raw/presented mapping, packet spans, global trim intersections, whole/adjacent deletions, zero output, allocation failures and resource caps. This component alone does not establish container or playback timing.",
+  "oracle_sha256": "716703627f09236bfbc9cfd11fd79f69abc01743665152dcb1f18bf65b42d039",
+  "sources": {
+    "src/track_cuts.s": "0e0b0b2df541caf29166a9570494488554fc50ae38aaa1f667f99c89d999883b",
+    "tests/track-cuts-probe.s": "c00d88ceb5784ec8afbc453eca4e1ab3fe90d9c533b77bc9ada50bf6a054ee90",
+    "tests/track-cuts-oracle.c": "f11674ae8bb8c615732b2e2826a401512d7e930e9843b265b0c14077a418d11d",
+    "tests/verify-track-cuts.py": "09291c33d40268a4e024fe9b54472bbb69159e48af7b26805f95c07dd56b28c0"
+  }
+}

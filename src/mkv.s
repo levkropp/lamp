@@ -21,6 +21,7 @@
 .equ ID_FLAG_DEFAULT, 0x88
 .equ ID_CODEC_ID, 0x86
 .equ ID_CODEC_PRIVATE, 0x63a2
+.equ ID_CODEC_DELAY, 0x56aa
 .equ ID_AUDIO, 0xe1
 .equ ID_SAMPLING, 0xb5
 .equ ID_CHANNELS, 0x9f
@@ -102,7 +103,8 @@ mkv_channels: .long 0
 mkv_bits: .long 0
 mkv_tracks_seen: .long 0
 mkv_discard: .quad 0                 # DiscardPadding ns of the latest block group
-mkv_discard_packet: .quad -1         # packet count after that group's block
+mkv_codec_delay: .quad 0
+mkv_codec_delay_active: .long 0
 mkv_vorbis_headers: .zero 3*16
 # Candidate track being parsed.
 mkv_entry_number: .quad 0
@@ -113,6 +115,8 @@ mkv_entry_codec: .long 0
 mkv_entry_flags: .long 0
 mkv_entry_private: .quad 0
 mkv_entry_private_bytes: .long 0
+mkv_entry_delay: .quad 0
+mkv_entry_delay_active: .long 0
 mkv_entry_encoded: .long 0
 mkv_entry_rate: .double 0.0
 mkv_entry_channels: .quad 1
@@ -226,6 +230,27 @@ LOCALFN mkv_uint
     ret
 ENDFN mkv_uint
 
+# RCX=data, EDX=bytes (prevalidated 0..8) -> signed big-endian integer.
+LOCALFN mkv_sint
+    xor eax, eax
+    test edx, edx
+    jz .Lmkv_sint_done
+    movsx rax, byte ptr [rcx]
+    inc rcx
+    dec edx
+.Lmkv_sint_byte:
+    test edx, edx
+    jz .Lmkv_sint_done
+    shl rax, 8
+    movzx r8d, byte ptr [rcx]
+    or rax, r8
+    inc rcx
+    dec edx
+    jmp .Lmkv_sint_byte
+.Lmkv_sint_done:
+    ret
+ENDFN mkv_sint
+
 # RCX=data, EDX=bytes -> XMM0=big-endian float (4 or 8 bytes), else 0.
 LOCALFN mkv_float
     xorpd xmm0, xmm0
@@ -306,6 +331,8 @@ LOCALFN mkv_track_entry
     mov dword ptr [rip + mkv_entry_flags], 0
     mov qword ptr [rip + mkv_entry_private], 0
     mov dword ptr [rip + mkv_entry_private_bytes], 0
+    mov qword ptr [rip + mkv_entry_delay], 0
+    mov dword ptr [rip + mkv_entry_delay_active], 0
     mov dword ptr [rip + mkv_entry_encoded], 0
     xorpd xmm0, xmm0
     movsd [rip + mkv_entry_rate], xmm0
@@ -334,6 +361,8 @@ LOCALFN mkv_track_entry
     je .Lmkv_entry_codec
     cmp eax, ID_CODEC_PRIVATE
     je .Lmkv_entry_private
+    cmp eax, ID_CODEC_DELAY
+    je .Lmkv_entry_delay
     cmp eax, ID_ENCODINGS
     je .Lmkv_entry_encodings
     cmp eax, ID_AUDIO
@@ -368,6 +397,16 @@ LOCALFN mkv_track_entry
 .Lmkv_entry_private:
     mov [rip + mkv_entry_private], r8
     mov [rip + mkv_entry_private_bytes], edx
+    jmp .Lmkv_entry_child
+.Lmkv_entry_delay:
+    cmp rdx, 8
+    ja .Lmkv_entry_bad
+    cmp dword ptr [rip + mkv_entry_delay_active], 0
+    jne .Lmkv_entry_bad
+    mov rcx, r8
+    call mkv_uint
+    mov [rip + mkv_entry_delay], rax
+    mov dword ptr [rip + mkv_entry_delay_active], 1
     jmp .Lmkv_entry_child
 .Lmkv_entry_encodings:
     mov dword ptr [rip + mkv_entry_encoded], 1
@@ -469,6 +508,10 @@ LOCALFN mkv_track_entry
     mov [rip + mkv_private], rax
     mov eax, [rip + mkv_entry_private_bytes]
     mov [rip + mkv_private_bytes], eax
+    mov rax, [rip + mkv_entry_delay]
+    mov [rip + mkv_codec_delay], rax
+    mov eax, [rip + mkv_entry_delay_active]
+    mov [rip + mkv_codec_delay_active], eax
     movsd xmm0, [rip + mkv_entry_rate]
     movsd [rip + mkv_rate], xmm0
     mov rax, [rip + mkv_entry_channels]
@@ -731,7 +774,8 @@ FN mkv_open
     mov dword ptr [rip + mkv_audio_index], 0
     mov dword ptr [rip + mkv_tracks_seen], 0
     mov qword ptr [rip + mkv_discard], 0
-    mov qword ptr [rip + mkv_discard_packet], -1
+    mov qword ptr [rip + mkv_codec_delay], 0
+    mov dword ptr [rip + mkv_codec_delay_active], 0
     # EBML header with DocType matroska or webm.
     mov rcx, rsi
     mov rdx, rdi
@@ -900,6 +944,8 @@ FN mkv_open
     jne .Lmkv_cluster_child
     # BlockGroup: Block and DiscardPadding.
     mov qword ptr [rip + mkv_discard], 0
+    mov dword ptr [rip + mkv_group_blocks], 0
+    mov dword ptr [rip + mkv_group_discard_seen], 0
     mov rax, [rip + track_count]
     mov [rip + mkv_group_packets], rax
     mov rbx, r8
@@ -916,6 +962,9 @@ FN mkv_open
     lea rbx, [r8 + rdx]
     cmp eax, ID_BLOCK
     jne .Lmkv_group_discard
+    cmp dword ptr [rip + mkv_group_blocks], 0
+    jne .Lmkv_open_bad
+    mov dword ptr [rip + mkv_group_blocks], 1
     mov rcx, r8
     call mkv_block
     test eax, eax
@@ -924,27 +973,29 @@ FN mkv_open
 .Lmkv_group_discard:
     cmp eax, ID_DISCARD
     jne .Lmkv_group_child
-    test rdx, rdx
-    jz .Lmkv_group_child
-    test byte ptr [r8], 0x80             # signed; negative padding is invalid
-    jnz .Lmkv_open_bad
+    cmp rdx, 8
+    ja .Lmkv_open_bad
+    cmp dword ptr [rip + mkv_group_discard_seen], 0
+    jne .Lmkv_open_bad
+    mov dword ptr [rip + mkv_group_discard_seen], 1
     mov rcx, r8
-    call mkv_uint
+    call mkv_sint
     mov [rip + mkv_discard], rax
     jmp .Lmkv_group_child
 .Lmkv_group_done:
+    cmp dword ptr [rip + mkv_group_blocks], 1
+    jne .Lmkv_open_bad
     cmp qword ptr [rip + mkv_discard], 0
     je .Lmkv_cluster_child
     mov rax, [rip + track_count]
     cmp rax, [rip + mkv_group_packets]
     je .Lmkv_cluster_child               # another track's block
-    # Only the final packet may discard padding; a later packet rejects.
-    cmp qword ptr [rip + mkv_discard_packet], -1
-    jne .Lmkv_open_bad
-    mov rax, [rip + track_count]
-    mov [rip + mkv_discard_packet], rax
-    mov rax, [rip + mkv_discard]
-    mov [rip + mkv_discard_ns], rax
+    mov rcx, [rip + mkv_group_packets]
+    mov rdx, [rip + track_count]
+    mov r8, [rip + mkv_discard]
+    call track_cut_add
+    test eax, eax
+    jz .Lmkv_open_bad
     jmp .Lmkv_cluster_child
 .Lmkv_simple_block:
     mov rcx, r8
@@ -958,14 +1009,11 @@ FN mkv_open
 .Lmkv_top_done:
     cmp dword ptr [rip + mkv_tracks_seen], 0
     je .Lmkv_open_bad
-    mov rax, [rip + mkv_discard_packet]
-    cmp rax, -1
-    je .Lmkv_config
-    cmp rax, [rip + track_count]
-    jne .Lmkv_open_bad                   # padding must belong to the last packet
-    mov rax, [rip + mkv_discard_ns]
-    mov [rip + track_end_trim_ns], rax   # converted at the codec's rate
 .Lmkv_config:
+    mov rax, [rip + mkv_codec_delay]
+    mov [rip + track_start_trim_ns], rax
+    mov eax, [rip + mkv_codec_delay_active]
+    mov [rip + track_start_trim_ns_active], eax
     mov rcx, [rip + mkv_private]
     mov edx, [rip + mkv_private_bytes]
     mov [rip + track_config], rcx
@@ -1095,5 +1143,6 @@ FN mkv_open
 ENDFN mkv_open
 
 .data
-mkv_discard_ns: .quad 0
 mkv_group_packets: .quad 0
+mkv_group_blocks: .long 0
+mkv_group_discard_seen: .long 0

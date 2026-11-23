@@ -10,6 +10,7 @@
 .globl track_start_trim, track_end_trim, track_end_trim_ns, track_config, track_config_bytes
 .globl track_pcm_channels, track_pcm_bits, track_pcm_flags
 .globl track_unit_scale, track_start_units, track_end_units, track_edit
+.globl track_start_trim_ns, track_start_trim_ns_active
 
 .equ TK_PCM, 1
 .equ TK_FLAC, 2
@@ -45,6 +46,8 @@ track_pcm_channels: .long 0
 track_pcm_bits: .long 0
 track_pcm_flags: .long 0
 track_start_trim: .quad 0            # raw samples before the presented start
+track_start_trim_ns: .quad 0         # container delay, overriding codec default when active
+track_start_trim_ns_active: .long 0
 track_end_trim: .quad 0              # raw samples after the presented end
 track_end_trim_ns: .quad 0           # or nanoseconds, rounded at the codec rate
 track_raw_total: .quad 0
@@ -63,6 +66,7 @@ track_primer: .long 0                # packets still to decode without output
 .text
 FN track_close
     sub rsp, 40
+    call track_cuts_close
     mov rcx, [rip + track_packets]
     test rcx, rcx
     jz .Ltk_close_buffer
@@ -123,6 +127,8 @@ FN track_close
     mov qword ptr [rip + track_config], 0
     mov dword ptr [rip + track_config_bytes], 0
     mov qword ptr [rip + track_start_trim], 0
+    mov qword ptr [rip + track_start_trim_ns], 0
+    mov dword ptr [rip + track_start_trim_ns_active], 0
     mov qword ptr [rip + track_end_trim], 0
     mov qword ptr [rip + track_end_trim_ns], 0
     mov dword ptr [rip + track_unit_scale], 0
@@ -545,6 +551,19 @@ FN track_finish
     div rcx
     mov [rip + track_end_frames], rax
 .Ltk_units_ready:
+    cmp dword ptr [rip + track_start_trim_ns_active], 0
+    je .Ltk_delay_ready
+    mov rax, [rip + track_start_trim_ns]
+    mov ecx, [rip + sample_rate]
+    mul rcx
+    add rax, 500000000
+    adc rdx, 0
+    mov ecx, 1000000000
+    cmp rdx, rcx
+    jae .Ltk_finish_bad
+    div rcx
+    mov [rip + track_start_trim], rax   # do not add OpusHead pre-skip twice
+.Ltk_delay_ready:
     mov rax, [rip + track_end_trim_ns]
     test rax, rax
     jz .Ltk_trim_ready
@@ -610,6 +629,12 @@ FN track_finish
     cmp rcx, rdi
     jne .Ltk_finish_bad
 .Ltk_finish_declared:
+    mov rcx, [rip + track_packets]
+    mov rdx, [rip + track_count]
+    mov r8, [rip + track_raw_total]
+    call track_cuts_finish
+    test eax, eax
+    jz .Ltk_finish_bad
     xor ecx, ecx
     call track_restart
     mov dword ptr [rip + track_active], 1
@@ -731,6 +756,16 @@ FN track_read
     xor eax, eax
 .Ltk_read_tail:
     mov [rip + track_available], eax
+    cmp dword ptr [rip + track_cut_count], 0
+    je .Ltk_read_cut_ready
+    mov r8d, eax
+    mov edx, [rip + track_used]
+    mov rcx, [rip + track_raw]
+    call track_cut_buffer
+    mov [rip + track_used], eax
+    mov [rip + track_available], edx
+    mov eax, edx
+.Ltk_read_cut_ready:
     cmp [rip + track_used], eax
     jbe .Ltk_read_next
     mov [rip + track_used], eax
@@ -789,8 +824,8 @@ FN track_seek
 .Ltk_seek_not_cancelled:
     cmp rcx, [rip + total_frames]
     cmova rcx, [rip + total_frames]
-    add rcx, [rip + track_start_trim]    # raw target
-    mov rdi, rcx
+    call track_cut_to_raw
+    mov rdi, rax
     # Last packet whose raw start is at or before the target.
     xor r8d, r8d
     mov r9, [rip + track_count]
@@ -911,9 +946,8 @@ FN track_seek
     add rax, [rip + track_packets]
     mov rax, [rax + TK_START]
 .Ltk_seek_position:
-    sub rax, [rip + track_start_trim]    # presented position of that packet
-    jae .Ltk_seek_return
-    xor eax, eax
+    mov rcx, rax
+    call track_cut_to_presented
 .Ltk_seek_return:
     add rsp, 32
     pop rdi

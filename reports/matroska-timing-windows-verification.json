@@ -1,0 +1,6462 @@
+{
+  "result": "passed",
+  "platform": "Windows-11-10.0.26300-SP0",
+  "ffmpeg": "ffmpeg version 8.0.1-essentials_build-www.gyan.dev Copyright (c) 2000-2025 the FFmpeg developers",
+  "scope": "CodecDelay and signed BlockGroup padding; normative whole-block intervals including lacing, global-delay intersection, compressed presentation seeks and empty output. Expected intervals are selected by an independent per-sample mask from unchanged unpadded PCM; codec DSP has separate conformance suites. Timestamp gap scheduling and arbitrary SeekPreRoll are not established.",
+  "checks": [
+    {
+      "file": "pcm-8000-delay.mka",
+      "reference": "pcm-8000-delay.mka.reference.f32",
+      "rate": 8000,
+      "channels": 2,
+      "description": {
+        "delay": 6500000
+      },
+      "model_frames": 1362,
+      "seek_base": null,
+      "start_trim": 52,
+      "removed_intervals": [],
+      "raw_frames": 1414,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 1362,
+        "seeks": 16,
+        "checks": 1174613,
+        "exact_float_words": 7940
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 39917,
+        "exact_float_words": 2724,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "f8805b503a42328b6d5a6eb664f3baedfe19d878b8e35ecb2b783f6d41453670"
+    },
+    {
+      "file": "pcm-8000-explicit-zero.mka",
+      "reference": "pcm-8000-explicit-zero.mka.reference.f32",
+      "rate": 8000,
+      "channels": 2,
+      "description": {
+        "delay": 0
+      },
+      "model_frames": 1414,
+      "seek_base": null,
+      "start_trim": 0,
+      "removed_intervals": [],
+      "raw_frames": 1414,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 1414,
+        "seeks": 16,
+        "checks": 1175360,
+        "exact_float_words": 8044
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 47617,
+        "exact_float_words": 2828,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "40700f6be46e4b9d675da46ecff5bfd7b97f03c96bfc9df897c54d336ccc0ea3"
+    },
+    {
+      "file": "pcm-8000-head.mka",
+      "reference": "pcm-8000-head.mka.reference.f32",
+      "rate": 8000,
+      "channels": 2,
+      "description": {
+        "padding": "negative"
+      },
+      "model_frames": 1413,
+      "seek_base": null,
+      "start_trim": 0,
+      "removed_intervals": [
+        [
+          0,
+          1
+        ]
+      ],
+      "raw_frames": 1414,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 1413,
+        "seeks": 16,
+        "checks": 1208073,
+        "exact_float_words": 8042
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 47623,
+        "exact_float_words": 2826,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "5ff5291883df2dca596c05bb657df98815e830373ee274686efc6ce401a379a0"
+    },
+    {
+      "file": "pcm-8000-middle.mka",
+      "reference": "pcm-8000-middle.mka.reference.f32",
+      "rate": 8000,
+      "channels": 2,
+      "description": {
+        "padding": "positive"
+      },
+      "model_frames": 1397,
+      "seek_base": null,
+      "start_trim": 0,
+      "removed_intervals": [
+        [
+          490,
+          507
+        ]
+      ],
+      "raw_frames": 1414,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 1397,
+        "seeks": 16,
+        "checks": 1175208,
+        "exact_float_words": 8010
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 47719,
+        "exact_float_words": 2794,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "8aba208a29d93647a1b33c761bb279343c131545cb7a2d88a4517de977047155"
+    },
+    {
+      "file": "pcm-8000-mixed.mka",
+      "reference": "pcm-8000-mixed.mka.reference.f32",
+      "rate": 8000,
+      "channels": 2,
+      "description": {
+        "delay": 6500000,
+        "padding": "mixed"
+      },
+      "model_frames": 547,
+      "seek_base": null,
+      "start_trim": 52,
+      "removed_intervals": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          8
+        ],
+        [
+          8,
+          21
+        ],
+        [
+          40,
+          58
+        ],
+        [
+          58,
+          59
+        ],
+        [
+          234,
+          251
+        ],
+        [
+          251,
+          507
+        ],
+        [
+          763,
+          1018
+        ],
+        [
+          1018,
+          1019
+        ],
+        [
+          1129,
+          1146
+        ],
+        [
+          1146,
+          1403
+        ],
+        [
+          1409,
+          1414
+        ]
+      ],
+      "raw_frames": 1414,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 547,
+        "seeks": 16,
+        "checks": 1159841,
+        "exact_float_words": 4116
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 18474986,
+        "exact_float_words": 1094,
+        "guarded_cases": 1742,
+        "protected_prefixes": 1229,
+        "mutations": 512
+      },
+      "sha256": "6cadad1d5c615d82f86d484cf94a4e8a0e26c7aa7a3fc4ed7411ca6652750395"
+    },
+    {
+      "file": "pcm-8000-xiph.mka",
+      "reference": "pcm-8000-xiph.mka.reference.f32",
+      "rate": 8000,
+      "channels": 2,
+      "description": {
+        "delay": 6500000,
+        "padding": "mixed",
+        "lacing": 1,
+        "unknown": true
+      },
+      "model_frames": 332,
+      "seek_base": null,
+      "start_trim": 52,
+      "removed_intervals": [
+        [
+          0,
+          1
+        ],
+        [
+          234,
+          251
+        ],
+        [
+          251,
+          1115
+        ],
+        [
+          1265,
+          1414
+        ]
+      ],
+      "raw_frames": 1414,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 332,
+        "seeks": 16,
+        "checks": 902950,
+        "exact_float_words": 2934
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 30073,
+        "exact_float_words": 664,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "ab945fc07db77043a009dec0e7c9797f64c0e0f52990295eaf5a45b971cbcdd2"
+    },
+    {
+      "file": "pcm-8000-ebml.mka",
+      "reference": "pcm-8000-ebml.mka.reference.f32",
+      "rate": 8000,
+      "channels": 2,
+      "description": {
+        "padding": "mixed",
+        "lacing": 3
+      },
+      "model_frames": 383,
+      "seek_base": null,
+      "start_trim": 0,
+      "removed_intervals": [
+        [
+          0,
+          1
+        ],
+        [
+          234,
+          251
+        ],
+        [
+          251,
+          1115
+        ],
+        [
+          1265,
+          1414
+        ]
+      ],
+      "raw_frames": 1414,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 383,
+        "seeks": 16,
+        "checks": 901934,
+        "exact_float_words": 3258
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 29767,
+        "exact_float_words": 766,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "1da1d601630c8857d82d8763c4472f05067b981a1e7329cfb0ec2afdcb8439ec"
+    },
+    {
+      "file": "pcm-8000-fixed.mka",
+      "reference": "pcm-8000-fixed.mka.reference.f32",
+      "rate": 8000,
+      "channels": 2,
+      "description": {
+        "padding": "mixed",
+        "lacing": 2
+      },
+      "model_frames": 566,
+      "seek_base": null,
+      "start_trim": 0,
+      "removed_intervals": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          8
+        ],
+        [
+          8,
+          21
+        ],
+        [
+          40,
+          58
+        ],
+        [
+          58,
+          59
+        ],
+        [
+          234,
+          251
+        ],
+        [
+          251,
+          507
+        ],
+        [
+          763,
+          1018
+        ],
+        [
+          1018,
+          1019
+        ],
+        [
+          1129,
+          1146
+        ],
+        [
+          1146,
+          1403
+        ],
+        [
+          1409,
+          1414
+        ]
+      ],
+      "raw_frames": 1414,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 566,
+        "seeks": 16,
+        "checks": 1159097,
+        "exact_float_words": 4274
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 36681,
+        "exact_float_words": 1132,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "2a4e6e8f88cb559b683700c37360ac013badd20dabaf3da6495871cf551fc5aa"
+    },
+    {
+      "file": "pcm-8000-round-below.mka",
+      "reference": "pcm-8000-round-below.mka.reference.f32",
+      "rate": 8000,
+      "channels": 2,
+      "description": {
+        "delay": 62499
+      },
+      "model_frames": 1414,
+      "seek_base": null,
+      "start_trim": 0,
+      "removed_intervals": [],
+      "raw_frames": 1414,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 1414,
+        "seeks": 16,
+        "checks": 1175360,
+        "exact_float_words": 8044
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 47617,
+        "exact_float_words": 2828,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "f0773497a4c6100c29d8bcba95c7aaa685c81d73e4b6e40d18ffc457d2bd6697"
+    },
+    {
+      "file": "pcm-8000-round-half.mka",
+      "reference": "pcm-8000-round-half.mka.reference.f32",
+      "rate": 8000,
+      "channels": 2,
+      "description": {
+        "delay": 62500
+      },
+      "model_frames": 1413,
+      "seek_base": null,
+      "start_trim": 1,
+      "removed_intervals": [],
+      "raw_frames": 1414,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 1413,
+        "seeks": 16,
+        "checks": 1208073,
+        "exact_float_words": 8042
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 47623,
+        "exact_float_words": 2826,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "f7f0be56038fab70bcfd7f36a5d7192920b9b65d4bb5baaa46627fce0fc4b088"
+    },
+    {
+      "file": "pcm-8000-round-above.mka",
+      "reference": "pcm-8000-round-above.mka.reference.f32",
+      "rate": 8000,
+      "channels": 2,
+      "description": {
+        "delay": 62501
+      },
+      "model_frames": 1413,
+      "seek_base": null,
+      "start_trim": 1,
+      "removed_intervals": [],
+      "raw_frames": 1414,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 1413,
+        "seeks": 16,
+        "checks": 1208073,
+        "exact_float_words": 8042
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 47623,
+        "exact_float_words": 2826,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "53a8aa48332d12464685838c0e96a5a05eb07bb66604af9f5e999feac4eb210b"
+    },
+    {
+      "file": "pcm-11025-delay.mka",
+      "reference": "pcm-11025-delay.mka.reference.f32",
+      "rate": 11025,
+      "channels": 2,
+      "description": {
+        "delay": 6500000
+      },
+      "model_frames": 1342,
+      "seek_base": null,
+      "start_trim": 72,
+      "removed_intervals": [],
+      "raw_frames": 1414,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 1342,
+        "seeks": 16,
+        "checks": 1175949,
+        "exact_float_words": 7900
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 40037,
+        "exact_float_words": 2684,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "c98c1ec3c347c2af0c0ae74b067522a57da56ffc3d92c61c6f32fc72b33a4a0d"
+    },
+    {
+      "file": "pcm-11025-explicit-zero.mka",
+      "reference": "pcm-11025-explicit-zero.mka.reference.f32",
+      "rate": 11025,
+      "channels": 2,
+      "description": {
+        "delay": 0
+      },
+      "model_frames": 1414,
+      "seek_base": null,
+      "start_trim": 0,
+      "removed_intervals": [],
+      "raw_frames": 1414,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 1414,
+        "seeks": 16,
+        "checks": 1175360,
+        "exact_float_words": 8044
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 47617,
+        "exact_float_words": 2828,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "da34642cf94b48bc1354dbc64c98605100334db14d25b0cfeabf095e9e20b58e"
+    },
+    {
+      "file": "pcm-11025-head.mka",
+      "reference": "pcm-11025-head.mka.reference.f32",
+      "rate": 11025,
+      "channels": 2,
+      "description": {
+        "padding": "negative"
+      },
+      "model_frames": 1413,
+      "seek_base": null,
+      "start_trim": 0,
+      "removed_intervals": [
+        [
+          0,
+          1
+        ]
+      ],
+      "raw_frames": 1414,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 1413,
+        "seeks": 16,
+        "checks": 1208073,
+        "exact_float_words": 8042
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 47623,
+        "exact_float_words": 2826,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "38e3188bba24ade79067586993fb998fa1776c5c5426b70de082660b59b553b9"
+    },
+    {
+      "file": "pcm-11025-middle.mka",
+      "reference": "pcm-11025-middle.mka.reference.f32",
+      "rate": 11025,
+      "channels": 2,
+      "description": {
+        "padding": "positive"
+      },
+      "model_frames": 1397,
+      "seek_base": null,
+      "start_trim": 0,
+      "removed_intervals": [
+        [
+          490,
+          507
+        ]
+      ],
+      "raw_frames": 1414,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 1397,
+        "seeks": 16,
+        "checks": 1175208,
+        "exact_float_words": 8010
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 47719,
+        "exact_float_words": 2794,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "5b17db592edcc07abb256020e374ca996d23ea01b468257fc435bd51ff4b94fb"
+    },
+    {
+      "file": "pcm-11025-mixed.mka",
+      "reference": "pcm-11025-mixed.mka.reference.f32",
+      "rate": 11025,
+      "channels": 2,
+      "description": {
+        "delay": 6500000,
+        "padding": "mixed"
+      },
+      "model_frames": 534,
+      "seek_base": null,
+      "start_trim": 72,
+      "removed_intervals": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          8
+        ],
+        [
+          8,
+          21
+        ],
+        [
+          40,
+          58
+        ],
+        [
+          58,
+          59
+        ],
+        [
+          234,
+          251
+        ],
+        [
+          251,
+          507
+        ],
+        [
+          763,
+          1018
+        ],
+        [
+          1018,
+          1019
+        ],
+        [
+          1129,
+          1146
+        ],
+        [
+          1146,
+          1403
+        ],
+        [
+          1409,
+          1414
+        ]
+      ],
+      "raw_frames": 1414,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 534,
+        "seeks": 16,
+        "checks": 1159737,
+        "exact_float_words": 4006
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 36873,
+        "exact_float_words": 1068,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "86f53a86a643ed8944a38cb7a3729481cd005d5900d248c2cc84c8aa9615fc26"
+    },
+    {
+      "file": "pcm-11025-xiph.mka",
+      "reference": "pcm-11025-xiph.mka.reference.f32",
+      "rate": 11025,
+      "channels": 2,
+      "description": {
+        "delay": 6500000,
+        "padding": "mixed",
+        "lacing": 1,
+        "unknown": true
+      },
+      "model_frames": 312,
+      "seek_base": null,
+      "start_trim": 72,
+      "removed_intervals": [
+        [
+          0,
+          1
+        ],
+        [
+          234,
+          251
+        ],
+        [
+          251,
+          1115
+        ],
+        [
+          1265,
+          1414
+        ]
+      ],
+      "raw_frames": 1414,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 312,
+        "seeks": 16,
+        "checks": 903062,
+        "exact_float_words": 2766
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 30193,
+        "exact_float_words": 624,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "4b84b30e1a15c5e564fb76051a921b3607a68ba0f65e0559b7c87666056d694d"
+    },
+    {
+      "file": "pcm-11025-ebml.mka",
+      "reference": "pcm-11025-ebml.mka.reference.f32",
+      "rate": 11025,
+      "channels": 2,
+      "description": {
+        "padding": "mixed",
+        "lacing": 3
+      },
+      "model_frames": 383,
+      "seek_base": null,
+      "start_trim": 0,
+      "removed_intervals": [
+        [
+          0,
+          1
+        ],
+        [
+          234,
+          251
+        ],
+        [
+          251,
+          1115
+        ],
+        [
+          1265,
+          1414
+        ]
+      ],
+      "raw_frames": 1414,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 383,
+        "seeks": 16,
+        "checks": 901934,
+        "exact_float_words": 3258
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 29767,
+        "exact_float_words": 766,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "282558d45360d533fc82bb1b091c8c272c387bc882871b53fbb4bf75a196146b"
+    },
+    {
+      "file": "pcm-11025-fixed.mka",
+      "reference": "pcm-11025-fixed.mka.reference.f32",
+      "rate": 11025,
+      "channels": 2,
+      "description": {
+        "padding": "mixed",
+        "lacing": 2
+      },
+      "model_frames": 566,
+      "seek_base": null,
+      "start_trim": 0,
+      "removed_intervals": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          8
+        ],
+        [
+          8,
+          21
+        ],
+        [
+          40,
+          58
+        ],
+        [
+          58,
+          59
+        ],
+        [
+          234,
+          251
+        ],
+        [
+          251,
+          507
+        ],
+        [
+          763,
+          1018
+        ],
+        [
+          1018,
+          1019
+        ],
+        [
+          1129,
+          1146
+        ],
+        [
+          1146,
+          1403
+        ],
+        [
+          1409,
+          1414
+        ]
+      ],
+      "raw_frames": 1414,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 566,
+        "seeks": 16,
+        "checks": 1159097,
+        "exact_float_words": 4274
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 36681,
+        "exact_float_words": 1132,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "8f3a61347ebb8957f629bcaa92289247e8c375e4d349b3f1d0bcca07a436d7fa"
+    },
+    {
+      "file": "pcm-44100-delay.mka",
+      "reference": "pcm-44100-delay.mka.reference.f32",
+      "rate": 44100,
+      "channels": 2,
+      "description": {
+        "delay": 6500000
+      },
+      "model_frames": 1127,
+      "seek_base": null,
+      "start_trim": 287,
+      "removed_intervals": [],
+      "raw_frames": 1414,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 1127,
+        "seeks": 16,
+        "checks": 1171597,
+        "exact_float_words": 7428
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 41327,
+        "exact_float_words": 2254,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "b0f0eee202d27d83df507e90c7f19e77500f19e81ef1769eb759413afe8ea448"
+    },
+    {
+      "file": "pcm-44100-explicit-zero.mka",
+      "reference": "pcm-44100-explicit-zero.mka.reference.f32",
+      "rate": 44100,
+      "channels": 2,
+      "description": {
+        "delay": 0
+      },
+      "model_frames": 1414,
+      "seek_base": null,
+      "start_trim": 0,
+      "removed_intervals": [],
+      "raw_frames": 1414,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 1414,
+        "seeks": 16,
+        "checks": 1175360,
+        "exact_float_words": 8044
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 47617,
+        "exact_float_words": 2828,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "7799e4a88805b85c05e54ea3c108b956cca7f73e66478b87fb41e053bfdf3365"
+    },
+    {
+      "file": "pcm-44100-head.mka",
+      "reference": "pcm-44100-head.mka.reference.f32",
+      "rate": 44100,
+      "channels": 2,
+      "description": {
+        "padding": "negative"
+      },
+      "model_frames": 1413,
+      "seek_base": null,
+      "start_trim": 0,
+      "removed_intervals": [
+        [
+          0,
+          1
+        ]
+      ],
+      "raw_frames": 1414,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 1413,
+        "seeks": 16,
+        "checks": 1208073,
+        "exact_float_words": 8042
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 47623,
+        "exact_float_words": 2826,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "5cde86bcf7f4a110cf050ae6a8096c073345d4c7789630b8eb2a4ec21a915873"
+    },
+    {
+      "file": "pcm-44100-middle.mka",
+      "reference": "pcm-44100-middle.mka.reference.f32",
+      "rate": 44100,
+      "channels": 2,
+      "description": {
+        "padding": "positive"
+      },
+      "model_frames": 1397,
+      "seek_base": null,
+      "start_trim": 0,
+      "removed_intervals": [
+        [
+          490,
+          507
+        ]
+      ],
+      "raw_frames": 1414,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 1397,
+        "seeks": 16,
+        "checks": 1175208,
+        "exact_float_words": 8010
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 47719,
+        "exact_float_words": 2794,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "73002760adde4fbd48dc6417e398bc1c48232f8a09d5491df7b2ee27adacb54b"
+    },
+    {
+      "file": "pcm-44100-mixed.mka",
+      "reference": "pcm-44100-mixed.mka.reference.f32",
+      "rate": 44100,
+      "channels": 2,
+      "description": {
+        "delay": 6500000,
+        "padding": "mixed"
+      },
+      "model_frames": 372,
+      "seek_base": null,
+      "start_trim": 287,
+      "removed_intervals": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          8
+        ],
+        [
+          8,
+          21
+        ],
+        [
+          40,
+          58
+        ],
+        [
+          58,
+          59
+        ],
+        [
+          234,
+          251
+        ],
+        [
+          251,
+          507
+        ],
+        [
+          763,
+          1018
+        ],
+        [
+          1018,
+          1019
+        ],
+        [
+          1129,
+          1146
+        ],
+        [
+          1146,
+          1403
+        ],
+        [
+          1409,
+          1414
+        ]
+      ],
+      "raw_frames": 1414,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 372,
+        "seeks": 16,
+        "checks": 1129333,
+        "exact_float_words": 3186
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 29833,
+        "exact_float_words": 744,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "23cfc8c0cfe1d9b8e149ea8cc0262505dbb41efd1e829f629cc26c17db768279"
+    },
+    {
+      "file": "pcm-44100-xiph.mka",
+      "reference": "pcm-44100-xiph.mka.reference.f32",
+      "rate": 44100,
+      "channels": 2,
+      "description": {
+        "delay": 6500000,
+        "padding": "mixed",
+        "lacing": 1,
+        "unknown": true
+      },
+      "model_frames": 150,
+      "seek_base": null,
+      "start_trim": 287,
+      "removed_intervals": [
+        [
+          0,
+          1
+        ],
+        [
+          234,
+          251
+        ],
+        [
+          251,
+          1115
+        ],
+        [
+          1265,
+          1414
+        ]
+      ],
+      "raw_frames": 1414,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 150,
+        "seeks": 16,
+        "checks": 909150,
+        "exact_float_words": 1362
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 31165,
+        "exact_float_words": 300,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "600ab9bb5d695f07a7b160821e9f48533912ed6882bcd73680e67a60c1d3e11f"
+    },
+    {
+      "file": "pcm-44100-ebml.mka",
+      "reference": "pcm-44100-ebml.mka.reference.f32",
+      "rate": 44100,
+      "channels": 2,
+      "description": {
+        "padding": "mixed",
+        "lacing": 3
+      },
+      "model_frames": 383,
+      "seek_base": null,
+      "start_trim": 0,
+      "removed_intervals": [
+        [
+          0,
+          1
+        ],
+        [
+          234,
+          251
+        ],
+        [
+          251,
+          1115
+        ],
+        [
+          1265,
+          1414
+        ]
+      ],
+      "raw_frames": 1414,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 383,
+        "seeks": 16,
+        "checks": 901934,
+        "exact_float_words": 3258
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 29767,
+        "exact_float_words": 766,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "aefb0522da522caa7666a5ad40665666be7327704d0e8f1b85b4dfad27cfd902"
+    },
+    {
+      "file": "pcm-44100-fixed.mka",
+      "reference": "pcm-44100-fixed.mka.reference.f32",
+      "rate": 44100,
+      "channels": 2,
+      "description": {
+        "padding": "mixed",
+        "lacing": 2
+      },
+      "model_frames": 566,
+      "seek_base": null,
+      "start_trim": 0,
+      "removed_intervals": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          8
+        ],
+        [
+          8,
+          21
+        ],
+        [
+          40,
+          58
+        ],
+        [
+          58,
+          59
+        ],
+        [
+          234,
+          251
+        ],
+        [
+          251,
+          507
+        ],
+        [
+          763,
+          1018
+        ],
+        [
+          1018,
+          1019
+        ],
+        [
+          1129,
+          1146
+        ],
+        [
+          1146,
+          1403
+        ],
+        [
+          1409,
+          1414
+        ]
+      ],
+      "raw_frames": 1414,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 566,
+        "seeks": 16,
+        "checks": 1159097,
+        "exact_float_words": 4274
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 36681,
+        "exact_float_words": 1132,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "075c872fa7d21db971ab4d084c7b839f01e65105f6c9072698030841c5e021ad"
+    },
+    {
+      "file": "pcm-48000-delay.mka",
+      "reference": "pcm-48000-delay.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "delay": 6500000
+      },
+      "model_frames": 1102,
+      "seek_base": null,
+      "start_trim": 312,
+      "removed_intervals": [],
+      "raw_frames": 1414,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 1102,
+        "seeks": 16,
+        "checks": 1171261,
+        "exact_float_words": 7352
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 41477,
+        "exact_float_words": 2204,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "bdb6a9b3488bb2ac898c6d1c1cde30d7f2b1694cacacc120282544f66a281945"
+    },
+    {
+      "file": "pcm-48000-explicit-zero.mka",
+      "reference": "pcm-48000-explicit-zero.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "delay": 0
+      },
+      "model_frames": 1414,
+      "seek_base": null,
+      "start_trim": 0,
+      "removed_intervals": [],
+      "raw_frames": 1414,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 1414,
+        "seeks": 16,
+        "checks": 1175360,
+        "exact_float_words": 8044
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 47617,
+        "exact_float_words": 2828,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "adc66957056da6a514515bcffc4b249a8562be175c33d09facc7144f07782994"
+    },
+    {
+      "file": "pcm-48000-head.mka",
+      "reference": "pcm-48000-head.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "padding": "negative"
+      },
+      "model_frames": 1413,
+      "seek_base": null,
+      "start_trim": 0,
+      "removed_intervals": [
+        [
+          0,
+          1
+        ]
+      ],
+      "raw_frames": 1414,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 1413,
+        "seeks": 16,
+        "checks": 1208073,
+        "exact_float_words": 8042
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 47623,
+        "exact_float_words": 2826,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "797ef4089c52ffe3189deae0a13fa1eea118fb9d611511801e13a162ec6a9c08"
+    },
+    {
+      "file": "pcm-48000-middle.mka",
+      "reference": "pcm-48000-middle.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "padding": "positive"
+      },
+      "model_frames": 1397,
+      "seek_base": null,
+      "start_trim": 0,
+      "removed_intervals": [
+        [
+          490,
+          507
+        ]
+      ],
+      "raw_frames": 1414,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 1397,
+        "seeks": 16,
+        "checks": 1175208,
+        "exact_float_words": 8010
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 47719,
+        "exact_float_words": 2794,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "95670b61b492bb33a5cd7ae3c566be824046f7d803bce0902c3038d56d99d54e"
+    },
+    {
+      "file": "pcm-48000-mixed.mka",
+      "reference": "pcm-48000-mixed.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "delay": 6500000,
+        "padding": "mixed"
+      },
+      "model_frames": 372,
+      "seek_base": null,
+      "start_trim": 312,
+      "removed_intervals": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          8
+        ],
+        [
+          8,
+          21
+        ],
+        [
+          40,
+          58
+        ],
+        [
+          58,
+          59
+        ],
+        [
+          234,
+          251
+        ],
+        [
+          251,
+          507
+        ],
+        [
+          763,
+          1018
+        ],
+        [
+          1018,
+          1019
+        ],
+        [
+          1129,
+          1146
+        ],
+        [
+          1146,
+          1403
+        ],
+        [
+          1409,
+          1414
+        ]
+      ],
+      "raw_frames": 1414,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 372,
+        "seeks": 16,
+        "checks": 1129333,
+        "exact_float_words": 3186
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 29833,
+        "exact_float_words": 744,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "de9567e08dfc22a9d55d984df70700970b1f697b4fe63ff2610a5d270e5379df"
+    },
+    {
+      "file": "pcm-48000-xiph.mka",
+      "reference": "pcm-48000-xiph.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "delay": 6500000,
+        "padding": "mixed",
+        "lacing": 1,
+        "unknown": true
+      },
+      "model_frames": 150,
+      "seek_base": null,
+      "start_trim": 312,
+      "removed_intervals": [
+        [
+          0,
+          1
+        ],
+        [
+          234,
+          251
+        ],
+        [
+          251,
+          1115
+        ],
+        [
+          1265,
+          1414
+        ]
+      ],
+      "raw_frames": 1414,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 150,
+        "seeks": 16,
+        "checks": 909150,
+        "exact_float_words": 1362
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 31165,
+        "exact_float_words": 300,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "91b31d0e9accb9d3d8a3bc273c75bb1e1cfdec984047c23dc805a141fad1318d"
+    },
+    {
+      "file": "pcm-48000-ebml.mka",
+      "reference": "pcm-48000-ebml.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "padding": "mixed",
+        "lacing": 3
+      },
+      "model_frames": 383,
+      "seek_base": null,
+      "start_trim": 0,
+      "removed_intervals": [
+        [
+          0,
+          1
+        ],
+        [
+          234,
+          251
+        ],
+        [
+          251,
+          1115
+        ],
+        [
+          1265,
+          1414
+        ]
+      ],
+      "raw_frames": 1414,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 383,
+        "seeks": 16,
+        "checks": 901934,
+        "exact_float_words": 3258
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 29767,
+        "exact_float_words": 766,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "c67918e3ae249395818ed7ff76cb772f4141259d363dfd44cc2cdf9bcb742d15"
+    },
+    {
+      "file": "pcm-48000-fixed.mka",
+      "reference": "pcm-48000-fixed.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "padding": "mixed",
+        "lacing": 2
+      },
+      "model_frames": 566,
+      "seek_base": null,
+      "start_trim": 0,
+      "removed_intervals": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          8
+        ],
+        [
+          8,
+          21
+        ],
+        [
+          40,
+          58
+        ],
+        [
+          58,
+          59
+        ],
+        [
+          234,
+          251
+        ],
+        [
+          251,
+          507
+        ],
+        [
+          763,
+          1018
+        ],
+        [
+          1018,
+          1019
+        ],
+        [
+          1129,
+          1146
+        ],
+        [
+          1146,
+          1403
+        ],
+        [
+          1409,
+          1414
+        ]
+      ],
+      "raw_frames": 1414,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 566,
+        "seeks": 16,
+        "checks": 1159097,
+        "exact_float_words": 4274
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 36681,
+        "exact_float_words": 1132,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "133ea26652f7bfd86ee89747ac88f68dcbe21627575cab6c0f17f86451c63d25"
+    },
+    {
+      "file": "pcm-96000-delay.mka",
+      "reference": "pcm-96000-delay.mka.reference.f32",
+      "rate": 96000,
+      "channels": 2,
+      "description": {
+        "delay": 6500000
+      },
+      "model_frames": 790,
+      "seek_base": null,
+      "start_trim": 624,
+      "removed_intervals": [],
+      "raw_frames": 1414,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 790,
+        "seeks": 16,
+        "checks": 1150185,
+        "exact_float_words": 6140
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 35337,
+        "exact_float_words": 1580,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "c901f206442b7a3b03613e93326e38b5a557cc7430184926c94163ea8c79d79d"
+    },
+    {
+      "file": "pcm-96000-explicit-zero.mka",
+      "reference": "pcm-96000-explicit-zero.mka.reference.f32",
+      "rate": 96000,
+      "channels": 2,
+      "description": {
+        "delay": 0
+      },
+      "model_frames": 1414,
+      "seek_base": null,
+      "start_trim": 0,
+      "removed_intervals": [],
+      "raw_frames": 1414,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 1414,
+        "seeks": 16,
+        "checks": 1175360,
+        "exact_float_words": 8044
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 47617,
+        "exact_float_words": 2828,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "2de002b5f04a33387df6a883430edcbfdced18e54c539215c0491bb755fc1b28"
+    },
+    {
+      "file": "pcm-96000-head.mka",
+      "reference": "pcm-96000-head.mka.reference.f32",
+      "rate": 96000,
+      "channels": 2,
+      "description": {
+        "padding": "negative"
+      },
+      "model_frames": 1413,
+      "seek_base": null,
+      "start_trim": 0,
+      "removed_intervals": [
+        [
+          0,
+          1
+        ]
+      ],
+      "raw_frames": 1414,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 1413,
+        "seeks": 16,
+        "checks": 1208073,
+        "exact_float_words": 8042
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 47623,
+        "exact_float_words": 2826,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "f1668ad81da9b9de21e381aaa279b56d2ee9bec412fb46e0e11fc427822fa842"
+    },
+    {
+      "file": "pcm-96000-middle.mka",
+      "reference": "pcm-96000-middle.mka.reference.f32",
+      "rate": 96000,
+      "channels": 2,
+      "description": {
+        "padding": "positive"
+      },
+      "model_frames": 1397,
+      "seek_base": null,
+      "start_trim": 0,
+      "removed_intervals": [
+        [
+          490,
+          507
+        ]
+      ],
+      "raw_frames": 1414,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 1397,
+        "seeks": 16,
+        "checks": 1175208,
+        "exact_float_words": 8010
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 47719,
+        "exact_float_words": 2794,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "7d989b20571bfb714fa608853a3482b1f871e18b054d57599d89606e8c8cd2f2"
+    },
+    {
+      "file": "pcm-96000-mixed.mka",
+      "reference": "pcm-96000-mixed.mka.reference.f32",
+      "rate": 96000,
+      "channels": 2,
+      "description": {
+        "delay": 6500000,
+        "padding": "mixed"
+      },
+      "model_frames": 255,
+      "seek_base": null,
+      "start_trim": 624,
+      "removed_intervals": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          8
+        ],
+        [
+          8,
+          21
+        ],
+        [
+          40,
+          58
+        ],
+        [
+          58,
+          59
+        ],
+        [
+          234,
+          251
+        ],
+        [
+          251,
+          507
+        ],
+        [
+          763,
+          1018
+        ],
+        [
+          1018,
+          1019
+        ],
+        [
+          1129,
+          1146
+        ],
+        [
+          1146,
+          1403
+        ],
+        [
+          1409,
+          1414
+        ]
+      ],
+      "raw_frames": 1414,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 255,
+        "seeks": 16,
+        "checks": 1133693,
+        "exact_float_words": 2292
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 30535,
+        "exact_float_words": 510,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "24838427b61bd4352e93cb8e91e3570103a84fa451429bd0fe08587387e9e6d7"
+    },
+    {
+      "file": "pcm-96000-xiph.mka",
+      "reference": "pcm-96000-xiph.mka.reference.f32",
+      "rate": 96000,
+      "channels": 2,
+      "description": {
+        "delay": 6500000,
+        "padding": "mixed",
+        "lacing": 1,
+        "unknown": true
+      },
+      "model_frames": 150,
+      "seek_base": null,
+      "start_trim": 624,
+      "removed_intervals": [
+        [
+          0,
+          1
+        ],
+        [
+          234,
+          251
+        ],
+        [
+          251,
+          1115
+        ],
+        [
+          1265,
+          1414
+        ]
+      ],
+      "raw_frames": 1414,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 150,
+        "seeks": 16,
+        "checks": 909150,
+        "exact_float_words": 1362
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 31165,
+        "exact_float_words": 300,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "71e24ed3f75c75f1111b129cdfba73cc4a69fe5ffaadc1525a9ff36c11cd63d2"
+    },
+    {
+      "file": "pcm-96000-ebml.mka",
+      "reference": "pcm-96000-ebml.mka.reference.f32",
+      "rate": 96000,
+      "channels": 2,
+      "description": {
+        "padding": "mixed",
+        "lacing": 3
+      },
+      "model_frames": 383,
+      "seek_base": null,
+      "start_trim": 0,
+      "removed_intervals": [
+        [
+          0,
+          1
+        ],
+        [
+          234,
+          251
+        ],
+        [
+          251,
+          1115
+        ],
+        [
+          1265,
+          1414
+        ]
+      ],
+      "raw_frames": 1414,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 383,
+        "seeks": 16,
+        "checks": 901934,
+        "exact_float_words": 3258
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 29767,
+        "exact_float_words": 766,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "aaf1c195d289b232f0db3e6d734ba5b824750b7480a69dd2f7c4fed852dda999"
+    },
+    {
+      "file": "pcm-96000-fixed.mka",
+      "reference": "pcm-96000-fixed.mka.reference.f32",
+      "rate": 96000,
+      "channels": 2,
+      "description": {
+        "padding": "mixed",
+        "lacing": 2
+      },
+      "model_frames": 566,
+      "seek_base": null,
+      "start_trim": 0,
+      "removed_intervals": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          8
+        ],
+        [
+          8,
+          21
+        ],
+        [
+          40,
+          58
+        ],
+        [
+          58,
+          59
+        ],
+        [
+          234,
+          251
+        ],
+        [
+          251,
+          507
+        ],
+        [
+          763,
+          1018
+        ],
+        [
+          1018,
+          1019
+        ],
+        [
+          1129,
+          1146
+        ],
+        [
+          1146,
+          1403
+        ],
+        [
+          1409,
+          1414
+        ]
+      ],
+      "raw_frames": 1414,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 566,
+        "seeks": 16,
+        "checks": 1159097,
+        "exact_float_words": 4274
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 36681,
+        "exact_float_words": 1132,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "1611ed9788f9efd6da217de52e401fff519cf2993fe9aa85a6f3a77d88e3cc37"
+    },
+    {
+      "file": "pcm-192000-delay.mka",
+      "reference": "pcm-192000-delay.mka.reference.f32",
+      "rate": 192000,
+      "channels": 2,
+      "description": {
+        "delay": 6500000
+      },
+      "model_frames": 166,
+      "seek_base": null,
+      "start_trim": 1248,
+      "removed_intervals": [],
+      "raw_frames": 1414,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 166,
+        "seeks": 16,
+        "checks": 1137021,
+        "exact_float_words": 1528
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 31069,
+        "exact_float_words": 332,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "5ecefeee9e638fa8b2173185bb8795a73abb1ffd60fc0304e61d7613f7cdc3db"
+    },
+    {
+      "file": "pcm-192000-explicit-zero.mka",
+      "reference": "pcm-192000-explicit-zero.mka.reference.f32",
+      "rate": 192000,
+      "channels": 2,
+      "description": {
+        "delay": 0
+      },
+      "model_frames": 1414,
+      "seek_base": null,
+      "start_trim": 0,
+      "removed_intervals": [],
+      "raw_frames": 1414,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 1414,
+        "seeks": 16,
+        "checks": 1175360,
+        "exact_float_words": 8044
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 47617,
+        "exact_float_words": 2828,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "fec2be4c249567ad062eebc1ba7379a9ae1a78b7cb6dcd73c676d20aa905053e"
+    },
+    {
+      "file": "pcm-192000-head.mka",
+      "reference": "pcm-192000-head.mka.reference.f32",
+      "rate": 192000,
+      "channels": 2,
+      "description": {
+        "padding": "negative"
+      },
+      "model_frames": 1413,
+      "seek_base": null,
+      "start_trim": 0,
+      "removed_intervals": [
+        [
+          0,
+          1
+        ]
+      ],
+      "raw_frames": 1414,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 1413,
+        "seeks": 16,
+        "checks": 1208073,
+        "exact_float_words": 8042
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 47623,
+        "exact_float_words": 2826,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "9f1dd8f6edecd18e95b38fdf7b5de423a071351a1d980cfb57ad7a352e066c9c"
+    },
+    {
+      "file": "pcm-192000-middle.mka",
+      "reference": "pcm-192000-middle.mka.reference.f32",
+      "rate": 192000,
+      "channels": 2,
+      "description": {
+        "padding": "positive"
+      },
+      "model_frames": 1397,
+      "seek_base": null,
+      "start_trim": 0,
+      "removed_intervals": [
+        [
+          490,
+          507
+        ]
+      ],
+      "raw_frames": 1414,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 1397,
+        "seeks": 16,
+        "checks": 1175208,
+        "exact_float_words": 8010
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 47719,
+        "exact_float_words": 2794,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "7b6a74b0f26ee9e77fe6faedbe6cee9e8f8e81bbfbdeca62579981ab81eac455"
+    },
+    {
+      "file": "pcm-192000-mixed.mka",
+      "reference": "pcm-192000-mixed.mka.reference.f32",
+      "rate": 192000,
+      "channels": 2,
+      "description": {
+        "delay": 6500000,
+        "padding": "mixed"
+      },
+      "model_frames": 6,
+      "seek_base": null,
+      "start_trim": 1248,
+      "removed_intervals": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          8
+        ],
+        [
+          8,
+          21
+        ],
+        [
+          40,
+          58
+        ],
+        [
+          58,
+          59
+        ],
+        [
+          234,
+          251
+        ],
+        [
+          251,
+          507
+        ],
+        [
+          763,
+          1018
+        ],
+        [
+          1018,
+          1019
+        ],
+        [
+          1129,
+          1146
+        ],
+        [
+          1146,
+          1403
+        ],
+        [
+          1409,
+          1414
+        ]
+      ],
+      "raw_frames": 1414,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 6,
+        "seeks": 16,
+        "checks": 1113465,
+        "exact_float_words": 46
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 24017,
+        "exact_float_words": 12,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "0b439abbf5fa247c1faa755ed948b64bd8b0422953ce911c5f12db5810fc309d"
+    },
+    {
+      "file": "pcm-192000-xiph.mka",
+      "reference": "pcm-192000-xiph.mka.reference.f32",
+      "rate": 192000,
+      "channels": 2,
+      "description": {
+        "delay": 6500000,
+        "padding": "mixed",
+        "lacing": 1,
+        "unknown": true
+      },
+      "model_frames": 17,
+      "seek_base": null,
+      "start_trim": 1248,
+      "removed_intervals": [
+        [
+          0,
+          1
+        ],
+        [
+          234,
+          251
+        ],
+        [
+          251,
+          1115
+        ],
+        [
+          1265,
+          1414
+        ]
+      ],
+      "raw_frames": 1414,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 17,
+        "seeks": 16,
+        "checks": 785727,
+        "exact_float_words": 140
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 23951,
+        "exact_float_words": 34,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "1bc240a7c713994073df405a1ab1b80de958071a15b54c3064929201faed8a62"
+    },
+    {
+      "file": "pcm-192000-ebml.mka",
+      "reference": "pcm-192000-ebml.mka.reference.f32",
+      "rate": 192000,
+      "channels": 2,
+      "description": {
+        "padding": "mixed",
+        "lacing": 3
+      },
+      "model_frames": 383,
+      "seek_base": null,
+      "start_trim": 0,
+      "removed_intervals": [
+        [
+          0,
+          1
+        ],
+        [
+          234,
+          251
+        ],
+        [
+          251,
+          1115
+        ],
+        [
+          1265,
+          1414
+        ]
+      ],
+      "raw_frames": 1414,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 383,
+        "seeks": 16,
+        "checks": 901934,
+        "exact_float_words": 3258
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 29767,
+        "exact_float_words": 766,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "23efeb49f78691029e60b189202ccd686b3156b597f17e66a780dbb87f2f0d8a"
+    },
+    {
+      "file": "pcm-192000-fixed.mka",
+      "reference": "pcm-192000-fixed.mka.reference.f32",
+      "rate": 192000,
+      "channels": 2,
+      "description": {
+        "padding": "mixed",
+        "lacing": 2
+      },
+      "model_frames": 566,
+      "seek_base": null,
+      "start_trim": 0,
+      "removed_intervals": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          8
+        ],
+        [
+          8,
+          21
+        ],
+        [
+          40,
+          58
+        ],
+        [
+          58,
+          59
+        ],
+        [
+          234,
+          251
+        ],
+        [
+          251,
+          507
+        ],
+        [
+          763,
+          1018
+        ],
+        [
+          1018,
+          1019
+        ],
+        [
+          1129,
+          1146
+        ],
+        [
+          1146,
+          1403
+        ],
+        [
+          1409,
+          1414
+        ]
+      ],
+      "raw_frames": 1414,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 566,
+        "seeks": 16,
+        "checks": 1159097,
+        "exact_float_words": 4274
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 36681,
+        "exact_float_words": 1132,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "0c0a1f25927887859fa41791df5bd689358251525c445e6d7ea8a66f94208669"
+    },
+    {
+      "file": "flac-delay.mka",
+      "reference": "flac-delay.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "delay": 6500000
+      },
+      "model_frames": 25128,
+      "seek_base": null,
+      "start_trim": 312,
+      "removed_intervals": [],
+      "raw_frames": 25440,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 25128,
+        "seeks": 16,
+        "checks": 1260521,
+        "exact_float_words": 57278
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 265873,
+        "exact_float_words": 50256,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "939622287c38f85d2b91e8114784a4eac4ea15859b23235446093935cfc0c9ad"
+    },
+    {
+      "file": "flac-explicit-zero.mka",
+      "reference": "flac-explicit-zero.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "delay": 0
+      },
+      "model_frames": 25440,
+      "seek_base": null,
+      "start_trim": 0,
+      "removed_intervals": [],
+      "raw_frames": 25440,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 25440,
+        "seeks": 16,
+        "checks": 1260937,
+        "exact_float_words": 57902
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 288037,
+        "exact_float_words": 50880,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "0225c72edfa9247d0acdca22fefe35746fbf079767f148ba5f5a0e8836bdf0f3"
+    },
+    {
+      "file": "flac-head.mka",
+      "reference": "flac-head.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "padding": "negative"
+      },
+      "model_frames": 25423,
+      "seek_base": null,
+      "start_trim": 0,
+      "removed_intervals": [
+        [
+          0,
+          17
+        ]
+      ],
+      "raw_frames": 25440,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 25423,
+        "seeks": 16,
+        "checks": 1260921,
+        "exact_float_words": 57868
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 288139,
+        "exact_float_words": 50846,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "30a168f4499cd8efcf9980062f69d9359c2b4bfb1bb5ff6cde2bb00686a2e759"
+    },
+    {
+      "file": "flac-middle.mka",
+      "reference": "flac-middle.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "padding": "positive"
+      },
+      "model_frames": 25423,
+      "seek_base": null,
+      "start_trim": 0,
+      "removed_intervals": [
+        [
+          18415,
+          18432
+        ]
+      ],
+      "raw_frames": 25440,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 25423,
+        "seeks": 16,
+        "checks": 1261193,
+        "exact_float_words": 57868
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 288139,
+        "exact_float_words": 50846,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "1e6d03b7b5cdf1948529d57f2b6e28807a7d2b79d9ed1b47c5b8cbd97641b70b"
+    },
+    {
+      "file": "flac-mixed.mka",
+      "reference": "flac-mixed.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "delay": 6500000,
+        "padding": "mixed"
+      },
+      "model_frames": 18181,
+      "seek_base": null,
+      "start_trim": 312,
+      "removed_intervals": [
+        [
+          0,
+          1
+        ],
+        [
+          9199,
+          9216
+        ],
+        [
+          9216,
+          13824
+        ],
+        [
+          16128,
+          18432
+        ],
+        [
+          18432,
+          18433
+        ],
+        [
+          25423,
+          25440
+        ]
+      ],
+      "raw_frames": 25440,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 18181,
+        "seeks": 16,
+        "checks": 1264509,
+        "exact_float_words": 43384
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 195387,
+        "exact_float_words": 36362,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "0206b1d03350c464cf3c9fe530b0f34af7e4a7fc1360eccef26711395f5e8a14"
+    },
+    {
+      "file": "flac-xiph.mka",
+      "reference": "flac-xiph.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "delay": 6500000,
+        "padding": "mixed",
+        "lacing": 1,
+        "unknown": true
+      },
+      "model_frames": 25111,
+      "seek_base": null,
+      "start_trim": 312,
+      "removed_intervals": [
+        [
+          0,
+          1
+        ],
+        [
+          25423,
+          25440
+        ]
+      ],
+      "raw_frames": 25440,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 25111,
+        "seeks": 16,
+        "checks": 1261321,
+        "exact_float_words": 57244
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 265975,
+        "exact_float_words": 50222,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "f296012b20d05ed9966b0b773ec30a1bc67253d1f79cba82826d242e6ec5890a"
+    },
+    {
+      "file": "flac-ebml.mka",
+      "reference": "flac-ebml.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "padding": "mixed",
+        "lacing": 3
+      },
+      "model_frames": 25422,
+      "seek_base": null,
+      "start_trim": 0,
+      "removed_intervals": [
+        [
+          0,
+          1
+        ],
+        [
+          25423,
+          25440
+        ]
+      ],
+      "raw_frames": 25440,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 25422,
+        "seeks": 16,
+        "checks": 1261729,
+        "exact_float_words": 57866
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 288145,
+        "exact_float_words": 50844,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "7a5ba0c8a5e143da67541c121d6e21dd72ca85c3386ab694bc1e065030a7b630"
+    },
+    {
+      "file": "flac-fixed.mka",
+      "reference": "flac-fixed.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "padding": "mixed",
+        "lacing": 2
+      },
+      "model_frames": 18492,
+      "seek_base": null,
+      "start_trim": 0,
+      "removed_intervals": [
+        [
+          0,
+          1
+        ],
+        [
+          9199,
+          9216
+        ],
+        [
+          9216,
+          13824
+        ],
+        [
+          16128,
+          18432
+        ],
+        [
+          18432,
+          18433
+        ],
+        [
+          25423,
+          25440
+        ]
+      ],
+      "raw_frames": 25440,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 18492,
+        "seeks": 16,
+        "checks": 1264917,
+        "exact_float_words": 44006
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 193521,
+        "exact_float_words": 36984,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "16f5765f49233d79f44d308558b074f04a8a14bd779970dee2c3ec004cb04e57"
+    },
+    {
+      "file": "opus-delay.mka",
+      "reference": "opus-delay.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "delay": 6500000
+      },
+      "model_frames": 25608,
+      "seek_base": "opus-seek-base.mka",
+      "start_trim": 312,
+      "removed_intervals": [],
+      "raw_frames": 25920,
+      "result": "exact independent visibility model",
+      "seek_comparator": "fresh unpadded codec seek plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 25608,
+        "seeks": 16,
+        "checks": 1262220,
+        "exact_float_words": 58238
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 287029,
+        "exact_float_words": 51216,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "cd34510cecf86475292fbd46b55837817374ff08e6720aa403329e161adbbc19"
+    },
+    {
+      "file": "opus-explicit-zero.mka",
+      "reference": "opus-explicit-zero.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "delay": 0
+      },
+      "model_frames": 25920,
+      "seek_base": "opus-seek-base.mka",
+      "start_trim": 0,
+      "removed_intervals": [],
+      "raw_frames": 25920,
+      "result": "exact independent visibility model",
+      "seek_comparator": "fresh unpadded codec seek plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 25920,
+        "seeks": 16,
+        "checks": 1262636,
+        "exact_float_words": 58862
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 293169,
+        "exact_float_words": 51840,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "e53a06dd29c7524aedb665a1035fb5be2011194544f2ad3817fd2d3c1c47516d"
+    },
+    {
+      "file": "opus-head.mka",
+      "reference": "opus-head.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "padding": "negative"
+      },
+      "model_frames": 25608,
+      "seek_base": "opus-seek-base.mka",
+      "start_trim": 312,
+      "removed_intervals": [
+        [
+          0,
+          17
+        ]
+      ],
+      "raw_frames": 25920,
+      "result": "exact independent visibility model",
+      "seek_comparator": "fresh unpadded codec seek plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 25608,
+        "seeks": 16,
+        "checks": 1262220,
+        "exact_float_words": 58238
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 287029,
+        "exact_float_words": 51216,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "35cf60f8ed63e071f6c0a11588149e459349606c3e0ecbda505c9447d03fb566"
+    },
+    {
+      "file": "opus-middle.mka",
+      "reference": "opus-middle.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "padding": "positive"
+      },
+      "model_frames": 25591,
+      "seek_base": "opus-seek-base.mka",
+      "start_trim": 312,
+      "removed_intervals": [
+        [
+          13423,
+          13440
+        ]
+      ],
+      "raw_frames": 25920,
+      "result": "exact independent visibility model",
+      "seek_comparator": "fresh unpadded codec seek plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 25591,
+        "seeks": 16,
+        "checks": 1262476,
+        "exact_float_words": 58204
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 287131,
+        "exact_float_words": 51182,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "29f4650218fbee126680d4e9e58a08b4c66b5fcf47a173d33cc9c8179e304d52"
+    },
+    {
+      "file": "opus-mixed.mka",
+      "reference": "opus-mixed.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "delay": 6500000,
+        "padding": "mixed"
+      },
+      "model_frames": 15883,
+      "seek_base": "opus-seek-base.mka",
+      "start_trim": 312,
+      "removed_intervals": [
+        [
+          0,
+          1
+        ],
+        [
+          1903,
+          1920
+        ],
+        [
+          1920,
+          2880
+        ],
+        [
+          3360,
+          3840
+        ],
+        [
+          3840,
+          3841
+        ],
+        [
+          5743,
+          5760
+        ],
+        [
+          5760,
+          6720
+        ],
+        [
+          7200,
+          7680
+        ],
+        [
+          7680,
+          7681
+        ],
+        [
+          9583,
+          9600
+        ],
+        [
+          9600,
+          10560
+        ],
+        [
+          11040,
+          11520
+        ],
+        [
+          11520,
+          11521
+        ],
+        [
+          13423,
+          13440
+        ],
+        [
+          13440,
+          14400
+        ],
+        [
+          14880,
+          15360
+        ],
+        [
+          15360,
+          15361
+        ],
+        [
+          17263,
+          17280
+        ],
+        [
+          17280,
+          18240
+        ],
+        [
+          18720,
+          19200
+        ],
+        [
+          19200,
+          19201
+        ],
+        [
+          21103,
+          21120
+        ],
+        [
+          21120,
+          22080
+        ],
+        [
+          22560,
+          23040
+        ],
+        [
+          23040,
+          23041
+        ],
+        [
+          24943,
+          24960
+        ],
+        [
+          24960,
+          25920
+        ]
+      ],
+      "raw_frames": 25920,
+      "result": "exact independent visibility model",
+      "seek_comparator": "fresh unpadded codec seek plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 15883,
+        "seeks": 16,
+        "checks": 1237818,
+        "exact_float_words": 38788
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 185139,
+        "exact_float_words": 31766,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "538f5a2fc6550d7de6428c16c5195e33b49dc255fbcde2fc702db0c4bf7a6a15"
+    },
+    {
+      "file": "opus-xiph.mka",
+      "reference": "opus-xiph.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "delay": 6500000,
+        "padding": "mixed",
+        "lacing": 1,
+        "unknown": true
+      },
+      "model_frames": 16932,
+      "seek_base": "opus-seek-base.mka",
+      "start_trim": 312,
+      "removed_intervals": [
+        [
+          0,
+          1
+        ],
+        [
+          5743,
+          5760
+        ],
+        [
+          5760,
+          8640
+        ],
+        [
+          10080,
+          11520
+        ],
+        [
+          11520,
+          11521
+        ],
+        [
+          17263,
+          17280
+        ],
+        [
+          17280,
+          20160
+        ],
+        [
+          21600,
+          23040
+        ],
+        [
+          23040,
+          23041
+        ]
+      ],
+      "raw_frames": 25920,
+      "result": "exact independent visibility model",
+      "seek_comparator": "fresh unpadded codec seek plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 16932,
+        "seeks": 16,
+        "checks": 1237030,
+        "exact_float_words": 40886
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 194869,
+        "exact_float_words": 33864,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "c6d9a9792dfd3223b3265fe18405689bb90b64069798382adc7468879685a659"
+    },
+    {
+      "file": "opus-ebml.mka",
+      "reference": "opus-ebml.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "padding": "mixed",
+        "lacing": 3
+      },
+      "model_frames": 16932,
+      "seek_base": "opus-seek-base.mka",
+      "start_trim": 312,
+      "removed_intervals": [
+        [
+          0,
+          1
+        ],
+        [
+          5743,
+          5760
+        ],
+        [
+          5760,
+          8640
+        ],
+        [
+          10080,
+          11520
+        ],
+        [
+          11520,
+          11521
+        ],
+        [
+          17263,
+          17280
+        ],
+        [
+          17280,
+          20160
+        ],
+        [
+          21600,
+          23040
+        ],
+        [
+          23040,
+          23041
+        ]
+      ],
+      "raw_frames": 25920,
+      "result": "exact independent visibility model",
+      "seek_comparator": "fresh unpadded codec seek plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 16932,
+        "seeks": 16,
+        "checks": 1237030,
+        "exact_float_words": 40886
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 194869,
+        "exact_float_words": 33864,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "a8e74212c634474f4ce216ce7d6066807516a60133676ca0a7462653f7a55e16"
+    },
+    {
+      "file": "opus-fixed.mka",
+      "reference": "opus-fixed.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "padding": "mixed",
+        "lacing": 2
+      },
+      "model_frames": 15883,
+      "seek_base": "opus-seek-base.mka",
+      "start_trim": 312,
+      "removed_intervals": [
+        [
+          0,
+          1
+        ],
+        [
+          1903,
+          1920
+        ],
+        [
+          1920,
+          2880
+        ],
+        [
+          3360,
+          3840
+        ],
+        [
+          3840,
+          3841
+        ],
+        [
+          5743,
+          5760
+        ],
+        [
+          5760,
+          6720
+        ],
+        [
+          7200,
+          7680
+        ],
+        [
+          7680,
+          7681
+        ],
+        [
+          9583,
+          9600
+        ],
+        [
+          9600,
+          10560
+        ],
+        [
+          11040,
+          11520
+        ],
+        [
+          11520,
+          11521
+        ],
+        [
+          13423,
+          13440
+        ],
+        [
+          13440,
+          14400
+        ],
+        [
+          14880,
+          15360
+        ],
+        [
+          15360,
+          15361
+        ],
+        [
+          17263,
+          17280
+        ],
+        [
+          17280,
+          18240
+        ],
+        [
+          18720,
+          19200
+        ],
+        [
+          19200,
+          19201
+        ],
+        [
+          21103,
+          21120
+        ],
+        [
+          21120,
+          22080
+        ],
+        [
+          22560,
+          23040
+        ],
+        [
+          23040,
+          23041
+        ],
+        [
+          24943,
+          24960
+        ],
+        [
+          24960,
+          25920
+        ]
+      ],
+      "raw_frames": 25920,
+      "result": "exact independent visibility model",
+      "seek_comparator": "fresh unpadded codec seek plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 15883,
+        "seeks": 16,
+        "checks": 1237818,
+        "exact_float_words": 38788
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 185139,
+        "exact_float_words": 31766,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "3dd62ab406f51b8f70d61e9a6aeba4adf13629d6bc6bff316371f60d046a1e7e"
+    },
+    {
+      "file": "mp2-delay.mka",
+      "reference": "mp2-delay.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "delay": 6500000
+      },
+      "model_frames": 26184,
+      "seek_base": null,
+      "start_trim": 312,
+      "removed_intervals": [],
+      "raw_frames": 26496,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 26184,
+        "seeks": 16,
+        "checks": 1275885,
+        "exact_float_words": 59390
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 299597,
+        "exact_float_words": 52368,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "361bb101d1647a5c47f21cabceb5e1fd3f5cb2f8cea01b106632e9ff5263ab12"
+    },
+    {
+      "file": "mp2-explicit-zero.mka",
+      "reference": "mp2-explicit-zero.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "delay": 0
+      },
+      "model_frames": 26496,
+      "seek_base": null,
+      "start_trim": 0,
+      "removed_intervals": [],
+      "raw_frames": 26496,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 26496,
+        "seeks": 16,
+        "checks": 1281293,
+        "exact_float_words": 60014
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 297725,
+        "exact_float_words": 52992,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "81148b10d087813adc81dd7b013c966a629741c552562195451869e5e0491b3b"
+    },
+    {
+      "file": "mp2-head.mka",
+      "reference": "mp2-head.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "padding": "negative"
+      },
+      "model_frames": 26479,
+      "seek_base": null,
+      "start_trim": 0,
+      "removed_intervals": [
+        [
+          0,
+          17
+        ]
+      ],
+      "raw_frames": 26496,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 26479,
+        "seeks": 16,
+        "checks": 1281005,
+        "exact_float_words": 59980
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 297827,
+        "exact_float_words": 52958,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "0973f3bdba48a36e838f5861bec460bc93f8076e1e114c66ba41843f78c64b93"
+    },
+    {
+      "file": "mp2-middle.mka",
+      "reference": "mp2-middle.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "padding": "positive"
+      },
+      "model_frames": 26479,
+      "seek_base": null,
+      "start_trim": 0,
+      "removed_intervals": [
+        [
+          13807,
+          13824
+        ]
+      ],
+      "raw_frames": 26496,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 26479,
+        "seeks": 16,
+        "checks": 1281549,
+        "exact_float_words": 59980
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 297827,
+        "exact_float_words": 52958,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "d1e1426c4b3ad82347e850d9ee7641339397c089243fb4b6ba5074e50c74f325"
+    },
+    {
+      "file": "mp2-mixed.mka",
+      "reference": "mp2-mixed.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "delay": 6500000,
+        "padding": "mixed"
+      },
+      "model_frames": 16285,
+      "seek_base": null,
+      "start_trim": 312,
+      "removed_intervals": [
+        [
+          0,
+          1
+        ],
+        [
+          2287,
+          2304
+        ],
+        [
+          2304,
+          3456
+        ],
+        [
+          4032,
+          4608
+        ],
+        [
+          4608,
+          4609
+        ],
+        [
+          6895,
+          6912
+        ],
+        [
+          6912,
+          8064
+        ],
+        [
+          8640,
+          9216
+        ],
+        [
+          9216,
+          9217
+        ],
+        [
+          11503,
+          11520
+        ],
+        [
+          11520,
+          12672
+        ],
+        [
+          13248,
+          13824
+        ],
+        [
+          13824,
+          13825
+        ],
+        [
+          16111,
+          16128
+        ],
+        [
+          16128,
+          17280
+        ],
+        [
+          17856,
+          18432
+        ],
+        [
+          18432,
+          18433
+        ],
+        [
+          20719,
+          20736
+        ],
+        [
+          20736,
+          21888
+        ],
+        [
+          22464,
+          23040
+        ],
+        [
+          23040,
+          23041
+        ],
+        [
+          25327,
+          25344
+        ],
+        [
+          25344,
+          26496
+        ]
+      ],
+      "raw_frames": 26496,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 16285,
+        "seeks": 16,
+        "checks": 1275385,
+        "exact_float_words": 39592
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 190739,
+        "exact_float_words": 32570,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "d260de5800d802470b64dc350f6cb7bee5234821de21197d40e7536233415b6e"
+    },
+    {
+      "file": "mp2-xiph.mka",
+      "reference": "mp2-xiph.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "delay": 6500000,
+        "padding": "mixed",
+        "lacing": 1,
+        "unknown": true
+      },
+      "model_frames": 16357,
+      "seek_base": null,
+      "start_trim": 312,
+      "removed_intervals": [
+        [
+          0,
+          1
+        ],
+        [
+          6895,
+          6912
+        ],
+        [
+          6912,
+          10368
+        ],
+        [
+          12096,
+          13824
+        ],
+        [
+          13824,
+          13825
+        ],
+        [
+          20719,
+          20736
+        ],
+        [
+          20736,
+          24192
+        ],
+        [
+          25344,
+          26496
+        ]
+      ],
+      "raw_frames": 26496,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 16357,
+        "seeks": 16,
+        "checks": 1283673,
+        "exact_float_words": 39736
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 190307,
+        "exact_float_words": 32714,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "7515809558ec18f5c82a6ea0f609b194c6cd6a2970ead6d7ee72d12bb9a306e0"
+    },
+    {
+      "file": "mp2-ebml.mka",
+      "reference": "mp2-ebml.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "padding": "mixed",
+        "lacing": 3
+      },
+      "model_frames": 16668,
+      "seek_base": null,
+      "start_trim": 0,
+      "removed_intervals": [
+        [
+          0,
+          1
+        ],
+        [
+          6895,
+          6912
+        ],
+        [
+          6912,
+          10368
+        ],
+        [
+          12096,
+          13824
+        ],
+        [
+          13824,
+          13825
+        ],
+        [
+          20719,
+          20736
+        ],
+        [
+          20736,
+          24192
+        ],
+        [
+          25344,
+          26496
+        ]
+      ],
+      "raw_frames": 26496,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 16668,
+        "seeks": 16,
+        "checks": 1312613,
+        "exact_float_words": 40358
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 188441,
+        "exact_float_words": 33336,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "6613c76a424d990d1ba24488b2452cb815ca71d7ee0c34c168088459987a7db9"
+    },
+    {
+      "file": "mp2-fixed.mka",
+      "reference": "mp2-fixed.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "padding": "mixed",
+        "lacing": 2
+      },
+      "model_frames": 16668,
+      "seek_base": null,
+      "start_trim": 0,
+      "removed_intervals": [
+        [
+          0,
+          1
+        ],
+        [
+          6895,
+          6912
+        ],
+        [
+          6912,
+          10368
+        ],
+        [
+          12096,
+          13824
+        ],
+        [
+          13824,
+          13825
+        ],
+        [
+          20719,
+          20736
+        ],
+        [
+          20736,
+          24192
+        ],
+        [
+          25344,
+          26496
+        ]
+      ],
+      "raw_frames": 26496,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 16668,
+        "seeks": 16,
+        "checks": 1312613,
+        "exact_float_words": 40358
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 188441,
+        "exact_float_words": 33336,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "17a0dcdcf59a8966942ec77c3a8ad865313da1eb39567aaffaddc687dc858bf3"
+    },
+    {
+      "file": "mp3-delay.mka",
+      "reference": "mp3-delay.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "delay": 6500000
+      },
+      "model_frames": 27336,
+      "seek_base": null,
+      "start_trim": 312,
+      "removed_intervals": [],
+      "raw_frames": 27648,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 27336,
+        "seeks": 16,
+        "checks": 1327929,
+        "exact_float_words": 61694
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 308709,
+        "exact_float_words": 54672,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "f2f89208bcd53ba11532a91fc05d59313012c82bf201ccd49bd059701a8e43b4"
+    },
+    {
+      "file": "mp3-explicit-zero.mka",
+      "reference": "mp3-explicit-zero.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "delay": 0
+      },
+      "model_frames": 27648,
+      "seek_base": null,
+      "start_trim": 0,
+      "removed_intervals": [],
+      "raw_frames": 27648,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 27648,
+        "seeks": 16,
+        "checks": 1325849,
+        "exact_float_words": 62318
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 306837,
+        "exact_float_words": 55296,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "a253996cfa667e6d7e4b38b50308e2feb812037119fe441915def94c6a0c4350"
+    },
+    {
+      "file": "mp3-head.mka",
+      "reference": "mp3-head.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "padding": "negative"
+      },
+      "model_frames": 27631,
+      "seek_base": null,
+      "start_trim": 0,
+      "removed_intervals": [
+        [
+          0,
+          17
+        ]
+      ],
+      "raw_frames": 27648,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 27631,
+        "seeks": 16,
+        "checks": 1325969,
+        "exact_float_words": 62284
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 306939,
+        "exact_float_words": 55262,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "0780076af31842b6c74deebaf2f671f69dec36c5d33aae544cdd73cf4075095b"
+    },
+    {
+      "file": "mp3-middle.mka",
+      "reference": "mp3-middle.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "padding": "positive"
+      },
+      "model_frames": 27631,
+      "seek_base": null,
+      "start_trim": 0,
+      "removed_intervals": [
+        [
+          14959,
+          14976
+        ]
+      ],
+      "raw_frames": 27648,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 27631,
+        "seeks": 16,
+        "checks": 1316889,
+        "exact_float_words": 62284
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 306939,
+        "exact_float_words": 55262,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "0c474a12aa7b32a8cda5ff0fc184bab7c4d4f61fa41d23de818da30241927ccd"
+    },
+    {
+      "file": "mp3-mixed.mka",
+      "reference": "mp3-mixed.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "delay": 6500000,
+        "padding": "mixed"
+      },
+      "model_frames": 16861,
+      "seek_base": null,
+      "start_trim": 312,
+      "removed_intervals": [
+        [
+          0,
+          1
+        ],
+        [
+          2287,
+          2304
+        ],
+        [
+          2304,
+          3456
+        ],
+        [
+          4032,
+          4608
+        ],
+        [
+          4608,
+          4609
+        ],
+        [
+          6895,
+          6912
+        ],
+        [
+          6912,
+          8064
+        ],
+        [
+          8640,
+          9216
+        ],
+        [
+          9216,
+          9217
+        ],
+        [
+          11503,
+          11520
+        ],
+        [
+          11520,
+          12672
+        ],
+        [
+          13248,
+          13824
+        ],
+        [
+          13824,
+          13825
+        ],
+        [
+          16111,
+          16128
+        ],
+        [
+          16128,
+          17280
+        ],
+        [
+          17856,
+          18432
+        ],
+        [
+          18432,
+          18433
+        ],
+        [
+          20719,
+          20736
+        ],
+        [
+          20736,
+          21888
+        ],
+        [
+          22464,
+          23040
+        ],
+        [
+          23040,
+          23041
+        ],
+        [
+          25327,
+          25344
+        ],
+        [
+          25344,
+          26496
+        ],
+        [
+          27072,
+          27648
+        ]
+      ],
+      "raw_frames": 27648,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 16861,
+        "seeks": 16,
+        "checks": 1270083,
+        "exact_float_words": 40744
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 195295,
+        "exact_float_words": 33722,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "07c9cb7d467bbbabe49a1e19cdd5ee1bdf6ce50ed0e99eb4ece1117c80919e5c"
+    },
+    {
+      "file": "mp3-xiph.mka",
+      "reference": "mp3-xiph.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "delay": 6500000,
+        "padding": "mixed",
+        "lacing": 1,
+        "unknown": true
+      },
+      "model_frames": 16933,
+      "seek_base": null,
+      "start_trim": 312,
+      "removed_intervals": [
+        [
+          0,
+          1
+        ],
+        [
+          6895,
+          6912
+        ],
+        [
+          6912,
+          10368
+        ],
+        [
+          12096,
+          13824
+        ],
+        [
+          13824,
+          13825
+        ],
+        [
+          20719,
+          20736
+        ],
+        [
+          20736,
+          24192
+        ],
+        [
+          25920,
+          27648
+        ]
+      ],
+      "raw_frames": 27648,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 16933,
+        "seeks": 16,
+        "checks": 1310027,
+        "exact_float_words": 40888
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 194863,
+        "exact_float_words": 33866,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "a26ac1dcceac361650405bc2b5f45e85639c5764d3adc86ea8662b0e835c3b8f"
+    },
+    {
+      "file": "mp3-ebml.mka",
+      "reference": "mp3-ebml.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "padding": "mixed",
+        "lacing": 3
+      },
+      "model_frames": 17244,
+      "seek_base": null,
+      "start_trim": 0,
+      "removed_intervals": [
+        [
+          0,
+          1
+        ],
+        [
+          6895,
+          6912
+        ],
+        [
+          6912,
+          10368
+        ],
+        [
+          12096,
+          13824
+        ],
+        [
+          13824,
+          13825
+        ],
+        [
+          20719,
+          20736
+        ],
+        [
+          20736,
+          24192
+        ],
+        [
+          25920,
+          27648
+        ]
+      ],
+      "raw_frames": 27648,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 17244,
+        "seeks": 16,
+        "checks": 1275178,
+        "exact_float_words": 41510
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 192997,
+        "exact_float_words": 34488,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "238464648b8d5af4aab79a2198befbb0952c225ed5bea63d2ce2576242ec7a90"
+    },
+    {
+      "file": "mp3-fixed.mka",
+      "reference": "mp3-fixed.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "padding": "mixed",
+        "lacing": 2
+      },
+      "model_frames": 17244,
+      "seek_base": null,
+      "start_trim": 0,
+      "removed_intervals": [
+        [
+          0,
+          1
+        ],
+        [
+          6895,
+          6912
+        ],
+        [
+          6912,
+          10368
+        ],
+        [
+          12096,
+          13824
+        ],
+        [
+          13824,
+          13825
+        ],
+        [
+          20719,
+          20736
+        ],
+        [
+          20736,
+          24192
+        ],
+        [
+          25920,
+          27648
+        ]
+      ],
+      "raw_frames": 27648,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 17244,
+        "seeks": 16,
+        "checks": 1275178,
+        "exact_float_words": 41510
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 192997,
+        "exact_float_words": 34488,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "35902ea4529dace95c98f312fbba023ae1a0b4f5946540a4f9ab67889f426eab"
+    },
+    {
+      "file": "aac-delay.mka",
+      "reference": "aac-delay.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "delay": 6500000
+      },
+      "model_frames": 26312,
+      "seek_base": "aac-seek-base.mka",
+      "start_trim": 312,
+      "removed_intervals": [],
+      "raw_frames": 26624,
+      "result": "exact independent visibility model",
+      "seek_comparator": "fresh unpadded codec seek plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 26312,
+        "seeks": 16,
+        "checks": 1441982,
+        "exact_float_words": 59646
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 298829,
+        "exact_float_words": 52624,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "16e372d974a1632ef5c0b610957e11bdb4528ddddf25d8bb8a2a49874442402c"
+    },
+    {
+      "file": "aac-explicit-zero.mka",
+      "reference": "aac-explicit-zero.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "delay": 0
+      },
+      "model_frames": 26624,
+      "seek_base": "aac-seek-base.mka",
+      "start_trim": 0,
+      "removed_intervals": [],
+      "raw_frames": 26624,
+      "result": "exact independent visibility model",
+      "seek_comparator": "fresh unpadded codec seek plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 26624,
+        "seeks": 16,
+        "checks": 1406429,
+        "exact_float_words": 60270
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 304969,
+        "exact_float_words": 53248,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "da39501ea3b507a68fa37506d124113aa97ab483924eb4aa09cd4ce34458754a"
+    },
+    {
+      "file": "aac-head.mka",
+      "reference": "aac-head.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "padding": "negative"
+      },
+      "model_frames": 26607,
+      "seek_base": "aac-seek-base.mka",
+      "start_trim": 0,
+      "removed_intervals": [
+        [
+          0,
+          17
+        ]
+      ],
+      "raw_frames": 26624,
+      "result": "exact independent visibility model",
+      "seek_comparator": "fresh unpadded codec seek plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 26607,
+        "seeks": 16,
+        "checks": 1447094,
+        "exact_float_words": 60236
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 305071,
+        "exact_float_words": 53214,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "3cab4d271861d2ea2811cc4b0603d798c3e70222ea600343a77c9c3db3789164"
+    },
+    {
+      "file": "aac-middle.mka",
+      "reference": "aac-middle.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "padding": "positive"
+      },
+      "model_frames": 26607,
+      "seek_base": "aac-seek-base.mka",
+      "start_trim": 0,
+      "removed_intervals": [
+        [
+          14319,
+          14336
+        ]
+      ],
+      "raw_frames": 26624,
+      "result": "exact independent visibility model",
+      "seek_comparator": "fresh unpadded codec seek plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 26607,
+        "seeks": 16,
+        "checks": 1398485,
+        "exact_float_words": 60236
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 305071,
+        "exact_float_words": 53214,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "10a7e279d264692680eb283a04ea8ebcb2690e9289292db5a9e287c89d267c53"
+    },
+    {
+      "file": "aac-mixed.mka",
+      "reference": "aac-mixed.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "delay": 6500000,
+        "padding": "mixed"
+      },
+      "model_frames": 16971,
+      "seek_base": "aac-seek-base.mka",
+      "start_trim": 312,
+      "removed_intervals": [
+        [
+          0,
+          1
+        ],
+        [
+          2031,
+          2048
+        ],
+        [
+          2048,
+          3072
+        ],
+        [
+          3584,
+          4096
+        ],
+        [
+          4096,
+          4097
+        ],
+        [
+          6127,
+          6144
+        ],
+        [
+          6144,
+          7168
+        ],
+        [
+          7680,
+          8192
+        ],
+        [
+          8192,
+          8193
+        ],
+        [
+          10223,
+          10240
+        ],
+        [
+          10240,
+          11264
+        ],
+        [
+          11776,
+          12288
+        ],
+        [
+          12288,
+          12289
+        ],
+        [
+          14319,
+          14336
+        ],
+        [
+          14336,
+          15360
+        ],
+        [
+          15872,
+          16384
+        ],
+        [
+          16384,
+          16385
+        ],
+        [
+          18415,
+          18432
+        ],
+        [
+          18432,
+          19456
+        ],
+        [
+          19968,
+          20480
+        ],
+        [
+          20480,
+          20481
+        ],
+        [
+          22511,
+          22528
+        ],
+        [
+          22528,
+          23552
+        ],
+        [
+          24064,
+          24576
+        ],
+        [
+          24576,
+          24577
+        ],
+        [
+          26607,
+          26624
+        ]
+      ],
+      "raw_frames": 26624,
+      "result": "exact independent visibility model",
+      "seek_comparator": "fresh unpadded codec seek plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 16971,
+        "seeks": 16,
+        "checks": 1377806,
+        "exact_float_words": 40964
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 194635,
+        "exact_float_words": 33942,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "723c6ee8a93d7978a2f2b0ae35e1b262e40d734d80a6041bcd5ee9f0eb219e34"
+    },
+    {
+      "file": "aac-xiph.mka",
+      "reference": "aac-xiph.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "delay": 6500000,
+        "padding": "mixed",
+        "lacing": 1,
+        "unknown": true
+      },
+      "model_frames": 17060,
+      "seek_base": "aac-seek-base.mka",
+      "start_trim": 312,
+      "removed_intervals": [
+        [
+          0,
+          1
+        ],
+        [
+          6127,
+          6144
+        ],
+        [
+          6144,
+          9216
+        ],
+        [
+          10752,
+          12288
+        ],
+        [
+          12288,
+          12289
+        ],
+        [
+          18415,
+          18432
+        ],
+        [
+          18432,
+          21504
+        ],
+        [
+          23040,
+          24576
+        ],
+        [
+          24576,
+          24577
+        ]
+      ],
+      "raw_frames": 26624,
+      "result": "exact independent visibility model",
+      "seek_comparator": "fresh unpadded codec seek plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 17060,
+        "seeks": 16,
+        "checks": 1385006,
+        "exact_float_words": 41142
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 194101,
+        "exact_float_words": 34120,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "6cb53d2eee370b12bd21fde29056682a10390032e9e1be71088404c1760e5690"
+    },
+    {
+      "file": "aac-ebml.mka",
+      "reference": "aac-ebml.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "padding": "mixed",
+        "lacing": 3
+      },
+      "model_frames": 17371,
+      "seek_base": "aac-seek-base.mka",
+      "start_trim": 0,
+      "removed_intervals": [
+        [
+          0,
+          1
+        ],
+        [
+          6127,
+          6144
+        ],
+        [
+          6144,
+          9216
+        ],
+        [
+          10752,
+          12288
+        ],
+        [
+          12288,
+          12289
+        ],
+        [
+          18415,
+          18432
+        ],
+        [
+          18432,
+          21504
+        ],
+        [
+          23040,
+          24576
+        ],
+        [
+          24576,
+          24577
+        ]
+      ],
+      "raw_frames": 26624,
+      "result": "exact independent visibility model",
+      "seek_comparator": "fresh unpadded codec seek plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 17371,
+        "seeks": 16,
+        "checks": 1357629,
+        "exact_float_words": 41764
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 192235,
+        "exact_float_words": 34742,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "6c8ebdca8b459e3e6192325801ab6358b7a1af64d677cc5fc448cbba67e5a4a5"
+    },
+    {
+      "file": "aac-fixed.mka",
+      "reference": "aac-fixed.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "padding": "mixed",
+        "lacing": 2
+      },
+      "model_frames": 17282,
+      "seek_base": "aac-seek-base.mka",
+      "start_trim": 0,
+      "removed_intervals": [
+        [
+          0,
+          1
+        ],
+        [
+          2031,
+          2048
+        ],
+        [
+          2048,
+          3072
+        ],
+        [
+          3584,
+          4096
+        ],
+        [
+          4096,
+          4097
+        ],
+        [
+          6127,
+          6144
+        ],
+        [
+          6144,
+          7168
+        ],
+        [
+          7680,
+          8192
+        ],
+        [
+          8192,
+          8193
+        ],
+        [
+          10223,
+          10240
+        ],
+        [
+          10240,
+          11264
+        ],
+        [
+          11776,
+          12288
+        ],
+        [
+          12288,
+          12289
+        ],
+        [
+          14319,
+          14336
+        ],
+        [
+          14336,
+          15360
+        ],
+        [
+          15872,
+          16384
+        ],
+        [
+          16384,
+          16385
+        ],
+        [
+          18415,
+          18432
+        ],
+        [
+          18432,
+          19456
+        ],
+        [
+          19968,
+          20480
+        ],
+        [
+          20480,
+          20481
+        ],
+        [
+          22511,
+          22528
+        ],
+        [
+          22528,
+          23552
+        ],
+        [
+          24064,
+          24576
+        ],
+        [
+          24576,
+          24577
+        ],
+        [
+          26607,
+          26624
+        ]
+      ],
+      "raw_frames": 26624,
+      "result": "exact independent visibility model",
+      "seek_comparator": "fresh unpadded codec seek plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 17282,
+        "seeks": 16,
+        "checks": 1375014,
+        "exact_float_words": 41586
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 192769,
+        "exact_float_words": 34564,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "931d0ab6aad9e092566fe8257b89c97fa3aa2c15002ed7c09e15e51b73b5807f"
+    },
+    {
+      "file": "alac-delay.mka",
+      "reference": "alac-delay.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "delay": 6500000
+      },
+      "model_frames": 25128,
+      "seek_base": null,
+      "start_trim": 312,
+      "removed_intervals": [],
+      "raw_frames": 25440,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 25128,
+        "seeks": 16,
+        "checks": 1423465,
+        "exact_float_words": 57278
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 265873,
+        "exact_float_words": 50256,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "0fd6a8cc47ec09c0226f0535e4212d21d90396d0195fd4b0c4ec4f8a298e03c8"
+    },
+    {
+      "file": "alac-explicit-zero.mka",
+      "reference": "alac-explicit-zero.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "delay": 0
+      },
+      "model_frames": 25440,
+      "seek_base": null,
+      "start_trim": 0,
+      "removed_intervals": [],
+      "raw_frames": 25440,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 25440,
+        "seeks": 16,
+        "checks": 1363336,
+        "exact_float_words": 57902
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 288037,
+        "exact_float_words": 50880,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "d41054711aa82c27d41a534fd96039889b85370f9db2487cdff38c6bc4e9c2a3"
+    },
+    {
+      "file": "alac-head.mka",
+      "reference": "alac-head.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "padding": "negative"
+      },
+      "model_frames": 25423,
+      "seek_base": null,
+      "start_trim": 0,
+      "removed_intervals": [
+        [
+          0,
+          17
+        ]
+      ],
+      "raw_frames": 25440,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 25423,
+        "seeks": 16,
+        "checks": 1428585,
+        "exact_float_words": 57868
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 288139,
+        "exact_float_words": 50846,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "4632724fbc5c56e20f8d425602a27ca3cf43c700f5c65e2341a4743942969d7f"
+    },
+    {
+      "file": "alac-middle.mka",
+      "reference": "alac-middle.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "padding": "positive"
+      },
+      "model_frames": 25423,
+      "seek_base": null,
+      "start_trim": 0,
+      "removed_intervals": [
+        [
+          16367,
+          16384
+        ]
+      ],
+      "raw_frames": 25440,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 25423,
+        "seeks": 16,
+        "checks": 1363592,
+        "exact_float_words": 57868
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 288139,
+        "exact_float_words": 50846,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "81543c586785d6627fad1b690f88d67744ee2ac362c5719ea10b49082bf11cf8"
+    },
+    {
+      "file": "alac-mixed.mka",
+      "reference": "alac-mixed.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "delay": 6500000,
+        "padding": "mixed"
+      },
+      "model_frames": 18085,
+      "seek_base": null,
+      "start_trim": 312,
+      "removed_intervals": [
+        [
+          0,
+          1
+        ],
+        [
+          8175,
+          8192
+        ],
+        [
+          8192,
+          12288
+        ],
+        [
+          14336,
+          16384
+        ],
+        [
+          16384,
+          16385
+        ],
+        [
+          24559,
+          24576
+        ],
+        [
+          24576,
+          25440
+        ]
+      ],
+      "raw_frames": 25440,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 18085,
+        "seeks": 16,
+        "checks": 1259490,
+        "exact_float_words": 43192
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 195963,
+        "exact_float_words": 36170,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "ee992972788ce026e6854a919aefbfa2a52823617369abd984f93a48e9ec9eb4"
+    },
+    {
+      "file": "alac-xiph.mka",
+      "reference": "alac-xiph.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "delay": 6500000,
+        "padding": "mixed",
+        "lacing": 1,
+        "unknown": true
+      },
+      "model_frames": 24247,
+      "seek_base": null,
+      "start_trim": 312,
+      "removed_intervals": [
+        [
+          0,
+          1
+        ],
+        [
+          24559,
+          24576
+        ],
+        [
+          24576,
+          25440
+        ]
+      ],
+      "raw_frames": 25440,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 24247,
+        "seeks": 16,
+        "checks": 1333102,
+        "exact_float_words": 55516
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 263147,
+        "exact_float_words": 48494,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "6b014abd66336226930112974dea703668fd2f782972d5d2b96cc3916e98fb8b"
+    },
+    {
+      "file": "alac-ebml.mka",
+      "reference": "alac-ebml.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "padding": "mixed",
+        "lacing": 3
+      },
+      "model_frames": 24558,
+      "seek_base": null,
+      "start_trim": 0,
+      "removed_intervals": [
+        [
+          0,
+          1
+        ],
+        [
+          24559,
+          24576
+        ],
+        [
+          24576,
+          25440
+        ]
+      ],
+      "raw_frames": 25440,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 24558,
+        "seeks": 16,
+        "checks": 1240181,
+        "exact_float_words": 56138
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 269293,
+        "exact_float_words": 49116,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "0bd68cf51eb7903f17bc9b4507b7389ef763b1aa09468d528b7ca272ecd6e285"
+    },
+    {
+      "file": "alac-fixed.mka",
+      "reference": "alac-fixed.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "padding": "mixed",
+        "lacing": 2
+      },
+      "model_frames": 18396,
+      "seek_base": null,
+      "start_trim": 0,
+      "removed_intervals": [
+        [
+          0,
+          1
+        ],
+        [
+          8175,
+          8192
+        ],
+        [
+          8192,
+          12288
+        ],
+        [
+          14336,
+          16384
+        ],
+        [
+          16384,
+          16385
+        ],
+        [
+          24559,
+          24576
+        ],
+        [
+          24576,
+          25440
+        ]
+      ],
+      "raw_frames": 25440,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 18396,
+        "seeks": 16,
+        "checks": 1232105,
+        "exact_float_words": 43814
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 194097,
+        "exact_float_words": 36792,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "d21817c42def1ad904636b44a14480706471b9a88ac8c3c37476d68885e12819"
+    },
+    {
+      "file": "speex-delay.mka",
+      "reference": "speex-delay.mka.reference.f32",
+      "rate": 16000,
+      "channels": 2,
+      "description": {
+        "delay": 6500000
+      },
+      "model_frames": 8536,
+      "seek_base": null,
+      "start_trim": 104,
+      "removed_intervals": [],
+      "raw_frames": 8640,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 8536,
+        "seeks": 16,
+        "checks": 1234666,
+        "exact_float_words": 24094
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 117053,
+        "exact_float_words": 17072,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "54a11b8aad6a8d4d2405b81c6be34441c4bfb15968280d76f72a0862ae04317b"
+    },
+    {
+      "file": "speex-explicit-zero.mka",
+      "reference": "speex-explicit-zero.mka.reference.f32",
+      "rate": 16000,
+      "channels": 2,
+      "description": {
+        "delay": 0
+      },
+      "model_frames": 8640,
+      "seek_base": null,
+      "start_trim": 0,
+      "removed_intervals": [],
+      "raw_frames": 8640,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 8640,
+        "seeks": 16,
+        "checks": 1229810,
+        "exact_float_words": 24302
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 116429,
+        "exact_float_words": 17280,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "3739577035f92c65a9d52e450562f40534f33d3e9005aa56a6208ce1e8371459"
+    },
+    {
+      "file": "speex-head.mka",
+      "reference": "speex-head.mka.reference.f32",
+      "rate": 16000,
+      "channels": 2,
+      "description": {
+        "padding": "negative"
+      },
+      "model_frames": 8623,
+      "seek_base": null,
+      "start_trim": 0,
+      "removed_intervals": [
+        [
+          0,
+          17
+        ]
+      ],
+      "raw_frames": 8640,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 8623,
+        "seeks": 16,
+        "checks": 1230610,
+        "exact_float_words": 24268
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 116531,
+        "exact_float_words": 17246,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "1af58623efd83d5a2f22fdd4b9925c199422a13b3601e9cc2995466369369adc"
+    },
+    {
+      "file": "speex-middle.mka",
+      "reference": "speex-middle.mka.reference.f32",
+      "rate": 16000,
+      "channels": 2,
+      "description": {
+        "padding": "positive"
+      },
+      "model_frames": 8623,
+      "seek_base": null,
+      "start_trim": 0,
+      "removed_intervals": [
+        [
+          4463,
+          4480
+        ]
+      ],
+      "raw_frames": 8640,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 8623,
+        "seeks": 16,
+        "checks": 1230610,
+        "exact_float_words": 24268
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 116531,
+        "exact_float_words": 17246,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "1a73b26b7d1d8b8925f872cc18698b7d7d6b3c146998cfff3b167a43cdf34e44"
+    },
+    {
+      "file": "speex-mixed.mka",
+      "reference": "speex-mixed.mka.reference.f32",
+      "rate": 16000,
+      "channels": 2,
+      "description": {
+        "delay": 6500000,
+        "padding": "mixed"
+      },
+      "model_frames": 5211,
+      "seek_base": null,
+      "start_trim": 104,
+      "removed_intervals": [
+        [
+          0,
+          1
+        ],
+        [
+          623,
+          640
+        ],
+        [
+          640,
+          960
+        ],
+        [
+          1120,
+          1280
+        ],
+        [
+          1280,
+          1281
+        ],
+        [
+          1903,
+          1920
+        ],
+        [
+          1920,
+          2240
+        ],
+        [
+          2400,
+          2560
+        ],
+        [
+          2560,
+          2561
+        ],
+        [
+          3183,
+          3200
+        ],
+        [
+          3200,
+          3520
+        ],
+        [
+          3680,
+          3840
+        ],
+        [
+          3840,
+          3841
+        ],
+        [
+          4463,
+          4480
+        ],
+        [
+          4480,
+          4800
+        ],
+        [
+          4960,
+          5120
+        ],
+        [
+          5120,
+          5121
+        ],
+        [
+          5743,
+          5760
+        ],
+        [
+          5760,
+          6080
+        ],
+        [
+          6240,
+          6400
+        ],
+        [
+          6400,
+          6401
+        ],
+        [
+          7023,
+          7040
+        ],
+        [
+          7040,
+          7360
+        ],
+        [
+          7520,
+          7680
+        ],
+        [
+          7680,
+          7681
+        ],
+        [
+          8303,
+          8320
+        ],
+        [
+          8320,
+          8640
+        ]
+      ],
+      "raw_frames": 8640,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 5211,
+        "seeks": 16,
+        "checks": 1160445,
+        "exact_float_words": 17444
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 80919,
+        "exact_float_words": 10422,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "76aed70b2d4c72347fb0638ff26e38915037ce91866aa04fa5ba914457c1898b"
+    },
+    {
+      "file": "speex-xiph.mka",
+      "reference": "speex-xiph.mka.reference.f32",
+      "rate": 16000,
+      "channels": 2,
+      "description": {
+        "delay": 6500000,
+        "padding": "mixed",
+        "lacing": 1,
+        "unknown": true
+      },
+      "model_frames": 5620,
+      "seek_base": null,
+      "start_trim": 104,
+      "removed_intervals": [
+        [
+          0,
+          1
+        ],
+        [
+          1903,
+          1920
+        ],
+        [
+          1920,
+          2880
+        ],
+        [
+          3360,
+          3840
+        ],
+        [
+          3840,
+          3841
+        ],
+        [
+          5743,
+          5760
+        ],
+        [
+          5760,
+          6720
+        ],
+        [
+          7200,
+          7680
+        ],
+        [
+          7680,
+          7681
+        ]
+      ],
+      "raw_frames": 8640,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 5620,
+        "seeks": 16,
+        "checks": 1141357,
+        "exact_float_words": 18262
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 78465,
+        "exact_float_words": 11240,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "3f684bb75347a262b3eb7174fed3dcd12b9992cd189e73fb4ef5d06c24235a30"
+    },
+    {
+      "file": "speex-ebml.mka",
+      "reference": "speex-ebml.mka.reference.f32",
+      "rate": 16000,
+      "channels": 2,
+      "description": {
+        "padding": "mixed",
+        "lacing": 3
+      },
+      "model_frames": 5723,
+      "seek_base": null,
+      "start_trim": 0,
+      "removed_intervals": [
+        [
+          0,
+          1
+        ],
+        [
+          1903,
+          1920
+        ],
+        [
+          1920,
+          2880
+        ],
+        [
+          3360,
+          3840
+        ],
+        [
+          3840,
+          3841
+        ],
+        [
+          5743,
+          5760
+        ],
+        [
+          5760,
+          6720
+        ],
+        [
+          7200,
+          7680
+        ],
+        [
+          7680,
+          7681
+        ]
+      ],
+      "raw_frames": 8640,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 5723,
+        "seeks": 16,
+        "checks": 1136557,
+        "exact_float_words": 18468
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 85859,
+        "exact_float_words": 11446,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "63b33224baea82dfad4e2c67b8ee88852917bc1953f9574589f386bcf95506a1"
+    },
+    {
+      "file": "speex-fixed.mka",
+      "reference": "speex-fixed.mka.reference.f32",
+      "rate": 16000,
+      "channels": 2,
+      "description": {
+        "padding": "mixed",
+        "lacing": 2
+      },
+      "model_frames": 5723,
+      "seek_base": null,
+      "start_trim": 0,
+      "removed_intervals": [
+        [
+          0,
+          1
+        ],
+        [
+          1903,
+          1920
+        ],
+        [
+          1920,
+          2880
+        ],
+        [
+          3360,
+          3840
+        ],
+        [
+          3840,
+          3841
+        ],
+        [
+          5743,
+          5760
+        ],
+        [
+          5760,
+          6720
+        ],
+        [
+          7200,
+          7680
+        ],
+        [
+          7680,
+          7681
+        ]
+      ],
+      "raw_frames": 8640,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 5723,
+        "seeks": 16,
+        "checks": 1136557,
+        "exact_float_words": 18468
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 85859,
+        "exact_float_words": 11446,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "919a09a34981afe5f23894fb26a5b44b41e5856b8bdde01c032c0176544fc607"
+    },
+    {
+      "file": "vorbis-delay.mka",
+      "reference": "vorbis-delay.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "delay": 6500000
+      },
+      "model_frames": 25864,
+      "seek_base": null,
+      "start_trim": 312,
+      "removed_intervals": [],
+      "raw_frames": 26176,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 25864,
+        "seeks": 16,
+        "checks": 1413825,
+        "exact_float_words": 58750
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 293505,
+        "exact_float_words": 51728,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "f89508f54781ed081f2a635ea579a2d71cd250c91bdcfd17040b2ab06f7d0c94"
+    },
+    {
+      "file": "vorbis-explicit-zero.mka",
+      "reference": "vorbis-explicit-zero.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "delay": 0
+      },
+      "model_frames": 26176,
+      "seek_base": null,
+      "start_trim": 0,
+      "removed_intervals": [],
+      "raw_frames": 26176,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 26176,
+        "seeks": 16,
+        "checks": 1439589,
+        "exact_float_words": 59374
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 299645,
+        "exact_float_words": 52352,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "ee60568408a62ec2372d36360a0ac305a706595595ee885e0e57b57f935e007d"
+    },
+    {
+      "file": "vorbis-head.mka",
+      "reference": "vorbis-head.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "padding": "negative"
+      },
+      "model_frames": 26176,
+      "seek_base": null,
+      "start_trim": 0,
+      "removed_intervals": [],
+      "raw_frames": 26176,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 26176,
+        "seeks": 16,
+        "checks": 1439589,
+        "exact_float_words": 59374
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 299645,
+        "exact_float_words": 52352,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "8a9aad53883337d41b09ce25d9d634418861c9901e1549030ac8c7d1eae8883c"
+    },
+    {
+      "file": "vorbis-middle.mka",
+      "reference": "vorbis-middle.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "padding": "positive"
+      },
+      "model_frames": 26159,
+      "seek_base": null,
+      "start_trim": 0,
+      "removed_intervals": [
+        [
+          12847,
+          12864
+        ]
+      ],
+      "raw_frames": 26176,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 26159,
+        "seeks": 16,
+        "checks": 1439709,
+        "exact_float_words": 59340
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 299747,
+        "exact_float_words": 52318,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "985b7a352eb5a51806e043266bd6bb2d6fb5e19780a18095ad2d1cc8a16f53a8"
+    },
+    {
+      "file": "vorbis-mixed.mka",
+      "reference": "vorbis-mixed.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "delay": 6500000,
+        "padding": "mixed"
+      },
+      "model_frames": 15499,
+      "seek_base": null,
+      "start_trim": 312,
+      "removed_intervals": [
+        [
+          559,
+          576
+        ],
+        [
+          576,
+          1600
+        ],
+        [
+          2112,
+          2624
+        ],
+        [
+          2624,
+          2625
+        ],
+        [
+          4655,
+          4672
+        ],
+        [
+          4672,
+          5696
+        ],
+        [
+          6208,
+          6720
+        ],
+        [
+          6720,
+          6721
+        ],
+        [
+          8751,
+          8768
+        ],
+        [
+          8768,
+          9792
+        ],
+        [
+          10304,
+          10816
+        ],
+        [
+          10816,
+          10817
+        ],
+        [
+          12847,
+          12864
+        ],
+        [
+          12864,
+          13888
+        ],
+        [
+          14400,
+          14912
+        ],
+        [
+          14912,
+          14913
+        ],
+        [
+          16943,
+          16960
+        ],
+        [
+          16960,
+          17984
+        ],
+        [
+          18496,
+          19008
+        ],
+        [
+          19008,
+          19009
+        ],
+        [
+          21039,
+          21056
+        ],
+        [
+          21056,
+          22080
+        ],
+        [
+          22592,
+          23104
+        ],
+        [
+          23104,
+          23105
+        ],
+        [
+          25135,
+          25152
+        ],
+        [
+          25152,
+          26176
+        ]
+      ],
+      "raw_frames": 26176,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 15499,
+        "seeks": 16,
+        "checks": 1281790,
+        "exact_float_words": 38020
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 179431,
+        "exact_float_words": 30998,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "119aadcd423883c403526681e7a1e2fd95a68001061bf335edb3b56a0b799377"
+    },
+    {
+      "file": "vorbis-xiph.mka",
+      "reference": "vorbis-xiph.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "delay": 6500000,
+        "padding": "mixed",
+        "lacing": 1,
+        "unknown": true
+      },
+      "model_frames": 16612,
+      "seek_base": null,
+      "start_trim": 312,
+      "removed_intervals": [
+        [
+          0,
+          1
+        ],
+        [
+          4655,
+          4672
+        ],
+        [
+          4672,
+          7744
+        ],
+        [
+          9280,
+          10816
+        ],
+        [
+          10816,
+          10817
+        ],
+        [
+          16943,
+          16960
+        ],
+        [
+          16960,
+          20032
+        ],
+        [
+          21568,
+          23104
+        ],
+        [
+          23104,
+          23105
+        ]
+      ],
+      "raw_frames": 26176,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 16612,
+        "seeks": 16,
+        "checks": 1389485,
+        "exact_float_words": 40246
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 188777,
+        "exact_float_words": 33224,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "763cb0fe700d9a39cd3dec18e606f060195cbe3161f00b8018cc97f7543d1660"
+    },
+    {
+      "file": "vorbis-ebml.mka",
+      "reference": "vorbis-ebml.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "padding": "mixed",
+        "lacing": 3
+      },
+      "model_frames": 16923,
+      "seek_base": null,
+      "start_trim": 0,
+      "removed_intervals": [
+        [
+          0,
+          1
+        ],
+        [
+          4655,
+          4672
+        ],
+        [
+          4672,
+          7744
+        ],
+        [
+          9280,
+          10816
+        ],
+        [
+          10816,
+          10817
+        ],
+        [
+          16943,
+          16960
+        ],
+        [
+          16960,
+          20032
+        ],
+        [
+          21568,
+          23104
+        ],
+        [
+          23104,
+          23105
+        ]
+      ],
+      "raw_frames": 26176,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 16923,
+        "seeks": 16,
+        "checks": 1382461,
+        "exact_float_words": 40868
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 194923,
+        "exact_float_words": 33846,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "e7db6433d2aca52274405045fc4919cbf4a9e51336ab9cbb1653c0411ddcf763"
+    },
+    {
+      "file": "vorbis-fixed.mka",
+      "reference": "vorbis-fixed.mka.reference.f32",
+      "rate": 48000,
+      "channels": 2,
+      "description": {
+        "padding": "mixed",
+        "lacing": 2
+      },
+      "model_frames": 16323,
+      "seek_base": null,
+      "start_trim": 0,
+      "removed_intervals": [
+        [
+          559,
+          576
+        ],
+        [
+          576,
+          1600
+        ],
+        [
+          2112,
+          2624
+        ],
+        [
+          2624,
+          2625
+        ],
+        [
+          4655,
+          4672
+        ],
+        [
+          4672,
+          5696
+        ],
+        [
+          6208,
+          6720
+        ],
+        [
+          6720,
+          6721
+        ],
+        [
+          8751,
+          8768
+        ],
+        [
+          8768,
+          9792
+        ],
+        [
+          10816,
+          11840
+        ],
+        [
+          11840,
+          11841
+        ],
+        [
+          13871,
+          13888
+        ],
+        [
+          13888,
+          14912
+        ],
+        [
+          15424,
+          15936
+        ],
+        [
+          15936,
+          15937
+        ],
+        [
+          17967,
+          17984
+        ],
+        [
+          17984,
+          19008
+        ],
+        [
+          19520,
+          20032
+        ],
+        [
+          20032,
+          20033
+        ],
+        [
+          22063,
+          22080
+        ],
+        [
+          22080,
+          23104
+        ],
+        [
+          23616,
+          24128
+        ],
+        [
+          24128,
+          24129
+        ],
+        [
+          26159,
+          26176
+        ]
+      ],
+      "raw_frames": 26176,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 16323,
+        "seeks": 16,
+        "checks": 1353969,
+        "exact_float_words": 39668
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 190511,
+        "exact_float_words": 32646,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "67528d40257270fc2f84b8f02e119d595acdc0e0212a277eb618b39d275acf5e"
+    },
+    {
+      "file": "empty.mka",
+      "reference": "empty.f32",
+      "rate": 8000,
+      "channels": 2,
+      "description": "delay removes entire stream",
+      "model_frames": 0,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 0,
+        "seeks": 16,
+        "checks": 557162,
+        "exact_float_words": 0
+      },
+      "guarded": null,
+      "sha256": "1ceea93a38152839bfcbcc852da532a5e21b657ef4f6b48d71f53079b5ffc770"
+    },
+    {
+      "file": "unselected.mka",
+      "reference": "unselected.f32",
+      "rate": 8000,
+      "channels": 2,
+      "description": "unselected track delay/padding ignored",
+      "model_frames": 1414,
+      "result": "exact independent visibility model",
+      "seek_comparator": "continuous unpadded PCM plus independent visibility mask",
+      "oracle": {
+        "result": "passed",
+        "frames": 1414,
+        "seeks": 16,
+        "checks": 1175360,
+        "exact_float_words": 8044
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 47617,
+        "exact_float_words": 2828,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "sha256": "a23f06d5144c816faf35b24d269edb5a4819b4d7ff36cd74fa9ae7506b49e6ae"
+    }
+  ],
+  "rejections": [
+    {
+      "file": "bad-excess-delay.mka",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 60
+    },
+    {
+      "file": "bad-excess-padding.mka",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 60
+    },
+    {
+      "file": "bad-long-delay.mka",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 70
+    },
+    {
+      "file": "bad-long-padding.mka",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 70
+    },
+    {
+      "file": "bad-duplicate-delay.mka",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 70
+    },
+    {
+      "file": "bad-duplicate-padding.mka",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 70
+    },
+    {
+      "file": "bad-duplicate-block.mka",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 70
+    },
+    {
+      "file": "bad-missing-block.mka",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 70
+    }
+  ],
+  "cancellation": [
+    {
+      "test": "cancel-open",
+      "result": "cancelled"
+    },
+    {
+      "test": "cancel-read",
+      "result": "cancelled",
+      "frames_before_cancel": 4126
+    }
+  ],
+  "binaries": {
+    "lamp-cli.exe": "15d195cc30c3f1fb3eccf4bf268d856afcc3101460da83cb3d107eb578230a38",
+    "matroska-timing-oracle.exe": "88b1e2f089cbfd25cc12c4a61dba6cc91280459ed1c3d88a9d6f4073813b1394",
+    "matroska-timing-chain.exe": "b9752a965ffae3df19a74f4be001aa5057c7c295c369a947a9f372f9f403959e",
+    "matroska-timing-guard.exe": "58bef31619fa5b217552e4ba266d1765f1256c260427098929d3204e8bd6ca0d"
+  },
+  "sources": {
+    "src/mkv.s": "ec0f10939af6abbc1afac1c1822256b2ffdabc885899fdf87fbc54fb6d42436a",
+    "src/track.s": "b000c8c75f1d9ec7852e862db988bdd5397625799c145b1e6ae76278c952a475",
+    "src/track_cuts.s": "0e0b0b2df541caf29166a9570494488554fc50ae38aaa1f667f99c89d999883b",
+    "tests/verify-matroska-timing.py": "521b9bda018603a1f3d3f4126280eca71ffff6ee1ea669fbb553c3ac2f054c5e",
+    "tests/matroska-timing-oracle.c": "6a6720abcc0a5039f019d4afa3cd7b9442539912f9302d1ba9580b0fd0cea24c",
+    "tests/speex-matroska-oracle.c": "bf2a91701a4985c694f345026605a9a797231984d0d3b499cf451960a956e548",
+    "tests/chain-oracle.c": "770757565631753a57a6a8352cbac5ffecd33bb380eec247f23874277f7a00f7",
+    "tests/verify-matroska.py": "a506b58d0fc0ccfba565d0471b27f9ddb60c465793772d14ae372051ea50b221",
+    "src/decoder.s": "17d5243b02935f5e43b7842355abcdfa7b0bc5514bca6f96ebc2b694227bd2fb"
+  },
+  "native_lifecycle": [
+    {
+      "file": "lifecycle.mka",
+      "description": "Speex 16 kHz stereo, CodecDelay, mixed signed whole-block padding and Xiph lacing",
+      "details": [
+        "Passed: playback, pause, resume, stop, reopen, seek, paused seek and cancelled open.",
+        "Muted output: lifecycle exercised with volume zero.",
+        "Default-device callback: paused and active restart passed; pending command preserved.",
+        "Exclusive output: 48000 Hz session lifecycle passed."
+      ],
+      "probe_sha256": "44b7a9dcbddfcba4826e18a6c18c97b03748ed577d1faea5da9c241a65138a3b"
+    }
+  ],
+  "ffmpeg_interoperability": [
+    {
+      "file": "pcm-48000-head.mka",
+      "result": "exact installed FFmpeg PCM"
+    },
+    {
+      "file": "pcm-48000-middle.mka",
+      "result": "exact installed FFmpeg PCM"
+    }
+  ],
+  "ffmpeg_comparator_limits": "FFmpeg 8.0.1 exposes CodecDelay as initial_padding without applying generic skip_samples; whole-block laced padding is checked against the normative mask rather than repeated per-lace trimming."
+}

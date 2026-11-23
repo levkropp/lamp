@@ -1,0 +1,46 @@
+{
+  "result": "passed",
+  "scope": "Compile-only ARM64 macOS checks of the four changed runtime modules. No native linking, execution, device playback or Mac feature parity is established.",
+  "target": "arm64-apple-macosx12.0.0",
+  "cpu": "apple-m1",
+  "compiler": "Ubuntu LLVM version 18.1.3",
+  "sources": {
+    "tools/arm64.py": "f8abd01ad67063451181e0adc66e72b2a445ebe9a7b159f7b88ac52b79bdadc2",
+    "tools/arm64_lamp.py": "37e4a515283ef441f9d1ee647377716efbe0d6a3aae27ef7c62faf53118f35d0",
+    "src/lamp.inc": "d79c75543ab0d78863010b32e46faf23fda5b9cb54ec624e9dce0acfcabf03e6"
+  },
+  "checks": [
+    {
+      "file": "src/decoder.s",
+      "source_sha256": "17d5243b02935f5e43b7842355abcdfa7b0bc5514bca6f96ebc2b694227bd2fb",
+      "translated_sha256": "7a3164e0fdbcbfb60241b1360abf9c606cb57046bbdc5a0ccc2cd1c0bc55e606",
+      "object_sha256": "5755e2f0371e7b584cbd5beb7677172604a4192baa8b6aeaf09f296ff54141bb",
+      "object_bytes": 61488,
+      "result": "translated and assembled"
+    },
+    {
+      "file": "src/mkv.s",
+      "source_sha256": "ec0f10939af6abbc1afac1c1822256b2ffdabc885899fdf87fbc54fb6d42436a",
+      "translated_sha256": "25f7f6904478a1a0d376cd13b0b7ec857097785bfce161946d931ceb74d54088",
+      "object_sha256": "6f1a6f2e4443426c5510637f26c5fb705de095ea7ede507fad2d76a58f5c9e7f",
+      "object_bytes": 12584,
+      "result": "translated and assembled"
+    },
+    {
+      "file": "src/track.s",
+      "source_sha256": "b000c8c75f1d9ec7852e862db988bdd5397625799c145b1e6ae76278c952a475",
+      "translated_sha256": "69a0f514375bd58a51932fee3e188555766270122f5675a5da418ae139a95431",
+      "object_sha256": "520cbca8b411200fd1b0c89f837d90e03d41b3ef54df5bd437f9baedd153a66b",
+      "object_bytes": 13824,
+      "result": "translated and assembled"
+    },
+    {
+      "file": "src/track_cuts.s",
+      "source_sha256": "0e0b0b2df541caf29166a9570494488554fc50ae38aaa1f667f99c89d999883b",
+      "translated_sha256": "0536f4a27c8d5b497c9477475feafec66c21091e9c2d9359da2cd378dc5581ec",
+      "object_sha256": "3f7e0694142ba4d680be322d0e37331c3673d2ce5be03fdc64e72ae1c32d5302",
+      "object_bytes": 4064,
+      "result": "translated and assembled"
+    }
+  ]
+}

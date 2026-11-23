@@ -42,7 +42,8 @@ def main():
             private=track['private'];size=struct.unpack_from('<H',private,16)[0];header=private[18:18+size];rate,channels=struct.unpack_from('<I',header,36)[0],struct.unpack_from('<I',header,48)[0]
             packets=track['frames'];reference=name+'.packets';(work/reference).write_bytes(struct.pack('<I',len(header))+header+struct.pack('<I',len(packets))+b''.join(struct.pack('<I',len(x))+x for x in packets))
             trim=(track.get('discard',0)*rate+500000000)//1000000000
-            manifest['cases'].append({'file':name,'reference':reference,'rate':rate,'channels':channels,'trim_samples':trim,'track_choice':choice,'fuzz':fuzz,'description':description})
+            start=(track.get('codec_delay',0)*rate+500000000)//1000000000
+            manifest['cases'].append({'file':name,'reference':reference,'rate':rate,'channels':channels,'trim_samples':trim,'start_samples':start,'track_choice':choice,'fuzz':fuzz,'description':description})
         def encode(name,rate,channels,quality=8,group=1,vbr=False,duration=.53,video=False):
             tone=f'aevalsrc=if(lt(mod(t\\,0.4)\\,0.22)\\,0.23*sin(2*PI*337*t)\\,0)|0.14*sin(2*PI*911*t):s={rate}:d={duration}'
             cmd=['-f','lavfi','-i',tone]
@@ -88,7 +89,7 @@ def main():
         data=mkv.mux(t,extra_tracks=[before],selected_default=0,number=7)
         add('unsupported-before.mka',t,'unknown ACM is counted and skipped by Automatic',data=data)
         # Private before CodecID and unrelated track metadata remain valid.
-        entry=mkv.element(0x63A2,private)+mkv.element(0x86,b'A_MS/ACM')+mkv.uint(0xD7,1)+mkv.uint(0x83,2)+mkv.element(0xE1,t['audio'])
+        entry=mkv.element(0x63A2,private)+mkv.element(0x86,b'A_MS/ACM')+mkv.uint(0xD7,1)+mkv.uint(0x83,2)+mkv.element(0xE1,t['audio'])+mkv.uint(0x56AA,t.get('codec_delay',0))
         body=mkv.uint(0xE7,0)+b''.join(mkv.element(0xA3,mkv.size_bytes(1)+b'\0\0\x80'+f) for f in t['frames'])
         data=mkv.element(0x1A45DFA3,mkv.element(0x4282,b'matroska'))+mkv.element(0x18538067,mkv.element(0x1654AE6B,mkv.element(0xAE,entry))+mkv.element(0x1F43B675,body))
         add('private-first.mka',t,'CodecPrivate precedes CodecID',data=data)
@@ -100,7 +101,7 @@ def main():
         bad('missing-private',private=None);bad('short-wave',private[:17]);bad('raw-header',private[18:]);bad('invented-id',codec='A_SPEEX')
         for name,offset,fmt,value in [('small-cb',16,'<H',79),('large-cb',16,'<H',65535),('wave-rate',4,'<I',8000),('wave-channels',2,'<H',1),('header-size',50,'<I',81),('mode',58,'<I',3),('version',62,'<I',3),('channels',66,'<I',3)]:
             b=bytearray(private);struct.pack_into(fmt,b,offset,value);bad(name,b)
-        bad('oversized-discard',discard=1000000000000);bad('negative-discard',discard=-1)
+        bad('oversized-discard',discard=1000000000000);bad('excessive-negative-discard',discard=-1000000000000)
         bad('payload',frames=[b'\x48']);bad('control-only',frames=[b'\x7f'])
     (work/'fixtures.json').write_text(json.dumps(manifest,indent=2)+'\n',encoding='utf-8');(work/'ffmpeg-version.txt').write_text(version+'\n',encoding='utf-8')
     ref=module('speex_reference',ROOT/'tests/build-speex-reference.py');_,includes,sources=ref.prepare();reference=out/('speex-matroska-reference'+suffix);compile_c(reference,[ROOT/'tests/speex-file-reference.c',*sources],defines=['FLOATING_POINT','EXPORT=','MAX_CHARS_PER_FRAME=16384'],includes=[*includes,ROOT/'tests'])
@@ -109,7 +110,7 @@ def main():
     for target,file in [(seek,'seek-oracle.c'),(chain,'chain-oracle.c'),(guard,'speex-matroska-oracle.c'),(catalog,'track-catalog-oracle.c')]:compile_c(target,[ROOT/'tests'/file],objects=objects,libraries=libraries)
     checks=[]
     for case in manifest['cases']:
-        path=work/case['file'];raw=work/(path.stem+'.raw.f32');run([reference,work/case['reference'],raw]);expected=work/(path.stem+'.reference.f32');data=raw.read_bytes();trim=case['trim_samples'];expected.write_bytes(data[:-trim*8] if trim else data);pcm=work/(path.stem+'.lamp.f32');pcm.unlink(missing_ok=True);choice=case['track_choice'];options=['--track',choice] if choice else [];stats=run([cli,'--decode',*options,path,pcm]);assert pcm.read_bytes()==expected.read_bytes(),(case,stats)
+        path=work/case['file'];raw=work/(path.stem+'.raw.f32');run([reference,work/case['reference'],raw]);expected=work/(path.stem+'.reference.f32');data=raw.read_bytes()[case.get('start_samples',0)*8:];trim=case['trim_samples'];expected.write_bytes(data[:-trim*8] if trim else data);pcm=work/(path.stem+'.lamp.f32');pcm.unlink(missing_ok=True);choice=case['track_choice'];options=['--track',choice] if choice else [];stats=run([cli,'--decode',*options,path,pcm]);assert pcm.read_bytes()==expected.read_bytes(),(case,stats)
         detail=json.loads(run([seek,path,expected,0,0,0,choice]).strip().splitlines()[-1])
         bounds=json.loads(run([guard,path,expected,case['rate'],case['channels'],choice,int(case['fuzz'])]).strip().splitlines()[-1]);checks.append({**case,'result':'exact official float PCM','frames':pcm.stat().st_size//8,'seeks':detail,'guarded':bounds,'fixture_sha256':hashlib.sha256(path.read_bytes()).hexdigest()});print(f"{path.name}: exact PCM and guarded input/output",flush=True)
     rejected=[]
@@ -128,6 +129,6 @@ def main():
         for rate in (8000,16000,32000):
             detail=run([probe,work/f'lifecycle-{rate}.mka'],timeout=75);assert 'Passed: playback, pause, resume, stop, reopen, seek, paused seek and cancelled open.' in detail;lifecycle.append({'rate':rate,'details':detail.splitlines(),'probe_sha256':hashlib.sha256(probe.read_bytes()).hexdigest()})
     paths=['src/mkv.s','src/track.s','src/speex_track.s','src/speex_packet.s','tests/verify-speex-matroska.py','tests/verify-matroska.py','tests/speex-matroska-oracle.c','tests/speex-file-reference.c','tests/seek-oracle.c','tests/chain-oracle.c','tests/track-catalog-oracle.c']
-    report={'result':'passed','suite':'speex-matroska','platform':platform.platform(),'recorded_utc':datetime.now(timezone.utc).isoformat(),'ffmpeg':version,'reference':'Unchanged test-only Speex 1.2.1 float decoder on independent packet extraction','archive_url':ref.URL,'archive_sha256':ref.SHA256,'checks':checks,'rejections':rejected,'catalogs':catalogs,'third_track_opus':'exact against standalone','cancellation':cancellation,'native_lifecycle':lifecycle,'scope':'Matroska A_MS/ACM Speex tag0xa109, NB/WB/UWB mono/stereo, packet grouping, lacing, final padding and selected ordinals. Timestamp scheduling/gaps, CodecDelay, broader ACM codecs and native Mac execution are not established.','binaries':{p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in [cli,reference,seek,chain,guard,catalog]},'sources':{p:hashlib.sha256((ROOT/p).read_bytes()).hexdigest() for p in paths}}
+    report={'result':'passed','suite':'speex-matroska','platform':platform.platform(),'recorded_utc':datetime.now(timezone.utc).isoformat(),'ffmpeg':version,'reference':'Unchanged test-only Speex 1.2.1 float decoder on independent packet extraction','archive_url':ref.URL,'archive_sha256':ref.SHA256,'checks':checks,'rejections':rejected,'catalogs':catalogs,'third_track_opus':'exact against standalone','cancellation':cancellation,'native_lifecycle':lifecycle,'scope':'Matroska A_MS/ACM Speex tag0xa109, NB/WB/UWB mono/stereo, packet grouping, lacing, CodecDelay, final padding and selected ordinals. Timestamp scheduling/gaps, broader ACM codecs and native Mac execution are not established.','binaries':{p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in [cli,reference,seek,chain,guard,catalog]},'sources':{p:hashlib.sha256((ROOT/p).read_bytes()).hexdigest() for p in paths}}
     (out/'speex-matroska-verification.json').write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8');print('Passed',len(checks),'files,',sum(x['seeks']['checks'] for x in checks if x['seeks']),'exact seeks and',len(rejected),'malformed cases.')
 if __name__=='__main__':main()

@@ -87,6 +87,7 @@ def parse(path):
                     track['codec'] = fields[0x86].rstrip(b'\0').decode()
                     track['private'] = fields.get(0x63A2)
                     track['audio'] = fields.get(0xE1, b'')
+                    if 0x56AA in fields:track['codec_delay'] = int.from_bytes(fields[0x56AA], 'big')
         elif ident == 0x1F43B675:
             for ci, ca, cb in elements(data, a, b):
                 blocks = []
@@ -152,6 +153,7 @@ def mux(track, lacing=0, group=4, unknown=False, extra_tracks=(), selected_defau
         entry += element(0x63A2, track['private'])
     if track.get('audio'):
         entry += element(0xE1, track['audio'])
+    if 'codec_delay' in track:entry += uint(0x56AA, track['codec_delay'])
     tracks = element(0x1654AE6B, b''.join(element(0xAE, e) for e in extra_tracks) + element(0xAE, entry))
     header = element(0x1A45DFA3, uint(0x4286, 1) + element(0x4282, b'matroska'))
     blocks = blocks_of(track['frames'], lacing, group)
@@ -232,13 +234,19 @@ def main():
             if channels <= 2:
                 upmix = ['-af', 'pan=stereo|c0=c0|c1=c0'] if channels == 1 else []
                 ffmpeg(*decoder, '-i', path, *upmix, '-f', 'f32le', reference)
+                # FFmpeg 8 exposes generic CodecDelay as initial_padding but
+                # does not discard it. Opus consumes its own header pre-skip.
+                delay = (parse(path).get('codec_delay', 0) * rate + 500000000) // 1000000000
+                adjusted = False
+                if kind != 'opus' and delay and reference.stat().st_size == ours.stat().st_size + delay * 8:
+                    reference.write_bytes(reference.read_bytes()[delay * 8:]);adjusted = True
                 peak, snr, frames, expected = measure(ours, reference)
                 if frames != expected:
                     raise Failure(f'{path.name}: {frames // 2} frames, FFmpeg {expected // 2}')
                 limit, min_snr = TOLERANCE.get(kind, (0.0, math.inf))
                 if peak > limit or snr < min_snr:
                     raise Failure(f'{path.name}: peak error {peak:.3g}, SNR {snr:.1f} dB against FFmpeg')
-                comparator = 'FFmpeg'
+                comparator = 'FFmpeg with explicit CodecDelay sample removal' if adjusted else 'FFmpeg'
             else:
                 comparator = 'multichannel: LAMP Ogg/native decode below'
                 peak, snr = None, None
@@ -359,7 +367,24 @@ def main():
     while len(uneven) % 3 == 0:
         uneven = uneven[:-1]
     reject('fixed-size', rebuild_blocks(track, [size_bytes(1) + b'\0\0\x84\x02' + uneven]))
-    reject('discard-not-last', mux_discard_early(opus))
+    # Midstream BlockGroup padding is valid. Compare to the same packets
+    # without final padding, deleting the declared interval in sample space.
+    unpadded = work / 'opus-unpadded.mka'
+    unpadded.write_bytes(mux(dict(opus, discard=0)))
+    raw = work / 'opus-unpadded.f32'
+    decode_f32(unpadded, raw)
+    early = work / 'opus-discard-early.mka'
+    early.write_bytes(mux_discard_early(opus))
+    output = work / 'opus-discard-early.f32'
+    decode_f32(early, output)
+    def opus_samples(packet):
+        config, code = packet[0] >> 3, packet[0] & 3
+        per = (480,960,1920,2880)[config & 3] if config < 12 else (480 << (config & 1)) if config < 16 else 120 << (config & 3)
+        return per * (1 if code == 0 else packet[1] & 63 if code == 3 else 2)
+    end = sum(opus_samples(p) for p in opus['frames'][:4]) - int.from_bytes(opus['private'][10:12], 'little')
+    expected = raw.read_bytes()[:(end - 120)*8] + raw.read_bytes()[end*8:]
+    if output.read_bytes() != expected:raise Failure('Midstream DiscardPadding differs from the declared sample interval')
+    checks.append({'test': 'midstream DiscardPadding', 'result': 'exact sample-interval model', 'removed_samples':120})
     print(f'Rejected {rejected} malformed files', flush=True)
     for mode in ('cancel-open', 'cancel-read'):
         line = run([chain, mode, work / 'vorbis-stereo.mka']).strip().splitlines()[-1]
