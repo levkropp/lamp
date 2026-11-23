@@ -276,9 +276,10 @@ def main():
     # Rejections.
     seed += 1
     unsupported = {}
-    for codec in ('nellymoser', 'libspeex'):
+    # Speex now has its own official-float PCM/seek/guard suite.
+    for codec in ('nellymoser',):
         path = work / f'{codec}.flv'
-        ffmpeg(*source(16000 if codec == 'libspeex' else 22050, 1, 1, seed), '-c:a', codec, path)
+        ffmpeg(*source(22050, 1, 1, seed), '-c:a', codec, path)
         unsupported[f'flv-{codec}.flv'] = (path.read_bytes(), 101)
     silent = work / 'video-only.flv'
     ffmpeg(*video(1), '-c:v', 'flv', silent)

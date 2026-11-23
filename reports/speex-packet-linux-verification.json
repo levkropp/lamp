@@ -1,9 +1,10 @@
 {
   "result": "passed",
-  "checks": 13647790,
+  "checks": 13718200,
   "bit_operations": 262144,
   "header_cases": 883,
   "encoded_packets": 792,
+  "final_group_packets": 576,
   "projected_output_modes": 3,
   "protected_prefixes": 581,
   "mutations": 4096,
@@ -15,23 +16,23 @@
   "lsp_cases": 352256,
   "lsp_float_words": 3514368,
   "lsp_truncated_inputs": 480,
-  "pcm_decoder_implemented": false,
+  "pcm_synthesis_verified_by_this_suite": false,
   "platform": "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
-  "recorded_utc": "2026-11-22T21:33:56.922530+00:00",
-  "scope": "MSB bit access, bounded Speex headers, canonical NB/WB/UWB packet structure and exact float NB30/NB18/high12 LSP codebook reconstruction. Official C encodes and fully decodes test packets to establish frame counts and bit positions; LAMP PCM synthesis and file playback are not implemented. Mutation acceptance is structural only. Native macOS execution is unverified.",
+  "recorded_utc": "2026-11-23T00:11:31.644520+00:00",
+  "scope": "MSB bit access, bounded Speex headers, canonical NB/WB/UWB packet structure and exact float NB30/NB18/high12 LSP codebook reconstruction. Official C encodes and fully decodes test packets to establish frame counts and bit positions; PCM synthesis and file playback are checked by separate suites. Mutation acceptance is structural only. Native macOS execution is unverified.",
   "reference": "Speex 1.2.1 floating-point, test-only",
   "archive_url": "https://downloads.xiph.org/releases/speex/speex-1.2.1.tar.gz",
   "archive_sha256": "4b44d4f2b38a370a2d98a78329fefc56a0cf93d1c1be70029217baae6628feea",
-  "oracle_sha256": "150766708c69228a70a5eb102b1d0d3df7c3863b0caf1e644e18224bc8a72259",
+  "oracle_sha256": "cfbac4dd7442cd87aa807cdd2c5978723f2886fac61491c94897bb6fa24dc227",
   "sources": {
-    "src/speex_packet.s": "8ffa7d5f4b870b816dcaa92c552787b79ad0ea7cec637969adc5c062cc3a72aa",
+    "src/speex_packet.s": "18c0df44d4e88f323a649848e3f3ffe66afdca56e5002fea72b411e77782cc30",
     "src/speex_packet.inc": "d222f4982343f5c4874ee37bb2cedf226d7e84ce9a06f11d7f4a78298eb94620",
     "src/speex_lsp.s": "67d490a7e3f92fb55eccd0a97c4bfdeb3c6af64f43a8f0ca9183b5a8cf6ffe95",
     "src/speex_lsp_tables.inc": "c55742f6d0d28c799c5168c11eb5c04dfcae1f0e821ab81ef7e85b29271a2c1d",
     "src/lamp.inc": "d79c75543ab0d78863010b32e46faf23fda5b9cb54ec624e9dce0acfcabf03e6",
-    "tests/speex-packet-oracle.c": "4ed07ca466638af40cb73be9654149c5fb5a38d1eabe95b8c829fe781518133a",
+    "tests/speex-packet-oracle.c": "296536541e62b6209c825979bc344d5519ccc9b25a6883b465561ce0cc45dab4",
     "tests/build-speex-reference.py": "d1bd105ba2b9ce038859d208d94e07ef0e1e50a0dc93b487b3dc61b99c76bf04",
     "tests/generate-speex-tables.py": "95c256890aed4cc28845710d4709df0300d794da14255bf3f9bc77e27c98c993",
-    "tests/verify-speex-packet.py": "86e4f5c3f097a5763174e49590fa9a42387592327d67c8709e61f5e3c3a1a322"
+    "tests/verify-speex-packet.py": "845396fd8462618e8bcc4d8729886c64b9c612f931a3a68ff53998c39765b4a1"
   }
 }

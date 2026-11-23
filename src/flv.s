@@ -7,7 +7,7 @@
 # tags. PCM (8-bit unsigned, 16-bit little-endian), G.711 and MP3 tag data
 # is gathered behind a Wave64 header for the WAV reader, as AVI's is; AAC
 # raw frames (after the AudioSpecificConfig of the first sequence header)
-# and Flash ADPCM tags are track packets.
+# and Flash ADPCM/Speex tags are track packets.
 .include "lamp.inc"
 .globl flv_open
 
@@ -15,11 +15,22 @@
 .equ FLV_UNSUPPORTED, 101
 .equ TK_AAC, 7
 .equ TK_ADPCM, 10
+.equ TK_SPEEX, 11
 .equ ADPCM_SWF, 0x5346
 .equ FLV_IMAGE, 0
 .equ FLV_AAC, 1
 .equ FLV_ADPCM, 2
+.equ FLV_SPEEX, 3
 .equ FLV_PACKET_MAX, 65535          # Flash ADPCM tag data (a WAVE block size)
+
+RODATA
+# FLV sound format11 has no codec header: WB,16kHz,mono. The low audio
+# flags are ignored, including FFmpeg's legacy11kHz rate flag. Packet frame
+# counts come from the bitstream, not this synthetic header's nominal1.
+flv_speex_header:
+    .ascii "Speex   lamp"
+    .zero 16
+    .long 1,80,16000,1,4,1,-1,320,0,1,0,0,0
 
 .data
 flv_file: .quad 0
@@ -88,7 +99,9 @@ LOCALFN flv_start
     je .Lflv_start_aac
     cmp eax, 1
     je .Lflv_start_adpcm
-    jmp .Lflv_start_unsupported           # Nellymoser, Speex and others
+    cmp eax, 11
+    je .Lflv_start_speex
+    jmp .Lflv_start_unsupported           # Nellymoser and others
 .Lflv_start_alaw:
     mov word ptr [r8], 6
     jmp .Lflv_start_g711
@@ -137,6 +150,11 @@ LOCALFN flv_start
     mov ecx, TK_ADPCM
     call track_begin
     jmp .Lflv_start_return
+.Lflv_start_speex:
+    mov dword ptr [rip + flv_mode], FLV_SPEEX
+    mov ecx, TK_SPEEX
+    call track_begin
+    jmp .Lflv_start_return
 .Lflv_start_unsupported:
     mov dword ptr [rip + decode_error], FLV_UNSUPPORTED
     xor eax, eax
@@ -173,6 +191,8 @@ LOCALFN flv_audio
     je .Lflv_audio_aac
     cmp dword ptr [rip + flv_mode], FLV_ADPCM
     je .Lflv_audio_adpcm
+    cmp dword ptr [rip + flv_mode], FLV_SPEEX
+    je .Lflv_audio_speex
     mov ecx, [rip + flv_flags]
     shr ecx, 4
     cmp ecx, 2
@@ -233,6 +253,15 @@ LOCALFN flv_audio
     lea rcx, [rsi + 1]
     call track_add
     jmp .Lflv_audio_return
+.Lflv_audio_speex:
+    test ebx, ebx
+    jnz .Lflv_audio_return                # discard an incomplete final tag
+    cmp rdi, 1
+    jbe .Lflv_audio_return
+    lea rdx, [rdi - 1]
+    cmp rdx, 1048576
+    ja .Lflv_audio_unsupported
+    jmp .Lflv_audio_packet
 .Lflv_audio_unsupported:
     mov dword ptr [rip + decode_error], FLV_UNSUPPORTED
     xor eax, eax
@@ -245,7 +274,7 @@ LOCALFN flv_audio
 ENDFN flv_audio
 
 # RCX=mapped start ("FLV", version 1), RDX=end -> EAX=1 with the stream open
-# (AAC, Flash ADPCM), EAX=2 with RCX..RDX a Wave64 image for the WAV reader,
+# (AAC, Flash ADPCM, Speex), EAX=2 with a Wave64 image for the WAV reader,
 # or 0 with decode_error set.
 FN flv_open
     push rbx
@@ -320,6 +349,8 @@ FN flv_open
     je .Lflv_open_aac
     cmp eax, FLV_ADPCM
     je .Lflv_open_adpcm
+    cmp eax, FLV_SPEEX
+    je .Lflv_open_speex
     xor ecx, ecx
     cmp word ptr [rip + flv_fmt], 0x55
     je .Lflv_open_image
@@ -355,6 +386,18 @@ FN flv_open
     test eax, eax
     jz .Lflv_open_failed
     mov dword ptr [rip + codec_kind], 15
+    mov eax, 1
+    jmp .Lflv_open_return
+.Lflv_open_speex:
+    cmp qword ptr [rip + track_count], 0
+    je .Lflv_open_bad
+    lea rax, [rip + flv_speex_header]
+    mov [rip + track_config], rax
+    mov dword ptr [rip + track_config_bytes], 80
+    call track_finish
+    test eax, eax
+    jz .Lflv_open_failed
+    mov dword ptr [rip + codec_kind], 22
     mov eax, 1
     jmp .Lflv_open_return
 .Lflv_open_bad:

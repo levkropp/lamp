@@ -22,7 +22,7 @@ static uint32_t rng=0x19577291;
 static uint32_t next(void){rng^=rng<<13;rng^=rng>>17;rng^=rng<<5;return rng;}
 static uint64_t checks,bit_checks,header_checks,packets,prefixes,mutations,accepted_mutations,controls;
 static unsigned nb_mask,wb_mask,uwb_mask;
-static uint64_t lsp_cases,lsp_words,lsp_truncated;
+static uint64_t lsp_cases,lsp_words,lsp_truncated,final_groups;
 #define CHECK(x) do{checks++;if(!(x)){fprintf(stderr,"line %d: %s\n",__LINE__,#x);exit(1);}}while(0)
 typedef struct {unsigned char*allocation,*data;size_t size;} Guard;
 static Guard guarded(size_t n){
@@ -122,6 +122,16 @@ static void control_packets(void){
  Packet untouched;memset(&untouched,0xa5,sizeof(untouched));CHECK(spx_packet_scan(NULL,1,0,&untouched)==-1);CHECK(spx_packet_scan(data,1,3,&untouched)==-1);CHECK(spx_packet_scan(data,1,0,NULL)==-1);CHECK(spx_packet_scan(data,1048577,0,&untouched)==-1);CHECK(spx_packet_scan((void*)(UINTPTR_MAX-2),10,0,&untouched)==-1);CHECK(spx_packet_scan(data,1,0,(Packet*)data)==-1);
  speex_bits_destroy(&bits);
 }
+static void final_group_markers(void){
+ /* speexenc and FFmpeg fill absent final-group slots with mode15. */
+ for(unsigned mode=0;mode<3;mode++)for(unsigned frames=1;frames<=3;frames++)for(unsigned markers=1;markers<=64;markers++){
+  SpeexBits bits;speex_bits_init(&bits);for(unsigned i=0;i<frames;i++){speex_bits_pack(&bits,0,5);for(unsigned j=0;j<mode;j++)speex_bits_pack(&bits,8,4);}unsigned coded=bits.nbBits;
+  for(unsigned i=0;i<markers;i++)speex_bits_pack(&bits,15,5);unsigned char data[128];int n=speex_bits_write(&bits,(char*)data,sizeof(data));Packet p;
+  for(unsigned projected=0;projected<3;projected++){CHECK(inspect(data,n,projected,&p)==(int)frames);CHECK(p.coded_bits==coded&&p.samples==frames*(160u<<projected));}
+  void*d=speex_decoder_init(speex_lib_get_mode(mode));CHECK(d);SpeexBits input;speex_bits_set_bit_buffer(&input,data,n);float pcm[640];for(unsigned i=0;i<frames;i++)CHECK(!speex_decode(d,&input,pcm));CHECK(reference_used(&input)==coded);CHECK(speex_decode(d,&input,pcm)==-1&&!input.overflow);speex_decoder_destroy(d);speex_bits_destroy(&bits);final_groups++;
+ }
+ for(unsigned kind=0;kind<2;kind++){SpeexBits bits;speex_bits_init(&bits);speex_bits_pack(&bits,0,5);for(unsigned i=0;i<(kind?1:66);i++)speex_bits_pack(&bits,15,5);if(kind)speex_bits_pack(&bits,0,5);unsigned char data[64];int n=speex_bits_write(&bits,(char*)data,sizeof(data));CHECK(inspect(data,n,0,NULL)==-1);speex_bits_destroy(&bits);}
+}
 static void spectral_books(void){
  for(unsigned kind=0;kind<3;kind++){
   unsigned stages=kind==0?5:kind==1?3:2,count=kind==2?8:10,required=stages*6;
@@ -146,7 +156,7 @@ static void spectral_books(void){
  }
 }
 int lamp_main(int argc,lamp_char**argv){
- (void)argc;(void)argv;bit_access();headers();encoded();control_packets();spectral_books();
+ (void)argc;(void)argv;bit_access();headers();encoded();control_packets();final_group_markers();spectral_books();
  CHECK(nb_mask==0x1ff);CHECK(wb_mask==31);CHECK(uwb_mask==3);
- printf("{\"result\":\"passed\",\"checks\":%llu,\"bit_operations\":%llu,\"header_cases\":%llu,\"encoded_packets\":%llu,\"projected_output_modes\":3,\"protected_prefixes\":%llu,\"mutations\":%llu,\"structurally_accepted_mutations\":%llu,\"control_and_null_layer_packets\":%llu,\"narrowband_submode_mask\":%u,\"wideband_submode_mask\":%u,\"ultrawideband_coverage\":%u,\"lsp_cases\":%llu,\"lsp_float_words\":%llu,\"lsp_truncated_inputs\":%llu,\"pcm_decoder_implemented\":false}\n",(unsigned long long)checks,(unsigned long long)bit_checks,(unsigned long long)header_checks,(unsigned long long)packets,(unsigned long long)prefixes,(unsigned long long)mutations,(unsigned long long)accepted_mutations,(unsigned long long)controls,nb_mask,wb_mask,uwb_mask,(unsigned long long)lsp_cases,(unsigned long long)lsp_words,(unsigned long long)lsp_truncated);return 0;
+ printf("{\"result\":\"passed\",\"checks\":%llu,\"bit_operations\":%llu,\"header_cases\":%llu,\"encoded_packets\":%llu,\"final_group_packets\":%llu,\"projected_output_modes\":3,\"protected_prefixes\":%llu,\"mutations\":%llu,\"structurally_accepted_mutations\":%llu,\"control_and_null_layer_packets\":%llu,\"narrowband_submode_mask\":%u,\"wideband_submode_mask\":%u,\"ultrawideband_coverage\":%u,\"lsp_cases\":%llu,\"lsp_float_words\":%llu,\"lsp_truncated_inputs\":%llu,\"pcm_synthesis_verified_by_this_suite\":false}\n",(unsigned long long)checks,(unsigned long long)bit_checks,(unsigned long long)header_checks,(unsigned long long)packets,(unsigned long long)final_groups,(unsigned long long)prefixes,(unsigned long long)mutations,(unsigned long long)accepted_mutations,(unsigned long long)controls,nb_mask,wb_mask,uwb_mask,(unsigned long long)lsp_cases,(unsigned long long)lsp_words,(unsigned long long)lsp_truncated);return 0;
 }

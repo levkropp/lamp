@@ -136,8 +136,8 @@
   ],
   "scope": "Actual CLI decode, selected Ogg stream, tags, same/mixed-rate chains, cold seek/lifecycle/cancellation via full shipping decoder. Native output-device playback and Mac execution are separate checks.",
   "binaries": {
-    "lamp-cli": "8cbdeece07295beef9e7c69a69fd2471105c169e7da77babb1eca98a9121d7c8",
-    "speex-chain-oracle": "d8c93567936f7ce4209a321a9da907b627181e90d9a6a3bbabc34b479a3d79e8",
+    "lamp-cli": "1f2b72ad5f85804411de679fb394548940c904c38fcf37eb90a7bbc67111a98b",
+    "speex-chain-oracle": "5cdd7636583861251d04f1a300656b1add7fa89e7aabb35c158ff0f13ebb19fc",
     "speex-file-reference": "93440a8b050b45b28fedca06c816429ad4c2b3f4d4483782cd49c49437fec1d7"
   },
   "sources": {

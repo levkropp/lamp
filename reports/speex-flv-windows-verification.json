@@ -1,0 +1,789 @@
+{
+  "result": "passed",
+  "suite": "speex-flv",
+  "recorded_utc": "2026-11-23T00:10:04.864691+00:00",
+  "platform": "Windows-11-10.0.26300-SP0",
+  "ffmpeg": "ffmpeg version 8.0.1-essentials_build-www.gyan.dev Copyright (c) 2000-2025 the FFmpeg developers",
+  "reference": "Unchanged test-only Speex 1.2.1 encoder/float decoder; no Ogg trimming for FLV packets",
+  "archive_url": "https://downloads.xiph.org/releases/speex/speex-1.2.1.tar.gz",
+  "archive_sha256": "4b44d4f2b38a370a2d98a78329fefc56a0cf93d1c1be70029217baae6628feea",
+  "checks": [
+    {
+      "file": "q0.flv",
+      "description": "FFmpeg libspeex quality 0, group 1",
+      "result": "exact official float PCM",
+      "frames": 7040,
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 63422,
+        "maximum_discarded": 7040,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 85969,
+        "exact_float_words": 14080,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "fixture_sha256": "3cb3bc89e0a4d1acdfeec497c9963892f1a98d9a2d2bc32b33467a0359185ba1"
+    },
+    {
+      "file": "q1.flv",
+      "description": "FFmpeg libspeex quality 1, group 1",
+      "result": "exact official float PCM",
+      "frames": 7040,
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 63422,
+        "maximum_discarded": 7040,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 85969,
+        "exact_float_words": 14080,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "fixture_sha256": "175451bf95fb98be8b2af7fdaac2c617a6850b7592a88abc9868c2d3f038104d"
+    },
+    {
+      "file": "q2.flv",
+      "description": "FFmpeg libspeex quality 2, group 1",
+      "result": "exact official float PCM",
+      "frames": 7040,
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 63422,
+        "maximum_discarded": 7040,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 85969,
+        "exact_float_words": 14080,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "fixture_sha256": "1842005ffda5ef45d765f6c52544fbdf25d8fc58892c27d10017bd4254749677"
+    },
+    {
+      "file": "q3.flv",
+      "description": "FFmpeg libspeex quality 3, group 1",
+      "result": "exact official float PCM",
+      "frames": 7040,
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 63422,
+        "maximum_discarded": 7040,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 85969,
+        "exact_float_words": 14080,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "fixture_sha256": "1842e2f414ab42f51976922928c8fc6a8a09d39e822e372fee1024fe62a5ee40"
+    },
+    {
+      "file": "q4.flv",
+      "description": "FFmpeg libspeex quality 4, group 1",
+      "result": "exact official float PCM",
+      "frames": 7040,
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 63422,
+        "maximum_discarded": 7040,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 85969,
+        "exact_float_words": 14080,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "fixture_sha256": "4195134e9db0f44aa98ed8d8370bf6cf7a1476fa583713be23a8c7ac16a1d078"
+    },
+    {
+      "file": "q5.flv",
+      "description": "FFmpeg libspeex quality 5, group 1",
+      "result": "exact official float PCM",
+      "frames": 7040,
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 63422,
+        "maximum_discarded": 7040,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 85969,
+        "exact_float_words": 14080,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "fixture_sha256": "3b719ef30a3318b6e132b15fb644d7115579d97b5e3bf13220e8aca9f0ca6d60"
+    },
+    {
+      "file": "q6.flv",
+      "description": "FFmpeg libspeex quality 6, group 1",
+      "result": "exact official float PCM",
+      "frames": 7040,
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 63422,
+        "maximum_discarded": 7040,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 85969,
+        "exact_float_words": 14080,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "fixture_sha256": "3ee17ae4702d48a3ff7a68ad24b0e99dee09e820c53555e4d6ab8d699891d222"
+    },
+    {
+      "file": "q7.flv",
+      "description": "FFmpeg libspeex quality 7, group 1",
+      "result": "exact official float PCM",
+      "frames": 7040,
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 63422,
+        "maximum_discarded": 7040,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 85969,
+        "exact_float_words": 14080,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "fixture_sha256": "2308424225ec15892fee9eacbd883974daf1fe1aca2ef101353b0ee54df3abb2"
+    },
+    {
+      "file": "q8.flv",
+      "description": "FFmpeg libspeex quality 8, group 1",
+      "result": "exact official float PCM",
+      "frames": 7040,
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 63422,
+        "maximum_discarded": 7040,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 54947564,
+        "exact_float_words": 14080,
+        "guarded_cases": 748,
+        "protected_prefixes": 235,
+        "mutations": 512
+      },
+      "fixture_sha256": "cd143b7d8b2e93a689d7eac8c651ab51d1c0b2e0d09c9c47518968d4ca24de7a"
+    },
+    {
+      "file": "q9.flv",
+      "description": "FFmpeg libspeex quality 9, group 1",
+      "result": "exact official float PCM",
+      "frames": 7040,
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 63422,
+        "maximum_discarded": 7040,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 85969,
+        "exact_float_words": 14080,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "fixture_sha256": "b81ec356f5a72e9a7a05118d0c7403b0f2fafcdfc9ca310dbff39e1b43ab8ea2"
+    },
+    {
+      "file": "q10.flv",
+      "description": "FFmpeg libspeex quality 10, group 1",
+      "result": "exact official float PCM",
+      "frames": 7040,
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 63422,
+        "maximum_discarded": 7040,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 85969,
+        "exact_float_words": 14080,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "fixture_sha256": "9b5624bb6f079596a7640108a0d8b60d37a66ea9e391e53063d7f20757270450"
+    },
+    {
+      "file": "group2.flv",
+      "description": "FFmpeg libspeex quality 8, group 2",
+      "result": "exact official float PCM",
+      "frames": 13440,
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 96573,
+        "maximum_discarded": 13440,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 159737,
+        "exact_float_words": 26880,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "fixture_sha256": "50b857cf3758ae96d0651f17728ea96e9128a4f44e074ff884dc86d300f74a8c"
+    },
+    {
+      "file": "group5.flv",
+      "description": "FFmpeg libspeex quality 8, group 5",
+      "result": "exact official float PCM",
+      "frames": 13440,
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 96573,
+        "maximum_discarded": 13440,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 159737,
+        "exact_float_words": 26880,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "fixture_sha256": "23e62df64d526ba4623fdb43115e38bb319549b526c7bfa4fc262cf27fe71328"
+    },
+    {
+      "file": "group8.flv",
+      "description": "FFmpeg libspeex quality 8, group 8",
+      "result": "exact official float PCM",
+      "frames": 13440,
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 96573,
+        "maximum_discarded": 13440,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 159737,
+        "exact_float_words": 26880,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "fixture_sha256": "21e69c1f41a86a4ef0b206c3251f7e990886f0b508c423bc9bad97a08c664e8b"
+    },
+    {
+      "file": "vbr-dtx.flv",
+      "description": "FFmpeg libspeex quality 8, group 5, VBR/VAD/DTX",
+      "result": "exact official float PCM",
+      "frames": 26240,
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 154173,
+        "maximum_discarded": 26240,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 299261,
+        "exact_float_words": 52480,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "fixture_sha256": "11b264c62049c47606d263348ad6fc3f4eceebebe6b54e48fc427808c81879af"
+    },
+    {
+      "file": "video.flv",
+      "description": "FFmpeg libspeex quality 8, group 1, interleaved Sorenson video",
+      "result": "exact official float PCM",
+      "frames": 10240,
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 82173,
+        "maximum_discarded": 10240,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 122853,
+        "exact_float_words": 20480,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "fixture_sha256": "d6b0952a01304e20d22073a2d3a1cb1be5321a1b643d16b09e6ecf519d7ffbee"
+    },
+    {
+      "file": "lifecycle.flv",
+      "description": "FFmpeg libspeex quality 8, group 8",
+      "result": "exact official float PCM",
+      "frames": 192000,
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 900093,
+        "maximum_discarded": 192000,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 1948661,
+        "exact_float_words": 384000,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "fixture_sha256": "3405f5ae15147690f7e43ca5fcb6c168a62c3e63a74116b069174f8853df014b"
+    },
+    {
+      "file": "spec-flags.flv",
+      "description": "Adobe 16 kHz mono flags",
+      "result": "exact official float PCM",
+      "frames": 7040,
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 63422,
+        "maximum_discarded": 7040,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 85969,
+        "exact_float_words": 14080,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "fixture_sha256": "9a77d467e15ab3080fc1f5b12035952d209619bbbcf7bc14db0c2df0681087b9"
+    },
+    {
+      "file": "changing-flags.flv",
+      "description": "all low audio flags ignored; format remains 16 kHz mono",
+      "result": "exact official float PCM",
+      "frames": 7040,
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 63422,
+        "maximum_discarded": 7040,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 85969,
+        "exact_float_words": 14080,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "fixture_sha256": "86617846dde434dbaefa05129004060ce194a6210a15f1ceddecbbdc29815dc6"
+    },
+    {
+      "file": "skipped-tags.flv",
+      "description": "script, video, encrypted and other audio tags skipped",
+      "result": "exact official float PCM",
+      "frames": 7040,
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 63422,
+        "maximum_discarded": 7040,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 85969,
+        "exact_float_words": 14080,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "fixture_sha256": "d7c9ca8f765f055d0308051babb80a026262e447fa59c5bfe01373b55ec3ffc6"
+    },
+    {
+      "file": "changing-groups.flv",
+      "description": "packet frame counts change across tags",
+      "result": "exact official float PCM",
+      "frames": 15360,
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 105213,
+        "maximum_discarded": 15360,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 180265,
+        "exact_float_words": 30720,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "fixture_sha256": "d500db8c17cddad43368500c9406cfaf4594995a6da4f858f092a24351d79081"
+    },
+    {
+      "file": "null-groups.flv",
+      "description": "null WB modes, including 64 frames in one bounded packet",
+      "result": "exact official float PCM",
+      "frames": 24960,
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 148413,
+        "maximum_discarded": 24960,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 266881,
+        "exact_float_words": 49920,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "fixture_sha256": "8e4802c12570eeba73e1241ff993082d924ef11cd7de9c7a8386d34d3ad06f01"
+    },
+    {
+      "file": "large-header.flv",
+      "description": "extended FLV header",
+      "result": "exact official float PCM",
+      "frames": 7040,
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 63422,
+        "maximum_discarded": 7040,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 85969,
+        "exact_float_words": 14080,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "fixture_sha256": "a96fd8337e8d0c9beba853ebaf51ee9678fa45a1467b6391eef4920968bfcbd3"
+    },
+    {
+      "file": "cut-final-tag.flv",
+      "description": "incomplete final Speex tag dropped",
+      "result": "exact official float PCM",
+      "frames": 6720,
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 61342,
+        "maximum_discarded": 6720,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 87889,
+        "exact_float_words": 13440,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "fixture_sha256": "e205f3453c0f29306e790d935ed1198c5ec8406f75dca169b225654d4a9d72bc"
+    },
+    {
+      "file": "empty-tags.flv",
+      "description": "empty audio tags ignored",
+      "result": "exact official float PCM",
+      "frames": 7040,
+      "seeks": {
+        "result": "passed",
+        "checks": 15,
+        "advanced": 0,
+        "discarded_frames": 63422,
+        "maximum_discarded": 7040,
+        "maximum_probes": 0,
+        "index_points": 0,
+        "maximum_skimmed_headers": 0,
+        "maximum_stride": 0,
+        "maximum_preroll": 0,
+        "maximum_deviation": 0
+      },
+      "guarded": {
+        "result": "passed",
+        "checks": 85969,
+        "exact_float_words": 14080,
+        "guarded_cases": 1,
+        "protected_prefixes": 0,
+        "mutations": 0
+      },
+      "fixture_sha256": "eadc9bddffe87d150d7ea1dcb1db430579c15f90b573c7734f8d39375d51495e"
+    }
+  ],
+  "rejections": [
+    {
+      "file": "illegal-nb-mode.flv",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 60
+    },
+    {
+      "file": "illegal-high-mode.flv",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 60
+    },
+    {
+      "file": "control-only.flv",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 60
+    },
+    {
+      "file": "65-frames.flv",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 60
+    },
+    {
+      "file": "oversized.flv",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 101
+    },
+    {
+      "file": "empty-only.flv",
+      "result": "rejected",
+      "stage": "open",
+      "decode_error": 100
+    }
+  ],
+  "cancellation": [
+    {
+      "test": "cancel-open",
+      "result": "cancelled"
+    },
+    {
+      "test": "cancel-read",
+      "result": "cancelled",
+      "frames_before_cancel": 99840
+    }
+  ],
+  "native_lifecycle": {
+    "result": "passed",
+    "details": [
+      "Passed: playback, pause, resume, stop, reopen, seek, paused seek and cancelled open.",
+      "Muted output: lifecycle exercised with volume zero.",
+      "Default-device callback: paused and active restart passed; pending command preserved.",
+      "Exclusive output: 48000 Hz session lifecycle passed."
+    ],
+    "probe_sha256": "a0a5581668e62b64227da31323a21736a737b6285d5ee13dc3e4ff937090a4cf"
+  },
+  "scope": "FLV 16 kHz mono Speex, grouped packets, ignored low flags, bounded parser/decoding, exact cold seeks and cancellation. FLV timestamp gaps/scheduling, audible latency, captured hardware PCM and native Mac execution are not established.",
+  "binaries": {
+    "lamp-cli.exe": "95722312ff0950d81d5054b932f3b8ab753c9b74aca041eda207915055539bc5",
+    "speex-flv-reference.exe": "c18596ace833cb83074dc038d2d58829bb4b86edf625e7ce2dd68c5347539242",
+    "speex-flv-seek.exe": "4b2e09337e6a528ee5843601180edf97243194e3a88cbc825bb5d82b7204c564",
+    "speex-flv-chain.exe": "79a54ef9136020807bc13b3652bfcd4a1c8deeeadf0d53c8afa91573007bb45d",
+    "speex-flv-guard.exe": "ec7490410f13bf73b8cb1b539fa596ef2404aebfdc1311a668c7caf2100f6260"
+  },
+  "sources": {
+    "src/flv.s": "c69040c775fed7358d6cba629b5ebafa3fe68d7223f83e59c53825e57bb7e534",
+    "src/track.s": "83aa69f8270556a1c3f497197a101aaf7c6922e44156c0cb3f4878213580e689",
+    "src/speex_track.s": "3822fd2600173166022611dfdb652df58cba4cd2b45761e8820cfc4b2ecd6c0a",
+    "tests/speex-file-reference.c": "a90c6d585fc33718d3f143058a4241741f97959f6ca02cfe265cc8e91918be7d",
+    "tests/speex-flv-oracle.c": "e5485949f5dbdaf6dd3ca8f9c3d1987816c1901d19f59912177f2640289847c8",
+    "tests/verify-speex-flv.py": "884a1c30165dec23bc68cfbaa71f1835cbae0c99e4f7c692fc063b72a4584965",
+    "tests/seek-oracle.c": "3354db980a9957d61d5d9d054110faacb0159e25640fbc42905edd254517f148",
+    "tests/chain-oracle.c": "770757565631753a57a6a8352cbac5ffecd33bb380eec247f23874277f7a00f7"
+  }
+}

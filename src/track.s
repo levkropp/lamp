@@ -21,6 +21,7 @@
 .equ TK_AC3, 8
 .equ TK_WAVPACK, 9
 .equ TK_ADPCM, 10
+.equ TK_SPEEX, 11
 .equ TK_ENTRY, 24                   # pointer, raw start sample, bytes, samples
 .equ TK_POINTER, 0
 .equ TK_START, 8
@@ -108,8 +109,12 @@ FN track_close
     call wv_track_close
 .Ltk_close_adpcm:
     cmp dword ptr [rip + track_codec], TK_ADPCM
-    jne .Ltk_close_done
+    jne .Ltk_close_speex
     call adpcm_track_close
+.Ltk_close_speex:
+    cmp dword ptr [rip + track_codec], TK_SPEEX
+    jne .Ltk_close_done
+    call speex_track_close
 .Ltk_close_done:
     mov dword ptr [rip + track_active], 0
     mov dword ptr [rip + track_codec], 0
@@ -235,6 +240,8 @@ LOCALFN track_samples
     je .Ltk_samples_wavpack
     cmp eax, TK_ADPCM
     je .Ltk_samples_adpcm
+    cmp eax, TK_SPEEX
+    je .Ltk_samples_speex
     call pcm_track_samples
     jmp .Ltk_samples_return
 .Ltk_samples_opus:
@@ -266,6 +273,9 @@ LOCALFN track_samples
     jmp .Ltk_samples_return
 .Ltk_samples_adpcm:
     call adpcm_track_samples
+    jmp .Ltk_samples_return
+.Ltk_samples_speex:
+    call speex_track_samples
 .Ltk_samples_return:
     add rsp, 40
     ret
@@ -298,6 +308,8 @@ LOCALFN track_decode
     je .Ltk_decode_wavpack
     cmp eax, TK_ADPCM
     je .Ltk_decode_adpcm
+    cmp eax, TK_SPEEX
+    je .Ltk_decode_speex
     call pcm_track_decode
     jmp .Ltk_decode_return
 .Ltk_decode_opus:
@@ -355,6 +367,9 @@ LOCALFN track_decode
     jmp .Ltk_decode_return
 .Ltk_decode_adpcm:
     call adpcm_track_decode
+    jmp .Ltk_decode_return
+.Ltk_decode_speex:
+    call speex_track_decode
 .Ltk_decode_return:
     add rsp, 40
     ret
@@ -376,6 +391,8 @@ LOCALFN track_reset_codec
     je .Ltk_reset_ac3
     cmp eax, TK_ADPCM
     je .Ltk_reset_adpcm
+    cmp eax, TK_SPEEX
+    je .Ltk_reset_speex
     cmp eax, TK_MPA
     jne .Ltk_reset_return
     call mpa_track_reset
@@ -397,6 +414,9 @@ LOCALFN track_reset_codec
     jmp .Ltk_reset_return
 .Ltk_reset_flac:
     call flac_track_reset
+    jmp .Ltk_reset_return
+.Ltk_reset_speex:
+    call speex_track_reset
 .Ltk_reset_return:
     add rsp, 40
     ret
@@ -439,6 +459,8 @@ FN track_finish
     je .Ltk_open_wavpack
     cmp eax, TK_ADPCM
     je .Ltk_open_adpcm
+    cmp eax, TK_SPEEX
+    je .Ltk_open_speex
     mov ecx, [rip + track_pcm_channels]
     mov edx, [rip + track_pcm_bits]
     mov r8d, [rip + track_pcm_flags]
@@ -484,6 +506,9 @@ FN track_finish
     jmp .Ltk_opened
 .Ltk_open_flac:
     call flac_track_open
+    jmp .Ltk_opened
+.Ltk_open_speex:
+    call speex_track_open
     jmp .Ltk_opened
 .Ltk_open_mpa:
     mov rax, [rip + track_packets]
@@ -743,7 +768,8 @@ ENDFN track_read
 # codec's pre-roll: Opus 80 ms, MPEG audio two frames (Layer III also earlier
 # frames holding up to 2 KiB of reservoir data), Vorbis, AAC and AC-3 one
 # primer packet whose output is skipped, HE-AAC two, IMA4 one. FLAC, ALAC,
-# WavPack, other ADPCM and PCM packets decode independently.
+# WavPack, other ADPCM and PCM packets decode independently. Speex rebuilds
+# its complete prediction/noise history from packet0 for exact seeking.
 FN track_seek
     push rbx
     push rsi
@@ -787,6 +813,8 @@ FN track_seek
 .Ltk_seek_found:
     mov rbx, r8                          # packet holding the target
     mov eax, [rip + track_codec]
+    cmp eax, TK_SPEEX
+    je .Ltk_seek_from_zero
     cmp eax, TK_OPUS
     je .Ltk_seek_opus
     cmp eax, TK_MPA

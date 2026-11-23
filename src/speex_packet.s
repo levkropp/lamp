@@ -388,8 +388,30 @@ FN spx_packet_scan
     jne .Lspxp_bad
     jmp .Lspxp_finish
 .Lspxp_terminator:
+    # Official encoders pad unused final-group slots with repeated5-bit
+    # end markers. Bound their count; no audio/control data may follow.
+    mov edi, 1
+.Lspxp_terminator_next:
     mov rcx, rbx
     call spx_bits_remaining
+    mov [rsp+116], eax
+    cmp eax, 5
+    jb .Lspxp_terminator_tail
+    cmp edi, SPX_MAX_FRAMES
+    jae .Lspxp_terminator_tail
+    mov edx, 5
+    mov rcx, rbx
+    call spx_bits_peek
+    cmp eax, 15
+    jne .Lspxp_terminator_reload
+    mov edx, 5
+    mov rcx, rbx
+    call spx_bits_advance
+    inc edi
+    jmp .Lspxp_terminator_next
+.Lspxp_terminator_reload:
+    mov eax, [rsp+116]
+.Lspxp_terminator_tail:
     cmp eax, 7
     ja .Lspxp_bad
     test eax, eax

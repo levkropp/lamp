@@ -1,8 +1,9 @@
-# Ogg/Speex playback
+# Speex playback
 
 Source builds play Ogg/Speex (`.spx` or `.ogg`): narrowband, wideband and
 ultra-wideband, all submodes, mono and in-band stereo, grouped frames,
 CBR/VBR/VAD/DTX, comment tags, granule/delay trimming and exact seeks.
+[FLV Speex](flv.md#speex) also plays as 16 kHz mono with grouped packets.
 The assembly decoder matches the BSD Speex 1.2.1 float reference. Speex
 participates in Ogg track selection, chained links, queue playback and
 output resampling. Windows and Linux decoding/seeking are verified;
@@ -12,7 +13,7 @@ The published v0.3.0 download predates this support.
 
 The following sections retain the individual component contracts and
 their separate verification scopes. File/player verification follows at
-the end. Speex mappings in other containers are not implemented yet.
+the end. Matroska/Speex and other mappings remain unimplemented.
 
 ## Source and provenance
 
@@ -87,8 +88,9 @@ state. The file bridge described below owns its stream state and optional cache.
   modes, with no more than two higher layers per frame. It consumes up to
   1,024 standard/user in-band controls with their declared sizes; stereo
   controls are counted. Packets begin with a narrowband frame or control,
-  and end at a complete frame, canonical zero/ones alignment padding or an
-  explicit terminator followed by at most seven alignment bits. A four-bit
+  and end at a complete frame, canonical zero/ones alignment padding or up to
+  64 repeated end markers followed by at most seven alignment bits. Official
+  encoders use repeated markers for unused slots of the final packet group. A four-bit
   null higher-band layer at the exact end is valid. The eight summary fields
   are frame count, projected sample count, coded bits excluding final
   padding/terminator, control count, wideband-layer count, ultra-wideband-layer
@@ -246,6 +248,9 @@ record source and oracle hashes. Both establish:
 - 448 standard/user control and null-higher-layer packets, including both
   ultra-wideband modes across written and official encoder cases. Their final
   bit positions also agree with the full reference decoder.
+- 576 final-group cases with 1–64 repeated end markers, NB/WB/UWB and
+  1–3 actual frames, compared with the unchanged reference decoder. Excessive
+  markers and audio after an end marker reject.
 - 581 protected input prefixes and 4,096 mutated packets. Accepted mutations
   are only structurally accepted; no PCM validity is inferred. Reference
   encoders use each platform's floating-point math, so mutation acceptance
@@ -663,12 +668,12 @@ recorded corpus and ffprobe packet timestamps on a host without FFmpeg.
 
 The [Linux bridge report](../reports/speex-file-linux-verification.json)
 and [Windows bridge report](../reports/speex-file-windows-verification.json)
-each pass 63,802,414 checks and 5,903,082 exact float comparisons over
-86 files, 2,752 warm seeks and 86 cold seeks. Cases cover all qualities,
+each pass 64,173,949 checks and 5,983,514 exact float comparisons over
+89 files, 2,848 warm seeks and 89 cold seeks. Cases cover all qualities,
 three bands, mono/stereo, CBR/VBR/VAD+DTX, 1/2/5/64 grouped frames,
 continued comments/audio, extra headers, positive origins, custom rates,
 priming spanning frames, final-only pages, one-sample output and short final
-groups. Cache compaction and failed-index-allocation fallbacks pass.
+groups, including encoder-filled final groups with repeated end markers. Cache compaction and failed-index-allocation fallbacks pass.
 Fourteen malformed/cancellation cases, 618 protected truncated file prefixes
 and 1,024 CRC-repaired mutations check bounded behavior and allocation
 cleanup. Accepted mutations are not a claim of correct damaged-file PCM.
