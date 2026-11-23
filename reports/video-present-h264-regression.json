@@ -1,0 +1,1793 @@
+{
+  "result": "passed",
+  "scope": "Assembly Baseline/CAVLC Annex B IDR frontend. CPU-only synthetic and mutated inputs never go to the GPU. Native Windows file check/export is exact against decoded NV12 references; no window presentation, P/B-reference frames, container video or A/V sync established.",
+  "platform": "Windows-11-10.0.26300-SP0",
+  "fixtures": {
+    "reference": "ffmpeg version 8.0.1-essentials_build-www.gyan.dev Copyright (c) 2000-2025 the FFmpeg developers",
+    "ffmpeg_executable_sha256": "a07104f51ccb15971c4affc34a392e34899cf8752f08f4d1aca58e8892a69859",
+    "fixtures": [
+      {
+        "name": "base-64x64",
+        "width": 64,
+        "height": 64,
+        "frames": 8,
+        "independent_packet_oracle": true,
+        "sha256": {
+          "base-64x64.h264": "c85bd19fad6fa1ea6b7bd268c5c14a0b82fc9bc8b839df90e2074275f82614b0",
+          "base-64x64.nv12": "29043b4058e14a203cdd5aabd2f393b59d8f6106ac5de4cc987857bfeb1ad4a1",
+          "base-64x64.wv": "92b06239f5dca4c2cd2549ebfed50595f1e8bf62235023c1bc3fd49836873794"
+        }
+      },
+      {
+        "name": "base-192x112",
+        "width": 192,
+        "height": 112,
+        "frames": 8,
+        "independent_packet_oracle": true,
+        "sha256": {
+          "base-192x112.h264": "2dafd703be708f86114dc82433f845e8970eb062c62fe9cff8dae3a5828605f1",
+          "base-192x112.nv12": "68c748f02ada18186a55d1bacb8ccc5db717d9bb65102e02c7ca54f4e0a0c3f1",
+          "base-192x112.wv": "f7a867a2e4fe5411cc38a05fd94a22bfc139713f7902dff50819f4c728c11c65"
+        }
+      },
+      {
+        "name": "base-320x240",
+        "width": 320,
+        "height": 240,
+        "frames": 8,
+        "independent_packet_oracle": true,
+        "sha256": {
+          "base-320x240.h264": "730161cee2294144738061216ad998530928ceb3ea82693f3215829c684f9b42",
+          "base-320x240.nv12": "c5e758786ffc4e75017af4d8dbf9346922c26709f2a146db5d3d6e52e78adde1",
+          "base-320x240.wv": "f8cb58822200ff0816d83f59d7c5878ccd15b1f5e632f000dfead58a2c0312da"
+        }
+      },
+      {
+        "name": "base-640x368",
+        "width": 640,
+        "height": 368,
+        "frames": 8,
+        "independent_packet_oracle": true,
+        "sha256": {
+          "base-640x368.h264": "2fa2ce8f1f74188730c123df917c7dc2b16ac9653baaf48a1bde215563d4d13e",
+          "base-640x368.nv12": "dc8e2de170b2ee8bd5a97e833f62e8bb7d14cdc98fa7c666adc22ac51bc505d1",
+          "base-640x368.wv": "8f1389a0493532aee3c82380f7507ab7a62caa5ab5df91ec87c1bb3cec497ace"
+        }
+      },
+      {
+        "name": "base-1280x720",
+        "width": 1280,
+        "height": 720,
+        "frames": 8,
+        "independent_packet_oracle": true,
+        "sha256": {
+          "base-1280x720.h264": "4f5e81062a6a443615c57dc8dfb23a1abda66abf07c1f8a93552936ee4d01794",
+          "base-1280x720.nv12": "cb09f990bb00da4e62fcc3831ce4ccf78d9fcc3750d873846a5d010042fa39df",
+          "base-1280x720.wv": "9d6170c0647bf377c781797d969ee036bf7a95591063cc3ba6c15bc93900a15b"
+        }
+      },
+      {
+        "name": "base-1920x1088",
+        "width": 1920,
+        "height": 1088,
+        "frames": 8,
+        "independent_packet_oracle": true,
+        "sha256": {
+          "base-1920x1088.h264": "de88e62515ed3cc4966b8f9b25e1d7f9f9d3b3522efff3582a357a009213d5a9",
+          "base-1920x1088.nv12": "0c928aef5fcc401696146675a71b03001b1d3941607f2c234d1f4e859bc25af3",
+          "base-1920x1088.wv": "6b83f8d3da98ebfd7438c6f92fadd4b25e1d25896f313c7625d839ae6fc1af38"
+        }
+      },
+      {
+        "name": "crop-62x62",
+        "width": 62,
+        "height": 62,
+        "frames": 4,
+        "independent_packet_oracle": false,
+        "sha256": {
+          "crop-62x62.h264": "817cb43d8296c3ce81ca16ee2f9f1b988da8a996403d83f5a90e593d908aaaa6",
+          "crop-62x62.nv12": "96bab724240bad87a92901ffd15ded61b313c9c5b286fbd4e61e879524ec4716"
+        }
+      },
+      {
+        "name": "crop-162x98",
+        "width": 162,
+        "height": 98,
+        "frames": 4,
+        "independent_packet_oracle": false,
+        "sha256": {
+          "crop-162x98.h264": "c249d9b64425af9b501308ba2ec1313a4db4e4e9ab6627553d92465f6ce0bbef",
+          "crop-162x98.nv12": "7e58cf8de9150fe7c3041b0c95b9fda9a760bc6249f50e9c84fbc4e2afbdd0fd"
+        }
+      },
+      {
+        "name": "crop-318x242",
+        "width": 318,
+        "height": 242,
+        "frames": 4,
+        "independent_packet_oracle": false,
+        "sha256": {
+          "crop-318x242.h264": "7b03bbe0a961a1484039a0fbff1cb00dbf69d16199152fd13ad0fbbb01987d90",
+          "crop-318x242.nv12": "aca49286e74e90c20a3c783058699ef4eb916a1ecb88b459de6da591c86e8b9e"
+        }
+      },
+      {
+        "name": "crop-638x358",
+        "width": 638,
+        "height": 358,
+        "frames": 4,
+        "independent_packet_oracle": false,
+        "sha256": {
+          "crop-638x358.h264": "9acfa36019e4cd70cbee71ddffd5e0ee25482629a4e896a3386c90357a3d066a",
+          "crop-638x358.nv12": "2666d84810ffe8d9739b93df0acd8f6d297cd74839584faad16921a5af0716c3"
+        }
+      },
+      {
+        "name": "crop-1280x718",
+        "width": 1280,
+        "height": 718,
+        "frames": 4,
+        "independent_packet_oracle": false,
+        "sha256": {
+          "crop-1280x718.h264": "8137dd1fbccacea8e4e5320be1722cf2faaf554a3773b5723705fdbf68160ff4",
+          "crop-1280x718.nv12": "7af44af971122ebacf6670177e1a7ded9395b5e19c26f55c25a1cf80167556c4"
+        }
+      },
+      {
+        "name": "crop-1920x1080",
+        "width": 1920,
+        "height": 1080,
+        "frames": 4,
+        "independent_packet_oracle": false,
+        "sha256": {
+          "crop-1920x1080.h264": "4a817b8833cc6b7689fac9a0c245b4f4fd1268359b85cc24bac77a814ed3ac5c",
+          "crop-1920x1080.nv12": "67e3e8bf1b7b6d8c00cc321691d0dcf5d3cc25ee03b584081915a3c977a0122a"
+        }
+      },
+      {
+        "name": "slices-2",
+        "width": 320,
+        "height": 240,
+        "frames": 4,
+        "independent_packet_oracle": false,
+        "sha256": {
+          "slices-2.h264": "5b228ca04dfe04d1b3c16e9d12c444417c398eaeef95562266017adf0b94942a",
+          "slices-2.nv12": "ee4a66c8095fe1b285669183d574d925491c75f6d8a1b26c3b64a9a3092abf4d"
+        }
+      },
+      {
+        "name": "slices-4",
+        "width": 320,
+        "height": 240,
+        "frames": 4,
+        "independent_packet_oracle": false,
+        "sha256": {
+          "slices-4.h264": "eefc6ac0e95c4d37875c14abe6240ae8e509c0ada2a4034356f274f0627fb99e",
+          "slices-4.nv12": "d3af898ae582b2fca02b9902cc4bcab0df65cdfd38323cb14e1f21b160a4b394"
+        }
+      },
+      {
+        "name": "slices-8",
+        "width": 320,
+        "height": 240,
+        "frames": 4,
+        "independent_packet_oracle": false,
+        "sha256": {
+          "slices-8.h264": "b092e8d2ac1a9d987fd107edd9a30e166c5277ff5c1f65ddc5083300a38cd56a",
+          "slices-8.nv12": "93b0cd9d352388de72608eb4e6ee10e8a8e117863995d3ab1d00f2b56fcd52da"
+        }
+      },
+      {
+        "name": "sar-color",
+        "width": 320,
+        "height": 240,
+        "frames": 4,
+        "independent_packet_oracle": false,
+        "sha256": {
+          "sar-color.h264": "13635f8c9af59af226bdd2dd69975b237c2fcd24869b055f4b4a49a4d2782d5f",
+          "sar-color.nv12": "1a79d88d4c9a6b096c0b7249df2e93aef131e80948c8b416fd7d487a12a7db41"
+        }
+      },
+      {
+        "name": "noise",
+        "width": 640,
+        "height": 368,
+        "frames": 3,
+        "independent_packet_oracle": false,
+        "sha256": {
+          "noise.h264": "fe9e4c847460436fa870e1b77b5e3ee927d58387baabc745db473fa20aa0d1d8",
+          "noise.nv12": "74e8298c4669e255b87531c6986685cbe9409b137a464c6123ee1b6a9bd7cba4"
+        }
+      },
+      {
+        "name": "poc-type-zero",
+        "width": 320,
+        "height": 240,
+        "frames": 8,
+        "independent_packet_oracle": false,
+        "sha256": {
+          "poc-type-zero.h264": "f95223e65baf9009e35a5ffcfb21e18f84bc9551643c1fcdf419d9490369f25f",
+          "poc-type-zero.nv12": "c5e758786ffc4e75017af4d8dbf9346922c26709f2a146db5d3d6e52e78adde1"
+        }
+      },
+      {
+        "name": "four-sided-crop",
+        "width": 314,
+        "height": 226,
+        "frames": 8,
+        "independent_packet_oracle": false,
+        "sha256": {
+          "four-sided-crop.h264": "c9af2e6beeda94e0ba43a3cf16bc220eafbd5dd4515e8cce3ad6aecd7c80e471",
+          "four-sided-crop.nv12": "3ea3c927a573ee4d6f3eab46894e0c5d7a5c0b5ba4689fb2127866beb7fb09a0"
+        }
+      },
+      {
+        "name": "prefixes",
+        "width": 64,
+        "height": 64,
+        "frames": 8,
+        "independent_packet_oracle": false,
+        "sha256": {
+          "prefixes.h264": "8a5deb7da7cde28cab82a8be5ceb668fa74aef96a3e589478fe8159ea7d47627",
+          "prefixes.nv12": "29043b4058e14a203cdd5aabd2f393b59d8f6106ac5de4cc987857bfeb1ad4a1"
+        }
+      }
+    ],
+    "synthetic": [
+      {
+        "name": "rich-vui",
+        "accepted": true,
+        "metadata": [
+          320,
+          240,
+          314,
+          226,
+          2,
+          6,
+          4,
+          3,
+          1,
+          9,
+          16,
+          9,
+          1001,
+          60000,
+          1
+        ],
+        "sha256": "ffab64a07de6c922bfb22987dab89bbce04aa07b34ad370bc35c5cca2fd1b4f2"
+      },
+      {
+        "name": "poc-zero-type",
+        "accepted": true,
+        "metadata": null,
+        "sha256": "b2595d3c6c4dae54902a2e7c345da14aee0a83fd900875380b60b176477e0568"
+      },
+      {
+        "name": "256-slices",
+        "accepted": true,
+        "metadata": null,
+        "sha256": "570c3c9c3d9a036f75f6b7af55259ab7afd824a37ad3a4c3ec580303518eec84"
+      },
+      {
+        "name": "257-slices",
+        "accepted": false,
+        "metadata": null,
+        "sha256": "e6c00b635bd14d006e2a619af8ed866c557ea10a968b5b11433fd493d0dc5c35"
+      },
+      {
+        "name": "missing-sps",
+        "accepted": false,
+        "metadata": null,
+        "sha256": "08cef9483d07d0aac838d2ba439ec8a970ba5abfba970ac4cc92062ebbc34a99"
+      },
+      {
+        "name": "missing-pps",
+        "accepted": false,
+        "metadata": null,
+        "sha256": "3bb59ba054f23847905489f697ab1ec6404a75a730a2dcbd2ab3330e7f33e9d5"
+      },
+      {
+        "name": "missing-picture",
+        "accepted": false,
+        "metadata": null,
+        "sha256": "97f1ff8b933caab6882b37410e5bd15619f477c71c75c065746b9a274fe0f405"
+      },
+      {
+        "name": "first-mb",
+        "accepted": false,
+        "metadata": null,
+        "sha256": "9929ec797695d56914de26c53575eb220082cd6ce66aa8007746e60a6e7c9dbb"
+      },
+      {
+        "name": "slice-order",
+        "accepted": false,
+        "metadata": null,
+        "sha256": "c72eec1249c72e701234fcdb6929c5bf4544a5700b207e4f1a454bec1827f776"
+      },
+      {
+        "name": "unknown-pps",
+        "accepted": false,
+        "metadata": null,
+        "sha256": "3e440b3891031744cbdc95b6b46f198747f9e6393d5e09a8d486393c0c64d6ff"
+      },
+      {
+        "name": "empty-crop",
+        "accepted": false,
+        "metadata": null,
+        "sha256": "412e66494b98eb2356332ea77830ea7403147236a198ec51d26ca065a5dff06d"
+      },
+      {
+        "name": "bad-sar",
+        "accepted": false,
+        "metadata": null,
+        "sha256": "3256f078665c0b6aae1ad0ae27da2d3f0e4987a5f22400c8413449edd0a8471e"
+      },
+      {
+        "name": "bad-clock",
+        "accepted": false,
+        "metadata": null,
+        "sha256": "aa32c73d2b93f4ea986bd0dc4519d32c383330e0af1f145266b2e06305474a66"
+      },
+      {
+        "name": "cabac",
+        "accepted": false,
+        "metadata": null,
+        "sha256": "71ff9f196abcb4fc6b718724a8c0ae587ad82af40fec78736106dcff21f7fa50"
+      },
+      {
+        "name": "changed-sps",
+        "accepted": false,
+        "metadata": null,
+        "sha256": "2775ddd61b675a8745d111c9261af715ffdca80262e2b38f27a1f19fc232d676"
+      },
+      {
+        "name": "changed-pps",
+        "accepted": false,
+        "metadata": null,
+        "sha256": "27224ae0e3fc1bacd03faff5a5f76ea428cee48159acb8f2d15dd19b5e4eb20c"
+      },
+      {
+        "name": "truncated-header",
+        "accepted": false,
+        "metadata": null,
+        "sha256": "56e544d9a008d878be4612e3d344f7d4a40c11348441122dfd0233cbcba76840"
+      },
+      {
+        "name": "golomb-overflow",
+        "accepted": false,
+        "metadata": null,
+        "sha256": "8d27dce8e0583105b4eae57bc0105bdf5d0b1b4a4d411c4f4b82180d1a677337"
+      },
+      {
+        "name": "large-nal",
+        "accepted": false,
+        "metadata": null,
+        "sha256": "7d2eee9546a5e7640ce576ca0507d1ab4bd6a6674d093b36070df69bb0164c2a"
+      }
+    ],
+    "unsupported": [
+      {
+        "name": "inter-frame",
+        "sha256": "023c76873fdd9130ef1a44abd7945aacd01f9040901f6acc2283fd8606a15e81"
+      },
+      {
+        "name": "high-profile",
+        "sha256": "02c8c27e828ea9b3c2eb822159ab08b6b527f40569f5d643ef02f86a23de82f8"
+      }
+    ]
+  },
+  "checks": [
+    {
+      "name": "base-64x64",
+      "cpu": {
+        "result": "passed",
+        "checks": 15103,
+        "opens": 1,
+        "pictures": 8,
+        "mutation_fingerprint": "14650fb0739d0383",
+        "metadata": [
+          64,
+          64,
+          64,
+          64,
+          0,
+          0,
+          1,
+          1,
+          0,
+          2,
+          2,
+          2,
+          1,
+          48,
+          0
+        ]
+      },
+      "independent_packet_oracle": true,
+      "packet_sha256": "92b06239f5dca4c2cd2549ebfed50595f1e8bf62235023c1bc3fd49836873794",
+      "native_stats": "video=h264-idr backend=d3d11 format=nv12 width=64 height=64 coded_width=64 coded_height=64 frames=8",
+      "image_sha256": "29043b4058e14a203cdd5aabd2f393b59d8f6106ac5de4cc987857bfeb1ad4a1",
+      "no_overwrite": true,
+      "native_check": true
+    },
+    {
+      "name": "base-192x112",
+      "cpu": {
+        "result": "passed",
+        "checks": 15103,
+        "opens": 1,
+        "pictures": 8,
+        "mutation_fingerprint": "14650fb0739d0383",
+        "metadata": [
+          192,
+          112,
+          192,
+          112,
+          0,
+          0,
+          1,
+          1,
+          0,
+          2,
+          2,
+          2,
+          1,
+          48,
+          0
+        ]
+      },
+      "independent_packet_oracle": true,
+      "packet_sha256": "f7a867a2e4fe5411cc38a05fd94a22bfc139713f7902dff50819f4c728c11c65",
+      "native_stats": "video=h264-idr backend=d3d11 format=nv12 width=192 height=112 coded_width=192 coded_height=112 frames=8",
+      "image_sha256": "68c748f02ada18186a55d1bacb8ccc5db717d9bb65102e02c7ca54f4e0a0c3f1",
+      "no_overwrite": true,
+      "native_check": true
+    },
+    {
+      "name": "base-320x240",
+      "cpu": {
+        "result": "passed",
+        "checks": 15103,
+        "opens": 1,
+        "pictures": 8,
+        "mutation_fingerprint": "14650fb0739d0383",
+        "metadata": [
+          320,
+          240,
+          320,
+          240,
+          0,
+          0,
+          1,
+          1,
+          0,
+          2,
+          2,
+          2,
+          1,
+          48,
+          0
+        ]
+      },
+      "independent_packet_oracle": true,
+      "packet_sha256": "f8cb58822200ff0816d83f59d7c5878ccd15b1f5e632f000dfead58a2c0312da",
+      "native_stats": "video=h264-idr backend=d3d11 format=nv12 width=320 height=240 coded_width=320 coded_height=240 frames=8",
+      "image_sha256": "c5e758786ffc4e75017af4d8dbf9346922c26709f2a146db5d3d6e52e78adde1",
+      "no_overwrite": true,
+      "native_check": true
+    },
+    {
+      "name": "base-640x368",
+      "cpu": {
+        "result": "passed",
+        "checks": 15103,
+        "opens": 1,
+        "pictures": 8,
+        "mutation_fingerprint": "14650fb0739d0383",
+        "metadata": [
+          640,
+          368,
+          640,
+          368,
+          0,
+          0,
+          1,
+          1,
+          0,
+          2,
+          2,
+          2,
+          1,
+          48,
+          0
+        ]
+      },
+      "independent_packet_oracle": true,
+      "packet_sha256": "8f1389a0493532aee3c82380f7507ab7a62caa5ab5df91ec87c1bb3cec497ace",
+      "native_stats": "video=h264-idr backend=d3d11 format=nv12 width=640 height=368 coded_width=640 coded_height=368 frames=8",
+      "image_sha256": "dc8e2de170b2ee8bd5a97e833f62e8bb7d14cdc98fa7c666adc22ac51bc505d1",
+      "no_overwrite": true,
+      "native_check": true
+    },
+    {
+      "name": "base-1280x720",
+      "cpu": {
+        "result": "passed",
+        "checks": 15103,
+        "opens": 1,
+        "pictures": 8,
+        "mutation_fingerprint": "14650fb0739d0383",
+        "metadata": [
+          1280,
+          720,
+          1280,
+          720,
+          0,
+          0,
+          1,
+          1,
+          0,
+          2,
+          2,
+          2,
+          1,
+          48,
+          0
+        ]
+      },
+      "independent_packet_oracle": true,
+      "packet_sha256": "9d6170c0647bf377c781797d969ee036bf7a95591063cc3ba6c15bc93900a15b",
+      "native_stats": "video=h264-idr backend=d3d11 format=nv12 width=1280 height=720 coded_width=1280 coded_height=720 frames=8",
+      "image_sha256": "cb09f990bb00da4e62fcc3831ce4ccf78d9fcc3750d873846a5d010042fa39df",
+      "no_overwrite": true,
+      "native_check": true
+    },
+    {
+      "name": "base-1920x1088",
+      "cpu": {
+        "result": "passed",
+        "checks": 15103,
+        "opens": 1,
+        "pictures": 8,
+        "mutation_fingerprint": "14650fb0739d0383",
+        "metadata": [
+          1920,
+          1088,
+          1920,
+          1088,
+          0,
+          0,
+          1,
+          1,
+          0,
+          2,
+          2,
+          2,
+          1,
+          48,
+          0
+        ]
+      },
+      "independent_packet_oracle": true,
+      "packet_sha256": "6b83f8d3da98ebfd7438c6f92fadd4b25e1d25896f313c7625d839ae6fc1af38",
+      "native_stats": "video=h264-idr backend=d3d11 format=nv12 width=1920 height=1088 coded_width=1920 coded_height=1088 frames=8",
+      "image_sha256": "0c928aef5fcc401696146675a71b03001b1d3941607f2c234d1f4e859bc25af3",
+      "no_overwrite": true,
+      "native_check": true
+    },
+    {
+      "name": "crop-62x62",
+      "cpu": {
+        "result": "passed",
+        "checks": 13831,
+        "opens": 1,
+        "pictures": 4,
+        "mutation_fingerprint": "14650fb0739d0383",
+        "metadata": [
+          64,
+          64,
+          62,
+          62,
+          0,
+          0,
+          1,
+          1,
+          0,
+          2,
+          2,
+          2,
+          1,
+          48,
+          0
+        ]
+      },
+      "independent_packet_oracle": false,
+      "packet_sha256": "a89098b48453cdbf1ce2d15a88de74a90ff377760e34dcb410c75ba0d612513d",
+      "native_stats": "video=h264-idr backend=d3d11 format=nv12 width=62 height=62 coded_width=64 coded_height=64 frames=4",
+      "image_sha256": "96bab724240bad87a92901ffd15ded61b313c9c5b286fbd4e61e879524ec4716",
+      "no_overwrite": true,
+      "native_check": true
+    },
+    {
+      "name": "crop-162x98",
+      "cpu": {
+        "result": "passed",
+        "checks": 13831,
+        "opens": 1,
+        "pictures": 4,
+        "mutation_fingerprint": "14650fb0739d0383",
+        "metadata": [
+          176,
+          112,
+          162,
+          98,
+          0,
+          0,
+          1,
+          1,
+          0,
+          2,
+          2,
+          2,
+          1,
+          48,
+          0
+        ]
+      },
+      "independent_packet_oracle": false,
+      "packet_sha256": "14ede2331e0cdae6a3523e1770cac10b9f5007d036a797e8c2368dd4b859b20d",
+      "native_stats": "video=h264-idr backend=d3d11 format=nv12 width=162 height=98 coded_width=176 coded_height=112 frames=4",
+      "image_sha256": "7e58cf8de9150fe7c3041b0c95b9fda9a760bc6249f50e9c84fbc4e2afbdd0fd",
+      "no_overwrite": true,
+      "native_check": true
+    },
+    {
+      "name": "crop-318x242",
+      "cpu": {
+        "result": "passed",
+        "checks": 13831,
+        "opens": 1,
+        "pictures": 4,
+        "mutation_fingerprint": "14650fb0739d0383",
+        "metadata": [
+          320,
+          256,
+          318,
+          242,
+          0,
+          0,
+          1,
+          1,
+          0,
+          2,
+          2,
+          2,
+          1,
+          48,
+          0
+        ]
+      },
+      "independent_packet_oracle": false,
+      "packet_sha256": "adc63268dcfec46fe5e36d46a3eb2f36de97305cfb9dc94dfc205e069b26448f",
+      "native_stats": "video=h264-idr backend=d3d11 format=nv12 width=318 height=242 coded_width=320 coded_height=256 frames=4",
+      "image_sha256": "aca49286e74e90c20a3c783058699ef4eb916a1ecb88b459de6da591c86e8b9e",
+      "no_overwrite": true,
+      "native_check": true
+    },
+    {
+      "name": "crop-638x358",
+      "cpu": {
+        "result": "passed",
+        "checks": 13831,
+        "opens": 1,
+        "pictures": 4,
+        "mutation_fingerprint": "14650fb0739d0383",
+        "metadata": [
+          640,
+          368,
+          638,
+          358,
+          0,
+          0,
+          1,
+          1,
+          0,
+          2,
+          2,
+          2,
+          1,
+          48,
+          0
+        ]
+      },
+      "independent_packet_oracle": false,
+      "packet_sha256": "a09ff51f0e2df6bb3d9c92ad58653b656f8aba160f5821c5ab2b53574d8d01b4",
+      "native_stats": "video=h264-idr backend=d3d11 format=nv12 width=638 height=358 coded_width=640 coded_height=368 frames=4",
+      "image_sha256": "2666d84810ffe8d9739b93df0acd8f6d297cd74839584faad16921a5af0716c3",
+      "no_overwrite": true,
+      "native_check": true
+    },
+    {
+      "name": "crop-1280x718",
+      "cpu": {
+        "result": "passed",
+        "checks": 13831,
+        "opens": 1,
+        "pictures": 4,
+        "mutation_fingerprint": "14650fb0739d0383",
+        "metadata": [
+          1280,
+          720,
+          1280,
+          718,
+          0,
+          0,
+          1,
+          1,
+          0,
+          2,
+          2,
+          2,
+          1,
+          48,
+          0
+        ]
+      },
+      "independent_packet_oracle": false,
+      "packet_sha256": "b7ee521cd5e7d6d776ba6e3ec271d3442d70a38a4d5d6bd5ff8c40a6b2996f61",
+      "native_stats": "video=h264-idr backend=d3d11 format=nv12 width=1280 height=718 coded_width=1280 coded_height=720 frames=4",
+      "image_sha256": "7af44af971122ebacf6670177e1a7ded9395b5e19c26f55c25a1cf80167556c4",
+      "no_overwrite": true,
+      "native_check": true
+    },
+    {
+      "name": "crop-1920x1080",
+      "cpu": {
+        "result": "passed",
+        "checks": 13831,
+        "opens": 1,
+        "pictures": 4,
+        "mutation_fingerprint": "14650fb0739d0383",
+        "metadata": [
+          1920,
+          1088,
+          1920,
+          1080,
+          0,
+          0,
+          1,
+          1,
+          0,
+          2,
+          2,
+          2,
+          1,
+          48,
+          0
+        ]
+      },
+      "independent_packet_oracle": false,
+      "packet_sha256": "50a77cbc6e1bca4476f24052d6318d9225d1192f347818358fafb9059509dfcf",
+      "native_stats": "video=h264-idr backend=d3d11 format=nv12 width=1920 height=1080 coded_width=1920 coded_height=1088 frames=4",
+      "image_sha256": "67e3e8bf1b7b6d8c00cc321691d0dcf5d3cc25ee03b584081915a3c977a0122a",
+      "no_overwrite": true,
+      "native_check": true
+    },
+    {
+      "name": "slices-2",
+      "cpu": {
+        "result": "passed",
+        "checks": 13843,
+        "opens": 1,
+        "pictures": 4,
+        "mutation_fingerprint": "14650fb0739d0383",
+        "metadata": [
+          320,
+          240,
+          320,
+          240,
+          0,
+          0,
+          1,
+          1,
+          0,
+          2,
+          2,
+          2,
+          1,
+          48,
+          0
+        ]
+      },
+      "independent_packet_oracle": false,
+      "packet_sha256": "e6998f8e5a5f2a9a3f37d28c70b233d19c5b039c3ffa39568c972be0e08c70f1",
+      "native_stats": "video=h264-idr backend=d3d11 format=nv12 width=320 height=240 coded_width=320 coded_height=240 frames=4",
+      "image_sha256": "ee4a66c8095fe1b285669183d574d925491c75f6d8a1b26c3b64a9a3092abf4d",
+      "no_overwrite": true,
+      "native_check": true
+    },
+    {
+      "name": "slices-4",
+      "cpu": {
+        "result": "passed",
+        "checks": 13867,
+        "opens": 1,
+        "pictures": 4,
+        "mutation_fingerprint": "14650fb0739d0383",
+        "metadata": [
+          320,
+          240,
+          320,
+          240,
+          0,
+          0,
+          1,
+          1,
+          0,
+          2,
+          2,
+          2,
+          1,
+          48,
+          0
+        ]
+      },
+      "independent_packet_oracle": false,
+      "packet_sha256": "3231f7c3d73395cdaf9ffe4b54dfa37610d13ec96fb2567c948d6382e0127dfa",
+      "native_stats": "video=h264-idr backend=d3d11 format=nv12 width=320 height=240 coded_width=320 coded_height=240 frames=4",
+      "image_sha256": "d3af898ae582b2fca02b9902cc4bcab0df65cdfd38323cb14e1f21b160a4b394",
+      "no_overwrite": true,
+      "native_check": true
+    },
+    {
+      "name": "slices-8",
+      "cpu": {
+        "result": "passed",
+        "checks": 13915,
+        "opens": 1,
+        "pictures": 4,
+        "mutation_fingerprint": "14650fb0739d0383",
+        "metadata": [
+          320,
+          240,
+          320,
+          240,
+          0,
+          0,
+          1,
+          1,
+          0,
+          2,
+          2,
+          2,
+          1,
+          48,
+          0
+        ]
+      },
+      "independent_packet_oracle": false,
+      "packet_sha256": "3ec7e03081208d7bec19b6274b2aaf73637c599a470533e426e4c15c16bc1af4",
+      "native_stats": "video=h264-idr backend=d3d11 format=nv12 width=320 height=240 coded_width=320 coded_height=240 frames=4",
+      "image_sha256": "93b0cd9d352388de72608eb4e6ee10e8a8e117863995d3ab1d00f2b56fcd52da",
+      "no_overwrite": true,
+      "native_check": true
+    },
+    {
+      "name": "sar-color",
+      "cpu": {
+        "result": "passed",
+        "checks": 13831,
+        "opens": 1,
+        "pictures": 4,
+        "mutation_fingerprint": "14650fb0739d0383",
+        "metadata": [
+          320,
+          240,
+          320,
+          240,
+          0,
+          0,
+          4,
+          3,
+          1,
+          2,
+          2,
+          1,
+          1,
+          48,
+          0
+        ]
+      },
+      "independent_packet_oracle": false,
+      "packet_sha256": "913627294457e774ead178abe9f4be4c3231307d9cd6e5b881dcc858699364b6",
+      "native_stats": "video=h264-idr backend=d3d11 format=nv12 width=320 height=240 coded_width=320 coded_height=240 frames=4",
+      "image_sha256": "1a79d88d4c9a6b096c0b7249df2e93aef131e80948c8b416fd7d487a12a7db41",
+      "no_overwrite": true,
+      "native_check": true
+    },
+    {
+      "name": "noise",
+      "cpu": {
+        "result": "passed",
+        "checks": 13513,
+        "opens": 1,
+        "pictures": 3,
+        "mutation_fingerprint": "14650fb0739d0383",
+        "metadata": [
+          640,
+          368,
+          640,
+          368,
+          0,
+          0,
+          0,
+          0,
+          0,
+          2,
+          2,
+          2,
+          1,
+          48,
+          0
+        ]
+      },
+      "independent_packet_oracle": false,
+      "packet_sha256": "10366834758a3323d8d45aec1861c227c8d45ce6e4ba0e47c1da209d47c7b1b9",
+      "native_stats": "video=h264-idr backend=d3d11 format=nv12 width=640 height=368 coded_width=640 coded_height=368 frames=3",
+      "image_sha256": "74e8298c4669e255b87531c6986685cbe9409b137a464c6123ee1b6a9bd7cba4",
+      "no_overwrite": true,
+      "native_check": true
+    },
+    {
+      "name": "poc-type-zero",
+      "cpu": {
+        "result": "passed",
+        "checks": 15103,
+        "opens": 1,
+        "pictures": 8,
+        "mutation_fingerprint": "14650fb0739d0383",
+        "metadata": [
+          320,
+          240,
+          320,
+          240,
+          0,
+          0,
+          1,
+          1,
+          0,
+          2,
+          2,
+          2,
+          1,
+          48,
+          0
+        ]
+      },
+      "independent_packet_oracle": false,
+      "packet_sha256": "de190471098c67370c0a6ddb44a2e2b2396025806fdce2175ac6e8e9ae9d3e48",
+      "native_stats": "video=h264-idr backend=d3d11 format=nv12 width=320 height=240 coded_width=320 coded_height=240 frames=8",
+      "image_sha256": "c5e758786ffc4e75017af4d8dbf9346922c26709f2a146db5d3d6e52e78adde1",
+      "no_overwrite": true,
+      "native_check": true
+    },
+    {
+      "name": "four-sided-crop",
+      "cpu": {
+        "result": "passed",
+        "checks": 15103,
+        "opens": 1,
+        "pictures": 8,
+        "mutation_fingerprint": "14650fb0739d0383",
+        "metadata": [
+          320,
+          240,
+          314,
+          226,
+          2,
+          6,
+          1,
+          1,
+          0,
+          2,
+          2,
+          2,
+          1,
+          48,
+          0
+        ]
+      },
+      "independent_packet_oracle": false,
+      "packet_sha256": "f8cb58822200ff0816d83f59d7c5878ccd15b1f5e632f000dfead58a2c0312da",
+      "native_stats": "video=h264-idr backend=d3d11 format=nv12 width=314 height=226 coded_width=320 coded_height=240 frames=8",
+      "image_sha256": "3ea3c927a573ee4d6f3eab46894e0c5d7a5c0b5ba4689fb2127866beb7fb09a0",
+      "no_overwrite": true,
+      "native_check": true
+    },
+    {
+      "name": "prefixes",
+      "cpu": {
+        "result": "passed",
+        "checks": 15103,
+        "opens": 1,
+        "pictures": 8,
+        "mutation_fingerprint": "14650fb0739d0383",
+        "metadata": [
+          64,
+          64,
+          64,
+          64,
+          0,
+          0,
+          1,
+          1,
+          0,
+          2,
+          2,
+          2,
+          1,
+          48,
+          0
+        ]
+      },
+      "independent_packet_oracle": false,
+      "packet_sha256": "92b06239f5dca4c2cd2549ebfed50595f1e8bf62235023c1bc3fd49836873794",
+      "native_stats": "video=h264-idr backend=d3d11 format=nv12 width=64 height=64 coded_width=64 coded_height=64 frames=8",
+      "image_sha256": "29043b4058e14a203cdd5aabd2f393b59d8f6106ac5de4cc987857bfeb1ad4a1",
+      "no_overwrite": true,
+      "native_check": true
+    }
+  ],
+  "synthetic": [
+    {
+      "name": "rich-vui",
+      "accepted": true,
+      "result": {
+        "result": "passed",
+        "checks": 12877,
+        "opens": 1,
+        "pictures": 1,
+        "mutation_fingerprint": "14650fb0739d0383",
+        "metadata": [
+          320,
+          240,
+          314,
+          226,
+          2,
+          6,
+          4,
+          3,
+          1,
+          9,
+          16,
+          9,
+          1001,
+          60000,
+          1
+        ]
+      }
+    },
+    {
+      "name": "poc-zero-type",
+      "accepted": true,
+      "result": {
+        "result": "passed",
+        "checks": 12877,
+        "opens": 1,
+        "pictures": 1,
+        "mutation_fingerprint": "14650fb0739d0383",
+        "metadata": [
+          320,
+          240,
+          320,
+          240,
+          0,
+          0,
+          0,
+          0,
+          0,
+          2,
+          2,
+          2,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "name": "256-slices",
+      "accepted": true,
+      "result": {
+        "result": "passed",
+        "checks": 13642,
+        "opens": 1,
+        "pictures": 1,
+        "mutation_fingerprint": "14650fb0739d0383",
+        "metadata": [
+          320,
+          240,
+          320,
+          240,
+          0,
+          0,
+          0,
+          0,
+          0,
+          2,
+          2,
+          2,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "name": "257-slices",
+      "accepted": false,
+      "result": {
+        "result": "rejected",
+        "checks": 12556,
+        "opens": 1,
+        "pictures": 0,
+        "mutation_fingerprint": "14650fb0739d0383",
+        "metadata": [
+          320,
+          240,
+          320,
+          240,
+          0,
+          0,
+          0,
+          0,
+          0,
+          2,
+          2,
+          2,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "name": "missing-sps",
+      "accepted": false,
+      "result": {
+        "result": "rejected",
+        "checks": 12556,
+        "opens": 1,
+        "pictures": 0,
+        "mutation_fingerprint": "14650fb0739d0383",
+        "metadata": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "name": "missing-pps",
+      "accepted": false,
+      "result": {
+        "result": "rejected",
+        "checks": 12556,
+        "opens": 1,
+        "pictures": 0,
+        "mutation_fingerprint": "14650fb0739d0383",
+        "metadata": [
+          320,
+          240,
+          320,
+          240,
+          0,
+          0,
+          0,
+          0,
+          0,
+          2,
+          2,
+          2,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "name": "missing-picture",
+      "accepted": false,
+      "result": {
+        "result": "rejected",
+        "checks": 12556,
+        "opens": 1,
+        "pictures": 0,
+        "mutation_fingerprint": "14650fb0739d0383",
+        "metadata": [
+          320,
+          240,
+          320,
+          240,
+          0,
+          0,
+          0,
+          0,
+          0,
+          2,
+          2,
+          2,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "name": "first-mb",
+      "accepted": false,
+      "result": {
+        "result": "rejected",
+        "checks": 12556,
+        "opens": 1,
+        "pictures": 0,
+        "mutation_fingerprint": "14650fb0739d0383",
+        "metadata": [
+          320,
+          240,
+          320,
+          240,
+          0,
+          0,
+          0,
+          0,
+          0,
+          2,
+          2,
+          2,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "name": "slice-order",
+      "accepted": false,
+      "result": {
+        "result": "rejected",
+        "checks": 12556,
+        "opens": 1,
+        "pictures": 0,
+        "mutation_fingerprint": "14650fb0739d0383",
+        "metadata": [
+          320,
+          240,
+          320,
+          240,
+          0,
+          0,
+          0,
+          0,
+          0,
+          2,
+          2,
+          2,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "name": "unknown-pps",
+      "accepted": false,
+      "result": {
+        "result": "rejected",
+        "checks": 12556,
+        "opens": 1,
+        "pictures": 0,
+        "mutation_fingerprint": "14650fb0739d0383",
+        "metadata": [
+          320,
+          240,
+          320,
+          240,
+          0,
+          0,
+          0,
+          0,
+          0,
+          2,
+          2,
+          2,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "name": "empty-crop",
+      "accepted": false,
+      "result": {
+        "result": "rejected",
+        "checks": 12556,
+        "opens": 1,
+        "pictures": 0,
+        "mutation_fingerprint": "14650fb0739d0383",
+        "metadata": [
+          320,
+          240,
+          0,
+          0,
+          320,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "name": "bad-sar",
+      "accepted": false,
+      "result": {
+        "result": "rejected",
+        "checks": 12556,
+        "opens": 1,
+        "pictures": 0,
+        "mutation_fingerprint": "14650fb0739d0383",
+        "metadata": [
+          320,
+          240,
+          320,
+          240,
+          0,
+          0,
+          0,
+          0,
+          0,
+          2,
+          2,
+          2,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "name": "bad-clock",
+      "accepted": false,
+      "result": {
+        "result": "rejected",
+        "checks": 12556,
+        "opens": 1,
+        "pictures": 0,
+        "mutation_fingerprint": "14650fb0739d0383",
+        "metadata": [
+          320,
+          240,
+          320,
+          240,
+          0,
+          0,
+          4,
+          3,
+          1,
+          9,
+          16,
+          9,
+          1001,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "name": "cabac",
+      "accepted": false,
+      "result": {
+        "result": "rejected",
+        "checks": 12556,
+        "opens": 1,
+        "pictures": 0,
+        "mutation_fingerprint": "14650fb0739d0383",
+        "metadata": [
+          320,
+          240,
+          320,
+          240,
+          0,
+          0,
+          0,
+          0,
+          0,
+          2,
+          2,
+          2,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "name": "changed-sps",
+      "accepted": false,
+      "result": {
+        "result": "rejected",
+        "checks": 12875,
+        "opens": 1,
+        "pictures": 1,
+        "mutation_fingerprint": "14650fb0739d0383",
+        "metadata": [
+          320,
+          240,
+          320,
+          240,
+          0,
+          0,
+          0,
+          0,
+          0,
+          2,
+          2,
+          2,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "name": "changed-pps",
+      "accepted": false,
+      "result": {
+        "result": "rejected",
+        "checks": 12875,
+        "opens": 1,
+        "pictures": 1,
+        "mutation_fingerprint": "14650fb0739d0383",
+        "metadata": [
+          320,
+          240,
+          320,
+          240,
+          0,
+          0,
+          0,
+          0,
+          0,
+          2,
+          2,
+          2,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "name": "truncated-header",
+      "accepted": false,
+      "result": {
+        "result": "rejected",
+        "checks": 12556,
+        "opens": 1,
+        "pictures": 0,
+        "mutation_fingerprint": "14650fb0739d0383",
+        "metadata": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "name": "golomb-overflow",
+      "accepted": false,
+      "result": {
+        "result": "rejected",
+        "checks": 12556,
+        "opens": 1,
+        "pictures": 0,
+        "mutation_fingerprint": "14650fb0739d0383",
+        "metadata": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "name": "large-nal",
+      "accepted": false,
+      "result": {
+        "result": "rejected",
+        "checks": 12556,
+        "opens": 1,
+        "pictures": 0,
+        "mutation_fingerprint": "14650fb0739d0383",
+        "metadata": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    }
+  ],
+  "unsupported": [
+    {
+      "name": "inter-frame",
+      "rejected": true
+    },
+    {
+      "name": "high-profile",
+      "rejected": true
+    }
+  ],
+  "guarded": {
+    "result": "passed",
+    "checks": 41614136,
+    "opens": 3075,
+    "pictures": 9616,
+    "mutation_fingerprint": "14f42a7938ff4348",
+    "metadata": [
+      64,
+      64,
+      64,
+      64,
+      0,
+      0,
+      1,
+      1,
+      0,
+      2,
+      2,
+      2,
+      1,
+      48,
+      0
+    ]
+  },
+  "controls": [
+    {
+      "mode": "published-before-file-reader",
+      "executable_sha256": "e3e5132718e379a1e1852e6b30be2f7135462039bd303f38c37059a144bf6343",
+      "exit_code": 0,
+      "missing_video_result": true
+    },
+    {
+      "mode": "cancel",
+      "scope": "Test-only CLI object changes one cancel flag or reported write length after one real frame. No console event, desktop input, audio, disk-full simulation or production test hook.",
+      "source_sha256": "1cb3e72083e99cf02ba418ad2d2b6ee01f05fdd0eaff17f0a526b53fb5cc0ee2",
+      "object_sha256": "308752f4729e71c7a16acffeeadbd4d5beb82035911043eb3cb7955433ac49ce",
+      "executable_sha256": "86e34026e3ea82844d3ee87b8662a2d6100444607a97e245691d0f0aac24325d",
+      "exit_code": 1,
+      "partial_output_removed": true
+    },
+    {
+      "mode": "write",
+      "scope": "Test-only CLI object changes one cancel flag or reported write length after one real frame. No console event, desktop input, audio, disk-full simulation or production test hook.",
+      "source_sha256": "122fbf1fbf7bf300e3a523abc5647938fa8d7641a39f890d484cd92ff39009b1",
+      "object_sha256": "56818633046a438e2a3f07c0675a0bede42ee40ee84c677d55ad3d539e5c25d3",
+      "executable_sha256": "dba1610af5aec330421315f4a9621dab1dfb4dee521597916096eff309ca327b",
+      "exit_code": 1,
+      "partial_output_removed": true
+    }
+  ],
+  "native_images": 115,
+  "native_image_bytes": 64813440,
+  "sources": {
+    "src/h264.s": "a1456b95776839582d149fc7132eebb26b9183db34796a46f75ef0f4726c8bca",
+    "src/h264.inc": "4920bbd1d29bd2880dfdc006a1c88893b7828d469b65855ebd187ab5cf8b4d10",
+    "src/h264_headers.inc": "9153013c949d81a44bf0f8678d604df64d0e05ef9763d912ffd31a6865c3de3c",
+    "src/h264_frames.inc": "888bfc114ff26cd91b4d1b04c75aa3b883f33db856062e1e32cdf25bbc441c44",
+    "src/lamp.inc": "d79c75543ab0d78863010b32e46faf23fda5b9cb54ec624e9dce0acfcabf03e6",
+    "tests/h264-file-oracle.c": "1c09e72bb96230cdaf760b77fa821d7780416e2f93c954fe89bddc833e27a534",
+    "tests/h264_file_fixtures.py": "3eb83f793f510e5807e9965155f0eea1b93e8e9459154205bab7197f7db05db5",
+    "tests/verify-h264-file.py": "fe23d4bc17ffa99451a7e84aba5e846a1761b59c29b0aa87fdea8cdcabe28ec2",
+    "tests/verify-windows-video.py": "9b2c8198ad664dc6bd717160a48338b667047b288dd442aac46c7aabb7cb9ac4",
+    "src/win/video_cli.s": "9088c5f25dcbfdd735bbb363b76cc1836e44658ae5b30d54eb874703960e0c51",
+    "src/win/video.s": "d073eb62db2d47d63d359dd7600eb218aebd113aa20fd5f4e3eea65b991dce5a",
+    "src/win/video.inc": "60c54078b1de30cf3e1267f082c83dd954c2d51a0ed50dc95eb536e31b62b40d",
+    "src/win/player.s": "a4ea0b0ee3830814dfca1e773cb10d50c1568672dc93301188d43fa766c616ea",
+    "src/win/kernel32.def": "723dab404498c79ab1fc1aaa716f23476e6a4901ac96febf03f797c48647f241",
+    "tools/build-windows.py": "742271524146520f0c7f80e41c626a5f882c7b06765d8492ed55ce078479c4a7",
+    "tests/verify-runtime.js": "a0b0a8af963548b7f8b3989850fae10a2a78578c2307fcb150b88663baa7bf33"
+  },
+  "artifacts": {
+    "h264-file\\h264-file-oracle.exe": "663185049832ed19cbc2b651698ecddc126d3758060eae9bc08ef3f7c8402816",
+    "obj\\h264.obj": "434c7fd7f1aeab3b0c1769eaf8bc9255bc13178ad2e5a07a5e6882052b424bd0",
+    "lamp-cli.exe": "bd3d0166ba020bd3eacca2e197dceff2a55d6c23639dc4894e8b1fb76685ff68"
+  },
+  "verification_host": {
+    "cpu": "12th Gen Intel(R) Core(TM) i7-12700KF",
+    "graphics": [
+      {
+        "Name": "Virtual Display Driver",
+        "DriverVersion": "11.30.4.434",
+        "VideoProcessor": null
+      },
+      {
+        "Name": "NVIDIA GeForce RTX 5070 Ti",
+        "DriverVersion": "32.0.16.1692",
+        "VideoProcessor": "NVIDIA GeForce RTX 5070 Ti"
+      }
+    ]
+  },
+  "git_source_sha256": {
+    "src/h264.s": "a1456b95776839582d149fc7132eebb26b9183db34796a46f75ef0f4726c8bca",
+    "src/h264.inc": "4920bbd1d29bd2880dfdc006a1c88893b7828d469b65855ebd187ab5cf8b4d10",
+    "src/h264_headers.inc": "9153013c949d81a44bf0f8678d604df64d0e05ef9763d912ffd31a6865c3de3c",
+    "src/h264_frames.inc": "888bfc114ff26cd91b4d1b04c75aa3b883f33db856062e1e32cdf25bbc441c44",
+    "src/lamp.inc": "d79c75543ab0d78863010b32e46faf23fda5b9cb54ec624e9dce0acfcabf03e6",
+    "tests/h264-file-oracle.c": "82a0966d0002bf3988e2c6022e67c354ea60a9bb1883e948fe059c5a633c3023",
+    "tests/h264_file_fixtures.py": "3eb83f793f510e5807e9965155f0eea1b93e8e9459154205bab7197f7db05db5",
+    "tests/verify-h264-file.py": "fe23d4bc17ffa99451a7e84aba5e846a1761b59c29b0aa87fdea8cdcabe28ec2",
+    "tests/verify-windows-video.py": "9b2c8198ad664dc6bd717160a48338b667047b288dd442aac46c7aabb7cb9ac4",
+    "src/win/video_cli.s": "9088c5f25dcbfdd735bbb363b76cc1836e44658ae5b30d54eb874703960e0c51",
+    "src/win/video.s": "d073eb62db2d47d63d359dd7600eb218aebd113aa20fd5f4e3eea65b991dce5a",
+    "src/win/video.inc": "60c54078b1de30cf3e1267f082c83dd954c2d51a0ed50dc95eb536e31b62b40d",
+    "src/win/player.s": "a4ea0b0ee3830814dfca1e773cb10d50c1568672dc93301188d43fa766c616ea",
+    "src/win/kernel32.def": "723dab404498c79ab1fc1aaa716f23476e6a4901ac96febf03f797c48647f241",
+    "tools/build-windows.py": "742271524146520f0c7f80e41c626a5f882c7b06765d8492ed55ce078479c4a7",
+    "tests/verify-runtime.js": "29775ecd7215e63629e41dc2654e00b3291c6a46dcc8258e6aa3167150c442b8"
+  },
+  "audio_smoke": [
+    {
+      "codec": "wav",
+      "frames": 12000,
+      "rate": 48000,
+      "peak": 0.08837890625,
+      "result": "passed"
+    },
+    {
+      "codec": "aiff",
+      "frames": 12000,
+      "rate": 48000,
+      "peak": 0.08837890625,
+      "result": "passed"
+    },
+    {
+      "codec": "flac",
+      "frames": 12000,
+      "rate": 48000,
+      "peak": 0.08837890625,
+      "result": "passed"
+    },
+    {
+      "codec": "mp3",
+      "frames": 12000,
+      "rate": 48000,
+      "peak": 0.0840023010969162,
+      "result": "passed"
+    },
+    {
+      "codec": "vorbis",
+      "frames": 12000,
+      "rate": 48000,
+      "peak": 0.08997303247451782,
+      "result": "passed"
+    },
+    {
+      "codec": "opus",
+      "frames": 12000,
+      "rate": 48000,
+      "peak": 0.08913379907608032,
+      "result": "passed"
+    }
+  ],
+  "runtime_imports_and_resources": [
+    {
+      "file": "lamp-cli.exe",
+      "bytes": 529920,
+      "architecture": "x86-64",
+      "subsystem": "console",
+      "imports": [
+        "AVRT.dll",
+        "d3d11.dll",
+        "KERNEL32.dll",
+        "ole32.dll",
+        "SHELL32.dll",
+        "USER32.dll"
+      ],
+      "iconSizes": [
+        16,
+        24,
+        32,
+        48,
+        64,
+        128,
+        256
+      ],
+      "version": "0.4.0-dev",
+      "result": "passed"
+    },
+    {
+      "file": "lamp.exe",
+      "bytes": 559616,
+      "architecture": "x86-64",
+      "subsystem": "windows",
+      "imports": [
+        "AVRT.dll",
+        "COMCTL32.dll",
+        "COMDLG32.dll",
+        "d3d11.dll",
+        "GDI32.dll",
+        "KERNEL32.dll",
+        "ole32.dll",
+        "SHELL32.dll",
+        "SHLWAPI.dll",
+        "USER32.dll"
+      ],
+      "iconSizes": [
+        16,
+        24,
+        32,
+        48,
+        64,
+        128,
+        256
+      ],
+      "version": "0.4.0-dev",
+      "result": "passed"
+    }
+  ]
+}

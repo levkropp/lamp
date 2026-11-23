@@ -49,7 +49,7 @@ def cancel_or_write_control(out, work, mode):
     llvm('llvm-mc', ['-triple=x86_64-pc-windows-msvc', '-filetype=obj', '-defsym=WINDOWS=1',
                     '-I', convert(ROOT/'src'), '-I', convert(ROOT/'src/win'), convert(path), '-o', convert(obj)])
     objects = [out/'obj'/(p.stem+'.obj') for p in sorted((ROOT/'src').glob('*.s'))]
-    objects += [out/'obj'/(n+'.obj') for n in ['platform', 'player', 'output_notifications', 'output_format', 'output_exclusive', 'video']]
+    objects += [out/'obj'/(n+'.obj') for n in ['platform', 'player', 'output_notifications', 'output_format', 'output_exclusive', 'video', 'video_present', 'video_window']]
     llvm('lld-link', ['/nologo', '/nodefaultlib', '/entry:start', '/subsystem:console', '/machine:x64',
                      '/dynamicbase', '/nxcompat', '/opt:ref', '/out:'+convert(exe),
                      *[convert(x) for x in [*objects, obj, *sorted((out/'obj').glob('*.lib'))]]])

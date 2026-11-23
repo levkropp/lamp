@@ -16,6 +16,10 @@ EXPORTS
     PostMessageW
     PostQuitMessage
     RegisterClassExW
+    UnregisterClassW
+    AdjustWindowRectEx
+    PeekMessageW
+    MsgWaitForMultipleObjectsEx
     SetProcessDpiAwarenessContext
     SetTimer
     SetWindowPos

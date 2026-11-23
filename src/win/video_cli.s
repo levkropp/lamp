@@ -1,11 +1,12 @@
-# Original Windows H.264 IDR check/export path. No CRT or external decoder.
+# Original Windows H.264 IDR playback/check/export. No CRT/external decoder.
 .include "lamp.inc"
 .include "h264.inc"
 .include "video.inc"
 RODATA
 vc_check: .short '-','-','v','i','d','e','o','-','c','h','e','c','k',0
 vc_decode: .short '-','-','v','i','d','e','o','-','d','e','c','o','d','e',0
-vc_usage: .asciz "Usage: --video-check file.h264 | --video-decode file.h264 output.nv12\r\n"
+vc_play: .short '-','-','v','i','d','e','o','-','p','l','a','y',0
+vc_usage: .asciz "Usage: --video-play file.h264 | --video-check file.h264 | --video-decode file.h264 output.nv12\r\n"
 vc_input_error: .asciz "Unsupported, malformed or inaccessible H.264 IDR file.\r\n"
 vc_gpu_error: .asciz "H.264 hardware decode failed or timed out on this adapter.\r\n"
 vc_output_error: .asciz "Cannot create or write video output; existing files are preserved.\r\n"
@@ -31,6 +32,7 @@ vc_written: .long 0
 .p2align 6
 vc_parser: .zero HP_BYTES
 vc_gpu: .zero WV_BYTES
+vc_play_info: .zero 56
 .text
 
 # RCX=argv, EDX=argc ->-1 not video, otherwise process exit code0/1/2.
@@ -55,11 +57,22 @@ FN win_video_cli
     lea rdx, [rip+vc_decode]
     call equal_wide
     test eax, eax
+    jnz .Lvc_decode_mode
+    mov rcx, [rbx+8]
+    lea rdx, [rip+vc_play]
+    call equal_wide
+    test eax, eax
     jz .Lvc_not_video
+    mov esi, 5
+    cmp ebp, 3
+    jne .Lvc_bad_usage
+    jmp .Lvc_initialize
+.Lvc_decode_mode:
     mov esi, 4
 .Lvc_mode:
     cmp ebp, esi
     jne .Lvc_bad_usage
+.Lvc_initialize:
     mov dword ptr [rip+vc_cancel], 0
     mov qword ptr [rip+vc_output], -1
     mov qword ptr [rip+vc_output_path], 0
@@ -98,6 +111,8 @@ FN win_video_cli
     call win_video_open
     test eax, eax
     js .Lvc_gpu_error
+    cmp esi, 5
+    je .Lvc_play_window
     lea rax, [rip+vc_parser]
     mov ecx, [rax+HP_WIDTH]
     imul ecx, [rax+HP_HEIGHT]
@@ -183,6 +198,29 @@ FN win_video_cli
     cmp eax, [rip+vc_written]
     jne .Lvc_output_error
     jmp .Lvc_next
+.Lvc_play_window:
+    mov rcx, -4              # Per-monitor V2 awareness for this CLI process.
+    call SetProcessDpiAwarenessContext
+    lea r8, [rip+vc_play_info]
+    mov rax, [rip+vc_view]
+    mov [r8], rax
+    mov rax, [rip+vc_size]
+    mov [r8+8], rax
+    lea rax, [rip+vc_cancel]
+    mov [r8+16], rax
+    mov rax, [rip+vc_count]
+    mov [r8+24], rax
+    mov dword ptr [r8+32], 1
+    # No event: the window checks the Ctrl+C flag at most every250ms at rest.
+    lea rcx, [rip+vc_gpu]
+    lea rdx, [rip+vc_parser]
+    call win_video_play
+    cmp dword ptr [rip+vc_cancel], 0
+    jne .Lvc_cancelled
+    test eax, eax
+    js .Lvc_gpu_error
+    xor ebp, ebp
+    jmp .Lvc_cleanup
 .Lvc_success:
     lea rbx, [rip+vc_parser]
     mov rax, [rbx+HP_FRAMES]

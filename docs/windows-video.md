@@ -4,8 +4,9 @@ This backend now feeds the experimental [Windows file check/export commands](h26
 The assembly module `src/win/video.s` submits H.264 IDR pictures directly to
 Direct3D 11 and reads back decoded NV12 images. The normal Windows build links it
 with the assembly Annex B frontend. Source builds can check files and export
-cropped NV12; window presentation, ordinary inter-frame pictures and the real
-audio clock/scheduler connection remain to be implemented. The earlier backend
+cropped NV12 or use the [GPU video-only window](video-present.md). Ordinary
+inter-frame pictures and the real audio clock/scheduler connection remain to be
+implemented. The earlier backend
 report below retains its component-only scope; the file integration has its own
 current reports.
 

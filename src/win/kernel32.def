@@ -19,6 +19,8 @@ EXPORTS
     GetProcessTimes
     GetStdHandle
     GetTickCount64
+    QueryPerformanceCounter
+    QueryPerformanceFrequency
     LocalFree
     MapViewOfFile
     ReadConsoleInputW

@@ -43,6 +43,8 @@ usage: .ascii "LAMP 0.4.0-dev - Lev's Assembly Media Player"
       .byte 13, 10
       .ascii "       lamp-cli.exe --video-check file.h264"
       .byte 13, 10
+      .ascii "       lamp-cli.exe --video-play file.h264 (Space pause, . step, Esc close)"
+      .byte 13, 10
       .ascii "       lamp-cli.exe --video-decode file.h264 output.nv12"
       .byte 13, 10
       .ascii "Several files play one after another without a gap, at the first file's rate;"
