@@ -2,9 +2,11 @@
 
 The shared assembly scheduler is a component for milestone 4. It orders decoded
 frame descriptors against an audible media clock; it does not decode video,
-present images, or connect to the audio engine yet. Source builds remain audio
-players. No end-to-end A/V, accurate video seeking, frame-step UI, GPU acceleration
-or video codec support is claimed by this component.
+present images, or connect to the audio engine yet. The separate Windows
+[video-only file commands](h264.md) provide GPU playback, including
+[MP4/MOV timestamps and stepping](mp4-play.md). This scheduling component is not
+connected to that window or the real audio clock; end-to-end A/V and accurate
+video seeking remain unfinished.
 
 ## Contract
 
