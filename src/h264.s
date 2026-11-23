@@ -371,6 +371,7 @@ LOCALFN hp_nal
     ret
 ENDFN hp_nal
 
+.include "h264_scaling.inc"
 .include "h264_headers.inc"
 .include "h264_dpb.inc"
 .include "h264_frames.inc"

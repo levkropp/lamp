@@ -103,6 +103,13 @@
 .equ HP_FRAME_MMCO, 12672
 .equ HP_TEMP_MMCO, 13440
 .equ HP_DPB, 14208       # 16 compact records {surface,frame_num,poc,long_index}; -1 short.
+.equ HP_PROFILE, 14464
+.equ HP_ENTROPY, 14468
+.equ HP_WEIGHTED, 14472
+.equ HP_BIPRED, 14476
+.equ HP_TRANSFORM8, 14480
+.equ HP_SEQ_SCALING, 14484
+.equ HP_SPS_MATRIX, 14592   # Preserved224B sequence-level scaling lists.
 
 # Checked syntax readers used by the original SPS/PPS/slice implementation.
 .macro HP_BITS n, field, maximum, bad

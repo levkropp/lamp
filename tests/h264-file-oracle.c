@@ -39,7 +39,7 @@ static void frame_check(Guarded *g) {
     }
     CHECK(end==f.bytes); CHECK(((unsigned char*)f.picture)[4]<=16);
     for(i=16;i<32;++i)CHECK(((unsigned char*)f.picture)[i]==255 || ((((unsigned char*)f.picture)[i]&127)<=16 && (((unsigned char*)f.picture)[i]&127)!=((unsigned char*)f.picture)[4]));
-    for(i=0;i<224;++i)CHECK(((unsigned char*)f.matrix)[i]==16);
+    for(i=0;i<224;++i)CHECK(((unsigned char*)f.matrix)[i]>0);
 }
 static int scan(const unsigned char *data,size_t bytes,FILE *out,int cancel_after_frame) {
     Guarded g; volatile uint32_t cancel=0; int result=0; uint64_t count=0; unsigned i;

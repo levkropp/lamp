@@ -3,7 +3,7 @@
 Windows source builds now decode and present progressive Baseline/CAVLC H.264
 I/P pictures, including non-IDR I pictures and retained short/long-term references.
 The existing [play/check/export commands](h264.md) accept these elementary Annex B
-files. B pictures, CABAC/Main/High profiles, video containers, accurate seeking and
+files. B pictures, higher bit depths/chroma formats, video containers, accurate seeking and
 audio/video synchronization remain unfinished.
 
 ## Parser and reference ownership
@@ -26,7 +26,7 @@ P references and the existing 256-slice/16 MiB compressed-picture limits.
 
 The current output path follows decode order. Streams requiring reordered output
 reject when POC decreases or repeats outside an IDR/MMCO5 reset. Missing/inferred
-frame-number gaps, POC type 1, fields/MBAFF, weighted prediction, B/SP/SI slices,
+frame-number gaps, POC type 1, fields/MBAFF, B/SP/SI slices,
 redundant pictures, slice groups and changing parameter sets remain unsupported.
 Unsupported input fails preflight before creating an export or opening the video
 window. Slice coefficient/entropy conformance is delegated to the driver.
@@ -48,7 +48,10 @@ slice. The [GPU presenter](video-present.md) changes its video-processor input
 view when the current slice changes, after the previous GPU fence completes.
 The normal presentation path continues to keep pixels on the GPU.
 
-## Verification
+The [Main/High extension](h264-profiles.md) now supplies CABAC, explicit P weights,
+8×8 transforms and custom scaling lists on top of this reference map.
+
+## Recorded Baseline verification
 
 The [Windows report](../reports/h264-reference-windows-verification.json) records
 12 encoded sequences / **626 GPU images**, with all **44,047,650 NV12 bytes** equal

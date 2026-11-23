@@ -143,7 +143,7 @@ def main():
             assert output.read_bytes() == reference.read_bytes(), name
             frames += len(pics); total += output.stat().st_size; record.update(image_sha256=sha(output), bytes=output.stat().st_size)
         images.append(record)
-    sources = [ROOT/'src'/n for n in ['h264.s', 'h264.inc', 'h264_headers.inc', 'h264_frames.inc', 'h264_dpb.inc']]+[ROOT/'tests'/n for n in ['h264-file-oracle.c', 'h264_reference_fixtures.py', 'verify-h264-reference.py', 'windows-video-mock.c']]
+    sources = [ROOT/'src'/n for n in ['h264.s', 'h264.inc', 'h264_headers.inc', 'h264_frames.inc', 'h264_dpb.inc', 'h264_scaling.inc']]+[ROOT/'tests'/n for n in ['h264-file-oracle.c', 'h264_reference_fixtures.py', 'verify-h264-reference.py', 'windows-video-mock.c']]
     artifacts = [oracle, obj/('h264.obj' if WINDOWS else 'h264.o'), out/('lamp-cli.exe' if WINDOWS else 'lamp-cli')]
     if WINDOWS:
         sources += [ROOT/'src/win'/n for n in ['video.s', 'video.inc', 'video_cli.s', 'video_present.s', 'video_present.inc']]+[ROOT/'tools/build-windows.py']

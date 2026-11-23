@@ -6,7 +6,8 @@ Direct3D 11 and reads back decoded NV12 images. The normal Windows build links i
 with the assembly Annex B frontend. Source builds can check files and export
 cropped NV12 or use the [GPU video-only window](video-present.md). The
 [reference-picture extension](h264-references.md) adds short/long-term DPB
-surfaces. B/CABAC/Main/High profiles and the real audio clock/scheduler connection
+surfaces; the [Main/High extension](h264-profiles.md) adds CABAC, P weights and
+8×8/custom quantization. B pictures and the real audio clock/scheduler connection
 remain to be implemented. The earlier backend
 report below retains its component-only scope; the file integration has its own
 current reports.
@@ -26,8 +27,8 @@ multiples of 16. Dimensions, current/reference surface indices, bitstream bounds
 and contiguous short-slice locations are checked
 before calling the driver. The caller must provide consistent, already parsed
 picture/matrix/slice data; this API is not a validator for arbitrary H.264 files.
-It accepts VCL NAL types 1/5 and rejects field pictures and the 8×8 transform mode.
-The assembly frontend enforces the supported Baseline/CAVLC syntax and normative
+It accepts VCL NAL types 1/5 and 4×4/8×8 transforms while rejecting field pictures.
+The assembly frontend enforces the supported 8-bit I/P profile syntax and normative
 reference marking. The [current image reports](h264-references.md#verification)
 extend the historical IDR component evidence below.
 
@@ -97,7 +98,7 @@ maps and missing syntax-field validation. No mock or broken object enters the
 player. Image tests also exercise close/reopen across sizes and padded GPU rows.
 
 This historical component coverage predates the window and P-picture extension.
-It establishes no container demuxing, B/CABAC/Main/High profile coverage, accurate
+It establishes no container demuxing, B-picture/reordered-output and higher-bit-depth coverage, accurate
 video seeking, screenshots, audio synchronization, multi-adapter behavior,
 software fallback, native Linux/Mac video, power use, playback latency or
 performance advantage. Oracle elapsed times and retry counts are test observations,

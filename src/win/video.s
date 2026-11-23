@@ -406,7 +406,7 @@ FN win_video_decode
     cmp byte ptr [rsi+9], 0
     jne .Lwv_decode_invalid
     movzx eax, word ptr [rsi+6]
-    and eax, 0x383f         # progressive,420,consecutive;8x8 transform off
+    and eax, 0x183f         # progressive,420,consecutive;4x4/8x8 transforms
     cmp eax, 0x1810
     jne .Lwv_decode_invalid
     cmp byte ptr [rsi+171], 1 # remaining syntax fields must be present

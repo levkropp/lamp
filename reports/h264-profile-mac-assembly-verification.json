@@ -1,0 +1,31 @@
+{
+  "result": "passed",
+  "scope": "Shared H264 frontend translation/assembly only; no native Mac execution, GPU, file playback or video support established.",
+  "target": "arm64-apple-macosx12.0.0",
+  "cpu": "apple-m1",
+  "sources": {
+    "src/h264.s": "c2778cf9bfc32da1ef52e73067f8cdf6ecd68104448931b93b1f74a7d2396370",
+    "src/h264.inc": "d22d0190acf47eed0dc260e76b2ed5fc88a196b78aedb039cec58f0bae9649db",
+    "src/h264_headers.inc": "60881215e4b6dee8b3b2fe53e999e40ae967a106af5a11094a030e75a54cee21",
+    "src/h264_frames.inc": "c950aeb86e1cbfef3efd9a1be333640ee95aa22bff614f43b9ee13ea9e64b82e",
+    "src/h264_dpb.inc": "0fa35856648506a73a19477bc41ff6a0c07d715321e7f431dad708a992a803e9",
+    "src/h264_scaling.inc": "5b0543e2cf11063097233bafccdcc19829efb3e6a07c203de65be86ef9009e59",
+    "src/lamp.inc": "d79c75543ab0d78863010b32e46faf23fda5b9cb54ec624e9dce0acfcabf03e6",
+    "tools/arm64.py": "f8abd01ad67063451181e0adc66e72b2a445ebe9a7b159f7b88ac52b79bdadc2",
+    "tools/arm64_lamp.py": "37e4a515283ef441f9d1ee647377716efbe0d6a3aae27ef7c62faf53118f35d0"
+  },
+  "translated_sha256": "f42e153da86af1ca81df14777d9556d103cb8b62583c195ad75e59eddbb0f966",
+  "object_sha256": "0929ac1059af6121f5ce8f1d7cf5148257abba9611b6cfb1d0e5c4cea05eee61",
+  "object_bytes": 18408,
+  "git_source_sha256": {
+    "src/h264.s": "c2778cf9bfc32da1ef52e73067f8cdf6ecd68104448931b93b1f74a7d2396370",
+    "src/h264.inc": "d22d0190acf47eed0dc260e76b2ed5fc88a196b78aedb039cec58f0bae9649db",
+    "src/h264_headers.inc": "60881215e4b6dee8b3b2fe53e999e40ae967a106af5a11094a030e75a54cee21",
+    "src/h264_frames.inc": "c950aeb86e1cbfef3efd9a1be333640ee95aa22bff614f43b9ee13ea9e64b82e",
+    "src/h264_dpb.inc": "0fa35856648506a73a19477bc41ff6a0c07d715321e7f431dad708a992a803e9",
+    "src/h264_scaling.inc": "5b0543e2cf11063097233bafccdcc19829efb3e6a07c203de65be86ef9009e59",
+    "src/lamp.inc": "d79c75543ab0d78863010b32e46faf23fda5b9cb54ec624e9dce0acfcabf03e6",
+    "tools/arm64.py": "f8abd01ad67063451181e0adc66e72b2a445ebe9a7b159f7b88ac52b79bdadc2",
+    "tools/arm64_lamp.py": "37e4a515283ef441f9d1ee647377716efbe0d6a3aae27ef7c62faf53118f35d0"
+  }
+}

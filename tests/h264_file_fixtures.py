@@ -100,8 +100,20 @@ def units(data):
 
 def cropped_sps(nal, crop, Bits):
     b = Bits(nal)
-    assert b.read(8) == 66
-    b.read(16); b.ue(); b.ue(); poc = b.ue()
+    profile = b.read(8); assert profile in (66, 77, 100)
+    b.read(16); b.ue()
+    if profile == 100:
+        assert b.ue() == 1; b.ue(); b.ue(); b.read()
+        if b.read():
+            for i in range(8):
+                if b.read():
+                    previous = following = 8
+                    for _ in range(16 if i < 6 else 64):
+                        if following:
+                            following = (previous+b.se()+256) % 256
+                        if following:
+                            previous = following
+    b.ue(); poc = b.ue()
     if poc == 0:
         b.ue()
     else:
@@ -208,14 +220,15 @@ def generate(folder, ffmpeg):
     for name, data, accepted, meta in cases:
         file = folder/(name+'.synthetic'); file.write_bytes(data)
         synthetic.append(dict(name=name, accepted=accepted, metadata=meta, sha256=hashlib.sha256(data).hexdigest()))
-    # Genuine unsupported Main/B and High-profile files; CPU preflight must reject.
+    # Genuine unsupported B-picture and High10 files; CPU preflight must reject.
     negatives = []
     for name, profile, params in [('inter-frame', 'main', 'keyint=30:bframes=2:cabac=1:8x8dct=0'),
-                                  ('high-profile', 'high', 'keyint=1:cabac=1:8x8dct=1')]:
+                                  ('high10-profile', 'high10', 'keyint=1:cabac=1:8x8dct=1')]:
         file = folder/(name+'.h264')
         subprocess.run([ffmpeg, '-hide_banner', '-loglevel', 'error', '-y', '-f', 'lavfi', '-i',
                         'testsrc2=size=320x240:rate=24', '-frames:v', '4', '-c:v', 'libx264',
-                        '-profile:v', profile, '-x264-params', params+':threads=1', '-f', 'h264', str(file)], check=True)
+                        '-profile:v', profile, '-pix_fmt', 'yuv420p10le' if profile == 'high10' else 'yuv420p',
+                        '-x264-params', params+':threads=1', '-f', 'h264', str(file)], check=True)
         negatives.append(dict(name=name, sha256=hashlib.sha256(file.read_bytes()).hexdigest()))
     manifest = dict(reference=subprocess.check_output([ffmpeg, '-version'], text=True).splitlines()[0],
                     ffmpeg_executable_sha256=hashlib.sha256(Path(shutil.which(ffmpeg) or ffmpeg).read_bytes()).hexdigest(),

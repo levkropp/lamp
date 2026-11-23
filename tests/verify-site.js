@@ -2,7 +2,7 @@
 const fs=require('fs'),path=require('path'),assert=require('assert');
 const site=path.resolve(__dirname,'..','site'),html=fs.readFileSync(path.join(site,'index.html'),'utf8');
 assert.match(html,/<html lang="en">/);assert.match(html,/name="viewport"/);
-assert.match(html,/Lev's Assembly Media Player/);assert.match(html,/Broader H.264 profiles, A\/V synchronization, subtitles and streaming remain unfinished/);
+assert.match(html,/Lev's Assembly Media Player/);assert.match(html,/B-frame video, higher bit depths, A\/V synchronization, subtitles and streaming remain unfinished/);
 assert.match(html,/Source builds play Ogg\/Opus families 0 and 1/);
 assert(fs.existsSync(path.join(site,'..','README.md')),'Root README is required');
 assert(!fs.existsSync(path.join(site,'..','.github','README.md')),'GitHub must serve the root README');

@@ -1,4 +1,4 @@
-# Original H.264 Baseline I/P header parsing. Included by h264.s only.
+# Original H.264 Baseline/Main/High 8-bit I/P parsing. Included by h264.s only.
 RODATA
 .p2align 2
 hp_sars: .short 0,0, 1,1, 12,11, 10,11, 16,11, 40,33, 24,11, 20,11
@@ -7,12 +7,24 @@ hp_sars: .short 0,0, 1,1, 12,11, 10,11, 16,11, 40,33, 24,11, 20,11
 
 LOCALFN hp_sps
     push rbx
+    push rsi
+    push rdi
     sub rsp, 32
     mov rbx, rcx
+    lea rdi, [rbx+HP_SPS_MATRIX]
+    mov ecx, 224
+    mov al, 16
+    rep stosb
+    mov rcx, rbx
     call hp_header
-    HP_BITS 8,-1,255,.Lhp_sps_bad
+    HP_BITS 8,HP_PROFILE,255,.Lhp_sps_bad
     cmp eax, 66
+    je .Lhp_sps_profile_ok
+    cmp eax, 77
+    je .Lhp_sps_profile_ok
+    cmp eax, 100
     jne .Lhp_sps_unsupported
+.Lhp_sps_profile_ok:
     HP_BITS 8,-1,255,.Lhp_sps_bad
     test eax, 3
     jnz .Lhp_sps_bad
@@ -20,6 +32,25 @@ LOCALFN hp_sps
     cmp eax, 9
     jb .Lhp_sps_bad
     HP_UE HP_SPS_ID,31,.Lhp_sps_bad
+    cmp dword ptr [rbx+HP_PROFILE], 100
+    jne .Lhp_sps_frame_bits
+    HP_UE -1,3,.Lhp_sps_bad
+    cmp eax, 1
+    jne .Lhp_sps_unsupported # NV12 4:2:0 only.
+    HP_UE -1,0,.Lhp_sps_unsupported # bit_depth_luma_minus8
+    HP_UE -1,0,.Lhp_sps_unsupported # bit_depth_chroma_minus8
+    HP_BITS 1,-1,0,.Lhp_sps_unsupported # transform bypass not in native contract
+    HP_BITS 1,HP_SEQ_SCALING,1,.Lhp_sps_bad
+    test eax, eax
+    jz .Lhp_sps_frame_bits
+    mov rcx, rbx
+    lea rdx, [rbx+HP_SPS_MATRIX]
+    mov r8d, 8
+    xor r9d, r9d
+    call hp_scaling_set
+    test eax, eax
+    jz .Lhp_sps_return
+.Lhp_sps_frame_bits:
     HP_UE HP_FRAME_BITS,12,.Lhp_sps_bad
     add dword ptr [rbx+HP_FRAME_BITS], 4
     HP_UE HP_POC_TYPE,2,.Lhp_sps_bad
@@ -93,6 +124,8 @@ LOCALFN hp_sps
     xor eax, eax
 .Lhp_sps_return:
     add rsp, 32
+    pop rdi
+    pop rsi
     pop rbx
     ret
 ENDFN hp_sps
@@ -239,20 +272,37 @@ ENDFN hp_hrd
 
 LOCALFN hp_pps
     push rbx
+    push rsi
+    push rdi
     sub rsp, 32
     mov rbx, rcx
+    lea rsi, [rbx+HP_SPS_MATRIX]
+    lea rdi, [rbx+HP_MATRIX]
+    mov ecx, 224
+    rep movsb
+    mov rcx, rbx
     call hp_header
     HP_UE HP_PPS_ID,255,.Lhp_pps_bad
     HP_UE -1,31,.Lhp_pps_bad
     cmp eax, [rbx+HP_SPS_ID]
     jne .Lhp_pps_unsupported
-    HP_BITS 1,-1,0,.Lhp_pps_unsupported # CAVLC
+    HP_BITS 1,HP_ENTROPY,1,.Lhp_pps_bad
+    cmp dword ptr [rbx+HP_PROFILE], 66
+    jne .Lhp_pps_entropy_ok
+    test eax, eax
+    jnz .Lhp_pps_unsupported
+.Lhp_pps_entropy_ok:
     HP_BITS 1,-1,0,.Lhp_pps_unsupported # no bottom POC delta
     HP_UE -1,0,.Lhp_pps_unsupported     # no slice groups
     HP_UE HP_L0,31,.Lhp_pps_bad
     HP_UE HP_L1,31,.Lhp_pps_bad
-    HP_BITS 1,-1,0,.Lhp_pps_unsupported
-    HP_BITS 2,-1,0,.Lhp_pps_unsupported
+    HP_BITS 1,HP_WEIGHTED,1,.Lhp_pps_bad
+    HP_BITS 2,HP_BIPRED,2,.Lhp_pps_bad
+    cmp dword ptr [rbx+HP_PROFILE], 66
+    jne .Lhp_pps_weight_ok
+    or eax, [rbx+HP_WEIGHTED]
+    jnz .Lhp_pps_unsupported
+.Lhp_pps_weight_ok:
     HP_SE HP_QP,-26,25,.Lhp_pps_bad
     HP_SE HP_QS,-26,25,.Lhp_pps_bad
     HP_SE HP_CHROMA,-12,12,.Lhp_pps_bad
@@ -264,8 +314,26 @@ LOCALFN hp_pps
     call hp_more
     test eax, eax
     jz .Lhp_pps_trailing
-    HP_BITS 1,-1,0,.Lhp_pps_unsupported # no8x8 transform
-    HP_BITS 1,-1,0,.Lhp_pps_unsupported # no scaling matrices
+    HP_BITS 1,HP_TRANSFORM8,1,.Lhp_pps_bad
+    cmp dword ptr [rbx+HP_PROFILE], 100
+    je .Lhp_pps_transform_ok
+    test eax, eax
+    jnz .Lhp_pps_unsupported
+.Lhp_pps_transform_ok:
+    HP_BITS 1,-1,1,.Lhp_pps_bad
+    test eax, eax
+    jz .Lhp_pps_chroma2
+    cmp dword ptr [rbx+HP_PROFILE], 100
+    jne .Lhp_pps_unsupported
+    mov rcx, rbx
+    lea rdx, [rbx+HP_MATRIX]
+    mov r8d, [rbx+HP_TRANSFORM8]
+    lea r8d, [r8+r8+6]
+    mov r9d, 1
+    call hp_scaling_set
+    test eax, eax
+    jz .Lhp_pps_return
+.Lhp_pps_chroma2:
     HP_SE HP_CHROMA2,-12,12,.Lhp_pps_bad
 .Lhp_pps_trailing:
     mov rcx, rbx
@@ -284,6 +352,8 @@ LOCALFN hp_pps
     xor eax, eax
 .Lhp_pps_return:
     add rsp, 32
+    pop rdi
+    pop rsi
     pop rbx
     ret
 ENDFN hp_pps
@@ -357,12 +427,12 @@ LOCALFN hp_slice
     ja .Lhp_slice_unsupported
     HP_BITS 1,-1,1,.Lhp_slice_bad # ref_pic_list_modification_flag_l0
     test eax, eax
-    jz .Lhp_slice_marking
+    jz .Lhp_slice_weights
     xor r12d, r12d
 .Lhp_slice_list_mod:
     HP_UE -1,3,.Lhp_slice_bad
     cmp eax, 3
-    je .Lhp_slice_marking
+    je .Lhp_slice_weights
     inc r12d
     cmp r12d, 32
     ja .Lhp_slice_unsupported
@@ -379,6 +449,13 @@ LOCALFN hp_slice
 .Lhp_slice_list_long:
     HP_UE -1,15,.Lhp_slice_bad
     jmp .Lhp_slice_list_mod
+.Lhp_slice_weights:
+    cmp dword ptr [rbx+HP_WEIGHTED], 0
+    je .Lhp_slice_marking
+    mov rcx, rbx
+    call hp_weights
+    test eax, eax
+    jz .Lhp_slice_return
 .Lhp_slice_marking:
     mov dword ptr [rbx+HP_TEMP_MMCO_COUNT], 0
     mov dword ptr [rbx+HP_TEMP_ADAPT], 0
@@ -443,18 +520,34 @@ LOCALFN hp_slice
 .Lhp_slice_mmco_done:
     mov [rbx+HP_TEMP_MMCO_COUNT], edi
 .Lhp_slice_qp:
+    cmp dword ptr [rbx+HP_ENTROPY], 0
+    je .Lhp_slice_qp_delta
+    cmp dword ptr [rbx+HP_TEMP_TYPE], 2
+    je .Lhp_slice_qp_delta
+    HP_UE -1,2,.Lhp_slice_bad # cabac_init_idc, P pictures only.
+.Lhp_slice_qp_delta:
     HP_SE -1,-51,51,.Lhp_slice_bad
     add eax, [rbx+HP_QP]
     add eax, 26
     cmp eax, 51
     ja .Lhp_slice_bad
     cmp dword ptr [rbx+HP_DEBLOCK], 0
-    je .Lhp_slice_payload
+    je .Lhp_slice_alignment
     HP_UE -1,2,.Lhp_slice_bad
     cmp eax, 1
+    je .Lhp_slice_alignment
+    HP_SE -1,-6,6,.Lhp_slice_bad
+    HP_SE -1,-6,6,.Lhp_slice_bad
+.Lhp_slice_alignment:
+    cmp dword ptr [rbx+HP_ENTROPY], 0
     je .Lhp_slice_payload
-    HP_SE -1,-6,6,.Lhp_slice_bad
-    HP_SE -1,-6,6,.Lhp_slice_bad
+.Lhp_slice_align_bit:
+    cmp dword ptr [rbx+HP_BR_BITS], 0
+    je .Lhp_slice_payload
+    HP_BITS 1,-1,1,.Lhp_slice_bad
+    test eax, eax
+    jz .Lhp_slice_bad
+    jmp .Lhp_slice_align_bit
 .Lhp_slice_payload:
     cmp dword ptr [rbx+HP_ERROR], 0
     jne .Lhp_slice_bad
@@ -485,3 +578,42 @@ LOCALFN hp_slice
     pop rbx
     ret
 ENDFN hp_slice
+
+# Parse bounded explicit P prediction weights. Raw-slice driver uses the values.
+LOCALFN hp_weights
+    push rbx
+    push rsi
+    sub rsp, 40
+    mov rbx, rcx
+    HP_UE -1,7,.Lhp_weights_bad
+    HP_UE -1,7,.Lhp_weights_bad
+    xor esi, esi
+.Lhp_weights_ref:
+    HP_BITS 1,-1,1,.Lhp_weights_bad
+    test eax, eax
+    jz .Lhp_weights_chroma
+    HP_SE -1,-128,127,.Lhp_weights_bad
+    HP_SE -1,-128,127,.Lhp_weights_bad
+.Lhp_weights_chroma:
+    HP_BITS 1,-1,1,.Lhp_weights_bad
+    test eax, eax
+    jz .Lhp_weights_next
+    HP_SE -1,-128,127,.Lhp_weights_bad
+    HP_SE -1,-128,127,.Lhp_weights_bad
+    HP_SE -1,-128,127,.Lhp_weights_bad
+    HP_SE -1,-128,127,.Lhp_weights_bad
+.Lhp_weights_next:
+    inc esi
+    cmp esi, [rbx+HP_TEMP_ACTIVE]
+    jbe .Lhp_weights_ref
+    mov eax, 1
+    jmp .Lhp_weights_return
+.Lhp_weights_bad:
+    mov dword ptr [rbx+HP_ERROR], 1
+    xor eax, eax
+.Lhp_weights_return:
+    add rsp, 40
+    pop rsi
+    pop rbx
+    ret
+ENDFN hp_weights

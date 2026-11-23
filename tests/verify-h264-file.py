@@ -146,7 +146,7 @@ def main():
                 result = run([controlled, '--video-decode', source, target])
                 assert result.returncode == 1 and expected in result.stdout and not target.exists(), (mode, result.stdout, result.stderr)
                 record.update(exit_code=1, partial_output_removed=True); controls.append(record)
-    sources = ['src/h264.s', 'src/h264.inc', 'src/h264_headers.inc', 'src/h264_frames.inc', 'src/h264_dpb.inc', 'src/lamp.inc',
+    sources = ['src/h264.s', 'src/h264.inc', 'src/h264_headers.inc', 'src/h264_frames.inc', 'src/h264_dpb.inc', 'src/h264_scaling.inc', 'src/lamp.inc',
                'tests/h264-file-oracle.c', 'tests/h264_file_fixtures.py', 'tests/verify-h264-file.py', 'tests/verify-windows-video.py']
     if WINDOWS:
         sources += ['src/win/video_cli.s', 'src/win/video.s', 'src/win/video.inc', 'src/win/player.s', 'src/win/kernel32.def', 'tools/build-windows.py', 'tests/verify-runtime.js']

@@ -363,6 +363,15 @@ LOCALFN hp_finish
     je .Lhp_finish_level_flag
     or eax, 0x40
 .Lhp_finish_level_flag:
+    mov edx, [rbx+HP_WEIGHTED]
+    shl edx, 8
+    or eax, edx
+    mov edx, [rbx+HP_BIPRED]
+    shl edx, 9
+    or eax, edx
+    mov edx, [rbx+HP_TRANSFORM8]
+    shl edx, 13
+    or eax, edx
     cmp dword ptr [rbx+HP_LEVEL], 31
     jb .Lhp_finish_flags
     or eax, 0x4000
@@ -406,6 +415,8 @@ LOCALFN hp_finish
     mov [rbx+HP_PICTURE+218], al
     mov eax, [rbx+HP_DIRECT]
     mov [rbx+HP_PICTURE+220], al
+    mov eax, [rbx+HP_ENTROPY]
+    mov [rbx+HP_PICTURE+221], al
     mov eax, [rbx+HP_DEBLOCK]
     mov [rbx+HP_PICTURE+225], al
     mov rcx, rbx
