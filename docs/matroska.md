@@ -148,8 +148,8 @@ paused seeks, cancelled open, simulated default-output recovery and
 exclusive 48 kHz output. Hardware PCM capture and physical hotplug are
 not established. Changed sources translate and assemble for Apple Silicon;
 native Mac execution and Linux output-device playback remain unverified
-for this addition. Timestamp gaps/overlaps, arbitrary `SeekPreRoll`, video
-and A/V synchronization remain open.
+for this addition. Timestamp gaps/overlaps, video and A/V synchronization
+remain open. Track-requested seek history is covered separately below.
 
 Run `python3 tests/verify-track-cuts.py --bin build/mkv-timing-check` and
 `python3 tests/verify-matroska-timing.py --bin build/mkv-timing-check`.
@@ -159,6 +159,72 @@ options for those lifecycle checks). `--fixtures PATH` reuses generated
 fixtures without FFmpeg.
 For the Windows map-only oracle, first assemble its test wrapper:
 `llvm-mc -triple=x86_64-pc-windows-msvc -filetype=obj -defsym=WINDOWS=1 -I src tests/track-cuts-probe.s -o bin/mkv-timing-check/track-cuts-probe.obj`.
+
+## Track-requested seek history
+
+The selected track's unsigned `SeekPreRoll` supplies a minimum duration of
+coded history to decode after a seek. Its nanoseconds convert upward to
+whole samples, using a 128-bit product. The packet search starts at or
+before that history cutoff in the coded timeline, before any presentation
+cuts. The existing codec restart rules still apply: a short or zero value
+cannot reduce Opus's 80 ms minimum, MPEG reservoir history, overlap primers
+or Speex's complete-history policy. Codec primers can move the decode
+start earlier still. A history request longer than the available prefix
+starts from the first packet; even the full unsigned 64-bit value is
+handled without allocating more memory. Continuous PCM and duration do not
+change. These semantics follow [SeekPreRoll's element definition](https://www.matroska.org/technical/elements.html).
+
+Missing and zero values add no container minimum. Empty unsigned elements
+mean zero; duplicate values or payloads over eight bytes reject. Unselected
+tracks' values do not affect playback, and close clears the selected
+history. This applies to audio in the existing coded packet timeline;
+timestamp gaps and A/V clock scheduling remain unfinished.
+
+Repeated seeks now reset the decoder when the requested position is zero,
+including after EOF. AAC reset also restores its PNS noise seed alongside
+overlap/window/SBR state. Repeated AAC seeks therefore match a fresh codec
+restart at the same packets; this does not promise continuous-noise
+identity after a different restart point.
+
+The [Windows](../reports/matroska-preroll-windows-verification.json) and
+[Linux](../reports/matroska-preroll-linux-verification.json) suites each pass
+143 files and 2,145 modeled seeks, with 154,097,941 checks and 30,404,434
+exact float comparisons. Six PCM rates (8–192 kHz), FLAC, Opus, MP2/MP3,
+AAC, ALAC, Speex and Vorbis cover absent/zero/one-nanosecond history,
+boundaries around 80 ms, upward fractional-sample rounding, 250 ms and
+the maximum unsigned value. Delayed, signed-padding, EBML-laced files,
+selected ordinals, metadata ordering, repeated EOF/zero seeks, cancellation
+and close/reopen are included. An independent sample mask and packet model
+determine restart positions. Opus/AAC sample expectations come from
+continuous decoding of independently constructed packet suffixes, rather
+than another seek through this implementation. Other tested codecs compare
+to their unchanged continuous PCM; separate codec suites establish DSP
+conformance.
+
+Each platform also passes 61,789,073 guarded checks, 1,274 protected input
+prefixes and 512 mutations; accepted damaged inputs establish bounds, not
+correct damaged-file audio. Malformed duplicate/oversized elements reject,
+and an empty unsigned element is checked against absent metadata.
+[Counterfactual controls](../reports/matroska-preroll-negative-controls-verification.json)
+reproduce the old zero-rewind failure, then isolate the AAC noise-reset
+failure by substituting only the previous AAC object. The current runtime
+passes both. The 117-file timing suite, 68-check AAC, 67-check HE-AAC,
+52-check Matroska and 72-check MP4 regressions also pass on the current
+Windows objects.
+
+A muted native Windows probe checks a 250 ms pre-roll Opus stream with
+delay and signed laced padding through pause/resume, stop/reopen, active
+and paused seek, cancelled open, simulated default-output recovery and
+exclusive 48 kHz output. Changed sources and their decoder/timing
+dependencies [translate and assemble for Apple Silicon](../reports/matroska-preroll-mac-assembly-verification.json);
+native Mac execution, Linux output-device playback, hardware PCM capture
+and physical hotplug remain unverified for this addition.
+
+Run `python3 tests/verify-matroska-preroll.py --bin build/mkv-preroll-check`.
+Windows uses `python` and `--bin bin/mkv-preroll-check`; add `--probe` only
+after a marked `--tests --probe-silent` build (plus default-device/exclusive
+options for those checks). `--fixtures PATH` reuses the encoded corpus,
+sample masks and independently prepared seek references without FFmpeg.
 
 ## Track layer
 

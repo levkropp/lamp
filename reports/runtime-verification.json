@@ -24,7 +24,7 @@
   },
   {
     "file": "lamp.exe",
-    "bytes": 532992,
+    "bytes": 534016,
     "architecture": "x86-64",
     "subsystem": "windows",
     "imports": [

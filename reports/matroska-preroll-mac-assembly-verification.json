@@ -1,0 +1,54 @@
+{
+  "result": "passed",
+  "scope": "Compile-only ARM64 macOS checks of the changed runtime modules and their decoder/timing dependencies. No native linking, execution, device playback or Mac feature parity is established.",
+  "target": "arm64-apple-macosx12.0.0",
+  "cpu": "apple-m1",
+  "compiler": "Ubuntu LLVM version 18.1.3",
+  "sources": {
+    "tools/arm64.py": "f8abd01ad67063451181e0adc66e72b2a445ebe9a7b159f7b88ac52b79bdadc2",
+    "tools/arm64_lamp.py": "37e4a515283ef441f9d1ee647377716efbe0d6a3aae27ef7c62faf53118f35d0",
+    "src/lamp.inc": "d79c75543ab0d78863010b32e46faf23fda5b9cb54ec624e9dce0acfcabf03e6"
+  },
+  "checks": [
+    {
+      "file": "src/aac.s",
+      "source_sha256": "44191d88ad88e0a782d0da9ea67ce1b83d644be0d0170e41412e653087fc03b8",
+      "translated_sha256": "7f0d1e97458978821cd895bd1d1ae97fb7c753d6bc51dac74f207f7030d32aad",
+      "object_sha256": "28b85a3faf1f8836cf313c58f59894b4d4fb10b5cbab74b02d8fdbe3c47ec9b0",
+      "object_bytes": 112280,
+      "result": "translated and assembled"
+    },
+    {
+      "file": "src/decoder.s",
+      "source_sha256": "17d5243b02935f5e43b7842355abcdfa7b0bc5514bca6f96ebc2b694227bd2fb",
+      "translated_sha256": "7a3164e0fdbcbfb60241b1360abf9c606cb57046bbdc5a0ccc2cd1c0bc55e606",
+      "object_sha256": "5755e2f0371e7b584cbd5beb7677172604a4192baa8b6aeaf09f296ff54141bb",
+      "object_bytes": 61488,
+      "result": "translated and assembled"
+    },
+    {
+      "file": "src/mkv.s",
+      "source_sha256": "464308915ebeed389832347cb5d9e41873590b54fff5d35762ffea1b0f3c6577",
+      "translated_sha256": "9999a22b08afd52bc13a4eac4235eec45313327609a6790c0c76ac429533882c",
+      "object_sha256": "829ffbfa34ae8be3460c53bb4aa66d43c72a9af1bbdd59ef3a2fcd35f6174d36",
+      "object_bytes": 13136,
+      "result": "translated and assembled"
+    },
+    {
+      "file": "src/track.s",
+      "source_sha256": "cb132627305fef71aa8e266c9bca5bd7913d337117eaeba909102cd3ea542ce7",
+      "translated_sha256": "9d1b1f8b516736d0ada8e9e6defb8e3407ae2b76eed3abd6e38d7437dc72970a",
+      "object_sha256": "e5f454d71a1c8a1dacd23b40d17e3d1bf3a93640e393ea6806debbd46283623f",
+      "object_bytes": 14200,
+      "result": "translated and assembled"
+    },
+    {
+      "file": "src/track_cuts.s",
+      "source_sha256": "0e0b0b2df541caf29166a9570494488554fc50ae38aaa1f667f99c89d999883b",
+      "translated_sha256": "0536f4a27c8d5b497c9477475feafec66c21091e9c2d9359da2cd378dc5581ec",
+      "object_sha256": "3f7e0694142ba4d680be322d0e37331c3673d2ce5be03fdc64e72ae1c32d5302",
+      "object_bytes": 4064,
+      "result": "translated and assembled"
+    }
+  ]
+}

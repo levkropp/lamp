@@ -11,6 +11,7 @@
 .globl track_pcm_channels, track_pcm_bits, track_pcm_flags
 .globl track_unit_scale, track_start_units, track_end_units, track_edit
 .globl track_start_trim_ns, track_start_trim_ns_active
+.globl track_seek_preroll_ns
 
 .equ TK_PCM, 1
 .equ TK_FLAC, 2
@@ -48,6 +49,8 @@ track_pcm_flags: .long 0
 track_start_trim: .quad 0            # raw samples before the presented start
 track_start_trim_ns: .quad 0         # container delay, overriding codec default when active
 track_start_trim_ns_active: .long 0
+track_seek_preroll_ns: .quad 0       # container's minimum history after a seek
+track_seek_preroll_frames: .quad 0
 track_end_trim: .quad 0              # raw samples after the presented end
 track_end_trim_ns: .quad 0           # or nanoseconds, rounded at the codec rate
 track_raw_total: .quad 0
@@ -129,6 +132,8 @@ FN track_close
     mov qword ptr [rip + track_start_trim], 0
     mov qword ptr [rip + track_start_trim_ns], 0
     mov dword ptr [rip + track_start_trim_ns_active], 0
+    mov qword ptr [rip + track_seek_preroll_ns], 0
+    mov qword ptr [rip + track_seek_preroll_frames], 0
     mov qword ptr [rip + track_end_trim], 0
     mov qword ptr [rip + track_end_trim_ns], 0
     mov dword ptr [rip + track_unit_scale], 0
@@ -577,6 +582,17 @@ FN track_finish
     div rcx
     mov [rip + track_end_trim], rax
 .Ltk_trim_ready:
+    # A minimum decode duration rounds upward, unlike presentation trimming.
+    mov rax, [rip + track_seek_preroll_ns]
+    mov ecx, [rip + sample_rate]
+    mul rcx
+    add rax, 999999999
+    adc rdx, 0
+    mov ecx, 1000000000
+    cmp rdx, rcx
+    jae .Ltk_finish_bad
+    div rcx
+    mov [rip + track_seek_preroll_frames], rax
     # Every packet's duration, from the codec; raw starts accumulate.
     mov rsi, [rip + track_packets]
     xor ebx, ebx                         # packet
@@ -798,13 +814,15 @@ FN track_read
     ret
 ENDFN track_read
 
-# RCX=presented frame, on a freshly finished track -> RAX=resume frame at or
+# RCX=presented frame -> RAX=resume frame at or
 # before it. Restarts at the packet holding the target, moved back by the
 # codec's pre-roll: Opus 80 ms, MPEG audio two frames (Layer III also earlier
 # frames holding up to 2 KiB of reservoir data), Vorbis, AAC and AC-3 one
 # primer packet whose output is skipped, HE-AAC two, IMA4 one. FLAC, ALAC,
 # WavPack, other ADPCM and PCM packets decode independently. Speex rebuilds
 # its complete prediction/noise history from packet0 for exact seeking.
+# A container minimum moves the search target back first; codec-specific
+# history/primer rules can only move the actual decode start earlier.
 FN track_seek
     push rbx
     push rsi
@@ -813,8 +831,6 @@ FN track_seek
     xor eax, eax
     cmp dword ptr [rip + track_active], 0
     je .Ltk_seek_return
-    test rcx, rcx
-    jz .Ltk_seek_return
     mov rax, [rip + ogg_cancel_ptr]
     test rax, rax
     jz .Ltk_seek_not_cancelled
@@ -822,11 +838,18 @@ FN track_seek
     mov eax, 0
     jne .Ltk_seek_return
 .Ltk_seek_not_cancelled:
+    test rcx, rcx
+    jz .Ltk_seek_from_zero              # reset even after earlier reads/seeks
     cmp rcx, [rip + total_frames]
     cmova rcx, [rip + total_frames]
     call track_cut_to_raw
     mov rdi, rax
-    # Last packet whose raw start is at or before the target.
+    mov rsi, rax
+    sub rsi, [rip + track_seek_preroll_frames]
+    jae .Ltk_seek_history_ready
+    xor esi, esi
+.Ltk_seek_history_ready:
+    # Last packet whose raw start is at or before the history cutoff.
     xor r8d, r8d
     mov r9, [rip + track_count]
 .Ltk_seek_search:
@@ -838,7 +861,7 @@ FN track_seek
     add rdx, r8
     imul rax, rdx, TK_ENTRY
     add rax, [rip + track_packets]
-    cmp [rax + TK_START], rdi
+    cmp [rax + TK_START], rsi
     ja .Ltk_seek_upper
     mov r8, rdx
     jmp .Ltk_seek_search

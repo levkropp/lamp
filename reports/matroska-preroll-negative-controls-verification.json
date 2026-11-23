@@ -1,0 +1,41 @@
+{
+  "result": "passed",
+  "scope": "Public decoder seek counterfactuals. First links the previous published runtime with a test-only zero-valued shim for its absent inspection field; fixtures omit SeekPreRoll, so no behavior is supplied by the shim. Second links current objects except the unchanged previous AAC object, isolating stale noise state. Neither shim nor mixed runtime is shipped.",
+  "previous_cli_sha256": "15d195cc30c3f1fb3eccf4bf268d856afcc3101460da83cb3d107eb578230a38",
+  "current_cli_sha256": "b1fe18b21e5ee13842ae395cc9bb9c63b7c247a5b663233071c5f107d492c156",
+  "previous_aac_object_sha256": "443080d2cde99eeeba2e839d14127e1ec4105fa9e52890e255b6965a697cf598",
+  "legacy_inspection_shim": "/* Test-only absent metadata field for the old runtime; never written. */\n#include <stdint.h>\nuint64_t track_seek_preroll_ns=0;\n",
+  "sources": {
+    "tests/matroska-preroll-oracle.c": "2c3185563980103d374d197d514d4bfbc45cf880f2f237343b0d67e53d842adf"
+  },
+  "checks": [
+    {
+      "test": "previous packet rewind",
+      "file": "pcm-8000-absent.mka",
+      "previous_exit": 1,
+      "previous_stderr": "pre-roll check failed line32 error0",
+      "current": {
+        "result": "passed",
+        "seeks": 15,
+        "checks": 851769,
+        "exact_float_words": 111090
+      },
+      "oracle_sha256": "3e5fb03837acee37f0a52ebb18ab4ff0572cad6024e6f6a6abb47fdc66d254dc",
+      "result": "failure reproduced; current runtime passes"
+    },
+    {
+      "test": "previous AAC reset only",
+      "file": "aac-absent.mka",
+      "previous_exit": 1,
+      "previous_stderr": "seek PCM differs request0\npre-roll check failed line32 error0",
+      "current": {
+        "result": "passed",
+        "seeks": 15,
+        "checks": 1015505,
+        "exact_float_words": 208898
+      },
+      "oracle_sha256": "0f11510118a21378db5e1f7aa2b667e0babd87a0fa0c8f1018228256a68834f2",
+      "result": "failure reproduced; current runtime passes"
+    }
+  ]
+}

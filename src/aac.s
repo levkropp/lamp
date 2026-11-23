@@ -264,6 +264,7 @@ FN aac_track_reset
     mov ecx, 8*1024
     rep stosd
 .Laac_reset_shapes:
+    mov dword ptr [rip + aac_random], 0x1f2e3d4c
     mov qword ptr [rip + aac_prev_shape], 0
     call sbr_reset_all
     add rsp, 32

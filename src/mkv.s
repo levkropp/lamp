@@ -22,6 +22,7 @@
 .equ ID_CODEC_ID, 0x86
 .equ ID_CODEC_PRIVATE, 0x63a2
 .equ ID_CODEC_DELAY, 0x56aa
+.equ ID_SEEK_PREROLL, 0x56bb
 .equ ID_AUDIO, 0xe1
 .equ ID_SAMPLING, 0xb5
 .equ ID_CHANNELS, 0x9f
@@ -105,6 +106,7 @@ mkv_tracks_seen: .long 0
 mkv_discard: .quad 0                 # DiscardPadding ns of the latest block group
 mkv_codec_delay: .quad 0
 mkv_codec_delay_active: .long 0
+mkv_seek_preroll: .quad 0
 mkv_vorbis_headers: .zero 3*16
 # Candidate track being parsed.
 mkv_entry_number: .quad 0
@@ -117,6 +119,8 @@ mkv_entry_private: .quad 0
 mkv_entry_private_bytes: .long 0
 mkv_entry_delay: .quad 0
 mkv_entry_delay_active: .long 0
+mkv_entry_preroll: .quad 0
+mkv_entry_preroll_seen: .long 0
 mkv_entry_encoded: .long 0
 mkv_entry_rate: .double 0.0
 mkv_entry_channels: .quad 1
@@ -333,6 +337,8 @@ LOCALFN mkv_track_entry
     mov dword ptr [rip + mkv_entry_private_bytes], 0
     mov qword ptr [rip + mkv_entry_delay], 0
     mov dword ptr [rip + mkv_entry_delay_active], 0
+    mov qword ptr [rip + mkv_entry_preroll], 0
+    mov dword ptr [rip + mkv_entry_preroll_seen], 0
     mov dword ptr [rip + mkv_entry_encoded], 0
     xorpd xmm0, xmm0
     movsd [rip + mkv_entry_rate], xmm0
@@ -363,6 +369,8 @@ LOCALFN mkv_track_entry
     je .Lmkv_entry_private
     cmp eax, ID_CODEC_DELAY
     je .Lmkv_entry_delay
+    cmp eax, ID_SEEK_PREROLL
+    je .Lmkv_entry_preroll
     cmp eax, ID_ENCODINGS
     je .Lmkv_entry_encodings
     cmp eax, ID_AUDIO
@@ -410,6 +418,16 @@ LOCALFN mkv_track_entry
     jmp .Lmkv_entry_child
 .Lmkv_entry_encodings:
     mov dword ptr [rip + mkv_entry_encoded], 1
+    jmp .Lmkv_entry_child
+.Lmkv_entry_preroll:
+    cmp rdx, 8
+    ja .Lmkv_entry_bad
+    cmp dword ptr [rip + mkv_entry_preroll_seen], 0
+    jne .Lmkv_entry_bad
+    mov rcx, r8
+    call mkv_uint
+    mov [rip + mkv_entry_preroll], rax
+    mov dword ptr [rip + mkv_entry_preroll_seen], 1
     jmp .Lmkv_entry_child
 .Lmkv_entry_audio:
     lea rbx, [r8 + rdx]                  # Audio children
@@ -512,6 +530,8 @@ LOCALFN mkv_track_entry
     mov [rip + mkv_codec_delay], rax
     mov eax, [rip + mkv_entry_delay_active]
     mov [rip + mkv_codec_delay_active], eax
+    mov rax, [rip + mkv_entry_preroll]
+    mov [rip + mkv_seek_preroll], rax
     movsd xmm0, [rip + mkv_entry_rate]
     movsd [rip + mkv_rate], xmm0
     mov rax, [rip + mkv_entry_channels]
@@ -776,6 +796,7 @@ FN mkv_open
     mov qword ptr [rip + mkv_discard], 0
     mov qword ptr [rip + mkv_codec_delay], 0
     mov dword ptr [rip + mkv_codec_delay_active], 0
+    mov qword ptr [rip + mkv_seek_preroll], 0
     # EBML header with DocType matroska or webm.
     mov rcx, rsi
     mov rdx, rdi
@@ -1010,6 +1031,8 @@ FN mkv_open
     cmp dword ptr [rip + mkv_tracks_seen], 0
     je .Lmkv_open_bad
 .Lmkv_config:
+    mov rax, [rip + mkv_seek_preroll]
+    mov [rip + track_seek_preroll_ns], rax
     mov rax, [rip + mkv_codec_delay]
     mov [rip + track_start_trim_ns], rax
     mov eax, [rip + mkv_codec_delay_active]

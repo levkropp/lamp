@@ -1,0 +1,476 @@
+{
+  "result": "passed",
+  "checks": [
+    {
+      "test": "alac-16.m4a",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "peak_error": 0.0,
+      "snr_db": null,
+      "stats": "codec=9 rate=44100 channels=2 bits=16 frames=52920 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=31250 endpoint_dry=0"
+    },
+    {
+      "test": "alac-16-frag.m4a",
+      "result": "matched",
+      "comparator": "FFmpeg, progressive version",
+      "peak_error": 0.0,
+      "snr_db": null,
+      "stats": "codec=9 rate=44100 channels=2 bits=16 frames=52920 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "alac-16-dash.m4a",
+      "result": "matched",
+      "comparator": "FFmpeg, progressive version",
+      "peak_error": 0.0,
+      "snr_db": null,
+      "stats": "codec=9 rate=44100 channels=2 bits=16 frames=52920 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "alac-16 .m4a vs .mka",
+      "result": "exact"
+    },
+    {
+      "test": "alac-24-96k.m4a",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "peak_error": 0.0,
+      "snr_db": null,
+      "stats": "codec=9 rate=96000 channels=2 bits=24 frames=115200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "alac-24-96k-frag.m4a",
+      "result": "matched",
+      "comparator": "FFmpeg, progressive version",
+      "peak_error": 0.0,
+      "snr_db": null,
+      "stats": "codec=9 rate=96000 channels=2 bits=24 frames=115200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "alac-24-96k-dash.m4a",
+      "result": "matched",
+      "comparator": "FFmpeg, progressive version",
+      "peak_error": 0.0,
+      "snr_db": null,
+      "stats": "codec=9 rate=96000 channels=2 bits=24 frames=115200 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "alac-24-96k .m4a vs .mka",
+      "result": "exact"
+    },
+    {
+      "test": "alac-mono.m4a",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "peak_error": 0.0,
+      "snr_db": null,
+      "stats": "codec=9 rate=22050 channels=1 bits=16 frames=26460 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=31250 endpoint_dry=0"
+    },
+    {
+      "test": "alac-mono-frag.m4a",
+      "result": "matched",
+      "comparator": "FFmpeg, progressive version",
+      "peak_error": 0.0,
+      "snr_db": null,
+      "stats": "codec=9 rate=22050 channels=1 bits=16 frames=26460 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "alac-mono-dash.m4a",
+      "result": "matched",
+      "comparator": "FFmpeg, progressive version",
+      "peak_error": 0.0,
+      "snr_db": null,
+      "stats": "codec=9 rate=22050 channels=1 bits=16 frames=26460 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "alac-mono .m4a vs .mka",
+      "result": "exact"
+    },
+    {
+      "test": "alac-5.1.m4a",
+      "result": "matched",
+      "comparator": "multichannel: LAMP decode of the same stream below",
+      "peak_error": null,
+      "snr_db": null,
+      "stats": "codec=9 rate=48000 channels=6 bits=24 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "alac-5.1-frag.m4a",
+      "result": "matched",
+      "comparator": "multichannel: LAMP decode of the same stream below, progressive version",
+      "peak_error": null,
+      "snr_db": null,
+      "stats": "codec=9 rate=48000 channels=6 bits=24 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "alac-5.1-dash.m4a",
+      "result": "matched",
+      "comparator": "multichannel: LAMP decode of the same stream below, progressive version",
+      "peak_error": null,
+      "snr_db": null,
+      "stats": "codec=9 rate=48000 channels=6 bits=24 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=31250 endpoint_dry=0"
+    },
+    {
+      "test": "alac-5.1 .m4a vs .mka",
+      "result": "exact"
+    },
+    {
+      "test": "alac-small-frames.m4a",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "peak_error": 0.0,
+      "snr_db": null,
+      "stats": "codec=9 rate=48000 channels=2 bits=16 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "alac-small-frames-frag.m4a",
+      "result": "matched",
+      "comparator": "FFmpeg, progressive version",
+      "peak_error": 0.0,
+      "snr_db": null,
+      "stats": "codec=9 rate=48000 channels=2 bits=16 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "alac-small-frames-dash.m4a",
+      "result": "matched",
+      "comparator": "FFmpeg, progressive version",
+      "peak_error": 0.0,
+      "snr_db": null,
+      "stats": "codec=9 rate=48000 channels=2 bits=16 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "alac-small-frames .m4a vs .mka",
+      "result": "exact"
+    },
+    {
+      "test": "alac-qt.mov",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "peak_error": 0.0,
+      "snr_db": null,
+      "stats": "codec=9 rate=44100 channels=2 bits=16 frames=52920 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "alac-qt .mov vs .mka",
+      "result": "exact"
+    },
+    {
+      "test": "alac-qt-24-mono.mov",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "peak_error": 0.0,
+      "snr_db": null,
+      "stats": "codec=9 rate=48000 channels=1 bits=24 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "alac-qt-24-mono .mov vs .mka",
+      "result": "exact"
+    },
+    {
+      "test": "mp3.mp4",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "peak_error": 1.1622905731201172e-06,
+      "snr_db": 120.6,
+      "stats": "codec=9 rate=44100 channels=2 bits=0 frames=66150 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "mp2.mp4",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "peak_error": 8.344650268554688e-07,
+      "snr_db": 120.4,
+      "stats": "codec=9 rate=48000 channels=2 bits=0 frames=71472 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "opus.mp4",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "peak_error": 2.7120113372802734e-06,
+      "snr_db": 116.7,
+      "stats": "codec=9 rate=48000 channels=2 bits=32 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "opus-frag.mp4",
+      "result": "matched",
+      "comparator": "FFmpeg, progressive version",
+      "peak_error": 2.7120113372802734e-06,
+      "snr_db": 116.7,
+      "stats": "codec=9 rate=48000 channels=2 bits=32 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "opus-dash.mp4",
+      "result": "matched",
+      "comparator": "FFmpeg, progressive version",
+      "peak_error": 2.7120113372802734e-06,
+      "snr_db": 116.7,
+      "stats": "codec=9 rate=48000 channels=2 bits=32 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=15 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "opus .mp4 vs .opus",
+      "result": "exact"
+    },
+    {
+      "test": "opus-5.1.mp4",
+      "result": "matched",
+      "comparator": "multichannel: LAMP decode of the same stream below",
+      "peak_error": null,
+      "snr_db": null,
+      "stats": "codec=9 rate=48000 channels=6 bits=32 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "opus-5.1-frag.mp4",
+      "result": "matched",
+      "comparator": "multichannel: LAMP decode of the same stream below, progressive version",
+      "peak_error": null,
+      "snr_db": null,
+      "stats": "codec=9 rate=48000 channels=6 bits=32 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=16 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "opus-5.1-dash.mp4",
+      "result": "matched",
+      "comparator": "multichannel: LAMP decode of the same stream below, progressive version",
+      "peak_error": null,
+      "snr_db": null,
+      "stats": "codec=9 rate=48000 channels=6 bits=32 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "opus-5.1 .mp4 vs .opus",
+      "result": "exact"
+    },
+    {
+      "test": "flac.mp4",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "peak_error": 0.0,
+      "snr_db": null,
+      "stats": "codec=9 rate=44100 channels=2 bits=16 frames=52920 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "flac-frag.mp4",
+      "result": "matched",
+      "comparator": "FFmpeg, progressive version",
+      "peak_error": 0.0,
+      "snr_db": null,
+      "stats": "codec=9 rate=44100 channels=2 bits=16 frames=52920 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "flac-dash.mp4",
+      "result": "matched",
+      "comparator": "FFmpeg, progressive version",
+      "peak_error": 0.0,
+      "snr_db": null,
+      "stats": "codec=9 rate=44100 channels=2 bits=16 frames=52920 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "flac .mp4 vs .flac",
+      "result": "exact"
+    },
+    {
+      "test": "flac-24.mp4",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "peak_error": 0.0,
+      "snr_db": null,
+      "stats": "codec=9 rate=48000 channels=2 bits=24 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "flac-24-frag.mp4",
+      "result": "matched",
+      "comparator": "FFmpeg, progressive version",
+      "peak_error": 0.0,
+      "snr_db": null,
+      "stats": "codec=9 rate=48000 channels=2 bits=24 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "flac-24-dash.mp4",
+      "result": "matched",
+      "comparator": "FFmpeg, progressive version",
+      "peak_error": 0.0,
+      "snr_db": null,
+      "stats": "codec=9 rate=48000 channels=2 bits=24 frames=57600 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "flac-24 .mp4 vs .flac",
+      "result": "exact"
+    },
+    {
+      "test": "pcm-s16le.mov",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "peak_error": 0.0,
+      "snr_db": null,
+      "stats": "codec=9 rate=44100 channels=2 bits=16 frames=66150 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "pcm-s16be.mov",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "peak_error": 0.0,
+      "snr_db": null,
+      "stats": "codec=9 rate=48000 channels=2 bits=16 frames=72000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "pcm-s24be.mov",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "peak_error": 0.0,
+      "snr_db": null,
+      "stats": "codec=9 rate=48000 channels=2 bits=24 frames=72000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "pcm-s24le.mov",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "peak_error": 0.0,
+      "snr_db": null,
+      "stats": "codec=9 rate=48000 channels=2 bits=24 frames=72000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "pcm-s32be.mov",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "peak_error": 0.0,
+      "snr_db": null,
+      "stats": "codec=9 rate=32000 channels=2 bits=32 frames=48000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "pcm-f32be.mov",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "peak_error": 0.0,
+      "snr_db": null,
+      "stats": "codec=9 rate=48000 channels=1 bits=32 frames=72000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "pcm-f64le.mov",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "peak_error": 0.0,
+      "snr_db": null,
+      "stats": "codec=9 rate=48000 channels=2 bits=64 frames=72000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "pcm-u8.mov",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "peak_error": 0.0,
+      "snr_db": null,
+      "stats": "codec=9 rate=8000 channels=1 bits=8 frames=12000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=15625 endpoint_dry=0"
+    },
+    {
+      "test": "pcm-s8.mov",
+      "result": "matched",
+      "comparator": "FFmpeg",
+      "peak_error": 0.0,
+      "snr_db": null,
+      "stats": "codec=9 rate=8000 channels=1 bits=8 frames=12000 underruns=0 decode_error=0 audio_error=0 elapsed_ms=0 cpu_us=0 endpoint_dry=0"
+    },
+    {
+      "test": "alac-16.m4a seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":10,\"discarded_frames\":24377,\"maximum_discarded\":4095,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "alac-5.1.m4a seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":10,\"discarded_frames\":8573,\"maximum_discarded\":4095,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "alac-small-frames-dash.m4a seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":10,\"discarded_frames\":8573,\"maximum_discarded\":4095,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "flac.mp4 seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":8,\"discarded_frames\":30009,\"maximum_discarded\":4607,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "mp3.mp4 seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":7,\"discarded_frames\":70783,\"maximum_discarded\":8017,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "mp2.mp4 seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":11,\"discarded_frames\":32384,\"maximum_discarded\":3425,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "pcm-s24be.mov seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":10,\"discarded_frames\":20125,\"maximum_discarded\":4095,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "pcm-s16le.mov seeks",
+      "result": "{\"result\":\"passed\",\"checks\":15,\"advanced\":10,\"discarded_frames\":10184,\"maximum_discarded\":4095,\"maximum_probes\":0,\"index_points\":0,\"maximum_skimmed_headers\":0,\"maximum_stride\":0,\"maximum_preroll\":0,\"maximum_deviation\":0}"
+    },
+    {
+      "test": "opus.mp4 seeks equal Ogg Opus seeks",
+      "result": "exact",
+      "targets": 5
+    },
+    {
+      "test": "bad-truncated.m4a",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":90}"
+    },
+    {
+      "test": "bad-no-moov.m4a",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":90}"
+    },
+    {
+      "test": "bad-sample-count.m4a",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":90}"
+    },
+    {
+      "test": "bad-chunk-offset.m4a",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":90}"
+    },
+    {
+      "test": "bad-box-size.m4a",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":90}"
+    },
+    {
+      "test": "bad-stsc-empty.m4a",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":90}"
+    },
+    {
+      "test": "bad-description-index.m4a",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":90}"
+    },
+    {
+      "test": "bad-unsupported-entry.m4a",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":90}"
+    },
+    {
+      "test": "bad-alac-depth.m4a",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":60}"
+    },
+    {
+      "test": "bad-alac-frame.m4a",
+      "result": "rejected",
+      "oracle": "{\"result\":\"rejected\",\"stage\":\"open\",\"decode_error\":60}"
+    },
+    {
+      "test": "cancel-open alac-16.m4a",
+      "result": "{\"result\":\"cancelled\"}"
+    },
+    {
+      "test": "cancel-read alac-16.m4a",
+      "result": "{\"result\":\"cancelled\",\"frames_before_cancel\":28672}"
+    }
+  ],
+  "rejections": 10,
+  "scope": "MP4/M4A/MOV audio tracks: ALAC 16/24-bit, mono to 5.1, MPEG Layer II/III, Opus, FLAC and QuickTime PCM entries against FFmpeg and LAMP decodes of the same streams in Ogg, native FLAC and Matroska; fragmented (moof/trun) files equal their progressive versions; exact seeks and Opus seeks equal to Ogg; malformed tables, entries and frames; cancellation.",
+  "binary_sha256": "b1fe18b21e5ee13842ae395cc9bb9c63b7c247a5b663233071c5f107d492c156",
+  "sources": {
+    "src/aac.s": "44191d88ad88e0a782d0da9ea67ce1b83d644be0d0170e41412e653087fc03b8",
+    "src/mkv.s": "464308915ebeed389832347cb5d9e41873590b54fff5d35762ffea1b0f3c6577",
+    "src/track.s": "cb132627305fef71aa8e266c9bca5bd7913d337117eaeba909102cd3ea542ce7",
+    "src/track_cuts.s": "0e0b0b2df541caf29166a9570494488554fc50ae38aaa1f667f99c89d999883b",
+    "tests/verify-mp4.py": "1ecf9507c2e72492025dabb49eb6facb37b1071be23ed15eabdc118d4ee4e1c6",
+    "tests/chain-oracle.c": "770757565631753a57a6a8352cbac5ffecd33bb380eec247f23874277f7a00f7",
+    "tests/seek-oracle.c": "a03fd2777080de19f95aee235f83d0c02a067e4ab676601424e77ccac9377605"
+  }
+}

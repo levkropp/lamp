@@ -76,6 +76,13 @@ Five saved pre-change binary controls reject files that the new decoder opens. A
 
 The existing [AAC](../reports/aac-pce-aac-regression-verification.json), [LATM](../reports/aac-pce-latm-regression-verification.json) and [HE-AAC](../reports/aac-pce-heaac-regression-verification.json) suites pass 68, 71 and 68 checks. The final binary also reproduces [221 cached PCM outputs](../reports/aac-pce-indexed-regression-verification.json) from those suites byte-for-byte.
 
+AAC decoder resets now also restore the PNS noise seed. Repeated packet
+seeks and rewinds match a fresh decoder restart at the same coded packets;
+they do not promise bit identity with uninterrupted noise from an earlier
+history. The [Matroska pre-roll suite](matroska.md#track-requested-seek-history)
+checks independently decoded suffix references and repeated zero seeks,
+and the existing 68 AAC and 67 HE-AAC regression checks pass on this build.
+
 `python3 tests/verify-aac.py` checks:
 
 - 26 FFmpeg-encoded M4A files: tones, noise and transients at all twelve rates, 48–320 kb/s, FFmpeg's two-loop and fast coders with M/S, intensity, PNS and TNS switched on and off, mono, and 3.0, 4.0, 5.0, 5.1 and 7.1 layouts. Mono and stereo files match FFmpeg's decode within 2.4e-7 (at least 138 dB SNR); multichannel files match FFmpeg's channels mixed with LAMP's speaker weights. A coverage probe records which coding tools each file used.
