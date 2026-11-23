@@ -1,0 +1,24 @@
+{
+  "result": "passed",
+  "scope": "Compile-only ARM64 macOS video scheduler check. No native linking, execution, decoder, GPU or synchronized playback is established.",
+  "target": "arm64-apple-macosx12.0.0",
+  "cpu": "apple-m1",
+  "compiler": "Ubuntu LLVM version 18.1.3",
+  "sources": {
+    "tools/arm64.py": "f8abd01ad67063451181e0adc66e72b2a445ebe9a7b159f7b88ac52b79bdadc2",
+    "tools/arm64_lamp.py": "37e4a515283ef441f9d1ee647377716efbe0d6a3aae27ef7c62faf53118f35d0",
+    "src/lamp.inc": "d79c75543ab0d78863010b32e46faf23fda5b9cb54ec624e9dce0acfcabf03e6",
+    "src/video_sync.inc": "4b6fd1808b140fae9d75b6e0cd2453447e777169969284713835bc92e79d25ba",
+    "src/video_sync.s": "9d021b0bce288f7e01229b89e5c5a176249a3fe37a450ec53f82edaba1d57a91"
+  },
+  "translated_sha256": "ca92fd8d5d519b64f38f628bb3aaba83348540a9e64718b7406715dd14f65a98",
+  "object_sha256": "fa562105113dd4c4108dcd07232817ae70ff1d44dc98d2c2c08be35fcd56fdd1",
+  "object_bytes": 2776,
+  "git_source_sha256": {
+    "tools/arm64.py": "f8abd01ad67063451181e0adc66e72b2a445ebe9a7b159f7b88ac52b79bdadc2",
+    "tools/arm64_lamp.py": "37e4a515283ef441f9d1ee647377716efbe0d6a3aae27ef7c62faf53118f35d0",
+    "src/lamp.inc": "d79c75543ab0d78863010b32e46faf23fda5b9cb54ec624e9dce0acfcabf03e6",
+    "src/video_sync.inc": "4b6fd1808b140fae9d75b6e0cd2453447e777169969284713835bc92e79d25ba",
+    "src/video_sync.s": "9d021b0bce288f7e01229b89e5c5a176249a3fe37a450ec53f82edaba1d57a91"
+  }
+}

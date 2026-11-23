@@ -1,0 +1,186 @@
+{
+  "result": "passed",
+  "checks": 37698315,
+  "random_operations": 500000,
+  "audio_clock_vectors": 14371,
+  "simulated_av_sessions": 3,
+  "video_frames_per_session": 600,
+  "context_bytes": 1152,
+  "queue_capacity": 32,
+  "elapsed_seconds": 0.150471,
+  "platform": "Windows-11-10.0.26300-SP0",
+  "machine": "AMD64",
+  "scope": "Assembly component verification only. Simulated media timestamps and audible sample clocks; no video decoder, GPU, real A/V playback, power or native macOS execution is established.",
+  "policies": [
+    "stable presentation ordering; 32 owned tokens maximum",
+    "atomic rejection of stale epochs, invalid clocks and overflowing frame ends",
+    "audible sample clock floor conversion using integer arithmetic",
+    "paused/starved hold; one frame per explicit step",
+    "late frames dropped only when a newer frame is due; last frame retained",
+    "explicit drain before epoch changes; ownership transferred exactly once"
+  ],
+  "sources": {
+    "src/video_sync.s": "9d021b0bce288f7e01229b89e5c5a176249a3fe37a450ec53f82edaba1d57a91",
+    "src/video_sync.inc": "4b6fd1808b140fae9d75b6e0cd2453447e777169969284713835bc92e79d25ba",
+    "src/lamp.inc": "d79c75543ab0d78863010b32e46faf23fda5b9cb54ec624e9dce0acfcabf03e6",
+    "tests/video-sync-oracle.c": "8dbae04eda5025a181310ddcd0daa40179e6f78f44ce7214c1772974e450c959",
+    "tests/verify-video-sync.py": "ee48e3f23a03da81c64e8c85d92979d5af33b1bd496331bdb42237163f9f5f02",
+    "tests/lamp_test.py": "570da1afe419d642ea19968f9c286e0fa58b60b1afacae97d6e6517eadea47bf"
+  },
+  "artifacts": {
+    "obj\\video_sync.obj": "69d302f71cf18514dc8b24b3d91e119bb85aaa7ec22929870832c007480409b4",
+    "video-sync\\video-sync-oracle.exe": "9850302c3ee7d36191f112e1808628a4187b86d6359fc55a90583ff61b37817f",
+    "video-sync\\sample-ns.bin": "528291347bc8f1839574991cb70d1efe52c0822ca7ea0e02f581b9ff063cb03d"
+  },
+  "negative_controls": [
+    {
+      "policy": "stale-epoch",
+      "exit_code": 1,
+      "failure": "video-sync line 99 operation 0",
+      "source_sha256": "c8cc050564ede2e80839367bb422831ab6920d8ba7b8ad951c69cd593b6f2199",
+      "object_sha256": "62d561a74a648ad59517adc31903f668fba9b837c8ea7939addb1f3200b085c0",
+      "executable_sha256": "6fadc3e10b1585ee6652b7acfe1fa3b61a07fcc24b643257aabd91d85b67d809"
+    },
+    {
+      "policy": "paused-advance",
+      "exit_code": 1,
+      "failure": "video-sync line 106 operation 0",
+      "source_sha256": "b9d2e83b8febe011e8e0a9815b913576fdafb3262b9ee36d4d6b5992e010d89a",
+      "object_sha256": "56c1538f4bbab51c738b0ed62c61279eb6980d21cca785b0cb64c9c6112eb822",
+      "executable_sha256": "df5845c606f216c43406ff707cc6a1857b09e97e1009d30e739eb51bcfce6d78"
+    },
+    {
+      "policy": "reverse-picture",
+      "exit_code": 1,
+      "failure": "video-sync line 106 operation 0",
+      "source_sha256": "8e08c737b718364570bfe49ca94be570cd6799b4d81e2efd738e3ab8e0eae9b2",
+      "object_sha256": "79c3d0fe6268bd7e2a60778f472d2e5585b71349a6ec5f6f32cf41554b820e2e",
+      "executable_sha256": "dd00f93f5461c0a86519e949d1d60c9b5e11e49a78e6a5d48b605b9bcfab7d33"
+    },
+    {
+      "policy": "backward-clock",
+      "exit_code": 1,
+      "failure": "video-sync line 106 operation 0",
+      "source_sha256": "ea05aa0a96f9284b5cf87fa36a4f75e81c79dfde41cfdb156c3226f04a1403b4",
+      "object_sha256": "14d2e7cf253ef6be16b02d3f86220ffc2829570d35802d32a917b8de5b644790",
+      "executable_sha256": "52e42b832b82b08c84d5805d0ff06d67462860c6418b759b869028e53f116b40"
+    },
+    {
+      "policy": "drop-last-frame",
+      "exit_code": 1,
+      "failure": "video-sync line 106 operation 0",
+      "source_sha256": "fa2d59def005f5687b306fca8000933d3e10db1dbfbb989ae89f69eac096e6a8",
+      "object_sha256": "2001b0523801146391f04d21c5f6b26c2a7d751cfdf910cf2760e14fe27e5552",
+      "executable_sha256": "3a1e3e46293e66fb4ca09399f873f2947898235512cf0374e2c5e2828cc3412f"
+    }
+  ],
+  "git_source_sha256": {
+    "src/video_sync.s": "9d021b0bce288f7e01229b89e5c5a176249a3fe37a450ec53f82edaba1d57a91",
+    "src/video_sync.inc": "4b6fd1808b140fae9d75b6e0cd2453447e777169969284713835bc92e79d25ba",
+    "src/lamp.inc": "d79c75543ab0d78863010b32e46faf23fda5b9cb54ec624e9dce0acfcabf03e6",
+    "tests/video-sync-oracle.c": "8dbae04eda5025a181310ddcd0daa40179e6f78f44ce7214c1772974e450c959",
+    "tests/verify-video-sync.py": "ee48e3f23a03da81c64e8c85d92979d5af33b1bd496331bdb42237163f9f5f02",
+    "tests/lamp_test.py": "570da1afe419d642ea19968f9c286e0fa58b60b1afacae97d6e6517eadea47bf"
+  },
+  "shipping_binaries": {
+    "lamp.exe": "69eba7b7857f9fb109d03cbed40c6af26b42a0b34fbe888ad263fa37d5fdaa68",
+    "lamp-cli.exe": "b4c15d8cbbccb7f44efa7f438fb2a8765e96752c11a1d9391440624fcab738db"
+  },
+  "audio_smoke": [
+    {
+      "codec": "wav",
+      "frames": 12000,
+      "rate": 48000,
+      "peak": 0.08837890625,
+      "result": "passed"
+    },
+    {
+      "codec": "aiff",
+      "frames": 12000,
+      "rate": 48000,
+      "peak": 0.08837890625,
+      "result": "passed"
+    },
+    {
+      "codec": "flac",
+      "frames": 12000,
+      "rate": 48000,
+      "peak": 0.08837890625,
+      "result": "passed"
+    },
+    {
+      "codec": "mp3",
+      "frames": 12000,
+      "rate": 48000,
+      "peak": 0.0840023010969162,
+      "result": "passed"
+    },
+    {
+      "codec": "vorbis",
+      "frames": 12000,
+      "rate": 48000,
+      "peak": 0.08997303247451782,
+      "result": "passed"
+    },
+    {
+      "codec": "opus",
+      "frames": 12000,
+      "rate": 48000,
+      "peak": 0.08913379907608032,
+      "result": "passed"
+    }
+  ],
+  "runtime_imports_and_resources": [
+    {
+      "file": "lamp-cli.exe",
+      "bytes": 510976,
+      "architecture": "x86-64",
+      "subsystem": "console",
+      "imports": [
+        "AVRT.dll",
+        "KERNEL32.dll",
+        "ole32.dll",
+        "SHELL32.dll"
+      ],
+      "iconSizes": [
+        16,
+        24,
+        32,
+        48,
+        64,
+        128,
+        256
+      ],
+      "version": "0.4.0-dev",
+      "result": "passed"
+    },
+    {
+      "file": "lamp.exe",
+      "bytes": 541696,
+      "architecture": "x86-64",
+      "subsystem": "windows",
+      "imports": [
+        "AVRT.dll",
+        "COMCTL32.dll",
+        "COMDLG32.dll",
+        "GDI32.dll",
+        "KERNEL32.dll",
+        "ole32.dll",
+        "SHELL32.dll",
+        "SHLWAPI.dll",
+        "USER32.dll"
+      ],
+      "iconSizes": [
+        16,
+        24,
+        32,
+        48,
+        64,
+        128,
+        256
+      ],
+      "version": "0.4.0-dev",
+      "result": "passed"
+    }
+  ]
+}

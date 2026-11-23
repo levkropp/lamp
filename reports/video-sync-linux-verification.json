@@ -1,0 +1,132 @@
+{
+  "result": "passed",
+  "checks": 37698315,
+  "random_operations": 500000,
+  "audio_clock_vectors": 14371,
+  "simulated_av_sessions": 3,
+  "video_frames_per_session": 600,
+  "context_bytes": 1152,
+  "queue_capacity": 32,
+  "elapsed_seconds": 0.124579,
+  "platform": "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "machine": "x86_64",
+  "scope": "Assembly component verification only. Simulated media timestamps and audible sample clocks; no video decoder, GPU, real A/V playback, power or native macOS execution is established.",
+  "policies": [
+    "stable presentation ordering; 32 owned tokens maximum",
+    "atomic rejection of stale epochs, invalid clocks and overflowing frame ends",
+    "audible sample clock floor conversion using integer arithmetic",
+    "paused/starved hold; one frame per explicit step",
+    "late frames dropped only when a newer frame is due; last frame retained",
+    "explicit drain before epoch changes; ownership transferred exactly once"
+  ],
+  "sources": {
+    "src/video_sync.s": "9d021b0bce288f7e01229b89e5c5a176249a3fe37a450ec53f82edaba1d57a91",
+    "src/video_sync.inc": "4b6fd1808b140fae9d75b6e0cd2453447e777169969284713835bc92e79d25ba",
+    "src/lamp.inc": "d79c75543ab0d78863010b32e46faf23fda5b9cb54ec624e9dce0acfcabf03e6",
+    "tests/video-sync-oracle.c": "8dbae04eda5025a181310ddcd0daa40179e6f78f44ce7214c1772974e450c959",
+    "tests/verify-video-sync.py": "ee48e3f23a03da81c64e8c85d92979d5af33b1bd496331bdb42237163f9f5f02",
+    "tests/lamp_test.py": "570da1afe419d642ea19968f9c286e0fa58b60b1afacae97d6e6517eadea47bf"
+  },
+  "artifacts": {
+    "obj/video_sync.o": "dbd2f53f74b66e2d8c658c6c78f3b6031f4269298cb9847327660af0c22bb54b",
+    "video-sync/video-sync-oracle": "3af67c82af79cb98bb477977b104374861578b76d4ad24dd54657df7835088bb",
+    "video-sync/sample-ns.bin": "528291347bc8f1839574991cb70d1efe52c0822ca7ea0e02f581b9ff063cb03d"
+  },
+  "negative_controls": [
+    {
+      "policy": "stale-epoch",
+      "exit_code": 1,
+      "failure": "video-sync line 99 operation 0",
+      "source_sha256": "01dab38bb59dea60bd7a6f6348d0a35ccdad32d7eb52436f92a398c222473fb2",
+      "object_sha256": "a94dc382f07b1ca2970c1b0ac5e46428efbff6ed287f59aeb45c309642025e77",
+      "executable_sha256": "6d959e4e9c571c7c0cefa5c4a6f0ebea9ae9cdfc2ac98b83325dc0f7de36793e"
+    },
+    {
+      "policy": "paused-advance",
+      "exit_code": 1,
+      "failure": "video-sync line 106 operation 0",
+      "source_sha256": "96eec0b66138979133a0d7f9514c208e0c2e445b1006daf9af367b1991eb3348",
+      "object_sha256": "8f51719fa071bb7210a55006afab57d90660620b3c27b0144e83d60316942aec",
+      "executable_sha256": "8127518c1fa0c23fa37c801ce3d16fa11930aee291c8dba2b0cbf21991ca8e81"
+    },
+    {
+      "policy": "reverse-picture",
+      "exit_code": 1,
+      "failure": "video-sync line 106 operation 0",
+      "source_sha256": "186ab17bb7af139893f41ca6c2e9143e578735f55261596a693fe880e52c9633",
+      "object_sha256": "121cc246a8f23d99e1005e1a5a158d3a1a1ca90176809375c3631e32dc8d6044",
+      "executable_sha256": "88bfbfdc8415a0427af2fd1bc02f57ef8c277b3e8eb6aa92bd10325c7b35db17"
+    },
+    {
+      "policy": "backward-clock",
+      "exit_code": 1,
+      "failure": "video-sync line 106 operation 0",
+      "source_sha256": "f5e6f6b8a97540b44538dcf171795977f33f682cdadbc72273721ece62118f87",
+      "object_sha256": "6cff48bc70330f85aa9bc8fdc0461f6b2c1053fc3d59886ace11aa53938da92a",
+      "executable_sha256": "26144a92b8bcda558b6af4083cb22269438d5076008d377478a56a7e93ff9ba5"
+    },
+    {
+      "policy": "drop-last-frame",
+      "exit_code": 1,
+      "failure": "video-sync line 106 operation 0",
+      "source_sha256": "b6a03ca51a4cab748e8a39b128b823d7764948c9b04f1ccfd5e632ad9e431c5f",
+      "object_sha256": "e1c7c1e30a74da29baa5885fde52042580c277943cada0e7327044b67f196008",
+      "executable_sha256": "dd3070ef3820ac1e8dd43ceaa3002937043f75ed6d1ca7c2dddcf256e8cdd269"
+    }
+  ],
+  "git_source_sha256": {
+    "src/video_sync.s": "9d021b0bce288f7e01229b89e5c5a176249a3fe37a450ec53f82edaba1d57a91",
+    "src/video_sync.inc": "4b6fd1808b140fae9d75b6e0cd2453447e777169969284713835bc92e79d25ba",
+    "src/lamp.inc": "d79c75543ab0d78863010b32e46faf23fda5b9cb54ec624e9dce0acfcabf03e6",
+    "tests/video-sync-oracle.c": "8dbae04eda5025a181310ddcd0daa40179e6f78f44ce7214c1772974e450c959",
+    "tests/verify-video-sync.py": "ee48e3f23a03da81c64e8c85d92979d5af33b1bd496331bdb42237163f9f5f02",
+    "tests/lamp_test.py": "570da1afe419d642ea19968f9c286e0fa58b60b1afacae97d6e6517eadea47bf"
+  },
+  "shipping_binaries": {
+    "lamp-cli": "ae43375539a83b2fbad699e117c5baaa429f90a0a83aba5f87ffa3e02e896445"
+  },
+  "audio_smoke": [
+    {
+      "codec": "wav",
+      "frames": 12000,
+      "rate": 48000,
+      "peak": 0.08837890625,
+      "result": "passed"
+    },
+    {
+      "codec": "aiff",
+      "frames": 12000,
+      "rate": 48000,
+      "peak": 0.08837890625,
+      "result": "passed"
+    },
+    {
+      "codec": "flac",
+      "frames": 12000,
+      "rate": 48000,
+      "peak": 0.08837890625,
+      "result": "passed"
+    },
+    {
+      "codec": "mp3",
+      "frames": 12000,
+      "rate": 48000,
+      "peak": 0.0840023010969162,
+      "result": "passed"
+    },
+    {
+      "codec": "vorbis",
+      "frames": 12000,
+      "rate": 48000,
+      "peak": 0.08997303247451782,
+      "result": "passed"
+    },
+    {
+      "codec": "opus",
+      "frames": 12000,
+      "rate": 48000,
+      "peak": 0.08913379907608032,
+      "result": "passed"
+    }
+  ]
+}

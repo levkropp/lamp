@@ -262,6 +262,8 @@ ASF PCM/float, G.711, IMA/Microsoft/Duck ADPCM, MPEG audio, AC-3 and ADTS AAC/HE
 - [ ] Aspect/rotation, scaling, deinterlacing, color-space/range handling, HDR and tone mapping; progressively add higher-quality rendering controls.
 - [ ] Screenshots and image playback when the common presentation pipeline supports them.
 
+The [video scheduling foundation](docs/video-sync.md) now provides a bounded 32-frame assembly queue, audible-sample clock conversion, epoch rejection, pause/starvation holds, stepping and a late-frame policy. Windows/Linux component oracles pass 37,698,315 checks each, including randomized operations, exact clocks and simulated VFR sessions; Mac translation/assembly also passes. This component is not yet connected to a video decoder, GPU presenter or real audio clock. Video playback and the full synchronization gate remain open.
+
 **Gate:** reference video vectors/images and synchronized mixed-media fixtures; measured dropped frames, latency, CPU/GPU use and fallback behavior. Hardware paths must have explicit supported-profile limits. Implementing mature software video codecs is a substantial project, not a quick extension of the audio decoder.
 
 ## 5 — Subtitles and network media

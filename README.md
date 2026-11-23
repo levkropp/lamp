@@ -173,6 +173,8 @@ Latest Opus work adds family 1 multistream decoding and the RFC stereo downmix. 
 
 [ROADMAP.md](ROADMAP.md) covers Opus, reliable audio playback, broader codecs and containers, video, subtitles, streaming, and eventual support for everything relevant that mpv supports. The [compatibility matrix](docs/compatibility.md) tracks the current gaps. Goals have acceptance gates, not promised release dates. Hardware decode should be used when it lowers system cost; handwritten assembly alone does not guarantee a faster codec.
 
+The [video scheduling component](docs/video-sync.md) now has a bounded frame queue, audio-clock conversion, pause/step and late-frame rules, verified independently on Windows/Linux. It is not connected to decoding or presentation yet; source builds remain audio players.
+
 Keep runtime and codec code in assembly. Use original implementations or carefully attributed permissive references (MIT, MIT-0, BSD-2-Clause, BSD-3-Clause, or CC0). Preserve applicable notices. Test tools may use other languages. Please include the failing media characteristics, a redistributable fixture when possible, and a reference comparison when reporting decoder issues.
 
 ## License and references
