@@ -1,7 +1,8 @@
 # Windows video presentation and playback
 
 Windows source builds provide an experimental video-only window for the
-[supported H.264 Annex B subset](h264.md), including [Main/High B pictures](h264-b.md):
+[supported H.264 file subset](h264.md), including [Main/High B pictures](h264-b.md)
+and [MP4/MOV video with timestamps](mp4-play.md):
 
 ```
 lamp-cli.exe --video-play file.h264
@@ -9,7 +10,7 @@ lamp-cli.exe --video-play file.h264
 
 Space pauses or resumes, `.` advances one picture while paused, and Esc or Q
 closes the window. At the end, the last picture stays visible and Space replays
-the file. The audio-library window remains separate. Video containers, audio,
+the file. The audio-library window remains separate. Other video containers, audio,
 seeking, higher bit depths/chroma formats and other video codecs are not yet
 connected to this path.
 
@@ -46,21 +47,25 @@ user screenshot command.
 
 ## Clock and window ownership
 
-`src/win/video_window.s` owns one window, its message loop and a fixed 2,048-byte
-state allocation including the presenter. It uses integer QueryPerformanceCounter
-time and the SPS VUI nominal rate `time_scale/(2*num_units_in_tick)`, falling back
+`src/win/video_window.s` owns one window, its message loop and a fixed 4,096-byte
+state allocation including the presenter and bounded display-order bridge. It
+uses integer QueryPerformanceCounter time. Annex B uses the SPS VUI nominal rate
+`time_scale/(2*num_units_in_tick)`, falling back
 to 24 fps when timing is absent. Rates above 240 fps and overflowing durations
-reject. VUI timing is a nominal schedule, not container timestamps, SEI timing or
-an audio clock. The separate [audio-master scheduler](video-sync.md) is not yet
-connected.
+reject on that path. MP4/MOV instead schedules the reader's composition
+timestamps and edit-clipped intervals, including VFR and leading gaps. Neither
+path uses SEI timing or a real audio clock. The separate
+[audio-master scheduler](video-sync.md) is not yet connected.
 
-Playback shows every picture, waiting until its nominal due time before decoding.
-There is no queue or frame-dropping policy in this initial window. A picture more
-than one period late increments a diagnostic count. GPU decode/present retries
+Playback shows visible pictures through the bounded display-order queue. The
+MP4 path can inspect the next interval while retaining the displayed surface;
+hidden preroll/postroll still decode without consuming step requests. There is
+no connected late-frame dropping policy yet. A picture more than one period or
+its source display duration late increments a diagnostic count. GPU decode/present retries
 have five-second deadlines and yield to messages. Pause and step take effect at
 completed picture boundaries; one already submitted picture may finish. A step
-updates the frozen media position to the next picture's nominal timestamp.
-The final picture stays for its full period before the EOF hold.
+updates the frozen media position to the next visible picture's timestamp.
+The final picture stays through its source interval or nominal period before the EOF hold.
 
 Minimization and swapchain occlusion suspend the nominal clock. Paused/minimized
 hosts can wait on an optional cancellation event; the CLI instead checks its

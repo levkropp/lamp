@@ -1,0 +1,23 @@
+{
+  "result": "passed",
+  "scope": "Shared MP4/H264 source adapter translation/assembly only; no native Mac execution or video window established.",
+  "sources": {
+    "src/video_mp4_h264.s": "9c0f03315e094e65486e6547362e75410c0ae37119b4580f38598c80c150a3e6",
+    "src/video_mp4.inc": "1c9ea068b78c3f825fe045e55055512fb459b58aea214563538f8f8b44a34176",
+    "src/h264.inc": "a0729de31cc476db3412bd7fc4058ed069a8b2658954a362f5d2850d1e232545",
+    "src/lamp.inc": "d79c75543ab0d78863010b32e46faf23fda5b9cb54ec624e9dce0acfcabf03e6",
+    "tools/arm64.py": "f8abd01ad67063451181e0adc66e72b2a445ebe9a7b159f7b88ac52b79bdadc2",
+    "tools/arm64_lamp.py": "37e4a515283ef441f9d1ee647377716efbe0d6a3aae27ef7c62faf53118f35d0"
+  },
+  "translated_sha256": "d8348b563aef5650bfbef4ebefd9f5ba055190dd6c43565464f5ebc451f286c9",
+  "object_sha256": "ddb62a0df836bde7f460303f824eaa5ec0554bea4fb2074260b82328ce9866b4",
+  "object_bytes": 8016,
+  "git_source_sha256": {
+    "src/video_mp4_h264.s": "9c0f03315e094e65486e6547362e75410c0ae37119b4580f38598c80c150a3e6",
+    "src/video_mp4.inc": "1c9ea068b78c3f825fe045e55055512fb459b58aea214563538f8f8b44a34176",
+    "src/h264.inc": "a0729de31cc476db3412bd7fc4058ed069a8b2658954a362f5d2850d1e232545",
+    "src/lamp.inc": "d79c75543ab0d78863010b32e46faf23fda5b9cb54ec624e9dce0acfcabf03e6",
+    "tools/arm64.py": "f8abd01ad67063451181e0adc66e72b2a445ebe9a7b159f7b88ac52b79bdadc2",
+    "tools/arm64_lamp.py": "37e4a515283ef441f9d1ee647377716efbe0d6a3aae27ef7c62faf53118f35d0"
+  }
+}

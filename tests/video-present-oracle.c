@@ -75,7 +75,7 @@ static HRESULT decode(void *stream) {
     return hr;
 }
 int main(int argc,char **argv) {
-    Guard gpu,present; Parser parser; BYTE stream[512]={0}; BYTE *data,*ref;size_t bytes,ref_bytes,frame_bytes; Target target; HRESULT hr;UINT i,frames=1;int next;
+    Guard gpu,present; Parser parser; BYTE stream[1536]={0}; BYTE *data,*ref;size_t bytes,ref_bytes,frame_bytes; Target target; HRESULT hr;UINT i,frames=1;int next;
     CHECK(argc==4);data=file(argv[1],&bytes);ref=file(argv[2],&ref_bytes);
     memset(&gpu,0xa5,sizeof(gpu));memset(gpu.ctx,0,sizeof(gpu.ctx));memset(&present,0xa5,sizeof(present));memset(present.ctx,0,sizeof(present.ctx));
     memset(&parser,0xa5,sizeof(parser));memset(parser.ctx,0,sizeof(parser.ctx));CHECK(h264_open(parser.ctx,data,bytes,0));CHECK(h264_next(parser.ctx)==1);

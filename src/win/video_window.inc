@@ -1,5 +1,5 @@
-# Original single-owner video-window state; all allocation bounded to2048B.
-.equ VW_BYTES, 2048
+# Original single-owner video-window state; all allocation bounded to4096B.
+.equ VW_BYTES, 4096
 .equ VW_GPU, 0
 .equ VW_PARSER, 8
 .equ VW_INFO, 16
@@ -41,5 +41,8 @@
 .equ VW_WAIT_MS, 400
 .equ VW_REDRAW_PENDING, 404
 .equ VW_SOURCE_EOF, 416
+.equ VW_TIMED, 424
+.equ VW_TIMED_HEAD, 428
+.equ VW_LAST_PRESENTED_PTS, 432
 .equ VW_STREAM, 448
-.equ VW_PRESENT, 1024
+.equ VW_PRESENT, 2048

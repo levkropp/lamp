@@ -38,8 +38,13 @@ def negative_controls(out,work):
     controls=[('skip-output-pin','    bts [rsi+HP_HOLD_MASK], eax','    nop'),
               ('reverse-poc','    jle .Lvs_min_next','    jge .Lvs_min_next'),
               ('drop-old-idr','    cmp dword ptr [rsi+HP_FRAME_NOOUTPUT], 0\n    je .Lvs_pop','    cmp dword ptr [rsi+HP_FRAME_NOOUTPUT], 0\n    nop'),
-              ('retain-old-display','    btr [rsi+HP_HOLD_MASK], eax','    nop'),
-              ('ignore-busy-decode','    cmp eax, WV_PENDING\n    je .Lvs_return\n    test eax, eax\n    js .Lvs_fail\n    mov dword ptr [rbx+VS_PENDING], 0','    cmp eax, WV_PENDING\n    nop\n    test eax, eax\n    js .Lvs_fail\n    mov dword ptr [rbx+VS_PENDING], 0')]
+              ('retain-old-display','    btr [rsi+HP_HOLD_MASK], eax\n.Lvs_selected:','    nop\n.Lvs_selected:'),
+              ('ignore-busy-decode','    cmp eax, WV_PENDING\n    je .Lvs_return\n    test eax, eax\n    js .Lvs_fail\n    mov dword ptr [rbx+VS_PENDING], 0','    cmp eax, WV_PENDING\n    nop\n    test eax, eax\n    js .Lvs_fail\n    mov dword ptr [rbx+VS_PENDING], 0'),
+              ('peek-restores-display','    mov [rcx+WV_CURRENT], edx\n    mov dword ptr [rcx+WV_HAVE_FRAME], 1','    nop'),
+              ('preserve-source-pts','    mov rdx, [rbx+VS_PACKET+24]\n    mov [rbx+rcx+VS_QUEUE+16], rdx','    mov rdx, [rbx+VS_PACKET+16]\n    mov [rbx+rcx+VS_QUEUE+16], rdx'),
+              ('skip-hidden-output','    test dword ptr [rbx+r13+VS_QUEUE+40], 2\n    jnz .Lvs_hidden','    nop'),
+              ('source-epoch-change','    cmp rax, [rbx+VS_SOURCE_EPOCH]\n    jne .Lvs_invalid','    nop'),
+              ('peek-does-not-consume','    cmp dword ptr [rbx+VS_PEEK], 0\n    jne .Lvs_peek_ready','    nop')]
     assembler=shutil.which('llvm-mc')
     def convert(path):
         name=str(path.absolute());return name if assembler else '/mnt/'+name[0].lower()+name[2:].replace('\\','/')

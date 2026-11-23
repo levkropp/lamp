@@ -1,0 +1,269 @@
+{
+  "result": "passed",
+  "scope": "Public MP4/MOV H264 video-only commands; known encoded samples only, no audio endpoint",
+  "inputs": [
+    {
+      "name": "base",
+      "frames": 90,
+      "bytes": 2903040,
+      "check": "video=h264 backend=d3d11 format=nv12 width=192 height=112 coded_width=192 coded_height=112 frames=90",
+      "decode": "video=h264 backend=d3d11 format=nv12 width=192 height=112 coded_width=192 coded_height=112 frames=90",
+      "sha256": {
+        "base.mp4": "f0780c22ebde0ea40016f4f46fd5c4e34ed3236a943aaff8e4cb44fcaad382a4",
+        "base.probe.json": "2488b6a14196a3758544ca694754ece6193b14119ac675b7c49858e5657635d5",
+        "base.reference.nv12": "58d0c6fe6ff716c13388d6540ac4486acd9bb13f232afcca3e640f6fc1fa44e7",
+        "base.nv12": "58d0c6fe6ff716c13388d6540ac4486acd9bb13f232afcca3e640f6fc1fa44e7"
+      }
+    },
+    {
+      "name": "crop",
+      "frames": 60,
+      "bytes": 6926040,
+      "check": "video=h264 backend=d3d11 format=nv12 width=318 height=242 coded_width=320 coded_height=256 frames=60",
+      "decode": "video=h264 backend=d3d11 format=nv12 width=318 height=242 coded_width=320 coded_height=256 frames=60",
+      "sha256": {
+        "crop.mp4": "bc8c50a0604370035a6407198d4893f3614a976d2110a79a30694bc1535dae3e",
+        "crop.probe.json": "7e2279b033e3c58b56191140f3735a5c9b62ef0a8fd92be700852531781e9af7",
+        "crop.reference.nv12": "1a5dd492001d5084e259560228a5ccf48e422f3f05895be75e61a38be9f9dc7e",
+        "crop.nv12": "1a5dd492001d5084e259560228a5ccf48e422f3f05895be75e61a38be9f9dc7e"
+      }
+    },
+    {
+      "name": "dash",
+      "frames": 90,
+      "bytes": 2903040,
+      "check": "video=h264 backend=d3d11 format=nv12 width=192 height=112 coded_width=192 coded_height=112 frames=90",
+      "decode": "video=h264 backend=d3d11 format=nv12 width=192 height=112 coded_width=192 coded_height=112 frames=90",
+      "sha256": {
+        "dash.mp4": "7a201ad1822017b20d057ed664796adefe256c13665604a5154c69af99365b69",
+        "dash.probe.json": "be8ffe159820b97d2c5e79a8489483c79fda53433c76c20c02f4179aeef3ac48",
+        "dash.reference.nv12": "58d0c6fe6ff716c13388d6540ac4486acd9bb13f232afcca3e640f6fc1fa44e7",
+        "dash.nv12": "58d0c6fe6ff716c13388d6540ac4486acd9bb13f232afcca3e640f6fc1fa44e7"
+      }
+    },
+    {
+      "name": "delay",
+      "frames": 90,
+      "bytes": 2903040,
+      "check": "video=h264 backend=d3d11 format=nv12 width=192 height=112 coded_width=192 coded_height=112 frames=90",
+      "decode": "video=h264 backend=d3d11 format=nv12 width=192 height=112 coded_width=192 coded_height=112 frames=90",
+      "sha256": {
+        "delay.mp4": "da8049c69661ed6c2b3588e2f2653f09cd67acb7cbabd8f8358a515eb5f813a1",
+        "delay.probe.json": "aa50cf3d7c2dcd15b4f218fabb00b192a42d4f8b476e42e6b4f65f1f53885c5a",
+        "delay.reference.nv12": "58d0c6fe6ff716c13388d6540ac4486acd9bb13f232afcca3e640f6fc1fa44e7",
+        "delay.nv12": "58d0c6fe6ff716c13388d6540ac4486acd9bb13f232afcca3e640f6fc1fa44e7"
+      }
+    },
+    {
+      "name": "every-frame",
+      "frames": 90,
+      "bytes": 2903040,
+      "check": "video=h264 backend=d3d11 format=nv12 width=192 height=112 coded_width=192 coded_height=112 frames=90",
+      "decode": "video=h264 backend=d3d11 format=nv12 width=192 height=112 coded_width=192 coded_height=112 frames=90",
+      "sha256": {
+        "every-frame.mp4": "e0c742920f2fec1681fd0e9427a90e389b968b022a9154f6c0843561c8f3d089",
+        "every-frame.probe.json": "21bc88c9d8aeec3ff5a9ed066b476d51004a192e355adc04331829b0b57c85c0",
+        "every-frame.reference.nv12": "58d0c6fe6ff716c13388d6540ac4486acd9bb13f232afcca3e640f6fc1fa44e7",
+        "every-frame.nv12": "58d0c6fe6ff716c13388d6540ac4486acd9bb13f232afcca3e640f6fc1fa44e7"
+      }
+    },
+    {
+      "name": "explicit",
+      "frames": 90,
+      "bytes": 2903040,
+      "check": "video=h264 backend=d3d11 format=nv12 width=192 height=112 coded_width=192 coded_height=112 frames=90",
+      "decode": "video=h264 backend=d3d11 format=nv12 width=192 height=112 coded_width=192 coded_height=112 frames=90",
+      "sha256": {
+        "explicit.mp4": "9ec06489095362f297660e06256cca7703e51c306b039f8895df2b1159b81e16",
+        "explicit.probe.json": "7a58042fd9841a79dd042cffce734aca0df6e8eb9eeb27d07961aca2a18da782",
+        "explicit.reference.nv12": "58d0c6fe6ff716c13388d6540ac4486acd9bb13f232afcca3e640f6fc1fa44e7",
+        "explicit.nv12": "58d0c6fe6ff716c13388d6540ac4486acd9bb13f232afcca3e640f6fc1fa44e7"
+      }
+    },
+    {
+      "name": "flat",
+      "frames": 45,
+      "bytes": 276480,
+      "check": "video=h264 backend=d3d11 format=nv12 width=64 height=64 coded_width=64 coded_height=64 frames=45",
+      "decode": "video=h264 backend=d3d11 format=nv12 width=64 height=64 coded_width=64 coded_height=64 frames=45",
+      "sha256": {
+        "flat.mp4": "bead76325fd4918b30b676480b0e08ac6c3972ddcb3809212ab594392160a3eb",
+        "flat.probe.json": "8865f4e8ae0ea16acd1a2a875de5e01b1db85932df36745f66646ea35eade198",
+        "flat.reference.nv12": "56bf8422efad95fd20775140f56cc06316c5c269060e9fbcae7660eabeb60b2b",
+        "flat.nv12": "56bf8422efad95fd20775140f56cc06316c5c269060e9fbcae7660eabeb60b2b"
+      }
+    },
+    {
+      "name": "high-b",
+      "frames": 90,
+      "bytes": 10368000,
+      "check": "video=h264 backend=d3d11 format=nv12 width=320 height=240 coded_width=320 coded_height=240 frames=90",
+      "decode": "video=h264 backend=d3d11 format=nv12 width=320 height=240 coded_width=320 coded_height=240 frames=90",
+      "sha256": {
+        "high-b.mp4": "ee70cb8c9636daea0d76e59c0d07bee175442be35ca253f562075103cb2d9c3d",
+        "high-b.probe.json": "7b0b63e1bc30db7d9a89593818932c0b120fe44c284ccfbc298d0985700ecc27",
+        "high-b.reference.nv12": "8ed603a6c27752188795ae8487597f3bf5dbb9d3829c5daeb88bdc702f70c2b7",
+        "high-b.nv12": "8ed603a6c27752188795ae8487597f3bf5dbb9d3829c5daeb88bdc702f70c2b7"
+      }
+    },
+    {
+      "name": "hybrid",
+      "frames": 90,
+      "bytes": 2903040,
+      "check": "video=h264 backend=d3d11 format=nv12 width=192 height=112 coded_width=192 coded_height=112 frames=90",
+      "decode": "video=h264 backend=d3d11 format=nv12 width=192 height=112 coded_width=192 coded_height=112 frames=90",
+      "sha256": {
+        "hybrid.mp4": "ab181809027b984e638fb54331f2f149f643d6706e5c45fd39a6ab873e2991a7",
+        "hybrid.probe.json": "8939866aae34aa81da54c138d3b24514310fbcd6470da997ca5c1186fd7d8edf",
+        "hybrid.reference.nv12": "58d0c6fe6ff716c13388d6540ac4486acd9bb13f232afcca3e640f6fc1fa44e7",
+        "hybrid.nv12": "58d0c6fe6ff716c13388d6540ac4486acd9bb13f232afcca3e640f6fc1fa44e7"
+      }
+    },
+    {
+      "name": "implicit",
+      "frames": 90,
+      "bytes": 2903040,
+      "check": "video=h264 backend=d3d11 format=nv12 width=192 height=112 coded_width=192 coded_height=112 frames=90",
+      "decode": "video=h264 backend=d3d11 format=nv12 width=192 height=112 coded_width=192 coded_height=112 frames=90",
+      "sha256": {
+        "implicit.mp4": "4bb792384be72ff842d1fa9f9279dcbb37710365341b27c8538b6beeea08bbf4",
+        "implicit.probe.json": "e270c57633d635f726faf91baa97a97d32fde82f9a0a8380f7afbe6c7a11aa9f",
+        "implicit.reference.nv12": "58d0c6fe6ff716c13388d6540ac4486acd9bb13f232afcca3e640f6fc1fa44e7",
+        "implicit.nv12": "58d0c6fe6ff716c13388d6540ac4486acd9bb13f232afcca3e640f6fc1fa44e7"
+      }
+    },
+    {
+      "name": "interleave",
+      "frames": 90,
+      "bytes": 2903040,
+      "check": "video=h264 backend=d3d11 format=nv12 width=192 height=112 coded_width=192 coded_height=112 frames=90",
+      "decode": "video=h264 backend=d3d11 format=nv12 width=192 height=112 coded_width=192 coded_height=112 frames=90",
+      "sha256": {
+        "interleave.mp4": "f037e4750020aa7b552cb477bb3cdd5d990aaf290a6efc111463cfd55c45dff2",
+        "interleave.probe.json": "42184fb90c91b1b150e1baf26baa4af16324348b65b2592e1ac4f1bf85c714ff",
+        "interleave.reference.nv12": "58d0c6fe6ff716c13388d6540ac4486acd9bb13f232afcca3e640f6fc1fa44e7",
+        "interleave.nv12": "58d0c6fe6ff716c13388d6540ac4486acd9bb13f232afcca3e640f6fc1fa44e7"
+      }
+    },
+    {
+      "name": "main-b",
+      "frames": 90,
+      "bytes": 10368000,
+      "check": "video=h264 backend=d3d11 format=nv12 width=320 height=240 coded_width=320 coded_height=240 frames=90",
+      "decode": "video=h264 backend=d3d11 format=nv12 width=320 height=240 coded_width=320 coded_height=240 frames=90",
+      "sha256": {
+        "main-b.mp4": "0aa28fce75a5e8edd970299d452a9ae6248be4a82121b6a1e359ec97f94846fa",
+        "main-b.probe.json": "5f41c0f6592846f49fa78ce04cf6cf3be97e0610032c7ce2386d8df27c6ef707",
+        "main-b.reference.nv12": "7e5e9a49b838e4cac80900e8927b6f9023ed90cda061887a89e3533e03c0a96e",
+        "main-b.nv12": "7e5e9a49b838e4cac80900e8927b6f9023ed90cda061887a89e3533e03c0a96e"
+      }
+    },
+    {
+      "name": "mixed",
+      "frames": 90,
+      "bytes": 2903040,
+      "check": "video=h264 backend=d3d11 format=nv12 width=192 height=112 coded_width=192 coded_height=112 frames=90",
+      "decode": "video=h264 backend=d3d11 format=nv12 width=192 height=112 coded_width=192 coded_height=112 frames=90",
+      "sha256": {
+        "mixed.mp4": "35ca1d0d31b21b737f5f1bcf045a5ec2081873daafd24c625818244c7acc5edf",
+        "mixed.probe.json": "2c57268cd9c4837e4502fbfba4f881b2967c7f9a381aeb1e00f96d6b009a6f00",
+        "mixed.reference.nv12": "58d0c6fe6ff716c13388d6540ac4486acd9bb13f232afcca3e640f6fc1fa44e7",
+        "mixed.nv12": "58d0c6fe6ff716c13388d6540ac4486acd9bb13f232afcca3e640f6fc1fa44e7"
+      }
+    },
+    {
+      "name": "slices",
+      "frames": 60,
+      "bytes": 1935360,
+      "check": "video=h264 backend=d3d11 format=nv12 width=192 height=112 coded_width=192 coded_height=112 frames=60",
+      "decode": "video=h264 backend=d3d11 format=nv12 width=192 height=112 coded_width=192 coded_height=112 frames=60",
+      "sha256": {
+        "slices.mp4": "6793f2a4c0a4a3ad7ebdaddedbd616b7933954099003572b691c7e2a062d45c0",
+        "slices.probe.json": "5a130402949df99e4a55f0a719b83c76a6e4436f9696f638a4caf0c2bffd045a",
+        "slices.reference.nv12": "cfb8f483667da9559a93fcffc08775a224e13926933019ff48a83e675d8913ed",
+        "slices.nv12": "cfb8f483667da9559a93fcffc08775a224e13926933019ff48a83e675d8913ed"
+      }
+    },
+    {
+      "name": "vfr",
+      "frames": 30,
+      "bytes": 276480,
+      "check": "video=h264 backend=d3d11 format=nv12 width=96 height=64 coded_width=96 coded_height=64 frames=30",
+      "decode": "video=h264 backend=d3d11 format=nv12 width=96 height=64 coded_width=96 coded_height=64 frames=30",
+      "sha256": {
+        "vfr.mp4": "8f0abd9da773720373e742c976eaec49885bb312400bb11cdcc63be0fa2d0016",
+        "vfr.probe.json": "f2b48b8d69cec45fe8e8777a688c55bc5119f0b1abd3157c5700e0f70b4add54",
+        "vfr.reference.nv12": "4252e89e358976bdacb63503ebe8aeabace01d8813b227247c089a4722a8184e",
+        "vfr.nv12": "4252e89e358976bdacb63503ebe8aeabace01d8813b227247c089a4722a8184e"
+      }
+    }
+  ],
+  "controls": [
+    {
+      "mode": "cancel",
+      "scope": "Test-only CLI object changes one cancel flag or reported write length after one real frame. No console event, desktop input, audio, disk-full simulation or production test hook.",
+      "source_sha256": "ee0a20473f4858a0a0f1467a74e8f4e5b3f5123a59724cd39eaaeb588e4156c2",
+      "object_sha256": "735df223f9e77e83955429e21f17b95bb631ef16864e2c9d5ae28cd33a415af9",
+      "executable_sha256": "4b80ff60fcf2c9a918349b822004337a2a3782f426f97d4da793541ed8068d9b",
+      "partial_output_removed": true,
+      "message": "Video operation cancelled."
+    },
+    {
+      "mode": "write",
+      "scope": "Test-only CLI object changes one cancel flag or reported write length after one real frame. No console event, desktop input, audio, disk-full simulation or production test hook.",
+      "source_sha256": "eeb53050b4daa14dc5b2bae1dd9623ecb3a089c682536adfc7ca2e1f042a7f35",
+      "object_sha256": "79b032812a3e6b9482858f59f448f2bfa1407336e29ddf11301b8a96d2284e7e",
+      "executable_sha256": "71e37f42851f410f09651be4086279cfcabdf4759f9f3dc4c861695999dc55eb",
+      "partial_output_removed": true,
+      "message": "Cannot create or write video output; existing files are preserved."
+    }
+  ],
+  "windows": [
+    {
+      "name": "base",
+      "result": "passed",
+      "scope": "Actual --video-play command, PID-owned hidden window, pause title, step request and clean close; direct API oracle establishes exact step counts."
+    },
+    {
+      "name": "interleave",
+      "result": "passed",
+      "scope": "Actual --video-play command, PID-owned hidden window, pause title, step request and clean close; direct API oracle establishes exact step counts."
+    },
+    {
+      "name": "vfr",
+      "result": "passed",
+      "scope": "Actual --video-play command, PID-owned hidden window, pause title, step request and clean close; direct API oracle establishes exact step counts."
+    }
+  ],
+  "sources": {
+    "src/win/video_cli.s": "2aeb7838741043c5d9ead65bd453a92cd047a851b436a1ffa11ebe73ad656a9d",
+    "src/win/video_stream.s": "49790d17a05e998a29237ef0f1e3d7d9a86fbdb5e327e0ac5d616244bb4fbdfd",
+    "src/win/video_stream.inc": "ef55597e85dc57404c618083e9ef6613df3572ce5fa377de297cea9885d60156",
+    "src/win/video_window.s": "7870e6a789ab15df96a00d954c21e1a257a9d5d0f87ab46be9e287088af42833",
+    "src/win/video_window.inc": "78b0e9345a0ee06d4e06d950d03df9025f6989720dc498a5f912666f603d3ea8",
+    "src/video_mp4_h264.s": "9c0f03315e094e65486e6547362e75410c0ae37119b4580f38598c80c150a3e6",
+    "tests/verify-mp4-export.py": "0f6ec475aeb14b0b618fa42ce1fd06293e17d462ef4570a929825695f420c194",
+    "tests/verify-h264-file.py": "a90c89ef7e689c1cfe40632dc5def1a8175ee934e5b1ac39deea6355e3796d51",
+    "tests/verify-video-present.py": "dcf5bbc2e6f4ce45796abaf354d10d9996e9f487b6f436937cbc527c01b5dd9b"
+  },
+  "artifacts": {
+    "lamp-cli.exe": "ce624268966ed1abeeb052c93fd84a1f4ced99a764ff2fa3e6de2f4a8658aa62",
+    "lamp.exe": "fb6e8adeda3233ec155e167b64ca507763d3a35c55ca6ffbf8c8d5f36863c6dc",
+    "obj/video_mp4_h264.obj": "0817c7a4673faffece447570cce0851faa829ae73b9a06c3b4d1091c88143560",
+    "obj/video_cli.obj": "e53927363e7b35d9e2257597cf369c85e8d349d34e9189fd4c63fb45d0276064",
+    "obj/video_stream.obj": "3b8fae83975a16aed1f14fc8970fb3231fba25dcbc8bdae7fae220ecc3fd0049",
+    "obj/video_window.obj": "7406729a65e3e439b7e52f570c82c4ee2ef4b833cc045446e782c0088af3a0da"
+  },
+  "existing_output_preserved": true,
+  "git_source_sha256": {
+    "src/win/video_cli.s": "2aeb7838741043c5d9ead65bd453a92cd047a851b436a1ffa11ebe73ad656a9d",
+    "src/win/video_stream.s": "49790d17a05e998a29237ef0f1e3d7d9a86fbdb5e327e0ac5d616244bb4fbdfd",
+    "src/win/video_stream.inc": "ef55597e85dc57404c618083e9ef6613df3572ce5fa377de297cea9885d60156",
+    "src/win/video_window.s": "7870e6a789ab15df96a00d954c21e1a257a9d5d0f87ab46be9e287088af42833",
+    "src/win/video_window.inc": "78b0e9345a0ee06d4e06d950d03df9025f6989720dc498a5f912666f603d3ea8",
+    "src/video_mp4_h264.s": "9c0f03315e094e65486e6547362e75410c0ae37119b4580f38598c80c150a3e6",
+    "tests/verify-mp4-export.py": "0f6ec475aeb14b0b618fa42ce1fd06293e17d462ef4570a929825695f420c194",
+    "tests/verify-h264-file.py": "a90c89ef7e689c1cfe40632dc5def1a8175ee934e5b1ac39deea6355e3796d51",
+    "tests/verify-video-present.py": "dcf5bbc2e6f4ce45796abaf354d10d9996e9f487b6f436937cbc527c01b5dd9b"
+  }
+}

@@ -19,6 +19,18 @@ vw_title_eof: .short 'L','A','M','P',' ','v','i','d','e','o',' ','-',' ','F','i'
 # media_ns:i64,late:u64. show0 is offscreen hosting; show1/4 normal/no-activate.
 # S_OK on own-window close, E_ABORT on external cancellation, error otherwise.
 FN win_video_play
+    xor r9d, r9d
+    jmp vw_play
+ENDFN win_video_play
+
+# Extended info88B appends {sourceContext,nextFn,resetFn,duration_ns:u64}.
+# Same video-only QPC clock, now scheduled by source composition timestamps.
+FN win_video_play_source
+    mov r9d, 1
+    jmp vw_play
+ENDFN win_video_play_source
+
+LOCALFN vw_play
     push rbx
     push rbp
     push rsi
@@ -26,6 +38,7 @@ FN win_video_play
     push r12
     push r13
     sub rsp, 104
+    mov [rsp+96], r9d
     mov rsi, rcx
     mov rdi, rdx
     mov r12, r8
@@ -37,6 +50,8 @@ FN win_video_play
     mov [rbx+VW_GPU], rsi
     mov [rbx+VW_PARSER], rdi
     mov [rbx+VW_INFO], r12
+    mov eax, [rsp+96]
+    mov [rbx+VW_TIMED], eax
     mov rax, [r12+40]
     mov [rbx+VW_REPORT], rax
     cmp dword ptr [r12+36], 0
@@ -52,6 +67,8 @@ FN win_video_play
     jne .Lvw_invalid
 .Lvw_show_ok:
     mov [rbx+VW_SHOW], eax
+    cmp dword ptr [rbx+VW_TIMED], 0
+    jne .Lvw_timed_duration
     mov eax, [rdi+HP_TIME_TICK]
     mov edx, [rdi+HP_TIME_SCALE]
     test eax, eax
@@ -77,6 +94,19 @@ FN win_video_play
     test rax, rax
     js .Lvw_unsupported
     mov [rbx+VW_DURATION], rax
+    jmp .Lvw_have_duration
+.Lvw_timed_duration:
+    cmp qword ptr [r12+56], 0
+    je .Lvw_invalid
+    cmp qword ptr [r12+64], 0
+    je .Lvw_invalid
+    cmp qword ptr [r12+72], 0
+    je .Lvw_invalid
+    mov rax, [r12+80]
+    test rax, rax
+    js .Lvw_invalid
+    mov [rbx+VW_DURATION], rax
+.Lvw_have_duration:
     lea rcx, [rbx+VW_FREQ]
     call QueryPerformanceFrequency
     test eax, eax
@@ -300,6 +330,8 @@ FN win_video_play
     cmp dword ptr [rbx+VW_STREAM+VS_PENDING], 0
     jne .Lvw_frame_available
     mov dword ptr [rbx+VW_SOURCE_EOF], 1
+    cmp dword ptr [rbx+VW_TIMED], 0
+    jne .Lvw_clock_end
     mov rcx, rbx
     call vw_frame_ns
     test rax, rax
@@ -331,10 +363,21 @@ FN win_video_play
     sub rdx, rax
     jmp .Lvw_wait_delta
 .Lvw_frame_available:
+    cmp dword ptr [rbx+VW_TIMED], 0
+    je .Lvw_nominal_due
+    cmp dword ptr [rbx+VW_TIMED_HEAD], 1
+    jne .Lvw_prepare_head
+    mov rax, [rbx+VW_STREAM+VS_HEAD_PTS]
+    jmp .Lvw_due_set
+.Lvw_prepare_head:
+    mov dword ptr [rbx+VW_TIMED_HEAD], 2
+    jmp .Lvw_parse_start
+.Lvw_nominal_due:
     mov rcx, rbx
     call vw_frame_ns
     test rax, rax
     js .Lvw_unexpected
+.Lvw_due_set:
     mov [rbx+VW_DUE], rax
     mov dword ptr [rbx+VW_IS_STEP], 0
     cmp dword ptr [rbx+VW_PAUSED], 0
@@ -369,6 +412,10 @@ FN win_video_play
     mov [rbx+VW_WAIT_MS], eax
     jmp .Lvw_wait
 .Lvw_parse:
+    cmp dword ptr [rbx+VW_TIMED], 0
+    je .Lvw_parse_start
+    mov dword ptr [rbx+VW_TIMED_HEAD], 3
+.Lvw_parse_start:
     mov dword ptr [rbx+VW_STAGE], 1
     call GetTickCount64
     add rax, 5000
@@ -377,13 +424,26 @@ FN win_video_play
     cmp dword ptr [rbx+VW_STAGE], 1
     jne .Lvw_render
     lea rcx, [rbx+VW_STREAM]
+    cmp dword ptr [rbx+VW_TIMED_HEAD], 2
+    jne .Lvw_consume_frame
+    call win_video_stream_peek
+    jmp .Lvw_stream_result
+.Lvw_consume_frame:
     call win_video_stream_next
+.Lvw_stream_result:
     cmp eax, WV_PENDING
     je .Lvw_retry
     test eax, eax
     js .Lvw_failed
     cmp eax, 1
     je .Lvw_source_end
+    cmp dword ptr [rbx+VW_TIMED_HEAD], 2
+    jne .Lvw_frame_selected
+    mov dword ptr [rbx+VW_TIMED_HEAD], 1
+    mov dword ptr [rbx+VW_STAGE], 0
+    jmp .Lvw_choose
+.Lvw_frame_selected:
+    mov dword ptr [rbx+VW_TIMED_HEAD], 0
     mov dword ptr [rbx+VW_STAGE], 2
     call GetTickCount64
     add rax, 5000
@@ -399,6 +459,8 @@ FN win_video_play
     cmp dword ptr [rbx+VW_REDRAW_PENDING], 0
     jne .Lvw_redrawn
     inc qword ptr [rbx+VW_PRESENTED]
+    mov rax, [rbx+VW_DUE]
+    mov [rbx+VW_LAST_PRESENTED_PTS], rax
     mov dword ptr [rbx+VW_HAS_FRAME], 1
     cmp dword ptr [rbx+VW_IS_STEP], 0
     je .Lvw_frame_clock
@@ -408,6 +470,11 @@ FN win_video_play
     cmp dword ptr [rbx+VW_STARTED], 0
     jne .Lvw_frame_late
     mov dword ptr [rbx+VW_STARTED], 1
+    cmp dword ptr [rbx+VW_TIMED], 0
+    je .Lvw_first_anchor
+    mov rax, [rbx+VW_DUE]
+    mov [rbx+VW_BASE_NS], rax
+.Lvw_first_anchor:
     mov rcx, rbx
     call vw_anchor
     test eax, eax
@@ -421,9 +488,15 @@ FN win_video_play
     sub rax, [rbx+VW_DUE]
     jle .Lvw_sync_again
     mov rbp, rax
+    cmp dword ptr [rbx+VW_TIMED], 0
+    je .Lvw_nominal_late
+    mov rax, [rbx+VW_STREAM+VS_SHOW_DURATION]
+    jmp .Lvw_late_compare
+.Lvw_nominal_late:
     mov rcx, rbx
     mov eax, 1
     call vw_frame_ns
+.Lvw_late_compare:
     cmp rbp, rax
     jbe .Lvw_sync_again
     inc qword ptr [rbx+VW_LATE]
@@ -437,6 +510,8 @@ FN win_video_play
 .Lvw_source_end:
     mov dword ptr [rbx+VW_STAGE], 0
     mov dword ptr [rbx+VW_SOURCE_EOF], 1
+    cmp dword ptr [rbx+VW_TIMED], 0
+    jne .Lvw_choose
     mov rcx, rbx
     mov rax, [rbx+VW_STREAM+VS_OUTPUTS]
     call vw_frame_ns
@@ -551,7 +626,7 @@ FN win_video_play
     pop rbp
     pop rbx
     ret
-ENDFN win_video_play
+ENDFN vw_play
 
 LOCALFN vw_restart
     push rbx
@@ -565,6 +640,22 @@ LOCALFN vw_restart
     call win_video_stream_open
     test eax, eax
     js .Lvw_restart_failed
+    cmp dword ptr [rbx+VW_TIMED], 0
+    je .Lvw_restart_annex
+    mov rax, [rbx+VW_INFO]
+    lea rcx, [rbx+VW_STREAM]
+    mov rdx, [rax+64]
+    mov r8, [rax+56]
+    call win_video_stream_set_source
+    test eax, eax
+    js .Lvw_restart_failed
+    mov rax, [rbx+VW_INFO]
+    mov rcx, [rax+56]
+    mov rdx, [rbx+VW_PARSER]
+    mov rax, [rax+72]
+    call rax
+    jmp .Lvw_restart_opened
+.Lvw_restart_annex:
     mov rcx, [rbx+VW_PARSER]
     call h264_close
     mov rax, [rbx+VW_INFO]
@@ -573,6 +664,7 @@ LOCALFN vw_restart
     mov r8, [rax+8]
     mov r9, [rax+16]
     call h264_open
+.Lvw_restart_opened:
     test eax, eax
     jz .Lvw_restart_return
     mov dword ptr [rbx+VW_PAUSED], 0
@@ -581,6 +673,7 @@ LOCALFN vw_restart
     mov dword ptr [rbx+VW_STEP], 0
     mov dword ptr [rbx+VW_HAS_FRAME], 0
     mov dword ptr [rbx+VW_STARTED], 0
+    mov dword ptr [rbx+VW_TIMED_HEAD], 0
     mov qword ptr [rbx+VW_BASE_NS], 0
     mov rcx, rbx
     call vw_anchor
@@ -707,8 +800,6 @@ LOCALFN vw_sync
     mov [rdx+40], rax
     mov rax, [rbx+VW_HWND]
     mov [rdx], rax
-    mov rax, [rbx+VW_PRESENTED]
-    mov [rdx+8], rax
     mov eax, [rbx+VW_PAUSED]
     mov [rdx+16], eax
     mov eax, [rbx+VW_EOF]
@@ -721,6 +812,11 @@ LOCALFN vw_sync
     mov [rdx+36], eax
     mov rax, [rbx+VW_LATE]
     mov [rdx+48], rax
+    mov rax, [rbx+VW_LAST_PRESENTED_PTS]
+    mov [rdx+56], rax
+    # Publish the count last so a stepped-frame observer sees its timestamp.
+    mov rax, [rbx+VW_PRESENTED]
+    mov [rdx+8], rax
 .Lvw_sync_return:
     add rsp, 32
     pop rbx

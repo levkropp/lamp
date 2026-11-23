@@ -1,0 +1,43 @@
+{
+  "result": "passed",
+  "scope": "Actual MOV/faststart encoded video public check/export, no audio or window",
+  "inputs": [
+    {
+      "name": "quicktime.mov",
+      "frames": 90,
+      "image_bytes": 10368000,
+      "check": "video=h264 backend=d3d11 format=nv12 width=320 height=240 coded_width=320 coded_height=240 frames=90",
+      "decode": "video=h264 backend=d3d11 format=nv12 width=320 height=240 coded_width=320 coded_height=240 frames=90",
+      "sha256": {
+        "main-b.mp4": "0aa28fce75a5e8edd970299d452a9ae6248be4a82121b6a1e359ec97f94846fa",
+        "quicktime.mov": "2f470b137d6343d4a9c8066aeacd99b6a52fdc2673b0d38410c70fe91304ea9e",
+        "quicktime.mov.reference.nv12": "7e5e9a49b838e4cac80900e8927b6f9023ed90cda061887a89e3533e03c0a96e",
+        "quicktime.mov.nv12": "7e5e9a49b838e4cac80900e8927b6f9023ed90cda061887a89e3533e03c0a96e"
+      }
+    },
+    {
+      "name": "faststart.mp4",
+      "frames": 90,
+      "image_bytes": 10368000,
+      "check": "video=h264 backend=d3d11 format=nv12 width=320 height=240 coded_width=320 coded_height=240 frames=90",
+      "decode": "video=h264 backend=d3d11 format=nv12 width=320 height=240 coded_width=320 coded_height=240 frames=90",
+      "sha256": {
+        "main-b.mp4": "0aa28fce75a5e8edd970299d452a9ae6248be4a82121b6a1e359ec97f94846fa",
+        "faststart.mp4": "f8a27b15b8f214403fc7352325407000a3c062e9b72565939accd930679d2b1b",
+        "faststart.mp4.reference.nv12": "7e5e9a49b838e4cac80900e8927b6f9023ed90cda061887a89e3533e03c0a96e",
+        "faststart.mp4.nv12": "7e5e9a49b838e4cac80900e8927b6f9023ed90cda061887a89e3533e03c0a96e"
+      }
+    }
+  ],
+  "sources": {
+    "tests/verify-mov-video.py": "7f9b86b11602e98da9731aeea73c86dec81445bdb438887b3835dc14dc82866b",
+    "src/win/video_cli.s": "2aeb7838741043c5d9ead65bd453a92cd047a851b436a1ffa11ebe73ad656a9d"
+  },
+  "artifacts": {
+    "lamp-cli.exe": "ce624268966ed1abeeb052c93fd84a1f4ced99a764ff2fa3e6de2f4a8658aa62"
+  },
+  "git_source_sha256": {
+    "tests/verify-mov-video.py": "7f9b86b11602e98da9731aeea73c86dec81445bdb438887b3835dc14dc82866b",
+    "src/win/video_cli.s": "2aeb7838741043c5d9ead65bd453a92cd047a851b436a1ffa11ebe73ad656a9d"
+  }
+}

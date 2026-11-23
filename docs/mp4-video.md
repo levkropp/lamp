@@ -6,11 +6,11 @@ timestamps and a bounded edit list. It supplies the existing
 [timestamped H.264 frontend](h264-packets.md) directly, without a whole-file
 Annex B conversion or an external demuxer.
 
-This is a component API. **The shipping Windows video commands still accept
-Annex B only.** The window's nominal clock, the real audio clock, accurate
-seeking and synchronized container playback remain separate work. The existing
-MP4 audio reader is unchanged. Neither file-clock coverage for every supported
-audio codec nor general MP4 video playback is established by this component.
+The [Windows video commands](mp4-play.md) now use this API for video-only MP4/MOV
+playback, checking and export, with composition timestamps in the window. The
+real audio clock, accurate seeking and synchronized playback remain separate
+work. The existing MP4 audio reader is unchanged; complete audio-clock coverage
+and unrestricted MP4 video/codec support are not established by this component.
 
 ## Ownership and API
 

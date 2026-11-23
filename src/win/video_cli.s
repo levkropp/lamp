@@ -3,12 +3,13 @@
 .include "h264.inc"
 .include "video.inc"
 .include "video_stream.inc"
+.include "video_mp4.inc"
 RODATA
 vc_check: .short '-','-','v','i','d','e','o','-','c','h','e','c','k',0
 vc_decode: .short '-','-','v','i','d','e','o','-','d','e','c','o','d','e',0
 vc_play: .short '-','-','v','i','d','e','o','-','p','l','a','y',0
-vc_usage: .asciz "Usage: --video-play file.h264 | --video-check file.h264 | --video-decode file.h264 output.nv12\r\n"
-vc_input_error: .asciz "Unsupported, malformed or inaccessible H.264 file.\r\n"
+vc_usage: .asciz "Usage: --video-play input.h264/mp4/mov | --video-check input | --video-decode input output.nv12\r\n"
+vc_input_error: .asciz "Unsupported, malformed or inaccessible H.264 Annex B/MP4/MOV video.\r\n"
 vc_gpu_error: .asciz "H.264 hardware decode failed or timed out on this adapter.\r\n"
 vc_output_error: .asciz "Cannot create or write video output; existing files are preserved.\r\n"
 vc_cancel_error: .asciz "Video operation cancelled.\r\n"
@@ -27,6 +28,8 @@ vc_capacity: .quad 0
 vc_output: .quad -1
 vc_output_path: .quad 0
 vc_count: .quad 0
+vc_duration: .quad 0
+vc_is_mp4: .long 0
 vc_cancel: .long 0
 vc_written: .long 0
 .bss
@@ -34,7 +37,9 @@ vc_written: .long 0
 vc_parser: .zero HP_BYTES
 vc_gpu: .zero WV_BYTES
 vc_stream: .zero VS_BYTES
-vc_play_info: .zero 56
+vc_mp4: .zero VM_BYTES
+vc_packet: .zero 80
+vc_play_info: .zero 88
 .text
 
 # RCX=argv, EDX=argc ->-1 not video, otherwise process exit code0/1/2.
@@ -79,6 +84,8 @@ FN win_video_cli
     mov qword ptr [rip+vc_output], -1
     mov qword ptr [rip+vc_output_path], 0
     mov qword ptr [rip+vc_count], 0
+    mov qword ptr [rip+vc_duration], 0
+    mov dword ptr [rip+vc_is_mp4], 0
     cmp esi, 4
     jne .Lvc_handler
     mov rax, [rbx+24]
@@ -99,14 +106,38 @@ FN win_video_cli
     jz .Lvc_input_error
     # Complete header/framing preflight before creating an output file.
 .Lvc_preflight:
-    lea rcx, [rip+vc_parser]
-    call h264_next
+    call vc_next_parser
     test eax, eax
     js .Lvc_input_error
-    jnz .Lvc_preflight
+    jz .Lvc_preflight_end
+    cmp eax, 2
+    je .Lvc_preflight
+    cmp dword ptr [rip+vc_is_mp4], 0
+    je .Lvc_preflight
+    lea rax, [rip+vc_packet]
+    cmp qword ptr [rax+64], 0
+    je .Lvc_preflight
+    mov rdx, [rax+56]
+    add rdx, [rax+64]
+    jo .Lvc_input_error
+    cmp rdx, [rip+vc_duration]
+    cmovb rdx, [rip+vc_duration]
+    mov [rip+vc_duration], rdx
+    jmp .Lvc_preflight
+.Lvc_preflight_end:
     lea rax, [rip+vc_parser]
     mov rdx, [rax+HP_FRAMES]
     mov [rip+vc_count], rdx
+    test rdx, rdx
+    jz .Lvc_input_error
+    cmp dword ptr [rip+vc_is_mp4], 0
+    je .Lvc_preflight_gpu
+    lea rcx, [rip+vc_mp4]
+    cmp dword ptr [rcx+VM_EDIT_FOUND], 2
+    jne .Lvc_preflight_gpu
+    mov rdx, [rcx+VM_GAP_NS]
+    mov [rip+vc_duration], rdx
+.Lvc_preflight_gpu:
     lea rcx, [rip+vc_gpu]
     mov edx, [rax+HP_WIDTH]
     mov r8d, [rax+HP_HEIGHT]
@@ -127,6 +158,15 @@ FN win_video_cli
     call win_video_stream_open
     test eax, eax
     js .Lvc_gpu_error
+    cmp dword ptr [rip+vc_is_mp4], 0
+    je .Lvc_stream_ready
+    lea rcx, [rip+vc_stream]
+    lea rdx, [rip+video_mp4_h264_next]
+    lea r8, [rip+vc_mp4]
+    call win_video_stream_set_source
+    test eax, eax
+    js .Lvc_gpu_error
+.Lvc_stream_ready:
     lea rax, [rip+vc_parser]
     mov ecx, [rax+HP_WIDTH]
     imul ecx, [rax+HP_HEIGHT]
@@ -224,7 +264,21 @@ FN win_video_cli
     # No event: the window checks the Ctrl+C flag at most every250ms at rest.
     lea rcx, [rip+vc_gpu]
     lea rdx, [rip+vc_parser]
+    cmp dword ptr [rip+vc_is_mp4], 0
+    je .Lvc_play_annex
+    lea rax, [rip+vc_mp4]
+    mov [r8+56], rax
+    lea rax, [rip+video_mp4_h264_next]
+    mov [r8+64], rax
+    lea rax, [rip+video_mp4_h264_reset]
+    mov [r8+72], rax
+    mov rax, [rip+vc_duration]
+    mov [r8+80], rax
+    call win_video_play_source
+    jmp .Lvc_play_result
+.Lvc_play_annex:
     call win_video_play
+.Lvc_play_result:
     cmp dword ptr [rip+vc_cancel], 0
     jne .Lvc_cancelled
     test eax, eax
@@ -293,6 +347,8 @@ FN win_video_cli
     call win_video_close
     lea rcx, [rip+vc_parser]
     call h264_close
+    lea rcx, [rip+vc_mp4]
+    call video_mp4_close
     mov rcx, [rip+vc_pixels]
     test rcx, rcx
     jz .Lvc_cleanup_map
@@ -330,12 +386,79 @@ FN win_video_cli
 ENDFN win_video_cli
 
 LOCALFN vc_open_parser
+    sub rsp, 56
+    lea rcx, [rip+vc_mp4]
+    cmp dword ptr [rcx+VM_READY], 1
+    je .Lvc_reset_mp4
+    mov rax, [rip+vc_view]
+    cmp qword ptr [rip+vc_size], 8
+    jb .Lvc_open_annex
+    mov edx, [rax]
+    cmp edx, 0x01000000 #Unambiguous four-byte Annex B prefix.
+    je .Lvc_open_annex
+    and edx, 0x00ffffff
+    cmp edx, 0x00010000 #Three-byte prefix followed by any NAL header.
+    je .Lvc_open_annex
+    mov edx, [rax+4]
+    cmp edx, 0x70797466 #ftyp
+    je .Lvc_open_mp4
+    cmp edx, VM_MOOV_TYPE
+    je .Lvc_open_mp4
+    cmp edx, VM_MDAT_TYPE
+    je .Lvc_open_mp4
+    cmp edx, 0x65657266 #free
+    je .Lvc_open_mp4
+    cmp edx, 0x70696b73 #skip
+    je .Lvc_open_mp4
+    cmp edx, 0x65646977 #wide
+    je .Lvc_open_mp4
+    cmp edx, 0x64697575 #uuid
+    je .Lvc_open_mp4
+    cmp edx, 0x6e696470 #pdin
+    je .Lvc_open_mp4
+    cmp edx, 0x78646973 #sidx
+    je .Lvc_open_mp4
+    cmp edx, 0x70797473 #styp
+    jne .Lvc_open_annex
+.Lvc_open_mp4:
+    mov dword ptr [rip+vc_is_mp4], 1
+    mov qword ptr [rsp+32], 0 #Default selected video ordinal, reserved0.
+    lea rax, [rip+vc_cancel]
+    mov [rsp+40], rax
+    mov qword ptr [rsp+48], 1
+    mov rdx, [rip+vc_view]
+    mov r8, [rip+vc_size]
+    lea r9, [rsp+32]
+    call video_mp4_open
+    test eax, eax
+    jz .Lvc_open_return
+    lea rcx, [rip+vc_mp4]
+.Lvc_reset_mp4:
+    lea rdx, [rip+vc_parser]
+    call video_mp4_h264_reset
+    jmp .Lvc_open_return
+.Lvc_open_annex:
     lea rcx, [rip+vc_parser]
     mov rdx, [rip+vc_view]
     mov r8, [rip+vc_size]
     lea r9, [rip+vc_cancel]
-    jmp h264_open
+    call h264_open
+.Lvc_open_return:
+    add rsp, 56
+    ret
 ENDFN vc_open_parser
+
+LOCALFN vc_next_parser
+    cmp dword ptr [rip+vc_is_mp4], 0
+    je .Lvc_next_annex
+    lea rcx, [rip+vc_mp4]
+    lea rdx, [rip+vc_parser]
+    lea r8, [rip+vc_packet]
+    jmp video_mp4_h264_next
+.Lvc_next_annex:
+    lea rcx, [rip+vc_parser]
+    jmp h264_next
+ENDFN vc_next_parser
 
 # R12=deadline; no unbounded busy-wait. Ctrl+C checked by caller each retry.
 LOCALFN vc_wait
